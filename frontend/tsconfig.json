@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "strict": true, // без any вне границ DTO
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"] // любой импорт — от корня src
+    }
+  }
+  // "@/features/orders", "@/shared/ui/button", "@/entities/item"
+  // Относительные пути ./file разрешены только внутри одной папки
+  // модуля. Выход выше через ../../ — запрещён eslint-правилом.
+}

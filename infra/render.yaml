@@ -1,0 +1,45 @@
+# infra/render.yaml — продакшен как код.
+# Наследует нынешний render.yaml в корне: тот же регион и healthcheck,
+# но процессов теперь три, а секреты не размазаны по одному сервису.
+services:
+  - type: web
+    name: sandalis-web            # Next.js
+    runtime: node
+    rootDir: frontend
+    region: frankfurt
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start
+    healthCheckPath: /api/health  # уже работает в проде — сохраняем
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: NEXT_PUBLIC_API_URL
+        value: https://sandalis-api.onrender.com
+
+  - type: web
+    name: sandalis-api            # FastAPI
+    runtime: python
+    rootDir: backend
+    region: frankfurt
+    buildCommand: pip install -e .
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sandalis-db
+          property: connectionString
+      - key: ACCESS_TOKENS_JSON   # реестр клановых токенов, как сегодня
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+
+  - type: worker
+    name: sandalis-worker         # ffmpeg + импорт данных войны
+    runtime: python
+    rootDir: backend
+    startCommand: python -m app.workers.media
+
+databases:
+  - name: sandalis-db
+    plan: starter                 # managed PostgreSQL 16 вместо пулера Supabase

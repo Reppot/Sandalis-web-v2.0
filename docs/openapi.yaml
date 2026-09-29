@@ -1,0 +1,26 @@
+openapi: 3.1.0
+info:
+  title: Sandalis API
+  version: 2.0.0
+
+paths:
+  /api/v1/orders:
+    get:
+      summary: Открытые заказы клана
+      responses:
+        "200":
+          description: Список заказов
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/OrderOut" }
+    post:
+      summary: Создать заказ
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/OrderCreate" }
+
+# …stockpiles, timers, codes, items, auth — полный контракт
