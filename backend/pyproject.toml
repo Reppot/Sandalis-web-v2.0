@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "sandalis-backend"
 version = "2.0.0"
 description = "Sandalis-Web v2.0 API — FastAPI backend"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "fastapi>=0.115.0,<1.0",
     "uvicorn[standard]>=0.34.0,<1.0",
@@ -25,7 +25,6 @@ dependencies = [
 dev = [
     "pytest>=8.0",
     "pytest-asyncio>=0.26.0",
-    "httpx>=0.28.0",
     "ruff>=0.11.0",
 ]
 
@@ -35,9 +34,17 @@ sandalis-import-catalog = "scripts.import_catalog:main"
 sandalis-import-icons = "scripts.import_icons_to_s3:main"
 sandalis-migrate-video = "scripts.migrate_video_to_s3:main"
 
+# --- КЛЮЧЕВОЙ БЛОК: указываем hatchling, что упаковывать ---
+[tool.hatch.build.targets.wheel]
+packages = ["app", "scripts"]
+
+[tool.hatch.build.targets.sdist]
+include = ["app", "scripts", "alembic", "tests", "alembic.ini"]
+
 [tool.ruff]
 target-version = "py312"
 line-length = 100
+exclude = [".venv", "alembic/versions"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
@@ -45,3 +52,4 @@ select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+pythonpath = ["."]

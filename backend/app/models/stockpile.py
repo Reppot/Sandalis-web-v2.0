@@ -6,8 +6,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.models.base import Base, TimestampMixin
 
 
-class Order(TimestampMixin, Base):
-    __tablename__ = "orders"
+class Stockpile(TimestampMixin, Base):
+    __tablename__ = "stockpiles"
 
     id: Mapped[str] = mapped_column(
         String(36),
@@ -42,15 +42,15 @@ class Order(TimestampMixin, Base):
         nullable=True,
     )
 
-    items: Mapped[list["OrderItem"]] = relationship(
-        "OrderItem",
-        back_populates="order",
+    items: Mapped[list["StockpileItem"]] = relationship(
+        "StockpileItem",
+        back_populates="stockpile",
         cascade="all, delete-orphan",
     )
 
 
-class OrderItem(Base):
-    __tablename__ = "order_items"
+class StockpileItem(Base):
+    __tablename__ = "stockpile_items"
 
     id: Mapped[int] = mapped_column(
         Integer,
@@ -58,8 +58,8 @@ class OrderItem(Base):
         autoincrement=True,
     )
 
-    order_id: Mapped[str] = mapped_column(
-        ForeignKey("orders.id", ondelete="CASCADE"),
+    stockpile_id: Mapped[str] = mapped_column(
+        ForeignKey("stockpiles.id", ondelete="CASCADE"),
         index=True,
         nullable=False,
     )
@@ -80,7 +80,7 @@ class OrderItem(Base):
         nullable=False,
     )
 
-    order: Mapped["Order"] = relationship(
-        "Order",
+    stockpile: Mapped["Stockpile"] = relationship(
+        "Stockpile",
         back_populates="items",
     )

@@ -205,6 +205,350 @@ docker compose up -d    # Поднять БД локально (фоном)
 docker compose down     # Остановить и удалить локальную БД
 docker compose logs -f  # Смотреть логи БД
 
+## Запуск backend локально
 
+### Требования
+
+- Python `3.12.x`
+- PostgreSQL
+- Git
+- Node.js / npm — для frontend
+
+---
+
+## Backend
+
+Перейдите в папку backend:
+
+```bash
+cd backend
+Создайте и активируйте виртуальное окружение:
+
+Windows CMD
+cmd
+
+python -m venv .venv
+.venv\Scripts\activate
+Установите зависимости:
+
+cmd
+
+pip install -r requirements.txt
+Важные исправления для корректного запуска
+Если проект был скачан из репозитория и при запуске появляются ошибки импортов или миграций, проверьте следующие моменты.
+
+1. Наличие __init__.py
+В backend должны существовать файлы __init__.py в основных пакетах:
+
+cmd
+
+type nul > app\__init__.py
+type nul > app\api\__init__.py
+type nul > app\api\v1\__init__.py
+type nul > app\core\__init__.py
+type nul > app\domain\__init__.py
+type nul > app\domain\catalog\__init__.py
+type nul > app\domain\production\__init__.py
+type nul > app\domain\timers\__init__.py
+type nul > tests\__init__.py
+type nul > tests\core\__init__.py
+type nul > tests\domain\__init__.py
+2. Исправление схем заказов
+В папке:
+
+text
+
+app/schemas
+файл схем заказов должен называться:
+
+text
+
+orders.py
+Если он называется order.py, переименуйте:
+
+cmd
+
+ren app\schemas\order.py orders.py
+Также в файле:
+
+text
+
+app/schemas/__init__.py
+импорт должен быть таким:
+
+Python
+
+from app.schemas.orders import (
+    ...
+)
+3. Исправление модели складских заявок
+Файл:
+
+text
+
+app/models/stockpile.py
+должен содержать модели Stockpile и StockpileItem, а не копии Order / OrderItem.
+
+Корректный вариант:
+
+Python
+
+import uuid
+
+from sqlalchemy import ForeignKey, Integer, String, Text
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.models.base import Base, TimestampMixin
+
+
+class Stockpile(TimestampMixin, Base):
+    __tablename__ = "stockpiles"
+
+    id: Mapped[str] = mapped_column(
+        String(36),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4()),
+    )
+
+    creator_id: Mapped[str | None] = mapped_column(
+        String(64),
+        nullable=True,
+    )
+
+    assignee_id: Mapped[str | None] = mapped_column(
+        String(64),
+        nullable=True,
+    )
+
+    status: Mapped[str] = mapped_column(
+        String(32),
+        default="pending",
+        index=True,
+        nullable=False,
+    )
+
+    destination: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+    )
+
+    notes: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    items: Mapped[list["StockpileItem"]] = relationship(
+        "StockpileItem",
+        back_populates="stockpile",
+        cascade="all, delete-orphan",
+    )
+
+
+class StockpileItem(Base):
+    __tablename__ = "stockpile_items"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True,
+    )
+
+    stockpile_id: Mapped[str] = mapped_column(
+        ForeignKey("stockpiles.id", ondelete="CASCADE"),
+        index=True,
+        nullable=False,
+    )
+
+    item_id: Mapped[str] = mapped_column(
+        String(128),
+        nullable=False,
+    )
+
+    quantity: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    completed_quantity: Mapped[int] = mapped_column(
+        Integer,
+        default=0,
+        nullable=False,
+    )
+
+    stockpile: Mapped["Stockpile"] = relationship(
+        "Stockpile",
+        back_populates="items",
+    )
+4. Регистрация всех моделей для Alembic
+Файл:
+
+text
+
+app/models/__init__.py
+не должен быть пустым. Alembic должен видеть все модели проекта.
+
+Пример содержимого:
+
+Python
+
+from app.models.base import Base, TimestampMixin
+from app.models.item import Item
+from app.models.order import Order, OrderItem
+from app.models.session import Session
+from app.models.stockpile import Stockpile, StockpileItem
+from app.models.timer import Timer
+from app.models.user import User
+
+__all__ = [
+    "Base",
+    "TimestampMixin",
+    "Item",
+    "Order",
+    "OrderItem",
+    "Session",
+    "Stockpile",
+    "StockpileItem",
+    "Timer",
+    "User",
+]
+Если названия классов в ваших файлах отличаются, используйте фактические имена классов из соответствующих файлов моделей.
+
+Проверка backend перед запуском
+После исправлений выполните:
+
+cmd
+
+python -c "import app.main; print('main OK')"
+Если всё настроено правильно, вывод будет:
+
+text
+
+main OK
+Миграции базы данных
+Примените существующие миграции:
+
+cmd
+
+alembic upgrade head
+Если модели были исправлены или добавлены новые поля, можно синхронизировать миграции:
+
+cmd
+
+alembic revision --autogenerate -m "sync_all_models"
+alembic upgrade head
+После повторной автогенерации может появиться пустая миграция. Если в логах нет строк вида Detected added, Detected removed, Detected changed, такую пустую миграцию можно удалить из:
+
+text
+
+alembic/versions
+Запуск backend
+cmd
+
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+После успешного запуска должно появиться:
+
+text
+
+Application startup complete.
+Адреса backend
+Swagger UI доступен по адресу:
+
+text
+
+http://127.0.0.1:8000/api/docs
+OpenAPI JSON:
+
+text
+
+http://127.0.0.1:8000/api/openapi.json
+Health check:
+
+text
+
+http://127.0.0.1:8000/api/health
+Также есть root health endpoint:
+
+text
+
+http://127.0.0.1:8000/health
+Важно: /docs может возвращать 404, так как документация в этом проекте находится по адресу /api/docs.
+
+Frontend
+В отдельном терминале перейдите в папку frontend:
+
+cmd
+
+cd frontend
+Установите зависимости:
+
+cmd
+
+npm install
+Запустите frontend:
+
+cmd
+
+npm run dev
+Если frontend не видит backend, проверьте .env frontend-части. Обычно нужно указать один из вариантов:
+
+env
+
+VITE_API_URL=http://127.0.0.1:8000
+или:
+
+env
+
+VITE_API_URL=http://127.0.0.1:8000/api
+Зависит от того, как в коде frontend формируются API-запросы.
+
+Частые ошибки
+ModuleNotFoundError: No module named 'app.schemas.orders'
+Проверьте, что файл называется:
+
+text
+
+app/schemas/orders.py
+а не:
+
+text
+
+app/schemas/order.py
+ImportError: cannot import name 'Base' from 'app.models'
+Проверьте файл:
+
+text
+
+app/models/__init__.py
+В нём должен импортироваться Base:
+
+Python
+
+from app.models.base import Base
+sqlalchemy.exc.InvalidRequestError: Table 'orders' is already defined
+Скорее всего, в одной из моделей случайно скопирован класс Order или OrderItem.
+
+Проверьте:
+
+text
+
+app/models/stockpile.py
+В нём должны быть классы:
+
+Python
+
+Stockpile
+StockpileItem
+а таблицы должны называться:
+
+Python
+
+__tablename__ = "stockpiles"
+__tablename__ = "stockpile_items"
+/docs возвращает 404
+Это нормально для данного проекта. Используйте:
+
+text
+
+http://127.0.0.1:8000/api/docs
 
 
