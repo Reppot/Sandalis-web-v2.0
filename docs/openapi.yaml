@@ -2,101 +2,139 @@ openapi: "3.1.0"
 info:
   title: Sandalis API
   version: "2.0.0"
-  description: Единый контракт HTTP API для SINDARIS Terminal v2.0
+  description: |
+    Единственный источник правды по HTTP-контракту SINDARIS Terminal v2.0.
+    Автогенерация FastAPI совпадает с этим документом.
 
 servers:
   - url: http://localhost:8000
     description: Local Dev
   - url: https://sandalis-api.onrender.com
-    description: Production
+    description: Production Render
 
 paths:
   /health:
     get:
-      summary: Быстрый healthcheck
+      summary: Быстрый healthcheck без БД
+      operationId: rootHealth
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
 
   /api/health:
     get:
-      summary: Healthcheck с проверкой PostgreSQL
+      summary: Healthcheck с проверкой соединения PostgreSQL
+      operationId: apiHealth
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: sandalis-api
 
   /api/v1/auth/token:
     post:
-      summary: Вход по клановому токену
+      summary: Вход по клановому токену доступа
+      operationId: loginWithToken
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required: [token]
-              properties:
-                token: { type: string }
+              $ref: "#/components/schemas/TokenLoginRequest"
       responses:
         "200":
-          description: Сессия успешно создана
+          description: Успешная авторизация, устанавливает cookie sindaris_session
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: sindaris_session=abc123...; HttpOnly; SameSite=Lax
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
         "401":
-          description: Неверный токен
+          description: Неверный или аннулированный токен
 
   /api/v1/auth/me:
     get:
-      summary: Получение текущей сессии
+      summary: Текущая сессия
+      operationId: getMe
       responses:
         "200":
           description: Активная сессия
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionResponse"
         "401":
-          description: Неавторизован
+          description: Сессия отсутствует или истекла
 
   /api/v1/auth/logout:
     post:
       summary: Завершение сессии
+      operationId: logout
       responses:
         "204":
-          description: Успешно вышли
+          description: Сессия удалена, cookie очищена
 
   /api/v1/orders:
     get:
-      summary: Список заказов
+      summary: Список заказов на производство
+      operationId: listOrders
       responses:
         "200":
-          description: Список всех заказов
+          description: Список заказов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/OrderResponse"
     post:
-      summary: Создание заказа
+      summary: Создание нового заказа
+      operationId: createOrder
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              required: [destination, items]
-              properties:
-                destination: { type: string }
-                notes: { type: string, nullable: true }
-                items:
-                  type: array
-                  items:
-                    type: object
-                    required: [itemId, quantity]
-                    properties:
-                      itemId: { type: string }
-                      quantity: { type: integer, minimum: 1 }
+              $ref: "#/components/schemas/OrderCreateRequest"
       responses:
         "201":
           description: Заказ создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
 
   /api/v1/orders/{order_id}/status:
     patch:
-      summary: Изменение статуса заказа
+      summary: Обновление статуса заказа
+      operationId: updateOrderStatus
       parameters:
         - name: order_id
           in: path
           required: true
-          schema: { type: string }
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -105,45 +143,399 @@ paths:
               type: object
               required: [status]
               properties:
-                status: { type: string, enum: [pending, processing, completed, cancelled] }
+                status:
+                  type: string
+                  enum: [pending, processing, completed, cancelled]
       responses:
         "200":
-          description: Статус обновлен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
+
+  /api/v1/orders/{order_id}/claim:
+    post:
+      summary: Назначение заказа на текущего пользователя
+      operationId: claimOrder
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderResponse"
+
+  /api/v1/orders/{order_id}:
+    delete:
+      summary: Удаление заказа
+      operationId: deleteOrder
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Заказ удалён
 
   /api/v1/stockpiles:
     get:
       summary: Список складов
+      operationId: listStockpiles
       responses:
         "200":
-          description: Список складов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StockpileResponse"
     post:
       summary: Создание склада
+      operationId: createStockpile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StockpileCreateRequest"
       responses:
         "201":
-          description: Склад создан
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockpileResponse"
+
+  /api/v1/stockpiles/{stockpile_id}/items:
+    put:
+      summary: Полное обновление содержимого склада
+      operationId: updateStockpileItems
+      parameters:
+        - name: stockpile_id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [items]
+              properties:
+                items:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/StockpileItemDTO"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StockpileResponse"
+
+  /api/v1/stockpiles/{stockpile_id}:
+    delete:
+      summary: Удаление склада
+      operationId: deleteStockpile
+      parameters:
+        - name: stockpile_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Склад удалён
 
   /api/v1/timers:
     get:
-      summary: Список таймеров
+      summary: Список таймеров деградации
+      operationId: listTimers
       responses:
         "200":
-          description: Список таймеров
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimerResponse"
     post:
-      summary: Создание таймера
+      summary: Запуск нового таймера
+      operationId: createTimer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimerCreateRequest"
       responses:
         "201":
-          description: Таймер запущен
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimerResponse"
+
+  /api/v1/timers/{timer_id}/reset:
+    post:
+      summary: Сброс таймера на начальный интервал
+      operationId: resetTimer
+      parameters:
+        - name: timer_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimerResponse"
+
+  /api/v1/timers/{timer_id}:
+    delete:
+      summary: Удаление таймера
+      operationId: deleteTimer
+      parameters:
+        - name: timer_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Таймер удалён
 
   /api/v1/items:
     get:
-      summary: Поиск и получение каталога предметов
+      summary: Каталог предметов с нечетким поиском
+      operationId: listItems
       parameters:
         - name: q
           in: query
-          schema: { type: string }
+          required: false
+          schema:
+            type: string
         - name: category
           in: query
-          schema: { type: string, default: all }
+          required: false
+          schema:
+            type: string
+            default: all
       responses:
         "200":
-          description: Отфильтрованный список предметов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ItemResponse"
+
+components:
+  schemas:
+    TokenLoginRequest:
+      type: object
+      required: [token]
+      properties:
+        token:
+          type: string
+
+    DiscordProfileDTO:
+      type: object
+      required: [id, username]
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        discriminator:
+          type: string
+          default: "0"
+        avatarUrl:
+          type: string
+          nullable: true
+
+    SessionResponse:
+      type: object
+      required: [token, role, createdAt, expiresAt]
+      properties:
+        token:
+          type: string
+        discordId:
+          type: string
+          nullable: true
+        discordProfile:
+          $ref: "#/components/schemas/DiscordProfileDTO"
+        role:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        expiresAt:
+          type: string
+          format: date-time
+
+    OrderItemDTO:
+      type: object
+      required: [itemId, quantity]
+      properties:
+        itemId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+        completedQuantity:
+          type: integer
+          default: 0
+
+    OrderCreateRequest:
+      type: object
+      required: [destination, items]
+      properties:
+        destination:
+          type: string
+        notes:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
+
+    OrderResponse:
+      type: object
+      required: [id, status, destination, items, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+        creatorId:
+          type: string
+          nullable: true
+        assigneeId:
+          type: string
+          nullable: true
+        status:
+          type: string
+        destination:
+          type: string
+        notes:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    StockpileItemDTO:
+      type: object
+      required: [itemId, quantity]
+      properties:
+        itemId:
+          type: string
+        quantity:
+          type: integer
+          minimum: 0
+
+    StockpileCreateRequest:
+      type: object
+      required: [name, location]
+      properties:
+        name:
+          type: string
+        location:
+          type: string
+        code:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/StockpileItemDTO"
+
+    StockpileResponse:
+      type: object
+      required: [id, name, location, items, updatedAt]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        location:
+          type: string
+        code:
+          type: string
+          nullable: true
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/StockpileItemDTO"
+        lastUpdatedBy:
+          type: string
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+
+    TimerCreateRequest:
+      type: object
+      required: [name, durationSeconds]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          default: stockpile_decay
+        durationSeconds:
+          type: integer
+          minimum: 1
+
+    TimerResponse:
+      type: object
+      required: [id, name, type, targetTimestamp, durationSeconds]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        targetTimestamp:
+          type: integer
+        durationSeconds:
+          type: integer
+
+    ItemResponse:
+      type: object
+      required: [id, code, name, englishName, category, crateSize, productionTime]
+      properties:
+        id:
+          type: string
+        code:
+          type: string
+        name:
+          type: string
+        englishName:
+          type: string
+        category:
+          type: string
+        iconUrl:
+          type: string
+          nullable: true
+        crateSize:
+          type: integer
+        productionTime:
+          type: integer

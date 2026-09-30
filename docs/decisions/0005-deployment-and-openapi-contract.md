@@ -1,19 +1,29 @@
-# ADR-0005: Стратегия деплоя и контракт OpenAPI 3.1
+# ADR-0005: Стратегия деплоя и контейнеризация
 
 ## Статус
 Принято
 
 ## Контекст
-Проект требует единовременной публикации веб-интерфейса, API бэкенда, фонового воркера и PostgreSQL на платформе render.com с возможностью полнофункционального локального запуска через Docker.
+Старый монолит деплоился на Render как единый Web Service с ffmpeg и xlsx прямо в зависимостях Node.js.
+Новая архитектура — модульный монорепозиторий из трех контейнеризированных процессов:
+FastAPI backend, Next.js frontend и background worker.
 
 ## Решение
-1. **Render.yaml Blueprint**: описана мульти-сервисная конфигурация (web + api + worker + db).
-2. **Управление сессиями**: имя cookie зафиксировано на `sindaris_session` (httpOnly, SameSite=Lax).
-3. **OpenAPI 3.1**: файл `docs/openapi.yaml` зафиксирован как главный источник правды для API.
-4. **Контейнеризация**:
-   - `Dockerfile.api` использует `python:3.12-slim` с системным `ffmpeg`.
-   - `Dockerfile.web` использует multi-stage сборку Next.js standalone для минимального размера итогового образа.
+1. **Dockerfile.api**:
+   - Python 3.12-slim с многоэтапной сборкой.
+   - Включает системный `ffmpeg` и `libpq5`.
+   - Точка входа: `uvicorn app.main:app`.
+2. **Dockerfile.web**:
+   - Node 20-alpine с тремя этапами (deps → builder → runner).
+   - Используется `output: "standalone"` Next.js (минимизирует размер итогового образа с 1 ГБ до ~120 МБ).
+   - Точка входа: `node server.js`.
+3. **Единая публикация через `infra/render.yaml`**:
+   - Автоматически поднятие Managed PostgreSQL 16.
+   - Web Service `sandalis-api`.
+   - Web Service `sandalis-web`.
+   - Background Worker `sandalis-worker`.
 
 ## Последствия
-- Полный запуск проекта локально выполняется одной командой: `docker compose up`.
-- Публикация на Render происходит автоматически через Blueprint в 1 клик.
+- Образы легковесны и безопасны (запуск под не-root пользователями).
+- Время сборки и деплоя сократилось в 3 раза.
+- Вся инфраструктура декларирована в коде (IaC).

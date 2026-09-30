@@ -1,23 +1,41 @@
-# === Dockerfile для FastAPI Backend + Worker ===
-FROM python:3.12-slim as builder
+# === STAGE 1: Build & Dependencies ===
+FROM python:3.12-slim AS builder
 
-WORKDIR /app
+WORKDIR /build
 
-# Системные зависимости (включая ffmpeg для конвертации видео)
+# Установка системных зависимостей для сборки C-расширений (asyncpg)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
-    ffmpeg \
-    curl \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 COPY backend/pyproject.toml backend/README.md ./
-COPY backend/app ./app
-COPY backend/alembic ./alembic
-COPY backend/alembic.ini ./
+RUN pip install --no-cache-dir --prefix=/install .
 
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir .
+# === STAGE 2: Runtime ===
+FROM python:3.12-slim AS runner
+
+WORKDIR /app
+
+# Установка системного ffmpeg для воркера видео и libpq для PostgreSQL
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /install /usr/local
+COPY backend/app /app/app
+COPY backend/alembic /app/alembic
+COPY backend/alembic.ini /app/alembic.ini
 
 EXPOSE 8000
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# Healthcheck для балансировщиков
+HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8000/health || exit 1
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
