@@ -17,6 +17,8 @@ dependencies = [
     "pydantic-settings>=2.9.0,<3.0",
     "python-multipart>=0.0.20",
     "httpx>=0.28.0,<1.0",
+    "boto3>=1.35.0,<2.0",
+    "h5py>=3.12.0,<4.0",
 ]
 
 [project.optional-dependencies]
@@ -26,6 +28,12 @@ dev = [
     "httpx>=0.28.0",
     "ruff>=0.11.0",
 ]
+
+[project.scripts]
+sandalis-migrate = "scripts.migrate_from_supabase:main"
+sandalis-import-catalog = "scripts.import_catalog:main"
+sandalis-import-icons = "scripts.import_icons_to_s3:main"
+sandalis-migrate-video = "scripts.migrate_video_to_s3:main"
 
 [tool.ruff]
 target-version = "py312"
