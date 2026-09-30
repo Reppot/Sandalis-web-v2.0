@@ -1,45 +1,72 @@
-# infra/render.yaml — продакшен как код.
-# Наследует нынешний render.yaml в корне: тот же регион и healthcheck,
-# но процессов теперь три, а секреты не размазаны по одному сервису.
-services:
-  - type: web
-    name: sandalis-web            # Next.js
-    runtime: node
-    rootDir: frontend
+# render.com Blueprint — поднимает web, api, worker и БД одной публикацией
+databases:
+  - name: sandalis-db
+    plan: free
+    databaseName: sandalis
+    user: sandalis
     region: frankfurt
-    buildCommand: npm ci --include=dev && npm run build
-    startCommand: npm run start
-    healthCheckPath: /api/health  # уже работает в проде — сохраняем
-    envVars:
-      - key: NODE_VERSION
-        value: "22"
-      - key: NEXT_PUBLIC_API_URL
-        value: https://sandalis-api.onrender.com
 
+services:
+  # --- FastAPI backend ---
   - type: web
-    name: sandalis-api            # FastAPI
+    name: sandalis-api
     runtime: python
-    rootDir: backend
     region: frankfurt
-    buildCommand: pip install -e .
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    buildCommand: |
+      cd backend && pip install -e .
+    startCommand: |
+      cd backend && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
         fromDatabase:
           name: sandalis-db
           property: connectionString
-      - key: ACCESS_TOKENS_JSON   # реестр клановых токенов, как сегодня
+      - key: ACCESS_TOKENS_JSON
+        sync: false
+      - key: DISCORD_CLIENT_ID
         sync: false
       - key: DISCORD_CLIENT_SECRET
         sync: false
+      - key: DISCORD_REDIRECT_URI
+        sync: false
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false
 
+  # --- Next.js frontend ---
+  - type: web
+    name: sandalis-web
+    runtime: node
+    region: frankfurt
+    plan: free
+    buildCommand: cd frontend && npm ci && npm run build
+    startCommand: cd frontend && npm start
+    healthCheckPath: /
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://sandalis-api.onrender.com
+
+  # --- Background worker (ffmpeg, imports) ---
   - type: worker
-    name: sandalis-worker         # ffmpeg + импорт данных войны
+    name: sandalis-worker
     runtime: python
-    rootDir: backend
-    startCommand: python -m app.workers.media
-
-databases:
-  - name: sandalis-db
-    plan: starter                 # managed PostgreSQL 16 вместо пулера Supabase
+    region: frankfurt
+    plan: free
+    buildCommand: cd backend && pip install -e .
+    startCommand: cd backend && python -m app.workers
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: sandalis-db
+          property: connectionString
+      - key: S3_ENDPOINT
+        sync: false
+      - key: S3_ACCESS_KEY
+        sync: false
+      - key: S3_SECRET_KEY
+        sync: false

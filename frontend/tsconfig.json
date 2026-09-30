@@ -1,12 +1,24 @@
 {
   "compilerOptions": {
-    "strict": true, // без any вне границ DTO
+    "target": "ES2022",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"] // любой импорт — от корня src
+      "@/*": ["./src/*"]
     }
-  }
-  // "@/features/orders", "@/shared/ui/button", "@/entities/item"
-  // Относительные пути ./file разрешены только внутри одной папки
-  // модуля. Выход выше через ../../ — запрещён eslint-правилом.
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

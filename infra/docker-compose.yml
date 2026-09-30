@@ -1,28 +1,48 @@
-# локально = облачно: web + api + worker + postgres одной командой
+version: "3.9"
+
 services:
-  web:
-    build: ../frontend
-    ports: ["3000:3000"]
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
+      POSTGRES_USER: sandalis
+      POSTGRES_PASSWORD: sandalis
+      POSTGRES_DB: sandalis
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sandalis"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   api:
-    build: ../backend
-    ports: ["8000:8000"]
+    build:
+      context: ../backend
+      dockerfile: ../infra/Dockerfile.api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/sandalis
-    depends_on: [db]
+      DATABASE_URL: "postgresql+asyncpg://sandalis:sandalis@db:5432/sandalis"
+      DEBUG: "true"
+    ports:
+      - "8000:8000"
 
-  worker:
-    build: ../backend
-    command: python -m app.workers.media  # ffmpeg отдельным процессом
-    depends_on: [db]
-
-  db:
-    image: postgres:16
+  web:
+    build:
+      context: ../frontend
+      dockerfile: ../infra/Dockerfile.web
+    restart: unless-stopped
+    depends_on:
+      - api
     environment:
-      POSTGRES_PASSWORD: postgres
-    volumes: [pgdata:/var/lib/postgresql/data]
+      NEXT_PUBLIC_API_URL: "http://api:8000"
+    ports:
+      - "3000:3000"
 
 volumes:
   pgdata:

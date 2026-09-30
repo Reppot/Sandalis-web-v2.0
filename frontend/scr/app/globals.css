@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/*
+ * Минимальный глобальный лист.
+ * Старый globals.css (51 КБ) был забит дублями Tailwind-утилит —
+ * здесь остаётся только то, что Tailwind не генерирует.
+ */
+
+:root {
+  --color-bg: #0a0e17;
+  --color-panel: #111827;
+  --color-border: #1f2937;
+  --color-accent: #3b82f6;
+  --color-text: #e5e7eb;
+  --color-muted: #6b7280;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "JetBrains Mono", "Fira Code", monospace;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Скроллбар в стиле терминала */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-panel);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted);
+}

@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/app/globals.css";
 
 export const metadata: Metadata = {
   title: "SINDARIS Terminal",
-  description: "Инструменты клана: заказы, склады, таймеры, коды.",
+  description: "Sandalis-Web v2.0 — клановый инструмент Foxhole",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="ru">
-      <body>{children}</body>
+    <html lang="ru" className="dark">
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

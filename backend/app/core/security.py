@@ -1,37 +1,119 @@
+import json
+import secrets
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from uuid import uuid4
-
-from fastapi import Depends, Response
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.core.config import settings
-from app.core.db import get_session
-from app.models.session import Session
-
-COOKIE = "sindaris_session"  # имя cookie сохраняем — фронт не меняется
+from typing import Any
 
 
-async def create_session(response: Response, user_id: int, s: AsyncSession) -> None:
-    session = Session(
-        id=str(uuid4()),
-        user_id=user_id,
-        expires_at=datetime.now(timezone.utc)
-        + timedelta(minutes=settings.session_ttl_min),
-    )
-    s.add(session)
-    await s.commit()
-    response.set_cookie(COOKIE, session.id, httponly=True, samesite="lax", secure=True)
+@dataclass(frozen=True)
+class ClanTokenInfo:
+    token: str
+    discord_id: str | None
+    role: str
+    username: str | None
 
 
-async def current_user_id(
-    cookie: str | None = None,
-    s: AsyncSession = Depends(get_session),
-) -> int:
-    # проверка сессии — зависимость FastAPI, а не прокси перед каждым рендером:
-    # один запрос в Postgres там, где она реально нужна
-    ...
+def generate_session_token() -> str:
+    return secrets.token_hex(32)
 
 
-def match_access_token(token: str) -> int | None:
-    # ACCESS_TOKENS_JSON: токен -> discord_id, как сегодня
-    ...
+def generate_oauth_state() -> str:
+    return secrets.token_urlsafe(32)
+
+
+def calculate_session_expiration(ttl_minutes: int = 30) -> datetime:
+    return datetime.now(timezone.utc) + timedelta(minutes=ttl_minutes)
+
+
+def is_session_expired(expires_at: datetime) -> bool:
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(tzinfo=timezone.utc)
+
+    return datetime.now(timezone.utc) >= expires_at
+
+
+def parse_access_tokens_registry(
+    raw_json: str,
+) -> dict[str, ClanTokenInfo]:
+    if not raw_json or not raw_json.strip():
+        return {}
+
+    try:
+        parsed: Any = json.loads(raw_json)
+    except json.JSONDecodeError:
+        return {}
+
+    if not isinstance(parsed, dict):
+        return {}
+
+    registry: dict[str, ClanTokenInfo] = {}
+
+    for raw_token, raw_value in parsed.items():
+        token = str(raw_token).strip()
+
+        if not token:
+            continue
+
+        if isinstance(raw_value, dict):
+            discord_id = raw_value.get("discord_id")
+            username = raw_value.get("username")
+            role = raw_value.get("role", "member")
+
+            registry[token] = ClanTokenInfo(
+                token=token,
+                discord_id=(
+                    str(discord_id)
+                    if discord_id is not None
+                    else None
+                ),
+                role=str(role),
+                username=(
+                    str(username)
+                    if username is not None
+                    else None
+                ),
+            )
+            continue
+
+        if isinstance(raw_value, (str, int)) and not isinstance(
+            raw_value,
+            bool,
+        ):
+            registry[token] = ClanTokenInfo(
+                token=token,
+                discord_id=str(raw_value),
+                role="member",
+                username=None,
+            )
+
+    return registry
+
+
+def resolve_access_token(
+    presented_token: str,
+    registry_json: str,
+    legacy_token: str = "",
+) -> ClanTokenInfo | None:
+    normalized = presented_token.strip()
+
+    if not normalized:
+        return None
+
+    registry = parse_access_tokens_registry(registry_json)
+
+    for registered_token, token_info in registry.items():
+        if secrets.compare_digest(normalized, registered_token):
+            return token_info
+
+    if legacy_token and secrets.compare_digest(
+        normalized,
+        legacy_token,
+    ):
+        return ClanTokenInfo(
+            token=legacy_token,
+            discord_id=None,
+            role="member",
+            username=None,
+        )
+
+    return None

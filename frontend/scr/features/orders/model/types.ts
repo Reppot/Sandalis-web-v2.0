@@ -1,18 +1,13 @@
-// view-модель фичи — то, что удобно показывать,
-// а не то, как сервер назвал поля.
-export type OrderStatus = "new" | "crafting" | "ready" | "done";
+import type { OrderStatus, ProductionOrder } from "@/entities/order";
 
-export interface Order {
-  id: number;
-  itemName: string;
-  quantityKg: number;
-  status: OrderStatus;
-  statusLabel: string;   // «в производстве», «готов»… — уже по-русски
-  deadlineLabel: string; // «12 авг., 18:00» — уже отформатировано
+export interface OrderFilterState {
+  status: OrderStatus | "all";
+  searchQuery: string;
 }
 
-export interface NewOrder {
-  itemId: number;
+export interface CreateOrderFormData {
+  itemId: string;
   quantity: number;
-  comment?: string;
+  destination: string;
+  notes: string;
 }

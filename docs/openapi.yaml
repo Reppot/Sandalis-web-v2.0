@@ -1,26 +1,51 @@
-openapi: 3.1.0
+openapi: "3.1.0"
 info:
   title: Sandalis API
-  version: 2.0.0
+  version: "2.0.0"
+  description: |
+    Единственный источник правды по HTTP-контракту.
+    Автогенерация FastAPI должна совпадать с этим файлом.
+
+servers:
+  - url: http://localhost:8000
+    description: Local dev
+  - url: https://sandalis-api.onrender.com
+    description: Production
 
 paths:
-  /api/v1/orders:
+  /health:
     get:
-      summary: Открытые заказы клана
+      operationId: rootHealth
+      summary: Быстрый healthcheck без БД
       responses:
         "200":
-          description: Список заказов
+          description: OK
           content:
             application/json:
               schema:
-                type: array
-                items: { $ref: "#/components/schemas/OrderOut" }
-    post:
-      summary: Создать заказ
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema: { $ref: "#/components/schemas/OrderCreate" }
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
 
-# …stockpiles, timers, codes, items, auth — полный контракт
+  /api/health:
+    get:
+      operationId: apiHealth
+      summary: Healthcheck с проверкой PostgreSQL
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+                  service:
+                    type: string
+                    example: sandalis-api
+
+# Остальные пути добавляются по мере реализации роутеров (итерации 4-5).
