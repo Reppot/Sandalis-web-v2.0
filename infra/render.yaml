@@ -1,4 +1,3 @@
-# render.com Blueprint — поднимает web, api, worker и БД одной публикацией
 databases:
   - name: sandalis-db
     plan: free
@@ -7,16 +6,14 @@ databases:
     region: frankfurt
 
 services:
-  # --- FastAPI backend ---
+  # --- FastAPI Backend ---
   - type: web
     name: sandalis-api
     runtime: python
     region: frankfurt
     plan: free
-    buildCommand: |
-      cd backend && pip install -e .
-    startCommand: |
-      cd backend && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
+    buildCommand: cd backend && pip install -e .
+    startCommand: cd backend && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
@@ -38,7 +35,7 @@ services:
       - key: S3_SECRET_KEY
         sync: false
 
-  # --- Next.js frontend ---
+  # --- Next.js Frontend ---
   - type: web
     name: sandalis-web
     runtime: node
@@ -51,7 +48,7 @@ services:
       - key: NEXT_PUBLIC_API_URL
         value: https://sandalis-api.onrender.com
 
-  # --- Background worker (ffmpeg, imports) ---
+  # --- Background Worker ---
   - type: worker
     name: sandalis-worker
     runtime: python

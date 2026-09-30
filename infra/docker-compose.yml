@@ -20,8 +20,8 @@ services:
 
   api:
     build:
-      context: ../backend
-      dockerfile: ../infra/Dockerfile.api
+      context: ..
+      dockerfile: infra/Dockerfile.api
     restart: unless-stopped
     depends_on:
       db:
@@ -29,18 +29,19 @@ services:
     environment:
       DATABASE_URL: "postgresql+asyncpg://sandalis:sandalis@db:5432/sandalis"
       DEBUG: "true"
+      ACCESS_TOKENS_JSON: '{"DEV_TOKEN":{"discord_id":"1000","role":"admin","username":"DevAdmin"}}'
     ports:
       - "8000:8000"
 
   web:
     build:
-      context: ../frontend
-      dockerfile: ../infra/Dockerfile.web
+      context: ..
+      dockerfile: infra/Dockerfile.web
     restart: unless-stopped
     depends_on:
       - api
     environment:
-      NEXT_PUBLIC_API_URL: "http://api:8000"
+      NEXT_PUBLIC_API_URL: "http://localhost:8000"
     ports:
       - "3000:3000"
 

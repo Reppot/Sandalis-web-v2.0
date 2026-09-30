@@ -2,50 +2,148 @@ openapi: "3.1.0"
 info:
   title: Sandalis API
   version: "2.0.0"
-  description: |
-    Единственный источник правды по HTTP-контракту.
-    Автогенерация FastAPI должна совпадать с этим файлом.
+  description: Единый контракт HTTP API для SINDARIS Terminal v2.0
 
 servers:
   - url: http://localhost:8000
-    description: Local dev
+    description: Local Dev
   - url: https://sandalis-api.onrender.com
     description: Production
 
 paths:
   /health:
     get:
-      operationId: rootHealth
-      summary: Быстрый healthcheck без БД
+      summary: Быстрый healthcheck
       responses:
         "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: ok
 
   /api/health:
     get:
-      operationId: apiHealth
       summary: Healthcheck с проверкой PostgreSQL
       responses:
         "200":
           description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: ok
-                  service:
-                    type: string
-                    example: sandalis-api
 
-# Остальные пути добавляются по мере реализации роутеров (итерации 4-5).
+  /api/v1/auth/token:
+    post:
+      summary: Вход по клановому токену
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [token]
+              properties:
+                token: { type: string }
+      responses:
+        "200":
+          description: Сессия успешно создана
+        "401":
+          description: Неверный токен
+
+  /api/v1/auth/me:
+    get:
+      summary: Получение текущей сессии
+      responses:
+        "200":
+          description: Активная сессия
+        "401":
+          description: Неавторизован
+
+  /api/v1/auth/logout:
+    post:
+      summary: Завершение сессии
+      responses:
+        "204":
+          description: Успешно вышли
+
+  /api/v1/orders:
+    get:
+      summary: Список заказов
+      responses:
+        "200":
+          description: Список всех заказов
+    post:
+      summary: Создание заказа
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [destination, items]
+              properties:
+                destination: { type: string }
+                notes: { type: string, nullable: true }
+                items:
+                  type: array
+                  items:
+                    type: object
+                    required: [itemId, quantity]
+                    properties:
+                      itemId: { type: string }
+                      quantity: { type: integer, minimum: 1 }
+      responses:
+        "201":
+          description: Заказ создан
+
+  /api/v1/orders/{order_id}/status:
+    patch:
+      summary: Изменение статуса заказа
+      parameters:
+        - name: order_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { type: string, enum: [pending, processing, completed, cancelled] }
+      responses:
+        "200":
+          description: Статус обновлен
+
+  /api/v1/stockpiles:
+    get:
+      summary: Список складов
+      responses:
+        "200":
+          description: Список складов
+    post:
+      summary: Создание склада
+      responses:
+        "201":
+          description: Склад создан
+
+  /api/v1/timers:
+    get:
+      summary: Список таймеров
+      responses:
+        "200":
+          description: Список таймеров
+    post:
+      summary: Создание таймера
+      responses:
+        "201":
+          description: Таймер запущен
+
+  /api/v1/items:
+    get:
+      summary: Поиск и получение каталога предметов
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string, default: all }
+      responses:
+        "200":
+          description: Отфильтрованный список предметов
