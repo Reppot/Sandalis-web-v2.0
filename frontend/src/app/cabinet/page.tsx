@@ -1,10 +1,5 @@
-import { CabinetGate, CabinetView } from "@/features/cabinet";
+import { CabinetWorkspace } from "@/features/cabinet";
 
 export default function CabinetPage() {
-  // Gate: есть сессия — кабинет, нет — редирект на «/»
-  return (
-    <CabinetGate>
-      <CabinetView />
-    </CabinetGate>
-  );
+  return <CabinetWorkspace />;
 }
