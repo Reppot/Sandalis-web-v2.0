@@ -1,0 +1,14 @@
+{
+  "order": {
+    "not_found": "Order {order_id} was not found in your clan.",
+    "created": "Order \"{title}\" has been created.",
+    "duplicate": "Such order already exists.",
+    "status_changed": "Order status changed to \"{status}\".",
+    "invalid_transition": "Cannot move from \"{from_status}\" to \"{to_status}\".",
+    "not_enough_stock": "Not enough \"{item}\" in stockpile: need {needed}, available {available}.",
+    "queued": {
+      "one": "{count} item queued.",
+      "other": "{count} items queued."
+    }
+  }
+}

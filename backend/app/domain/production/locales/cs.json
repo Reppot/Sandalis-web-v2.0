@@ -1,0 +1,15 @@
+{
+  "order": {
+    "not_found": "Objednávka {order_id} ve vašem klanu neexistuje.",
+    "created": "Objednávka „{title}“ byla vytvořena.",
+    "duplicate": "Taková objednávka již existuje.",
+    "status_changed": "Stav objednávky byl změněn na „{status}“.",
+    "invalid_transition": "Přechod ze stavu „{from_status}“ do „{to_status}“ není povolen.",
+    "not_enough_stock": "Ve skladu chybí „{item}“: potřeba {needed}, k dispozici {available}.",
+    "queued": {
+      "one": "Do fronty byla přidána {count} položka.",
+      "few": "Do fronty byly přidány {count} položky.",
+      "other": "Do fronty bylo přidáno {count} položek."
+    }
+  }
+}

@@ -1,154 +1,124 @@
-from fastapi import APIRouter, Depends, HTTPException, Response
-from sqlalchemy.ext.asyncio import AsyncSession
+from __future__ import annotations
 
-from app.api.dependencies import Principal, get_current_principal
-from app.core.db import get_db
-from app.models.order import Order
-from app.schemas.orders import (
-    OrderCreateRequest,
-    OrderItemResponse,
-    OrderResponse,
-    OrderStatusUpdateRequest,
+import uuid
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Query, Response, status
+
+from app.api.deps import (
+    ClanSession,
+    CurrentPrincipal,
+    PermissionChecker,
+    TranslatorDep,
+    domain_translator,
 )
-from app.services.errors import (
-    EntityNotFoundError,
-    PermissionDeniedError,
-    ValidationServiceError,
+from app.core.i18n import Translator
+from app.core.permissions import Scopes
+from app.core.security import Principal
+from app.models.order import OrderStatus
+from app.schemas.order import (
+    OrderCreate,
+    OrderCreated,
+    OrderRead,
+    OrderStatusUpdate,
+    OrderUpdate,
+    Page,
 )
-from app.services.orders import order_service
+from app.services.orders import OrderService
+
+router = APIRouter(prefix="/orders", tags=["orders"])
+
+ProductionTranslator = Annotated[Translator, Depends(domain_translator("production"))]
 
 
-router = APIRouter(
-    prefix="/orders",
-    tags=["orders"],
+async def get_order_service(
+    session: ClanSession,
+    principal: CurrentPrincipal,
+    translator: ProductionTranslator,
+) -> OrderService:
+    return OrderService(session, principal, translator)
+
+
+ServiceDep = Annotated[OrderService, Depends(get_order_service)]
+
+
+@router.get(
+    "",
+    response_model=Page[OrderRead],
+    summary="Список заказов текущего клана",
+    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_READ]))],
 )
-
-
-def _serialize_order(order: Order) -> OrderResponse:
-    return OrderResponse(
-        id=order.id,
-        creator_id=order.creator_id,
-        assignee_id=order.assignee_id,
-        status=order.status,
-        items=[
-            OrderItemResponse(
-                item_id=item.item_id,
-                quantity=item.quantity,
-                completed_quantity=item.completed_quantity,
-            )
-            for item in order.items
-        ],
-        destination=order.destination,
-        notes=order.notes,
-        created_at=order.created_at,
-        updated_at=order.updated_at,
-    )
-
-
-def _service_error(exc: Exception) -> HTTPException:
-    if isinstance(exc, EntityNotFoundError):
-        return HTTPException(status_code=404, detail=str(exc))
-
-    if isinstance(exc, PermissionDeniedError):
-        return HTTPException(status_code=403, detail=str(exc))
-
-    if isinstance(exc, ValidationServiceError):
-        return HTTPException(status_code=422, detail=str(exc))
-
-    return HTTPException(status_code=500, detail="Order operation failed")
-
-
-@router.get("", response_model=list[OrderResponse])
 async def list_orders(
-    db: AsyncSession = Depends(get_db),
-    principal: Principal = Depends(get_current_principal),
-) -> list[OrderResponse]:
-    orders = await order_service.list_all(
-        db=db,
-        principal=principal,
+    service: ServiceDep,
+    status_filter: Annotated[OrderStatus | None, Query(alias="status")] = None,
+    assignee_id: Annotated[str | None, Query(max_length=64)] = None,
+    limit: Annotated[int, Query(ge=1, le=200)] = 50,
+    offset: Annotated[int, Query(ge=0)] = 0,
+) -> Page[OrderRead]:
+    rows, total = await service.list_orders(
+        status=status_filter, assignee_id=assignee_id, limit=limit, offset=offset
+    )
+    return Page[OrderRead](
+        items=[OrderRead.model_validate(r) for r in rows],
+        total=total, limit=limit, offset=offset,
     )
 
-    return [_serialize_order(order) for order in orders]
 
-
-@router.post("", response_model=OrderResponse, status_code=201)
-async def create_order(
-    payload: OrderCreateRequest,
-    db: AsyncSession = Depends(get_db),
-    principal: Principal = Depends(get_current_principal),
-) -> OrderResponse:
-    try:
-        order = await order_service.create(
-            db=db,
-            principal=principal,
-            payload=payload,
-        )
-    except Exception as exc:
-        raise _service_error(exc) from exc
-
-    return _serialize_order(order)
-
-
-@router.patch(
-    "/{order_id}/status",
-    response_model=OrderResponse,
+@router.get(
+    "/{order_id}",
+    response_model=OrderRead,
+    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_READ]))],
 )
-async def update_order_status(
-    order_id: str,
-    payload: OrderStatusUpdateRequest,
-    db: AsyncSession = Depends(get_db),
-    principal: Principal = Depends(get_current_principal),
-) -> OrderResponse:
-    try:
-        order = await order_service.update_status(
-            db=db,
-            principal=principal,
-            order_id=order_id,
-            new_status=payload.status,
-        )
-    except Exception as exc:
-        raise _service_error(exc) from exc
-
-    return _serialize_order(order)
+async def get_order(order_id: uuid.UUID, service: ServiceDep) -> OrderRead:
+    return OrderRead.model_validate(await service.get_order(order_id))
 
 
 @router.post(
-    "/{order_id}/claim",
-    response_model=OrderResponse,
+    "",
+    response_model=OrderCreated,
+    status_code=status.HTTP_201_CREATED,
+    summary="Создать заказ (нужны orders:write + stockpiles:read)",
 )
-async def claim_order(
-    order_id: str,
-    db: AsyncSession = Depends(get_db),
-    principal: Principal = Depends(get_current_principal),
-) -> OrderResponse:
-    try:
-        order = await order_service.claim(
-            db=db,
-            principal=principal,
-            order_id=order_id,
-        )
-    except Exception as exc:
-        raise _service_error(exc) from exc
+async def create_order(
+    payload: OrderCreate,
+    service: ServiceDep,
+    # вариант с получением Principal прямо из чекера
+    principal: Annotated[
+        Principal, Depends(PermissionChecker([Scopes.ORDERS_WRITE, Scopes.STOCKPILES_READ]))
+    ],
+) -> OrderCreated:
+    order, message = await service.create_order(payload)
+    return OrderCreated(order=OrderRead.model_validate(order), message=message)
 
-    return _serialize_order(order)
+
+@router.patch(
+    "/{order_id}",
+    response_model=OrderRead,
+    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+)
+async def update_order(
+    order_id: uuid.UUID, payload: OrderUpdate, service: ServiceDep
+) -> OrderRead:
+    return OrderRead.model_validate(await service.update_order(order_id, payload))
+
+
+@router.post(
+    "/{order_id}/status",
+    response_model=OrderCreated,
+    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+)
+async def change_status(
+    order_id: uuid.UUID, payload: OrderStatusUpdate, service: ServiceDep
+) -> OrderCreated:
+    order, message = await service.change_status(order_id, payload)
+    return OrderCreated(order=OrderRead.model_validate(order), message=message)
 
 
 @router.delete(
     "/{order_id}",
-    status_code=204,
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_DELETE]))],  # officer+
 )
-async def delete_order(
-    order_id: str,
-    db: AsyncSession = Depends(get_db),
-    principal: Principal = Depends(get_current_principal),
-) -> Response:
-    try:
-        await order_service.delete(
-            db=db,
-            principal=principal,
-            order_id=order_id,
-        )
-    except Exception as exc:
-        raise _service_error(exc) from exc
-
-    return Response(status_code=204)
+async def delete_order(order_id: uuid.UUID, service: ServiceDep) -> Response:
+    await service.delete_order(order_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

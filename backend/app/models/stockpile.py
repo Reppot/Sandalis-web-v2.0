@@ -1,86 +1,37 @@
+from __future__ import annotations
+
 import uuid
 
-from sqlalchemy import ForeignKey, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import ForeignKey, Index, Integer, String, UniqueConstraint
+from sqlalchemy.orm import Mapped, mapped_column
 
-from app.models.base import Base, TimestampMixin
+from app.models.base import Base, ClanScopedMixin, TimestampMixin, UUIDPkMixin
 
 
-class Stockpile(TimestampMixin, Base):
+class Stockpile(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     __tablename__ = "stockpiles"
-
-    id: Mapped[str] = mapped_column(
-        String(36),
-        primary_key=True,
-        default=lambda: str(uuid.uuid4()),
+    __table_args__ = (
+        UniqueConstraint("clan_id", "name", name="uq_stockpiles_clan_id_name"),
     )
 
-    creator_id: Mapped[str | None] = mapped_column(
-        String(64),
-        nullable=True,
-    )
-
-    assignee_id: Mapped[str | None] = mapped_column(
-        String(64),
-        nullable=True,
-    )
-
-    status: Mapped[str] = mapped_column(
-        String(32),
-        default="pending",
-        index=True,
-        nullable=False,
-    )
-
-    destination: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False,
-    )
-
-    notes: Mapped[str | None] = mapped_column(
-        Text,
-        nullable=True,
-    )
-
-    items: Mapped[list["StockpileItem"]] = relationship(
-        "StockpileItem",
-        back_populates="stockpile",
-        cascade="all, delete-orphan",
-    )
+    name: Mapped[str] = mapped_column(String(80), nullable=False)
+    region: Mapped[str] = mapped_column(String(64), nullable=False)
 
 
-class StockpileItem(Base):
+class StockpileItem(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     __tablename__ = "stockpile_items"
-
-    id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
-        autoincrement=True,
+    __table_args__ = (
+        Index("ix_stockpile_items_clan_item", "clan_id", "item_code"),
+        UniqueConstraint(
+            "stockpile_id", "item_code",
+            name="uq_stockpile_items_stockpile_id_item_code",
+        ),
     )
 
-    stockpile_id: Mapped[str] = mapped_column(
-        ForeignKey("stockpiles.id", ondelete="CASCADE"),
-        index=True,
-        nullable=False,
+    stockpile_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("stockpiles.id", ondelete="CASCADE"), nullable=False
     )
-
-    item_id: Mapped[str] = mapped_column(
-        String(128),
-        nullable=False,
+    item_code: Mapped[str] = mapped_column(
+        ForeignKey("catalog_items.code"), nullable=False
     )
-
-    quantity: Mapped[int] = mapped_column(
-        Integer,
-        nullable=False,
-    )
-
-    completed_quantity: Mapped[int] = mapped_column(
-        Integer,
-        default=0,
-        nullable=False,
-    )
-
-    stockpile: Mapped["Stockpile"] = relationship(
-        "Stockpile",
-        back_populates="items",
-    )
+    quantity: Mapped[int] = mapped_column(Integer, default=0, nullable=False)

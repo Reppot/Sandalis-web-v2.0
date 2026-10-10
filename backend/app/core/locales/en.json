@@ -1,0 +1,13 @@
+{
+  "errors": {
+    "internal": "Internal server error. Please try again later.",
+    "unauthorized": "Clan authentication required.",
+    "token_expired": "Session expired. Please sign in again.",
+    "forbidden": "Insufficient permissions. Required: {scopes}.",
+    "not_found": "Object not found.",
+    "validation": "Invalid request payload.",
+    "clan_context_missing": "Unable to resolve clan context for this request.",
+    "clan_scope_violation": "Operation rejected: {entity} belongs to another clan.",
+    "db_unavailable": "Database is waking up, please retry in a few seconds."
+  }
+}

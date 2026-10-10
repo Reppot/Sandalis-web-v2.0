@@ -1,20 +1,13 @@
-from app.models.base import Base, TimestampMixin
-from app.models.item import Item
-from app.models.order import Order, OrderItem
-from app.models.session import Session
+"""Все модели импортированы здесь, чтобы метаданные и мапперы были полными."""
+from app.models.base import Base, ClanScopedMixin, TimestampMixin, UUIDPkMixin
+from app.models.catalog import CatalogItem
+from app.models.order import Order, OrderStatus
+from app.models.rbac import Clan, ClanApiToken, ClanMembership, User
 from app.models.stockpile import Stockpile, StockpileItem
-from app.models.timer import Timer
-from app.models.user import User
 
 __all__ = [
-    "Base",
-    "TimestampMixin",
-    "Item",
-    "Order",
-    "OrderItem",
-    "Session",
-    "Stockpile",
-    "StockpileItem",
-    "Timer",
-    "User",
+    "Base", "ClanScopedMixin", "TimestampMixin", "UUIDPkMixin",
+    "CatalogItem", "Order", "OrderStatus",
+    "Clan", "ClanApiToken", "ClanMembership", "User",
+    "Stockpile", "StockpileItem",
 ]

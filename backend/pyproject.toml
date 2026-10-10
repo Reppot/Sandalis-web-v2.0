@@ -1,55 +1,17 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "sandalis-backend"
 version = "2.0.0"
-description = "Sandalis-Web v2.0 API — FastAPI backend"
-requires-python = ">=3.12,<3.14"
-dependencies = [
-    "fastapi>=0.115.0,<1.0",
-    "uvicorn[standard]>=0.34.0,<1.0",
-    "sqlalchemy[asyncio]>=2.0.40,<3.0",
-    "asyncpg>=0.30.0,<1.0",
-    "alembic>=1.15.0,<2.0",
-    "pydantic>=2.11.0,<3.0",
-    "pydantic-settings>=2.9.0,<3.0",
-    "python-multipart>=0.0.20",
-    "httpx>=0.28.0,<1.0",
-    "boto3>=1.35.0,<2.0",
-    "h5py>=3.12.0,<4.0",
-]
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0",
-    "pytest-asyncio>=0.26.0",
-    "ruff>=0.11.0",
-]
-
-[project.scripts]
-sandalis-migrate = "scripts.migrate_from_supabase:main"
-sandalis-import-catalog = "scripts.import_catalog:main"
-sandalis-import-icons = "scripts.import_icons_to_s3:main"
-sandalis-migrate-video = "scripts.migrate_video_to_s3:main"
-
-# --- КЛЮЧЕВОЙ БЛОК: указываем hatchling, что упаковывать ---
-[tool.hatch.build.targets.wheel]
-packages = ["app", "scripts"]
-
-[tool.hatch.build.targets.sdist]
-include = ["app", "scripts", "alembic", "tests", "alembic.ini"]
-
-[tool.ruff]
-target-version = "py312"
-line-length = 100
-exclude = [".venv", "alembic/versions"]
-
-[tool.ruff.lint]
-select = ["E", "F", "I", "N", "UP", "B", "SIM", "RUF"]
+description = "Sandalis Web v2.0 — multitenancy + RBAC + i18n backend (FastAPI/SQLAlchemy 2.0/asyncpg)"
+requires-python = ">=3.11"
 
 [tool.pytest.ini_options]
-asyncio_mode = "auto"
 testpaths = ["tests"]
 pythonpath = ["."]
+addopts = "-q"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100

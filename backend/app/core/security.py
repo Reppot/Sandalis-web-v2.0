@@ -1,119 +1,101 @@
-import json
-import secrets
-from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
-from typing import Any
+from __future__ import annotations
+
+import hashlib
+import uuid
+from datetime import UTC, datetime, timedelta
+from typing import Any, Literal
+
+import jwt
+from pydantic import BaseModel, ConfigDict, Field
+
+from app.core.config import settings
+from app.core.errors import UnauthorizedError
+from app.core.permissions import ClanRole, has_scope, missing_scopes, scopes_for
 
 
-@dataclass(frozen=True)
-class ClanTokenInfo:
-    token: str
-    discord_id: str | None
-    role: str
-    username: str | None
+class Principal(BaseModel):
+    """Иммутабельный «кто я и что мне можно» на текущий запрос."""
+    model_config = ConfigDict(frozen=True)
+
+    subject_type: Literal["user", "clan_token"] = "user"
+    user_id: str
+    clan_id: str
+    role: ClanRole
+    scopes: frozenset[str] = Field(default_factory=frozenset)
+    display_name: str | None = None
+    session_id: str | None = None
+
+    def can(self, scope: str) -> bool:
+        return has_scope(self.scopes, scope)
+
+    def missing(self, required: list[str]) -> list[str]:
+        return missing_scopes(self.scopes, required)
 
 
-def generate_session_token() -> str:
-    return secrets.token_hex(32)
+def hash_clan_token(raw: str) -> str:
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
-def generate_oauth_state() -> str:
-    return secrets.token_urlsafe(32)
+def issue_access_token(
+    *,
+    user_id: str,
+    clan_id: str,
+    role: ClanRole,
+    extra_scopes: list[str] | None = None,
+    revoked_scopes: list[str] | None = None,
+    display_name: str | None = None,
+    ttl_minutes: int | None = None,
+) -> str:
+    now = datetime.now(UTC)
+    payload: dict[str, Any] = {
+        "sub": user_id,
+        "clan_id": clan_id,
+        "role": role.value,
+        # кладём только дельту, а не полный набор — токен остаётся коротким
+        "xsc": extra_scopes or [],
+        "rsc": revoked_scopes or [],
+        "name": display_name,
+        "iss": settings.JWT_ISSUER,
+        "aud": settings.JWT_AUDIENCE,
+        "iat": now,
+        "nbf": now,
+        "exp": now + timedelta(minutes=ttl_minutes or settings.ACCESS_TOKEN_TTL_MIN),
+        "jti": uuid.uuid4().hex,
+    }
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALG)
 
 
-def calculate_session_expiration(ttl_minutes: int = 30) -> datetime:
-    return datetime.now(timezone.utc) + timedelta(minutes=ttl_minutes)
+def decode_access_token(token: str) -> Principal:
+    try:
+        payload = jwt.decode(
+            token,
+            settings.JWT_SECRET,
+            algorithms=[settings.JWT_ALG],
+            audience=settings.JWT_AUDIENCE,
+            issuer=settings.JWT_ISSUER,
+            leeway=30,  # Render free-tier иногда плывёт по времени
+            options={"require": ["exp", "sub", "iat"]},
+        )
+    except jwt.ExpiredSignatureError as exc:
+        raise UnauthorizedError(message_key="errors.token_expired", code="token_expired") from exc
+    except jwt.PyJWTError as exc:
+        raise UnauthorizedError(code="invalid_token") from exc
 
-
-def is_session_expired(expires_at: datetime) -> bool:
-    if expires_at.tzinfo is None:
-        expires_at = expires_at.replace(tzinfo=timezone.utc)
-
-    return datetime.now(timezone.utc) >= expires_at
-
-
-def parse_access_tokens_registry(
-    raw_json: str,
-) -> dict[str, ClanTokenInfo]:
-    if not raw_json or not raw_json.strip():
-        return {}
+    clan_id = payload.get("clan_id")
+    if not clan_id:
+        raise UnauthorizedError(message_key="errors.clan_context_missing")
 
     try:
-        parsed: Any = json.loads(raw_json)
-    except json.JSONDecodeError:
-        return {}
+        role = ClanRole(payload.get("role", ClanRole.GUEST))
+    except ValueError:
+        role = ClanRole.GUEST
 
-    if not isinstance(parsed, dict):
-        return {}
-
-    registry: dict[str, ClanTokenInfo] = {}
-
-    for raw_token, raw_value in parsed.items():
-        token = str(raw_token).strip()
-
-        if not token:
-            continue
-
-        if isinstance(raw_value, dict):
-            discord_id = raw_value.get("discord_id")
-            username = raw_value.get("username")
-            role = raw_value.get("role", "member")
-
-            registry[token] = ClanTokenInfo(
-                token=token,
-                discord_id=(
-                    str(discord_id)
-                    if discord_id is not None
-                    else None
-                ),
-                role=str(role),
-                username=(
-                    str(username)
-                    if username is not None
-                    else None
-                ),
-            )
-            continue
-
-        if isinstance(raw_value, (str, int)) and not isinstance(
-            raw_value,
-            bool,
-        ):
-            registry[token] = ClanTokenInfo(
-                token=token,
-                discord_id=str(raw_value),
-                role="member",
-                username=None,
-            )
-
-    return registry
-
-
-def resolve_access_token(
-    presented_token: str,
-    registry_json: str,
-    legacy_token: str = "",
-) -> ClanTokenInfo | None:
-    normalized = presented_token.strip()
-
-    if not normalized:
-        return None
-
-    registry = parse_access_tokens_registry(registry_json)
-
-    for registered_token, token_info in registry.items():
-        if secrets.compare_digest(normalized, registered_token):
-            return token_info
-
-    if legacy_token and secrets.compare_digest(
-        normalized,
-        legacy_token,
-    ):
-        return ClanTokenInfo(
-            token=legacy_token,
-            discord_id=None,
-            role="member",
-            username=None,
-        )
-
-    return None
+    return Principal(
+        subject_type="user",
+        user_id=str(payload["sub"]),
+        clan_id=str(clan_id),
+        role=role,
+        scopes=scopes_for(role, payload.get("xsc", []), payload.get("rsc", [])),
+        display_name=payload.get("name"),
+        session_id=payload.get("jti"),
+    )

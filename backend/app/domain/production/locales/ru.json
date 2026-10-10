@@ -1,0 +1,15 @@
+{
+  "order": {
+    "not_found": "Заказ {order_id} не найден в вашем клане.",
+    "created": "Заказ «{title}» создан.",
+    "duplicate": "Такой заказ уже существует.",
+    "status_changed": "Статус заказа изменён на «{status}».",
+    "invalid_transition": "Нельзя перейти из статуса «{from_status}» в «{to_status}».",
+    "not_enough_stock": "На складе не хватает «{item}»: нужно {needed}, доступно {available}.",
+    "queued": {
+      "one": "В очередь добавлена {count} позиция.",
+      "few": "В очередь добавлено {count} позиции.",
+      "many": "В очередь добавлено {count} позиций."
+    }
+  }
+}

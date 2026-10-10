@@ -1,86 +1,64 @@
-import uuid
+from __future__ import annotations
 
-from sqlalchemy import ForeignKey, Integer, String, Text
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from enum import StrEnum
 
-from app.models.base import Base, TimestampMixin
+from sqlalchemy import (
+    CheckConstraint,
+    Enum as SAEnum,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    Text,
+)
+from sqlalchemy.orm import Mapped, mapped_column
+
+from app.models.base import Base, ClanScopedMixin, TimestampMixin, UUIDPkMixin
 
 
-class Order(TimestampMixin, Base):
+class OrderStatus(StrEnum):
+    DRAFT = "draft"
+    QUEUED = "queued"
+    IN_PROGRESS = "in_progress"
+    DONE = "done"
+    CANCELLED = "cancelled"
+
+
+ALLOWED_TRANSITIONS: dict[OrderStatus, frozenset[OrderStatus]] = {
+    OrderStatus.DRAFT: frozenset({OrderStatus.QUEUED, OrderStatus.CANCELLED}),
+    OrderStatus.QUEUED: frozenset({OrderStatus.IN_PROGRESS, OrderStatus.CANCELLED}),
+    OrderStatus.IN_PROGRESS: frozenset({OrderStatus.DONE, OrderStatus.CANCELLED}),
+    OrderStatus.DONE: frozenset(),
+    OrderStatus.CANCELLED: frozenset(),
+}
+
+order_status_enum = SAEnum(
+    OrderStatus,
+    name="order_status",
+    native_enum=True,
+    # PG-enum хранит ЗНАЧЕНИЯ ("draft"), а не имена ("DRAFT"):
+    # иначе INSERT падает 'invalid input value for enum' и DDL дрейфует от миграций.
+    values_callable=lambda e: [m.value for m in e],
+)
+
+
+class Order(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     __tablename__ = "orders"
-
-    id: Mapped[str] = mapped_column(
-        String(36),
-        primary_key=True,
-        default=lambda: str(uuid.uuid4()),
+    __table_args__ = (
+        # clan_id ПЕРВЫМ столбцом: один индекс и для изоляции, и для листинга
+        Index("ix_orders_clan_status_created", "clan_id", "status", "created_at"),
+        CheckConstraint("quantity > 0", name="quantity_positive"),
     )
 
-    creator_id: Mapped[str | None] = mapped_column(
-        String(64),
-        nullable=True,
+    title: Mapped[str] = mapped_column(String(120), nullable=False)
+    status: Mapped[OrderStatus] = mapped_column(
+        order_status_enum, default=OrderStatus.DRAFT, nullable=False
     )
-
-    assignee_id: Mapped[str | None] = mapped_column(
-        String(64),
-        nullable=True,
+    item_code: Mapped[str] = mapped_column(
+        ForeignKey("catalog_items.code", ondelete="RESTRICT"), nullable=False
     )
-
-    status: Mapped[str] = mapped_column(
-        String(32),
-        default="pending",
-        index=True,
-        nullable=False,
-    )
-
-    destination: Mapped[str] = mapped_column(
-        String(255),
-        nullable=False,
-    )
-
-    notes: Mapped[str | None] = mapped_column(
-        Text,
-        nullable=True,
-    )
-
-    items: Mapped[list["OrderItem"]] = relationship(
-        "OrderItem",
-        back_populates="order",
-        cascade="all, delete-orphan",
-    )
-
-
-class OrderItem(Base):
-    __tablename__ = "order_items"
-
-    id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
-        autoincrement=True,
-    )
-
-    order_id: Mapped[str] = mapped_column(
-        ForeignKey("orders.id", ondelete="CASCADE"),
-        index=True,
-        nullable=False,
-    )
-
-    item_id: Mapped[str] = mapped_column(
-        String(128),
-        nullable=False,
-    )
-
-    quantity: Mapped[int] = mapped_column(
-        Integer,
-        nullable=False,
-    )
-
-    completed_quantity: Mapped[int] = mapped_column(
-        Integer,
-        default=0,
-        nullable=False,
-    )
-
-    order: Mapped["Order"] = relationship(
-        "Order",
-        back_populates="items",
-    )
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    produced: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_by: Mapped[str] = mapped_column(String(64), nullable=False)
+    assignee_id: Mapped[str | None] = mapped_column(String(64), nullable=True)

@@ -36,3 +36,13 @@ infra/.env
 SNAP_*.md
 PROJECT_INGEST.md
 all_files_paths.txt
+# --- Python / env ---
+.env
+.env.*
+!.env.example
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/

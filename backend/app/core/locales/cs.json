@@ -1,0 +1,13 @@
+{
+  "errors": {
+    "internal": "Vnitřní chyba serveru. Zkuste to prosím později.",
+    "unauthorized": "Je vyžadováno přihlášení do klanu.",
+    "token_expired": "Relace vypršela. Přihlaste se prosím znovu.",
+    "forbidden": "Nedostatečná oprávnění. Požadováno: {scopes}.",
+    "not_found": "Objekt nebyl nalezen.",
+    "validation": "Neplatná data požadavku.",
+    "clan_context_missing": "Nepodařilo se určit klan požadavku.",
+    "clan_scope_violation": "Operace zamítnuta: {entity} patří jinému klanu.",
+    "db_unavailable": "Databáze se probouzí, opakujte za pár sekund."
+  }
+}

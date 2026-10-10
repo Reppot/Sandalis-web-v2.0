@@ -1,154 +1,145 @@
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
+from __future__ import annotations
 
-from app.api.dependencies import Principal
-from app.models.order import Order, OrderItem
-from app.schemas.orders import OrderCreateRequest
-from app.services.errors import (
-    EntityNotFoundError,
-    PermissionDeniedError,
-    ValidationServiceError,
-)
+import uuid
+from typing import Sequence
 
+from sqlalchemy import func, select
+from sqlalchemy.exc import IntegrityError
 
-_ALLOWED_STATUSES = {
-    "pending",
-    "processing",
-    "completed",
-    "cancelled",
-}
+from app.core.errors import ConflictError, NotFoundError
+from app.models.catalog import CatalogItem
+from app.models.order import ALLOWED_TRANSITIONS, Order, OrderStatus
+from app.models.stockpile import StockpileItem
+from app.schemas.order import OrderCreate, OrderStatusUpdate, OrderUpdate
+from app.services.base import ClanScopedService
+
+DOMAIN = "production"
 
 
-class OrderService:
-    async def list_all(
+class OrderService(ClanScopedService):
+    """Нигде в теле методов нет ручного `clan_id=...` при создании —
+    его проставляет before_flush-гвард; фильтрация идёт автоматически."""
+
+    # ---------------- read ------------------------------------------------ #
+    async def list_orders(
         self,
-        db: AsyncSession,
-        principal: Principal,
-    ) -> list[Order]:
-        result = await db.execute(
-            select(Order)
-            .options(selectinload(Order.items))
-            .order_by(Order.created_at.desc())
+        *,
+        status: OrderStatus | None = None,
+        assignee_id: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> tuple[Sequence[Order], int]:
+        stmt = self._scoped(select(Order), Order)
+        if status is not None:
+            stmt = stmt.where(Order.status == status)
+        if assignee_id is not None:
+            stmt = stmt.where(Order.assignee_id == assignee_id)
+
+        total = await self._count(stmt)
+        rows = (
+            await self.session.execute(
+                stmt.order_by(Order.created_at.desc()).limit(min(limit, 200)).offset(offset)
+            )
+        ).scalars().all()
+        return rows, total
+
+    async def get_order(self, order_id: uuid.UUID) -> Order:
+        return await self._get_scoped(
+            Order, order_id,
+            not_found_key="order.not_found", domain=DOMAIN,
+            params={"order_id": str(order_id)},
         )
 
-        return list(result.scalars().all())
-
-    async def create(
-        self,
-        db: AsyncSession,
-        principal: Principal,
-        payload: OrderCreateRequest,
-    ) -> Order:
-        for item in payload.items:
-            if item.completed_quantity > item.quantity:
-                raise ValidationServiceError(
-                    "Completed quantity cannot exceed requested quantity",
+    # ---------------- write ----------------------------------------------- #
+    async def create_order(self, payload: OrderCreate) -> tuple[Order, str]:
+        # CatalogItem — глобальная таблица, фильтр по clan_id к ней НЕ применяется
+        item = (
+            await self.session.execute(
+                select(CatalogItem).where(
+                    CatalogItem.code == payload.item_code, CatalogItem.is_active.is_(True)
                 )
+            )
+        ).scalar_one_or_none()
+        if item is None:
+            raise NotFoundError(
+                message_key="item.unknown_code", domain="catalog",
+                params={"code": payload.item_code},
+            )
 
         order = Order(
-            creator_id=principal.actor_id,
-            status="pending",
-            destination=payload.destination,
+            title=payload.title,
+            item_code=payload.item_code,
+            quantity=payload.quantity,
             notes=payload.notes,
-            items=[
-                OrderItem(
-                    item_id=item.item_id,
-                    quantity=item.quantity,
-                    completed_quantity=item.completed_quantity,
-                )
-                for item in payload.items
-            ],
+            assignee_id=payload.assignee_id,
+            created_by=self.principal.user_id,
+            status=OrderStatus.DRAFT,
+            # clan_id НЕ указываем: проставится автоматически из контекста сессии
         )
+        self.session.add(order)
+        try:
+            await self.session.commit()
+        except IntegrityError as exc:
+            await self.session.rollback()
+            raise ConflictError(message_key="order.duplicate", domain=DOMAIN) from exc
+        await self.session.refresh(order)
 
-        db.add(order)
-        await db.flush()
+        return order, self.t.t("order.created", domain=DOMAIN, title=order.title)
 
-        return await self._get_by_id(db, order.id)
-
-    async def update_status(
-        self,
-        db: AsyncSession,
-        principal: Principal,
-        order_id: str,
-        new_status: str,
-    ) -> Order:
-        if new_status not in _ALLOWED_STATUSES:
-            raise ValidationServiceError(
-                f"Unsupported order status: {new_status}",
-            )
-
-        order = await self._get_by_id(db, order_id)
-
-        if (
-            not principal.is_admin
-            and order.creator_id != principal.actor_id
-            and order.assignee_id != principal.actor_id
-        ):
-            raise PermissionDeniedError(
-                "Only the order owner, assignee or admin can update it",
-            )
-
-        order.status = new_status
-        await db.flush()
-
-        return await self._get_by_id(db, order_id)
-
-    async def claim(
-        self,
-        db: AsyncSession,
-        principal: Principal,
-        order_id: str,
-    ) -> Order:
-        order = await self._get_by_id(db, order_id)
-
-        if order.status != "pending":
-            raise ValidationServiceError(
-                "Only pending orders can be claimed",
-            )
-
-        order.assignee_id = principal.actor_id
-        order.status = "processing"
-
-        await db.flush()
-        return await self._get_by_id(db, order_id)
-
-    async def delete(
-        self,
-        db: AsyncSession,
-        principal: Principal,
-        order_id: str,
-    ) -> None:
-        order = await self._get_by_id(db, order_id)
-
-        if (
-            not principal.is_admin
-            and order.creator_id != principal.actor_id
-        ):
-            raise PermissionDeniedError(
-                "Only the order owner or admin can delete it",
-            )
-
-        await db.delete(order)
-        await db.flush()
-
-    async def _get_by_id(
-        self,
-        db: AsyncSession,
-        order_id: str,
-    ) -> Order:
-        result = await db.execute(
-            select(Order)
-            .options(selectinload(Order.items))
-            .where(Order.id == order_id)
+    async def update_order(self, order_id: uuid.UUID, payload: OrderUpdate) -> Order:
+        order = await self._get_scoped(
+            Order, order_id, not_found_key="order.not_found", domain=DOMAIN,
+            params={"order_id": str(order_id)}, for_update=True,
         )
-
-        order = result.scalar_one_or_none()
-
-        if order is None:
-            raise EntityNotFoundError("Order not found")
-
+        for field, value in payload.model_dump(exclude_unset=True).items():
+            setattr(order, field, value)
+        await self.session.commit()
+        await self.session.refresh(order)
         return order
 
+    async def change_status(self, order_id: uuid.UUID, payload: OrderStatusUpdate) -> tuple[Order, str]:
+        order = await self._get_scoped(
+            Order, order_id, not_found_key="order.not_found", domain=DOMAIN,
+            params={"order_id": str(order_id)}, for_update=True,
+        )
+        if payload.status not in ALLOWED_TRANSITIONS[order.status]:
+            raise ConflictError(
+                message_key="order.invalid_transition", domain=DOMAIN,
+                params={"from_status": order.status.value, "to_status": payload.status.value},
+            )
 
-order_service = OrderService()
+        if payload.status is OrderStatus.IN_PROGRESS:
+            await self._assert_stock(order)
+
+        order.status = payload.status
+        await self.session.commit()
+        await self.session.refresh(order)
+        return order, self.t.t("order.status_changed", domain=DOMAIN, status=order.status.value)
+
+    async def delete_order(self, order_id: uuid.UUID) -> None:
+        order = await self._get_scoped(
+            Order, order_id, not_found_key="order.not_found", domain=DOMAIN,
+            params={"order_id": str(order_id)},
+        )
+        await self.session.delete(order)   # before_flush ещё раз сверит clan_id
+        await self.session.commit()
+
+    # ---------------- internals ------------------------------------------- #
+    async def _assert_stock(self, order: Order) -> None:
+        """Пример доменной ошибки с параметрами в трёх локалях."""
+        available = int(
+            (
+                await self.session.execute(
+                    self._scoped(
+                        select(func.coalesce(func.sum(StockpileItem.quantity), 0)),
+                        StockpileItem,
+                    ).where(StockpileItem.item_code == order.item_code)
+                )
+            ).scalar_one()
+        )
+
+        if available < order.quantity:
+            raise ConflictError(
+                message_key="order.not_enough_stock", domain=DOMAIN,
+                params={"item": order.item_code, "needed": order.quantity, "available": available},
+            )

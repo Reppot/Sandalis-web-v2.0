@@ -1,0 +1,6 @@
+{
+  "item": {
+    "unknown_code": "Položka s kódem {code} nebyla v katalogu nalezena.",
+    "inactive": "Položka {code} se již nevyrábí."
+  }
+}
