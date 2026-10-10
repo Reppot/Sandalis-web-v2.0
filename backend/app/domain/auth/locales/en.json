@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "issued": "Dev token issued for {user_id}.",
+    "disabled": "Dev token issuance is disabled in this environment.",
+    "forbidden": "Invalid developer key."
+  },
+  "user": {
+    "not_member": "User {user_id} is not a member of clan {clan_id}."
+  },
+  "code": {
+    "invalid": "Invite code not found or has been revoked.",
+    "expired": "Invite code has expired.",
+    "exhausted": "Invite code usage limit reached.",
+    "redeemed": "You have joined clan \"{clan}\" with role \"{role}\"."
+  },
+  "clan_token": {
+    "created": "Token \"{label}\" created. Store it now — it is shown only once.",
+    "users_only": "Clan tokens can only be issued by a user, not by another token.",
+    "role_too_high": "Cannot issue a token with a role above your own: {role}."
+  },
+  "invite": {
+    "created": "Invite code {code} created.",
+    "revoked": "Invite code {code} revoked.",
+    "not_found": "Invite code was not found in your clan."
+  }
+}

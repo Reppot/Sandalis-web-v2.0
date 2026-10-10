@@ -67,9 +67,19 @@ async def seed_clan(clan_id: str = "CLAN_A", name: str = "Alpha") -> None:
         await s.commit()
 
 
-async def seed_catalog_item(code: str = "rifle", category: str = "small_arms") -> None:
+async def seed_catalog_item(
+    code: str = "rifle",
+    category: str = "small_arms",
+    name: str = "",
+    english_name: str = "",
+    is_active: bool = True,
+) -> None:
     async with AsyncSessionLocal() as s:
-        s.add(CatalogItem(code=code, category=category))
+        s.add(CatalogItem(
+            code=code, category=category,
+            name=name or code, english_name=english_name or code,
+            is_active=is_active,
+        ))
         await s.commit()
 
 

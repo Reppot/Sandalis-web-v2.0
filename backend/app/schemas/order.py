@@ -2,20 +2,12 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import Annotated, Generic, TypeVar
+from typing import Annotated
 
 from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.order import OrderStatus
-
-T = TypeVar("T")
-
-
-class Page(BaseModel, Generic[T]):
-    items: list[T]
-    total: int
-    limit: int
-    offset: int
+from app.schemas.common import Page  # noqa: F401  (ре-экспорт для обратной совместимости)
 
 
 class OrderCreate(BaseModel):

@@ -1,0 +1,11 @@
+{
+  "timer": {
+    "not_found": "Časovač nebyl ve vašem klanu nalezen.",
+    "created": "Časovač „{title}“ byl spuštěn.",
+    "updated": "Časovač „{title}“ byl aktualizován.",
+    "completed": "Časovač „{title}“ byl dokončen.",
+    "reopened": "Časovač „{title}“ byl znovu otevřen.",
+    "invalid_window": "Čas ukončení musí být později než čas zahájení.",
+    "stockpile_missing": "Připojený sklad nebyl ve vašem klanu nalezen."
+  }
+}

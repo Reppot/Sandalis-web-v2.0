@@ -1,0 +1,14 @@
+{
+  "stockpile": {
+    "not_found": "Stockpile was not found in your clan.",
+    "created": "Stockpile \"{name}\" has been created.",
+    "updated": "Stockpile \"{name}\" has been updated.",
+    "deleted": "Stockpile \"{name}\" has been deleted.",
+    "name_taken": "A stockpile named \"{name}\" already exists."
+  },
+  "item": {
+    "not_found": "No \"{item}\" in this stockpile.",
+    "saved": "\"{item}\": {quantity} pcs.",
+    "removed": "\"{item}\" removed from the stockpile."
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "stockpile": {
+    "not_found": "Sklad nebyl ve vašem klanu nalezen.",
+    "created": "Sklad „{name}“ byl vytvořen.",
+    "updated": "Sklad „{name}“ byl aktualizován.",
+    "deleted": "Sklad „{name}“ byl smazán.",
+    "name_taken": "Sklad s názvem „{name}“ již existuje."
+  },
+  "item": {
+    "not_found": "Ve skladu není „{item}“.",
+    "saved": "„{item}“: {quantity} ks.",
+    "removed": "„{item}“ bylo odebráno ze skladu."
+  }
+}

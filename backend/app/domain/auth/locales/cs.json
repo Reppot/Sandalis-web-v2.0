@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "issued": "Dev token vydán pro {user_id}.",
+    "disabled": "Vydávání dev tokenů je v tomto prostředí vypnuto.",
+    "forbidden": "Neplatný vývojářský klíč."
+  },
+  "user": {
+    "not_member": "Uživatel {user_id} není členem klanu {clan_id}."
+  },
+  "code": {
+    "invalid": "Pozvánkový kód nebyl nalezen nebo byl zrušen.",
+    "expired": "Platnost pozvánkového kódu vypršela.",
+    "exhausted": "Limit použití kódu byl vyčerpán.",
+    "redeemed": "Vstoupili jste do klanu „{clan}“ s rolí „{role}“."
+  },
+  "clan_token": {
+    "created": "Token „{label}“ byl vytvořen. Uložte si jej — zobrazí se pouze jednou.",
+    "users_only": "Klanové tokeny může vydávat pouze uživatel, nikoli jiný token.",
+    "role_too_high": "Nelze vydat token s vyšší rolí, než máte: {role}."
+  },
+  "invite": {
+    "created": "Pozvánkový kód {code} byl vytvořen.",
+    "revoked": "Pozvánkový kód {code} byl zrušen.",
+    "not_found": "Pozvánkový kód nebyl ve vašem klanu nalezen."
+  }
+}

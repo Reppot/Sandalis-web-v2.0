@@ -35,6 +35,11 @@ class Settings(BaseSettings):
     SESSION_COOKIE_NAME: str = "sandalis_session"
     CLAN_TOKEN_HEADER: str = "X-Clan-Token"
 
+    # Dev/админ-выдача JWT («служебный ключ»). Задан + совпал c X-Dev-Auth-Key
+    # -> выдача разрешена даже в prod. Не задан -> только ENV != prod.
+    DEV_AUTH_SECRET: str | None = None
+    DEV_AUTH_HEADER: str = "X-Dev-Auth-Key"
+
     # --- i18n -----------------------------------------------------------
     DEFAULT_LOCALE: str = "en"
     SUPPORTED_LOCALES: tuple[str, ...] = ("ru", "en", "cs")

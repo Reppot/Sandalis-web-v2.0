@@ -44,7 +44,9 @@ class TestCatalogAndTranslator:
         load_catalogs()
 
     def test_domains_discovered_from_filesystem(self):
-        assert set(known_domains()) == {"core", "catalog", "production"}
+        assert set(known_domains()) == {
+            "core", "catalog", "production", "auth", "stockpiles", "timers",
+        }
 
     def test_ru_plural_forms(self):
         t = Translator(locale="ru")

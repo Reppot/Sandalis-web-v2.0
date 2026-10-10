@@ -1,0 +1,11 @@
+{
+  "timer": {
+    "not_found": "Timer was not found in your clan.",
+    "created": "Timer \"{title}\" has been started.",
+    "updated": "Timer \"{title}\" has been updated.",
+    "completed": "Timer \"{title}\" has been completed.",
+    "reopened": "Timer \"{title}\" has been reopened.",
+    "invalid_window": "End time must be after start time.",
+    "stockpile_missing": "Linked stockpile was not found in your clan."
+  }
+}

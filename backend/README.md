@@ -1,11 +1,12 @@
 # Sandalis Web v2.0 — Backend (FastAPI)
 
-Асинхронный бэкенд с тремя сквозными системами: **мультиарендность кланов**
-(Discriminator Column, Shared DB / Shared Schema), **RBAC внутри клана** и
-**модульная i18n** (RU/EN/CS). Заточен под бесплатные тарифы Render + Supabase
-(пул ≤ 5 коннектов, pre_ping против «спящего» режима, словари в JSON, а не в БД).
+Асинхронный бэкенд: **мультиарендность кланов** (Discriminator Column, Shared DB /
+Shared Schema), **RBAC внутри клана**, **модульная i18n** (RU/EN/CS), перенесённые
+из старого backend домены **auth / catalog / stockpiles / timers / codes**.
+Заточен под бесплатные Render + Supabase (пул ≤ 5 коннектов, pre_ping,
+словари в JSON, а не в БД).
 
-## Быстрый старт
+## Быстрый старт (локально)
 
 ```bash
 cd backend
@@ -13,88 +14,74 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # прописать DATABASE_URL и JWT_SECRET
 
-alembic upgrade head            # схема БД
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
+python -m alembic upgrade head
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 1
 ```
 
 - Swagger UI: http://127.0.0.1:8000/api/docs
-- Health для Render: `GET /api/v1/health/live` (без БД)
-- Keep-alive ping для cron-job.org (раз в 10 мин): `GET /api/v1/health/ping` (`SELECT 1`)
-- Тесты (нужен локальный PostgreSQL, БД `sandalis_test`): `pytest`
+- Render health check: `GET /api/v1/health/live` (без БД)
+- Keep-alive для cron-job.org (раз в 10 мин): `GET /api/v1/health/ping` (`SELECT 1`)
+- Тесты: нужен локальный PostgreSQL; БД задаётся в `tests/conftest.py`
+  (env `DATABASE_URL=…/sandalis_test`, можно переопределить перед запуском):
+  `python -m pytest -q`
 
-## Аутентификация запроса (любой из трёх способов)
+## Render
 
-| Способ | Заголовок/кука | Кем выдаётся |
+```
+Build Command: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
+Start Command: python -m alembic upgrade head && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+```
+
+Один воркер = максимум 5 коннектов (`pool_size=3 + max_overflow=2`) — потолок
+бесплатного Supabase. Фоновые воркеры в web start command не добавляем.
+
+## Модули API (все защищённые — JWT Bearer / кука `sandalis_session` / `X-Clan-Token`)
+
+| Группа | Пути | Скоупы |
 |---|---|---|
-| JWT сессии | `Authorization: Bearer <jwt>` | OAuth-flow (Discord) |
-| JWT сессии | кука `sandalis_session` | тот же OAuth-flow |
-| Клановый токен | `X-Clan-Token: <raw>` | админ клана (бот, shared-ссылки) |
+| health | `GET /health/live`, `GET /health/ping` | публичные |
+| auth | `GET /auth/me` · `POST /auth/dev-token` (ENV≠prod или `X-Dev-Auth-Key`) · `POST /auth/redeem-code` (публичный) · `POST /auth/clan-token` | `clan:settings:write` для clan-token |
+| auth.invites | `GET/POST /auth/invites`, `DELETE /auth/invites/{id}` | `clan:members:read` (officer+) / `clan:members:write` (admin) |
+| orders | `GET/POST /orders`, `GET/PATCH/DELETE /orders/{id}`, `POST /orders/{id}/status` | `orders:read/write/delete` (delete: officer+) |
+| catalog | `GET /items`, `GET /items/{code}` (поиск `query`, `category`, `active_only`) | `catalog:read` (есть и у guest) |
+| codes (legacy v1) | `GET /codes?query=&category=&limit=` — плоский список до 5000 | `catalog:read` |
+| stockpiles | CRUD `/stockpiles`, позиции `POST/PATCH/DELETE /stockpiles/{id}/items[/{code}]` | `stockpiles:read/write` |
+| timers | CRUD `/timers`, фильтр `state=active/expired/completed`, `stockpile_id` | `timers:read` / `timers:write` (officer+) |
 
-JWT уже несёт `clan_id` + `role` (+ дельты скоупов `xsc`/`rsc`).
-`locale` для ответов: `X-Locale` (приоритетно) или `Accept-Language` с q-факторами
-(`cz` → `cs`).
+JWT выпускается `POST /auth/dev-token` (dev/infra) или `POST /auth/redeem-code`
+(вступление по инвайту). Discord OAuth старого backend — сознательный follow-up:
+его session-модель заменена стейтless JWT, поле личности `user_id` уже готово
+принять discord id.
 
-## Как это устроено
+## Совместимость со старым API (v1)
 
-- **Изоляция кланов — `app/core/tenancy.py`.**
-  `do_orm_execute` инъектит `with_loader_criteria(ClanScopedMixin, clan_id == …)`
-  в КАЖДЫЙ select/update/delete, который затрагивает арендованные таблицы;
-  `before_flush` автоподставляет `clan_id` при INSERT и бросает
-  `ClanScopeViolationError` при попытке записи/переноса в чужой клан.
-  Без контекста — fail-closed (`ClanContextMissingError`).
-  Источник истины контекста — `session.info["clan_id"]` (ставится в
-  `api/deps.get_principal`), ContextVar — резервный канал для фоновых задач
-  (`clan_scope(...)` для APScheduler/CLI). Единственный осознанный «люк» —
-  `bypass_clan_filter()` для auth по clan-token, миграций и суперадмина.
-  ⚠️ `session.get(Model, pk)` обходит фильтр через identity map — запрещён,
-  вместо него `ClanScopedService._get_scoped()`.
-- **RBAC — `app/core/permissions.py` + `app/api/deps.PermissionChecker`.**
-  Матрица `ClanRole → scopes` с wildcard (`owner: *`, `orders:*`) и точечными
-  грантами/отзывами из `clan_memberships`. На роутере:
-  `dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))]`.
-- **i18n — `app/core/i18n/`.** Словари лежат рядом с доменом:
-  `app/domain/<domain>/locales/{ru,en,cs}.json` + общий `app/core/locales/`.
-  Папка подхватывается автоматически (`load_catalogs()`), монолитного файла нет.
-  Плюрализация ru/cs по CLDR-формам (`key.one/few/many/other`).
-  Ошибки API — всегда конверт `{error: {code, message, locale, params}}` +
-  заголовок `Content-Language`; доменные исключения несут **ключ**, а не текст.
-- **Render/Supabase — `app/core/db.py`.** `pool_size=3, max_overflow=2,
-  pool_recycle=1800, pool_pre_ping=True, pool_use_lifo=True`, повтор запроса при
-  обрыве после сна (`run_with_retry`), `warmup()` в lifespan. Для Supabase
-  Pooler (:6543) — `DB_USE_PGBOUNCER=true` (NullPool + отключение кэша prepared
-  statements). `sslmode=require` из URL вырезается, SSL поднимается через
-  `connect_args`.
+- `GET /api/v1/codes` — тот же плоский формат (id == code, `name`, `english_name`,
+  `icon_url`, `production_time`); теперь требует авторизацию (у guest есть доступ).
+- Таймеры: принимают как `ends_at` (ISO-8601, tz-aware), так и legacy
+  `target_timestamp` (мс) + `duration_seconds` (дефолты: `type=stockpile_decay`,
+  172800 c). Ответ содержит legacy-поля `type`, `target_timestamp`,
+  `remaining_seconds`, `remaining_display` (ЧЧ:ММ:СС), `urgency`
+  (normal/warning/critical/expired) + новые `progress`, `starts_at`, `ends_at`.
+- Breaking changes: формы ошибок → единый `{error:{code,message,locale,params}}`;
+  таблица сессий Discord удалена (JWT стейтless); все ранее публичные
+  GET-эндпоинты стали авторизованными.
 
-## Экономия лимита 500 МБ
+## Архитектурные инварианты
 
-Один `clan_id String(64)` вместо схем/БД на арендатора; глобальный справочник
-`catalog_items` не дублируется; составные индексы `(clan_id, …)` вместо двух
-одиночных; переводы — JSON в репозитории, а не таблицы; FK `clan_id → clans.id`
-гарантирует целостность и каскадное удаление аренды.
+- Все таблицы с клановыми данными наследуют `ClanScopedMixin`
+  (`orders`, `stockpiles`, `stockpile_items`, `timers`, `clan_memberships`,
+  `clan_api_tokens`, `clan_invite_codes`); фильтрация — глобальная
+  (`with_loader_criteria`) + гвард `before_flush`. Глобальные справочники
+  (`catalog_items`, `clans`, `users`) — без `clan_id`.
+- Сервисы работают через `ClanSession` + `Principal` + `Translator`
+  (bootstrap-аутентификация — единственное осознанное исключение, внутри
+  `bypass_clan_filter()` в core-слое).
+- Ошибки несут ключ перевода; словари — `app/domain/<domain>/locales/{ru,en,cs}.json`,
+  общие — `app/core/locales/`; `cz` нормализуется в `cs`.
+- Миграции — только `backend/migrations` (0001 → 0002 → 0003).
 
-## Структура
+## Follow-up (вне этого объёма)
 
-```
-app/
-├── core/        config, db, tenancy, security, permissions, errors, i18n/, locales/
-├── domain/      <domain>/locales/*.json   (production, catalog)
-├── models/      base (Base+миксины), rbac, catalog, order, stockpile
-├── schemas/     Pydantic v2 (Page, Create/Update/Read)
-├── services/    ClanScopedService, OrderService
-├── api/         deps.py (Principal/RBAC/Translator), v1/ (health, orders)
-└── main.py      lifespan (i18n + warmup), locale-middleware, handlers
-```
-
-## Заметки, полученные сборкой в песочнице (отличия от первоначального ТЗ)
-
-1. `Enum` в PG должен хранить **значения**, не имена: `values_callable` в
-   `SAEnum(...)`, иначе INSERT падает `invalid input value for enum`, а DDL
-   `create_all` дрейфует от миграций.
-2. `clan_scope()`/`bypass_clan_filter()` — синхронные менеджеры: их нельзя
-   перечислять через запятую в `async with`; `commit()` фоновой задачи держим
-   ВНУТРИ области (в HTTP-слое это обеспечивает `session.info`).
-3. `clan_id` — FK на `clans.id` и в модели, и в миграциях: клан должен
-   существовать до первой записи его данных (рега клана — при Discord OAuth).
-4. Дальше по дорожной карте: `ClanMembershipService` + выдача JWT после OAuth;
-   Postgres RLS (`SET LOCAL app.clan_id`) как 4-й рубеж; TTL-джоба очистки
-   завершённых заказов старше 90 дней.
+Discord OAuth на стейтless JWT; Postgres RLS как 4-й рубеж; `app/workers`
+(`war_import`, `ffmpeg`) как отдельный сервис; TTL-очистка закрытых заказов;
+rate-limit на `redeem-code` (код — единственный секрет).

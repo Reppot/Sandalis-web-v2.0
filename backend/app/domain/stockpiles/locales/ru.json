@@ -1,0 +1,14 @@
+{
+  "stockpile": {
+    "not_found": "Склад не найден в вашем клане.",
+    "created": "Склад «{name}» создан.",
+    "updated": "Склад «{name}» обновлён.",
+    "deleted": "Склад «{name}» удалён.",
+    "name_taken": "Склад с именем «{name}» уже существует."
+  },
+  "item": {
+    "not_found": "На складе нет предмета «{item}».",
+    "saved": "«{item}»: {quantity} шт.",
+    "removed": "«{item}» убран со склада."
+  }
+}
