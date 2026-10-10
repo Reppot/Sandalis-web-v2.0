@@ -1,4 +1,11 @@
 {
+  "discord": {
+    "disabled": "Discord login is disabled in this environment.",
+    "state_invalid": "OAuth sign-in could not be verified: invalid or expired state.",
+    "exchange_failed": "Discord did not issue an access token. Please try signing in again.",
+    "profile_failed": "Could not fetch your profile from Discord. Please try signing in again.",
+    "signed_in": "Welcome, {name}."
+  },
   "dev": {
     "issued": "Dev token issued for {user_id}.",
     "disabled": "Dev token issuance is disabled in this environment.",

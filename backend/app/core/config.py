@@ -6,6 +6,8 @@ from typing import Literal
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from app.core.permissions import ClanRole
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -39,6 +41,28 @@ class Settings(BaseSettings):
     # -> выдача разрешена даже в prod. Не задан -> только ENV != prod.
     DEV_AUTH_SECRET: str | None = None
     DEV_AUTH_HEADER: str = "X-Dev-Auth-Key"
+
+    # --- OAuth / Discord ------------------------------------------------
+    # Пустые CLIENT_ID/CLIENT_SECRET -> /auth/discord/login отвечает 503
+    # «discord.disabled» (фича выключена, а не сломана).
+    DISCORD_API_BASE_URL: str = "https://discord.com/api/v10"
+    DISCORD_AUTHORIZE_URL: str = "https://discord.com/oauth2/authorize"
+    DISCORD_CLIENT_ID: str = ""
+    DISCORD_CLIENT_SECRET: str = ""
+    DISCORD_REDIRECT_URI: str = ""
+    DISCORD_OAUTH_STATE_TTL_SEC: int = 600   # срок жизни подписанного state
+
+    # --- Frontend / session-cookie --------------------------------------
+    FRONTEND_URL: str = "http://localhost:3000"
+    SESSION_TTL_MINUTES: int = 60            # Max-Age куки = TTL * 60
+    COOKIE_SECURE: bool = False              # в prod -> true
+    COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
+
+    # --- Bootstrap-аренда ------------------------------------------------
+    # Куда автоматически Deterministic-принять discord-юзера без membership.
+    # None -> 403 user.not_member (fail-closed).
+    DEFAULT_CLAN_ID: str | None = None
+    DEFAULT_CLAN_ROLE: ClanRole = ClanRole.GUEST
 
     # --- i18n -----------------------------------------------------------
     DEFAULT_LOCALE: str = "en"

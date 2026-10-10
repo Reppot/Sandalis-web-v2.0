@@ -21,7 +21,7 @@ Frontend на Next.js находится отдельно и в рамках bac
 Backend v2.0 уже содержит:
 
 - `health`;
-- `auth`;
+- `auth` (включая Discord OAuth: login / callback / logout);
 - `orders`;
 - `catalog/items`;
 - `codes`;
@@ -43,72 +43,78 @@ Render deploy работает:
 
 ---
 
-## ВАЖНО: Discord OAuth должен быть возвращён
+## Discord OAuth — реализовано (P0 закрыт)
 
-На текущем этапе backend имеет рабочую инфраструктуру авторизации:
+Discord OAuth2 (authorization code, `scope=identify`) возвращён в backend v2.0
+в stateless-исполнении: таблица сессий не нужна, личность и клановый контекст
+живут в подписанном `state`, а сессия — в stateless JWT внутри session-cookie.
 
-- JWT;
-- dev-token;
-- clan-token;
-- invite/redeem-code;
-- `/auth/me`.
-
-Но старый полноценный Discord OAuth flow был временно исключён при переходе на backend v2.0.
-
-### Discord OAuth — обязательный P0 follow-up
-
-Перед production-использованием необходимо вернуть авторизацию через Discord.
-
-Обязательные endpoints:
+### Endpoints
 
 ```text
-GET  /api/v1/auth/discord/login
-GET  /api/v1/auth/discord/callback
-POST /api/v1/auth/logout
-GET  /api/v1/auth/me
+GET  /api/v1/auth/discord/login      # 302 на Discord (или 503 discord.disabled)
+GET  /api/v1/auth/discord/callback   # state -> token -> profile -> JWT
+POST /api/v1/auth/logout             # 204, удаляет session-cookie
+GET  /api/v1/auth/me                 # работает и по куке, и по Bearer
 ```
 
-Ожидаемый flow:
+### Flow
 
-1. Пользователь нажимает "Войти через Discord".
-2. Backend создаёт OAuth `state` и сохраняет его в secure cookie/session.
-3. Backend редиректит пользователя на Discord OAuth.
-4. Discord возвращает пользователя на `/api/v1/auth/discord/callback`.
-5. Backend валидирует `state`.
-6. Backend получает Discord access token.
-7. Backend запрашивает Discord user profile.
-8. Backend создаёт/обновляет `User`.
-9. Backend находит или создаёт `ClanMembership`.
-10. Backend выпускает JWT с:
-    - `sub`;
-    - `clan_id`;
-    - `role`;
-    - scopes;
-    - `exp`;
-    - `iss`;
-    - `aud`.
-11. JWT кладётся в secure cookie или возвращается клиенту.
-12. `/auth/me` возвращает текущего пользователя, роль и scopes.
+1. `GET /auth/discord/login?clan_id=&return_to=` — если `DISCORD_CLIENT_ID` /
+   `DISCORD_CLIENT_SECRET` пусты, отвечает `503 discord.disabled` (локализовано).
+2. Иначе backend подписывает state (HMAC-SHA256 на `JWT_SECRET`, внутри `clan_id`,
+   `return_to`, `nonce`, `exp = now + DISCORD_OAUTH_STATE_TTL_SEC`) и отдаёт 302
+   на Discord с `client_id`, `redirect_uri`, `response_type=code`, `scope=identify`.
+3. Discord возвращает пользователя на `/api/v1/auth/discord/callback`.
+4. Backend проверяет подпись и `exp` state — любая проблема даёт
+   `401 discord.state_invalid`, до Discord-API запрос не доходит.
+5. `POST {DISCORD_API_BASE_URL}/oauth2/token` (`grant_type=authorization_code`),
+   не-2xx -> `502 discord.exchange_failed`.
+6. `GET {DISCORD_API_BASE_URL}/users/@me`, не-2xx -> `502 discord.profile_failed`.
+7. `User` апсертится: `id = discord_id`, `display_name = global_name or username`,
+   `avatar_url = https://cdn.discordapp.com/avatars/{id}/{avatar}.png`.
+8. Резолвится `ClanMembership` (все запросы под `bypass_clan_filter()`):
+   - `clan_id` из state -> строго требовать membership в этом клане;
+   - без `clan_id` -> единственное активное membership, а если их несколько —
+     последнее по `created_at`;
+   - нет ни одного -> если задан `DEFAULT_CLAN_ID`, юзер принимается в него
+     ролью `DEFAULT_CLAN_ROLE` (через `AuthService._upsert_identity`),
+     иначе `403 user.not_member`.
+9. Выпускается JWT (`issue_access_token`) с `sub`, `clan_id`, `role`, scopes,
+   `exp`, `iss`, `aud`.
+10. По умолчанию JWT кладётся в cookie (`HttpOnly`, `Secure=COOKIE_SECURE`,
+    `SameSite=COOKIE_SAMESITE`, `Max-Age=SESSION_TTL_MINUTES*60`) и следует 302
+    на `FRONTEND_URL` либо на безопасный `return_to` (только относительный путь
+    или тот же origin). `?response=json` возвращает `200 TokenResponse` вместо
+    редиректа.
+11. Ошибки: в redirect-режиме -> `302 FRONTEND_URL?error=<code>`, в json-режиме ->
+    стандартный JSON-envelope проекта (`{"error": {code, message, locale}}`).
 
-Минимальная схема Discord identity:
+### Локализация
+
+Ключи домена `auth` в `app/domain/auth/locales/{ru,en,cs}.json`:
+`discord.disabled`, `discord.state_invalid`, `discord.exchange_failed`,
+`discord.profile_failed`, `discord.signed_in`, `user.not_member`.
+
+### Тесты
+
+`backend/tests/test_discord_auth.py` — 14 кейсов (login 503/302, callback
+cookie/json, member/default-clan/no-member, поддельный и просроченный state,
+502 на token/profile, logout). Discord не вызывается: httpx-транспорт мокается
+`respx`, prod-код получает клиента из фабрики `get_http_client()`.
+
+### Discord Developer Portal
+
+1. https://discord.com/developers/applications -> New Application -> OAuth2.
+2. Redirects (оба окружения):
 
 ```text
-User.id = discord_user_id
-User.display_name = Discord username/global_name
-User.preferred_locale = optional
+http://localhost:8000/api/v1/auth/discord/callback
+https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
 ```
 
-Текущая RBAC-модель уже готова:
-
-```text
-Clan
-User
-ClanMembership
-ClanApiToken
-ClanInviteCode
-```
-
-Для Discord OAuth нужно добавить только сам OAuth-service, state-validation и callback-route.
+3. Scopes: `identify` (email не нужен).
+4. `Client ID` -> `DISCORD_CLIENT_ID`, `Client Secret` -> `DISCORD_CLIENT_SECRET`.
 
 ---
 
@@ -317,38 +323,43 @@ DELETE /api/v1/auth/invites/{invite_id}
 Backend сейчас поддерживает:
 
 - Bearer JWT;
-- session cookie;
+- session cookie (`SESSION_COOKIE_NAME`, ставится Discord-callback'ом);
 - `X-Clan-Token`;
+- Discord OAuth2 (`scope=identify`) -> JWT/cookie;
 - dev-token для локальной разработки;
 - invite/redeem-code для вступления в клан.
 
-### Required auth follow-up
-
-Нужно вернуть Discord OAuth.
-
-Файлы, которые нужно добавить/расширить:
+### Discord auth files
 
 ```text
-app/api/v1/auth.py
-app/services/auth.py
-app/core/security.py
-app/models/rbac.py или отдельная oauth/session модель
-app/schemas/auth.py
-app/domain/auth/locales/
+app/api/v1/auth.py               # /discord/login, /discord/callback, /logout
+app/services/discord_oauth.py    # signed state, token exchange, /users/@me, avatar
+app/services/auth.py             # upsert_discord_user / resolve_discord_membership
+app/models/rbac.py               # User.avatar_url (миграция 0004)
+app/schemas/auth.py              # DiscordTokenResponse, DiscordUserProfile
+app/domain/auth/locales/         # discord.* ключи (ru/en/cs)
+migrations/versions/0004_discord_oauth.py
+tests/test_discord_auth.py
 ```
 
-Минимальные env-переменные для Discord:
+Env-переменные Discord и session-cookie:
 
 ```env
 DISCORD_API_BASE_URL=https://discord.com/api/v10
+DISCORD_AUTHORIZE_URL=https://discord.com/oauth2/authorize
 DISCORD_CLIENT_ID=
 DISCORD_CLIENT_SECRET=
 DISCORD_REDIRECT_URI=http://localhost:8000/api/v1/auth/discord/callback
+DISCORD_OAUTH_STATE_TTL_SEC=600
+
 FRONTEND_URL=http://localhost:3000
-SESSION_COOKIE_NAME=sindaris_session
-SESSION_TTL_MINUTES=30
-COOKIE_SECURE=true
-COOKIE_SAMESITE=lax
+SESSION_COOKIE_NAME=sandalis_session
+SESSION_TTL_MINUTES=60
+COOKIE_SECURE=false              # prod -> true
+COOKIE_SAMESITE=lax              # lax | strict | none
+
+DEFAULT_CLAN_ID=                 # пусто -> 403 user.not_member
+DEFAULT_CLAN_ROLE=guest
 ```
 
 ---
@@ -696,6 +707,7 @@ Current chain:
 0001_initial
 0002_clan_scope_backfill
 0003_domain_modules
+0004_discord_oauth        # users.avatar_url
 ```
 
 Apply:
@@ -777,12 +789,8 @@ Legacy compatibility preserved where practical:
 
 ### P0 — must-have before production
 
-- Restore Discord OAuth login.
 - Add Discord login button integration on frontend if needed.
-- Ensure Discord user maps to `User` and `ClanMembership`.
-- Add secure state cookie and CSRF protection for OAuth callback.
-- Add logout flow.
-- Add production tests for Discord callback mocking.
+- Store Discord `refresh_token` if long-lived sessions will be needed.
 
 ### P1
 

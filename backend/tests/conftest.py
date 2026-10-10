@@ -5,8 +5,9 @@ import os
 import uuid
 
 # --- env ДО любых импортов app.* -------------------------------------------- #
-os.environ["DATABASE_URL"] = (
-    "postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/sandalis_test"
+os.environ.setdefault(
+    "DATABASE_URL",
+    "postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/sandalis_test",
 )
 os.environ["JWT_SECRET"] = "test-secret-only-for-ci-do-not-use-in-prod"
 os.environ["ENV"] = "local"

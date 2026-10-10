@@ -99,6 +99,90 @@ class AuthService:
             await self.session.flush()
             return membership, clan.name
 
+    def issue_token(
+        self, membership: ClanMembership, user_id: str, display_name: str | None
+    ) -> TokenResponse:
+        """Публичная обёртка над _issue: extra/revoked scopes читаются из
+        membership, поэтому вызывающему знать про них не нужно."""
+        return self._issue(membership, user_id, display_name)
+
+    # ---------------- discord oauth helpers ------------------------------------ #
+    async def commit(self) -> None:
+        """Точка фиксации для роутов, которые собирают ответ из нескольких шагов."""
+        await self.session.commit()
+
+    async def upsert_discord_user(
+        self,
+        *,
+        user_id: str,
+        display_name: str,
+        avatar_url: str | None = None,
+        locale: str | None = None,
+    ) -> None:
+        """Апсерт глобальной личности из Discord-профиля (User не clan-scoped,
+        поэтому отдельного bypass здесь не нужно)."""
+        user = (
+            await self.session.execute(select(User).where(User.id == user_id))
+        ).scalar_one_or_none()
+        if user is None:
+            self.session.add(
+                User(
+                    id=user_id,
+                    display_name=display_name or user_id,
+                    preferred_locale=locale,
+                    avatar_url=avatar_url,
+                )
+            )
+            return
+        user.display_name = display_name or user.display_name
+        user.avatar_url = avatar_url
+        if locale:
+            user.preferred_locale = locale
+
+    async def resolve_discord_membership(
+        self, *, user_id: str, display_name: str, clan_id: str | None
+    ) -> ClanMembership:
+        """Резолв кланового контекста для discord-юзера ДО аутентификации:
+          * clan_id из state -> строго требовать membership в нём;
+          * без clan_id -> единственное активное, иначе последнее по created_at;
+          * нет ни одного -> DEFAULT_CLAN_ID (auto-join ролью DEFAULT_CLAN_ROLE)
+            либо 403 user.not_member.
+        """
+        stmt = select(ClanMembership).where(
+            ClanMembership.user_id == user_id,
+            ClanMembership.is_active.is_(True),
+        )
+        if clan_id:
+            stmt = stmt.where(ClanMembership.clan_id == clan_id)
+        else:
+            stmt = stmt.order_by(ClanMembership.created_at.desc(), ClanMembership.id.desc())
+
+        # bypass: клан ещё не известен — это и есть его поиск (core-слой).
+        with bypass_clan_filter():
+            found = (
+                (await self.session.execute(stmt.limit(1))).scalars().first()
+                if clan_id is None
+                else (await self.session.execute(stmt)).scalar_one_or_none()
+            )
+            if found is not None:
+                return found
+
+            if clan_id is None and settings.DEFAULT_CLAN_ID:
+                membership, _ = await self._upsert_identity(
+                    clan_id=settings.DEFAULT_CLAN_ID,
+                    user_id=user_id,
+                    display_name=display_name,
+                    role=settings.DEFAULT_CLAN_ROLE,
+                    locale=self.t.locale,
+                )
+                return membership
+
+        raise PermissionDeniedError(
+            message_key="user.not_member",
+            domain=DOMAIN,
+            params={"user_id": user_id, "clan_id": clan_id or settings.DEFAULT_CLAN_ID or "-"},
+        )
+
     def _issue(self, membership: ClanMembership, user_id: str, display_name: str | None) -> TokenResponse:
         token = issue_access_token(
             user_id=user_id,

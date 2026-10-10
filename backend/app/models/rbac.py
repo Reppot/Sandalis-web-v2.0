@@ -43,6 +43,7 @@ class User(Base, TimestampMixin):
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     display_name: Mapped[str] = mapped_column(String(120), nullable=False)
     preferred_locale: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    avatar_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
 
 
 class ClanMembership(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):

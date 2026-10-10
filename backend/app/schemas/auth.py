@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.core.permissions import ClanRole
 
@@ -48,6 +48,40 @@ class RedeemCodeRequest(BaseModel):
     code: Annotated[str, Field(min_length=4, max_length=24)]
     user_id: Annotated[str, Field(min_length=1, max_length=64)]
     display_name: Annotated[str, Field(min_length=1, max_length=120)]
+
+
+class DiscordUserProfile(BaseModel):
+    """Нормализованный профиль Discord (GET /users/@me, scope=identify)."""
+    model_config = ConfigDict(extra="ignore", str_strip_whitespace=True)
+
+    id: Annotated[str, Field(min_length=1, max_length=64)]
+    username: Annotated[str, Field(default="", max_length=120)]
+    global_name: Annotated[str | None, Field(default=None, max_length=120)]
+    avatar: Annotated[str | None, Field(default=None, max_length=128)]
+    locale: Annotated[str | None, Field(default=None, max_length=8)]
+
+    @field_validator("id", "username", "global_name", "avatar", "locale", mode="before")
+    @classmethod
+    def _coerce_str(cls, value: object) -> object:
+        # Discord присылает строки, но number-safe парсинг дешевле 500-ки.
+        if value is None or isinstance(value, str):
+            return value
+        return str(value)
+
+    @property
+    def display_name(self) -> str:
+        return self.global_name or self.username or self.id
+
+
+class DiscordTokenResponse(BaseModel):
+    """Ответ POST {DISCORD_API_BASE_URL}/oauth2/token."""
+    model_config = ConfigDict(extra="ignore")
+
+    access_token: str
+    token_type: str = "Bearer"
+    expires_in: int = 604800
+    refresh_token: str | None = None
+    scope: str | None = None
 
 
 class ClanApiTokenCreate(BaseModel):

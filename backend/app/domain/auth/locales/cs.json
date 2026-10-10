@@ -1,4 +1,11 @@
 {
+  "discord": {
+    "disabled": "Přihlášení přes Discord je v tomto prostředí vypnuto.",
+    "state_invalid": "Přihlášení přes OAuth nelze ověřit: neplatný nebo vypršelý state.",
+    "exchange_failed": "Discord nevystavil přístupový token. Zkuste se přihlásit znovu.",
+    "profile_failed": "Profil z Discordu se nepodařilo načíst. Zkuste se přihlásit znovu.",
+    "signed_in": "Vítejte, {name}."
+  },
   "dev": {
     "issued": "Dev token vydán pro {user_id}.",
     "disabled": "Vydávání dev tokenů je v tomto prostředí vypnuto.",
