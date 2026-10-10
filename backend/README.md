@@ -1,4 +1,4 @@
-```markdown
+﻿```markdown
 # Sandalis Backend v2.0
 
 Асинхронный backend для Sandalis Web на **FastAPI + SQLAlchemy 2.0 + asyncpg + Alembic**.
@@ -772,8 +772,7 @@ Backend v2.0 is a new API architecture.
 
 Potential breaking points for old frontend:
 
-- auth flow changed temporarily;
-- Discord OAuth is not yet restored;
+- auth flow changed: Discord OAuth (`/api/v1/auth/discord/*`) + HttpOnly session cookie, old session table removed;
 - some response DTOs may differ from old backend;
 - protected endpoints now require JWT or clan-token;
 - clan isolation is mandatory.
@@ -819,9 +818,9 @@ Legacy compatibility preserved where practical:
 
 ---
 
-## Discord OAuth Definition of Done
+## Discord OAuth Definition of Done (выполнено)
 
-Discord auth is considered restored only when all are true:
+Все пункты закрыты и проверены на проде (/discord/login → Discord → callback):
 
 - `GET /api/v1/auth/discord/login` redirects to Discord.
 - `GET /api/v1/auth/discord/callback` validates `state`.
@@ -873,3 +872,106 @@ The backend is designed to fail closed:
 - health/ping is intentionally lightweight;
 - global catalog remains shared to save Supabase free-tier storage.
 ```
+
+
+---
+
+## Production runbook (актуально на октябрь 2026. Писал в 3 ночи 11 октября)
+
+### Состояние
+
+- Backend v2.0 задеплоен: `https://sandalis-web-v2-0.onrender.com` (Swagger: `/api/docs`).
+- Миграции на Supabase: `0001_initial → 0002_clan_scope_backfill → 0003_domain_modules → 0004_discord_oauth`.
+- Discord OAuth проверен на проде: `/api/v1/auth/discord/login` → Discord → callback обменивает код и получает профиль.
+- Frontend (`sandalis-frontend.onrender.com`) **не адаптирован** под новый API; это отдельная задача вне backend.
+
+### Render — настройки сервиса `Sandalis-web-v2.0`
+
+| Поле | Значение |
+|---|---|
+| Root Directory | `backend` |
+| Build Command | `python -m pip install --upgrade pip && python -m pip install -r requirements.txt` |
+| Start Command | `python -m alembic upgrade head && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1` |
+| Health Check Path | `/api/v1/health/live` |
+
+Start Command нельзя вставлять в Build Command: на этапе build uvicorn ещё не установлен, а сам build зависнет.
+
+### Render — обязательные переменные окружения
+
+```env
+ENV=prod                      # закрывает /auth/dev-token без X-Dev-Auth-Key
+DATABASE_URL=postgresql+asyncpg://postgres.<PROJECT_REF>:<PASSWORD>@aws-1-eu-west-1.pooler.supabase.com:5432/postgres
+DB_USE_PGBOUNCER=false
+JWT_SECRET=<длинный случайный секрет>
+JWT_ALG=HS256
+JWT_ISSUER=sandalis
+JWT_AUDIENCE=sandalis-web
+
+DISCORD_CLIENT_ID=<Discord Developer Portal>
+DISCORD_CLIENT_SECRET=<Discord Developer Portal>
+DISCORD_REDIRECT_URI=https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
+DISCORD_API_BASE_URL=https://discord.com/api/v10
+
+FRONTEND_URL=https://sandalis-frontend.onrender.com   # куда редиректить после callback
+COOKIE_SECURE=true
+COOKIE_SAMESITE=none          # фронт и backend на разных доменах; lax — только для одного origin
+CORS_ORIGINS=["https://sandalis-frontend.onrender.com","http://localhost:3000"]
+SESSION_COOKIE_NAME=sindaris_session
+SESSION_TTL_MINUTES=30
+
+DEFAULT_CLAN_ID=SANDALIS      # без этого первый Discord-пользователь получит ?error=forbidden
+DEFAULT_CLAN_ROLE=owner       # ТОЛЬКО на первый вход владельца, затем сменить на guest/member
+
+API_V1_PREFIX=/api/v1
+DEFAULT_LOCALE=en
+SUPPORTED_LOCALES=["ru","en","cs"]
+I18N_HOT_RELOAD=false
+PYTHON_VERSION=3.12.8
+```
+
+Переменная `REDIRECT_URI` (без префикса `DISCORD_`) кодом не читается — удалить.
+
+### Discord Developer Portal
+
+OAuth2 → Redirects (точное совпадение, scope `identify`):
+
+```text
+https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
+http://localhost:8000/api/v1/auth/discord/callback
+```
+
+### Расшифровка `?error=` после callback
+
+| Код | Причина | Что делать |
+|---|---|---|
+| `forbidden` | У пользователя нет membership, `DEFAULT_CLAN_ID` не задан | Задать `DEFAULT_CLAN_ID`/`DEFAULT_CLAN_ROLE` или выдать invite-код |
+| `discord.state_invalid` | Просроченный/чужой state (TTL 10 мин) | Повторить вход с `/auth/discord/login` |
+| `discord.exchange_failed` | Discord отклонил код: неверный secret или redirect_uri | Сверить `DISCORD_CLIENT_SECRET` и `DISCORD_REDIRECT_URI` с порталом |
+| `discord.disabled` | Пустые `DISCORD_CLIENT_ID`/`SECRET` | Заполнить в Environment |
+
+### Первый вход владельца
+
+1. Выставить `DEFAULT_CLAN_ID=SANDALIS`, `DEFAULT_CLAN_ROLE=owner`.
+2. Открыть `/api/v1/auth/discord/login`, авторизоваться.
+3. Проверить `/api/v1/auth/me`: `clan_id=SANDALIS`, `role=owner`, `scopes=["*"]`.
+4. Сменить `DEFAULT_CLAN_ROLE` на `guest`. Дальнейшие участники — через `/api/v1/auth/invites`.
+
+### Локальные тесты
+
+`tests/conftest.py` жёстко задаёт `DATABASE_URL=...127.0.0.1:5433/sandalis_test` и делает `drop_all/create_all` на каждый тест — тесты никогда не ходят в Supabase. Нужен локальный PostgreSQL на 5433 (5432 на Windows часто занят WSL/другим контейнером):
+
+```powershell
+docker run --name sandalis-pg -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=sandalis_test -p 5433:5432 -d postgres:15
+# в дальнейшем: docker start sandalis-pg
+cd backend
+.\.venv\Scripts\python.exe -m pytest -q
+```
+
+Без запущенного контейнера интеграционные тесты падают с `ConnectionRefusedError` — это ожидаемо и безопасно.
+
+### Известные ограничения / следующие шаги
+
+- Frontend работает со старым контрактом API: нужна адаптация (Discord-кнопка → `/api/v1/auth/discord/login`, cookie-режим, новые DTO orders/stockpiles/timers).
+- Workers (`war_import`, `ffmpeg`, S3) в v2.0 не перенесены.
+- Нет seed-скрипта первого клана: клан создаётся через `DEFAULT_CLAN_ID` при первом Discord-входе.
+- `JWT_SECRET=0000` недопустим в prod — заменить на случайную строку (это инвалидирует уже выданные токены).
