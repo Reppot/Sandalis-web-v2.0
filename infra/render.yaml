@@ -1,69 +1,85 @@
-databases:
-  - name: sandalis-db
-    plan: free
-    databaseName: sandalis
-    user: sandalis
-    region: frankfurt
+# Infra-as-code для текущего деплоя. Сервисы созданы вручную в Dashboard;
+# имена здесь совпадают с ними, чтобы Blueprint при подключении связался
+# с существующими, а не создал новые. Прежде чем нажимать "Apply Blueprint",
+# убедитесь, что имена и регион совпадают с Dashboard.
+# БД — Supabase (внешняя), поэтому блока `databases:` нет.
 
 services:
-  # --- FastAPI Backend ---
+  # --- FastAPI backend v2.0 ---
   - type: web
-    name: sandalis-api
+    name: Sandalis-web-v2.0
     runtime: python
-    region: frankfurt
     plan: free
-    buildCommand: cd backend && pip install -e .
-    startCommand: cd backend && alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000
-    healthCheckPath: /health
+    rootDir: backend
+    buildCommand: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
+    startCommand: python -m alembic upgrade head && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    healthCheckPath: /api/v1/health/live
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: ENV
+        value: prod
+      # Supabase session pooler (postgres.<ref>@aws-1-eu-west-1.pooler.supabase.com:5432)
       - key: DATABASE_URL
-        fromDatabase:
-          name: sandalis-db
-          property: connectionString
-      - key: ACCESS_TOKENS_JSON
         sync: false
+      - key: DB_USE_PGBOUNCER
+        value: "false"
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_ALG
+        value: HS256
+      - key: JWT_ISSUER
+        value: sandalis
+      - key: JWT_AUDIENCE
+        value: sandalis-web
       - key: DISCORD_CLIENT_ID
         sync: false
       - key: DISCORD_CLIENT_SECRET
         sync: false
       - key: DISCORD_REDIRECT_URI
-        sync: false
-      - key: S3_ENDPOINT
-        sync: false
-      - key: S3_ACCESS_KEY
-        sync: false
-      - key: S3_SECRET_KEY
-        sync: false
+        value: https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
+      - key: DISCORD_API_BASE_URL
+        value: https://discord.com/api/v10
+      - key: FRONTEND_URL
+        value: https://sandalis-frontend.onrender.com
+      - key: CORS_ORIGINS
+        value: '["https://sandalis-frontend.onrender.com","http://localhost:3000"]'
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: none
+      - key: SESSION_COOKIE_NAME
+        value: sindaris_session
+      - key: SESSION_TTL_MINUTES
+        value: "30"
+      - key: DEFAULT_CLAN_ID
+        value: SANDALIS
+      - key: DEFAULT_CLAN_ROLE
+        value: guest          # owner — только на первый вход владельца
+      - key: API_V1_PREFIX
+        value: /api/v1
+      - key: DEFAULT_LOCALE
+        value: en
+      - key: SUPPORTED_LOCALES
+        value: '["ru","en","cs"]'
+      - key: I18N_HOT_RELOAD
+        value: "false"
 
-  # --- Next.js Frontend ---
+  # --- Next.js frontend ---
   - type: web
-    name: sandalis-web
+    name: Sandalis-frontend
     runtime: node
-    region: frankfurt
     plan: free
-    buildCommand: cd frontend && npm ci && npm run build
-    startCommand: cd frontend && npm start
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
     healthCheckPath: /
     envVars:
+      - key: NODE_VERSION
+        value: "20"
       - key: NEXT_PUBLIC_API_URL
-        value: https://sandalis-api.onrender.com
+        value: https://sandalis-web-v2-0.onrender.com
 
-  # --- Background Worker ---
-  - type: worker
-    name: sandalis-worker
-    runtime: python
-    region: frankfurt
-    plan: free
-    buildCommand: cd backend && pip install -e .
-    startCommand: cd backend && python -m app.workers
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: sandalis-db
-          property: connectionString
-      - key: S3_ENDPOINT
-        sync: false
-      - key: S3_ACCESS_KEY
-        sync: false
-      - key: S3_SECRET_KEY
-        sync: false
+# Worker (war_import / ffmpeg / S3) в v2.0 не перенесён — см. backend/README.md,
+# раздел "Известные ограничения". Вернуть отдельным сервисом type: worker,
+# когда появится app/workers.
