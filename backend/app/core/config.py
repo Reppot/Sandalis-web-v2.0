@@ -54,6 +54,7 @@ class Settings(BaseSettings):
 
     # --- Frontend / session-cookie --------------------------------------
     FRONTEND_URL: str = "http://localhost:3000"
+    CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     SESSION_TTL_MINUTES: int = 60            # Max-Age куки = TTL * 60
     COOKIE_SECURE: bool = False              # в prod -> true
     COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"

@@ -36,7 +36,7 @@ app = FastAPI(
 app.add_middleware(GZipMiddleware, minimum_size=1024)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://sandalis.vercel.app", "http://localhost:3000"],
+    allow_origins=list(settings.CORS_ORIGINS),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*", "Authorization", "X-Clan-Token", "X-Locale", "Accept-Language"],
