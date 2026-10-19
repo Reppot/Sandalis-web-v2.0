@@ -880,82 +880,79 @@ The backend is designed to fail closed:
 
 ### Состояние
 
-- Backend v2.0 задеплоен: `https://sandalis-web-v2-0.onrender.com` (Swagger: `/api/docs`).
-- Миграции на Supabase: `0001_initial → 0002_clan_scope_backfill → 0003_domain_modules → 0004_discord_oauth`.
-- Discord OAuth проверен на проде: `/api/v1/auth/discord/login` → Discord → callback обменивает код и получает профиль.
-- Frontend (`sandalis-frontend.onrender.com`) **не адаптирован** под новый API; это отдельная задача вне backend.
+- Сайт — **один** web-сервис Render на Docker (`Dockerfile` в корне репозитория):
+  Next.js на публичном `$PORT` + FastAPI на `127.0.0.1:8000` в одном контейнере.
+  Браузер видит только домен сервиса, `/api/v1/*` Next проксирует в FastAPI —
+  CORS не нужен, кука сессии first-party, один холодный старт.
+- При каждом старте контейнера (`deploy/start.sh`): `alembic upgrade head` → `python -m app.seed`
+  (каталог 396 предметов, рецепты Factory/MPF/Refinery, контент) → uvicorn + next.
+- Описание сервиса — `infra/render.yaml`.
 
-### Render — настройки сервиса `Sandalis-web-v2.0`
+### Render — создание сервиса
 
-| Поле | Значение |
-|---|---|
-| Root Directory | `backend` |
-| Build Command | `python -m pip install --upgrade pip && python -m pip install -r requirements.txt` |
-| Start Command | `python -m alembic upgrade head && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1` |
-| Health Check Path | `/api/v1/health/live` |
+1. New → Web Service → репозиторий `Reppot/Sandalis-web-v2.0`, ветка с кодом.
+2. Language/Runtime: **Docker**, Dockerfile Path `./Dockerfile`, Docker Context `.`, Root Directory — пусто.
+3. Health Check Path: `/api/v1/health/live`.
+4. Build/Start Command — пусто (всё в Dockerfile/`deploy/start.sh`).
+5. Environment — переменные ниже. После первого успешного деплоя старые сервисы
+   (`Sandalis-web-v2.0` на Python и `Sandalis-frontend` на Node) можно удалить.
 
-Start Command нельзя вставлять в Build Command: на этапе build uvicorn ещё не установлен, а сам build зависнет.
+### Render — переменные окружения
 
-### Render — обязательные переменные окружения
+`<домен>` — адрес нового сервиса, например `https://sandalis-terminal.onrender.com`.
 
 ```env
 ENV=prod                      # закрывает /auth/dev-token без X-Dev-Auth-Key
 DATABASE_URL=postgresql+asyncpg://postgres.<PROJECT_REF>:<PASSWORD>@aws-1-eu-west-1.pooler.supabase.com:5432/postgres
 DB_USE_PGBOUNCER=false
-JWT_SECRET=<длинный случайный секрет>
-JWT_ALG=HS256
-JWT_ISSUER=sandalis
-JWT_AUDIENCE=sandalis-web
+JWT_SECRET=<длинный случайный секрет: openssl rand -hex 32>
 
 DISCORD_CLIENT_ID=<Discord Developer Portal>
 DISCORD_CLIENT_SECRET=<Discord Developer Portal>
-# через прокси фронтенда (тот же origin, что и сайт) — см. frontend/next.config.ts
-DISCORD_REDIRECT_URI=https://sandalis-frontend.onrender.com/api/v1/auth/discord/callback
-DISCORD_API_BASE_URL=https://discord.com/api/v10
+DISCORD_REDIRECT_URI=<домен>/api/v1/auth/discord/callback
+FRONTEND_URL=<домен>          # куда вернуть пользователя после входа
 
-FRONTEND_URL=https://sandalis-frontend.onrender.com   # куда редиректить после callback
 COOKIE_SECURE=true
-COOKIE_SAMESITE=lax           # браузер видит один origin (фронт проксирует /api/v1/*)
-CORS_ORIGINS=["https://sandalis-frontend.onrender.com","http://localhost:3000"]
+COOKIE_SAMESITE=lax
 SESSION_COOKIE_NAME=sindaris_session
-SESSION_TTL_MINUTES=30
+SESSION_TTL_MINUTES=10080     # 7 суток
+ACCESS_TOKEN_TTL_MIN=10080    # JWT живёт столько же, сколько кука
 
 DEFAULT_CLAN_ID=SANDALIS      # без этого первый Discord-пользователь получит ?error=forbidden
-DEFAULT_CLAN_ROLE=owner       # ТОЛЬКО на первый вход владельца, затем сменить на guest/member
-
-API_V1_PREFIX=/api/v1
-DEFAULT_LOCALE=en
-SUPPORTED_LOCALES=["ru","en","cs"]
-I18N_HOT_RELOAD=false
-PYTHON_VERSION=3.12.8
+DEFAULT_CLAN_ROLE=guest       # owner — ТОЛЬКО на первый вход владельца, затем вернуть guest
+DEFAULT_LOCALE=ru
 ```
 
-Переменная `REDIRECT_URI` (без префикса `DISCORD_`) кодом не читается — удалить.
+Не нужны (кодом не читаются, удалить): `ACCESS_TOKEN`, `ACCESS_TOKENS_JSON`, `DEBUG`, `REDIRECT_URI`,
+`S3_*`, `CORS_ORIGINS` (браузер в API напрямую не ходит), `BACKEND_URL`, `NODE_VERSION`.
 
 ### Discord Developer Portal
 
 OAuth2 → Redirects (точное совпадение, scope `identify`):
 
 ```text
-https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
-http://localhost:8000/api/v1/auth/discord/callback
+<домен>/api/v1/auth/discord/callback
+http://localhost:3000/api/v1/auth/discord/callback
 ```
+
+Для отправки рапортов в канал офицер (admin+) вставляет URL вебхука канала в «Кабинет» →
+«Канал Discord для рапортов». Секрет хранится в БД клана и наружу не отдаётся.
 
 ### Расшифровка `?error=` после callback
 
 | Код | Причина | Что делать |
 |---|---|---|
 | `forbidden` | У пользователя нет membership, `DEFAULT_CLAN_ID` не задан | Задать `DEFAULT_CLAN_ID`/`DEFAULT_CLAN_ROLE` или выдать invite-код |
-| `discord.state_invalid` | Просроченный/чужой state (TTL 10 мин) | Повторить вход с `/auth/discord/login` |
-| `discord.exchange_failed` | Discord отклонил код: неверный secret или redirect_uri | Сверить `DISCORD_CLIENT_SECRET` и `DISCORD_REDIRECT_URI` с порталом |
-| `discord.disabled` | Пустые `DISCORD_CLIENT_ID`/`SECRET` | Заполнить в Environment |
+| `state_invalid` | Просроченный/чужой state (TTL 10 мин) | Повторить вход |
+| `exchange_failed` | Discord отклонил код: неверный secret или redirect_uri | Сверить `DISCORD_CLIENT_SECRET` и `DISCORD_REDIRECT_URI` с порталом |
+| `disabled` | Пустые `DISCORD_CLIENT_ID`/`SECRET` | Заполнить в Environment |
 
 ### Первый вход владельца
 
 1. Выставить `DEFAULT_CLAN_ID=SANDALIS`, `DEFAULT_CLAN_ROLE=owner`.
-2. Открыть `/api/v1/auth/discord/login`, авторизоваться.
-3. Проверить `/api/v1/auth/me`: `clan_id=SANDALIS`, `role=owner`, `scopes=["*"]`.
-4. Сменить `DEFAULT_CLAN_ROLE` на `guest`. Дальнейшие участники — через `/api/v1/auth/invites`.
+2. Открыть сайт, «Войти через Discord».
+3. В «Кабинете» роль — «Командир клана», права — «Полный доступ».
+4. Сменить `DEFAULT_CLAN_ROLE` на `guest`. Дальнейшие участники — Discord (гость) или invite-коды из кабинета.
 
 ### Локальные тесты
 
@@ -972,7 +969,7 @@ cd backend
 
 ### Известные ограничения / следующие шаги
 
-- Frontend работает со старым контрактом API: нужна адаптация (Discord-кнопка → `/api/v1/auth/discord/login`, cookie-режим, новые DTO orders/stockpiles/timers).
 - Workers (`war_import`, `ffmpeg`, S3) в v2.0 не перенесены.
 - Нет seed-скрипта первого клана: клан создаётся через `DEFAULT_CLAN_ID` при первом Discord-входе.
-- `JWT_SECRET=0000` недопустим в prod — заменить на случайную строку (это инвалидирует уже выданные токены).
+- Глобальный контент (видео входа, ссылки, обучение) правится через `PUT /api/v1/content/{kind}/{key}`
+  (admin+ клана `CONTENT_ADMIN_CLAN_ID`/`DEFAULT_CLAN_ID`); страницы редактирования в интерфейсе нет.
