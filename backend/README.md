@@ -888,18 +888,20 @@ The backend is designed to fail closed:
   (каталог 396 предметов, рецепты Factory/MPF/Refinery, контент) → uvicorn + next.
 - Описание сервиса — `infra/render.yaml`.
 
-### Render — создание сервиса
+### Render — сервис `Sandalis-web-v2.0` (единственный)
 
-1. New → Web Service → репозиторий `Reppot/Sandalis-web-v2.0`, ветка с кодом.
-2. Language/Runtime: **Docker**, Dockerfile Path `./Dockerfile`, Docker Context `.`, Root Directory — пусто.
-3. Health Check Path: `/api/v1/health/live`.
-4. Build/Start Command — пусто (всё в Dockerfile/`deploy/start.sh`).
-5. Environment — переменные ниже. После первого успешного деплоя старые сервисы
-   (`Sandalis-web-v2.0` на Python и `Sandalis-frontend` на Node) можно удалить.
+Сайт: `https://sandalis-web-v2-0.onrender.com`, деплой из ветки `main`.
+
+| Поле | Значение |
+|---|---|
+| Language | **Docker** |
+| Root Directory | пусто |
+| Dockerfile Path | `./Dockerfile` |
+| Docker Build Context | `.` |
+| Build / Start Command | пусто (всё в `Dockerfile` и `deploy/start.sh`) |
+| Health Check Path | `/api/v1/health/live` |
 
 ### Render — переменные окружения
-
-`<домен>` — адрес нового сервиса, например `https://sandalis-terminal.onrender.com`.
 
 ```env
 ENV=prod                      # закрывает /auth/dev-token без X-Dev-Auth-Key
@@ -909,8 +911,8 @@ JWT_SECRET=<длинный случайный секрет: openssl rand -hex 32
 
 DISCORD_CLIENT_ID=<Discord Developer Portal>
 DISCORD_CLIENT_SECRET=<Discord Developer Portal>
-DISCORD_REDIRECT_URI=<домен>/api/v1/auth/discord/callback
-FRONTEND_URL=<домен>          # куда вернуть пользователя после входа
+DISCORD_REDIRECT_URI=https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
+FRONTEND_URL=https://sandalis-web-v2-0.onrender.com          # куда вернуть пользователя после входа
 
 COOKIE_SECURE=true
 COOKIE_SAMESITE=lax
@@ -931,7 +933,7 @@ DEFAULT_LOCALE=ru
 OAuth2 → Redirects (точное совпадение, scope `identify`):
 
 ```text
-<домен>/api/v1/auth/discord/callback
+https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
 http://localhost:3000/api/v1/auth/discord/callback
 ```
 
