@@ -909,12 +909,13 @@ JWT_AUDIENCE=sandalis-web
 
 DISCORD_CLIENT_ID=<Discord Developer Portal>
 DISCORD_CLIENT_SECRET=<Discord Developer Portal>
-DISCORD_REDIRECT_URI=https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
+# через прокси фронтенда (тот же origin, что и сайт) — см. frontend/next.config.ts
+DISCORD_REDIRECT_URI=https://sandalis-frontend.onrender.com/api/v1/auth/discord/callback
 DISCORD_API_BASE_URL=https://discord.com/api/v10
 
 FRONTEND_URL=https://sandalis-frontend.onrender.com   # куда редиректить после callback
 COOKIE_SECURE=true
-COOKIE_SAMESITE=none          # фронт и backend на разных доменах; lax — только для одного origin
+COOKIE_SAMESITE=lax           # браузер видит один origin (фронт проксирует /api/v1/*)
 CORS_ORIGINS=["https://sandalis-frontend.onrender.com","http://localhost:3000"]
 SESSION_COOKIE_NAME=sindaris_session
 SESSION_TTL_MINUTES=30

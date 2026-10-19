@@ -1,15 +1,14 @@
 import type { ProductionOrder } from "@/entities/order";
 import type { OrderFilterState } from "@/features/orders/model/types";
 
+/** Текстовый поиск — на клиенте; статус и «мои» уже отфильтрованы сервером. */
 export function filterOrders(orders: ProductionOrder[], filters: OrderFilterState): ProductionOrder[] {
-  return orders.filter((order) => {
-    const matchesStatus = filters.status === "all" || order.status === filters.status;
-    const matchesSearch =
-      filters.searchQuery === "" ||
-      order.destination.toLowerCase().includes(filters.searchQuery.toLowerCase()) ||
-      order.items.some((item) => item.itemId.toLowerCase().includes(filters.searchQuery.toLowerCase())) ||
-      (order.notes && order.notes.toLowerCase().includes(filters.searchQuery.toLowerCase()));
-
-    return matchesStatus && matchesSearch;
-  });
+  const q = filters.searchQuery.toLowerCase().trim();
+  if (q === "") return orders;
+  return orders.filter(
+    (order) =>
+      order.title.toLowerCase().includes(q) ||
+      order.itemCode.toLowerCase().includes(q) ||
+      (order.notes?.toLowerCase().includes(q) ?? false)
+  );
 }

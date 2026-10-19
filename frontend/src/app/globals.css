@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@theme {
+  --color-sindaris-bg: #0a0e17;
+  --color-sindaris-panel: #111827;
+  --color-sindaris-border: #1f2937;
+  --color-sindaris-accent: #3b82f6;
+  --color-sindaris-text: #e5e7eb;
+  --color-sindaris-muted: #6b7280;
+}
+
 /*
  * Минимальный глобальный лист.
  * Старый globals.css (51 КБ) был забит дублями Tailwind-утилит —

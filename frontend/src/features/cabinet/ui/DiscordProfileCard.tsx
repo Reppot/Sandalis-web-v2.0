@@ -23,12 +23,9 @@ export const DiscordProfileCard: React.FC<DiscordProfileCardProps> = ({ session,
 
       <div className="flex items-center gap-4 py-2">
         <div className="h-12 w-12 rounded-full bg-sindaris-bg border border-sindaris-border flex items-center justify-center overflow-hidden">
-          {session.discordProfile?.avatarUrl ? (
-            <img
-              src={session.discordProfile.avatarUrl}
-              alt="Avatar"
-              className="h-full w-full object-cover"
-            />
+          {session.avatarUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element -- аватар Discord CDN, оптимизация не нужна
+            <img src={session.avatarUrl} alt="" className="h-full w-full object-cover" />
           ) : (
             <User className="h-6 w-6 text-sindaris-muted" />
           )}
@@ -36,13 +33,18 @@ export const DiscordProfileCard: React.FC<DiscordProfileCardProps> = ({ session,
 
         <div className="space-y-0.5">
           <p className="font-bold text-sm text-sindaris-text">
-            {session.discordProfile?.username ?? "Боец клана"}
+            {session.displayName ?? "Боец клана"}
           </p>
-          <p className="text-xs text-sindaris-muted font-mono">
-            ID: {session.discordId ?? "Token-session"}
-          </p>
+          <p className="text-xs text-sindaris-muted font-mono">ID: {session.userId}</p>
+          <p className="text-xs text-sindaris-muted font-mono">Клан: {session.clanId}</p>
         </div>
       </div>
+
+      {session.scopes.length > 0 && (
+        <p className="text-[11px] text-sindaris-muted break-words">
+          {session.scopes.join(" · ")}
+        </p>
+      )}
 
       <div className="pt-2">
         <Button variant="danger" size="sm" onClick={onLogout} className="w-full">

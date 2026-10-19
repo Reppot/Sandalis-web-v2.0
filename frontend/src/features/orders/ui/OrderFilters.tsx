@@ -1,8 +1,6 @@
 import * as React from "react";
-import type { OrderStatus } from "@/entities/order";
 import type { OrderFilterState } from "@/features/orders/model/types";
 import { Input, Button } from "@/shared";
-import { Search } from "lucide-react";
 
 interface OrderFiltersProps {
   filters: OrderFilterState;
@@ -11,9 +9,11 @@ interface OrderFiltersProps {
 
 const statusOptions: { label: string; value: OrderFilterState["status"] }[] = [
   { label: "Все", value: "all" },
-  { label: "В очереди", value: "pending" },
-  { label: "В работе", value: "processing" },
-  { label: "Выполненные", value: "completed" },
+  { label: "Черновик", value: "draft" },
+  { label: "Очередь", value: "queued" },
+  { label: "В работе", value: "in_progress" },
+  { label: "Готово", value: "done" },
+  { label: "Отменены", value: "cancelled" },
 ];
 
 export const OrderFilters: React.FC<OrderFiltersProps> = ({ filters, onChange }) => {
@@ -30,11 +30,18 @@ export const OrderFilters: React.FC<OrderFiltersProps> = ({ filters, onChange })
             {opt.label}
           </Button>
         ))}
+        <Button
+          size="sm"
+          variant={filters.mineOnly ? "primary" : "ghost"}
+          onClick={() => onChange({ ...filters, mineOnly: !filters.mineOnly })}
+        >
+          Мои
+        </Button>
       </div>
 
       <div className="w-full md:w-72 relative">
         <Input
-          placeholder="Поиск по складу / предмету..."
+          placeholder="Поиск по названию / коду..."
           value={filters.searchQuery}
           onChange={(e) => onChange({ ...filters, searchQuery: e.target.value })}
         />

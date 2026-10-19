@@ -1,5 +1,6 @@
-import { ProductionWorkspace } from "@/features/production";
+import { redirect } from "next/navigation";
 
-export default function ProductionPage() {
-  return <ProductionWorkspace />;
+// Терминал — одна страница с вкладками; прямые ссылки ведут на нужную вкладку.
+export default function Page() {
+  redirect("/?tab=production");
 }

@@ -1,5 +1,6 @@
-import { StockpilesWorkspace } from "@/features/stockpiles";
+import { redirect } from "next/navigation";
 
-export default function StockpilesPage() {
-  return <StockpilesWorkspace />;
+// Терминал — одна страница с вкладками; прямые ссылки ведут на нужную вкладку.
+export default function Page() {
+  redirect("/?tab=stockpiles");
 }

@@ -18,6 +18,7 @@ class MeRead(BaseModel):
     role: ClanRole
     scopes: list[str]
     display_name: str | None
+    avatar_url: str | None = None   # Discord CDN; None у dev/invite-юзеров и clan_token
 
 
 class DevTokenRequest(BaseModel):

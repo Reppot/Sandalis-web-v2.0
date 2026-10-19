@@ -1,40 +1,16 @@
 "use client";
 
 import * as React from "react";
-import type { UserSession } from "@/entities/session";
 import { Spinner } from "@/shared";
-import { authApi } from "@/features/cabinet/api/authApi";
+import { useSession } from "@/features/cabinet/model/session-context";
 import { DiscordProfileCard } from "@/features/cabinet/ui/DiscordProfileCard";
 import { TokenLoginForm } from "@/features/cabinet/ui/TokenLoginForm";
+import { InvitesPanel } from "@/features/cabinet/ui/InvitesPanel";
+import { ClanTokenPanel } from "@/features/cabinet/ui/ClanTokenPanel";
+import { Scopes } from "@/entities/session";
 
 export const CabinetWorkspace: React.FC = () => {
-  const [session, setSession] = React.useState<UserSession | null>(null);
-  const [loading, setLoading] = React.useState(true);
-
-  const checkSession = React.useCallback(async () => {
-    try {
-      const data = await authApi.getMe();
-      setSession(data);
-    } catch {
-      setSession(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    checkSession();
-  }, [checkSession]);
-
-  const handleLogin = async (token: string) => {
-    const newSession = await authApi.loginWithToken(token);
-    setSession(newSession);
-  };
-
-  const handleLogout = async () => {
-    await authApi.logout();
-    setSession(null);
-  };
+  const { session, loading, error, setSession, logout, can } = useSession();
 
   if (loading) {
     return (
@@ -51,12 +27,22 @@ export const CabinetWorkspace: React.FC = () => {
         <p className="text-xs text-sindaris-muted">Статус доступа, сессия и привязка аккаунта</p>
       </div>
 
+      {error && (
+        <p className="text-xs text-red-400">{error}</p>
+      )}
+
       {session ? (
-        <div className="max-w-md mx-auto">
-          <DiscordProfileCard session={session} onLogout={handleLogout} />
+        <div className="space-y-6">
+          <div className="max-w-md mx-auto">
+            <DiscordProfileCard session={session} onLogout={() => void logout()} />
+          </div>
+          {can(Scopes.CLAN_MEMBERS_READ) && (
+            <InvitesPanel canManage={can(Scopes.CLAN_MEMBERS_WRITE)} />
+          )}
+          {can(Scopes.CLAN_SETTINGS_WRITE) && <ClanTokenPanel />}
         </div>
       ) : (
-        <TokenLoginForm onLogin={handleLogin} />
+        <TokenLoginForm onLoggedIn={setSession} />
       )}
     </div>
   );

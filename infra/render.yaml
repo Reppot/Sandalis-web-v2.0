@@ -36,18 +36,23 @@ services:
         sync: false
       - key: DISCORD_CLIENT_SECRET
         sync: false
+      # Один origin для браузера: фронт проксирует /api/v1/* на этот сервис
+      # (frontend/next.config.ts). Callback идёт через фронт — кука сессии
+      # ставится на домен фронта и остаётся first-party.
+      # Этот же URL должен быть в Discord Developer Portal → OAuth2 → Redirects.
       - key: DISCORD_REDIRECT_URI
-        value: https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
+        value: https://sandalis-frontend.onrender.com/api/v1/auth/discord/callback
       - key: DISCORD_API_BASE_URL
         value: https://discord.com/api/v10
       - key: FRONTEND_URL
         value: https://sandalis-frontend.onrender.com
+      # Браузер в API напрямую не ходит; CORS нужен только для /api/docs и локалки
       - key: CORS_ORIGINS
         value: '["https://sandalis-frontend.onrender.com","http://localhost:3000"]'
       - key: COOKIE_SECURE
         value: "true"
       - key: COOKIE_SAMESITE
-        value: none
+        value: lax
       - key: SESSION_COOKIE_NAME
         value: sindaris_session
       - key: SESSION_TTL_MINUTES
@@ -72,12 +77,14 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: npm ci && npm run build
-    startCommand: npm run start
-    healthCheckPath: /
+    startCommand: npx next start --port $PORT
+    healthCheckPath: /api/health
     envVars:
       - key: NODE_VERSION
         value: "20"
-      - key: NEXT_PUBLIC_API_URL
+      # Цель прокси /api/v1/* (читается при build и start). NEXT_PUBLIC_API_URL
+      # не задаём: браузер ходит только на свой origin.
+      - key: BACKEND_URL
         value: https://sandalis-web-v2-0.onrender.com
 
 # Worker (war_import / ffmpeg / S3) в v2.0 не перенесён — см. backend/README.md,

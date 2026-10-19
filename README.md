@@ -115,7 +115,7 @@ Bash
 cd frontend
 npm install
 npm run dev
-Приложение откроется по адресу http://localhost:3000. При входе используйте токен DEV_TOKEN.
+Приложение откроется по адресу http://localhost:3000. Для локального входа включите `NEXT_PUBLIC_ENABLE_DEV_LOGIN=true` и используйте форму dev-token в «Кабинете».
 
 ☁️ Инструкции по миграции (Supabase -> Render + S3)
 Старый проект использовал Supabase (DB + Storage). В версии 2.0 мы от него отказываемся в пользу чистого PostgreSQL на Render и S3 (Cloudflare R2 / AWS). Не удаляйте проект в Supabase, пока не выполните эти шаги на боевом сервере!
@@ -489,17 +489,16 @@ npm install
 cmd
 
 npm run dev
-Если frontend не видит backend, проверьте .env frontend-части. Обычно нужно указать один из вариантов:
+Браузер ходит только на свой origin: Next проксирует `/api/v1/*` на бэкенд
+(`frontend/next.config.ts`), поэтому кука сессии first-party. Если frontend не видит
+backend, проверьте `frontend/.env.local` (шаблон — `frontend/.env.example`):
 
 env
 
-VITE_API_URL=http://127.0.0.1:8000
-или:
+BACKEND_URL=http://127.0.0.1:8000
+NEXT_PUBLIC_ENABLE_DEV_LOGIN=true
 
-env
-
-VITE_API_URL=http://127.0.0.1:8000/api
-Зависит от того, как в коде frontend формируются API-запросы.
+`BACKEND_URL` читается при `next build`/`next start` — после смены перезапустите dev-сервер.
 
 Частые ошибки
 ModuleNotFoundError: No module named 'app.schemas.orders'

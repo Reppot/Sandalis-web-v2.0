@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 import path from "path";
 
+// Бэкенд живёт за прокси того же origin: браузер видит только фронтовый домен,
+// поэтому сессионная кука first-party (SameSite=Lax), а CORS не нужен.
+const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:8000").replace(/\/$/, "");
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   outputFileTracingRoot: path.resolve(__dirname),
@@ -14,14 +18,21 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.backblazeb2.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+      },
     ],
   },
+  experimental: {
+    // Render free-tier просыпается до ~60 с — дефолтных 30 с прокси не хватает
+    proxyTimeout: 120_000,
+  },
   async rewrites() {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
     return [
       {
-        source: "/api/:path*",
-        destination: `${apiUrl}/api/:path*`,
+        source: "/api/v1/:path*",
+        destination: `${backendUrl}/api/v1/:path*`,
       },
     ];
   },
