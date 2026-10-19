@@ -10,6 +10,17 @@ python -m app.seed
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --workers 1 &
 api_pid=$!
 
+# Next стартует, когда API уже отвечает: прокси не сыплет ECONNREFUSED в логи
+python - <<'EOF'
+import time, urllib.request
+for _ in range(120):
+    try:
+        urllib.request.urlopen("http://127.0.0.1:8000/api/v1/health/live", timeout=2)
+        break
+    except Exception:
+        time.sleep(0.5)
+EOF
+
 cd /app/web
 HOSTNAME=0.0.0.0 PORT="${PORT:-10000}" node server.js &
 web_pid=$!
