@@ -1,80 +1,83 @@
 "use client";
 
 import * as React from "react";
-import { OrdersWorkspace } from "@/features/orders";
-import { StockpilesWorkspace } from "@/features/stockpiles";
-import { TimersWorkspace } from "@/features/timers";
-import { CodesWorkspace } from "@/features/codes";
-import { ProductionWorkspace } from "@/features/production";
-import { CabinetWorkspace } from "@/features/cabinet";
-import { cn } from "@/shared";
-import { ClipboardList, Archive, Clock, Hash, Cpu, User } from "lucide-react";
-
-type TabKey = "orders" | "stockpiles" | "timers" | "codes" | "production" | "cabinet";
-
-interface NavigationTab {
-  key: TabKey;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-}
-
-const tabs: NavigationTab[] = [
-  { key: "orders", label: "Заказы", icon: ClipboardList },
-  { key: "stockpiles", label: "Склады", icon: Archive },
-  { key: "timers", label: "Таймеры", icon: Clock },
-  { key: "codes", label: "База кодов", icon: Hash },
-  { key: "production", label: "Производство", icon: Cpu },
-  { key: "cabinet", label: "Кабинет", icon: User },
-];
+import { useContent } from "@/entities/content";
+import { Scopes } from "@/entities/session";
+import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
+import { CodeBaseWorkspace } from "@/features/codes";
+import { ReportsWorkspace } from "@/features/reports";
+import { SupplyWorkspace } from "@/features/supply";
+import { TerminalProvider, TimersWorkspace } from "@/features/timers";
+import { ToolsWorkspace } from "@/features/tools";
+import { TrainingWorkspace } from "@/features/training";
+import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
+import { Header } from "@/app/_shell/Header";
+import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
+import { TABS, isTabKey, type TabKey } from "@/app/_shell/tabs";
 
 export default function TerminalPage() {
-  const [activeTab, setActiveTab] = React.useState<TabKey>("orders");
+  const { session, loading, setSession, can } = useSession();
+  const { media } = useContent();
+  const [tab, setTab] = React.useState<TabKey>("orders");
+
+  React.useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("tab");
+    if (isTabKey(requested)) setTab(requested);
+  }, []);
+
+  const select = React.useCallback((key: TabKey) => {
+    setTab(key);
+    const url = new URL(window.location.href);
+    url.search = key === "orders" ? "" : `?tab=${key}`;
+    window.history.replaceState(null, "", url);
+    window.scrollTo({ top: 0 });
+  }, []);
+
+  const background = session ? media(`bg_${TABS.find((t) => t.key === tab)?.background ?? "orders"}`) : media("bg_home");
+
+  if (loading) {
+    return (
+      <>
+        <BackgroundLayer src={media("bg_home")} />
+        <div className="hud-label flex min-h-dvh items-center justify-center text-muted">
+          <span className="pulse">📡 УСТАНОВКА КАНАЛА СВЯЗИ...</span>
+        </div>
+      </>
+    );
+  }
+
+  if (!session) return <LoginScreen onLoggedIn={setSession} />;
+
+  const workspace = (() => {
+    switch (tab) {
+      case "orders":
+        return <SupplyWorkspace canWriteStockpiles={can(Scopes.STOCKPILES_WRITE)} canWriteOrders={can(Scopes.ORDERS_WRITE)} onReportSubmitted={() => select("reports")} />;
+      case "reports":
+        return <ReportsWorkspace canWrite={can(Scopes.ORDERS_WRITE)} canDelete={can(Scopes.ORDERS_DELETE)} onOpenConstructor={() => select("orders")} />;
+      case "timers":
+        return <TimersWorkspace canWrite={can(Scopes.TIMERS_WRITE, Scopes.STOCKPILES_WRITE)} />;
+      case "codes":
+        return <CodeBaseWorkspace />;
+      case "tools":
+        return <ToolsWorkspace />;
+      case "training":
+        return <TrainingWorkspace />;
+      case "cabinet":
+        return <CabinetWorkspace />;
+    }
+  })();
 
   return (
-    <div className="min-h-screen flex flex-col bg-sindaris-bg text-sindaris-text font-mono selection:bg-sindaris-accent selection:text-white">
-      {/* Верхняя панель (Header) */}
-      <header className="border-b border-sindaris-border bg-sindaris-panel/80 backdrop-blur-md sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-3 w-3 bg-sindaris-accent rounded-full animate-pulse shadow-sm shadow-blue-500" />
-            <h1 className="text-base font-bold tracking-wider text-sindaris-accent">
-              SINDARIS <span className="text-sindaris-muted font-normal text-xs">// TERMINAL v2.0</span>
-            </h1>
-          </div>
-
-          <nav className="flex items-center gap-1">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeTab === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={cn(
-                    "flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-colors cursor-pointer",
-                    isActive
-                      ? "bg-sindaris-accent text-white shadow-xs"
-                      : "text-sindaris-muted hover:text-sindaris-text hover:bg-sindaris-border/50"
-                  )}
-                >
-                  <Icon className="h-3.5 w-3.5" />
-                  <span className="hidden md:inline">{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
+    <TerminalProvider enabled={can(Scopes.TIMERS_READ)}>
+      <BackgroundLayer src={background} />
+      <div className="relative flex min-h-dvh flex-col gap-2.5 p-2.5 md:gap-3 md:p-3">
+        <Header />
+        <div className="flex flex-1 items-start gap-2.5 md:gap-3">
+          <Sidebar active={tab} onSelect={select} />
+          <main key={tab} className="min-w-0 flex-1 pb-20 md:pb-0">{workspace}</main>
         </div>
-      </header>
-
-      {/* Основной контейнер рабочей области */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6">
-        {activeTab === "orders" && <OrdersWorkspace />}
-        {activeTab === "stockpiles" && <StockpilesWorkspace />}
-        {activeTab === "timers" && <TimersWorkspace />}
-        {activeTab === "codes" && <CodesWorkspace />}
-        {activeTab === "production" && <ProductionWorkspace />}
-        {activeTab === "cabinet" && <CabinetWorkspace />}
-      </main>
-    </div>
+        <MobileNav active={tab} onSelect={select} />
+      </div>
+    </TerminalProvider>
   );
 }

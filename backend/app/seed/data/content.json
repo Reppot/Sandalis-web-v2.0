@@ -1,0 +1,976 @@
+[
+ {
+  "kind": "media",
+  "key": "bg_home",
+  "sort": 0,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/page_bg_raw.jpg"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_orders",
+  "sort": 1,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/war-plan-foxhole-fan-art-warden-version-v0-v8c2b4w3a42c1.webp"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_reports",
+  "sort": 2,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/606565_smittymann_warden-field-artillery.png"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_storage",
+  "sort": 3,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/war-plan-foxhole-fan-art-warden-version-v0-l7l7cn6u942c1.webp"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_timers",
+  "sort": 4,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/war-plan-foxhole-fan-art-warden-version-v0-qzo9oqg4a42c1.webp"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_training",
+  "sort": 5,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/wp13765010-foxhole-wallpapers.jpg"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_codes",
+  "sort": 6,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/c516.jpg"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_tools",
+  "sort": 7,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/wp13764968-foxhole-wallpapers.jpg"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_cabinet",
+  "sort": 8,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/foxhole_banner_commission_for_the_27th_by_tomi_sa_deqkutr-pre.jpg"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_card",
+  "sort": 9,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/card-bg.jpg.jpg"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "bg_report_texture",
+  "sort": 10,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/bg/gray-background.jpg"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "clan_logo",
+  "sort": 11,
+  "payload": {
+   "type": "image",
+   "url": "/api/v1/assets/brand/clan-logo.png"
+  }
+ },
+ {
+  "kind": "media",
+  "key": "login_video",
+  "sort": 12,
+  "payload": {
+   "type": "video",
+   "url": "https://imoeicmsrtvsigjglqqy.supabase.co/storage/v1/object/public/media/video.mp4",
+   "poster": "/api/v1/assets/bg/page_bg_raw.jpg"
+  }
+ },
+ {
+  "kind": "external_tool",
+  "key": "foxwar-net",
+  "sort": 0,
+  "payload": {
+   "name": "FoxWar.net",
+   "url": "https://foxwar.net/",
+   "tag": "Карта и планирование",
+   "icon": "🧮",
+   "description": "Интерактивная карта для планирования и арты с функцией команд для одновременного отображения у участников команды."
+  }
+ },
+ {
+  "kind": "external_tool",
+  "key": "foxhole-hq",
+  "sort": 1,
+  "payload": {
+   "name": "Foxhole HQ",
+   "url": "https://foxholehq.com/",
+   "tag": "3D-модели и карта",
+   "icon": "🗺️",
+   "description": "Огромная библиотека 3D-моделей построек и техники, а также карта с пользовательскими заметками."
+  }
+ },
+ {
+  "kind": "external_tool",
+  "key": "foxhole-planner",
+  "sort": 2,
+  "payload": {
+   "name": "Foxhole Planner",
+   "url": "https://foxholeplanner.com/",
+   "tag": "Планировщик построек",
+   "icon": "📐",
+   "description": "Планировщик застройки баз со множеством готовых пресетов фортов, складов и оборонительных линий."
+  }
+ },
+ {
+  "kind": "external_tool",
+  "key": "fharty-artillery-calculator",
+  "sort": 3,
+  "payload": {
+   "name": "Fharty Artillery Calculator",
+   "url": "https://fharty.craftingthrulife.com/",
+   "tag": "Артиллерия",
+   "icon": "🎯",
+   "description": "Простой и быстрый калькулятор для расчёта артиллерийских дистанций и поправок."
+  }
+ },
+ {
+  "kind": "external_tool",
+  "key": "plane-damage-calculator",
+  "sort": 4,
+  "payload": {
+   "name": "Plane Damage Calculator",
+   "url": "https://planes.nfml.net/#t=AircraftFighterC&p=AircraftScoutC&g=AircraftScoutC_HMG&v=top",
+   "tag": "Авиация",
+   "icon": "✈️",
+   "description": "Калькулятор урона для расчёта воздушного боя: сравнение самолётов, вооружения и живучести."
+  }
+ },
+ {
+  "kind": "external_tool",
+  "key": "sravdar-map",
+  "sort": 5,
+  "payload": {
+   "name": "Sravdar Foxhole Map",
+   "url": "https://sravdar.github.io/",
+   "tag": "Карта",
+   "icon": "⌖",
+   "description": "Интерактивная карта Foxhole с живыми тайлами — раньше была встроена во вкладку «Карта»."
+  }
+ },
+ {
+  "kind": "ticker_phrase",
+  "key": "phrase-1",
+  "sort": 0,
+  "payload": {
+   "text": "Работай сука"
+  }
+ },
+ {
+  "kind": "ticker_phrase",
+  "key": "phrase-2",
+  "sort": 1,
+  "payload": {
+   "text": "Сделай САНДАЛИС снова великим!"
+  }
+ },
+ {
+  "kind": "ticker_phrase",
+  "key": "phrase-3",
+  "sort": 2,
+  "payload": {
+   "text": "💀ЦЫГАНИС на связи. Спутниковый мониторинг шейкелей колонистов..."
+  }
+ },
+ {
+  "kind": "ticker_phrase",
+  "key": "phrase-4",
+  "sort": 3,
+  "payload": {
+   "text": "Розыгрыш карвалола"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "acrithia",
+  "sort": 0,
+  "payload": {
+   "name": "Acrithia"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "allods-bight",
+  "sort": 1,
+  "payload": {
+   "name": "Allod's Bight"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "ash-fields",
+  "sort": 2,
+  "payload": {
+   "name": "Ash Fields"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "basin-sionnach",
+  "sort": 3,
+  "payload": {
+   "name": "Basin Sionnach"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "callahans-passage",
+  "sort": 4,
+  "payload": {
+   "name": "Callahan's Passage"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "callums-cape",
+  "sort": 5,
+  "payload": {
+   "name": "Callum's Cape"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "clahstra",
+  "sort": 6,
+  "payload": {
+   "name": "Clahstra"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "clanshead-valley",
+  "sort": 7,
+  "payload": {
+   "name": "Clanshead Valley"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "deadlands",
+  "sort": 8,
+  "payload": {
+   "name": "Deadlands"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "drowned-vale",
+  "sort": 9,
+  "payload": {
+   "name": "Drowned Vale"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "endless-shore",
+  "sort": 10,
+  "payload": {
+   "name": "Endless Shore"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "farranac-coast",
+  "sort": 11,
+  "payload": {
+   "name": "Farranac Coast"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "fishermans-row",
+  "sort": 12,
+  "payload": {
+   "name": "Fisherman's Row"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "godcrofts",
+  "sort": 13,
+  "payload": {
+   "name": "Godcrofts"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "great-march",
+  "sort": 14,
+  "payload": {
+   "name": "Great March"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "heartlands",
+  "sort": 15,
+  "payload": {
+   "name": "Heartlands"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "howl-county",
+  "sort": 16,
+  "payload": {
+   "name": "Howl County"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "kalokai",
+  "sort": 17,
+  "payload": {
+   "name": "Kalokai"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "kings-cage",
+  "sort": 18,
+  "payload": {
+   "name": "King's Cage"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "loch-m-r",
+  "sort": 19,
+  "payload": {
+   "name": "Loch Mór"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "marban-hollow",
+  "sort": 20,
+  "payload": {
+   "name": "Marban Hollow"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "morgens-crossing",
+  "sort": 21,
+  "payload": {
+   "name": "Morgen's Crossing"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "nevish-line",
+  "sort": 22,
+  "payload": {
+   "name": "Nevish Line"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "oarbreaker-isles",
+  "sort": 23,
+  "payload": {
+   "name": "Oarbreaker Isles"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "origin",
+  "sort": 24,
+  "payload": {
+   "name": "Origin"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "reaching-trail",
+  "sort": 25,
+  "payload": {
+   "name": "Reaching Trail"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "reavers-pass",
+  "sort": 26,
+  "payload": {
+   "name": "Reaver's Pass"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "red-river",
+  "sort": 27,
+  "payload": {
+   "name": "Red River"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "sableport",
+  "sort": 28,
+  "payload": {
+   "name": "Sableport"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "shackled-chasm",
+  "sort": 29,
+  "payload": {
+   "name": "Shackled Chasm"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "speaking-woods",
+  "sort": 30,
+  "payload": {
+   "name": "Speaking Woods"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "stema-landing",
+  "sort": 31,
+  "payload": {
+   "name": "Stema Landing"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "stlican-shelf",
+  "sort": 32,
+  "payload": {
+   "name": "Stlican Shelf"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "stonecradle",
+  "sort": 33,
+  "payload": {
+   "name": "Stonecradle"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "tempest-island",
+  "sort": 34,
+  "payload": {
+   "name": "Tempest Island"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "terminus",
+  "sort": 35,
+  "payload": {
+   "name": "Terminus"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "the-clahstra",
+  "sort": 36,
+  "payload": {
+   "name": "The Clahstra"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "the-fingers",
+  "sort": 37,
+  "payload": {
+   "name": "The Fingers"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "the-heartlands",
+  "sort": 38,
+  "payload": {
+   "name": "The Heartlands"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "the-linn-of-lights",
+  "sort": 39,
+  "payload": {
+   "name": "The Linn of Lights"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "the-moors",
+  "sort": 40,
+  "payload": {
+   "name": "The Moors"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "the-oarbreaker-isles",
+  "sort": 41,
+  "payload": {
+   "name": "The Oarbreaker Isles"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "umbral-wildwood",
+  "sort": 42,
+  "payload": {
+   "name": "Umbral Wildwood"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "viper-pit",
+  "sort": 43,
+  "payload": {
+   "name": "Viper Pit"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "weathered-expanse",
+  "sort": 44,
+  "payload": {
+   "name": "Weathered Expanse"
+  }
+ },
+ {
+  "kind": "region",
+  "key": "westgate",
+  "sort": 45,
+  "payload": {
+   "name": "Westgate"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "bmat",
+  "sort": 0,
+  "payload": {
+   "label": "БМАТ",
+   "name_en": "Basic Materials",
+   "icon": "/api/v1/assets/items/BasicMaterials.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "rmat",
+  "sort": 1,
+  "payload": {
+   "label": "РМАТ",
+   "name_en": "Refined Materials",
+   "icon": "/api/v1/assets/items/RefinedMaterials.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "emat",
+  "sort": 2,
+  "payload": {
+   "label": "ЭМАТ",
+   "name_en": "Explosive Powder",
+   "icon": "/api/v1/assets/items/ExplosiveMaterial.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "hemat",
+  "sort": 3,
+  "payload": {
+   "label": "ТЯЖ. ЭМАТ",
+   "name_en": "Heavy Explosive Powder",
+   "icon": "/api/v1/assets/items/HeavyExplosiveMaterials.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "salvage",
+  "sort": 4,
+  "payload": {
+   "label": "Металлолом",
+   "name_en": "Salvage",
+   "icon": "/api/v1/assets/items/Salvage.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "components",
+  "sort": 5,
+  "payload": {
+   "label": "Компоненты",
+   "name_en": "Components",
+   "icon": "/api/v1/assets/items/ComponentsIcon.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "sulfur",
+  "sort": 6,
+  "payload": {
+   "label": "Сера",
+   "name_en": "Sulfur",
+   "icon": "/api/v1/assets/items/Sulfur.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "coal",
+  "sort": 7,
+  "payload": {
+   "label": "Уголь",
+   "name_en": "Coal",
+   "icon": "/api/v1/assets/items/CoalIcon.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "aluminum",
+  "sort": 8,
+  "payload": {
+   "label": "Алюминий",
+   "name_en": "Aluminum",
+   "icon": "/api/v1/assets/items/ResouceAluminum.webp"
+  }
+ },
+ {
+  "kind": "material",
+  "key": "copper",
+  "sort": 9,
+  "payload": {
+   "label": "Медь",
+   "name_en": "Copper",
+   "icon": null
+  }
+ },
+ {
+  "kind": "material",
+  "key": "iron",
+  "sort": 10,
+  "payload": {
+   "label": "Железо",
+   "name_en": "Iron",
+   "icon": "/api/v1/assets/items/ResouceIron.png"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "weapons",
+  "sort": 0,
+  "payload": {
+   "label": "Оружие"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "ammo",
+  "sort": 1,
+  "payload": {
+   "label": "Боеприпасы"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "materials",
+  "sort": 2,
+  "payload": {
+   "label": "Материалы"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "medical",
+  "sort": 3,
+  "payload": {
+   "label": "Медицина"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "equipment",
+  "sort": 4,
+  "payload": {
+   "label": "Снаряжение"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "uniforms",
+  "sort": 5,
+  "payload": {
+   "label": "Форма"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "vehicles",
+  "sort": 6,
+  "payload": {
+   "label": "Техника"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "structures",
+  "sort": 7,
+  "payload": {
+   "label": "Сооружения"
+  }
+ },
+ {
+  "kind": "catalog_category",
+  "key": "other",
+  "sort": 8,
+  "payload": {
+   "label": "Прочее"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "small_arms",
+  "sort": 0,
+  "payload": {
+   "label": "Малое оружие"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "heavy_arms",
+  "sort": 1,
+  "payload": {
+   "label": "Тяжёлое оружие"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "heavy_ammunition",
+  "sort": 2,
+  "payload": {
+   "label": "Тяжёлые боеприпасы"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "utilities",
+  "sort": 3,
+  "payload": {
+   "label": "Снаряжение"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "resource",
+  "sort": 4,
+  "payload": {
+   "label": "Ресурсы"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "medical",
+  "sort": 5,
+  "payload": {
+   "label": "Медицина"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "uniforms",
+  "sort": 6,
+  "payload": {
+   "label": "Форма"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "vehicles",
+  "sort": 7,
+  "payload": {
+   "label": "Техника"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "shipables",
+  "sort": 8,
+  "payload": {
+   "label": "Сооружения"
+  }
+ },
+ {
+  "kind": "factory_category",
+  "key": "supplies",
+  "sort": 9,
+  "payload": {
+   "label": "Припасы"
+  }
+ },
+ {
+  "kind": "refinery_group",
+  "key": "materials",
+  "sort": 0,
+  "payload": {
+   "label": "Материалы"
+  }
+ },
+ {
+  "kind": "refinery_group",
+  "key": "fuel",
+  "sort": 1,
+  "payload": {
+   "label": "Топливо"
+  }
+ },
+ {
+  "kind": "refinery_group",
+  "key": "construction",
+  "sort": 2,
+  "payload": {
+   "label": "Стройматериалы"
+  }
+ },
+ {
+  "kind": "refinery_group",
+  "key": "alloys",
+  "sort": 3,
+  "payload": {
+   "label": "Сплавы"
+  }
+ },
+ {
+  "kind": "training_module",
+  "key": "terminal",
+  "sort": 0,
+  "payload": {
+   "title": "Работа с терминалом SINDARIS",
+   "status": "ready",
+   "icon": "/api/v1/assets/ui/browsing.png",
+   "summary": "Склад, конструктор заказа, рапорты и экспорт.",
+   "body": [
+    "1. «Заказы» → левая панель: выберите закреплённый склад и загрузите отчёт сканера (JSON/TXT, XLSX, буфер обмена) или просканируйте MapData.sav.",
+    "2. Правая панель: выберите предмет из матрицы (поиск по названию, английскому имени или коду), задайте количество и единицу (ЯЩ/ШТ), нажмите «Добавить в заказ».",
+    "3. Кнопка «РЕЖИМ» переключает нижние клавиши между экспортом (TXT/XLSX/PNG/буфер) и импортом.",
+    "4. «Отправить рапорт в штаб» сохраняет заказ на сервере — он появляется во вкладке «Текущие заказы клана», откуда его можно выгрузить или отправить в Discord."
+   ]
+  }
+ },
+ {
+  "kind": "training_module",
+  "key": "formats",
+  "sort": 1,
+  "payload": {
+   "title": "Форматы отчётов сканера",
+   "status": "ready",
+   "icon": "/api/v1/assets/ui/json.png",
+   "summary": "Какие строки понимает парсер терминала.",
+   "body": [
+    "• «Название предмета, 50» — классический формат сканера.",
+    "• «Название предмета -> 50 шт.» — формат экспорта терминала.",
+    "• «Название предмета: 12 ящ» — формат сообщений Discord.",
+    "• Маркеры •, *, «шт», «ящ», «ящиков» очищаются автоматически.",
+    "• JSON: массив объектов {name, count} или словарь {\"Название\": 50}.",
+    "• MapData.sav: сервер ищет коды предметов каталога и читает их количество."
+   ]
+  }
+ },
+ {
+  "kind": "training_module",
+  "key": "timers",
+  "sort": 2,
+  "payload": {
+   "title": "Таймеры деспавна складов",
+   "status": "ready",
+   "icon": "/api/v1/assets/ui/24-hour-clock.png",
+   "summary": "Правило 48 часов и протокол обновления.",
+   "body": [
+    "• Публичные и приватные склады Foxhole исчезают через 48 часов без обновления.",
+    "• Красный статус — менее 1 часа: срочно отправьте бойца обновить склад.",
+    "• Оранжевый — менее 24 часов: планируйте обновление в ближайшую смену.",
+    "• После обновления в игре нажмите «Сбросить на 48 часов» или задайте точное время.",
+    "• Все действия фиксируются в журнале таймера с меткой времени и автором."
+   ]
+  }
+ },
+ {
+  "kind": "training_module",
+  "key": "logistics",
+  "sort": 3,
+  "payload": {
+   "title": "Основы логистики Foxhole",
+   "status": "wip",
+   "icon": "/api/v1/assets/ui/pallets.png",
+   "summary": "Цепочки снабжения, MPF, фасилити.",
+   "body": []
+  }
+ },
+ {
+  "kind": "training_module",
+  "key": "protocol",
+  "sort": 4,
+  "payload": {
+   "title": "Протокол рапорта снабжения",
+   "status": "wip",
+   "icon": "/api/v1/assets/ui/parchment.png",
+   "summary": "Стандарт оформления заявок для штаба клана.",
+   "body": []
+  }
+ },
+ {
+  "kind": "training_module",
+  "key": "front",
+  "sort": 5,
+  "payload": {
+   "title": "Передовая логистика",
+   "status": "wip",
+   "icon": "/api/v1/assets/ui/deadline.png",
+   "summary": "Доставка под огнём, приоритеты, маршруты.",
+   "body": []
+  }
+ }
+]

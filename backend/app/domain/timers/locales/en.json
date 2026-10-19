@@ -6,6 +6,14 @@
     "completed": "Timer \"{title}\" has been completed.",
     "reopened": "Timer \"{title}\" has been reopened.",
     "invalid_window": "End time must be after start time.",
-    "stockpile_missing": "Linked stockpile was not found in your clan."
+    "stockpile_missing": "Linked stockpile was not found in your clan.",
+    "restarted": "Timer \"{title}\" restarted.",
+    "note_added": "Note added to the log.",
+    "log": {
+      "created": "[SYSTEM] Timer started, ends {ends}.",
+      "restarted": "[QUARTERMASTER] Timer restarted for {duration}.",
+      "completed": "[QUARTERMASTER] Timer marked as completed.",
+      "reopened": "[QUARTERMASTER] Timer reopened."
+    }
   }
 }

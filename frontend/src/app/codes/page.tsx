@@ -1,9 +1,6 @@
-import { CodesWorkspace } from "@/features/codes";
+import { redirect } from "next/navigation";
 
-export default function CodesPage() {
-  return (
-    <main className="mx-auto max-w-5xl px-4 py-10">
-      <CodesWorkspace />
-    </main>
-  );
+// Терминал — одна страница с вкладками; прямые ссылки ведут на нужную вкладку.
+export default function Page() {
+  redirect("/?tab=codes");
 }

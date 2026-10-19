@@ -1,0 +1,35 @@
+{
+  "report": {
+    "not_found": "Hlášení nebylo ve vašem klanu nalezeno.",
+    "default_title": "Hlášení zásobování {date}",
+    "created": "Hlášení přijato velitelstvím: položek {count}.",
+    "updated": "Hlášení „{title}“ bylo aktualizováno.",
+    "status_changed": "Hlášení „{title}“: {status}.",
+    "bad_transition": "Hlášení nelze převést z „{from}“ na „{to}“.",
+    "discord_not_configured": "Webhook Discordu není nastaven. Důstojník jej může nastavit v kabinetu.",
+    "discord_webhook_invalid": "Discord odmítl webhook: byl smazán nebo je URL chybná. Aktualizujte jej v kabinetu.",
+    "discord_failed": "Discord zprávu nepřijal. Zkuste to později.",
+    "discord_sent": "Hlášení „{title}“ bylo odesláno do Discordu.",
+    "image_too_large": "Obrázek hlášení přesahuje {limit_mb} MB.",
+    "status": {
+      "open": "Otevřeno",
+      "in_progress": "Probíhá",
+      "done": "Hotovo",
+      "cancelled": "Zrušeno"
+    },
+    "unit": {
+      "crate": "bedny",
+      "unit": "ks"
+    },
+    "embed": {
+      "status": "Stav",
+      "lines": "Položek",
+      "author": "Autor",
+      "place": "Sklad",
+      "note": "Poznámka"
+    }
+  },
+  "settings": {
+    "saved": "Nastavení klanu uloženo."
+  }
+}

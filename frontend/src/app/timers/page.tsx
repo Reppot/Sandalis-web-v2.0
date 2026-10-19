@@ -1,5 +1,6 @@
-import { TimersWorkspace } from "@/features/timers";
+import { redirect } from "next/navigation";
 
-export default function TimersPage() {
-  return <TimersWorkspace />;
+// Терминал — одна страница с вкладками; прямые ссылки ведут на нужную вкладку.
+export default function Page() {
+  redirect("/?tab=timers");
 }

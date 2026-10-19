@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from httpx import ASGITransport, AsyncClient
 
+from app.core.config import settings
 from app.main import app
 from tests.conftest import bearer, run, seed_catalog_item, seed_clan
 
@@ -54,7 +55,10 @@ def test_dev_token_and_me(db):
                 json={"user_id": "u-dev", "clan_id": "CLAN_DEV", "role": "guest"},
             )
             assert again.json()["me"]["role"] == "admin"
+            # dev-token ставит и session-cookie (веб-клиент живёт на ней)
+            assert f"{settings.SESSION_COOKIE_NAME}=" in again.headers["set-cookie"]
 
+            c.cookies.clear()      # дальше — запросы без какой-либо авторизации
             no = await c.get(f"{API}/auth/me", headers={"Accept-Language": "cs"})
             assert no.status_code == 401
             assert no.json()["error"]["message"] == "Je vyžadováno přihlášení do klanu."
@@ -86,11 +90,14 @@ def test_redeem_code_flow(db):
             assert ok.status_code == 200, ok.text
             assert ok.json()["message"] == "Вы вступили в клан «Alpha» с ролью «member»."
             token = ok.json()["access_token"]
+            # веб-клиент живёт на куке (same-origin прокси), Bearer в теле — для ботов
+            assert f"{settings.SESSION_COOKIE_NAME}=" in ok.headers["set-cookie"]
 
             me = await c.get(f"{API}/auth/me",
                              headers={"Authorization": f"Bearer {token}"})
             assert me.json()["clan_id"] == "CLAN_A"
             assert me.json()["role"] == "member"
+            assert me.json()["avatar_url"] is None
 
             # max_uses=1 исчерпан -> 409 (ru)
             again = await c.post(

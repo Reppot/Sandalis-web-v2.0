@@ -9,8 +9,8 @@ from sqlalchemy import select
 from app.core.errors import ConflictError
 from app.domain.timers.calculations import DEFAULT_DURATION_SECONDS, from_timestamp_ms
 from app.models.stockpile import Stockpile
-from app.models.timer import Timer
-from app.schemas.timer import TimerCreate, TimerUpdate
+from app.models.timer import Timer, TimerEvent
+from app.schemas.timer import TimerCreate, TimerEventCreate, TimerUpdate
 from app.services.base import ClanScopedService
 
 DOMAIN = "timers"
@@ -91,6 +91,8 @@ class TimerService(ClanScopedService):
             created_by=self.principal.user_id,
         )
         self.session.add(timer)
+        await self.session.flush()
+        self._log(timer, self.t.t("timer.log.created", domain=DOMAIN, ends=_fmt(ends_at)))
         await self.session.commit()
         await self.session.refresh(timer)
         return timer, self.t.t("timer.created", domain=DOMAIN, title=timer.title)
@@ -106,6 +108,18 @@ class TimerService(ClanScopedService):
         message_key = "timer.updated"
 
         fields = payload.model_dump(exclude_unset=True)
+        restart = fields.pop("restart", None)
+        restart_duration = fields.pop("duration_seconds", None)
+        if restart:
+            duration = restart_duration or timer.duration_seconds
+            timer.starts_at = now
+            timer.ends_at = now + timedelta(seconds=duration)
+            timer.duration_seconds = duration
+            timer.completed_at = None
+            message_key = "timer.restarted"
+            self._log(timer, self.t.t("timer.log.restarted", domain=DOMAIN,
+                                      duration=_fmt_duration(duration)))
+
         new_ends = fields.pop("ends_at", None)
         if new_ends is not None:
             if new_ends <= timer.starts_at:
@@ -131,9 +145,11 @@ class TimerService(ClanScopedService):
         if completed is True:
             timer.completed_at = now
             message_key = "timer.completed"
-        elif completed is False:
+            self._log(timer, self.t.t("timer.log.completed", domain=DOMAIN))
+        elif completed is False and not restart:
             timer.completed_at = None
             message_key = "timer.reopened"
+            self._log(timer, self.t.t("timer.log.reopened", domain=DOMAIN))
 
         for field, value in fields.items():   # title, note
             setattr(timer, field, value)
@@ -148,3 +164,43 @@ class TimerService(ClanScopedService):
         )
         await self.session.delete(timer)
         await self.session.commit()
+
+    # ---------------- журнал --------------------------------------------- #
+    def _log(self, timer: Timer, message: str) -> None:
+        self.session.add(
+            TimerEvent(timer_id=timer.id, message=message, created_by=self._author())
+        )
+
+    def _author(self) -> str:
+        return (self.principal.display_name or self.principal.user_id)[:64]
+
+    async def list_events(self, timer_id: uuid.UUID, *, limit: int = 100) -> Sequence[TimerEvent]:
+        timer = await self.get_timer(timer_id)
+        stmt = (
+            self._scoped(select(TimerEvent), TimerEvent)
+            .where(TimerEvent.timer_id == timer.id)
+            .order_by(TimerEvent.created_at.desc())
+            .limit(min(limit, 500))
+        )
+        rows = (await self.session.execute(stmt)).scalars().all()
+        return list(reversed(rows))   # хронологически, как консоль журнала
+
+    async def add_event(
+        self, timer_id: uuid.UUID, payload: TimerEventCreate
+    ) -> tuple[TimerEvent, str]:
+        timer = await self.get_timer(timer_id)
+        event = TimerEvent(timer_id=timer.id, message=payload.message, created_by=self._author())
+        self.session.add(event)
+        await self.session.commit()
+        await self.session.refresh(event)
+        return event, self.t.t("timer.note_added", domain=DOMAIN)
+
+
+def _fmt(value: datetime) -> str:
+    return value.astimezone(UTC).strftime("%d.%m %H:%M UTC")
+
+
+def _fmt_duration(seconds: int) -> str:
+    """Нейтральный к языку формат «48:00» (часы:минуты) — подставляется в локализованную фразу."""
+    hours, rest = divmod(seconds, 3600)
+    return f"{hours}:{rest // 60:02d}"

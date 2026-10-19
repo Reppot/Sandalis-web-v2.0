@@ -45,7 +45,7 @@ class TestCatalogAndTranslator:
 
     def test_domains_discovered_from_filesystem(self):
         assert set(known_domains()) == {
-            "core", "catalog", "production", "auth", "stockpiles", "timers",
+            "core", "catalog", "production", "auth", "stockpiles", "timers", "reports",
         }
 
     def test_ru_plural_forms(self):

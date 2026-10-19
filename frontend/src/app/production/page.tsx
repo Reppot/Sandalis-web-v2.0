@@ -1,5 +1,6 @@
-import { ProductionWorkspace } from "@/features/production";
+import { redirect } from "next/navigation";
 
-export default function ProductionPage() {
-  return <ProductionWorkspace />;
+// Старый адрес вкладки v2 — раздел переехал.
+export default function Page() {
+  redirect("/?tab=tools");
 }

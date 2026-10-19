@@ -37,3 +37,20 @@ class Timer(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
         DateTime(timezone=True), nullable=True
     )
     created_by: Mapped[str] = mapped_column(String(64), nullable=False)
+
+
+class TimerEvent(Base, UUIDPkMixin, ClanScopedMixin):
+    """Журнал таймера: заметки интенданта и системные записи (сброс, установка)."""
+    __tablename__ = "timer_events"
+    __table_args__ = (
+        Index("ix_timer_events_clan_timer_created", "clan_id", "timer_id", "created_at"),
+    )
+
+    timer_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("timers.id", ondelete="CASCADE"), nullable=False
+    )
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    created_by: Mapped[str] = mapped_column(String(64), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )

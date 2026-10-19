@@ -1,0 +1,35 @@
+{
+  "report": {
+    "not_found": "Report was not found in your clan.",
+    "default_title": "Supply report {date}",
+    "created": "Report accepted by HQ: {count} items.",
+    "updated": "Report \"{title}\" has been updated.",
+    "status_changed": "Report \"{title}\": {status}.",
+    "bad_transition": "Cannot move a report from \"{from}\" to \"{to}\".",
+    "discord_not_configured": "Discord webhook is not configured. An officer can set it in the cabinet.",
+    "discord_webhook_invalid": "Discord rejected the webhook: it was deleted or the URL is wrong. Update it in the cabinet.",
+    "discord_failed": "Discord did not accept the message. Try again later.",
+    "discord_sent": "Report \"{title}\" was sent to Discord.",
+    "image_too_large": "Report image exceeds {limit_mb} MB.",
+    "status": {
+      "open": "Open",
+      "in_progress": "In progress",
+      "done": "Done",
+      "cancelled": "Cancelled"
+    },
+    "unit": {
+      "crate": "crates",
+      "unit": "pcs"
+    },
+    "embed": {
+      "status": "Status",
+      "lines": "Items",
+      "author": "Author",
+      "place": "Stockpile",
+      "note": "Note"
+    }
+  },
+  "settings": {
+    "saved": "Clan settings saved."
+  }
+}

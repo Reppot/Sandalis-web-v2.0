@@ -2,5 +2,8 @@
   "item": {
     "unknown_code": "Item with code {code} was not found in the catalog.",
     "inactive": "Item {code} is no longer produced."
+  },
+  "scan": {
+    "too_large": "File is too large (limit {limit_mb} MB)."
   }
 }

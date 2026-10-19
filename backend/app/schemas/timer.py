@@ -60,6 +60,10 @@ class TimerUpdate(BaseModel):
     note: Annotated[str | None, Field(default=None, max_length=2000)]
     stockpile_id: uuid.UUID | None = None
     completed: bool | None = None         # True -> завершить, False -> переоткрыть
+    # True -> окно заново от «сейчас»: длительность duration_seconds или прежняя
+    # («Сбросить на 48 ч», «Задать таймер» Д/Ч/М старого сайта)
+    restart: bool | None = None
+    duration_seconds: Annotated[int | None, Field(default=None, gt=0, le=365 * 24 * 3600)] = None
 
     @field_validator("ends_at")
     @classmethod
@@ -111,4 +115,25 @@ class TimerRead(BaseModel):
 
 class TimerCreated(BaseModel):
     timer: TimerRead
+    message: str
+
+
+class TimerEventCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    message: Annotated[str, Field(min_length=1, max_length=1000)]
+
+
+class TimerEventRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    timer_id: uuid.UUID
+    message: str
+    created_by: str
+    created_at: datetime
+
+
+class TimerEventSaved(BaseModel):
+    event: TimerEventRead
     message: str

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -32,6 +32,8 @@ class StockpileRead(BaseModel):
     updated_at: datetime
     items_count: int = 0        # заполняет сервис агрегатом
     total_quantity: int = 0     # заполняет сервис агрегатом
+    last_sync_source: str | None = None
+    last_sync_at: datetime | None = None
 
 
 class StockpileCreated(BaseModel):
@@ -61,6 +63,21 @@ class StockpileItemRead(BaseModel):
     quantity: int
     created_at: datetime
     updated_at: datetime
+    # витрина из каталога — клиенту не нужно отдельно резолвить коды
+    name: str | None = None
+    icon_url: str | None = None
+
+
+SyncSource = Literal["json", "txt", "clipboard", "xlsx", "scan", "manual"]
+
+
+class StockpileContentsReplace(BaseModel):
+    """Полная замена содержимого склада выгрузкой сканера (монитор склада).
+    Позиции с одинаковым кодом суммируются; пустой список очищает склад."""
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    source: SyncSource = "manual"
+    items: Annotated[list[StockpileItemUpsert], Field(max_length=2000)]
 
 
 class StockpileDetailRead(StockpileRead):
@@ -69,4 +86,9 @@ class StockpileDetailRead(StockpileRead):
 
 class StockpileItemSaved(BaseModel):
     item: StockpileItemRead
+    message: str
+
+
+class StockpileContentsSaved(BaseModel):
+    stockpile: StockpileDetailRead
     message: str

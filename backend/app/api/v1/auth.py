@@ -6,6 +6,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Header, Query, Response, status
 from fastapi.responses import JSONResponse, RedirectResponse
+from sqlalchemy import select
 
 from app.api.deps import (
     ClanSession,
@@ -19,6 +20,7 @@ from app.core.errors import AppError, PermissionDeniedError
 from app.core.i18n import Translator
 from app.core.permissions import Scopes
 from app.core.security import Principal
+from app.models.rbac import User
 from app.schemas.auth import (
     ClanApiTokenCreate,
     ClanApiTokenCreated,
@@ -62,9 +64,30 @@ AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
 InviteServiceDep = Annotated[InviteService, Depends(get_invite_service)]
 
 
+# ---------------- session cookie ------------------------------------------- #
+def _set_session_cookie(response: Response, token: str) -> None:
+    """Stateless JWT в HttpOnly-куке: /me и все доменные ручки читают её сами
+    (get_principal проверяет Bearer -> session cookie -> X-Clan-Token)."""
+    ttl_sec = settings.SESSION_TTL_MINUTES * 60
+    response.set_cookie(
+        key=settings.SESSION_COOKIE_NAME,
+        value=token,
+        max_age=ttl_sec,
+        expires=ttl_sec,
+        path="/",
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+    )
+
+
 # ---------------- current principal ----------------------------------------- #
-@router.get("/me", response_model=MeRead, summary="Кто я: user/clan/role/scopes")
-async def read_me(principal: CurrentPrincipal) -> MeRead:
+@router.get("/me", response_model=MeRead, summary="Кто я: user/clan/role/scopes/avatar")
+async def read_me(principal: CurrentPrincipal, session: DbDep) -> MeRead:
+    avatar: str | None = None
+    if principal.subject_type == "user":
+        # User глобальный (не clan-scoped) — аватар в JWT не кладём, читаем из БД
+        avatar = await session.scalar(select(User.avatar_url).where(User.id == principal.user_id))
     return MeRead(
         subject_type=principal.subject_type,
         user_id=principal.user_id,
@@ -72,6 +95,7 @@ async def read_me(principal: CurrentPrincipal) -> MeRead:
         role=principal.role,
         scopes=sorted(principal.scopes),
         display_name=principal.display_name,
+        avatar_url=avatar,
     )
 
 
@@ -83,6 +107,7 @@ async def read_me(principal: CurrentPrincipal) -> MeRead:
 )
 async def issue_dev_token(
     payload: DevTokenRequest,
+    response: Response,
     service: AuthServiceDep,
     translator: AuthTranslator,
     dev_auth_key: Annotated[str | None, Header(alias=settings.DEV_AUTH_HEADER)] = None,
@@ -92,7 +117,9 @@ async def issue_dev_token(
             raise PermissionDeniedError(message_key="dev.forbidden", domain="auth", params={})
     elif settings.ENV == "prod":
         raise PermissionDeniedError(message_key="dev.disabled", domain="auth", params={})
-    return await service.issue_dev_token(payload, translator.locale)
+    token = await service.issue_dev_token(payload, translator.locale)
+    _set_session_cookie(response, token.access_token)
+    return token
 
 
 @router.post(
@@ -102,10 +129,14 @@ async def issue_dev_token(
 )
 async def redeem_code(
     payload: RedeemCodeRequest,
+    response: Response,
     service: AuthServiceDep,
     translator: AuthTranslator,
 ) -> TokenResponse:
-    return await service.redeem_code(payload, translator.locale)
+    token = await service.redeem_code(payload, translator.locale)
+    # веб-клиент живёт на куке (same-origin через прокси фронта); Bearer в теле — для ботов/CLI
+    _set_session_cookie(response, token.access_token)
+    return token
 
 
 @router.post(
@@ -168,22 +199,6 @@ async def revoke_invite(invite_id: uuid.UUID, service: InviteServiceDep) -> Resp
 
 
 # ---------------- Discord OAuth (stateless JWT) ------------------------------- #
-def _set_session_cookie(response: Response, token: str) -> None:
-    """Stateless JWT в HttpOnly-куке: /me и все доменные ручки читают её сами
-    (get_principal проверяет Bearer -> session cookie -> X-Clan-Token)."""
-    ttl_sec = settings.SESSION_TTL_MINUTES * 60
-    response.set_cookie(
-        key=settings.SESSION_COOKIE_NAME,
-        value=token,
-        max_age=ttl_sec,
-        expires=ttl_sec,
-        path="/",
-        httponly=True,
-        secure=settings.COOKIE_SECURE,
-        samesite=settings.COOKIE_SAMESITE,
-    )
-
-
 @router.get(
     "/discord/login",
     summary="Начать Discord OAuth2: 302 на Discord c подписанным state",

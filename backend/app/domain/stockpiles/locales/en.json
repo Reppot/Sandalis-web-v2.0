@@ -4,7 +4,8 @@
     "created": "Stockpile \"{name}\" has been created.",
     "updated": "Stockpile \"{name}\" has been updated.",
     "deleted": "Stockpile \"{name}\" has been deleted.",
-    "name_taken": "A stockpile named \"{name}\" already exists."
+    "name_taken": "A stockpile named \"{name}\" already exists.",
+    "synced": "Stockpile \"{name}\" synced: {count} items."
   },
   "item": {
     "not_found": "No \"{item}\" in this stockpile.",

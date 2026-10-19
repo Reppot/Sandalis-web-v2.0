@@ -198,6 +198,9 @@ def test_callback_success_sets_cookie_and_me_works(db, monkeypatch):
                 assert m["user_id"] == DISCORD_ID
                 assert m["clan_id"] == "CLAN_A"
                 assert m["role"] == "officer"
+                assert m["avatar_url"] == (
+                    f"https://cdn.discordapp.com/avatars/{DISCORD_ID}/{PROFILE['avatar']}.png"
+                )
                 assert "orders:write" in m["scopes"]
 
                 # профиль реально доехал до Discord

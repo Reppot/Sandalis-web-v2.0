@@ -1,5 +1,6 @@
-import { OrdersWorkspace } from "@/features/orders";
+import { redirect } from "next/navigation";
 
-export default function OrdersPage() {
-  return <OrdersWorkspace />;
+// Терминал — одна страница с вкладками; прямые ссылки ведут на нужную вкладку.
+export default function Page() {
+  redirect("/?tab=orders");
 }

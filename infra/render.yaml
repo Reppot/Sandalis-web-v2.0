@@ -1,22 +1,24 @@
-# Infra-as-code для текущего деплоя. Сервисы созданы вручную в Dashboard;
-# имена здесь совпадают с ними, чтобы Blueprint при подключении связался
-# с существующими, а не создал новые. Прежде чем нажимать "Apply Blueprint",
-# убедитесь, что имена и регион совпадают с Dashboard.
+# Infra-as-code. Сайт — ОДИН web-сервис на Docker: Next.js (публичный порт) +
+# FastAPI (127.0.0.1:8000) в одном контейнере, см. ../Dockerfile и ../deploy/start.sh.
+# Браузер ходит только на домен сервиса, /api/v1/* проксирует Next — CORS не нужен,
+# кука сессии first-party, один холодный старт вместо двух.
 # БД — Supabase (внешняя), поэтому блока `databases:` нет.
+#
+# Миграции (alembic) и сиды справочников (python -m app.seed) выполняются при каждом
+# старте контейнера — идемпотентно.
+#
+# Значения sync: false вносятся вручную в Render → Environment.
 
 services:
-  # --- FastAPI backend v2.0 ---
   - type: web
     name: Sandalis-web-v2.0
-    runtime: python
+    runtime: docker
     plan: free
-    rootDir: backend
-    buildCommand: python -m pip install --upgrade pip && python -m pip install -r requirements.txt
-    startCommand: python -m alembic upgrade head && python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     healthCheckPath: /api/v1/health/live
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.12.8
       - key: ENV
         value: prod
       # Supabase session pooler (postgres.<ref>@aws-1-eu-west-1.pooler.supabase.com:5432)
@@ -24,62 +26,36 @@ services:
         sync: false
       - key: DB_USE_PGBOUNCER
         value: "false"
+      # длинный случайный секрет (openssl rand -hex 32); смена = выход всех пользователей
       - key: JWT_SECRET
         sync: false
-      - key: JWT_ALG
-        value: HS256
-      - key: JWT_ISSUER
-        value: sandalis
-      - key: JWT_AUDIENCE
-        value: sandalis-web
       - key: DISCORD_CLIENT_ID
         sync: false
       - key: DISCORD_CLIENT_SECRET
         sync: false
+      # тот же URL — в Discord Developer Portal → OAuth2 → Redirects
       - key: DISCORD_REDIRECT_URI
         value: https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
-      - key: DISCORD_API_BASE_URL
-        value: https://discord.com/api/v10
       - key: FRONTEND_URL
-        value: https://sandalis-frontend.onrender.com
-      - key: CORS_ORIGINS
-        value: '["https://sandalis-frontend.onrender.com","http://localhost:3000"]'
+        value: https://sandalis-web-v2-0.onrender.com
       - key: COOKIE_SECURE
         value: "true"
       - key: COOKIE_SAMESITE
-        value: none
+        value: lax
       - key: SESSION_COOKIE_NAME
         value: sindaris_session
+      # 7 суток: кука и JWT живут одинаково, чтобы не выкидывало каждые полчаса
       - key: SESSION_TTL_MINUTES
-        value: "30"
+        value: "10080"
+      - key: ACCESS_TOKEN_TTL_MIN
+        value: "10080"
       - key: DEFAULT_CLAN_ID
         value: SANDALIS
+      # owner — ТОЛЬКО на первый вход владельца, затем вернуть guest
       - key: DEFAULT_CLAN_ROLE
-        value: guest          # owner — только на первый вход владельца
-      - key: API_V1_PREFIX
-        value: /api/v1
+        value: guest
       - key: DEFAULT_LOCALE
-        value: en
-      - key: SUPPORTED_LOCALES
-        value: '["ru","en","cs"]'
-      - key: I18N_HOT_RELOAD
-        value: "false"
-
-  # --- Next.js frontend ---
-  - type: web
-    name: Sandalis-frontend
-    runtime: node
-    plan: free
-    rootDir: frontend
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start
-    healthCheckPath: /
-    envVars:
-      - key: NODE_VERSION
-        value: "20"
-      - key: NEXT_PUBLIC_API_URL
-        value: https://sandalis-web-v2-0.onrender.com
+        value: ru
 
 # Worker (war_import / ffmpeg / S3) в v2.0 не перенесён — см. backend/README.md,
-# раздел "Известные ограничения". Вернуть отдельным сервисом type: worker,
-# когда появится app/workers.
+# раздел "Известные ограничения".

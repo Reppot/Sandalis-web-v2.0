@@ -1,5 +1,6 @@
-import { StockpilesWorkspace } from "@/features/stockpiles";
+import { redirect } from "next/navigation";
 
-export default function StockpilesPage() {
-  return <StockpilesWorkspace />;
+// Старый адрес вкладки v2 — раздел переехал.
+export default function Page() {
+  redirect("/?tab=orders");
 }

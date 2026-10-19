@@ -1,0 +1,6148 @@
+[
+ {
+  "id": "factory-dusk-ce-iii",
+  "kind": "factory",
+  "name": "\"Dusk\" ce.III",
+  "name_en": "\"Dusk\" ce.III",
+  "item_code": "AssaultRifleHeavyC",
+  "category": "small_arms",
+  "item_class": "Assault Rifle",
+  "description": "This unique assault rifle includes a high-capacity drum magazine designed for sustained rapid fire.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "rmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 0
+ },
+ {
+  "id": "factory-booker-storm-rifle-model-838",
+  "kind": "factory",
+  "name": "Booker Storm Rifle Model 838",
+  "name_en": "Booker Storm Rifle Model 838",
+  "item_code": "AssaultRifleHeavyW",
+  "category": "small_arms",
+  "item_class": "Assault Rifle",
+  "description": "The Booker is a high-impact three-round burst Storm Rifle for those who like to shoot first.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyWItem.webp",
+  "output_quantity": 20,
+  "cost": {
+   "rmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 1
+ },
+ {
+  "id": "factory-aalto-storm-rifle-24",
+  "kind": "factory",
+  "name": "Aalto Storm Rifle 24",
+  "name_en": "Aalto Storm Rifle 24",
+  "item_code": "AssaultRifleW",
+  "category": "small_arms",
+  "item_class": "Assault Rifle",
+  "description": "Widely considered to be the first storm rifle, the Aalto is a marvel in Caoivish engineering. With its two fire modes, it can be used as a rapid-fire assault weapon or a mid-range rifle.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AssaultRifleItem.webp",
+  "output_quantity": 20,
+  "cost": {
+   "rmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 2
+ },
+ {
+  "id": "factory-7-92mm",
+  "kind": "factory",
+  "name": "7.92mm",
+  "name_en": "7.92mm",
+  "item_code": "AssaultRifleAmmo",
+  "category": "small_arms",
+  "item_class": null,
+  "description": "Standard ammunition for storm rifles, light machine guns, and armored cars.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AssaultRifleAmmo.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 120
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 3
+ },
+ {
+  "id": "factory-catara-mo-ii",
+  "kind": "factory",
+  "name": "Catara mo.II",
+  "name_en": "Catara mo.II",
+  "item_code": "AssaultRifleC",
+  "category": "small_arms",
+  "item_class": "Light Machine Gun",
+  "description": "A titanic light machine gun capable of scattering infantry lines with ease, the Catara is a modern weapon for the modern Colonial.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightMachineGun.webp",
+  "output_quantity": 20,
+  "cost": {
+   "rmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 4
+ },
+ {
+  "id": "factory-krn886-127-gast-machine-gun",
+  "kind": "factory",
+  "name": "KRN886-127 Gast Machine Gun",
+  "name_en": "KRN886-127 Gast Machine Gun",
+  "item_code": "MGC",
+  "category": "small_arms",
+  "item_class": "Machine Gun",
+  "description": "The Gast is a deadly but cumbersome Kraunian heavy machine gun. It is best suited to holding and defending established fortifications or garrisoned structures against encroaching infantry.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MGC.webp",
+  "output_quantity": 5,
+  "cost": {
+   "rmat": 25
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 5
+ },
+ {
+  "id": "factory-malone-mk-2",
+  "kind": "factory",
+  "name": "Malone MK.2",
+  "name_en": "Malone MK.2",
+  "item_code": "MGW",
+  "category": "small_arms",
+  "item_class": "Machine Gun",
+  "description": "This heavy machine gun is bulky enough to require a steady surface to maintain stability. The Malone series of machine guns are unmatched defenders on the battlefield.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MGW.webp",
+  "output_quantity": 5,
+  "cost": {
+   "rmat": 25
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 6
+ },
+ {
+  "id": "factory-a3-harpa-fragmentation-grenade",
+  "kind": "factory",
+  "name": "A3 Harpa Fragmentation Grenade",
+  "name_en": "A3 Harpa Fragmentation Grenade",
+  "item_code": "GrenadeW",
+  "category": "small_arms",
+  "item_class": "Grenade",
+  "description": "This anti-personnel fragmentation grenade is designed with pull-pin mechanics and a time fuse for user safety. Serrations in the casing allow for a better grip and increased fragmentation effectiveness.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GrenadeW.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 100,
+   "emat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 7
+ },
+ {
+  "id": "factory-cascadier-873",
+  "kind": "factory",
+  "name": "Cascadier 873",
+  "name_en": "Cascadier 873",
+  "item_code": "PistolLightW",
+  "category": "small_arms",
+  "item_class": "Pistol",
+  "description": "This unique sidearm fires in three-round bursts. The Cascadier may not have the stopping power of its cousins, but it more than makes up for it with its lightweight frame, concealability, and fire rate.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/PistolLightW.webp",
+  "output_quantity": 40,
+  "cost": {
+   "bmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 8
+ },
+ {
+  "id": "factory-bomastone-grenade",
+  "kind": "factory",
+  "name": "Bomastone Grenade",
+  "name_en": "Bomastone Grenade",
+  "item_code": "GrenadeC",
+  "category": "small_arms",
+  "item_class": "Grenade",
+  "description": "The bomastone is a 'stick' style fragmentation grenade with a handle designed to aid in lobbing over moderate distances.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GrenadeC.webp",
+  "output_quantity": 25,
+  "cost": {
+   "bmat": 100,
+   "emat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 9
+ },
+ {
+  "id": "factory-8mm",
+  "kind": "factory",
+  "name": "8mm",
+  "name_en": "8mm",
+  "item_code": "PistolAmmo",
+  "category": "small_arms",
+  "item_class": null,
+  "description": "Standard ammunition for pistols.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/PistolAmmo.webp",
+  "output_quantity": 40,
+  "cost": {
+   "bmat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 10
+ },
+ {
+  "id": "factory-cometa-t2-9",
+  "kind": "factory",
+  "name": "Cometa T2-9",
+  "name_en": "Cometa T2-9",
+  "item_code": "Revolver",
+  "category": "small_arms",
+  "item_class": "Revolver",
+  "description": "The Cometa T2-9 boasts remarkable stopping power for a sidearm. This Estrellan mainstay has lived through several generations due to its fine craftsmanship design.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Revolver.webp",
+  "output_quantity": 30,
+  "cost": {
+   "bmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 11
+ },
+ {
+  "id": "factory-the-hangman-757",
+  "kind": "factory",
+  "name": "The Hangman 757",
+  "name_en": "The Hangman 757",
+  "item_code": "RifleHeavyW",
+  "category": "small_arms",
+  "item_class": "Heavy Rifle",
+  "description": "The weapon of choice for pirates and smugglers, its legend is well-earned. With incredibly high stopping power and unique revolver mechanism, the Hangman often playes judge, jury, and executioner.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleHeavyC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 125
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 12
+ },
+ {
+  "id": "factory-44",
+  "kind": "factory",
+  "name": ".44",
+  "name_en": ".44",
+  "item_code": null,
+  "category": "small_arms",
+  "item_class": null,
+  "description": "Standard ammunition for revolvers.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 40,
+  "cost": {
+   "bmat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 13
+ },
+ {
+  "id": "factory-catena-rt-iv-auto-rifle",
+  "kind": "factory",
+  "name": "Catena rt.IV Auto-Rifle",
+  "name_en": "Catena rt.IV Auto-Rifle",
+  "item_code": "RifleAutomaticC",
+  "category": "small_arms",
+  "item_class": "Rifle",
+  "description": "An auto-firing rifle that played a pivotal role in maintaining Mesean interests on the Katoman continent. While not quite as rapid-firing as its assault rifle bretheren, many soldiers speak fondly of the Catena as a sturdy, easy-to-use, and reliable firearm. It doesn't boast high points in any particular area but performs admirably as a general-purpose rifle.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleAutomaticC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 120
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 14
+ },
+ {
+  "id": "factory-argenti-r-ii-rifle",
+  "kind": "factory",
+  "name": "Argenti r.II Rifle",
+  "name_en": "Argenti r.II Rifle",
+  "item_code": "RifleC",
+  "category": "small_arms",
+  "item_class": "Rifle",
+  "description": "The primary infantry rifle of the Colonial legion. Its predecessor, the Volta repeater, was a sturdy, reliable firearm but had many limitations, namely, fire rate. The Argenti solves this limitation as well as being more compact and lightweight.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 15
+ },
+ {
+  "id": "factory-volta-r-i-repeater",
+  "kind": "factory",
+  "name": "Volta r.I Repeater",
+  "name_en": "Volta r.I Repeater",
+  "item_code": "RifleHeavyC",
+  "category": "small_arms",
+  "item_class": "Heavy Rifle",
+  "description": "An old war Mesean rifle. It boasts high stopping power, but not as accurate as its modern variant. A weapon of legend, the Howling Lions wielded the Volta during their raid on the beaches of Fisherman's Row.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleHeavyC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 16
+ },
+ {
+  "id": "factory-fuscina-pi-i",
+  "kind": "factory",
+  "name": "Fuscina pi.I",
+  "name_en": "Fuscina pi.I",
+  "item_code": "RifleLightC",
+  "category": "small_arms",
+  "item_class": "Rifle",
+  "description": "This unique rifle fires three rounds in rapid succession. The Fuscina is the first of its kind, designed for laying down suppressive fire during assaults on fortified enemy entrenchments.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleLightC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 140
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 17
+ },
+ {
+  "id": "factory-krr2-790-omen",
+  "kind": "factory",
+  "name": "KRR2-790 Omen",
+  "name_en": "KRR2-790 Omen",
+  "item_code": "RifleLongC",
+  "category": "small_arms",
+  "item_class": "Long Rifle",
+  "description": "An older but reliable model of Kraunian long rifle. The Omen is a sturdy, simple weapon best used in long-distance skirmishes.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleLongC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 155
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 18
+ },
+ {
+  "id": "factory-krr3-792-auger",
+  "kind": "factory",
+  "name": "KRR3-792 Auger",
+  "name_en": "KRR3-792 Auger",
+  "item_code": "SniperRifleC",
+  "category": "small_arms",
+  "item_class": "Sniper Rifle",
+  "description": "A Kraunian rifle modified for long-range engagements. It doesn't have the range or stopping power of other marksman rifles but more than makes up for it with unmatched reliability in a range of environments and a superior effective rate of fire.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SniperRifleC.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 250,
+   "rmat": 30
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 19
+ },
+ {
+  "id": "factory-sampo-auto-rifle-77",
+  "kind": "factory",
+  "name": "Sampo Auto-Rifle 77",
+  "name_en": "Sampo Auto-Rifle 77",
+  "item_code": "RifleAutomaticW",
+  "category": "small_arms",
+  "item_class": "Rifle",
+  "description": "The precursor to the storm rifle, the Sampo Auto-Rifle, is a mastercraft of its day. With a single shot and automatic fire mode, this versatile rifle may not reach the fire rates of automatic weapons but more than makes up for it with utility.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleAutomaticW.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 125
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 20
+ },
+ {
+  "id": "factory-blakerow-871",
+  "kind": "factory",
+  "name": "Blakerow 871",
+  "name_en": "Blakerow 871",
+  "item_code": "RifleLightW",
+  "category": "small_arms",
+  "item_class": "Rifle",
+  "description": "The Blakerow is a carbine with a high rate of fire compared to its bolt-action predecessor. This increased fire rate does come at the cost of innate stopping power; however, its versatility and lightweight frame more than makes up for any perceived shortcomings.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleLightC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 140
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 21
+ },
+ {
+  "id": "factory-clancy-cinder-m3",
+  "kind": "factory",
+  "name": "Clancy Cinder M3",
+  "name_en": "Clancy Cinder M3",
+  "item_code": "RifleLongW",
+  "category": "small_arms",
+  "item_class": "Long Rifle",
+  "description": "The Clancy Cinder is a classic, high-powered long rifle designed for use in mid-to-long range encounters. First deployed with the Hands during a high-risk operation in Acrithia.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleLongW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 130
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 22
+ },
+ {
+  "id": "factory-no-2b-hawthorne",
+  "kind": "factory",
+  "name": "No. 2B Hawthorne",
+  "name_en": "No. 2B Hawthorne",
+  "item_code": "RifleShortW",
+  "category": "small_arms",
+  "item_class": "Rifle",
+  "description": "Initially a field-modified Loughcaster, the Hawthorne sports a sawed-off barrel and a much lower profile than its ancestor. While sacrificing accuracy, its lightweight frame opens up the Hawthorne to a much higher degree of flexibility in battle and can be carried alongside a heavier primary firearm.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleShortW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 70
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 23
+ },
+ {
+  "id": "factory-no-2-loughcaster",
+  "kind": "factory",
+  "name": "No.2 Loughcaster",
+  "name_en": "No.2 Loughcaster",
+  "item_code": "RifleW",
+  "category": "small_arms",
+  "item_class": "Rifle",
+  "description": "Standard-issue Warden rifle. This bolt-action firearm is as robust as they come and has seen over a century of use on the battlefield.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleW.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 24
+ },
+ {
+  "id": "factory-clancy-raca-m4",
+  "kind": "factory",
+  "name": "Clancy-Raca M4",
+  "name_en": "Clancy-Raca M4",
+  "item_code": "SniperRifleW",
+  "category": "small_arms",
+  "item_class": "Sniper Rifle",
+  "description": "A heavy-duty, long-range marksman rifle. The Clancy-Raca has one hell of a kick but is fitted with a powerful scope, allowing infantry to survey the battlefield and provide support from a safe location.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SniperRifle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 250,
+   "rmat": 25
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 25
+ },
+ {
+  "id": "factory-7-62mm",
+  "kind": "factory",
+  "name": "7.62mm",
+  "name_en": "7.62mm",
+  "item_code": "RifleAmmo",
+  "category": "small_arms",
+  "item_class": null,
+  "description": "Standard ammunition for rifles.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RifleAmmo.webp",
+  "output_quantity": 40,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 26
+ },
+ {
+  "id": "factory-krf1-750-dragonfly",
+  "kind": "factory",
+  "name": "KRF1-750 Dragonfly",
+  "name_en": "KRF1-750 Dragonfly",
+  "item_code": "ShotgunC",
+  "category": "small_arms",
+  "item_class": "Shotgun",
+  "description": "A short-ranged firearm that has origins in both sport shooting and bird hunting. Its long stock and sturdy undercarriage give the Dragonfly stability and control that make it a worthy companion to many Kraunian soldiers deployed in urban centres. Dismantling haphazard barricades and clearing tight rooms are paltry tasks for the KRF1-750 Dragonfly.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ShotgunC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 130
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 27
+ },
+ {
+  "id": "factory-no-4-the-pillory-scattergun",
+  "kind": "factory",
+  "name": "No.4 The Pillory Scattergun",
+  "name_en": "No.4 The Pillory Scattergun",
+  "item_code": "ShotgunW",
+  "category": "small_arms",
+  "item_class": "Shotgun",
+  "description": "A hunting shotgun with a sawn-off barrel for higher stopping power and mobility at the expense of accuracy. This traditional civilian firearm can fire two shots in rapid succession before needing to be reloaded. It became a favourite sidearm among Caoivish Watchers and has since earned quite an ominous reputation as a result.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ShotgunW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 28
+ },
+ {
+  "id": "factory-buckshot",
+  "kind": "factory",
+  "name": "Buckshot",
+  "name_en": "Buckshot",
+  "item_code": "ShotgunAmmo",
+  "category": "small_arms",
+  "item_class": null,
+  "description": "Standard ammunition for Shotguns.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ShotgunAmmo.webp",
+  "output_quantity": 40,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 29
+ },
+ {
+  "id": "factory-no-1-the-liar-submachinegun",
+  "kind": "factory",
+  "name": "No.1 \"The Liar\" Submachinegun",
+  "name_en": "No.1 \"The Liar\" Submachinegun",
+  "item_code": "SMGHeavyW",
+  "category": "small_arms",
+  "item_class": "Submachine Gun",
+  "description": "This unique, heavy-duty submachine gun is not very useful on the run, but with careful aim and adequate cover, becomes a razorblade in the night.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SMGHeavyW.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 120
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 30
+ },
+ {
+  "id": "factory-fiddler-submachine-gun-model-868",
+  "kind": "factory",
+  "name": "Fiddler Submachine Gun Model 868",
+  "name_en": "Fiddler Submachine Gun Model 868",
+  "item_code": "SMGW",
+  "category": "small_arms",
+  "item_class": "Submachine Gun",
+  "description": "The Fiddler Submachine gun is a widely used urban combat weapon. Its high rate of fire and compact frame makes it ideal for close-quarters engagements.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SubMachineGun.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 120
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 31
+ },
+ {
+  "id": "factory-the-pitch-gun-mc-v",
+  "kind": "factory",
+  "name": "\"The Pitch Gun\" mc. V",
+  "name_en": "\"The Pitch Gun\" mc. V",
+  "item_code": "SMGC",
+  "category": "small_arms",
+  "item_class": "Submachine Gun",
+  "description": "This classic submachine gun is sturdy and irreplaceable as a general tool for close-range engagements. The \"Pitch Gun\" earned its namesake from Mesean sailors who employed the weapon to successfully defend against a night raid on the Geraston docks.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SMGC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 32
+ },
+ {
+  "id": "factory-lionclaw-mc-viii",
+  "kind": "factory",
+  "name": "\"Lionclaw\" mc.VIII",
+  "name_en": "\"Lionclaw\" mc.VIII",
+  "item_code": "SMGHeavyC",
+  "category": "small_arms",
+  "item_class": "Submachine Gun",
+  "description": "A heavier, modern variation of the Pitch Gun, the Lionclaw Performs well as a decent, all-around submachine gun designed as a primary firearm in urban and close-quarters combat operations.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SMGHeavyC.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 120
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 33
+ },
+ {
+  "id": "factory-9mm-smg",
+  "kind": "factory",
+  "name": "9mm SMG",
+  "name_en": "9mm SMG",
+  "item_code": null,
+  "category": "small_arms",
+  "item_class": null,
+  "description": "Standard ammunition for submachine guns.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 40,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 34
+ },
+ {
+  "id": "factory-pt-815-smoke-grenade",
+  "kind": "factory",
+  "name": "PT-815 Smoke Grenade",
+  "name_en": "PT-815 Smoke Grenade",
+  "item_code": "SmokeGrenade",
+  "category": "small_arms",
+  "item_class": "Smoke Grenade",
+  "description": "A standard smoke grenade designed for concealing allied movement or screening the enemy's vision.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Smokegrenade.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 35
+ },
+ {
+  "id": "factory-green-ash-grenade",
+  "kind": "factory",
+  "name": "Green Ash Grenade",
+  "name_en": "Green Ash Grenade",
+  "item_code": "GreenAsh",
+  "category": "small_arms",
+  "item_class": "Gas Grenade",
+  "description": "Green ash is an asphyxiating toxin. Inhaling it without protection will result in a quick death. Be sure to wear a gas mask with fresh filters when handling green ash.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/DeadlyGas01.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 140
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 36
+ },
+ {
+  "id": "factory-12-7mm",
+  "kind": "factory",
+  "name": "12.7mm",
+  "name_en": "12.7mm",
+  "item_code": "MGAmmo",
+  "category": "small_arms",
+  "item_class": null,
+  "description": "Standard ammunition for all machine guns, including vehicle mounted weapons like those on the half-track and battle tank.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MachineGunAmmo.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 37
+ },
+ {
+  "id": "factory-typhon-ra-xii",
+  "kind": "factory",
+  "name": "\"Typhon\" ra.XII",
+  "name_en": "\"Typhon\" ra.XII",
+  "item_code": "ATRifleTC",
+  "category": "heavy_arms",
+  "item_class": "Mounted Anti-Tank Rifle",
+  "description": "This mounted anti-tank rifle boasts improved accuracy over its free-standing counterparts. The Typhon was specifically designed with shock absorption in mind, allowing for faster, more consistent firing patterns.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRifleTC.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 5
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 38
+ },
+ {
+  "id": "factory-135-neville-anti-tank-rifle",
+  "kind": "factory",
+  "name": "135 Neville Anti-Tank Rifle",
+  "name_en": "135 Neville Anti-Tank Rifle",
+  "item_code": null,
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank Rifle",
+  "description": "The Neville is unmatched in its versatility as a portable, magazine-based anti-armor firearm.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRifle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 39
+ },
+ {
+  "id": "factory-14-5mm",
+  "kind": "factory",
+  "name": "14.5mm",
+  "name_en": "14.5mm",
+  "item_code": "ATRifleAmmo",
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "Standard ammunition for anti-tank rifles.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRifleAmmo.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 40
+ },
+ {
+  "id": "factory-venom-c-ii-35",
+  "kind": "factory",
+  "name": "Venom c.II 35",
+  "name_en": "Venom c.II 35",
+  "item_code": "ATRPGC",
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank RPG",
+  "description": "The venom RPG launcher fires anti-tank charges. Its simple design makes it easy to deploy, even in high-stakes operations",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRpgC.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 41
+ },
+ {
+  "id": "factory-carnyx-anti-tank-rocket-launcher",
+  "kind": "factory",
+  "name": "Carnyx Anti-Tank Rocket Launcher",
+  "name_en": "Carnyx Anti-Tank Rocket Launcher",
+  "item_code": null,
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank RPG",
+  "description": "Allows infantry to bombard armoured vehicles from safe distances. This anti-tank rocket launcher is surprisingly light when compared to its contemporaries. Its weight is a double-edged sword, as firing heavy anti-tank ordinance requires a Carnyx operator to prepare for heavy recoil.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Rocket.jpg",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 125,
+   "rmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 42
+ },
+ {
+  "id": "factory-bane-45",
+  "kind": "factory",
+  "name": "Bane 45",
+  "name_en": "Bane 45",
+  "item_code": "ATRPGHeavyC",
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank RPG",
+  "description": "This shoulder-mounted heavy launcher is the first of its kind. It features heavy blast shielding and is capable of launching anti-tank charges over relatively large distances.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRpgC.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 150,
+   "rmat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 43
+ },
+ {
+  "id": "factory-ap-rpg",
+  "kind": "factory",
+  "name": "AP/RPG",
+  "name_en": "AP/RPG",
+  "item_code": "ATRPGAmmo",
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "An anti-tank projectile fired from an R.P.G.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRpgAmmo.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 60,
+   "emat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 44
+ },
+ {
+  "id": "factory-mounted-bonesaw-mk-3",
+  "kind": "factory",
+  "name": "Mounted Bonesaw MK.3",
+  "name_en": "Mounted Bonesaw MK.3",
+  "item_code": "ATRPGTW",
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank RPG",
+  "description": "This variant of the Bonesaw MK.3 is specially designed for use with tripod mounts. This affords it with increased stability and maximum potential range.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRPGTW.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 5
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 45
+ },
+ {
+  "id": "factory-bonesaw-mk-3",
+  "kind": "factory",
+  "name": "Bonesaw MK.3",
+  "name_en": "Bonesaw MK.3",
+  "item_code": "ATRPGW",
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank RPG",
+  "description": "The pride of the Warden anti-armored arsenal, the Bonesaw Mk.3 has one job; to cut through heavy metal plating of Colonial tanks.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRPGTW.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 25
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 46
+ },
+ {
+  "id": "factory-arc-rpg",
+  "kind": "factory",
+  "name": "ARC/RPG",
+  "name_en": "ARC/RPG",
+  "item_code": "ATRPGIndirectAmmo",
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "An anti-tank projectile fired from indirect R.P.G. weapons.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATMortarAmmo.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 60,
+   "emat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 47
+ },
+ {
+  "id": "factory-molten-wind-v-ii-flame-torch",
+  "kind": "factory",
+  "name": "\"Molten Wind\" v.II Flame Torch",
+  "name_en": "\"Molten Wind\" v.II Flame Torch",
+  "item_code": "FlameTorchC",
+  "category": "heavy_arms",
+  "item_class": "Flamethrower",
+  "description": "Using a deadly mix of flammable gasses and chemical compounds, the \"Molten Wind\" is the Colonial Legion's most devasting infantry weapon. Employing ancient techniques, Mesean chemists developed a technique to stabilize and weaponize liquid flames, which quickly transform any flammable structure into a raging inferno.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FlamegunC.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 185,
+   "rmat": 25
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 48
+ },
+ {
+  "id": "factory-klg901-2-lunaire-f",
+  "kind": "factory",
+  "name": "KLG901-2 Lunaire F",
+  "name_en": "KLG901-2 Lunaire F",
+  "item_code": "GrenadeLauncherC",
+  "category": "heavy_arms",
+  "item_class": "Grenade Launcher",
+  "description": "A weapon designed to launch specialty grenades over long-distances. This modern Kraunian firearm uses advanced propulsion designed for increased efficiency due to the overall weight of the weapon and projectiles.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GrenadeLauncherC.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 50,
+   "rmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 49
+ },
+ {
+  "id": "factory-mounted-fissura-gd-i",
+  "kind": "factory",
+  "name": "Mounted Fissura gd.I",
+  "name_en": "Mounted Fissura gd.I",
+  "item_code": "GrenadeLauncherTC",
+  "category": "heavy_arms",
+  "item_class": "Grenade Launcher",
+  "description": "Capable of firing different grenades, quickly and at long range, the Fissura gd.I is mobile enough for easy transport, while increasing the effectiveness of infantry ordinance.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GrenadeLauncherTC.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 5
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 50
+ },
+ {
+  "id": "factory-willows-bane-model-845",
+  "kind": "factory",
+  "name": "Willow's Bane Model 845",
+  "name_en": "Willow's Bane Model 845",
+  "item_code": "FlameTorchW",
+  "category": "heavy_arms",
+  "item_class": "Flamethrower",
+  "description": "Named for the unfortunate trees harmed in the development of this highly destructive weapon, the Willow's Bane utilizes flammable checmicals and fires them into a concentrated stream through an open flame. This liquid flame ignites Colonial emplacements and garrisons to route infantry while reducing their defenses to a pile of ash.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FlamegunW.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 165,
+   "rmat": 30
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 51
+ },
+ {
+  "id": "factory-tremola-grenade-gpb-1",
+  "kind": "factory",
+  "name": "Tremola Grenade GPb-1",
+  "name_en": "Tremola Grenade GPb-1",
+  "item_code": "HELaunchedGrenade",
+  "category": "heavy_arms",
+  "item_class": "Grenade",
+  "description": "An expolosive Estrllan grenade specially designed for use with handheld grenade launchers. This modern grenade boasts a large payload and is deadly to lingering infantry and structural supports.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/HELaunchedGrenade.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 75,
+   "emat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 52
+ },
+ {
+  "id": "factory-lamentum-mm-iv",
+  "kind": "factory",
+  "name": "Lamentum mm.IV",
+  "name_en": "Lamentum mm.IV",
+  "item_code": "MGTC",
+  "category": "heavy_arms",
+  "item_class": "Mounted machinegun",
+  "description": "Built on the bones of the first automatic weapons introduced to the Legion, the \"Lamentum\" mm.IV is still quite an intimidating force to encounter on the battlefield. Boasting a large magazine and impressive active range, this mounted machinegun excels at laying down consistent suppressive fire.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/HeavyMachineGun.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 5
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 53
+ },
+ {
+  "id": "factory-malone-ratcatcher-mk-1",
+  "kind": "factory",
+  "name": "Malone Ratcatcher MK.1",
+  "name_en": "Malone Ratcatcher MK.1",
+  "item_code": "MGTW",
+  "category": "heavy_arms",
+  "item_class": "Mounted Machinegun",
+  "description": "Early iterations of this machinegun were built to be emplaced in bunkers and on the decks of lightly armed warships, the Ratcatcher is Harvey Malone’s first freely mountable infantry weapon designed for field use. Just like its predecessors, this heavy weapon suppresses enemy soldiers with unmatched efficiency.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MGW.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 5
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 54
+ },
+ {
+  "id": "factory-daucus-isg-iii",
+  "kind": "factory",
+  "name": "Daucus isg.III",
+  "name_en": "Daucus isg.III",
+  "item_code": "ISGTC",
+  "category": "heavy_arms",
+  "item_class": "Infantry Support Gun",
+  "description": "This heavy infantry cannon requires a tripod for stability. The Daucus is designed to give infantry a foothold against enemy vehicles and light fortifications or established fortified garrisons.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/InfantrySupportGun.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 5
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 55
+ },
+ {
+  "id": "factory-30mm",
+  "kind": "factory",
+  "name": "30mm",
+  "name_en": "30mm",
+  "item_code": "MiniTankAmmo",
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "Standard explosive shell for small vehicles or infantry weapons.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MiniTankAmmo.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 80,
+   "emat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 56
+ },
+ {
+  "id": "factory-cremari-mortar",
+  "kind": "factory",
+  "name": "Cremari Mortar",
+  "name_en": "Cremari Mortar",
+  "item_code": "Mortar",
+  "category": "heavy_arms",
+  "item_class": "Mortar",
+  "description": "This short-range cannon is designed to bombard enemy infantry with indirect fire.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Mortar.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 25
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 57
+ },
+ {
+  "id": "factory-mortar-flare-shell",
+  "kind": "factory",
+  "name": "Mortar Flare Shell",
+  "name_en": "Mortar Flare Shell",
+  "item_code": null,
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "A shell that ignites midair and illuminates a large area, revealing enemy targets.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Mortar.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 60,
+   "emat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 58
+ },
+ {
+  "id": "factory-mortar-shrapnel-shell",
+  "kind": "factory",
+  "name": "Mortar Shrapnel Shell",
+  "name_en": "Mortar Shrapnel Shell",
+  "item_code": null,
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "A shell that explodes into shrapnel on impact, devastating nearby infantry.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Mortar.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 60,
+   "emat": 20
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 59
+ },
+ {
+  "id": "factory-mortar-shell",
+  "kind": "factory",
+  "name": "Mortar Shell",
+  "name_en": "Mortar Shell",
+  "item_code": "MortarAmmo",
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "An explosive projectile fired from a mortar.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MortarAmmo.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 60,
+   "emat": 70
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 60
+ },
+ {
+  "id": "factory-ignifist-30",
+  "kind": "factory",
+  "name": "Ignifist 30",
+  "name_en": "Ignifist 30",
+  "item_code": "ATRPGLightC",
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank RPG",
+  "description": "This single-use rocket can be fired a short distance. Designed to punch holes into tanks, the ignifist is the perfect tool for infantry anticipating armored resistance.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATRPGLightC.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 85,
+   "emat": 70
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 61
+ },
+ {
+  "id": "factory-bf5-white-ash-flask-grenade",
+  "kind": "factory",
+  "name": "BF5 White Ash Flask Grenade",
+  "name_en": "BF5 White Ash Flask Grenade",
+  "item_code": "ATGrenadeW",
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank Grenade",
+  "description": "An explosive flask used for melting enemy armor. This carefully designed liquid bomb explodes into a dazzling flash of molten debris upon impact.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATGrenadeW.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 100,
+   "emat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 62
+ },
+ {
+  "id": "factory-b2-varsi-anti-tank-grenade",
+  "kind": "factory",
+  "name": "B2 Varsi Anti-Tank Grenade",
+  "name_en": "B2 Varsi Anti-Tank Grenade",
+  "item_code": "ATLaunchedGrenadeW",
+  "category": "heavy_arms",
+  "item_class": "Anti-Tank Grenade",
+  "description": "A compact anti-tank grenade that can be fired from rifle grenade launcher attachments or grenade turrets. Its dense payload excels at crippling armoured vehicles while being versatile and easy to transport.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATLaunchedGrenadeW.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 95,
+   "emat": 125
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 63
+ },
+ {
+  "id": "factory-mammon-91-b",
+  "kind": "factory",
+  "name": "Mammon 91-b",
+  "name_en": "Mammon 91-b",
+  "item_code": "HEGrenade",
+  "category": "heavy_arms",
+  "item_class": "HE Grenade",
+  "description": "This densely packed, high-explosive grenade is designed to damage structures and vehicles.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/HEGrenade.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 100,
+   "emat": 20
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 64
+ },
+ {
+  "id": "factory-anti-tank-sticky-bomb",
+  "kind": "factory",
+  "name": "Anti-Tank Sticky Bomb",
+  "name_en": "Anti-Tank Sticky Bomb",
+  "item_code": "StickyBomb",
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "An adherable grenade designed to penetrate heavy tank armor. The sticky bomb can only be thrown a short distance and is ineffective against structures.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/StickyBomb.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 50,
+   "emat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 65
+ },
+ {
+  "id": "factory-cutler-foebreaker",
+  "kind": "factory",
+  "name": "Cutler Foebreaker",
+  "name_en": "Cutler Foebreaker",
+  "item_code": "RPGTW",
+  "category": "heavy_arms",
+  "item_class": "Mounted RPG Launcher",
+  "description": "This unique duel-barrelled RPG launcher can fire two RPG shells in relatively quick succession. This increase in firepower makes it nearly impossible for a single soldier to operate without the support of a sturdy mount.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RpgW.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 5
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 66
+ },
+ {
+  "id": "factory-cutler-launcher-4",
+  "kind": "factory",
+  "name": "Cutler Launcher 4",
+  "name_en": "Cutler Launcher 4",
+  "item_code": "RpgW",
+  "category": "heavy_arms",
+  "item_class": "RPG",
+  "description": "The Cutler Launcher is capable of firing and unguided, rocket-propelled grenade over short distances with startling efficiency. Its simple design allows for easy deployment and storage.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/RpgW.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "rmat": 35
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 67
+ },
+ {
+  "id": "factory-r-p-g-shell",
+  "kind": "factory",
+  "name": "R.P.G Shell",
+  "name_en": "R.P.G Shell",
+  "item_code": null,
+  "category": "heavy_arms",
+  "item_class": null,
+  "description": "An explosive projectile fired from an R.P.G.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 60,
+   "emat": 90
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 68
+ },
+ {
+  "id": "factory-20mm",
+  "kind": "factory",
+  "name": "20mm",
+  "name_en": "20mm",
+  "item_code": "AircraftAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "Standard ammunition for anti-aircraft machine guns.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AircraftAmmo.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 120
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 69
+ },
+ {
+  "id": "factory-shatter-missle",
+  "kind": "factory",
+  "name": "Shatter Missle",
+  "name_en": "Shatter Missle",
+  "item_code": null,
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "Short-range rockets that specialize in breaching bunker and devastating enemy structures.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 250,
+   "hemat": 250
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 70
+ },
+ {
+  "id": "factory-150mm",
+  "kind": "factory",
+  "name": "150mm",
+  "name_en": "150mm",
+  "item_code": "HeavyArtilleryAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "Payload for heavy artillery weapons.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/HeavyArtilleryAmmo.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 120,
+   "hemat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 71
+ },
+ {
+  "id": "factory-120mm",
+  "kind": "factory",
+  "name": "120mm",
+  "name_en": "120mm",
+  "item_code": "LightArtilleryAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "Payload for light artillery weapons.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightArtilleryAmmo.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 120,
+   "hemat": 10
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 72
+ },
+ {
+  "id": "factory-250mm-purity-shell",
+  "kind": "factory",
+  "name": "250mm \"Purity\" Shell",
+  "name_en": "250mm \"Purity\" Shell",
+  "item_code": "MortarTankAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "A shell that is launched over short distances by a spigot mortar.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 120,
+   "hemat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 73
+ },
+ {
+  "id": "factory-250mm-fury-shell",
+  "kind": "factory",
+  "name": "250mm \"Fury\" Shell",
+  "name_en": "250mm \"Fury\" Shell",
+  "item_code": "MortarTankAmmoBR",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "A breaching shell that's launched by a spigot mortar.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 250,
+   "hemat": 200
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 74
+ },
+ {
+  "id": "factory-68mm",
+  "kind": "factory",
+  "name": "68mm",
+  "name_en": "68mm",
+  "item_code": "ATAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "An anti-tank shell that's effective against penetrating tank armor.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ATAmmo.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 120,
+   "emat": 240
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 75
+ },
+ {
+  "id": "factory-40mm",
+  "kind": "factory",
+  "name": "40mm",
+  "name_en": "40mm",
+  "item_code": "LightTankAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "Standard payload for light tanks.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightTankAmmo.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 160,
+   "emat": 240
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 76
+ },
+ {
+  "id": "factory-e6881-b-hullbreaker-mine",
+  "kind": "factory",
+  "name": "E6881-B Hullbreaker Mine",
+  "name_en": "E6881-B Hullbreaker Mine",
+  "item_code": null,
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "A specialized sea mine that floats near the surface, causing destructive damage to ship hulls.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 125,
+   "emat": 35
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 77
+ },
+ {
+  "id": "factory-quillback-torpedo",
+  "kind": "factory",
+  "name": "Quillback Torpedo",
+  "name_en": "Quillback Torpedo",
+  "item_code": "MiniTorpedoAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": "Designed as a lightweight version of the Moray Torpedo for mounting on light aircraft.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MiniTorpedoAmmo.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 125,
+   "emat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 78
+ },
+ {
+  "id": "factory-barbed-wire",
+  "kind": "factory",
+  "name": "Barbed Wire",
+  "name_en": "Barbed Wire",
+  "item_code": "BarbedWireMaterials",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Used to construct Barbed Wire defenses.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/BarbedWireMaterial.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 79
+ },
+ {
+  "id": "factory-buckhorn-ccq-18",
+  "kind": "factory",
+  "name": "Buckhorn CCQ-18",
+  "name_en": "Buckhorn CCQ-18",
+  "item_code": "Bayonet",
+  "category": "utilities",
+  "item_class": "Bayonet",
+  "description": "Attached to the barrel of a rifle, this short blade can spear enemies in close quarters encounters.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Bayonet.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 80
+ },
+ {
+  "id": "factory-binoculars",
+  "kind": "factory",
+  "name": "Binoculars",
+  "name_en": "Binoculars",
+  "item_code": "Binoculars",
+  "category": "utilities",
+  "item_class": null,
+  "description": "An optical instrument used for viewing distant objects.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Binoculars.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 81
+ },
+ {
+  "id": "factory-hydras-whisper",
+  "kind": "factory",
+  "name": "Hydra's Whisper",
+  "name_en": "Hydra's Whisper",
+  "item_code": "ExplosiveLightC",
+  "category": "utilities",
+  "item_class": "Explosive",
+  "description": "This unique demolotion tool is a long, metal tube packed with explosives. The Hydra's Whisper is designed to destroy out-of-reach movement impairing structures and detonate any mines along the length of the tube.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Bangalore.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "emat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 82
+ },
+ {
+  "id": "factory-havoc-charge",
+  "kind": "factory",
+  "name": "Havoc Charge",
+  "name_en": "Havoc Charge",
+  "item_code": null,
+  "category": "utilities",
+  "item_class": null,
+  "description": "A high-powered explosive charge that requires an accompanyting detonator. The Havoc Charge is highly effective at demoloshing large structures. The charge must be detonated via gunshot. The Havoc Charge's true potential is unleashed when executing strategic demolitions at safe distances.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": null,
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 75,
+   "hemat": 40
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 83
+ },
+ {
+  "id": "factory-willows-bane-ammo",
+  "kind": "factory",
+  "name": "Willow's Bane Ammo",
+  "name_en": "Willow's Bane Ammo",
+  "item_code": "FlameBackpackW",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Ammo for Willow's Bane Model 845",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/FlamePackW.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 135,
+   "hemat": 20
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 84
+ },
+ {
+  "id": "factory-molten-wind-v-ii-ammo",
+  "kind": "factory",
+  "name": "\"Molten Wind\" v.II Ammo",
+  "name_en": "\"Molten Wind\" v.II Ammo",
+  "item_code": "FlameBackpackC",
+  "category": "utilities",
+  "item_class": "Flamethrower Ammo",
+  "description": "Ammo for the \"Molten Wind\" v.II Flame Torch",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/FlamePackC.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 160,
+   "hemat": 20
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 85
+ },
+ {
+  "id": "factory-listening-kit",
+  "kind": "factory",
+  "name": "Listening Kit",
+  "name_en": "Listening Kit",
+  "item_code": "ListeningKit",
+  "category": "utilities",
+  "item_class": null,
+  "description": "A device used to intercept enemy radio broadcasts transmitted from nearby sources.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/ListeningKit.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 86
+ },
+ {
+  "id": "factory-falias-raiding-club",
+  "kind": "factory",
+  "name": "Falias Raiding Club",
+  "name_en": "Falias Raiding Club",
+  "item_code": "MaceW",
+  "category": "utilities",
+  "item_class": null,
+  "description": "A heavy mace constructed from solid wood and dotted with lead rivets. Commonly used when raiding entrenched positions in close quarters where firearms are less effective and an old-fashioned bludgeoning is better suited for the job.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": null,
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 200
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 87
+ },
+ {
+  "id": "factory-metal-beam",
+  "kind": "factory",
+  "name": "Metal Beam",
+  "name_en": "Metal Beam",
+  "item_code": "MetalBeamMaterials",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Used to construct Metal Beam defenses.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/MetalBeamMaterial.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 25
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 88
+ },
+ {
+  "id": "factory-radio-backpack",
+  "kind": "factory",
+  "name": "Radio Backpack",
+  "name_en": "Radio Backpack",
+  "item_code": "RadioBackpack",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Automatically gathers map intel periodically when equipped. The radio backpack is also used to transmit other sensitive information across long distances.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/RadioBackpack.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 89
+ },
+ {
+  "id": "factory-sandbag",
+  "kind": "factory",
+  "name": "Sandbag",
+  "name_en": "Sandbag",
+  "item_code": "SandbagMaterials",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Used to construct Sandbag defenses.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/SandbagMaterial.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 90
+ },
+ {
+  "id": "factory-havoc-charge-detonator",
+  "kind": "factory",
+  "name": "Havoc Charge Detonator",
+  "name_en": "Havoc Charge Detonator",
+  "item_code": null,
+  "category": "utilities",
+  "item_class": "Explosive Charge",
+  "description": "Required to detonate Havoc Charges. The Havoc Charge must be placed before the detonator can be deployed.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": null,
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 75,
+   "hemat": 20
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 91
+ },
+ {
+  "id": "factory-alligator-charge",
+  "kind": "factory",
+  "name": "Alligator Charge",
+  "name_en": "Alligator Charge",
+  "item_code": "SatchelChargeW",
+  "category": "utilities",
+  "item_class": "Satchel Charge",
+  "description": "This heavy-duty explosive device is designed to deal significant damage to structures and stationary vehicles.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/SatchelCharge.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 150,
+   "emat": 160
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 92
+ },
+ {
+  "id": "factory-shovel",
+  "kind": "factory",
+  "name": "Shovel",
+  "name_en": "Shovel",
+  "item_code": "Shovel",
+  "category": "utilities",
+  "item_class": null,
+  "description": "A tool for digging trenches and other entrenched structures.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Shovel.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 200
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 93
+ },
+ {
+  "id": "factory-sledge-hammer",
+  "kind": "factory",
+  "name": "Sledge Hammer",
+  "name_en": "Sledge Hammer",
+  "item_code": "SledgeHammer",
+  "category": "utilities",
+  "item_class": null,
+  "description": "A tool used to salvage components from remains of old vehicles and equipment.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/SledgeHammer.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 200
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 94
+ },
+ {
+  "id": "factory-eleos-infantry-dagger",
+  "kind": "factory",
+  "name": "Eleos Infantry Dagger",
+  "name_en": "Eleos Infantry Dagger",
+  "item_code": "SwordC",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Standard-issue Mesean military dagger. Its long, slender blade excels in close-quarter combat as well as a plethora of uses in everyday operations.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/StilSwordC.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 200
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 95
+ },
+ {
+  "id": "factory-tripod",
+  "kind": "factory",
+  "name": "Tripod",
+  "name_en": "Tripod",
+  "item_code": "Tripod",
+  "category": "utilities",
+  "item_class": null,
+  "description": "A mount point for deployable infantry weapons and equipment.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/DeployableTripod.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 96
+ },
+ {
+  "id": "factory-wind-sock",
+  "kind": "factory",
+  "name": "Wind Sock",
+  "name_en": "Wind Sock",
+  "item_code": "WindsockT",
+  "category": "utilities",
+  "item_class": "Equipment",
+  "description": "A sturdy fabric cylinder mounted on a tripod that's designed to help nearby operators determine the speed and direction of the wind.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/WindsockItem.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 97
+ },
+ {
+  "id": "factory-wrench",
+  "kind": "factory",
+  "name": "Wrench",
+  "name_en": "Wrench",
+  "item_code": "WorkWrench",
+  "category": "utilities",
+  "item_class": null,
+  "description": "A multipurpose tool. Can be used to dismantle mines/barbed wire and unlock vehicles.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/WorkWrench.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 98
+ },
+ {
+  "id": "factory-water-bucket",
+  "kind": "factory",
+  "name": "Water Bucket",
+  "name_en": "Water Bucket",
+  "item_code": "WaterBucket",
+  "category": "utilities",
+  "item_class": null,
+  "description": "A bucket that holds water. You can toss water onto fires to extinguish them.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Water.webp",
+  "output_quantity": 50,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 99
+ },
+ {
+  "id": "factory-gas-mask",
+  "kind": "factory",
+  "name": "Gas Mask",
+  "name_en": "Gas Mask",
+  "item_code": "GasMask",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Protects against poison gas.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Gasmask.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 160
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 100
+ },
+ {
+  "id": "factory-gas-mask-filter",
+  "kind": "factory",
+  "name": "Gas Mask Filter",
+  "name_en": "Gas Mask Filter",
+  "item_code": "GasMaskFilter",
+  "category": "utilities",
+  "item_class": null,
+  "description": "When attached to a gas mask, this filter provides fresh air to the wearer.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/GasMaskFilter.webp",
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 101
+ },
+ {
+  "id": "factory-the-ospreay",
+  "kind": "factory",
+  "name": "The Ospreay",
+  "name_en": "The Ospreay",
+  "item_code": null,
+  "category": "utilities",
+  "item_class": "Grenade Launcher",
+  "description": "A rifle attachment that fires grenades with pneumatic force. Along with specialized grenades, it can launch standard grenades.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": null,
+  "output_quantity": 20,
+  "cost": {
+   "bmat": 85,
+   "rmat": 10
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 102
+ },
+ {
+  "id": "factory-radio",
+  "kind": "factory",
+  "name": "Radio",
+  "name_en": "Radio",
+  "item_code": "Radio",
+  "category": "utilities",
+  "item_class": null,
+  "description": "Receives map intelligence updates.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Radio.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 103
+ },
+ {
+  "id": "factory-liason-transmitter",
+  "kind": "factory",
+  "name": "Liason Transmitter",
+  "name_en": "Liason Transmitter",
+  "item_code": null,
+  "category": "utilities",
+  "item_class": null,
+  "description": "Allows receiving map intelligence reports on detected airborne targets.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": null,
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 104
+ },
+ {
+  "id": "factory-bandages",
+  "kind": "factory",
+  "name": "Bandages",
+  "name_en": "Bandages",
+  "item_code": "Bandages",
+  "category": "medical",
+  "item_class": null,
+  "description": "Used to stem bleeding.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/Bandages.webp",
+  "output_quantity": 50,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 105
+ },
+ {
+  "id": "factory-first-aid-kit",
+  "kind": "factory",
+  "name": "First Aid Kit",
+  "name_en": "First Aid Kit",
+  "item_code": "FirstAidKit",
+  "category": "medical",
+  "item_class": null,
+  "description": "Used by medics to heal other soldiers.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/FirstAidKit.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 106
+ },
+ {
+  "id": "factory-trauma-kit",
+  "kind": "factory",
+  "name": "Trauma Kit",
+  "name_en": "Trauma Kit",
+  "item_code": "TraumaKit",
+  "category": "medical",
+  "item_class": null,
+  "description": "Used by medics to revive wounded soldiers.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/TraumaKit.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": false
+  },
+  "sort": 107
+ },
+ {
+  "id": "factory-blood-plasma",
+  "kind": "factory",
+  "name": "Blood Plasma",
+  "name_en": "Blood Plasma",
+  "item_code": "BloodPlasma",
+  "category": "medical",
+  "item_class": null,
+  "description": "A blood component used to treat wounded soldiers on the battlefield.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": "/api/v1/assets/items/BloodPlasma.webp",
+  "output_quantity": 50,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 108
+ },
+ {
+  "id": "factory-soldier-supplies",
+  "kind": "factory",
+  "name": "Soldier Supplies",
+  "name_en": "Soldier Supplies",
+  "item_code": "SoldierSupplies",
+  "category": "medical",
+  "item_class": null,
+  "description": "A standard issue set of supplies for foot soldiers. Bases must be stockpiled with soldier supplies in order for players to spawn.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory"
+  ],
+  "icon_url": null,
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 80
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": false
+  },
+  "sort": 109
+ },
+ {
+  "id": "factory-maintenance-supplies",
+  "kind": "factory",
+  "name": "Maintenance Supplies",
+  "name_en": "Maintenance Supplies",
+  "item_code": "MaintenanceSupplies",
+  "category": "supplies",
+  "item_class": null,
+  "description": "Supplies for maintaining structures. Store at Bases or Maintenance Tunnels to prevent decay on surrounding structures.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MaintenanceSupplies.webp",
+  "output_quantity": 100,
+  "cost": {
+   "bmat": 250
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 110
+ },
+ {
+  "id": "factory-material-pallet",
+  "kind": "factory",
+  "name": "Material pallet",
+  "name_en": "Material pallet",
+  "item_code": "MaterialPlatform",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A material pallet.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MaterialPlatform.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 111
+ },
+ {
+  "id": "factory-resource-container",
+  "kind": "factory",
+  "name": "Resource Container",
+  "name_en": "Resource Container",
+  "item_code": "ResourceContainer",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A container that can carry large quantities of resources and can be transported by certain vehicles.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ResourceContainer.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 112
+ },
+ {
+  "id": "factory-shipping-container",
+  "kind": "factory",
+  "name": "Shipping Container",
+  "name_en": "Shipping Container",
+  "item_code": "ShippingContainer",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A container for shipping very large quantities of Crates using Crane loaded vehicles. This type of container can only be unloaded at Storage Depots and Seaports.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ShippingContainerStructure.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 113
+ },
+ {
+  "id": "factory-leary-aa-70-bolas",
+  "kind": "factory",
+  "name": "Leary AA-70 Bolas",
+  "name_en": "Leary AA-70 Bolas",
+  "item_code": "EmplacedAircraftW",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A late entry into the Leary arsenal, the AA-70 Bolas was a direct response to a sudden uptick in Colonial aerial aggression. This emplaced cannon excels equally at both slowing and bringing down enemy aircraft.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 525
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 114
+ },
+ {
+  "id": "factory-leary-shellbore-68mm",
+  "kind": "factory",
+  "name": "Leary Shellbore 68mm",
+  "name_en": "Leary Shellbore 68mm",
+  "item_code": "EmplacedATW",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A defensive emplacement with a 68mm Anti-tank cannon. This rudimentary weapon was once built to fit onto the hell of large naval vessels, but was eventually phased out and repurposed.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/EmplacedAT.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 450
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 115
+ },
+ {
+  "id": "factory-dae-5b-zeal",
+  "kind": "factory",
+  "name": "DAE 5b \"Zeal\"",
+  "name_en": "DAE 5b \"Zeal\"",
+  "item_code": "EmplacedAircraftC",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A sturdy, stationary cannon for bombarding high-flying enemy aircrafts with explosive shrapnel shells. The DAE 5b anti-aircraft emplacement has become infamous for walls of black smoke its payload leaves behind.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 525
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 116
+ },
+ {
+  "id": "factory-50-500-thunderbolt-cannon",
+  "kind": "factory",
+  "name": "50-500 \"Thunderbolt\" Cannon",
+  "name_en": "50-500 \"Thunderbolt\" Cannon",
+  "item_code": "EmplacedHeavyArtilleryC",
+  "category": "shipables",
+  "item_class": null,
+  "description": "This heavy artillery cannon is designed to cripple enemy fortifcations from an entrenched position. Its long heavy barrel gives the \"Thunderbolt\" outstanding range.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 585
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 117
+ },
+ {
+  "id": "factory-huber-exalt-150mm",
+  "kind": "factory",
+  "name": "Huber Exalt 150mm",
+  "name_en": "Huber Exalt 150mm",
+  "item_code": "EmplacedHeavyArtilleryW",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A heavy cannon designed to shatter the garrisons and fortifications of advancing forces. The Exalt is best utilized when placed into a defensive position to take advantage of its impressive range.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/HeavyArtilleryAmmo.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 525
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 118
+ },
+ {
+  "id": "factory-leary-snare-trap-127",
+  "kind": "factory",
+  "name": "Leary Snare Trap 127",
+  "name_en": "Leary Snare Trap 127",
+  "item_code": null,
+  "category": "shipables",
+  "item_class": null,
+  "description": "The Snare Trap is a repurposed anti-aircraft flak cannon used to fortify emplaced positions with twin anti-infantry machine guns.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 225
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 119
+ },
+ {
+  "id": "factory-huber-lariat-120mm",
+  "kind": "factory",
+  "name": "Huber Lariat 120mm",
+  "name_en": "Huber Lariat 120mm",
+  "item_code": "EmplacedLightArtilleryW",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A light artillery cannon designed to be a fixture in defensive fortifications. The Lariat sports a formidable long-range 120mm cannon designed to put immense pressure on the enemy infantry.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AircraftAmmo.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 105
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 120
+ },
+ {
+  "id": "factory-dae-1o-3-polybolos",
+  "kind": "factory",
+  "name": "DAE 1o-3 \"Polybolos\"",
+  "name_en": "DAE 1o-3 \"Polybolos\"",
+  "item_code": "EmplacedIndirectC",
+  "category": "shipables",
+  "item_class": null,
+  "description": "To combat Caoivish ingenuity, the Meseans developed their own indirect RPG propulsion system. Duel launchers are fitted on a large emplacement platform to maximize coverage in an established position, rather than being related to a guerilla warfare tool.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 375
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 121
+ },
+ {
+  "id": "factory-dae-1b-2-serra",
+  "kind": "factory",
+  "name": "DAE 1b-2 \"Serra\"",
+  "name_en": "DAE 1b-2 \"Serra\"",
+  "item_code": "EmplacedInfantryC",
+  "category": "shipables",
+  "item_class": null,
+  "description": "Built like a saw blade, the DAE 1b-2 emplacement gun is fitted with three cascading machine gun turrets. What the \"Serra\" lacks in power, it makes up for in sheer rate of fire for a weapon of its size.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 122
+ },
+ {
+  "id": "factory-concrete-mixer",
+  "kind": "factory",
+  "name": "Concrete Mixer",
+  "name_en": "Concrete Mixer",
+  "item_code": "ConcreteMixer",
+  "category": "shipables",
+  "item_class": null,
+  "description": "A portable device that mixes various materials to form Concrete, which are used to build heavily fortified structures.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ConcreteMixerIcon.png",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 225
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 123
+ },
+ {
+  "id": "factory-construction-equipment",
+  "kind": "factory",
+  "name": "Construction Equipment",
+  "name_en": "Construction Equipment",
+  "item_code": "ConstructionEquipment",
+  "category": "shipables",
+  "item_class": null,
+  "description": "An automated excavator that can be fuelled with Gravel to assist with construction projects.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ConstructionEquipment.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 124
+ },
+ {
+  "id": "factory-liquid-container",
+  "kind": "factory",
+  "name": "Liquid Container",
+  "name_en": "Liquid Container",
+  "item_code": "LiquidContainer",
+  "category": "shipables",
+  "item_class": null,
+  "description": "Stores a high volume liquids, supporting a variety of fuel types. Nearby structures or vehicles can be refueled directly from this container.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 125
+ },
+ {
+  "id": "factory-t3-xiphos",
+  "kind": "factory",
+  "name": "T3 \"Xiphos\"",
+  "name_en": "T3 \"Xiphos\"",
+  "item_code": "ArmoredCarC",
+  "category": "vehicles",
+  "item_class": "Armored Car",
+  "description": "Colonial Armored Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barelled machineguns.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ArmoredCarVehicleC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 126
+ },
+ {
+  "id": "factory-obrien-v-190-knave",
+  "kind": "factory",
+  "name": "O'Brien v.190 Knave",
+  "name_en": "O'Brien v.190 Knave",
+  "item_code": "ArmoredCar2TwinW",
+  "category": "vehicles",
+  "item_class": "Armored Car",
+  "description": "One of Conor O'Brien's best traits was his ability to modernize and make use of older technology in his designs. The v.190 Knave is the perfect example of this philosophy. Fitted with a modified, outdated twin-grenade launcher turret, the Knave is a surprising combination of speed and subterfuge that quickly routs the enemy, leaving them befuddled.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ArmoredCarTwinW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 120
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 127
+ },
+ {
+  "id": "factory-obrien-v-110",
+  "kind": "factory",
+  "name": "O'Brien v.110",
+  "name_en": "O'Brien v.110",
+  "item_code": "ArmoredCarW",
+  "category": "vehicles",
+  "item_class": "Armored Car",
+  "description": "Warden Armoured Cars are quick, well-rounded urban assault platforms. These anti-infantry vehicles are equipped with twin-barrelled machineguns.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ArmoredCarWarVehicleW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 75
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 128
+ },
+ {
+  "id": "factory-noble-widow-mk-xiv",
+  "kind": "factory",
+  "name": "Noble Widow MK. XIV",
+  "name_en": "Noble Widow MK. XIV",
+  "item_code": "DestroyerTankW",
+  "category": "vehicles",
+  "item_class": "Destroyer Tank",
+  "description": "This deadly tank turns predator into prey. A tank Destroyer, the Noble Widow specializes in ambush tactics, waiting for its quarry and striking with destructive high-velocity shells",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/DestroyerTankWVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 480
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 129
+ },
+ {
+  "id": "factory-collins-cannon-68mm",
+  "kind": "factory",
+  "name": "Collins Cannon 68mm",
+  "name_en": "Collins Cannon 68mm",
+  "item_code": "FieldATW",
+  "category": "vehicles",
+  "item_class": "Field AT Gun",
+  "description": "The Collins Cannon is a mobile Anti-Tank field gun firing 68mm armor-piercing rounds.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldAT2W.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 130
+ },
+ {
+  "id": "factory-balfour-wolfhound-40mm",
+  "kind": "factory",
+  "name": "Balfour Wolfhound 40mm",
+  "name_en": "Balfour Wolfhound 40mm",
+  "item_code": "FieldCannonW",
+  "category": "vehicles",
+  "item_class": "Field Cannon",
+  "description": "This destructive short-ranged cannon is designed for direct engagement with enemy fortifications. The Wolfhound is fitted with reinforced shielding and a 40mm barrel.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldCannonWVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 131
+ },
+ {
+  "id": "factory-swallowtail-988-127-2",
+  "kind": "factory",
+  "name": "Swallowtail 988/127-2",
+  "name_en": "Swallowtail 988/127-2",
+  "item_code": "FieldMGW",
+  "category": "vehicles",
+  "item_class": "Field Machine Gun",
+  "description": "A duel barrelled, high calibre anti-infantry machine gun. The Swallowtail is fitted with forward-facing armor plating and is excellent for suppression.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldMachineGunWar.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 132
+ },
+ {
+  "id": "factory-balfour-falconer-250mm",
+  "kind": "factory",
+  "name": "Balfour Falconer 250mm",
+  "name_en": "Balfour Falconer 250mm",
+  "item_code": "FieldMortarW",
+  "category": "vehicles",
+  "item_class": "Field Mortar",
+  "description": "A heavy mobile mortar platform fitted with a thick frontal sheild for assaulting fortified locations.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldMortarW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 105
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 133
+ },
+ {
+  "id": "factory-niska-mk-i-gun-motor-carriage",
+  "kind": "factory",
+  "name": "Niska Mk. I Gun Motor Carriage",
+  "name_en": "Niska Mk. I Gun Motor Carriage",
+  "item_code": "HalfTrackW",
+  "category": "vehicles",
+  "item_class": "Half-Track",
+  "description": "Designed for escort missions and to support infantry operations, the Niska Gun Motor Carriage Half-Track is an armored, versatile all-terrain vehicle equipped with a mounted machinegun.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/HalfTrackWarVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 180
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 134
+ },
+ {
+  "id": "factory-mulloy-lpc",
+  "kind": "factory",
+  "name": "Mulloy LPC",
+  "name_en": "Mulloy LPC",
+  "item_code": "LandingCraftW",
+  "category": "vehicles",
+  "item_class": "Landing APC",
+  "description": "The Mulloy Landing Personnel Carrier is an armored amphibious vehicle designed for carrying troops across large bodies of water to aid in coordinated beach landings and flanking assaults.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LandingCraftWarVehicleW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 135
+ },
+ {
+  "id": "factory-devitt-mk-iii",
+  "kind": "factory",
+  "name": "Devitt Mk. III",
+  "name_en": "Devitt Mk. III",
+  "item_code": "LightTankW",
+  "category": "vehicles",
+  "item_class": "Light Tank",
+  "description": "A highly maneuverable lightweight tank. Designed for urban environments, the Devitt is fitted with a 40mm cannon.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightTankWarDefensiveVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 360
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 136
+ },
+ {
+  "id": "factory-aa-2-battering-ram",
+  "kind": "factory",
+  "name": "AA-2 Battering Ram",
+  "name_en": "AA-2 Battering Ram",
+  "item_code": "FieldATC",
+  "category": "vehicles",
+  "item_class": "Field AT Gun",
+  "description": "The Battering Ram is a mobile Anti-Tank field gun firing 68mm armor piercing rounds.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldAntiTankColVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 137
+ },
+ {
+  "id": "factory-g40-sagittarii",
+  "kind": "factory",
+  "name": "G40 \"Sagittarii\"",
+  "name_en": "G40 \"Sagittarii\"",
+  "item_code": "FieldMGC",
+  "category": "vehicles",
+  "item_class": "Field Machine Gun",
+  "description": "A duel barrelled, high calibre anti-infantry machine gun. The \"Sagittarii\" is fitted with forward-facing armor plating and is excellent for suppression.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldMachineGun.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 138
+ },
+ {
+  "id": "factory-30-250-tisiphone-field-cannon",
+  "kind": "factory",
+  "name": "30-250 \"Tisiphone\" Field Cannon",
+  "name_en": "30-250 \"Tisiphone\" Field Cannon",
+  "item_code": "FieldMortarC",
+  "category": "vehicles",
+  "item_class": "Field Mortar",
+  "description": "The 30-250 \"Tisiphone\" Field Cannon is mobilized destruction incarnate. An infantry unit armed with these mortar cannons signal imminent devastation to enemy structures and emplacements.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldMortarC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 105
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 139
+ },
+ {
+  "id": "factory-120-68-koronides-field-gun",
+  "kind": "factory",
+  "name": "120-68 \"Koronides\" Field Gun",
+  "name_en": "120-68 \"Koronides\" Field Gun",
+  "item_code": "LargeFieldLightArtilleryC",
+  "category": "vehicles",
+  "item_class": "Field Artillery",
+  "description": "A long range Colonial mobile artillery used to lay siege to fortified positions",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FieldArtilleryColVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 140
+ },
+ {
+  "id": "factory-hh-a-javelin",
+  "kind": "factory",
+  "name": "HH-a \"Javelin\"",
+  "name_en": "HH-a \"Javelin\"",
+  "item_code": "HalfTrackC",
+  "category": "vehicles",
+  "item_class": "Half-Track",
+  "description": "Designed for escort missions and to support infantry operations, the HH-a class \"Javelin\" Half-Track is an armored, versatile all-terrain vehicle equipped with a mounted machinegun.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/HalfTrackColVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 165
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 141
+ },
+ {
+  "id": "factory-ab-8-acheron",
+  "kind": "factory",
+  "name": "AB-8 \"Acheron\"",
+  "name_en": "AB-8 \"Acheron\"",
+  "item_code": "LandingCraftC",
+  "category": "vehicles",
+  "item_class": "Landing APC",
+  "description": "The Acheron is an armored amphibious vehicle designed for carrying troops across large bodies of water to aid in coordinated beach landings and flanking assaults.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LandingCraftVehicleC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 60
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 142
+ },
+ {
+  "id": "factory-h5-hatchet",
+  "kind": "factory",
+  "name": "H5 \"Hatchet\"",
+  "name_en": "H5 \"Hatchet\"",
+  "item_code": "LightTankC",
+  "category": "vehicles",
+  "item_class": "Light Tank",
+  "description": "A highly maneuverable lightweight tank. Designed for urban environments, the \"Hatchet\" is fitted with a 40mm cannon.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightTankColVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 345
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 143
+ },
+ {
+  "id": "factory-r-12-salus-ambulance",
+  "kind": "factory",
+  "name": "r-12 - \"Salus\" Ambulance",
+  "name_en": "r-12 - \"Salus\" Ambulance",
+  "item_code": "AmbulanceC",
+  "category": "vehicles",
+  "item_class": "Ambulance",
+  "description": "The \"salus\" Ambulance is efficient at transporting Critcally Wounded Soldiers and carrying medical supplies.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Ambulance.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 450
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 144
+ },
+ {
+  "id": "factory-dunne-responder-3e",
+  "kind": "factory",
+  "name": "Dunne Responder 3e",
+  "name_en": "Dunne Responder 3e",
+  "item_code": "AmbulanceW",
+  "category": "vehicles",
+  "item_class": "Ambulance",
+  "description": "The Responder Ambuleance is efficient at transporting Critically Wounded Soldiers and carrying medical supplies.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Ambulance.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 450
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 145
+ },
+ {
+  "id": "factory-r-15-chariot",
+  "kind": "factory",
+  "name": "R-15 - \"Chariot\"",
+  "name_en": "R-15 - \"Chariot\"",
+  "item_code": "BusC",
+  "category": "vehicles",
+  "item_class": "Transport Bus",
+  "description": "The \"Chariot\" is a transport vehicle used to shuttle personnel to the front line.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/BusC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 146
+ },
+ {
+  "id": "factory-dunne-caravaner-2f",
+  "kind": "factory",
+  "name": "Dunne Caravaner 2F",
+  "name_en": "Dunne Caravaner 2F",
+  "item_code": "BusW",
+  "category": "vehicles",
+  "item_class": "Transport Bus",
+  "description": "The Caravaner is a transport vehicle used to shuttle personnel to the front line.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/BusWar.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 147
+ },
+ {
+  "id": "factory-bms-universal-assemly-rig",
+  "kind": "factory",
+  "name": "BMS - Universal Assemly Rig",
+  "name_en": "BMS - Universal Assemly Rig",
+  "item_code": null,
+  "category": "vehicles",
+  "item_class": "Construction Vehicle",
+  "description": "A specialized vehicle designed by the Basset Motor Society used in the construction of large structures.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 148
+ },
+ {
+  "id": "factory-bms-class-2-mobile-auto-crane",
+  "kind": "factory",
+  "name": "BMS - Class 2 Mobile Auto-Crane",
+  "name_en": "BMS - Class 2 Mobile Auto-Crane",
+  "item_code": "Crane",
+  "category": "vehicles",
+  "item_class": "Crane",
+  "description": "The Basset Motor Society's Class 2 Mobile Auto-Crane is used to lift and reposition vehicles and very heavy equipment.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/CraneVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 375
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 149
+ },
+ {
+  "id": "factory-bms-packmule-flatbed",
+  "kind": "factory",
+  "name": "BMS - Packmule Flatbed",
+  "name_en": "BMS - Packmule Flatbed",
+  "item_code": "FlatbedTruck",
+  "category": "vehicles",
+  "item_class": "Flatbed Truck",
+  "description": "A heavy duty shipping transport truck designed by Bassett Motor Society. It's built for hauling the heaviest of equipment over long distances with ease.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FlatbedTruckVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 90
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 150
+ },
+ {
+  "id": "factory-rr-3-stolon-tanker",
+  "kind": "factory",
+  "name": "RR-3 \"Stolon\" Tanker.",
+  "name_en": "RR-3 \"Stolon\" Tanker.",
+  "item_code": "TruckLiquidC",
+  "category": "vehicles",
+  "item_class": "Fuel Tanker",
+  "description": "The \"Stolen\" Tanker is a heavier R-series rig designed to transport and distribute large quantities of Fuel.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/OilTankerC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 151
+ },
+ {
+  "id": "factory-dunne-fuelrunner-2d",
+  "kind": "factory",
+  "name": "Dunne Fuelrunner 2d",
+  "name_en": "Dunne Fuelrunner 2d",
+  "item_code": "TruckLiquidW",
+  "category": "vehicles",
+  "item_class": "Fuel Tanker",
+  "description": "The Fuelrunner is a heavy Dunne rig designed to transport and distribute large quantities of Fuel.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/OilTankerWar.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 152
+ },
+ {
+  "id": "factory-86k-a-bardiche",
+  "kind": "factory",
+  "name": "86K-a \"Bardiche\"",
+  "name_en": "86K-a \"Bardiche\"",
+  "item_code": "MediumTank2C",
+  "category": "vehicles",
+  "item_class": "Assault Tank",
+  "description": "Unlike the 85-series, the Bardiche sports a heavier, more durable build and is fitted with a coaxial heavy machinegun along with a powerful, short-barrelled 68mm turret. Modern Kraunian engineering allows for a fast reload, making it an ideal tool to combat enemy armor.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MediumTank2C.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 495
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 153
+ },
+ {
+  "id": "factory-90t-v-nemesis",
+  "kind": "factory",
+  "name": "90T-v \"Nemesis\"",
+  "name_en": "90T-v \"Nemesis\"",
+  "item_code": "MediumTank3C",
+  "category": "vehicles",
+  "item_class": "Assault Tank",
+  "description": "With immense off-road capabilities, the 90T-v \"Nemesis\" is a highly versatile armoured vehicle. While it may not boast the defensive capabilities of its more heavily armoured cousins, the \"Nemsis\" shatters enemy formations with its deadly 68mm cannon and auxiliary grenade launcher. This unique vehicle earned its namesake on its first deployment during an expedition into the Alliant Union. A Nevish Alliance armed convoy was crossing through wetlands when a wave of 90T-v tanks intercepted the convoy from between reeds and murky terrain.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 450
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 154
+ },
+ {
+  "id": "factory-85k-b-falchion",
+  "kind": "factory",
+  "name": "85K-b \"Falchion\"",
+  "name_en": "85K-b \"Falchion\"",
+  "item_code": "MediumTankC",
+  "category": "vehicles",
+  "item_class": "Assault Tank",
+  "description": "Designed for mass-production in Kraunia, this assault tank features a modular turret system for maximum versatility.The \"Falchion\" Class features a powerful if understated, 40mm cannon.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ColonialMediumTank.webp",
+  "output_quantity": 5,
+  "cost": {
+   "rmat": 405
+  },
+  "data": {
+   "number_produced_bonus": "2x bonus vehicles produced per crate",
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 155
+ },
+ {
+  "id": "factory-hc-2-scorpion",
+  "kind": "factory",
+  "name": "HC-2 \"Scorpion\"",
+  "name_en": "HC-2 \"Scorpion\"",
+  "item_code": "LightTank2InfantryC",
+  "category": "vehicles",
+  "item_class": "Light Infantry Tank",
+  "description": "The \"Scorpion\" HC-class tank is a moderately armored infantry support vehicle with twin, high-powered heavy machine guns and short-range radios for improved intelligence support. In addition, exterior seating is available for infantry.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightTank2InfantryCVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 156
+ },
+ {
+  "id": "factory-03mm-caster",
+  "kind": "factory",
+  "name": "03MM \"Caster\"",
+  "name_en": "03MM \"Caster\"",
+  "item_code": "MotorcycleC",
+  "category": "vehicles",
+  "item_class": "Motorcyle",
+  "description": "A motorcycle and sidecar used to patrol large areas. Speed can be boosted at the cost of additional fuel.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MotorcycleVehicleC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 255
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 157
+ },
+ {
+  "id": "factory-gallagher-brigand-mk-i",
+  "kind": "factory",
+  "name": "Gallagher Brigand Mk. I",
+  "name_en": "Gallagher Brigand Mk. I",
+  "item_code": "MediumTank2W",
+  "category": "vehicles",
+  "item_class": "Cruiser Tank",
+  "description": "The first Colm Gallagher's mid-sized tanks, the Brigand is a true brute on the battlefield. Not quite as sturdy as its younger siblings, the Brigand compensates with higher mobility, which, when paired with a mounted machine gun and 30mm repeater cannon, is a deadly force in any armour division. Seeing his hometown sundered at the hands of the Swords in a border skirmish before the onset of the Boreal Wars, Gallagher grew fixated on engineering a versatile yet sturdy tank. The Brigand was the result of his fixation.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MediumTank2W.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 450
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 158
+ },
+ {
+  "id": "factory-silverhand-mk-iv",
+  "kind": "factory",
+  "name": "Silverhand - Mk. IV",
+  "name_en": "Silverhand - Mk. IV",
+  "item_code": "MediumTankW",
+  "category": "vehicles",
+  "item_class": "Assault Tank",
+  "description": "The Silverhand assault tank is fitted with destructive dual-barrel armaments, and heavy frontal and rear armor. Its 68mm frontal cannon is pared with a lighter 40mm turret.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 465
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 159
+ },
+ {
+  "id": "factory-kivela-power-wheel-80-1",
+  "kind": "factory",
+  "name": "Kivela Power Wheel 80-1",
+  "name_en": "Kivela Power Wheel 80-1",
+  "item_code": "MotorcycleW",
+  "category": "vehicles",
+  "item_class": "Motorcycle",
+  "description": "A Warden Motorcycle used in patrols and fitted with a sidecar. The Kivela Power Wheel can also gain a momentary speed boost by burning additional fuel.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MotorcycleW.png",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 255
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 160
+ },
+ {
+  "id": "factory-uv-05a-argonaut",
+  "kind": "factory",
+  "name": "UV-05a \"Argonaut\"",
+  "name_en": "UV-05a \"Argonaut\"",
+  "item_code": "ScoutVehicleMobilityC",
+  "category": "vehicles",
+  "item_class": "Light Utility Vehicle",
+  "description": "This stripped down Light Utility Vehicle provides extra seating for a small crew to engage in hit and run tactices.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ScoutVehicleMobilityVehicleC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 30
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 161
+ },
+ {
+  "id": "factory-t12-actaeon-tankette",
+  "kind": "factory",
+  "name": "T12 \"Actaeon\" Tankette",
+  "name_en": "T12 \"Actaeon\" Tankette",
+  "item_code": "TanketteC",
+  "category": "vehicles",
+  "item_class": "Armored Car",
+  "description": "This complete overhaul of the T3 Armored Car is reinforced with tank armor. While these extra defenses lower the T12's overall speed and handling, the addition of treads provide increased performace in less than ideal terrain.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/TanketteCVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 105
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 162
+ },
+ {
+  "id": "factory-king-spire-mk-i",
+  "kind": "factory",
+  "name": "King Spire Mk. I",
+  "name_en": "King Spire Mk. I",
+  "item_code": "ScoutTankW",
+  "category": "vehicles",
+  "item_class": "Scout Tank",
+  "description": "This small tank has been recently recommissioned to the Warden arsenal. It b oasts high maneuverability and an antenna that allows for long-range communications during high-stakes recon operations.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ScoutTankW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 210
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 163
+ },
+ {
+  "id": "factory-drummond-100a",
+  "kind": "factory",
+  "name": "Drummond 100a",
+  "name_en": "Drummond 100a",
+  "item_code": "ScoutVehicleW",
+  "category": "vehicles",
+  "item_class": "Light Utility Vehicle",
+  "description": "A maltipurpose off-road Warden vehicle that can scout nearby targets.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ScoutVehicleWarVehicleW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 30
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 164
+ },
+ {
+  "id": "factory-rooster-junkwagon",
+  "kind": "factory",
+  "name": "Rooster - Junkwagon",
+  "name_en": "Rooster - Junkwagon",
+  "item_code": "TrailerResource",
+  "category": "vehicles",
+  "item_class": "Trailer",
+  "description": "A simple towable trailer that holds common building resources.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ResourceTrailer.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 30
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 165
+ },
+ {
+  "id": "factory-dunne-loadlugger-3c",
+  "kind": "factory",
+  "name": "Dunne Loadlugger 3c",
+  "name_en": "Dunne Loadlugger 3c",
+  "item_code": "TruckResourceW",
+  "category": "vehicles",
+  "item_class": "Truck",
+  "description": "This standard Truck is fitted with a resource hopper in place of the standard cargo hold. This allows for a much greater capacity for resources at the expense of space for cargo.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 360
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 166
+ },
+ {
+  "id": "factory-dunne-transport",
+  "kind": "factory",
+  "name": "Dunne Transport",
+  "name_en": "Dunne Transport",
+  "item_code": "TruckW",
+  "category": "vehicles",
+  "item_class": "Truck",
+  "description": "A heavy-duty Warden truck used to mobilize troops and supplies.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/TruckWarVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 167
+ },
+ {
+  "id": "factory-r-1-hauler",
+  "kind": "factory",
+  "name": "R-1 Hauler",
+  "name_en": "R-1 Hauler",
+  "item_code": "TruckC",
+  "category": "vehicles",
+  "item_class": "Truck",
+  "description": "A heavy-duty Colonial truck used to mobilize troops and supplies.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/TruckVehicleC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 168
+ },
+ {
+  "id": "factory-r-5-atlas-hauler",
+  "kind": "factory",
+  "name": "R-5 \"Atlas\" Hauler",
+  "name_en": "R-5 \"Atlas\" Hauler",
+  "item_code": "TruckResourceC",
+  "category": "vehicles",
+  "item_class": "Truck",
+  "description": "This standard Truck is fitted with a resource hopper in place of the standard cargo hold. This allows for a much greater capacity for resources at the expense of space for cargo.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/TruckUtilityVehicleC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 360
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 169
+ },
+ {
+  "id": "factory-type-b-lucian",
+  "kind": "factory",
+  "name": "Type B - \"Lucian\"",
+  "name_en": "Type B - \"Lucian\"",
+  "item_code": "Gunboat2C",
+  "category": "vehicles",
+  "item_class": "Siege Boat",
+  "description": "This shoreline \"bunker buster\" packs quite the punch to any unfortunately positioned enemy emplacements. The Type B was gifted its colloquial name in jest in response to the discovery that its first-ever captain, Lucian Kelly, once served in the Caoivish Naval Command.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GunBoat2CVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 170
+ },
+ {
+  "id": "factory-type-c-charon",
+  "kind": "factory",
+  "name": "Type C - \"Charon\"",
+  "name_en": "Type C - \"Charon\"",
+  "item_code": "GunboatC",
+  "category": "vehicles",
+  "item_class": "Gunboat",
+  "description": "Designed for river patrols, the Type-C Charon is fitted with twin tripod mounts, and a midship mortar cannon designed to sunder any armoured resistance on the shore or on open waters.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GunBoatCHull.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 420
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 171
+ },
+ {
+  "id": "factory-81f-f-ronan-blackguard",
+  "kind": "factory",
+  "name": "81f-f Ronan Blackguard",
+  "name_en": "81f-f Ronan Blackguard",
+  "item_code": "Gunboat2W",
+  "category": "vehicles",
+  "item_class": "Siege Boat",
+  "description": "A shore-strafing gunship, the Blackguard's heavy mortar blitz makes short work of coastline bunker networks. Sporting ample storage for mortar shells means a no-frills approach to overall engineering. While the Blackguard may need a nearby escort, it more than makes up for it with pure guile.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Gunboat2W.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 172
+ },
+ {
+  "id": "factory-74b-1-ronan-gunship",
+  "kind": "factory",
+  "name": "74b-1 Ronan Gunship",
+  "name_en": "74b-1 Ronan Gunship",
+  "item_code": "GunboatW",
+  "category": "vehicles",
+  "item_class": "Gunboat",
+  "description": "The 74b-1 Ronan Gunship specializes in roaming between larger vessels at high-speeds and boring into their hulls with ease. It's armed with multiple tripod mounts to support the midship high-explosive mortar cannon.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GunboatW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 420
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 173
+ },
+ {
+  "id": "factory-das-krokodil-by-vac",
+  "kind": "factory",
+  "name": "Das Krokodil by VAC",
+  "name_en": "Das Krokodil by VAC",
+  "item_code": "FreighterLight",
+  "category": "vehicles",
+  "item_class": "Light Freighter",
+  "description": "This deep water Venchin Auto Corporation light freighter is a sturdy vessel that specializes in seaport-to-seaport deliveries. As a deep water ship, Das Krokodil can't safely reach land-based shipping structures.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightFreighterVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 174
+ },
+ {
+  "id": "factory-k-81e-sombre",
+  "kind": "factory",
+  "name": "K-81e \"Sombre\"",
+  "name_en": "K-81e \"Sombre\"",
+  "item_code": "LightBoatInfantryC",
+  "category": "vehicles",
+  "item_class": "Infantry Boat",
+  "description": "The \"Sombre\" is an excort gunship that excels at deterring air-to-naval aggression. Fitted with paired machine gun turrets and boasting a heavier frame than most vessels of comparable size, this Kraunian-made K81e emerges at a moment's notice to defend its charge.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightBoatInfantryC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 600
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 175
+ },
+ {
+  "id": "factory-68a-4-ronan-fathomer",
+  "kind": "factory",
+  "name": "68A-4 Ronan Fathomer",
+  "name_en": "68A-4 Ronan Fathomer",
+  "item_code": "LightBoatInfantryW",
+  "category": "vehicles",
+  "item_class": "Infantry Boat",
+  "description": "This naval escort ship excels at sea-to-air engagements, providing friendly naval vessels with critical protection from enemy aircraft. The 68-series remains one of Patrick Ronan's favourite designs. Having been commissioned by the Watchers to aid in coastal investigations, this modification - given the designation A-4 - has since eclipsed its forebear's ubiquity.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightBoatInfantryWVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 750
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 176
+ },
+ {
+  "id": "factory-bms-aquatipper",
+  "kind": "factory",
+  "name": "BMS - Aquatipper",
+  "name_en": "BMS - Aquatipper",
+  "item_code": "Barge",
+  "category": "vehicles",
+  "item_class": "Barge",
+  "description": "A large shipping vessel, the Aquatipper is used to transport vehicles, equipment, and personnel over large bodies of water.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/BargeVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 450
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true
+  },
+  "sort": 177
+ },
+ {
+  "id": "factory-bms-ironship",
+  "kind": "factory",
+  "name": "BMS - Ironship",
+  "name_en": "BMS - Ironship",
+  "item_code": "Freighter",
+  "category": "vehicles",
+  "item_class": "Freighter",
+  "description": "The Basset Motor Society's Ironship-class shipping vessel is used to freight shippable goods and heavy vehicles.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Freighter02Item.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 1500
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 178
+ },
+ {
+  "id": "factory-strider",
+  "kind": "factory",
+  "name": "Strider",
+  "name_en": "Strider",
+  "item_code": "MediumBoatC",
+  "category": "vehicles",
+  "item_class": "Gunship",
+  "description": "A small but sturdy naval weapons plateform excelling in ship-to-ship combat. Deadly to both enemy vessels and crew, the Type D comes fitted with starboard and port-facing machine guns alongside bow and stern-facing cannons.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MediumBoatC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 1500
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 179
+ },
+ {
+  "id": "factory-rinnspeir-ornitier-class-gunship",
+  "kind": "factory",
+  "name": "Rinnspeir Ornitier-Class Gunship",
+  "name_en": "Rinnspeir Ornitier-Class Gunship",
+  "item_code": "MediumBoatW",
+  "category": "vehicles",
+  "item_class": "Gunship",
+  "description": "Known as the \"Bounty Hunter of the Sea\", the Ornitier is a deadly ship-to-ship weapons platform. While not as manoeuvrable as smaller vessels, its sturdy frame allows it to take much more punishment. Twin gunwale-mounted cannons provide ample firepower to punch holes in enemy ships, while its bow-mounted RPG launcher ends any chase before it has a chance to begin.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MediumBoatWVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 1350
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 180
+ },
+ {
+  "id": "factory-bellweather-by-vac",
+  "kind": "factory",
+  "name": "Bellweather by VAC",
+  "name_en": "Bellweather by VAC",
+  "item_code": "MineBoat",
+  "category": "vehicles",
+  "item_class": "Mine Boat",
+  "description": "A simple vessel designed to lay out and maintain naval mines. Manufactured by the Venchin Auto Corporation, the Bellweather was originally commissioned by the Wenitan Naval Guard. Sensing further opportunities to profit, VAC began marketing the Bellweather to navies beyond Katoma, finally reaching Caoivish shores.",
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/Mineboat.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 450
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 181
+ },
+ {
+  "id": "factory-velian-flak-vest",
+  "kind": "factory",
+  "name": "Velian Flak Vest",
+  "name_en": "Velian Flak Vest",
+  "item_code": "ArmourUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Armour Uniform",
+  "description": "A heavily reinforced vest designed to protect grenadiers from shrapnel back blasts. As such, the Flak Vest reduces cuts and scrapes on top of dampening bullet impacts.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ArmourUniformC.webp",
+  "output_quantity": 10,
+  "cost": {
+   "bmat": 200
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 182
+ },
+ {
+  "id": "factory-fabri-rucksack",
+  "kind": "factory",
+  "name": "Fabri Rucksack",
+  "name_en": "Fabri Rucksack",
+  "item_code": "EngineerUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Engineering Uniform",
+  "description": "Engineers are the bones of the Mesean Republic. They are outfitted with a heavy bag and belts for easy access to tools and handheld materials.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/EngineerUniformC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 183
+ },
+ {
+  "id": "factory-grenadiers-baldric",
+  "kind": "factory",
+  "name": "Grenadier's Baldric",
+  "name_en": "Grenadier's Baldric",
+  "item_code": "GrenadeUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Grenade Uniform",
+  "description": "Of the most distinguished divisions of the Legion are the Grenadiers. They are outfitted with specialized satchels and pockets for maximizing their capacity to hail explosives.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/GrenadeUniformC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 184
+ },
+ {
+  "id": "factory-medic-fatigues",
+  "kind": "factory",
+  "name": "Medic Fatigues",
+  "name_en": "Medic Fatigues",
+  "item_code": "MedicUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Medic Uniform",
+  "description": "For medics of the Legion, this uniform has a plethora of pockets and bags designed to carry and deploy first aid gear easily.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MedicUniformC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 185
+ },
+ {
+  "id": "factory-remex-garb",
+  "kind": "factory",
+  "name": "Remex Garb",
+  "name_en": "Remex Garb",
+  "item_code": "NavalUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Naval Uniform",
+  "description": "Standard-issue uniform for sailors in the Velian branc of the Republic Coastal Legion. Dressed for practicality, Velian Remiges are second to none at keeping ships in top-top condition while wading through water levels that would see most men praying for a swift death.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/NavalUniformC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 186
+ },
+ {
+  "id": "factory-officialis-attire",
+  "kind": "factory",
+  "name": "Officialis' Attire",
+  "name_en": "Officialis' Attire",
+  "item_code": "OfficerUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Officer Uniform",
+  "description": "This uniform, while impractical in combat, denotes the head of a regiment. Appropriately dressed officers may freely discipline their subordinates. Ancient Mesean officialis were key to the Legion's organization. This modern attire honours their lasting legacy.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/OfficerUniformC.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 187
+ },
+ {
+  "id": "factory-legionarys-oilcoat",
+  "kind": "factory",
+  "name": "Legionary's Oilcoat",
+  "name_en": "Legionary's Oilcoat",
+  "item_code": null,
+  "category": "uniforms",
+  "item_class": "Colonial Rain Uniform",
+  "description": "Quite accustomed to the temperate climates of the south, Colonials wear this oilcloth jacket paired with thick boots to operate at high efficiency in all but the heaviest storms.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 188
+ },
+ {
+  "id": "factory-recon-camo",
+  "kind": "factory",
+  "name": "Recon Camo",
+  "name_en": "Recon Camo",
+  "item_code": "ScoutUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Scout Uniform",
+  "description": "Legion scouts are deployed on the most dangerous missions. Their gear is lightweight, sturdy and well-suited for extended operations in rugged terrain.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ScoutUniformC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 189
+ },
+ {
+  "id": "factory-heavy-topcoat",
+  "kind": "factory",
+  "name": "Heavy Topcoat",
+  "name_en": "Heavy Topcoat",
+  "item_code": "SnowUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Snow Uniform",
+  "description": "Unaccustomed to the cold, Legionaries must always adapt. This heavy topcoat is designed to mitigate the effects of cold while still allowing for optimal mobility and combat effectiveness.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SnowUniformC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 190
+ },
+ {
+  "id": "factory-tankmans-coveralls",
+  "kind": "factory",
+  "name": "Tankman's Coveralls",
+  "name_en": "Tankman's Coveralls",
+  "item_code": "TankUniformC",
+  "category": "uniforms",
+  "item_class": "Colonial Tank Uniform",
+  "description": "Nothing compares to the efficiency and destructive capabilities of the Colonial armor division. Tank crew are provided with sturdy coveralls and satchel belts for easy access to essential tools required for tank maintenance and operation.",
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/TankUniformC.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 191
+ },
+ {
+  "id": "factory-specialists-overcoat",
+  "kind": "factory",
+  "name": "Specialist's Overcoat",
+  "name_en": "Specialist's Overcoat",
+  "item_code": "AmmoUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Heavy Ammo Uniform",
+  "description": "Warden specialists require a uniform designed to optimize their capacity to haul a variety of heavy ammunition.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AmmoUniformW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 192
+ },
+ {
+  "id": "factory-gunners-breastplate",
+  "kind": "factory",
+  "name": "Gunner's Breastplate",
+  "name_en": "Gunner's Breastplate",
+  "item_code": "ArmourUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Armour Uniform",
+  "description": "Repurposed from ancient wars, these armour plates are highly effective at stopping enemy small arms fire. That protection comes at the cost of weight, and the wearer will feel quite restricted.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ArmourUniformW.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 193
+ },
+ {
+  "id": "factory-sapper-gear",
+  "kind": "factory",
+  "name": "Sapper Gear",
+  "name_en": "Sapper Gear",
+  "item_code": "EngineerUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Engineering Uniform",
+  "description": "Caovish engineers are legendary in song and stature. They wear specialized uniforms, outfitted with belts and bags for easy access to tools and handheld materials.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/EngineerUniformW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 194
+ },
+ {
+  "id": "factory-physicians-jacket",
+  "kind": "factory",
+  "name": "Physician's Jacket",
+  "name_en": "Physician's Jacket",
+  "item_code": "MedicUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Medic Uniform",
+  "description": "Physicians in the Warden army are unmatched and this uniform has a plethora of pockets and bags designed to carry and deploy first aid gear easily.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MedicUniformW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 195
+ },
+ {
+  "id": "factory-gentlemans-peacoat",
+  "kind": "factory",
+  "name": "Gentleman's Peacoat",
+  "name_en": "Gentleman's Peacoat",
+  "item_code": "NavalUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Naval Uniform",
+  "description": "Seamen of the Caoivish Naval Command are always prepared to operate at the highest levels, even in frigid, northern waters. Every Warden sailor's readiness paints a portrait of life or death; thus, cold-weather outerwear is an essential part of every CNC gentlemaan's kit.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/NavalUniformW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 196
+ },
+ {
+  "id": "factory-officers-regalia",
+  "kind": "factory",
+  "name": "Officer's Regalia",
+  "name_en": "Officer's Regalia",
+  "item_code": "OfficerUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Officer Uniform",
+  "description": "A formal uniform that denotes a regiment's leading officer. While impractical, the officer on duty may use their authority to discipline subordinates without reparation. Officers hold an important role in the Warden military, dating back to ancient times when Caoiva was ruled by a dozen kings.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/OfficerUniformW.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 197
+ },
+ {
+  "id": "factory-outriders-mantle",
+  "kind": "factory",
+  "name": "Outrider's Mantle",
+  "name_en": "Outrider's Mantle",
+  "item_code": "ScoutUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Scout Uniform",
+  "description": "the Warden army relies on outriders to provide and recieve vital intelligence. Their gear is sturdy and well-suited for extended operations in rugged terrain and inclement weather.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/ScoutUniformW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 198
+ },
+ {
+  "id": "factory-caoivish-parka",
+  "kind": "factory",
+  "name": "Caoivish Parka",
+  "name_en": "Caoivish Parka",
+  "item_code": null,
+  "category": "uniforms",
+  "item_class": "Warden Snow Uniform",
+  "description": "Born and bred in the northern cold, this heavy parka protects Warden infantry from all but the worst blizzards.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": null,
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 199
+ },
+ {
+  "id": "factory-padded-boiler-suit",
+  "kind": "factory",
+  "name": "Padded Boiler Suit",
+  "name_en": "Padded Boiler Suit",
+  "item_code": "TankUniformW",
+  "category": "uniforms",
+  "item_class": "Warden Tank Uniform",
+  "description": "Caovish armor is unmatched in its design and resilience. All crew are provided with a sturdy boilersuit and satchel belts to access essential tools required for tank maintenance and operation.",
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/TankUniformW.webp",
+  "output_quantity": 15,
+  "cost": {
+   "bmat": 100
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": true,
+   "is_mpf_craftable": true
+  },
+  "sort": 200
+ },
+ {
+  "id": "refinery-bmat",
+  "kind": "refinery",
+  "name": "Базовые материалы",
+  "name_en": "Basic Materials",
+  "item_code": null,
+  "category": "materials",
+  "item_class": "БМАТ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/BasicMaterials.webp",
+  "output_quantity": 1,
+  "cost": {
+   "salvage": 2
+  },
+  "data": {
+   "input": "salvage",
+   "input_per_unit": 2,
+   "seconds_per_unit": 0.48,
+   "crate_size": 100,
+   "unit_label": "шт.",
+   "personal_limit": 12500
+  },
+  "sort": 0
+ },
+ {
+  "id": "refinery-emat",
+  "kind": "refinery",
+  "name": "Порох",
+  "name_en": "Explosive Powder",
+  "item_code": null,
+  "category": "materials",
+  "item_class": "ЭМАТ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/ExplosiveMaterial.webp",
+  "output_quantity": 1,
+  "cost": {
+   "salvage": 5
+  },
+  "data": {
+   "input": "salvage",
+   "input_per_unit": 5,
+   "seconds_per_unit": 9.375,
+   "crate_size": 40,
+   "unit_label": "шт.",
+   "personal_limit": 12000
+  },
+  "sort": 1
+ },
+ {
+  "id": "refinery-rmat",
+  "kind": "refinery",
+  "name": "Рафинированные материалы",
+  "name_en": "Refined Materials",
+  "item_code": null,
+  "category": "materials",
+  "item_class": "РМАТ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/RefinedMaterials.webp",
+  "output_quantity": 1,
+  "cost": {
+   "components": 20
+  },
+  "data": {
+   "input": "components",
+   "input_per_unit": 20,
+   "seconds_per_unit": 40,
+   "crate_size": 20,
+   "unit_label": "шт.",
+   "personal_limit": 6000
+  },
+  "sort": 2
+ },
+ {
+  "id": "refinery-hemat",
+  "kind": "refinery",
+  "name": "Тяжёлый порох",
+  "name_en": "Heavy Explosive Powder",
+  "item_code": null,
+  "category": "materials",
+  "item_class": "ТЯЖ. ЭМАТ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/HeavyExplosiveMaterials.webp",
+  "output_quantity": 1,
+  "cost": {
+   "sulfur": 5
+  },
+  "data": {
+   "input": "sulfur",
+   "input_per_unit": 5,
+   "seconds_per_unit": 15,
+   "crate_size": 30,
+   "unit_label": "шт.",
+   "personal_limit": 6000
+  },
+  "sort": 3
+ },
+ {
+  "id": "refinery-diesel",
+  "kind": "refinery",
+  "name": "Дизель",
+  "name_en": "Diesel",
+  "item_code": null,
+  "category": "fuel",
+  "item_class": "ДИЗЕЛЬ",
+  "description": "1 кан. = 100 л",
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/ResourceFuel.webp",
+  "output_quantity": 1,
+  "cost": {
+   "salvage": 10
+  },
+  "data": {
+   "input": "salvage",
+   "input_per_unit": 10,
+   "seconds_per_unit": 12,
+   "crate_size": 1,
+   "unit_label": "кан.",
+   "personal_limit": 6000
+  },
+  "sort": 4
+ },
+ {
+  "id": "refinery-gravel-coal",
+  "kind": "refinery",
+  "name": "Гравий (из угля)",
+  "name_en": "Gravel",
+  "item_code": null,
+  "category": "construction",
+  "item_class": "ГРАВИЙ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/GroundMaterials.webp",
+  "output_quantity": 1,
+  "cost": {
+   "coal": 5
+  },
+  "data": {
+   "input": "coal",
+   "input_per_unit": 5,
+   "seconds_per_unit": 1.2,
+   "crate_size": 20,
+   "unit_label": "шт.",
+   "personal_limit": 6000
+  },
+  "sort": 5
+ },
+ {
+  "id": "refinery-gravel-salvage",
+  "kind": "refinery",
+  "name": "Гравий (из металлолома)",
+  "name_en": "Gravel",
+  "item_code": null,
+  "category": "construction",
+  "item_class": "ГРАВИЙ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/GroundMaterials.webp",
+  "output_quantity": 1,
+  "cost": {
+   "salvage": 6
+  },
+  "data": {
+   "input": "salvage",
+   "input_per_unit": 6,
+   "seconds_per_unit": 1.2,
+   "crate_size": 20,
+   "unit_label": "шт.",
+   "personal_limit": 6000
+  },
+  "sort": 6
+ },
+ {
+  "id": "refinery-alloy-aluminum",
+  "kind": "refinery",
+  "name": "Алюминиевый сплав",
+  "name_en": "Aluminum Alloy",
+  "item_code": null,
+  "category": "alloys",
+  "item_class": "AL-СПЛАВ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/ResouceAluminumRefined.png",
+  "output_quantity": 1,
+  "cost": {
+   "aluminum": 1
+  },
+  "data": {
+   "input": "aluminum",
+   "input_per_unit": 1,
+   "seconds_per_unit": 0.24,
+   "crate_size": 20,
+   "unit_label": "шт.",
+   "personal_limit": 1000
+  },
+  "sort": 7
+ },
+ {
+  "id": "refinery-alloy-copper",
+  "kind": "refinery",
+  "name": "Медный сплав",
+  "name_en": "Copper Alloy",
+  "item_code": null,
+  "category": "alloys",
+  "item_class": "CU-СПЛАВ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/ResourceCopperRefined.png",
+  "output_quantity": 1,
+  "cost": {
+   "copper": 1
+  },
+  "data": {
+   "input": "copper",
+   "input_per_unit": 1,
+   "seconds_per_unit": 0.24,
+   "crate_size": 20,
+   "unit_label": "шт.",
+   "personal_limit": 1000
+  },
+  "sort": 8
+ },
+ {
+  "id": "refinery-alloy-iron",
+  "kind": "refinery",
+  "name": "Железный сплав",
+  "name_en": "Iron Alloy",
+  "item_code": null,
+  "category": "alloys",
+  "item_class": "FE-СПЛАВ",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "refinery"
+  ],
+  "icon_url": "/api/v1/assets/items/ResouceIronRefined.png",
+  "output_quantity": 1,
+  "cost": {
+   "iron": 1
+  },
+  "data": {
+   "input": "iron",
+   "input_per_unit": 1,
+   "seconds_per_unit": 0.24,
+   "crate_size": 20,
+   "unit_label": "шт.",
+   "personal_limit": 1000
+  },
+  "sort": 9
+ }
+]
