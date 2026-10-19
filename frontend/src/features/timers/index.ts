@@ -1,3 +1,4 @@
-export * from "./model/types";
-export * from "./api/timersApi";
+export * from "./api";
+export * from "./model";
+export * from "./ui/Ticker";
 export * from "./ui/TimersWorkspace";

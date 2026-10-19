@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import uuid
+from datetime import datetime
 
-from sqlalchemy import ForeignKey, Index, Integer, String, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, ClanScopedMixin, TimestampMixin, UUIDPkMixin
@@ -16,6 +17,11 @@ class Stockpile(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
 
     name: Mapped[str] = mapped_column(String(80), nullable=False)
     region: Mapped[str] = mapped_column(String(64), nullable=False)
+    # 0005: источник и время последней полной выгрузки содержимого (монитор склада)
+    last_sync_source: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    last_sync_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True), nullable=True
+    )
 
 
 class StockpileItem(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):

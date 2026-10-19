@@ -1,0 +1,35 @@
+{
+  "report": {
+    "not_found": "Рапорт не найден в вашем клане.",
+    "default_title": "Рапорт снабжения {date}",
+    "created": "Рапорт принят штабом: позиций {count}.",
+    "updated": "Рапорт «{title}» обновлён.",
+    "status_changed": "Рапорт «{title}»: {status}.",
+    "bad_transition": "Нельзя перевести рапорт из «{from}» в «{to}».",
+    "discord_not_configured": "Вебхук Discord не настроен. Офицер может задать его в кабинете.",
+    "discord_webhook_invalid": "Discord отклонил вебхук: он удалён или URL неверный. Обновите его в кабинете.",
+    "discord_failed": "Discord не принял сообщение. Попробуйте позже.",
+    "discord_sent": "Рапорт «{title}» отправлен в Discord.",
+    "image_too_large": "Картинка рапорта больше {limit_mb} МБ.",
+    "status": {
+      "open": "Открыт",
+      "in_progress": "В работе",
+      "done": "Выполнен",
+      "cancelled": "Отменён"
+    },
+    "unit": {
+      "crate": "ящ.",
+      "unit": "шт."
+    },
+    "embed": {
+      "status": "Статус",
+      "lines": "Позиций",
+      "author": "Автор",
+      "place": "Склад",
+      "note": "Примечание"
+    }
+  },
+  "settings": {
+    "saved": "Настройки клана сохранены."
+  }
+}

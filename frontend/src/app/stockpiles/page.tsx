@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-// Терминал — одна страница с вкладками; прямые ссылки ведут на нужную вкладку.
+// Старый адрес вкладки v2 — раздел переехал.
 export default function Page() {
-  redirect("/?tab=stockpiles");
+  redirect("/?tab=orders");
 }

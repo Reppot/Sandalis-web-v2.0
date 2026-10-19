@@ -55,7 +55,10 @@ def test_dev_token_and_me(db):
                 json={"user_id": "u-dev", "clan_id": "CLAN_DEV", "role": "guest"},
             )
             assert again.json()["me"]["role"] == "admin"
+            # dev-token ставит и session-cookie (веб-клиент живёт на ней)
+            assert f"{settings.SESSION_COOKIE_NAME}=" in again.headers["set-cookie"]
 
+            c.cookies.clear()      # дальше — запросы без какой-либо авторизации
             no = await c.get(f"{API}/auth/me", headers={"Accept-Language": "cs"})
             assert no.status_code == 401
             assert no.json()["error"]["message"] == "Je vyžadováno přihlášení do klanu."

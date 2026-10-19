@@ -25,7 +25,7 @@ function webUserId(): string {
 }
 
 export const authApi = {
-  discordLoginUrl(returnTo = "/?tab=cabinet"): string {
+  discordLoginUrl(returnTo = "/"): string {
     const params = new URLSearchParams({ return_to: returnTo });
     return `${env.apiUrl}/api/v1/auth/discord/login?${params.toString()}`;
   },

@@ -4,7 +4,8 @@
     "created": "Sklad „{name}“ byl vytvořen.",
     "updated": "Sklad „{name}“ byl aktualizován.",
     "deleted": "Sklad „{name}“ byl smazán.",
-    "name_taken": "Sklad s názvem „{name}“ již existuje."
+    "name_taken": "Sklad s názvem „{name}“ již existuje.",
+    "synced": "Sklad „{name}“ synchronizován: položek {count}."
   },
   "item": {
     "not_found": "Ve skladu není „{item}“.",

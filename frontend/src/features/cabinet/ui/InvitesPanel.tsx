@@ -1,23 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { Button, Card, Input, Spinner, cn, errorText, useToast } from "@/shared";
+import { Field, Loading, Select, cn, copyText, errorText, formatDateTime, useConfirm, useNotify } from "@/shared";
 import { clanApi, type GrantableRole, type InviteCode } from "@/features/cabinet/api/clanApi";
-import { Copy, Ticket, XCircle } from "lucide-react";
 
-interface InvitesPanelProps {
-  /** clan:members:write (admin+) — создание и отзыв; без него только просмотр. */
-  canManage: boolean;
-}
-
-const roleLabels: Record<GrantableRole, string> = {
-  guest: "Гость",
-  member: "Боец",
-  officer: "Офицер",
-};
-
-const selectClass =
-  "flex h-10 w-full rounded-md border border-sindaris-border bg-sindaris-bg px-3 py-2 text-sm text-sindaris-text font-mono";
+const ROLE_LABEL: Record<GrantableRole, string> = { guest: "Гость", member: "Боец", officer: "Офицер" };
 
 function inviteState(invite: InviteCode): { label: string; active: boolean } {
   if (invite.revokedAt) return { label: "отозван", active: false };
@@ -26,167 +13,114 @@ function inviteState(invite: InviteCode): { label: string; active: boolean } {
   return { label: "активен", active: true };
 }
 
-export const InvitesPanel: React.FC<InvitesPanelProps> = ({ canManage }) => {
-  const notify = useToast();
+/** Пригласительные коды клана: officer+ видит, admin+ создаёт и отзывает. */
+export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) => {
+  const notify = useNotify();
   const [invites, setInvites] = React.useState<InviteCode[]>([]);
   const [showRevoked, setShowRevoked] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
   const [role, setRole] = React.useState<GrantableRole>("member");
   const [maxUses, setMaxUses] = React.useState(1);
-  const [expiresInHours, setExpiresInHours] = React.useState(72);
+  const [hours, setHours] = React.useState(72);
   const [creating, setCreating] = React.useState(false);
+  const [armed, confirm] = useConfirm();
 
   const load = React.useCallback(async () => {
     setLoading(true);
     try {
       setInvites(await clanApi.listInvites(showRevoked));
-      setError(null);
     } catch (err) {
-      setError(errorText(err, "Не удалось загрузить приглашения"));
+      notify({ title: "ПРИГЛАШЕНИЯ", message: errorText(err, "Не удалось загрузить приглашения"), tone: "danger" });
     } finally {
       setLoading(false);
     }
-  }, [showRevoked]);
+  }, [showRevoked, notify]);
 
   React.useEffect(() => {
     void load();
   }, [load]);
 
-  const copy = (code: string) => {
-    void navigator.clipboard.writeText(code).then(() => notify(`Код ${code} скопирован`));
-  };
-
-  const handleCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const create = async () => {
     setCreating(true);
     try {
-      const { invite, message } = await clanApi.createInvite({
-        role,
-        maxUses,
-        expiresInHours: expiresInHours > 0 ? expiresInHours : null,
-      });
+      const { invite, message } = await clanApi.createInvite({ role, maxUses, expiresInHours: hours > 0 ? hours : null });
       setInvites((prev) => [invite, ...prev]);
-      notify(message);
+      notify({ title: "ПРИГЛАШЕНИЯ", message, tone: "success" });
     } catch (err) {
-      notify(errorText(err, "Не удалось создать код"), "error");
+      notify({ title: "ПРИГЛАШЕНИЯ", message: errorText(err, "Не удалось создать код"), tone: "danger" });
     } finally {
       setCreating(false);
     }
   };
 
-  const handleRevoke = async (invite: InviteCode) => {
-    if (!window.confirm(`Отозвать код ${invite.code}?`)) return;
+  const revoke = async (invite: InviteCode) => {
     try {
       await clanApi.revokeInvite(invite.id);
-      notify("Код отозван");
+      notify({ title: "ПРИГЛАШЕНИЯ", message: `Код ${invite.code} отозван.`, tone: "warning" });
       await load();
     } catch (err) {
-      notify(errorText(err, "Не удалось отозвать код"), "error");
+      notify({ title: "ПРИГЛАШЕНИЯ", message: errorText(err, "Не удалось отозвать код"), tone: "danger" });
     }
   };
 
   return (
-    <Card className="space-y-4">
-      <div className="flex items-center justify-between pb-2 border-b border-sindaris-border">
-        <div className="flex items-center gap-2">
-          <Ticket className="h-5 w-5 text-sindaris-accent" />
-          <h3 className="font-bold text-base text-sindaris-text">ПРИГЛАШЕНИЯ В КЛАН</h3>
-        </div>
-        <label className="flex items-center gap-2 text-xs text-sindaris-muted cursor-pointer">
+    <section className="panel panel-corners rounded-md p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="panel-title">🎟 Приглашения в клан</div>
+        <label className="hud-label flex cursor-pointer items-center gap-2 text-muted">
           <input type="checkbox" checked={showRevoked} onChange={(e) => setShowRevoked(e.target.checked)} />
           отозванные
         </label>
       </div>
+      <div className="cabinet-rule" />
 
       {canManage && (
-        <form onSubmit={handleCreate} className="grid grid-cols-2 md:grid-cols-4 gap-3 items-end">
-          <div className="space-y-1.5">
-            <label className="block text-xs font-mono font-medium text-sindaris-muted">Роль</label>
-            <select value={role} onChange={(e) => setRole(e.target.value as GrantableRole)} className={selectClass}>
-              {(Object.keys(roleLabels) as GrantableRole[]).map((r) => (
-                <option key={r} value={r}>
-                  {roleLabels[r]}
-                </option>
-              ))}
-            </select>
-          </div>
-          <Input
-            label="Использований"
-            type="number"
-            min="1"
-            max="1000"
-            value={maxUses}
-            onChange={(e) => setMaxUses(Math.max(1, parseInt(e.target.value, 10) || 1))}
-          />
-          <Input
-            label="Срок, ч (0 = бессрочно)"
-            type="number"
-            min="0"
-            max="720"
-            value={expiresInHours}
-            onChange={(e) => setExpiresInHours(Math.max(0, parseInt(e.target.value, 10) || 0))}
-          />
-          <Button type="submit" isLoading={creating}>
-            Создать код
-          </Button>
-        </form>
+        <div className="grid grid-cols-2 items-end gap-3 md:grid-cols-4">
+          <Select label="Роль" value={role} onChange={(e) => setRole(e.target.value as GrantableRole)}>
+            {(Object.keys(ROLE_LABEL) as GrantableRole[]).map((r) => (
+              <option key={r} value={r}>{ROLE_LABEL[r]}</option>
+            ))}
+          </Select>
+          <Field label="Использований" type="number" min={1} max={1000} value={maxUses} onChange={(e) => setMaxUses(Math.max(1, parseInt(e.target.value, 10) || 1))} />
+          <Field label="Срок, ч (0 = бессрочно)" type="number" min={0} max={720} value={hours} onChange={(e) => setHours(Math.max(0, parseInt(e.target.value, 10) || 0))} />
+          <button className="btn btn-primary h-[38px]" disabled={creating} onClick={() => void create()}>{creating ? "ПЕРЕДАЧА..." : "＋ Создать код"}</button>
+        </div>
       )}
 
-      {error && <p className="text-xs text-red-400">{error}</p>}
-
       {loading ? (
-        <div className="py-6 flex justify-center">
-          <Spinner />
-        </div>
+        <Loading label="📡 ЗАГРУЗКА КОДОВ..." className="min-h-[90px]" />
       ) : invites.length === 0 ? (
-        <p className="text-center py-4 text-xs text-sindaris-muted">Приглашений нет</p>
+        <p className="hud-label py-4 text-center text-muted">Приглашений нет</p>
       ) : (
-        <div className="space-y-2 max-h-80 overflow-y-auto">
+        <ul className="scroll-area mt-3 flex max-h-80 flex-col gap-1">
           {invites.map((invite) => {
             const state = inviteState(invite);
             return (
-              <div
-                key={invite.id}
-                className={cn(
-                  "flex items-center justify-between gap-3 p-2 rounded-md bg-sindaris-bg border border-sindaris-border/50 text-xs",
-                  !state.active && "opacity-60"
-                )}
-              >
+              <li key={invite.id} className={cn("row-item text-xs", !state.active && "opacity-60")}>
                 <button
                   type="button"
-                  onClick={() => copy(invite.code)}
-                  className="flex items-center gap-1.5 font-mono font-bold text-sindaris-accent cursor-pointer"
+                  className="font-mono font-bold text-accent"
                   title="Скопировать код"
+                  onClick={() => void copyText(invite.code).then((ok) => ok && notify({ title: "ПРИГЛАШЕНИЯ", message: `Код ${invite.code} скопирован`, tone: "success" }))}
                 >
-                  {invite.code}
-                  <Copy className="h-3 w-3 text-sindaris-muted" />
+                  {invite.code} ⧉
                 </button>
-                <span className="text-sindaris-muted">{roleLabels[invite.role as GrantableRole] ?? invite.role}</span>
-                <span className="font-mono text-sindaris-muted">
-                  {invite.usedCount}/{invite.maxUses}
-                </span>
-                <span className="text-sindaris-muted hidden md:inline">
-                  {invite.expiresAt ? `до ${new Date(invite.expiresAt).toLocaleString("ru-RU")}` : "бессрочно"}
-                </span>
-                <span className={state.active ? "text-green-400" : "text-sindaris-muted"}>{state.label}</span>
+                <span className="text-muted">{ROLE_LABEL[invite.role as GrantableRole] ?? invite.role}</span>
+                <span className="font-mono text-muted">{invite.usedCount}/{invite.maxUses}</span>
+                <span className="hidden text-muted md:inline">{invite.expiresAt ? `до ${formatDateTime(invite.expiresAt)}` : "бессрочно"}</span>
+                <span className={state.active ? "text-safe" : "text-muted"}>{state.label}</span>
                 {canManage && state.active ? (
-                  <button
-                    type="button"
-                    onClick={() => void handleRevoke(invite)}
-                    className="text-red-400 hover:text-red-300 cursor-pointer"
-                    title="Отозвать"
-                  >
-                    <XCircle className="h-4 w-4" />
+                  <button className={`btn btn-danger px-2 py-0.5 ${armed === invite.id ? "btn-active" : ""}`} onClick={() => confirm(invite.id, () => void revoke(invite))}>
+                    {armed === invite.id ? "?" : "✕"}
                   </button>
                 ) : (
-                  <span className="w-4" />
+                  <span className="w-6" />
                 )}
-              </div>
+              </li>
             );
           })}
-        </div>
+        </ul>
       )}
-    </Card>
+    </section>
   );
 };

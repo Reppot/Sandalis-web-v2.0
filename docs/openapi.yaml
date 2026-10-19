@@ -9,6 +9,8 @@ info:
 
     Браузер ходит на API через прокси фронтенда (тот же origin, кука сессии first-party).
 
+    Файлы интерфейса (иконки, фоны, логотип) раздаются из backend/static по /api/v1/assets/*.
+
     '
 paths:
   /api/v1/health/live:
@@ -40,6 +42,119 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PingOut'
+  /api/v1/content:
+    get:
+      tags:
+      - content
+      summary: 'Реестр контента интерфейса (публичный: нужен экрану входа до авторизации)'
+      description: 'kind: media, external_tool, training_module, ticker_phrase, region, material, catalog_category,
+        factory_category, refinery_group. Без kind — всё сразу.'
+      operationId: list_content_api_v1_content_get
+      parameters:
+      - name: kind
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: array
+            items:
+              type: string
+              pattern: ^[a-z_]{1,32}$
+          - type: 'null'
+          title: Kind
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ContentRead'
+                title: Response List Content Api V1 Content Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/content/{kind}/{key}:
+    put:
+      tags:
+      - content
+      summary: Создать/изменить запись контента (admin клана-владельца контента)
+      description: Контент глобальный, поэтому править его может только admin+ клана CONTENT_ADMIN_CLAN_ID
+        (по умолчанию DEFAULT_CLAN_ID).
+      operationId: upsert_content_api_v1_content__kind___key__put
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: kind
+        in: path
+        required: true
+        schema:
+          type: string
+          pattern: ^[a-z_]{1,32}$
+          title: Kind
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+          minLength: 1
+          maxLength: 64
+          title: Key
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentUpsert'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/auth/me:
     get:
       tags:
@@ -948,39 +1063,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/items:
+  /api/v1/reports:
     get:
       tags:
-      - catalog
-      summary: Поиск по глобальному каталогу предметов
-      operationId: list_items_api_v1_items_get
+      - reports
+      summary: 'Текущие заказы клана: рапорты снабжения (новые первыми)'
+      operationId: list_reports_api_v1_reports_get
       security:
       - ClanJWT: []
       parameters:
-      - name: query
-        in: query
-        required: false
-        schema:
-          type: string
-          maxLength: 120
-          default: ''
-          title: Query
-      - name: category
+      - name: status
         in: query
         required: false
         schema:
           anyOf:
-          - type: string
-            maxLength: 32
+          - type: array
+            items:
+              $ref: '#/components/schemas/ReportStatus'
           - type: 'null'
-          title: Category
-      - name: active_only
-        in: query
-        required: false
-        schema:
-          type: boolean
-          default: false
-          title: Active Only
+          title: Status
       - name: limit
         in: query
         required: false
@@ -1036,7 +1137,793 @@ paths:
           content:
             application/json:
               schema:
+                $ref: '#/components/schemas/Page_ReportRead_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - reports
+      summary: Отправить рапорт в штаб (строки без кода резолвятся по названию)
+      operationId: create_report_api_v1_reports_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reports/{report_id}:
+    get:
+      tags:
+      - reports
+      summary: Get Report
+      operationId: get_report_api_v1_reports__report_id__get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - reports
+      summary: Update Report
+      operationId: update_report_api_v1_reports__report_id__patch
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - reports
+      summary: Delete Report
+      operationId: delete_report_api_v1_reports__report_id__delete
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reports/{report_id}/status:
+    post:
+      tags:
+      - reports
+      summary: Change Status
+      operationId: change_status_api_v1_reports__report_id__status_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportStatusUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reports/{report_id}/discord:
+    post:
+      tags:
+      - reports
+      summary: Отправить рапорт в текстовый канал Discord (вебхук клана)
+      description: Эмбед со строками рапорта; необязательный PNG (графический рапорт, сформированный клиентом)
+        прикладывается картинкой. Без настроенного вебхука — 409 discord_not_configured.
+      operationId: send_to_discord_api_v1_reports__report_id__discord_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_send_to_discord_api_v1_reports__report_id__discord_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscordSent'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/clan/settings:
+    get:
+      tags:
+      - clan
+      summary: Настройки клана (вебхук Discord — только признак и хвост)
+      operationId: read_settings_api_v1_clan_settings_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClanSettingsRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - clan
+      summary: Изменить настройки клана (admin+)
+      operationId: update_settings_api_v1_clan_settings_put
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClanSettingsUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClanSettingsSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/items:
+    get:
+      tags:
+      - catalog
+      summary: Поиск по глобальному каталогу предметов
+      operationId: list_items_api_v1_items_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 120
+          default: ''
+          title: Query
+      - name: category
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Category
+      - name: faction
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 16
+          - type: 'null'
+          title: Faction
+      - name: needs_review
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Needs Review
+      - name: active_only
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Active Only
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Offset
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
                 $ref: '#/components/schemas/Page_CatalogItemRead_'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/items/parse:
+    post:
+      tags:
+      - catalog
+      summary: Разобрать отчёт сканера/Discord/CSV и сопоставить строки с каталогом
+      operationId: parse_report_api_v1_items_parse_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParseRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParseResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/items/resolve:
+    post:
+      tags:
+      - catalog
+      summary: Сопоставить свободные названия с предметами каталога
+      operationId: resolve_names_api_v1_items_resolve_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResolveRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResolvedName'
+                title: Response Resolve Names Api V1 Items Resolve Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/items/scan:
+    post:
+      tags:
+      - catalog
+      summary: 'Просканировать MapData.sav: найти коды каталога и их количество'
+      description: Файл разбирается в памяти и не сохраняется. Лимит 64 МБ.
+      operationId: scan_save_api_v1_items_scan_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_scan_save_api_v1_items_scan_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScanResult'
         '422':
           description: Validation Error
           content:
@@ -1097,6 +1984,112 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CatalogItemRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/recipes:
+    get:
+      tags:
+      - catalog
+      summary: Рецепты Factory / MPF / Refinery (данные калькуляторов)
+      operationId: list_recipes_api_v1_recipes_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: kind
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - factory
+            - refinery
+            type: string
+          - type: 'null'
+          title: Kind
+      - name: facility
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - enum:
+            - factory
+            - mpf
+            - refinery
+            type: string
+          - type: 'null'
+          title: Facility
+      - name: faction
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 16
+          - type: 'null'
+          title: Faction
+      - name: category
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Category
+      - name: query
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 120
+          default: ''
+          title: Query
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecipeRead'
+                title: Response List Recipes Api V1 Recipes Get
         '422':
           description: Validation Error
           content:
@@ -1505,6 +2498,72 @@ paths:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/stockpiles/{stockpile_id}/items:
+    put:
+      tags:
+      - stockpiles
+      summary: Заменить содержимое склада выгрузкой сканера (монитор склада)
+      operationId: replace_contents_api_v1_stockpiles__stockpile_id__items_put
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: stockpile_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Stockpile Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockpileContentsReplace'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockpileContentsSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
       - stockpiles
@@ -2040,8 +3099,169 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/timers/{timer_id}/events:
+    get:
+      tags:
+      - timers
+      summary: 'Журнал таймера: заметки и системные записи (хронологически)'
+      operationId: list_events_api_v1_timers__timer_id__events_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: timer_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Timer Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+          default: 100
+          title: Limit
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimerEventRead'
+                title: Response List Events Api V1 Timers  Timer Id  Events Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - timers
+      summary: Добавить заметку интенданта в журнал таймера
+      operationId: add_event_api_v1_timers__timer_id__events_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: timer_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Timer Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimerEventCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimerEventSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    Body_scan_save_api_v1_items_scan_post:
+      properties:
+        file:
+          type: string
+          contentMediaType: application/octet-stream
+          title: File
+          description: MapData.sav
+      type: object
+      required:
+      - file
+      title: Body_scan_save_api_v1_items_scan_post
+    Body_send_to_discord_api_v1_reports__report_id__discord_post:
+      properties:
+        image:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Image
+          description: PNG первой страницы рапорта
+      type: object
+      title: Body_send_to_discord_api_v1_reports__report_id__discord_post
     CatalogItemRead:
       properties:
         id:
@@ -2073,6 +3293,25 @@ components:
         is_active:
           type: boolean
           title: Is Active
+        faction:
+          type: string
+          title: Faction
+          default: neutral
+        origin:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Origin
+        aliases:
+          items:
+            type: string
+          type: array
+          title: Aliases
+          default: []
+        needs_review:
+          type: boolean
+          title: Needs Review
+          default: false
       type: object
       required:
       - id
@@ -2152,6 +3391,93 @@ components:
       - member
       - guest
       title: ClanRole
+    ClanSettingsRead:
+      properties:
+        discord_webhook_configured:
+          type: boolean
+          title: Discord Webhook Configured
+        discord_webhook_hint:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Discord Webhook Hint
+      type: object
+      required:
+      - discord_webhook_configured
+      - discord_webhook_hint
+      title: ClanSettingsRead
+      description: 'Секрет вебхука наружу не уходит: только признак и последние символы.'
+    ClanSettingsSaved:
+      properties:
+        settings:
+          $ref: '#/components/schemas/ClanSettingsRead'
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - settings
+      - message
+      title: ClanSettingsSaved
+    ClanSettingsUpdate:
+      properties:
+        discord_webhook_url:
+          anyOf:
+          - type: string
+            maxLength: 512
+          - type: 'null'
+          title: Discord Webhook Url
+      additionalProperties: false
+      type: object
+      title: ClanSettingsUpdate
+    ContentRead:
+      properties:
+        kind:
+          type: string
+          title: Kind
+        key:
+          type: string
+          title: Key
+        sort:
+          type: integer
+          title: Sort
+        is_active:
+          type: boolean
+          title: Is Active
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+      type: object
+      required:
+      - kind
+      - key
+      - sort
+      - is_active
+      - payload
+      title: ContentRead
+    ContentUpsert:
+      properties:
+        payload:
+          additionalProperties: true
+          type: object
+          title: Payload
+        sort:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Sort
+        is_active:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Is Active
+      additionalProperties: false
+      type: object
+      required:
+      - payload
+      title: ContentUpsert
+      description: Правка записи реестра контента (например, новый URL видео экрана входа).
     DevTokenRequest:
       properties:
         user_id:
@@ -2184,6 +3510,18 @@ components:
       - clan_id
       title: DevTokenRequest
       description: Выдача токена для разработки/администрирования (ENV!=prod либо DEV_AUTH_SECRET).
+    DiscordSent:
+      properties:
+        report:
+          $ref: '#/components/schemas/ReportRead'
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - report
+      - message
+      title: DiscordSent
     HTTPValidationError:
       properties:
         detail:
@@ -2542,6 +3880,29 @@ components:
       - limit
       - offset
       title: Page[OrderRead]
+    Page_ReportRead_:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/ReportRead'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+        limit:
+          type: integer
+          title: Limit
+        offset:
+          type: integer
+          title: Offset
+      type: object
+      required:
+      - items
+      - total
+      - limit
+      - offset
+      title: Page[ReportRead]
     Page_StockpileRead_:
       properties:
         items:
@@ -2588,6 +3949,66 @@ components:
       - limit
       - offset
       title: Page[TimerRead]
+    ParseRequest:
+      properties:
+        text:
+          type: string
+          maxLength: 500000
+          minLength: 1
+          title: Text
+      additionalProperties: false
+      type: object
+      required:
+      - text
+      title: ParseRequest
+      description: Текст отчёта сканера / сообщения Discord / CSV из XLSX — разбирает сервер.
+    ParseResult:
+      properties:
+        lines:
+          items:
+            $ref: '#/components/schemas/ParsedLineRead'
+          type: array
+          title: Lines
+        matched:
+          type: integer
+          title: Matched
+        unknown:
+          items:
+            type: string
+          type: array
+          title: Unknown
+      type: object
+      required:
+      - lines
+      - matched
+      - unknown
+      title: ParseResult
+    ParsedLineRead:
+      properties:
+        name:
+          type: string
+          title: Name
+        count:
+          type: integer
+          title: Count
+        unit:
+          type: string
+          enum:
+          - crate
+          - unit
+          title: Unit
+        item:
+          anyOf:
+          - $ref: '#/components/schemas/CatalogItemRead'
+          - type: 'null'
+      type: object
+      required:
+      - name
+      - count
+      - unit
+      - item
+      title: ParsedLineRead
+      description: 'Строка отчёта: исходное название, количество, единица и найденный предмет каталога.'
     PingOut:
       properties:
         status:
@@ -2612,6 +4033,84 @@ components:
       - latency_ms
       - env
       title: PingOut
+    RecipeRead:
+      properties:
+        id:
+          type: string
+          title: Id
+        kind:
+          type: string
+          title: Kind
+        name:
+          type: string
+          title: Name
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
+        item_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Item Code
+        category:
+          type: string
+          title: Category
+        item_class:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Item Class
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        factions:
+          items:
+            type: string
+          type: array
+          title: Factions
+        facilities:
+          items:
+            type: string
+          type: array
+          title: Facilities
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        output_quantity:
+          type: integer
+          title: Output Quantity
+        cost:
+          additionalProperties: true
+          type: object
+          title: Cost
+        data:
+          additionalProperties: true
+          type: object
+          title: Data
+      type: object
+      required:
+      - id
+      - kind
+      - name
+      - name_en
+      - item_code
+      - category
+      - item_class
+      - description
+      - factions
+      - facilities
+      - icon_url
+      - output_quantity
+      - cost
+      - data
+      title: RecipeRead
+      description: 'Рецепт Factory/MPF/Refinery. cost — {"bmat": 100} / {"salvage": 2}; data — поля вида.'
     RedeemCodeRequest:
       properties:
         code:
@@ -2639,6 +4138,362 @@ components:
       description: 'Вступление в клан по пригласительному коду (стендин Discord OAuth: пока
 
         личность передаёт клиент, в проде её даст OAuth-профиль Discord).'
+    ReportCreate:
+      properties:
+        title:
+          anyOf:
+          - type: string
+            maxLength: 160
+          - type: 'null'
+          title: Title
+        note:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Note
+        meta:
+          $ref: '#/components/schemas/ReportMeta'
+          default: {}
+        lines:
+          items:
+            $ref: '#/components/schemas/ReportLineIn'
+          type: array
+          maxItems: 500
+          minItems: 1
+          title: Lines
+      additionalProperties: false
+      type: object
+      required:
+      - lines
+      title: ReportCreate
+    ReportLineIn:
+      properties:
+        name:
+          type: string
+          maxLength: 160
+          minLength: 1
+          title: Name
+        item_code:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Item Code
+        quantity:
+          type: integer
+          maximum: 1000000.0
+          exclusiveMinimum: 0.0
+          title: Quantity
+        unit:
+          type: string
+          enum:
+          - crate
+          - unit
+          title: Unit
+          default: crate
+      additionalProperties: false
+      type: object
+      required:
+      - name
+      - quantity
+      title: ReportLineIn
+    ReportLineRead:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        position:
+          type: integer
+          title: Position
+        name:
+          type: string
+          title: Name
+        item_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Item Code
+        quantity:
+          type: integer
+          title: Quantity
+        unit:
+          type: string
+          enum:
+          - crate
+          - unit
+          title: Unit
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+      type: object
+      required:
+      - id
+      - position
+      - name
+      - item_code
+      - quantity
+      - unit
+      title: ReportLineRead
+    ReportMeta:
+      properties:
+        region:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Region
+        type:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Type
+        stockpile:
+          anyOf:
+          - type: string
+            maxLength: 80
+          - type: 'null'
+          title: Stockpile
+      additionalProperties: false
+      type: object
+      title: ReportMeta
+      description: Шапка графического рапорта (как поля «Гекс / Тип / Склад» старого сайта).
+    ReportRead:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          type: string
+          title: Title
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        meta:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: 'null'
+          type: object
+          title: Meta
+        created_by:
+          type: string
+          title: Created By
+        created_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By Name
+        discord_sent_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Discord Sent At
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        updated_at:
+          type: string
+          format: date-time
+          title: Updated At
+        lines:
+          items:
+            $ref: '#/components/schemas/ReportLineRead'
+          type: array
+          title: Lines
+        lines_count:
+          type: integer
+          title: Lines Count
+          default: 0
+        total_quantity:
+          type: integer
+          title: Total Quantity
+          default: 0
+      type: object
+      required:
+      - id
+      - title
+      - status
+      - note
+      - meta
+      - created_by
+      - created_by_name
+      - discord_sent_at
+      - created_at
+      - updated_at
+      - lines
+      title: ReportRead
+    ReportSaved:
+      properties:
+        report:
+          $ref: '#/components/schemas/ReportRead'
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - report
+      - message
+      title: ReportSaved
+    ReportStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - done
+      - cancelled
+      title: ReportStatus
+    ReportStatusUpdate:
+      properties:
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      title: ReportStatusUpdate
+    ReportUpdate:
+      properties:
+        title:
+          anyOf:
+          - type: string
+            maxLength: 160
+            minLength: 1
+          - type: 'null'
+          title: Title
+        note:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Note
+        meta:
+          anyOf:
+          - $ref: '#/components/schemas/ReportMeta'
+          - type: 'null'
+        lines:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/ReportLineIn'
+            type: array
+            maxItems: 500
+            minItems: 1
+          - type: 'null'
+          title: Lines
+      additionalProperties: false
+      type: object
+      title: ReportUpdate
+    ResolveRequest:
+      properties:
+        names:
+          items:
+            type: string
+            maxLength: 200
+          type: array
+          maxItems: 2000
+          title: Names
+      additionalProperties: false
+      type: object
+      required:
+      - names
+      title: ResolveRequest
+    ResolvedName:
+      properties:
+        name:
+          type: string
+          title: Name
+        item:
+          anyOf:
+          - $ref: '#/components/schemas/CatalogItemRead'
+          - type: 'null'
+      type: object
+      required:
+      - name
+      - item
+      title: ResolvedName
+    ScanResult:
+      properties:
+        lines:
+          items:
+            $ref: '#/components/schemas/ParsedLineRead'
+          type: array
+          title: Lines
+        matched:
+          type: integer
+          title: Matched
+        unknown:
+          items:
+            type: string
+          type: array
+          title: Unknown
+        file_name:
+          type: string
+          title: File Name
+        file_size:
+          type: integer
+          title: File Size
+        strict:
+          type: boolean
+          title: Strict
+      type: object
+      required:
+      - lines
+      - matched
+      - unknown
+      - file_name
+      - file_size
+      - strict
+      title: ScanResult
+    StockpileContentsReplace:
+      properties:
+        source:
+          type: string
+          enum:
+          - json
+          - txt
+          - clipboard
+          - xlsx
+          - scan
+          - manual
+          title: Source
+          default: manual
+        items:
+          items:
+            $ref: '#/components/schemas/StockpileItemUpsert'
+          type: array
+          maxItems: 2000
+          title: Items
+      additionalProperties: false
+      type: object
+      required:
+      - items
+      title: StockpileContentsReplace
+      description: 'Полная замена содержимого склада выгрузкой сканера (монитор склада).
+
+        Позиции с одинаковым кодом суммируются; пустой список очищает склад.'
+    StockpileContentsSaved:
+      properties:
+        stockpile:
+          $ref: '#/components/schemas/StockpileDetailRead'
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - stockpile
+      - message
+      title: StockpileContentsSaved
     StockpileCreate:
       properties:
         name:
@@ -2697,6 +4552,17 @@ components:
           type: integer
           title: Total Quantity
           default: 0
+        last_sync_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Source
+        last_sync_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Sync At
         items:
           items:
             $ref: '#/components/schemas/StockpileItemRead'
@@ -2743,6 +4609,16 @@ components:
           type: string
           format: date-time
           title: Updated At
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
       type: object
       required:
       - id
@@ -2810,6 +4686,17 @@ components:
           type: integer
           title: Total Quantity
           default: 0
+        last_sync_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Source
+        last_sync_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Sync At
       type: object
       required:
       - id
@@ -2900,6 +4787,58 @@ components:
       - timer
       - message
       title: TimerCreated
+    TimerEventCreate:
+      properties:
+        message:
+          type: string
+          maxLength: 1000
+          minLength: 1
+          title: Message
+      additionalProperties: false
+      type: object
+      required:
+      - message
+      title: TimerEventCreate
+    TimerEventRead:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        timer_id:
+          type: string
+          format: uuid
+          title: Timer Id
+        message:
+          type: string
+          title: Message
+        created_by:
+          type: string
+          title: Created By
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - timer_id
+      - message
+      - created_by
+      - created_at
+      title: TimerEventRead
+    TimerEventSaved:
+      properties:
+        event:
+          $ref: '#/components/schemas/TimerEventRead'
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - event
+      - message
+      title: TimerEventSaved
     TimerKind:
       type: string
       enum:
@@ -3038,6 +4977,18 @@ components:
           - type: boolean
           - type: 'null'
           title: Completed
+        restart:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Restart
+        duration_seconds:
+          anyOf:
+          - type: integer
+            maximum: 31536000.0
+            exclusiveMinimum: 0.0
+          - type: 'null'
+          title: Duration Seconds
       additionalProperties: false
       type: object
       title: TimerUpdate

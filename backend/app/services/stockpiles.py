@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import uuid
-from typing import Sequence
+from datetime import UTC, datetime
+from typing import Iterable, Sequence
 
-from sqlalchemy import func, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.exc import IntegrityError
 
 from app.core.errors import ConflictError, NotFoundError
 from app.models.catalog import CatalogItem
 from app.models.stockpile import Stockpile, StockpileItem
 from app.schemas.stockpile import (
+    StockpileContentsReplace,
     StockpileCreate,
     StockpileItemPatch,
     StockpileItemUpsert,
@@ -195,3 +197,64 @@ class StockpileService(ClanScopedService):
         row = await self._get_item_row(stockpile_id, item_code)
         await self.session.delete(row)
         await self.session.commit()
+
+    async def replace_contents(
+        self, stockpile_id: uuid.UUID, payload: StockpileContentsReplace
+    ) -> tuple[Stockpile, Sequence[StockpileItem], str]:
+        """Монитор склада: выгрузка сканера целиком заменяет содержимое (как PUT /api/storage
+        старого сайта). Дубли кодов суммируются, неизвестные коды — 404 до любых изменений."""
+        stockpile = await self._get_scoped(
+            Stockpile, stockpile_id,
+            not_found_key="stockpile.not_found", domain=DOMAIN, for_update=True,
+        )
+        merged: dict[str, int] = {}
+        for entry in payload.items:
+            merged[entry.item_code] = min(merged.get(entry.item_code, 0) + entry.quantity, 1_000_000)
+
+        if merged:
+            known = set(
+                (
+                    await self.session.execute(
+                        select(CatalogItem.code).where(
+                            CatalogItem.code.in_(merged), CatalogItem.is_active.is_(True)
+                        )
+                    )
+                ).scalars()
+            )
+            unknown = sorted(set(merged) - known)
+            if unknown:
+                raise NotFoundError(
+                    message_key="item.unknown_code", domain="catalog",
+                    params={"code": ", ".join(unknown[:5])},
+                )
+
+        await self.session.execute(
+            delete(StockpileItem).where(
+                StockpileItem.clan_id == self.clan_id,
+                StockpileItem.stockpile_id == stockpile.id,
+            )
+        )
+        for code, quantity in merged.items():
+            self.session.add(
+                StockpileItem(stockpile_id=stockpile.id, item_code=code, quantity=quantity)
+            )
+        stockpile.last_sync_source = payload.source
+        stockpile.last_sync_at = datetime.now(UTC)
+        await self.session.commit()
+
+        stockpile, items = await self.get_detail(stockpile.id)
+        return stockpile, items, self.t.t(
+            "stockpile.synced", domain=DOMAIN, name=stockpile.name, count=len(items)
+        )
+
+    async def catalog_brief(self, codes: Iterable[str]) -> dict[str, tuple[str, str | None]]:
+        """code -> (русское название, иконка) для витрины позиций склада."""
+        wanted = set(codes)
+        if not wanted:
+            return {}
+        rows = await self.session.execute(
+            select(CatalogItem.code, CatalogItem.name, CatalogItem.icon_url).where(
+                CatalogItem.code.in_(wanted)
+            )
+        )
+        return {code: (name, icon) for code, name, icon in rows.all()}

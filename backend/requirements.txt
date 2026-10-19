@@ -7,8 +7,9 @@ alembic>=1.13
 pydantic>=2.9
 pydantic-settings>=2.6
 PyJWT>=2.9
+httpx>=0.27              # исходящие вызовы: Discord OAuth и вебхуки каналов
+python-multipart>=0.0.9  # UploadFile: сканер MapData.sav, PNG-вложения в Discord
 
 # --- dev/test ----------------------------------------------------------------
 pytest>=8.3
-httpx>=0.27         # ASGI-тесты транспортом, без поднятия сокета
 respx>=0.21         # мок httpx-транспорта для тестов Discord OAuth

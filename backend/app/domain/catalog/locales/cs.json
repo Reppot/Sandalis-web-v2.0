@@ -2,5 +2,8 @@
   "item": {
     "unknown_code": "Položka s kódem {code} nebyla v katalogu nalezena.",
     "inactive": "Položka {code} se již nevyrábí."
+  },
+  "scan": {
+    "too_large": "Soubor je příliš velký (limit {limit_mb} MB)."
   }
 }

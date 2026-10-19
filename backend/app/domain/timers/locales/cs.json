@@ -6,6 +6,14 @@
     "completed": "Časovač „{title}“ byl dokončen.",
     "reopened": "Časovač „{title}“ byl znovu otevřen.",
     "invalid_window": "Čas ukončení musí být později než čas zahájení.",
-    "stockpile_missing": "Připojený sklad nebyl ve vašem klanu nalezen."
+    "stockpile_missing": "Připojený sklad nebyl ve vašem klanu nalezen.",
+    "restarted": "Časovač „{title}“ byl restartován.",
+    "note_added": "Záznam přidán do deníku.",
+    "log": {
+      "created": "[SYSTÉM] Časovač spuštěn, konec {ends}.",
+      "restarted": "[ZÁSOBOVAČ] Časovač restartován na {duration}.",
+      "completed": "[ZÁSOBOVAČ] Časovač označen jako dokončený.",
+      "reopened": "[ZÁSOBOVAČ] Časovač znovu otevřen."
+    }
   }
 }

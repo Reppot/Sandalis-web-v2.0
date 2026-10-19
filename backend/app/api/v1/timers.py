@@ -14,7 +14,15 @@ from app.api.deps import (
 from app.core.i18n import Translator
 from app.core.permissions import Scopes
 from app.schemas.common import Page
-from app.schemas.timer import TimerCreate, TimerCreated, TimerRead, TimerUpdate
+from app.schemas.timer import (
+    TimerCreate,
+    TimerCreated,
+    TimerEventCreate,
+    TimerEventRead,
+    TimerEventSaved,
+    TimerRead,
+    TimerUpdate,
+)
 from app.services.timers import TimerService
 
 router = APIRouter(prefix="/timers", tags=["timers"])
@@ -96,3 +104,32 @@ async def update_timer(
 async def delete_timer(timer_id: uuid.UUID, service: ServiceDep) -> Response:
     await service.delete_timer(timer_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# ---------------- журнал таймера --------------------------------------------- #
+@router.get(
+    "/{timer_id}/events",
+    response_model=list[TimerEventRead],
+    summary="Журнал таймера: заметки и системные записи (хронологически)",
+    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_READ]))],
+)
+async def list_events(
+    timer_id: uuid.UUID,
+    service: ServiceDep,
+    limit: Annotated[int, Query(ge=1, le=500)] = 100,
+) -> list[TimerEventRead]:
+    return [TimerEventRead.model_validate(e) for e in await service.list_events(timer_id, limit=limit)]
+
+
+@router.post(
+    "/{timer_id}/events",
+    response_model=TimerEventSaved,
+    status_code=status.HTTP_201_CREATED,
+    summary="Добавить заметку интенданта в журнал таймера",
+    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_WRITE]))],
+)
+async def add_event(
+    timer_id: uuid.UUID, payload: TimerEventCreate, service: ServiceDep
+) -> TimerEventSaved:
+    event, message = await service.add_event(timer_id, payload)
+    return TimerEventSaved(event=TimerEventRead.model_validate(event), message=message)

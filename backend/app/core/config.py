@@ -64,6 +64,9 @@ class Settings(BaseSettings):
     # None -> 403 user.not_member (fail-closed).
     DEFAULT_CLAN_ID: str | None = None
     DEFAULT_CLAN_ROLE: ClanRole = ClanRole.GUEST
+    # Глобальный контент (видео входа, ссылки, обучение) правят admin+ только этого
+    # клана. Пусто -> DEFAULT_CLAN_ID.
+    CONTENT_ADMIN_CLAN_ID: str | None = None
 
     # --- i18n -----------------------------------------------------------
     DEFAULT_LOCALE: str = "en"

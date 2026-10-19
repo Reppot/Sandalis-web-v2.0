@@ -89,3 +89,18 @@ export const clanApi = {
     });
   },
 };
+
+export interface ClanSettings {
+  discord_webhook_configured: boolean;
+  discord_webhook_hint: string | null;
+}
+
+export const clanSettingsApi = {
+  get(): Promise<ClanSettings> {
+    return apiClient.get<ClanSettings>("/api/v1/clan/settings");
+  },
+  /** null или "" — отключить отправку рапортов в Discord. */
+  setWebhook(url: string | null): Promise<{ settings: ClanSettings; message: string }> {
+    return apiClient.put("/api/v1/clan/settings", { discord_webhook_url: url || null });
+  },
+};

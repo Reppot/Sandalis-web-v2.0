@@ -16,6 +16,8 @@ from app.core.permissions import Scopes
 from app.models.stockpile import Stockpile, StockpileItem
 from app.schemas.common import Page
 from app.schemas.stockpile import (
+    StockpileContentsReplace,
+    StockpileContentsSaved,
     StockpileCreate,
     StockpileCreated,
     StockpileDetailRead,
@@ -53,8 +55,17 @@ def _read(
     return read
 
 
-def _detail(stockpile: Stockpile, items: Sequence[StockpileItem]) -> StockpileDetailRead:
-    item_reads = [StockpileItemRead.model_validate(i) for i in items]
+async def _detail(
+    service: StockpileService, stockpile: Stockpile, items: Sequence[StockpileItem]
+) -> StockpileDetailRead:
+    brief = await service.catalog_brief(i.item_code for i in items)
+    item_reads = [
+        StockpileItemRead.model_validate(i).model_copy(update={
+            "name": brief.get(i.item_code, (None, None))[0],
+            "icon_url": brief.get(i.item_code, (None, None))[1],
+        })
+        for i in items
+    ]
     read = StockpileDetailRead.model_validate(stockpile)
     return read.model_copy(update={
         "items": item_reads,
@@ -102,7 +113,7 @@ async def create_stockpile(payload: StockpileCreate, service: ServiceDep) -> Sto
 )
 async def get_stockpile(stockpile_id: uuid.UUID, service: ServiceDep) -> StockpileDetailRead:
     stockpile, items = await service.get_detail(stockpile_id)
-    return _detail(stockpile, items)
+    return await _detail(service, stockpile, items)
 
 
 @router.patch(
@@ -128,6 +139,21 @@ async def delete_stockpile(stockpile_id: uuid.UUID, service: ServiceDep) -> Resp
 
 
 # ---------------- stockpile items -------------------------------------------- #
+@router.put(
+    "/{stockpile_id}/items",
+    response_model=StockpileContentsSaved,
+    summary="Заменить содержимое склада выгрузкой сканера (монитор склада)",
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+)
+async def replace_contents(
+    stockpile_id: uuid.UUID, payload: StockpileContentsReplace, service: ServiceDep
+) -> StockpileContentsSaved:
+    stockpile, items, message = await service.replace_contents(stockpile_id, payload)
+    return StockpileContentsSaved(
+        stockpile=await _detail(service, stockpile, items), message=message
+    )
+
+
 @router.post(
     "/{stockpile_id}/items",
     response_model=StockpileItemSaved,

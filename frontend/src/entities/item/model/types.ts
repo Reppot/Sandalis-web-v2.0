@@ -1,15 +1,18 @@
-export type ItemCategory = string;
+export type ItemUnit = "crate" | "unit";
 
 export interface FoxholeItem {
-  id: string;
   code: string;
   name: string;
   englishName: string;
-  category: ItemCategory;
+  category: string;
+  faction: string;
+  origin: string | null;
   iconUrl: string | null;
   crateSize: number;
   productionTime: number;
   isActive: boolean;
+  aliases: string[];
+  needsReview: boolean;
 }
 
 export interface CatalogItemDto {
@@ -18,34 +21,51 @@ export interface CatalogItemDto {
   name: string;
   english_name: string;
   category: string;
+  faction?: string;
+  origin?: string | null;
   icon_url: string | null;
   crate_size: number;
   production_time: number;
   is_active: boolean;
+  aliases?: string[];
+  needs_review?: boolean;
 }
 
 export function toFoxholeItem(dto: CatalogItemDto): FoxholeItem {
   return {
-    id: dto.id,
     code: dto.code,
     name: dto.name,
     englishName: dto.english_name,
     category: dto.category,
+    faction: dto.faction ?? "neutral",
+    origin: dto.origin ?? null,
     iconUrl: dto.icon_url,
     crateSize: dto.crate_size,
     productionTime: dto.production_time,
     isActive: dto.is_active,
+    aliases: dto.aliases ?? [],
+    needsReview: dto.needs_review ?? false,
   };
 }
 
-export interface RecipeIngredient {
-  itemId: string;
-  quantity: number;
+/** Строка отчёта сканера, разобранная сервером (POST /items/parse, /items/scan). */
+export interface ParsedLine {
+  name: string;
+  count: number;
+  unit: ItemUnit;
+  item: FoxholeItem | null;
 }
 
-export interface CraftRecipe {
-  itemId: string;
-  facility: string;
-  ingredients: RecipeIngredient[];
-  yieldQuantity: number;
+export interface ParseResult {
+  lines: ParsedLine[];
+  matched: number;
+  unknown: string[];
 }
+
+export interface ScanResult extends ParseResult {
+  fileName: string;
+  fileSize: number;
+  strict: boolean;
+}
+
+export const UNIT_LABEL: Record<ItemUnit, string> = { crate: "ящ.", unit: "шт." };

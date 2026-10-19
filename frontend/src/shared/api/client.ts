@@ -30,7 +30,7 @@ export function setUnauthorizedHandler(handler: (() => void) | null): void {
 }
 
 interface RequestOptions extends RequestInit {
-  params?: Record<string, string | number | boolean | undefined>;
+  params?: Record<string, string | number | boolean | null | undefined | ReadonlyArray<string>>;
 }
 
 function errorMessage(data: unknown, fallback: string): { message: string; code?: string } {
@@ -59,9 +59,9 @@ export const apiClient = {
     if (params) {
       const searchParams = new URLSearchParams();
       Object.entries(params).forEach(([key, val]) => {
-        if (val !== undefined && val !== null) {
-          searchParams.append(key, String(val));
-        }
+        if (val === undefined || val === null) return;
+        // массив -> повтор ключа (?status=open&status=in_progress), как ждёт FastAPI
+        for (const item of Array.isArray(val) ? val : [val]) searchParams.append(key, String(item));
       });
       const queryStr = searchParams.toString();
       if (queryStr) {
@@ -74,7 +74,8 @@ export const apiClient = {
       "X-Locale": "ru",
       "Accept-Language": "ru",
     };
-    if (rest.body) {
+    // FormData сам выставит multipart-границу
+    if (rest.body && !(rest.body instanceof FormData)) {
       defaultHeaders["Content-Type"] = "application/json";
     }
 
@@ -130,6 +131,19 @@ export const apiClient = {
       method: "PATCH",
       body: body ? JSON.stringify(body) : undefined,
     });
+  },
+
+  put<T>(path: string, body?: unknown, options?: RequestOptions): Promise<T> {
+    return this.request<T>(path, {
+      ...options,
+      method: "PUT",
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+  },
+
+  /** multipart/form-data: файлы сканера, PNG-вложения. */
+  postForm<T>(path: string, form: FormData, options?: RequestOptions): Promise<T> {
+    return this.request<T>(path, { ...options, method: "POST", body: form });
   },
 
   delete<T>(path: string, options?: RequestOptions): Promise<T> {
