@@ -32,5 +32,11 @@
   "settings": {
     "saved": "Clan settings saved.",
     "roles_saved": "Discord role mapping saved. Roles update the next time members sign in."
+  },
+  "roles": {
+    "owner_only": "Only the clan commander (server owner) manages Discord roles.",
+    "bot_missing": "The clan bot cannot see the server: add it with “Add bot”.",
+    "pulled": "Server roles pulled: {n}. New roles start at basic level.",
+    "saved": "Access levels saved. Members get them at their next sign-in."
   }
 }

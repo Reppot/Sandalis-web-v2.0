@@ -13,7 +13,7 @@
   },
   "user": {
     "not_member": "Uživatel {user_id} není členem klanu {clan_id}.",
-    "no_clan": "Nejste členem žádného klanu. Požádejte velitele o pozvánku nebo se přihlaste jako host."
+    "no_clan": "Nejste členem žádného klanu. Velitel musí přidat bota klanu na svůj Discord server a načíst role — pak se budete moci připojit při přihlášení. Nebo se přihlaste jako host."
   },
   "code": {
     "invalid": "Pozvánkový kód nebyl nalezen nebo byl zrušen.",
@@ -37,7 +37,8 @@
     "clan_not_member": "Nejste členem tohoto klanu.",
     "nothing_selected": "Vyberte server nebo klan.",
     "clan_created": "Klan „{clan}“ je propojen s vaším Discord serverem. Jste velitel.",
-    "signed_in": "Vítejte, {name}."
+    "signed_in": "Vítejte, {name}.",
+    "joined": "Vstoupili jste do terminálu klanu „{clan}“."
   },
   "guest": {
     "disabled": "Přístup pro hosty je vypnutý.",

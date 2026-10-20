@@ -8,7 +8,6 @@ import { useSession } from "@/features/cabinet/model/session-context";
 import { ClanTokenPanel } from "@/features/cabinet/ui/ClanTokenPanel";
 import { DiscordRolesPanel } from "@/features/cabinet/ui/DiscordRolesPanel";
 import { DiscordWebhookPanel } from "@/features/cabinet/ui/DiscordWebhookPanel";
-import { InvitesPanel } from "@/features/cabinet/ui/InvitesPanel";
 import { LanguagePanel } from "@/features/cabinet/ui/LanguageSwitch";
 
 const ROLE_LABEL: Record<string, MessageKey> = {
@@ -98,9 +97,8 @@ export const CabinetWorkspace: React.FC = () => {
       </div>
 
       <LanguagePanel persist={session.subjectType === "user"} />
-      {can(Scopes.CLAN_SETTINGS_WRITE) && <DiscordRolesPanel />}
+      {session.role === "owner" && session.subjectType === "user" && <DiscordRolesPanel />}
       {can(Scopes.CLAN_SETTINGS_WRITE) && <DiscordWebhookPanel />}
-      {can(Scopes.CLAN_MEMBERS_READ) && <InvitesPanel canManage={can(Scopes.CLAN_MEMBERS_WRITE)} />}
       {can(Scopes.CLAN_SETTINGS_WRITE) && <ClanTokenPanel />}
     </div>
   );

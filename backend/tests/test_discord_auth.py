@@ -634,67 +634,6 @@ def test_setup_requires_signed_cookie(db, monkeypatch):
 
 
 # --------------------------------------------------------------------------- #
-# invite-ссылка через Discord
-# --------------------------------------------------------------------------- #
-def test_invite_link_joins_clan_via_discord(db, monkeypatch):
-    async def main() -> None:
-        enable_discord(monkeypatch)
-        await seed_clan("CLAN_A")
-        admin = {"Authorization": "Bearer " + issue_access_token(
-            user_id="boss", clan_id="CLAN_A", role=ClanRole.ADMIN)}
-        async with client() as c:
-            inv = await c.post(f"{API}/auth/invites", json={"role": "officer", "max_uses": 1}, headers=admin)
-            code = inv.json()["invite"]["code"]
-
-            preview = await c.get(f"{API}/auth/invites/{code.lower()}/preview")
-            assert preview.status_code == 200
-            assert preview.json()["clan_name"] == "Alpha"
-            assert preview.json()["role"] == "officer"
-
-            login = await c.get(f"{API}/auth/discord/login", params={"invite": code})
-            raw_state = login.headers["location"].split("state=", 1)[1].split("&")[0]
-            assert verify_state(raw_state).invite == code
-
-        # владелец серверов по invite-ссылке идёт в клан, а не в выбор сервера
-        with discord_mock(guilds=GUILDS):
-            async with client() as c:
-                r = await c.get(
-                    f"{API}/auth/discord/callback",
-                    params={"code": "abc", "state": make_state(invite=code), "response": "json"},
-                )
-                assert r.status_code == 200, r.text
-                assert r.json()["me"]["clan_id"] == "CLAN_A"
-                assert r.json()["me"]["role"] == "officer"
-
-                # повторный переход участника не тратит код
-                r = await c.get(
-                    f"{API}/auth/discord/callback",
-                    params={"code": "abc", "state": make_state(invite=code), "response": "json"},
-                )
-                assert r.status_code == 200, r.text
-
-        # другой пользователь: код исчерпан -> redirect ?error=invite_exhausted
-        other = {**PROFILE, "id": "222", "global_name": "Other"}
-        with respx.mock(assert_all_mocked=False) as mock:
-            mock.post(f"{BASE}/oauth2/token").respond(json=TOKEN_RESPONSE)
-            mock.get(f"{BASE}/users/@me").respond(json=other)
-            async with client() as c:
-                r = await c.get(
-                    f"{API}/auth/discord/callback",
-                    params={"code": "abc", "state": make_state(invite=code)},
-                )
-                assert r.status_code == 302
-                assert r.headers["location"] == f"{settings.FRONTEND_URL}?error=invite_exhausted"
-
-        async with client() as c:
-            bad = await c.get(f"{API}/auth/invites/INV-NOPE0000/preview", headers={"Accept-Language": "cs"})
-            assert bad.status_code == 404
-            assert bad.json()["error"]["code"] == "invite_invalid"
-
-    run(main())
-
-
-# --------------------------------------------------------------------------- #
 # гостевой доступ
 # --------------------------------------------------------------------------- #
 def test_guest_uses_tools_but_sees_no_clan_data(db, monkeypatch):
@@ -729,12 +668,17 @@ def test_guest_uses_tools_but_sees_no_clan_data(db, monkeypatch):
 
 
 # --------------------------------------------------------------------------- #
-# роли Discord-сервера -> роли терминала
+# роли Discord-сервера: снимок командира, уровни, вступление без приглашений
 # --------------------------------------------------------------------------- #
 ROLE_GUILD = "700000000000000001"
+R_OFFICER, R_PILOT, R_OTHER = "100000000000000111", "100000000000000222", "100000000000000999"
+SNAPSHOT = [
+    {"id": R_OFFICER, "name": "Офицер", "color": 15158332, "position": 5},
+    {"id": R_PILOT, "name": "Пилот", "color": 0, "position": 3},
+]
 
 
-async def link_guild_with_roles(role_map: dict[str, str], enabled: bool = True) -> None:
+async def link_guild(snapshot: list[dict] | None = None, levels: dict[str, str] | None = None) -> None:
     from app.models.clan_settings import ClanSettings
 
     await seed_clan("CLAN_R", "Roles Clan")
@@ -742,100 +686,112 @@ async def link_guild_with_roles(role_map: dict[str, str], enabled: bool = True) 
         with bypass_clan_filter():
             clan = await s.get(Clan, "CLAN_R")
             clan.discord_guild_id = ROLE_GUILD
-            s.add(ClanSettings(clan_id="CLAN_R", discord_role_sync=enabled, discord_role_map=role_map))
+            s.add(ClanSettings(clan_id="CLAN_R", discord_roles=snapshot or [], discord_role_map=levels or {}))
             await s.commit()
 
 
-def member_mock(mock, roles: list[str]) -> None:
+def member_mock(mock, roles: list[str], owner: bool = False) -> None:
     mock.post(f"{BASE}/oauth2/token").respond(json=TOKEN_RESPONSE)
     mock.get(f"{BASE}/users/@me").respond(json=PROFILE)
-    mock.get(f"{BASE}/users/@me/guilds").respond(json=[{"id": ROLE_GUILD, "name": "Clan", "owner": False}])
+    mock.get(f"{BASE}/users/@me/guilds").respond(json=[{"id": ROLE_GUILD, "name": "Clan", "owner": owner}])
     mock.get(f"{BASE}/users/@me/guilds/{ROLE_GUILD}/member").respond(json={"roles": roles, "nick": None})
 
 
-def test_discord_roles_grant_and_update_membership(db, monkeypatch):
+async def discord_login(c, roles: list[str]):
+    with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+        member_mock(mock, roles)
+        return await c.get(f"{API}/auth/discord/callback",
+                           params={"code": "abc", "state": make_state(), "response": "json"})
+
+
+def test_join_clan_with_discord_roles_and_level(db, monkeypatch):
     async def main() -> None:
         enable_discord(monkeypatch)
-        await link_guild_with_roles({"100000000000000111": "officer", "100000000000000222": "member"})
+        await link_guild(SNAPSHOT, {R_OFFICER: "medium"})
+        async with client() as c:
+            r = await discord_login(c, [R_OTHER, R_PILOT, R_OFFICER])
+            assert r.status_code == 202, r.text                  # выбор: вступить в клан
+            setup = (await c.get(f"{API}/auth/discord/setup")).json()
+            assert setup["guilds"] == []
+            [join] = setup["joins"]
+            assert join["clan_id"] == "CLAN_R" and join["level"] == "medium"
+            assert [x["name"] for x in join["roles"]] == ["Офицер", "Пилот"]
 
-        async def login(roles: list[str]) -> dict:
-            with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
-                member_mock(mock, roles)
-                async with client() as c:
-                    r = await c.get(f"{API}/auth/discord/callback",
-                                    params={"code": "abc", "state": make_state(), "response": "json"})
-                    return {"status": r.status_code, **(r.json() if r.status_code == 200 else {})}
+            ok = await c.post(f"{API}/auth/discord/setup", json={"join_clan_id": "CLAN_R"})
+            assert ok.status_code == 200, ok.text
+            assert ok.json()["me"]["role"] == "officer"           # средний уровень
 
-        # участник сервера с ролью «111» входит без приглашения офицером
-        r = await login(["100000000000000999", "100000000000000222", "100000000000000111"])
-        assert r["status"] == 200, r
-        assert r["me"]["clan_id"] == "CLAN_R" and r["me"]["role"] == "officer"
-        # роль сняли в Discord — при следующем входе роль терминала понижается
-        r = await login(["100000000000000222"])
-        assert r["me"]["role"] == "member"
-        # без сопоставленных ролей роль не меняется
-        r = await login(["100000000000000999"])
-        assert r["me"]["role"] == "member"
+            # следующий вход: уже участник — сразу в терминал, уровень пересчитан
+            r = await discord_login(c, [R_PILOT])
+            assert r.status_code == 200, r.text
+            assert r.json()["me"]["role"] == "member"             # базовый (рядовой)
 
     run(main())
 
 
-def test_discord_roles_sync_disabled_and_owner_untouched(db, monkeypatch):
+def test_no_join_until_owner_pulls_roles(db, monkeypatch):
     async def main() -> None:
         enable_discord(monkeypatch)
-        await link_guild_with_roles({"100000000000000111": "officer"}, enabled=False)
-        with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
-            member_mock(mock, ["100000000000000111"])
-            async with client() as c:
-                r = await c.get(f"{API}/auth/discord/callback",
-                                params={"code": "abc", "state": make_state(), "response": "json"})
-                assert r.status_code == 403            # синхронизация выключена — нужен invite
+        await link_guild([])                                       # бот ещё не добавлен
+        async with client() as c:
+            r = await discord_login(c, [R_OFFICER])
+            assert r.status_code == 403
+            assert r.json()["error"]["message"].startswith("You are not in any clan")
 
+    run(main())
+
+
+def test_owner_role_never_downgraded(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        await link_guild(SNAPSHOT)
         await seed_membership("CLAN_R", role=ClanRole.OWNER)
-        async with AsyncSessionLocal() as s:
-            from app.models.clan_settings import ClanSettings
-            with bypass_clan_filter():
-                row = (await s.execute(select(ClanSettings).where(ClanSettings.clan_id == "CLAN_R"))).scalar_one()
-                row.discord_role_sync = True
-                await s.commit()
-        with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
-            member_mock(mock, ["100000000000000111"])
-            async with client() as c:
-                r = await c.get(f"{API}/auth/discord/callback",
-                                params={"code": "abc", "state": make_state(), "response": "json"})
-                assert r.json()["me"]["role"] == "owner"   # командира роль Discord не понижает
+        async with client() as c:
+            r = await discord_login(c, [R_PILOT])
+            assert r.status_code == 200, r.text
+            assert r.json()["me"]["role"] == "owner"
 
     run(main())
 
 
-def test_discord_roles_admin_endpoint(db, monkeypatch):
+def test_discord_roles_owner_endpoints(db, monkeypatch):
     async def main() -> None:
         enable_discord(monkeypatch)
         monkeypatch.setattr(settings, "DISCORD_BOT_TOKEN", "bot-token", raising=True)
-        await link_guild_with_roles({})
-        admin = {"Authorization": "Bearer " + issue_access_token(user_id="boss", clan_id="CLAN_R", role=ClanRole.ADMIN)}
-        member = {"Authorization": "Bearer " + issue_access_token(user_id="u", clan_id="CLAN_R", role=ClanRole.MEMBER)}
+        await link_guild([])
+        owner = {"Authorization": "Bearer " + issue_access_token(user_id="boss", clan_id="CLAN_R", role=ClanRole.OWNER)}
+        admin = {"Authorization": "Bearer " + issue_access_token(user_id="adm", clan_id="CLAN_R", role=ClanRole.ADMIN)}
         with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
             mock.get(f"{BASE}/guilds/{ROLE_GUILD}/roles").respond(json=[
                 {"id": ROLE_GUILD, "name": "@everyone", "position": 0},
-                {"id": "100000000000000111", "name": "Офицер", "position": 5, "color": 15158332},
-                {"id": "100000000000000222", "name": "Боец", "position": 3},
+                {"id": R_OFFICER, "name": "Офицер", "position": 5, "color": 15158332},
+                {"id": R_PILOT, "name": "Пилот", "position": 3},
                 {"id": "100000000000000333", "name": "Bot role", "position": 9, "managed": True},
             ])
+            mock.get(f"{BASE}/guilds/{ROLE_GUILD}/members").respond(json=[
+                {"user": {"id": "555", "username": "pilot1"}, "nick": "Пилот Один", "roles": [R_PILOT]},
+                {"user": {"id": "666", "username": "botty", "bot": True}, "roles": []},
+            ])
             async with client() as c:
-                assert (await c.get(f"{API}/clan/discord-roles", headers=member)).status_code == 403
-                r = await c.get(f"{API}/clan/discord-roles", headers=admin)
+                assert (await c.get(f"{API}/clan/discord-roles", headers=admin)).status_code == 403   # только командир
+                r = await c.get(f"{API}/clan/discord-roles", headers=owner)
                 assert r.status_code == 200, r.text
-                body = r.json()
-                assert body["guild_id"] == ROLE_GUILD and body["bot_in_guild"] is True
-                assert [x["name"] for x in body["roles"]] == ["Офицер", "Боец"]
-                assert "guild_id=" + ROLE_GUILD in body["bot_invite_url"]
+                assert r.json()["bot_in_guild"] is True and r.json()["roles"] == []
 
-                bad = await c.put(f"{API}/clan/discord-roles", json={"enabled": True, "role_map": {"100000000000000111": "owner"}}, headers=admin)
+                pulled = await c.post(f"{API}/clan/discord-roles/pull", headers=owner)
+                assert pulled.status_code == 200, pulled.text
+                roles = pulled.json()["roles"]["roles"]
+                assert [(x["name"], x["level"]) for x in roles] == [("Офицер", "basic"), ("Пилот", "basic")]
+
+                bad = await c.put(f"{API}/clan/discord-roles", json={"levels": {R_OFFICER: "admin"}}, headers=owner)
                 assert bad.status_code == 422
-                ok = await c.put(f"{API}/clan/discord-roles", json={"enabled": True, "role_map": {"100000000000000111": "officer"}}, headers=admin)
+                ok = await c.put(f"{API}/clan/discord-roles", json={"levels": {R_OFFICER: "high", R_PILOT: "basic"}}, headers=owner)
                 assert ok.status_code == 200, ok.text
-                assert ok.json()["roles"]["enabled"] is True
-                assert ok.json()["roles"]["role_map"] == {"100000000000000111": "officer"}
+                assert [x["level"] for x in ok.json()["roles"]["roles"]] == ["high", "basic"]
+
+                members = (await c.get(f"{API}/clan/discord-members", headers=owner)).json()
+                assert members["status"] == "ok"
+                assert [(m["name"], m["roles"], m["level"], m["joined"]) for m in members["members"]] == [
+                    ("Пилот Один", ["Пилот"], "basic", False)]
 
     run(main())

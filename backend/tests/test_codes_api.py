@@ -14,56 +14,6 @@ def client() -> AsyncClient:
     return AsyncClient(transport=ASGITransport(app=app), base_url="http://testserver")
 
 
-def test_invite_rbac_matrix(db):
-    async def main() -> None:
-        await seed_clan()
-        member = bearer(role=ClanRole.MEMBER)
-        guest = bearer(role=ClanRole.GUEST)
-        officer = bearer(role=ClanRole.OFFICER)
-        admin = bearer()
-
-        async with client() as c:
-            # создание кодов — только admin (clan:members:write)
-            for h in (member, guest, officer):
-                r = await c.post(f"{API}/auth/invites", json={},
-                                 headers={**h, "Accept-Language": "ru"})
-                assert r.status_code == 403
-                assert r.json()["error"]["code"] == "forbidden"
-
-            # чтение списка — officer+ (clan:members:read)
-            assert (await c.get(f"{API}/auth/invites", headers=officer)).status_code == 200
-            assert (await c.get(f"{API}/auth/invites", headers=member)).status_code == 403
-            assert (await c.get(f"{API}/auth/invites", headers=guest)).status_code == 403
-
-            inv = await c.post(f"{API}/auth/invites",
-                               json={"role": "officer", "max_uses": 3}, headers=admin)
-            assert inv.status_code == 201
-            invite = inv.json()["invite"]
-            assert invite["role"] == "officer"
-            assert "clan_id" not in invite
-
-            listed = await c.get(f"{API}/auth/invites", headers=admin)
-            assert listed.json()["total"] == 1
-
-            # код не может выдавать admin/owner (правило схемы)
-            bad_role = await c.post(f"{API}/auth/invites",
-                                    json={"role": "admin"}, headers=admin)
-            assert bad_role.status_code == 422
-
-            assert (await c.delete(f"{API}/auth/invites/{invite['id']}",
-                                   headers=admin)).status_code == 204
-
-            red = await c.get(
-                f"{API}/auth/invites/{invite['code']}/preview",
-                headers={"Accept-Language": "ru"},
-            )
-            assert red.status_code == 404
-            assert red.json()["error"]["message"] == \
-                "Пригласительный код не найден или отозван."
-
-    run(main())
-
-
 def test_clan_api_token_issuance(db):
     async def main() -> None:
         await seed_clan()

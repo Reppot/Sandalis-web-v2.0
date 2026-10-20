@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from sqlalchemy import Boolean, String, UniqueConstraint
+from datetime import datetime
+
+from sqlalchemy import DateTime, String, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -14,6 +16,8 @@ class ClanSettings(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     __table_args__ = (UniqueConstraint("clan_id", name="uq_clan_settings_clan_id"),)
 
     discord_webhook_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
-    # роли терминала по ролям Discord-сервера клана (services/discord_roles.py)
-    discord_role_sync: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false", nullable=False)
+    # роли Discord-сервера клана (services/discord_roles.py): снимок ролей, который
+    # подтягивает командир, и уровни доступа {id роли: basic|medium|high}
+    discord_roles: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
+    discord_roles_synced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     discord_role_map: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict, server_default="{}", nullable=False)

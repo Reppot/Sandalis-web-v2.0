@@ -1,6 +1,7 @@
 import { apiClient } from "@/shared";
 import type { CreatedInviteEnvelope, Page } from "@/shared";
 import type { ClanRole } from "@/entities/session";
+import type { AccessLevel } from "@/features/cabinet/api/authApi";
 
 export type GrantableRole = Extract<ClanRole, "guest" | "member" | "officer">;
 
@@ -105,13 +106,12 @@ export const clanSettingsApi = {
   },
 };
 
-export type SyncableRole = Extract<ClanRole, "guest" | "member" | "officer" | "admin">;
-
 export interface DiscordRole {
   id: string;
   name: string;
   color: number;
   position: number;
+  level: AccessLevel;
 }
 
 export interface DiscordRoles {
@@ -119,9 +119,17 @@ export interface DiscordRoles {
   botConfigured: boolean;
   botInGuild: boolean;
   botInviteUrl: string | null;
-  enabled: boolean;
+  syncedAt: string | null;
   roles: DiscordRole[];
-  roleMap: Record<string, SyncableRole>;
+}
+
+export interface DiscordMember {
+  id: string;
+  name: string;
+  roles: string[];
+  level: AccessLevel;
+  joined: boolean;
+  role: ClanRole | null;
 }
 
 interface DiscordRolesDto {
@@ -129,9 +137,8 @@ interface DiscordRolesDto {
   bot_configured: boolean;
   bot_in_guild: boolean;
   bot_invite_url: string | null;
-  enabled: boolean;
+  synced_at: string | null;
   roles: DiscordRole[];
-  role_map: Record<string, SyncableRole>;
 }
 
 const toDiscordRoles = (d: DiscordRolesDto): DiscordRoles => ({
@@ -139,18 +146,26 @@ const toDiscordRoles = (d: DiscordRolesDto): DiscordRoles => ({
   botConfigured: d.bot_configured,
   botInGuild: d.bot_in_guild,
   botInviteUrl: d.bot_invite_url,
-  enabled: d.enabled,
+  syncedAt: d.synced_at,
   roles: d.roles,
-  roleMap: d.role_map,
 });
 
-/** Роли Discord-сервера клана -> роли терминала (admin+). */
+type Saved = { roles: DiscordRolesDto; message: string };
+
+/** «Роли Discord» — только командир клана. */
 export const discordRolesApi = {
   async get(): Promise<DiscordRoles> {
     return toDiscordRoles(await apiClient.get<DiscordRolesDto>("/api/v1/clan/discord-roles"));
   },
-  async save(enabled: boolean, roleMap: Record<string, SyncableRole>): Promise<{ roles: DiscordRoles; message: string }> {
-    const r = await apiClient.put<{ roles: DiscordRolesDto; message: string }>("/api/v1/clan/discord-roles", { enabled, role_map: roleMap });
+  async pull(): Promise<{ roles: DiscordRoles; message: string }> {
+    const r = await apiClient.post<Saved>("/api/v1/clan/discord-roles/pull");
     return { roles: toDiscordRoles(r.roles), message: r.message };
+  },
+  async save(levels: Record<string, AccessLevel>): Promise<{ roles: DiscordRoles; message: string }> {
+    const r = await apiClient.put<Saved>("/api/v1/clan/discord-roles", { levels });
+    return { roles: toDiscordRoles(r.roles), message: r.message };
+  },
+  async members(): Promise<{ status: "ok" | "no_bot" | "intent_required" | "no_guild"; members: DiscordMember[] }> {
+    return apiClient.get("/api/v1/clan/discord-members");
   },
 };

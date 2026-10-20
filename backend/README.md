@@ -74,7 +74,6 @@ GET  /api/v1/auth/me                 # работает и по куке, и п�
 7. `User` апсертится: `id = discord_id`, `display_name = global_name or username`,
    `avatar_url = https://cdn.discordapp.com/avatars/{id}/{avatar}.png`.
 8. Резолвится клан (все запросы под `bypass_clan_filter()`):
-   - `invite` в state (ссылка `/?invite=INV-…`) -> вступление в клан с ролью кода;
    - `clan_id` из state -> строго требовать membership в этом клане;
    - пользователь владеет Discord-серверами (`GET /users/@me/guilds`, флаг `owner`) ->
      подписанная кука `sindaris_discord_setup` и 302 на `FRONTEND_URL?setup=guild`:
@@ -82,7 +81,10 @@ GET  /api/v1/auth/me                 # работает и по куке, и п�
      сервер становится кланом (`clans.discord_guild_id`), пользователь — `owner`;
      старый клан без сервера, где он уже owner, привязывается к серверу (данные сохраняются);
    - иначе последнее активное membership, а если его нет — `403 user.no_clan`
-     (автоматического вступления больше нет: только invite-ссылка).
+     (вступление — только через кланы с ботом, см. «Роли Discord»).
+   - уровень доступа уже вступивших пересчитывается по их текущим ролям Discord;
+   - кланы серверов пользователя, где командир подтянул роли (бот добавлен), попадают в
+     `joins` экрана выбора: «Вступить в терминал клана …» с ролями пользователя на сервере.
 9. Выпускается JWT (`issue_access_token`) с `sub`, `clan_id`, `role`, scopes,
    `exp`, `iss`, `aud`.
 10. По умолчанию JWT кладётся в cookie (`HttpOnly`, `Secure=COOKIE_SECURE`,
@@ -319,13 +321,13 @@ principal: Annotated[
 GET  /api/v1/auth/me
 POST /api/v1/auth/dev-token
 POST /api/v1/auth/guest                     # гость: только инструменты/каталог, клан __guest__
-GET  /api/v1/auth/invites/{code}/preview     # публичное превью invite-ссылки
 GET  /api/v1/auth/discord/setup              # серверы во владении после Discord-входа
 POST /api/v1/auth/discord/setup              # {guild_id} -> owner клана | {clan_id}
 POST /api/v1/auth/clan-token
-GET  /api/v1/auth/invites
-POST /api/v1/auth/invites
-DELETE /api/v1/auth/invites/{invite_id}
+GET  /api/v1/clan/discord-roles             # командир: роли сервера и уровни
+POST /api/v1/clan/discord-roles/pull        # командир: подтянуть роли через бота
+PUT  /api/v1/clan/discord-roles             # командир: {levels: {role_id: basic|medium|high}}
+GET  /api/v1/clan/discord-members           # командир: участники сервера (Server Members Intent)
 ```
 
 ### Current auth methods
@@ -337,7 +339,7 @@ Backend сейчас поддерживает:
 - `X-Clan-Token`;
 - Discord OAuth2 (`scope=identify guilds`) -> JWT/cookie, выбор сервера клана владельцем;
 - dev-token для локальной разработки;
-- invite-ссылки (`/?invite=CODE` -> Discord-вход) для вступления в клан;
+- вступление через бота клана: уровни доступа по ролям Discord (basic → member, medium → officer, high → admin);
 - гостевой JWT (`gst`) — инструменты и каталог в пустом арендаторе `__guest__`, данные кланов недоступны.
 
 ### Discord auth files
@@ -955,8 +957,7 @@ http://localhost:3000/api/v1/auth/discord/callback
 
 | Код | Причина | Что делать |
 |---|---|---|
-| `forbidden` | Нет клана и нет серверов во владении | Отправить пользователю invite-ссылку из кабинета |
-| `invite_invalid` / `invite_expired` / `invite_exhausted` | Ссылка отозвана, просрочена или исчерпана | Создать новую ссылку |
+| `forbidden` | Нет клана, нет серверов во владении и нет кланов с ботом | Командир добавляет бота и подтягивает роли в «Роли Discord» |
 | `setup_expired` | Выбор сервера не сделан за 15 минут | Повторить вход |
 | `state_invalid` | Просроченный/чужой state (TTL 10 мин) | Повторить вход |
 | `exchange_failed` | Discord отклонил код: неверный secret или redirect_uri | Сверить `DISCORD_CLIENT_SECRET` и `DISCORD_REDIRECT_URI` с порталом |
@@ -970,7 +971,8 @@ http://localhost:3000/api/v1/auth/discord/callback
    был owner клана `SANDALIS`, этот клан привязывается к серверу, данные сохраняются;
    иначе создаётся клан с id = ID сервера — тогда для правки контента выставьте
    `CONTENT_ADMIN_CLAN_ID` = этот id.
-4. Остальные — «Кабинет» → «Приглашения» → ссылка-приглашение (🔗), её открывают и входят через Discord.
+4. Командир: «Кабинет» → «Роли Discord» → «Добавить бота» → «Подтянуть роли» → уровни ролей.
+   Участники сервера при входе через Discord видят «Вступить в терминал клана …».
 
 ### Локальные тесты
 

@@ -35,6 +35,18 @@ const setupCookie = () =>
         { id: LINKED_GUILD, name: "SINDARIS", icon_url: null },
         { id: "900000000000000002", name: "Foxhole Logistics Hub", icon_url: null },
       ],
+      joins: [
+        {
+          clan_id: "ALLIED",
+          name: "11th Logistics Regiment",
+          icon_url: null,
+          level: "medium",
+          roles: [
+            { name: "Officer", color: 15158332, level: "medium" },
+            { name: "Logistics", color: 3447003, level: "basic" },
+          ],
+        },
+      ],
     },
     3600,
   );

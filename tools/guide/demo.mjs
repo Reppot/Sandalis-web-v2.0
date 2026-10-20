@@ -78,8 +78,6 @@ export async function seedDemo(base) {
   });
   await call("POST", `/reports/${r1.report.id}/status`, { status: "in_progress" });
 
-  await call("POST", "/auth/invites", { role: "member", max_uses: 10, expires_in_hours: 72 });
-  await call("POST", "/auth/invites", { role: "officer", max_uses: 1, expires_in_hours: 24 });
 
   return { token, pinnedId: port.id, draft };
 }

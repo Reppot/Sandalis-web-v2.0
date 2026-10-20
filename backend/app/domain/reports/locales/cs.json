@@ -32,5 +32,11 @@
   "settings": {
     "saved": "Nastavení klanu uloženo.",
     "roles_saved": "Přiřazení rolí Discordu uloženo. Role se aktualizují při dalším přihlášení členů."
+  },
+  "roles": {
+    "owner_only": "Role Discordu spravuje jen velitel klanu (vlastník serveru).",
+    "bot_missing": "Bot klanu nevidí server: přidejte ho tlačítkem „Přidat bota“.",
+    "pulled": "Role serveru načteny: {n}. Nové role mají základní úroveň.",
+    "saved": "Úrovně přístupu uloženy. Členové je dostanou při dalším přihlášení."
   }
 }

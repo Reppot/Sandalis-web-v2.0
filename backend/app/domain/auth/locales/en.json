@@ -13,7 +13,7 @@
   },
   "user": {
     "not_member": "User {user_id} is not a member of clan {clan_id}.",
-    "no_clan": "You are not in any clan. Ask your commander for an invite link or sign in as a guest."
+    "no_clan": "You are not in any clan. The commander has to add the clan bot to their Discord server and pull the roles — then you can join when signing in. Or sign in as a guest."
   },
   "code": {
     "invalid": "Invite code not found or has been revoked.",
@@ -37,7 +37,8 @@
     "clan_not_member": "You are not a member of this clan.",
     "nothing_selected": "Pick a server or a clan.",
     "clan_created": "Clan “{clan}” is linked to your Discord server. You are the commander.",
-    "signed_in": "Welcome, {name}."
+    "signed_in": "Welcome, {name}.",
+    "joined": "You joined the terminal of clan “{clan}”."
   },
   "guest": {
     "disabled": "Guest access is disabled.",

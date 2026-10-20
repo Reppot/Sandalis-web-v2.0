@@ -13,13 +13,11 @@ from app.core.i18n import Translator, normalize_locale
 from app.core.permissions import ClanRole, Scopes, scopes_for
 from app.core.security import decode_access_token, hash_clan_token, issue_access_token  # noqa: F401
 from app.core.tenancy import bypass_clan_filter
-from app.models.code import ClanInviteCode
 from app.models.rbac import Clan, ClanApiToken, ClanMembership, User
 from app.schemas.auth import (
     ClanApiTokenCreate,
     ClanApiTokenCreated,
     DevTokenRequest,
-    InvitePreview,
     MeRead,
     SetupGuildRead,
     SetupMembershipRead,
@@ -181,18 +179,30 @@ class AuthService:
         with bypass_clan_filter():
             return (await self.session.execute(stmt.limit(1))).scalars().first()
 
-    async def sync_discord_roles(
-        self, *, user_id: str, display_name: str, access_token: str, guild_ids: list[str]
-    ) -> int:
-        from app.services.discord_roles import sync_member_roles
+    async def sync_discord_roles(self, *, user_id: str, access_token: str, guild_ids: list[str]) -> int:
+        from app.services.discord_roles import sync_existing_members
 
-        async def upsert(**kw):  # noqa: ANN003, ANN202
-            return await self._upsert_identity(**kw, locale=self.t.locale)
+        return await sync_existing_members(self.session, user_id=user_id, access_token=access_token, guild_ids=guild_ids)
 
-        return await sync_member_roles(
-            self.session, upsert, user_id=user_id, display_name=display_name,
-            access_token=access_token, guild_ids=guild_ids,
+    async def joinable_clans(self, *, user_id: str, access_token: str, guilds: list) -> list[dict]:  # noqa: ANN001
+        from app.services.discord_roles import joinable_clans
+
+        return await joinable_clans(self.session, user_id=user_id, access_token=access_token, guilds=guilds)
+
+    async def join_clan(self, *, user_id: str, display_name: str, join: dict) -> tuple[ClanMembership, str]:
+        """Вступление в клан с экрана выбора: уровень посчитан при входе по ролям Discord."""
+        from app.services.discord_roles import LEVEL_ROLE
+
+        role = LEVEL_ROLE.get(join.get("level", "basic"), ClanRole.MEMBER)
+        membership, clan_name = await self._upsert_identity(
+            clan_id=join["clan_id"], user_id=user_id, display_name=display_name, role=role, locale=self.t.locale,
         )
+        with bypass_clan_filter():
+            membership.is_active = True
+            if membership.role != ClanRole.OWNER:
+                membership.role = role
+            await self.session.flush()
+        return membership, clan_name
 
     # ---------------- выбор сервера клана (владелец Discord-сервера) ------------ #
     async def setup_options(
@@ -280,59 +290,6 @@ class AuthService:
             membership.is_active = True
             await self.session.flush()
         return membership, clan.name
-
-    # ---------------- invite-ссылка ---------------------------------------------- #
-    async def _invite(self, code_value: str, *, check_usage: bool = True) -> ClanInviteCode:
-        now = datetime.now(UTC)
-        with bypass_clan_filter():
-            code = (
-                await self.session.execute(
-                    select(ClanInviteCode).where(ClanInviteCode.code == code_value.strip().upper())
-                )
-            ).scalar_one_or_none()
-        if code is None or code.revoked_at is not None:
-            raise NotFoundError(message_key="code.invalid", domain=DOMAIN, code="invite_invalid")
-        if not check_usage:
-            return code
-        if code.expires_at is not None and code.expires_at < now:
-            raise ConflictError(message_key="code.expired", domain=DOMAIN, code="invite_expired")
-        if code.used_count >= code.max_uses:
-            raise ConflictError(message_key="code.exhausted", domain=DOMAIN, code="invite_exhausted")
-        return code
-
-    async def preview_invite(self, code_value: str) -> InvitePreview:
-        code = await self._invite(code_value)
-        with bypass_clan_filter():
-            clan = await self.session.get(Clan, code.clan_id)
-        return InvitePreview(
-            code=code.code,
-            clan_name=clan.name if clan else code.clan_id,
-            clan_icon_url=clan.icon_url if clan else None,
-            role=code.role,
-        )
-
-    async def redeem_invite(
-        self, *, code_value: str, user_id: str, display_name: str
-    ) -> tuple[ClanMembership, str]:
-        """Discord-пользователь вступает в клан по invite-ссылке. Повторный
-        переход уже состоящего участника не тратит использование и не меняет роль."""
-        code = await self._invite(code_value, check_usage=False)
-        existing = await self._active_membership(user_id, code.clan_id)
-        if existing is None:
-            await self._invite(code_value)       # срок и лимит — только для новых
-        membership, clan_name = await self._upsert_identity(
-            clan_id=code.clan_id,
-            user_id=user_id,
-            display_name=display_name,
-            role=code.role,
-            locale=self.t.locale,
-        )
-        if existing is None:
-            with bypass_clan_filter():
-                membership.is_active = True
-                code.used_count += 1
-                await self.session.flush()
-        return membership, clan_name
 
     # ---------------- гостевой просмотр ------------------------------------------ #
     def issue_guest_token(self) -> TokenResponse:

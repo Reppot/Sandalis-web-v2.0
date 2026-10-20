@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -34,34 +35,50 @@ class ClanSettingsUpdate(BaseModel):
         return value
 
 
+Level = Literal["basic", "medium", "high"]
+
+
 class DiscordRoleRead(BaseModel):
     id: str
     name: str
     color: int
     position: int
+    level: Level
 
 
 class DiscordRolesRead(BaseModel):
-    """Экран «Роли Discord»: роли сервера клана и их сопоставление."""
+    """«Роли Discord»: роли сервера клана, подтянутые командиром, и их уровни."""
     guild_id: str | None            # null — клан не привязан к Discord-серверу
     bot_configured: bool            # задан DISCORD_BOT_TOKEN
-    bot_in_guild: bool              # бот видит сервер (роли загружены)
+    bot_in_guild: bool              # бот видит сервер
     bot_invite_url: str | None
-    enabled: bool
+    synced_at: datetime | None      # когда роли подтянуты (null — ещё нет: вступление закрыто)
     roles: list[DiscordRoleRead]
-    role_map: dict[str, str]
 
 
 class DiscordRolesUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    enabled: bool
-    role_map: dict[Annotated[str, Field(pattern=r"^\d{5,25}$")], Literal["guest", "member", "officer", "admin"]]
+    levels: dict[Annotated[str, Field(pattern=r"^\d{5,25}$")], Level]
 
 
 class DiscordRolesSaved(BaseModel):
     roles: DiscordRolesRead
     message: str
+
+
+class DiscordMemberRead(BaseModel):
+    id: str
+    name: str
+    roles: list[str]
+    level: Level
+    joined: bool                    # уже вступил в терминал
+    role: str | None                # роль в терминале, если вступил
+
+
+class DiscordMembersRead(BaseModel):
+    status: Literal["ok", "no_bot", "intent_required", "no_guild"]
+    members: list[DiscordMemberRead]
 
 
 class ClanSettingsSaved(BaseModel):

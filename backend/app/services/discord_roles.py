@@ -1,17 +1,20 @@
-"""Роли терминала по ролям Discord-сервера клана.
+"""Клан и роли Discord-сервера: вступление и уровни доступа без приглашений.
 
-* Админ клана сопоставляет роли сервера с ролями терминала (clan_settings.discord_role_map).
-* При каждом входе через Discord (scope guilds.members.read) для кланов, привязанных к
-  серверам пользователя, читаются его роли на сервере и выдаётся самая старшая
-  сопоставленная роль: участник сервера попадает в клан без invite-ссылки, а смена
-  роли в Discord доходит до терминала при следующем входе.
-* Названия ролей Discord отдаёт только боту, поэтому для экрана сопоставления нужен
-  DISCORD_BOT_TOKEN и бот на сервере (без каких-либо прав).
-* Командира (owner) синхронизация не трогает: его роль даёт владение сервером.
+* Командир (владелец Discord-сервера клана) добавляет бота клана на сервер (без прав) и
+  «подтягивает» роли сервера — снимок хранится в clan_settings.discord_roles.
+* Каждой роли командир назначает уровень доступа: basic (рядовой) — по умолчанию,
+  medium или high. Уровень -> роль терминала: member / officer / admin.
+* При входе через Discord пользователь видит кланы своих серверов, где роли уже
+  подтянуты, со своими ролями на сервере — и вступает кнопкой «Вступить в терминал клана».
+  Уровень = самый высокий среди его ролей; при каждом следующем входе он пересчитывается.
+* Роли пользователя читаются его же токеном (scope guilds.members.read); названия ролей
+  и список участников сервера отдаёт бот (DISCORD_BOT_TOKEN).
+* Командира (owner) пересчёт не трогает: его роль даёт владение сервером.
 """
 from __future__ import annotations
 
-from typing import Final
+from datetime import UTC, datetime
+from typing import Any, Final
 from urllib.parse import urlencode
 
 import httpx
@@ -25,20 +28,24 @@ from app.models.clan_settings import ClanSettings
 from app.models.rbac import Clan, ClanMembership
 from app.services.discord_oauth import get_http_client
 
-SYNCABLE: Final[dict[str, ClanRole]] = {
-    r.value: r for r in (ClanRole.GUEST, ClanRole.MEMBER, ClanRole.OFFICER, ClanRole.ADMIN)
-}
-RANK: Final[dict[ClanRole, int]] = {
-    ClanRole.GUEST: 0, ClanRole.MEMBER: 1, ClanRole.OFFICER: 2, ClanRole.ADMIN: 3, ClanRole.OWNER: 4,
-}
+LEVELS: Final[tuple[str, ...]] = ("basic", "medium", "high")
+LEVEL_ROLE: Final[dict[str, ClanRole]] = {"basic": ClanRole.MEMBER, "medium": ClanRole.OFFICER, "high": ClanRole.ADMIN}
+DEFAULT_LEVEL: Final[str] = "basic"
 
 
 def _api(path: str) -> str:
     return f"{settings.DISCORD_API_BASE_URL.rstrip('/')}{path}"
 
 
+def _bot_headers() -> dict[str, str]:
+    return {"Authorization": f"Bot {settings.DISCORD_BOT_TOKEN}"}
+
+
+# --------------------------------------------------------------------------- #
+# Discord API
+# --------------------------------------------------------------------------- #
 async def fetch_member_roles(access_token: str, guild_id: str) -> list[str] | None:
-    """Роли пользователя на сервере (scope guilds.members.read). None — не участник/сбой."""
+    """Роли пользователя на сервере (его токен, scope guilds.members.read)."""
     try:
         async with get_http_client() as client:
             r = await client.get(_api(f"/users/@me/guilds/{guild_id}/member"),
@@ -51,14 +58,13 @@ async def fetch_member_roles(access_token: str, guild_id: str) -> list[str] | No
     return [str(x) for x in roles] if isinstance(roles, list) else None
 
 
-async def fetch_guild_roles(guild_id: str) -> list[dict] | None:
+async def fetch_guild_roles(guild_id: str) -> list[dict[str, Any]] | None:
     """Роли сервера глазами бота. None — бот не настроен или его нет на сервере."""
     if not settings.DISCORD_BOT_TOKEN:
         return None
     try:
         async with get_http_client() as client:
-            r = await client.get(_api(f"/guilds/{guild_id}/roles"),
-                                 headers={"Authorization": f"Bot {settings.DISCORD_BOT_TOKEN}"})
+            r = await client.get(_api(f"/guilds/{guild_id}/roles"), headers=_bot_headers())
         if r.status_code // 100 != 2:
             return None
         data = r.json()
@@ -70,10 +76,46 @@ async def fetch_guild_roles(guild_id: str) -> list[dict] | None:
         {"id": str(x["id"]), "name": str(x.get("name", "")), "color": int(x.get("color") or 0),
          "position": int(x.get("position") or 0)}
         for x in data
-        # @everyone (id = id сервера) и роли интеграций/ботов сопоставлять бессмысленно
+        # @everyone (id = id сервера) и роли интеграций/ботов уровнями не управляются
         if str(x.get("id")) != str(guild_id) and not x.get("managed")
     ]
     return sorted(roles, key=lambda x: -x["position"])
+
+
+async def fetch_guild_members(guild_id: str) -> tuple[str, list[dict[str, Any]]]:
+    """Участники сервера (бот). Статус: ok | no_bot | intent_required (нужен
+    Server Members Intent в Developer Portal → Bot)."""
+    if not settings.DISCORD_BOT_TOKEN:
+        return "no_bot", []
+    members: list[dict[str, Any]] = []
+    after = "0"
+    try:
+        async with get_http_client() as client:
+            for _ in range(10):                      # до 10 000 участников
+                r = await client.get(_api(f"/guilds/{guild_id}/members"), headers=_bot_headers(),
+                                     params={"limit": 1000, "after": after})
+                if r.status_code == 403:
+                    return "intent_required", []
+                if r.status_code // 100 != 2:
+                    return "no_bot", []
+                page = r.json()
+                if not isinstance(page, list) or not page:
+                    break
+                for m in page:
+                    user = m.get("user") or {}
+                    if user.get("bot"):
+                        continue
+                    members.append({
+                        "id": str(user.get("id")),
+                        "name": m.get("nick") or user.get("global_name") or user.get("username") or str(user.get("id")),
+                        "roles": [str(x) for x in m.get("roles") or []],
+                    })
+                after = str((page[-1].get("user") or {}).get("id") or after)
+                if len(page) < 1000:
+                    break
+    except (httpx.HTTPError, ValueError):
+        return "no_bot", []
+    return "ok", members
 
 
 def bot_invite_url(guild_id: str | None) -> str | None:
@@ -85,40 +127,96 @@ def bot_invite_url(guild_id: str | None) -> str | None:
     return f"https://discord.com/oauth2/authorize?{urlencode(params)}"
 
 
-def best_role(member_roles: list[str], role_map: dict[str, str]) -> ClanRole | None:
-    mapped = [SYNCABLE[role_map[r]] for r in member_roles if role_map.get(r) in SYNCABLE]
-    return max(mapped, key=RANK.__getitem__) if mapped else None
+# --------------------------------------------------------------------------- #
+# уровни
+# --------------------------------------------------------------------------- #
+def level_of(member_roles: list[str], snapshot: list[dict[str, Any]], role_map: dict[str, str]) -> str:
+    """Самый высокий уровень среди ролей участника; без ролей/уровней — basic."""
+    known = {r["id"] for r in snapshot}
+    levels = [role_map.get(r, DEFAULT_LEVEL) for r in member_roles if r in known]
+    levels = [lv for lv in levels if lv in LEVELS] or [DEFAULT_LEVEL]
+    return max(levels, key=LEVELS.index)
 
 
-async def sync_member_roles(
-    session: AsyncSession, upsert_identity, *, user_id: str, display_name: str,  # noqa: ANN001
-    access_token: str, guild_ids: list[str],
-) -> int:
-    """Выдать/обновить membership по ролям Discord во всех кланах серверов пользователя.
-    upsert_identity — AuthService._upsert_identity (создаёт клан/юзера/membership)."""
+def roles_view(member_roles: list[str], snapshot: list[dict[str, Any]], role_map: dict[str, str]) -> list[dict[str, Any]]:
+    """Роли участника из снимка: имя, цвет, уровень — для экрана вступления."""
+    mine = set(member_roles)
+    return [{"name": r["name"], "color": r["color"], "level": role_map.get(r["id"], DEFAULT_LEVEL)}
+            for r in snapshot if r["id"] in mine]
+
+
+async def _linked_clans(session: AsyncSession, guild_ids: list[str]):  # noqa: ANN202
+    """Кланы серверов пользователя, где командир уже подтянул роли (бот добавлен)."""
     if not guild_ids:
-        return 0
+        return []
     with bypass_clan_filter():
         rows = (
             await session.execute(
-                select(Clan.id, Clan.discord_guild_id, ClanSettings.discord_role_map)
+                select(Clan, ClanSettings)
                 .join(ClanSettings, ClanSettings.clan_id == Clan.id)
-                .where(Clan.discord_guild_id.in_(guild_ids), ClanSettings.discord_role_sync.is_(True))
+                .where(Clan.discord_guild_id.in_(guild_ids), Clan.is_active.is_(True))
             )
         ).all()
-    synced = 0
-    for clan_id, guild_id, role_map in rows:
-        member_roles = await fetch_member_roles(access_token, guild_id)
-        role = best_role(member_roles or [], role_map or {})
-        if role is None:
-            continue
-        membership, _ = await upsert_identity(
-            clan_id=clan_id, user_id=user_id, display_name=display_name, role=role,
-        )
+    return [(clan, cs) for clan, cs in rows if cs.discord_roles]
+
+
+async def joinable_clans(
+    session: AsyncSession, *, user_id: str, access_token: str, guilds: list[Any]
+) -> list[dict[str, Any]]:
+    """Кланы, в которые пользователь может вступить: серверы, где он участник (но не
+    владелец — для своих серверов есть выбор сервера), бот добавлен, членства ещё нет."""
+    not_owned = [g.id for g in guilds if not g.owner]
+    out: list[dict[str, Any]] = []
+    for clan, cs in await _linked_clans(session, not_owned):
         with bypass_clan_filter():
-            membership.is_active = True
-            if membership.role != ClanRole.OWNER:
+            member = (
+                await session.execute(
+                    select(ClanMembership.id).where(
+                        ClanMembership.clan_id == clan.id, ClanMembership.user_id == user_id,
+                        ClanMembership.is_active.is_(True),
+                    )
+                )
+            ).scalar_one_or_none()
+        if member is not None:
+            continue
+        member_roles = await fetch_member_roles(access_token, clan.discord_guild_id) or []
+        out.append({
+            "clan_id": clan.id,
+            "name": clan.name,
+            "icon_url": clan.icon_url,
+            "level": level_of(member_roles, cs.discord_roles, cs.discord_role_map or {}),
+            "roles": roles_view(member_roles, cs.discord_roles, cs.discord_role_map or {}),
+        })
+    return out
+
+
+async def sync_existing_members(
+    session: AsyncSession, *, user_id: str, access_token: str, guild_ids: list[str]
+) -> int:
+    """Пересчитать уровень уже вступивших участников по их текущим ролям Discord."""
+    updated = 0
+    for clan, cs in await _linked_clans(session, guild_ids):
+        with bypass_clan_filter():
+            membership = (
+                await session.execute(
+                    select(ClanMembership).where(
+                        ClanMembership.clan_id == clan.id, ClanMembership.user_id == user_id,
+                        ClanMembership.is_active.is_(True),
+                    )
+                )
+            ).scalar_one_or_none()
+            if membership is None or membership.role == ClanRole.OWNER:
+                continue
+            member_roles = await fetch_member_roles(access_token, clan.discord_guild_id)
+            if member_roles is None:                 # ушёл с сервера или сбой — не трогаем
+                continue
+            role = LEVEL_ROLE[level_of(member_roles, cs.discord_roles, cs.discord_role_map or {})]
+            if membership.role != role:
                 membership.role = role
+                updated += 1
             await session.flush()
-        synced += 1
-    return synced
+    return updated
+
+
+def snapshot_at() -> datetime:
+    return datetime.now(UTC)

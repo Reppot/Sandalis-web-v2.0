@@ -27,12 +27,10 @@ from app.schemas.auth import (
     DevTokenRequest,
     DiscordSetupRead,
     DiscordSetupSelect,
-    InvitePreview,
     LocaleUpdate,
     MeRead,
     TokenResponse,
 )
-from app.schemas.code import InviteCodeCreate, InviteCodeCreated, InviteCodeRead
 from app.schemas.common import Page
 from app.services.auth import AuthService
 from app.services.discord_oauth import (
@@ -50,7 +48,6 @@ from app.services.discord_oauth import (
     unseal,
     verify_state,
 )
-from app.services.invites import InviteService
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -62,14 +59,7 @@ async def get_auth_service(session: DbDep, translator: AuthTranslator) -> AuthSe
     return AuthService(session, translator)
 
 
-async def get_invite_service(
-    session: ClanSession, principal: CurrentPrincipal, translator: AuthTranslator
-) -> InviteService:
-    return InviteService(session, principal, translator)
-
-
 AuthServiceDep = Annotated[AuthService, Depends(get_auth_service)]
-InviteServiceDep = Annotated[InviteService, Depends(get_invite_service)]
 
 
 # ---------------- session cookie ------------------------------------------- #
@@ -198,15 +188,6 @@ async def guest_login(response: Response, service: AuthServiceDep) -> TokenRespo
     return token
 
 
-@router.get(
-    "/invites/{code}/preview",
-    response_model=InvitePreview,
-    summary="Публичное превью invite-ссылки: клан и роль (код = секрет)",
-)
-async def preview_invite(code: str, service: AuthServiceDep) -> InvitePreview:
-    return await service.preview_invite(code)
-
-
 @router.post(
     "/clan-token",
     response_model=ClanApiTokenCreated,
@@ -219,51 +200,6 @@ async def create_clan_token(
     principal: Annotated[Principal, Depends(PermissionChecker([Scopes.CLAN_SETTINGS_WRITE]))],
 ) -> ClanApiTokenCreated:
     return await service.create_clan_api_token(principal, payload)
-
-
-# ---------------- invite codes (management) ---------------------------------- #
-@router.get(
-    "/invites",
-    response_model=Page[InviteCodeRead],
-    summary="Пригласительные коды клана",
-    dependencies=[Depends(PermissionChecker([Scopes.CLAN_MEMBERS_READ]))],  # officer+
-)
-async def list_invites(
-    service: InviteServiceDep,
-    include_revoked: Annotated[bool, Query()] = False,
-    limit: Annotated[int, Query(ge=1, le=200)] = 50,
-    offset: Annotated[int, Query(ge=0)] = 0,
-) -> Page[InviteCodeRead]:
-    rows, total = await service.list_invites(
-        include_revoked=include_revoked, limit=limit, offset=offset
-    )
-    return Page[InviteCodeRead](
-        items=[InviteCodeRead.model_validate(r) for r in rows],
-        total=total, limit=limit, offset=offset,
-    )
-
-
-@router.post(
-    "/invites",
-    response_model=InviteCodeCreated,
-    status_code=status.HTTP_201_CREATED,
-    summary="Создать пригласительный код",
-    dependencies=[Depends(PermissionChecker([Scopes.CLAN_MEMBERS_WRITE]))],  # admin+
-)
-async def create_invite(payload: InviteCodeCreate, service: InviteServiceDep) -> InviteCodeCreated:
-    invite, message = await service.create_invite(payload)
-    return InviteCodeCreated(invite=InviteCodeRead.model_validate(invite), message=message)
-
-
-@router.delete(
-    "/invites/{invite_id}",
-    status_code=status.HTTP_204_NO_CONTENT,
-    summary="Отозвать пригласительный код",
-    dependencies=[Depends(PermissionChecker([Scopes.CLAN_MEMBERS_WRITE]))],  # admin+
-)
-async def revoke_invite(invite_id: uuid.UUID, service: InviteServiceDep) -> Response:
-    await service.revoke_invite(invite_id)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 # ---------------- Discord OAuth (stateless JWT) ------------------------------- #
@@ -279,7 +215,6 @@ async def revoke_invite(invite_id: uuid.UUID, service: InviteServiceDep) -> Resp
 async def discord_login(
     clan_id: Annotated[str | None, Query(max_length=64)] = None,
     return_to: Annotated[str | None, Query(max_length=512)] = None,
-    invite: Annotated[str | None, Query(max_length=24)] = None,
 ) -> Response:
     if not settings.DISCORD_CLIENT_ID or not settings.DISCORD_CLIENT_SECRET:
         raise AppError(
@@ -289,7 +224,7 @@ async def discord_login(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             params={},
         )
-    state = make_state(clan_id=clan_id, return_to=return_to, invite=invite)
+    state = make_state(clan_id=clan_id, return_to=return_to)
     return RedirectResponse(build_authorize_url(state), status_code=status.HTTP_302_FOUND)
 
 
@@ -337,49 +272,45 @@ async def discord_callback(
             locale=profile.locale,
         )
 
-        # роли сервера клана -> роли терминала (участник сервера входит без приглашения)
+        # серверы пользователя: свои (создать клан), кланы с ботом (вступить),
+        # и пересчёт уровня доступа там, где он уже состоит
         guilds = await fetch_user_guilds(token.access_token)
         await service.sync_discord_roles(
-            user_id=profile.id, display_name=profile.display_name,
-            access_token=token.access_token, guild_ids=[g.id for g in guilds],
+            user_id=profile.id, access_token=token.access_token, guild_ids=[g.id for g in guilds],
         )
 
-        if oauth_state.invite:
-            # invite-ссылка: вступление в клан с ролью кода
-            membership, _ = await service.redeem_invite(
-                code_value=oauth_state.invite,
-                user_id=profile.id,
-                display_name=profile.display_name,
+        owned = [] if oauth_state.clan_id else owned_guilds(guilds)
+        joins = [] if oauth_state.clan_id else await service.joinable_clans(
+            user_id=profile.id, access_token=token.access_token, guilds=guilds,
+        )
+        if owned or joins:
+            # владелец серверов: выбор сервера клана (или уже существующего клана)
+            await service.commit()
+            setup = seal(
+                {
+                    "uid": profile.id,
+                    "name": profile.display_name,
+                    "avatar": avatar_url(profile),
+                    "guilds": [
+                        {"id": g.id, "name": g.name, "icon_url": g.icon_url} for g in owned
+                    ],
+                    "joins": joins,
+                },
+                settings.DISCORD_SETUP_TTL_SEC,
             )
-        else:
-            owned = [] if oauth_state.clan_id else owned_guilds(guilds)
-            if owned:
-                # владелец серверов: выбор сервера клана (или уже существующего клана)
-                await service.commit()
-                setup = seal(
-                    {
-                        "uid": profile.id,
-                        "name": profile.display_name,
-                        "avatar": avatar_url(profile),
-                        "guilds": [
-                            {"id": g.id, "name": g.name, "icon_url": g.icon_url} for g in owned
-                        ],
-                    },
-                    settings.DISCORD_SETUP_TTL_SEC,
+            if json_mode:
+                body = JSONResponse(
+                    {"setup_required": True}, status_code=status.HTTP_202_ACCEPTED
                 )
-                if json_mode:
-                    body = JSONResponse(
-                        {"setup_required": True}, status_code=status.HTTP_202_ACCEPTED
-                    )
-                else:
-                    body = RedirectResponse(setup_redirect_url(), status_code=status.HTTP_302_FOUND)
-                _set_setup_cookie(body, setup)
-                return body
-            membership = await service.resolve_discord_membership(
-                user_id=profile.id,
-                display_name=profile.display_name,
-                clan_id=oauth_state.clan_id,
-            )
+            else:
+                body = RedirectResponse(setup_redirect_url(), status_code=status.HTTP_302_FOUND)
+            _set_setup_cookie(body, setup)
+            return body
+        membership = await service.resolve_discord_membership(
+            user_id=profile.id,
+            display_name=profile.display_name,
+            clan_id=oauth_state.clan_id,
+        )
 
         token_response = service.issue_token(membership, profile.id, profile.display_name)
         token_response.message = translator.t(
@@ -418,6 +349,7 @@ async def discord_setup(
         display_name=body.get("name") or body["uid"],
         avatar_url=body.get("avatar"),
         guilds=guilds,
+        joins=body.get("joins") or [],
         memberships=memberships,
     )
 
@@ -442,6 +374,12 @@ async def discord_setup_select(
             raise PermissionDeniedError(message_key="setup.guild_not_owned", domain="auth", params={})
         membership, clan_name = await service.claim_guild(user_id=user_id, display_name=name, guild=guild)
         message = translator.t("setup.clan_created", domain="auth", clan=clan_name)
+    elif payload.join_clan_id:
+        join = next((j for j in body.get("joins") or [] if j.get("clan_id") == payload.join_clan_id), None)
+        if join is None:
+            raise PermissionDeniedError(message_key="setup.clan_not_member", domain="auth", params={})
+        membership, clan_name = await service.join_clan(user_id=user_id, display_name=name, join=join)
+        message = translator.t("setup.joined", domain="auth", clan=clan_name)
     elif payload.clan_id:
         try:
             membership = await service.resolve_discord_membership(

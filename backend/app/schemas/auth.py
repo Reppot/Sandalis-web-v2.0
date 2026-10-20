@@ -49,16 +49,6 @@ class TokenResponse(BaseModel):
     message: str             # локализованное уведомление
 
 
-class RedeemCodeRequest(BaseModel):
-    """Вступление в клан по пригласительному коду (стендин Discord OAuth: пока
-    личность передаёт клиент, в проде её даст OAuth-профиль Discord)."""
-    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
-
-    code: Annotated[str, Field(min_length=4, max_length=24)]
-    user_id: Annotated[str, Field(min_length=1, max_length=64)]
-    display_name: Annotated[str, Field(min_length=1, max_length=120)]
-
-
 class DiscordUserProfile(BaseModel):
     """Нормализованный профиль Discord (GET /users/@me, scope=identify)."""
     model_config = ConfigDict(extra="ignore", str_strip_whitespace=True)
@@ -115,11 +105,27 @@ class SetupMembershipRead(BaseModel):
     role: ClanRole
 
 
+class SetupJoinRole(BaseModel):
+    name: str
+    color: int
+    level: str
+
+
+class SetupJoinRead(BaseModel):
+    """Клан сервера, где пользователь участник и командир уже добавил бота."""
+    clan_id: str
+    name: str
+    icon_url: str | None
+    level: str                      # basic | medium | high — по ролям пользователя
+    roles: list[SetupJoinRole]
+
+
 class DiscordSetupRead(BaseModel):
-    """Незавершённый Discord-вход: выбор сервера клана (владелец) или клана."""
+    """Незавершённый Discord-вход: свои серверы, кланы для вступления, свои кланы."""
     display_name: str
     avatar_url: str | None
     guilds: list[SetupGuildRead]
+    joins: list[SetupJoinRead]
     memberships: list[SetupMembershipRead]
 
 
@@ -128,14 +134,7 @@ class DiscordSetupSelect(BaseModel):
 
     guild_id: Annotated[str | None, Field(default=None, max_length=32)]
     clan_id: Annotated[str | None, Field(default=None, max_length=64)]
-
-
-class InvitePreview(BaseModel):
-    """Публичное превью invite-ссылки для экрана входа."""
-    code: str
-    clan_name: str
-    clan_icon_url: str | None
-    role: ClanRole
+    join_clan_id: Annotated[str | None, Field(default=None, max_length=64)]
 
 
 class DiscordTokenResponse(BaseModel):

@@ -324,48 +324,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/auth/invites/{code}/preview:
-    get:
-      tags:
-      - auth
-      summary: 'Публичное превью invite-ссылки: клан и роль (код = секрет)'
-      operationId: preview_invite_api_v1_auth_invites__code__preview_get
-      parameters:
-      - name: code
-        in: path
-        required: true
-        schema:
-          type: string
-          title: Code
-      - name: Accept-Language
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Accept-Language
-      - name: X-Locale
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: X-Locale
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InvitePreview'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/auth/clan-token:
     post:
       tags:
@@ -426,200 +384,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/auth/invites:
-    get:
-      tags:
-      - auth
-      summary: Пригласительные коды клана
-      operationId: list_invites_api_v1_auth_invites_get
-      security:
-      - ClanJWT: []
-      parameters:
-      - name: include_revoked
-        in: query
-        required: false
-        schema:
-          type: boolean
-          default: false
-          title: Include Revoked
-      - name: limit
-        in: query
-        required: false
-        schema:
-          type: integer
-          maximum: 200
-          minimum: 1
-          default: 50
-          title: Limit
-      - name: offset
-        in: query
-        required: false
-        schema:
-          type: integer
-          minimum: 0
-          default: 0
-          title: Offset
-      - name: X-Clan-Token
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: X-Clan-Token
-      - name: Accept-Language
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Accept-Language
-      - name: X-Locale
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: X-Locale
-      - name: sindaris_session
-        in: cookie
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sindaris Session
-      responses:
-        '200':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Page_InviteCodeRead_'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-    post:
-      tags:
-      - auth
-      summary: Создать пригласительный код
-      operationId: create_invite_api_v1_auth_invites_post
-      security:
-      - ClanJWT: []
-      parameters:
-      - name: X-Clan-Token
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: X-Clan-Token
-      - name: Accept-Language
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Accept-Language
-      - name: X-Locale
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: X-Locale
-      - name: sindaris_session
-        in: cookie
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sindaris Session
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InviteCodeCreate'
-      responses:
-        '201':
-          description: Successful Response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InviteCodeCreated'
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/auth/invites/{invite_id}:
-    delete:
-      tags:
-      - auth
-      summary: Отозвать пригласительный код
-      operationId: revoke_invite_api_v1_auth_invites__invite_id__delete
-      security:
-      - ClanJWT: []
-      parameters:
-      - name: invite_id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-          title: Invite Id
-      - name: X-Clan-Token
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: X-Clan-Token
-      - name: Accept-Language
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Accept-Language
-      - name: X-Locale
-        in: header
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: X-Locale
-      - name: sindaris_session
-        in: cookie
-        required: false
-        schema:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sindaris Session
-      responses:
-        '204':
-          description: Successful Response
-        '422':
-          description: Validation Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/auth/discord/login:
     get:
       tags:
@@ -646,15 +410,6 @@ paths:
             maxLength: 512
           - type: 'null'
           title: Return To
-      - name: invite
-        in: query
-        required: false
-        schema:
-          anyOf:
-          - type: string
-            maxLength: 24
-          - type: 'null'
-          title: Invite
       responses:
         '200':
           description: Successful Response
@@ -1821,7 +1576,7 @@ paths:
     get:
       tags:
       - clan
-      summary: Роли Discord-сервера клана и их сопоставление с ролями терминала (admin+)
+      summary: Роли Discord-сервера клана и уровни доступа (командир)
       operationId: read_discord_roles_api_v1_clan_discord_roles_get
       security:
       - ClanJWT: []
@@ -1874,7 +1629,7 @@ paths:
     put:
       tags:
       - clan
-      summary: Сохранить сопоставление ролей Discord (admin+)
+      summary: 'Уровни доступа ролей: basic | medium | high (командир)'
       operationId: update_discord_roles_api_v1_clan_discord_roles_put
       security:
       - ClanJWT: []
@@ -1924,6 +1679,114 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DiscordRolesSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/clan/discord-roles/pull:
+    post:
+      tags:
+      - clan
+      summary: Подтянуть роли сервера через бота (командир)
+      operationId: pull_discord_roles_api_v1_clan_discord_roles_pull_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscordRolesSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/clan/discord-members:
+    get:
+      tags:
+      - clan
+      summary: Участники Discord-сервера клана глазами бота (командир)
+      operationId: read_discord_members_api_v1_clan_discord_members_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscordMembersRead'
         '422':
           description: Validation Error
           content:
@@ -3806,6 +3669,63 @@ components:
       - clan_id
       title: DevTokenRequest
       description: Выдача токена для разработки/администрирования (ENV!=prod либо DEV_AUTH_SECRET).
+    DiscordMemberRead:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        roles:
+          items:
+            type: string
+          type: array
+          title: Roles
+        level:
+          type: string
+          enum:
+          - basic
+          - medium
+          - high
+          title: Level
+        joined:
+          type: boolean
+          title: Joined
+        role:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Role
+      type: object
+      required:
+      - id
+      - name
+      - roles
+      - level
+      - joined
+      - role
+      title: DiscordMemberRead
+    DiscordMembersRead:
+      properties:
+        status:
+          type: string
+          enum:
+          - ok
+          - no_bot
+          - intent_required
+          - no_guild
+          title: Status
+        members:
+          items:
+            $ref: '#/components/schemas/DiscordMemberRead'
+          type: array
+          title: Members
+      type: object
+      required:
+      - status
+      - members
+      title: DiscordMembersRead
     DiscordRoleRead:
       properties:
         id:
@@ -3820,12 +3740,20 @@ components:
         position:
           type: integer
           title: Position
+        level:
+          type: string
+          enum:
+          - basic
+          - medium
+          - high
+          title: Level
       type: object
       required:
       - id
       - name
       - color
       - position
+      - level
       title: DiscordRoleRead
     DiscordRolesRead:
       properties:
@@ -3845,30 +3773,27 @@ components:
           - type: string
           - type: 'null'
           title: Bot Invite Url
-        enabled:
-          type: boolean
-          title: Enabled
+        synced_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Synced At
         roles:
           items:
             $ref: '#/components/schemas/DiscordRoleRead'
           type: array
           title: Roles
-        role_map:
-          additionalProperties:
-            type: string
-          type: object
-          title: Role Map
       type: object
       required:
       - guild_id
       - bot_configured
       - bot_in_guild
       - bot_invite_url
-      - enabled
+      - synced_at
       - roles
-      - role_map
       title: DiscordRolesRead
-      description: 'Экран «Роли Discord»: роли сервера клана и их сопоставление.'
+      description: '«Роли Discord»: роли сервера клана, подтянутые командиром, и их уровни.'
     DiscordRolesSaved:
       properties:
         roles:
@@ -3883,25 +3808,20 @@ components:
       title: DiscordRolesSaved
     DiscordRolesUpdate:
       properties:
-        enabled:
-          type: boolean
-          title: Enabled
-        role_map:
+        levels:
           patternProperties:
             ^\d{5,25}$:
               type: string
               enum:
-              - guest
-              - member
-              - officer
-              - admin
+              - basic
+              - medium
+              - high
           type: object
-          title: Role Map
+          title: Levels
       additionalProperties: false
       type: object
       required:
-      - enabled
-      - role_map
+      - levels
       title: DiscordRolesUpdate
     DiscordSent:
       properties:
@@ -3930,6 +3850,11 @@ components:
             $ref: '#/components/schemas/SetupGuildRead'
           type: array
           title: Guilds
+        joins:
+          items:
+            $ref: '#/components/schemas/SetupJoinRead'
+          type: array
+          title: Joins
         memberships:
           items:
             $ref: '#/components/schemas/SetupMembershipRead'
@@ -3940,9 +3865,10 @@ components:
       - display_name
       - avatar_url
       - guilds
+      - joins
       - memberships
       title: DiscordSetupRead
-      description: 'Незавершённый Discord-вход: выбор сервера клана (владелец) или клана.'
+      description: 'Незавершённый Discord-вход: свои серверы, кланы для вступления, свои кланы.'
     DiscordSetupSelect:
       properties:
         guild_id:
@@ -3957,6 +3883,12 @@ components:
             maxLength: 64
           - type: 'null'
           title: Clan Id
+        join_clan_id:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Join Clan Id
       additionalProperties: false
       type: object
       title: DiscordSetupSelect
@@ -3969,110 +3901,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    InviteCodeCreate:
-      properties:
-        role:
-          $ref: '#/components/schemas/ClanRole'
-          default: member
-        max_uses:
-          type: integer
-          maximum: 1000.0
-          exclusiveMinimum: 0.0
-          title: Max Uses
-          default: 1
-        expires_in_hours:
-          anyOf:
-          - type: integer
-            maximum: 720.0
-            exclusiveMinimum: 0.0
-          - type: 'null'
-          title: Expires In Hours
-      additionalProperties: false
-      type: object
-      title: InviteCodeCreate
-    InviteCodeCreated:
-      properties:
-        invite:
-          $ref: '#/components/schemas/InviteCodeRead'
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - invite
-      - message
-      title: InviteCodeCreated
-    InviteCodeRead:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        code:
-          type: string
-          title: Code
-        role:
-          $ref: '#/components/schemas/ClanRole'
-        max_uses:
-          type: integer
-          title: Max Uses
-        used_count:
-          type: integer
-          title: Used Count
-        expires_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Expires At
-        revoked_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Revoked At
-        created_by:
-          type: string
-          title: Created By
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-      - id
-      - code
-      - role
-      - max_uses
-      - used_count
-      - expires_at
-      - revoked_at
-      - created_by
-      - created_at
-      title: InviteCodeRead
-    InvitePreview:
-      properties:
-        code:
-          type: string
-          title: Code
-        clan_name:
-          type: string
-          title: Clan Name
-        clan_icon_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Clan Icon Url
-        role:
-          $ref: '#/components/schemas/ClanRole'
-      type: object
-      required:
-      - code
-      - clan_name
-      - clan_icon_url
-      - role
-      title: InvitePreview
-      description: Публичное превью invite-ссылки для экрана входа.
     LocaleUpdate:
       properties:
         locale:
@@ -4314,29 +4142,6 @@ components:
       - limit
       - offset
       title: Page[CatalogItemRead]
-    Page_InviteCodeRead_:
-      properties:
-        items:
-          items:
-            $ref: '#/components/schemas/InviteCodeRead'
-          type: array
-          title: Items
-        total:
-          type: integer
-          title: Total
-        limit:
-          type: integer
-          title: Limit
-        offset:
-          type: integer
-          title: Offset
-      type: object
-      required:
-      - items
-      - total
-      - limit
-      - offset
-      title: Page[InviteCodeRead]
     Page_OrderRead_:
       properties:
         items:
@@ -4939,6 +4744,53 @@ components:
       - clan_id
       - clan_name
       title: SetupGuildRead
+    SetupJoinRead:
+      properties:
+        clan_id:
+          type: string
+          title: Clan Id
+        name:
+          type: string
+          title: Name
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        level:
+          type: string
+          title: Level
+        roles:
+          items:
+            $ref: '#/components/schemas/SetupJoinRole'
+          type: array
+          title: Roles
+      type: object
+      required:
+      - clan_id
+      - name
+      - icon_url
+      - level
+      - roles
+      title: SetupJoinRead
+      description: Клан сервера, где пользователь участник и командир уже добавил бота.
+    SetupJoinRole:
+      properties:
+        name:
+          type: string
+          title: Name
+        color:
+          type: integer
+          title: Color
+        level:
+          type: string
+          title: Level
+      type: object
+      required:
+      - name
+      - color
+      - level
+      title: SetupJoinRole
     SetupMembershipRead:
       properties:
         clan_id:

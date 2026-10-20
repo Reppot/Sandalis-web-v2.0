@@ -26,44 +26,39 @@ export interface SetupMembership {
   role: ClanRole;
 }
 
+export type AccessLevel = "basic" | "medium" | "high";
+
+/** Клан сервера, где пользователь участник и командир уже добавил бота. */
+export interface SetupJoin {
+  clanId: string;
+  name: string;
+  iconUrl: string | null;
+  level: AccessLevel;
+  roles: { name: string; color: number; level: AccessLevel }[];
+}
+
 export interface DiscordSetup {
   displayName: string;
   avatarUrl: string | null;
   guilds: SetupGuild[];
+  joins: SetupJoin[];
   memberships: SetupMembership[];
-}
-
-export interface InvitePreview {
-  code: string;
-  clanName: string;
-  clanIconUrl: string | null;
-  role: ClanRole;
 }
 
 interface DiscordSetupDto {
   display_name: string;
   avatar_url: string | null;
   guilds: { id: string; name: string; icon_url: string | null; clan_id: string | null; clan_name: string | null }[];
+  joins: { clan_id: string; name: string; icon_url: string | null; level: AccessLevel; roles: SetupJoin["roles"] }[];
   memberships: { clan_id: string; clan_name: string; role: ClanRole }[];
 }
 
+export type SetupChoice = { guildId: string } | { clanId: string } | { joinClanId: string };
+
 export const authApi = {
-  discordLoginUrl(options: { returnTo?: string; invite?: string | null } = {}): string {
+  discordLoginUrl(options: { returnTo?: string } = {}): string {
     const params = new URLSearchParams({ return_to: options.returnTo ?? "/" });
-    if (options.invite) params.set("invite", options.invite);
     return `${env.apiUrl}/api/v1/auth/discord/login?${params.toString()}`;
-  },
-
-  /** Ссылка-приглашение: после Discord-входа пользователь вступает в клан с ролью кода. */
-  inviteLink(code: string): string {
-    return `${window.location.origin}/?invite=${encodeURIComponent(code)}`;
-  },
-
-  async previewInvite(code: string): Promise<InvitePreview> {
-    const dto = await apiClient.get<{ code: string; clan_name: string; clan_icon_url: string | null; role: ClanRole }>(
-      `/api/v1/auth/invites/${encodeURIComponent(code)}/preview`,
-    );
-    return { code: dto.code, clanName: dto.clan_name, clanIconUrl: dto.clan_icon_url, role: dto.role };
   },
 
   /** Незавершённый Discord-вход владельца серверов (кука живёт ~15 минут). */
@@ -73,15 +68,16 @@ export const authApi = {
       displayName: dto.display_name,
       avatarUrl: dto.avatar_url,
       guilds: dto.guilds.map((g) => ({ id: g.id, name: g.name, iconUrl: g.icon_url, clanId: g.clan_id, clanName: g.clan_name })),
+      joins: (dto.joins ?? []).map((j) => ({ clanId: j.clan_id, name: j.name, iconUrl: j.icon_url, level: j.level, roles: j.roles })),
       memberships: dto.memberships.map((m) => ({ clanId: m.clan_id, clanName: m.clan_name, role: m.role })),
     };
   },
 
-  /** Выбрать сервер клана (станете командиром) или клан, где уже состоите. */
-  async completeSetup(choice: { guildId: string } | { clanId: string }): Promise<UserSession> {
+  /** Свой сервер (станете командиром), вступление в клан с ботом или вход в свой клан. */
+  async completeSetup(choice: SetupChoice): Promise<UserSession> {
     await apiClient.post<TokenResponseDto>(
       "/api/v1/auth/discord/setup",
-      "guildId" in choice ? { guild_id: choice.guildId } : { clan_id: choice.clanId },
+      "guildId" in choice ? { guild_id: choice.guildId } : "joinClanId" in choice ? { join_clan_id: choice.joinClanId } : { clan_id: choice.clanId },
     );
     return this.getMe();
   },

@@ -4,7 +4,7 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { UserSession } from "@/entities/session";
 import { env, errorText, useT, type MessageKey } from "@/shared";
-import { authApi, type DiscordSetup, type InvitePreview } from "@/features/cabinet/api/authApi";
+import { authApi, type AccessLevel, type DiscordSetup, type SetupChoice } from "@/features/cabinet/api/authApi";
 import { LanguageSwitch } from "@/features/cabinet/ui/LanguageSwitch";
 
 // Ключи = AppError.code, которые бэкенд кладёт в FRONTEND_URL?error=<code>.
@@ -14,9 +14,6 @@ const OAUTH_ERRORS: Record<string, MessageKey> = {
   exchange_failed: "login.err.exchange_failed",
   profile_failed: "login.err.profile_failed",
   disabled: "login.err.disabled",
-  invite_invalid: "login.err.invite_invalid",
-  invite_expired: "login.err.invite_expired",
-  invite_exhausted: "login.err.invite_exhausted",
   setup_expired: "login.err.setup_expired",
 };
 
@@ -36,7 +33,7 @@ const DiscordGlyph = () => (
 
 /**
  * Экран входа старого терминала: видео на фоне (URL — из реестра медиа в БД, а не из
- * локальной папки), Discord OAuth, invite-ссылка, выбор сервера клана для владельца
+ * локальной папки), Discord OAuth, выбор своего сервера или клана для вступления
  * Discord-сервера и гостевой просмотр.
  */
 export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = ({ onLoggedIn }) => {
@@ -45,8 +42,6 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   const [oauthError, setOauthError] = React.useState("");
   const [error, setError] = React.useState("");
   const [busy, setBusy] = React.useState(false);
-  const [invite, setInvite] = React.useState<string | null>(null);
-  const [invitePreview, setInvitePreview] = React.useState<InvitePreview | null>(null);
   const [setupMode, setSetupMode] = React.useState(false);
   const [setup, setSetup] = React.useState<DiscordSetup | null>(null);
   const [videoFailed, setVideoFailed] = React.useState(false);
@@ -59,19 +54,9 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
     const params = new URLSearchParams(window.location.search);
     const code = params.get("error");
     if (code) setOauthError(code);
-    const inviteCode = params.get("invite");
-    if (inviteCode) setInvite(inviteCode.trim().toUpperCase());
     if (params.get("setup") === "guild") setSetupMode(true);
-    if (code || params.get("setup")) window.history.replaceState(null, "", window.location.pathname + (inviteCode ? `?invite=${encodeURIComponent(inviteCode)}` : ""));
+    if (code || params.get("setup")) window.history.replaceState(null, "", window.location.pathname);
   }, []);
-
-  React.useEffect(() => {
-    if (!invite) return;
-    authApi
-      .previewInvite(invite)
-      .then(setInvitePreview)
-      .catch((err) => setError(`[${t("login.denied")}] ${errorText(err, t("login.err.invite_invalid")).toUpperCase()}`));
-  }, [invite, t]);
 
   React.useEffect(() => {
     if (!setupMode) return;
@@ -128,23 +113,10 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
           <ServerPicker setup={setup} busy={busy} onPick={(choice) => void run(() => authApi.completeSetup(choice))} onCancel={() => setSetupMode(false)} />
         ) : (
           <>
-            {invitePreview && (
-              <div className="auth-invite relative z-[1]">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                {invitePreview.clanIconUrl && <img src={invitePreview.clanIconUrl} alt="" width={40} height={40} className="h-10 w-10 rounded-full" />}
-                <div className="min-w-0">
-                  <div className="auth-label mb-0.5">{t("login.invitedTo")}</div>
-                  <div className="truncate text-sm text-white">
-                    {invitePreview.clanName} • <span className="text-accent">{t(ROLE_KEY[invitePreview.role] ?? "role.member")}</span>
-                  </div>
-                </div>
-              </div>
-            )}
-
             <div className="auth-form">
-              <a href={authApi.discordLoginUrl({ invite: invitePreview ? invite : null })} data-guide="login-discord" className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
+              <a href={authApi.discordLoginUrl()} data-guide="login-discord" className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
                 <DiscordGlyph />
-                <span>{t(invitePreview ? "login.discordJoin" : "login.discord")}</span>
+                <span>{t("login.discord")}</span>
               </a>
               <p data-guide="login-owner" className="auth-hint">{t("login.ownerHint")}</p>
             </div>
@@ -183,11 +155,14 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   );
 };
 
-/** Выбор сервера клана: серверы Discord во владении + кланы, где пользователь уже состоит. */
+const LEVEL_KEY: Record<AccessLevel, MessageKey> = { basic: "level.basic", medium: "level.medium", high: "level.high" };
+const roleColor = (color: number) => (color ? `#${color.toString(16).padStart(6, "0")}` : "rgba(229,231,235,0.55)");
+
+/** Выбор после входа: свои серверы (клан), кланы с ботом (вступить), свои кланы (войти). */
 const ServerPicker: React.FC<{
   setup: DiscordSetup | null;
   busy: boolean;
-  onPick: (choice: { guildId: string } | { clanId: string }) => void;
+  onPick: (choice: SetupChoice) => void;
   onCancel: () => void;
 }> = ({ setup, busy, onPick, onCancel }) => {
   const t = useT();
@@ -195,6 +170,43 @@ const ServerPicker: React.FC<{
 
   return (
     <div className="auth-form mt-0">
+      {setup.joins.length > 0 && (
+        <>
+          <div className="auth-label">{t("setup.joinTitle")}</div>
+          <p className="auth-hint mt-0 mb-3">{t("setup.joinHint", { name: setup.displayName })}</p>
+          <ul data-guide="setup-joins" className="auth-servers scroll-area mb-4">
+            {setup.joins.map((j) => (
+              <li key={j.clanId}>
+                <button type="button" className="auth-server items-start" disabled={busy} onClick={() => onPick({ joinClanId: j.clanId })}>
+                  {j.iconUrl ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={j.iconUrl} alt="" width={40} height={40} className="auth-server-icon" />
+                  ) : (
+                    <span className="auth-server-icon auth-server-letter">{j.name.charAt(0).toUpperCase()}</span>
+                  )}
+                  <span className="min-w-0 flex-1 text-left">
+                    <span className="block text-sm text-white">{t("setup.join", { clan: j.name })}</span>
+                    <span className="mt-1 flex flex-wrap gap-1">
+                      {j.roles.length ? (
+                        j.roles.map((r) => (
+                          <span key={r.name} className="auth-role-chip" style={{ borderColor: roleColor(r.color), color: roleColor(r.color) }}>{r.name}</span>
+                        ))
+                      ) : (
+                        <span className="hud-label text-muted">{t("setup.noRoles")}</span>
+                      )}
+                    </span>
+                    <span className="hud-label mt-1 block text-accent">{t("setup.access", { level: t(LEVEL_KEY[j.level] ?? "level.basic") })}</span>
+                  </span>
+                  <span className="text-accent" aria-hidden>▶</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {setup.guilds.length > 0 && (
+        <>
       <div className="auth-label">{t("setup.title")}</div>
       <p className="auth-hint mt-0 mb-3">{t("setup.hint", { name: setup.displayName })}</p>
       <ul data-guide="setup-guilds" className="auth-servers scroll-area">
@@ -216,6 +228,8 @@ const ServerPicker: React.FC<{
           </li>
         ))}
       </ul>
+        </>
+      )}
 
       {setup.memberships.length > 0 && (
         <>
