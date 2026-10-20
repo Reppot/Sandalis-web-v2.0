@@ -37,7 +37,7 @@ export const ClanTokenPanel: React.FC = () => {
   };
 
   return (
-    <section className="panel panel-corners rounded-md p-4">
+    <section data-guide="cab-token" className="panel panel-corners rounded-md p-4">
       <div className="panel-title">🤖 {t("token.heading")}</div>
       <div className="cabinet-rule" />
       <div className="grid grid-cols-2 items-end gap-3 md:grid-cols-4">

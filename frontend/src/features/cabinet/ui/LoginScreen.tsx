@@ -119,7 +119,7 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
           {logo && <img src={logo} alt={t("common.crest")} width={180} height={230} className="auth-logo" />}
           <h1 className="auth-title">SINDARIS Terminal</h1>
           <p className="auth-subtitle">LOGISTICS OVERWATCH • FOXHOLE</p>
-          <LanguageSwitch className="mt-3 justify-center" />
+          <div data-guide="login-lang"><LanguageSwitch className="mt-3 justify-center" /></div>
         </div>
 
         <div className="auth-rule" />
@@ -142,11 +142,11 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
             )}
 
             <div className="auth-form">
-              <a href={authApi.discordLoginUrl({ invite: invitePreview ? invite : null })} className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
+              <a href={authApi.discordLoginUrl({ invite: invitePreview ? invite : null })} data-guide="login-discord" className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
                 <DiscordGlyph />
                 <span>{t(invitePreview ? "login.discordJoin" : "login.discord")}</span>
               </a>
-              <p className="auth-hint">{t("login.ownerHint")}</p>
+              <p data-guide="login-owner" className="auth-hint">{t("login.ownerHint")}</p>
             </div>
           </>
         )}
@@ -162,7 +162,7 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
           <>
             <div className="auth-rule" />
             <div className="auth-form">
-              <button type="button" className="btn auth-submit" disabled={busy} onClick={() => void run(() => authApi.loginAsGuest())}>
+              <button type="button" className="btn auth-submit" disabled={busy} data-guide="login-guest" onClick={() => void run(() => authApi.loginAsGuest())}>
                 <span className={busy ? "pulse" : ""}>👁 {t("login.guest")}</span>
               </button>
               <p className="auth-hint">{t("login.guestHint")}</p>
@@ -197,7 +197,7 @@ const ServerPicker: React.FC<{
     <div className="auth-form mt-0">
       <div className="auth-label">{t("setup.title")}</div>
       <p className="auth-hint mt-0 mb-3">{t("setup.hint", { name: setup.displayName })}</p>
-      <ul className="auth-servers scroll-area">
+      <ul data-guide="setup-guilds" className="auth-servers scroll-area">
         {setup.guilds.map((g) => (
           <li key={g.id}>
             <button type="button" className="auth-server" disabled={busy} onClick={() => onPick({ guildId: g.id })}>
@@ -220,7 +220,7 @@ const ServerPicker: React.FC<{
       {setup.memberships.length > 0 && (
         <>
           <div className="auth-label mt-4">{t("setup.memberships")}</div>
-          <ul className="auth-servers">
+          <ul data-guide="setup-members" className="auth-servers">
             {setup.memberships.map((m) => (
               <li key={m.clanId}>
                 <button type="button" className="auth-server" disabled={busy} onClick={() => onPick({ clanId: m.clanId })}>
@@ -237,7 +237,7 @@ const ServerPicker: React.FC<{
         </>
       )}
 
-      <button type="button" className="btn mt-4 w-full" disabled={busy} onClick={onCancel}>
+      <button type="button" className="btn mt-4 w-full" disabled={busy} data-guide="setup-back" onClick={onCancel}>
         ← {t("setup.back")}
       </button>
     </div>

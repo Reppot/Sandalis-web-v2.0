@@ -66,7 +66,7 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
   };
 
   return (
-    <section className="panel panel-corners rounded-md p-4">
+    <section data-guide="cab-invites" className="panel panel-corners rounded-md p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="panel-title">🎟 {t("invites.heading")}</div>
         <label className="hud-label flex cursor-pointer items-center gap-2 text-muted">
@@ -85,7 +85,7 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
           </Select>
           <Field label={t("invites.uses")} type="number" min={1} max={1000} value={maxUses} onChange={(e) => setMaxUses(Math.max(1, parseInt(e.target.value, 10) || 1))} />
           <Field label={t("invites.ttl")} type="number" min={0} max={720} value={hours} onChange={(e) => setHours(Math.max(0, parseInt(e.target.value, 10) || 0))} />
-          <button className="btn btn-primary h-[38px]" disabled={creating} onClick={() => void create()}>{creating ? t("common.sending") : `＋ ${t("invites.create")}`}</button>
+          <button className="btn btn-primary h-[38px]" disabled={creating} data-guide="cab-invite-create" onClick={() => void create()}>{creating ? t("common.sending") : `＋ ${t("invites.create")}`}</button>
         </div>
       )}
 
@@ -102,7 +102,7 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
                 <button
                   type="button"
                   className="font-mono font-bold text-accent"
-                  title={t("invites.copyLink")}
+                  data-guide="cab-invite-link" title={t("invites.copyLink")}
                   onClick={() => void copyText(authApi.inviteLink(invite.code)).then((ok) => ok && notify({ title: t("invites.title"), message: t("invites.linkCopied", { code: invite.code }), tone: "success" }))}
                 >
                   🔗 {invite.code} ⧉

@@ -7,6 +7,8 @@ const backendUrl = (process.env.BACKEND_URL ?? "http://localhost:8000").replace(
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // значок Next в углу не нужен (и не должен попадать в скриншоты руководства)
+  devIndicators: false,
   // самодостаточный server.js для Docker-образа (Dockerfile в корне репозитория)
   output: "standalone",
   outputFileTracingRoot: path.resolve(__dirname),

@@ -3,16 +3,16 @@
 import * as React from "react";
 import { useContent, type ExternalToolPayload } from "@/entities/content";
 import { recipeApi, type Recipe } from "@/entities/recipe";
-import { Loading, errorText, uiIcon, useNotify, useT, type MessageKey, type UiIcon } from "@/shared";
+import { Loading, errorText, UiGlyph, useNotify, useT, type MessageKey, type UiIcon } from "@/shared";
 import { FactoryCalculator } from "@/features/tools/ui/FactoryCalculator";
 import { RefineryCalculator } from "@/features/tools/ui/RefineryCalculator";
 
 type ClanToolId = "factory" | "mpf" | "refinery";
 
 const CLAN_TOOLS: { id: ClanToolId; label: MessageKey; hint: MessageKey; icon: UiIcon }[] = [
-  { id: "factory", label: "tools.factory", hint: "tools.factoryTab", icon: "business" },
-  { id: "mpf", label: "tools.mpf", hint: "tools.mpfTab", icon: "conveyor-belt" },
-  { id: "refinery", label: "tools.refinery", hint: "tools.refineryTab", icon: "pallets" },
+  { id: "factory", label: "tools.factory", hint: "tools.factoryTab", icon: "factory" },
+  { id: "mpf", label: "tools.mpf", hint: "tools.mpfTab", icon: "mpf" },
+  { id: "refinery", label: "tools.refinery", hint: "tools.refineryTab", icon: "refinery" },
 ];
 
 /** «Инструменты»: калькуляторы клана на рецептах сервера + проверенные внешние сервисы. */
@@ -47,7 +47,7 @@ export const ToolsWorkspace: React.FC = () => {
         </span>
       </section>
 
-      <nav className="panel panel-corners rounded-md p-2.5" aria-label={t("tools.clanTools")}>
+      <nav data-guide="tools-tabs" className="panel panel-corners rounded-md p-2.5" aria-label={t("tools.clanTools")}>
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
           <span className="hud-label text-accent">{t("tools.clanTools")}</span>
           {active ? (
@@ -69,8 +69,7 @@ export const ToolsWorkspace: React.FC = () => {
                 onClick={() => setActive(on ? null : tool.id)}
                 title={on ? t("tools.clickAgain") : t(tool.hint)}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={uiIcon(tool.icon)} alt="" width={36} height={36} className="ui-icon h-9 w-9 shrink-0 object-contain" />
+                <UiGlyph icon={tool.icon} size={36} className="shrink-0" />
                 <span className="min-w-0">
                   <span className={`block text-[0.78rem] ${on ? "text-accent" : "text-white"}`}>{t(tool.label)}</span>
                   <span className="mt-1 block text-[0.62rem] font-normal tracking-normal text-white/60 normal-case">{t(tool.hint)}</span>
@@ -98,7 +97,7 @@ export const ToolsWorkspace: React.FC = () => {
             <span className="hud-label text-accent">{t("tools.thirdParty")}</span>
             <span className="badge-count min-w-0 px-2">{t("tools.links", { n: external.length })}</span>
           </div>
-          <h2 className="panel-title mt-1 text-[0.95rem]">🔗 {t("tools.external")}</h2>
+          <h2 data-guide="tools-external" className="panel-title mt-1 text-[0.95rem]">🔗 {t("tools.external")}</h2>
           <p className="mt-1 text-[0.8rem] text-white/65">{t("tools.externalHint")}</p>
           <div className="external-tools-grid mt-3">
             {external.map(({ key, payload }) => (

@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { uiIcon } from "@/shared/config/assets";
+import type { UiIcon } from "@/shared/config/assets";
+import { UiGlyph } from "@/shared/ui/glyph";
 import { useT, type MessageKey, type Translate } from "@/shared/i18n";
 import {
   buildTxt,
@@ -22,11 +23,11 @@ import { useNotify } from "@/shared/ui/notify";
 export type ExportFormat = "txt" | "xlsx" | "png" | "clipboard";
 export type PanelMode = "export" | "import";
 
-const FORMATS: { fmt: ExportFormat; label: MessageKey; icon: string; importable: boolean; hintExport: MessageKey; hintImport: MessageKey }[] = [
-  { fmt: "txt", label: "export.fmt.txt", icon: uiIcon("txt-file"), importable: true, hintExport: "export.hint.txt", hintImport: "export.hint.txtImport" },
-  { fmt: "xlsx", label: "export.fmt.xlsx", icon: uiIcon("xls"), importable: true, hintExport: "export.hint.xlsx", hintImport: "export.hint.xlsxImport" },
-  { fmt: "png", label: "export.fmt.png", icon: uiIcon("png-file"), importable: false, hintExport: "export.hint.png", hintImport: "export.hint.pngImport" },
-  { fmt: "clipboard", label: "export.fmt.clipboard", icon: uiIcon("log-file"), importable: true, hintExport: "export.hint.clipboard", hintImport: "export.hint.clipboardImport" },
+const FORMATS: { fmt: ExportFormat; label: MessageKey; icon: UiIcon; importable: boolean; hintExport: MessageKey; hintImport: MessageKey }[] = [
+  { fmt: "txt", label: "export.fmt.txt", icon: "file-txt", importable: true, hintExport: "export.hint.txt", hintImport: "export.hint.txtImport" },
+  { fmt: "xlsx", label: "export.fmt.xlsx", icon: "file-xlsx", importable: true, hintExport: "export.hint.xlsx", hintImport: "export.hint.xlsxImport" },
+  { fmt: "png", label: "export.fmt.png", icon: "file-png", importable: false, hintExport: "export.hint.png", hintImport: "export.hint.pngImport" },
+  { fmt: "clipboard", label: "export.fmt.clipboard", icon: "clipboard", importable: true, hintExport: "export.hint.clipboard", hintImport: "export.hint.clipboardImport" },
 ];
 
 /** Подписи файлов экспорта на текущем языке. */
@@ -57,7 +58,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onTo
   return (
     <div className="mt-3 flex flex-col gap-2">
       {mode && onToggleMode ? (
-        <button className={`btn w-full justify-between ${isImport ? "btn-warn btn-active" : ""}`} onClick={onToggleMode} title={t("export.toggleHint")}>
+        <button className={`btn w-full justify-between ${isImport ? "btn-warn btn-active" : ""}`} data-guide="export-mode" onClick={onToggleMode} title={t("export.toggleHint")}>
           <span className="flex items-center gap-2">
             <span className={`status-dot ${isImport ? "pulse" : ""}`} style={{ color: isImport ? "var(--warn)" : "var(--accent)", background: isImport ? "var(--warn)" : "var(--accent)" }} />
             {isImport ? t("export.modeImport") : t("export.modeExport")}
@@ -73,7 +74,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onTo
           <span className="hud-label opacity-70">{t("export.upload")}</span>
         </div>
       )}
-      <div className="grid grid-cols-4 gap-2">
+      <div data-guide="export-formats" className="grid grid-cols-4 gap-2">
         {FORMATS.map((f) => (
           <button
             key={f.fmt}
@@ -84,7 +85,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onTo
             title={t(isImport ? f.hintImport : f.hintExport)}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={f.icon} alt="" width={22} height={22} className="ui-icon h-[22px] w-[22px] object-contain" />
+            <UiGlyph icon={f.icon} size={22} />
             <span className="hidden sm:inline">{t(f.label)}</span>
           </button>
         ))}
@@ -183,7 +184,7 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
       open
       onClose={onClose}
       title={t("export.previewTitle", { n: ready?.canvases.length ?? "…" })}
-      icon={uiIcon("png-file")}
+      icon="file-png"
       widthClass="max-w-4xl"
       footer={
         <div className="flex flex-wrap items-center justify-between gap-2">

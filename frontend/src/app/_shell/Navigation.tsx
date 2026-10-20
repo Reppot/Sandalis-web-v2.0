@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { STORAGE_KEYS, ThemeIcon, readStorage, uiIcon, useT, useTheme, writeStorage } from "@/shared";
+import { STORAGE_KEYS, ThemeIcon, readStorage, UiGlyph, useT, useTheme, writeStorage } from "@/shared";
 import { tabKeys, type NavTab, type TabKey } from "@/app/_shell/tabs";
 
 interface NavProps {
@@ -34,11 +34,11 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
         )}
       </div>
 
-      <button className="btn w-full text-base" onClick={toggle} aria-label={expanded ? t("nav.collapse") : t("nav.expand")}>
+      <button data-guide="shell-collapse" className="btn w-full text-base" onClick={toggle} aria-label={expanded ? t("nav.collapse") : t("nav.expand")}>
         {expanded ? "❮" : "❯"}
       </button>
 
-      <nav className="scroll-area flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto pr-1" aria-label={t("nav.aria")}>
+      <nav data-guide="shell-nav" className="scroll-area flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto pr-1" aria-label={t("nav.aria")}>
         {tabs.map((tab) => {
           const on = tab.key === active;
           return (
@@ -50,15 +50,14 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
               aria-current={on ? "page" : undefined}
               onClick={() => onSelect(tab.key)}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={uiIcon(tab.icon)} alt="" width={36} height={36} className="ui-icon" />
+              <UiGlyph icon={tab.icon} size={36} />
               {expanded && <span className="nav-label truncate">{t(tabKeys(tab.key).label)}</span>}
             </button>
           );
         })}
       </nav>
 
-      <button className={`nav-btn ${expanded ? "" : "justify-center px-0"}`} onClick={toggleTheme} title={theme === "dark" ? t("nav.themeLight") : t("nav.themeDark")}>
+      <button className={`nav-btn ${expanded ? "" : "justify-center px-0"}`} data-guide="shell-theme" onClick={toggleTheme} title={theme === "dark" ? t("nav.themeLight") : t("nav.themeDark")}>
         <span className="flex h-9 w-9 shrink-0 items-center justify-center" style={{ color: "var(--accent)" }}>
           <ThemeIcon theme={theme} />
         </span>
@@ -77,11 +76,10 @@ export const MobileNav: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
   const t = useT();
   const { theme, toggleTheme } = useTheme();
   return (
-    <nav className="chrome fixed inset-x-2 bottom-2 z-[60] grid grid-cols-8 gap-1 rounded-md p-1.5 md:hidden" aria-label={t("nav.aria")}>
+    <nav className="chrome fixed inset-x-2 bottom-2 z-[60] grid auto-cols-fr grid-flow-col gap-1 rounded-md p-1.5 md:hidden" aria-label={t("nav.aria")}>
       {tabs.map((tab) => (
         <button key={tab.key} type="button" onClick={() => onSelect(tab.key)} className={`nav-btn h-14 flex-col justify-center gap-1 px-0 ${tab.key === active ? "is-active" : ""}`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={uiIcon(tab.icon)} alt="" width={24} height={24} className="ui-icon" style={{ width: 24, height: 24 }} />
+          <UiGlyph icon={tab.icon} size={24} />
           <span className="hud-label max-w-full truncate text-[0.46rem] tracking-normal">{t(tabKeys(tab.key).short)}</span>
         </button>
       ))}

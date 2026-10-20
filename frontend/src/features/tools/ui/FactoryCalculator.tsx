@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
-import { ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, uiIcon, useI18n, useNotify, type MessageKey } from "@/shared";
+import { ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, type MessageKey } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 
 type Facility = "factory" | "mpf";
@@ -120,8 +120,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
     <div className="tab-fade factory-page pb-24 lg:pb-0">
       <section className="panel panel-corners factory-topbar">
         <div className="flex min-w-0 items-center gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={uiIcon(facility === "factory" ? "business" : "conveyor-belt")} alt="" className="ui-icon h-10 w-10 object-contain" />
+          <UiGlyph icon={facility === "factory" ? "factory" : "mpf"} size={40} />
           <div className="min-w-0">
             <div className="hud-label text-muted">PRODUCTION PLANNER • FOXHOLE</div>
             <h2 className="panel-title mt-1 text-[1.1rem] md:text-[1.45rem]">⚙ {facility === "factory" ? t("tools.factory") : "MPF — Mass Production Factory"}</h2>
@@ -133,7 +132,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
           </div>
         </div>
         <div className="factory-controls">
-          <button className={`btn ${planning ? "btn-warn btn-active" : ""}`} onClick={() => setPlanning((v) => !v)}>{planning ? "PLANNING" : "PRODUCTION"}</button>
+          <button className={`btn ${planning ? "btn-warn btn-active" : ""}`} data-guide="tool-mode" onClick={() => setPlanning((v) => !v)}>{planning ? "PLANNING" : "PRODUCTION"}</button>
           <button className="btn btn-primary" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: "FACTORY PLAN", message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
             ⧉ {t("tools.sharePlan")}
           </button>
@@ -143,14 +142,14 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
       <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(340px,400px)]">
         <section className="panel panel-corners factory-catalog">
           <div className="factory-filters">
-            <input className="field h-11 flex-1" placeholder={t("tools.factorySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
+            <input className="field h-11 flex-1" data-guide="tool-search" placeholder={t("tools.factorySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
             <select className="field h-11 w-full md:w-44" value={faction} onChange={(e) => setFaction(e.target.value)}>
               {FACTIONS.map((f) => (
                 <option key={f.key} value={f.key}>{t(f.label)}</option>
               ))}
             </select>
           </div>
-          <div className="factory-categories scroll-area">
+          <div data-guide="tool-cats" className="factory-categories scroll-area">
             <button className={`chip ${category === "all" ? "is-active" : ""}`} onClick={() => setCategory("all")}>{t("common.all")}</button>
             {categories.map((c) => (
               <button key={c} className={`chip ${category === c ? "is-active" : ""}`} onClick={() => setCategory(c)}>{label("factory_category", c)}</button>
@@ -196,7 +195,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
                 </span>
               </span>
               <QuantityStepper value={crates} unit={t("unit.crate")} label={rname(recipe)} onChange={(n) => setQuantity(recipe, n)} />
-              <button type="button" className="btn btn-danger px-2 py-1" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
+              <button type="button" className="btn btn-danger px-2 py-1" data-guide="tool-remove" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
             </div>
           ))}
         </ResourceSummaryPanel>

@@ -12,7 +12,6 @@ import {
   Modal,
   assetUrl,
   errorText,
-  uiIcon,
   useConfirm,
   useDocExport,
   useI18n,
@@ -20,6 +19,7 @@ import {
   xlsxToText,
   type ExportFormat,
   type PanelMode,
+  UiGlyph,
 } from "@/shared";
 
 interface OrderBuilderProps {
@@ -174,11 +174,10 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
   };
 
   return (
-    <section className="panel panel-corners flex flex-col rounded-md p-4">
+    <section data-guide="builder-panel" className="panel panel-corners flex flex-col rounded-md p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="panel-title flex items-center gap-2">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={uiIcon("parchment")} alt="" width={22} height={22} className="ui-icon h-[22px] w-[22px] object-contain" />
+          <UiGlyph icon="orders" size={22} />
           🛠️ {t("builder.title")}
         </h2>
         <div className="flex items-center gap-2">
@@ -190,28 +189,27 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
 
       <div className={`order-builder-controls mt-4 rounded-md border border-emerald-900/60 bg-black/25 ${isFullWidth ? "px-5 py-8" : "px-3 py-6"}`}>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,3fr)_minmax(120px,1fr)_auto_auto]">
-          <div className={`field flex h-12 items-center gap-2 truncate text-base ${selected ? "text-accent" : "text-white/50"}`} title={selected ? itemName(selected, locale) : t("builder.pick")}>
+          <div data-guide="builder-pick" className={`field flex h-12 items-center gap-2 truncate text-base ${selected ? "text-accent" : "text-white/50"}`} title={selected ? itemName(selected, locale) : t("builder.pick")}>
             {selected && <ItemIcon sources={[assetUrl(selected.iconUrl)]} size={28} label={selected.name} />}
             <span className="truncate">{selected ? itemName(selected, locale) : t("builder.pick")}</span>
           </div>
-          <input ref={countRef} className="field field-mono h-12 text-base" placeholder={t("builder.qty")} inputMode="numeric" value={count} onChange={(e) => setCount(e.target.value.replace(/[^\d]/g, ""))} onKeyDown={(e) => e.key === "Enter" && submitLine()} />
+          <input ref={countRef} className="field field-mono h-12 text-base" data-guide="builder-qty" placeholder={t("builder.qty")} inputMode="numeric" value={count} onChange={(e) => setCount(e.target.value.replace(/[^\d]/g, ""))} onKeyDown={(e) => e.key === "Enter" && submitLine()} />
           <button
             className="btn h-12 min-w-[64px] px-3 text-base"
             onClick={() => setUnit((u) => (u === "crate" ? "unit" : "crate"))}
             style={unit === "unit" ? { background: "#ff9900", color: "#000", borderColor: "#ff9900" } : undefined}
-            title={t("builder.unitHint")}
+            data-guide="builder-unit" title={t("builder.unitHint")}
           >
             {t(unit === "crate" ? "builder.crateShort" : "builder.unitShort")}
           </button>
-          <button className="btn btn-primary h-12 px-5 text-sm" onClick={submitLine} disabled={!selected}>
+          <button className="btn btn-primary h-12 px-5 text-sm" data-guide="builder-add" onClick={submitLine} disabled={!selected}>
             {t("builder.add")}
           </button>
         </div>
 
         <div className="mt-5 flex items-center gap-3">
-          <input className="field h-12 flex-1 text-base" placeholder={t("builder.filter")} value={filter} onChange={(e) => setFilter(e.target.value)} />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={uiIcon("find")} alt="" width={40} height={40} className="ui-icon hidden h-10 w-10 object-contain sm:block" />
+          <input className="field h-12 flex-1 text-base" data-guide="builder-filter" placeholder={t("builder.filter")} value={filter} onChange={(e) => setFilter(e.target.value)} />
+          <UiGlyph icon="search" size={40} className="hidden sm:block" />
         </div>
         <div className="scroll-area mt-4 flex gap-2 overflow-x-auto pb-2">
           <button className={`chip h-10 shrink-0 px-4 text-sm ${category === "all" ? "is-active" : ""}`} onClick={() => setCategory("all")}>{t("common.all")}</button>
@@ -223,7 +221,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
         </div>
 
         <div className="mt-5 flex gap-3">
-          <div className={`scroll-area panel-inner ${isFullWidth ? "grid h-[300px] grid-cols-2 gap-1.5 p-2 xl:grid-cols-3" : "h-[190px] p-1"} flex-1 rounded`}>
+          <div data-guide="builder-matrix" className={`scroll-area panel-inner ${isFullWidth ? "grid h-[300px] grid-cols-2 gap-1.5 p-2 xl:grid-cols-3" : "h-[190px] p-1"} flex-1 rounded`}>
             {catalogLoading ? (
               <Loading label={t("builder.loading")} className="col-span-full min-h-0 h-full" />
             ) : matrix.length === 0 ? (
@@ -248,7 +246,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
                 notify({ title: t("builder.short"), message: t("builder.cleared"), tone: "warning" });
               })
             }
-            title={`⚠️ ${t("builder.clearHint")}`}
+            data-guide="builder-clear" title={`⚠️ ${t("builder.clearHint")}`}
             disabled={!order.length}
           >
             <span className="text-xl">🗑</span>
@@ -263,7 +261,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
         {order.length === 0 ? (
           <div className="empty-order flex h-[45px] items-center justify-center rounded px-3 text-center text-[0.8rem]">{t("builder.empty")}</div>
         ) : (
-          <ul className={`grid grid-cols-1 gap-2 sm:grid-cols-2 ${isFullWidth ? "xl:grid-cols-4" : ""}`}>
+          <ul data-guide="builder-order" className={`grid grid-cols-1 gap-2 sm:grid-cols-2 ${isFullWidth ? "xl:grid-cols-4" : ""}`}>
             {order.map((line) => (
               <li key={line.name} className="row-item group min-w-0">
                 <span className="flex min-w-0 items-center gap-2">
@@ -288,7 +286,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
       {canWrite ? (
         <div className="mt-2 flex flex-col gap-2 sm:flex-row">
           <input className="field field-mono flex-1 text-xs" placeholder={t("builder.reportName")} value={title} onChange={(e) => setTitle(e.target.value)} />
-          <button className="btn btn-primary" onClick={() => void sendReport()} disabled={saving || !order.length}>
+          <button className="btn btn-primary" data-guide="builder-send" onClick={() => void sendReport()} disabled={saving || !order.length}>
             {saving ? t("common.sending") : `📨 ${t("builder.send")}`}
           </button>
         </div>
@@ -307,7 +305,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
         if (file) void xlsxToText(file).then(importText).catch((err) => notify({ title: "XLSX", message: errorText(err, t("import.xlsxFailed")), tone: "danger" }));
       }} />
 
-      <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("builder.pasteTitle")} icon={uiIcon("log-file")} widthClass="max-w-lg">
+      <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("builder.pasteTitle")} icon="clipboard" widthClass="max-w-lg">
         <p className="hud-label text-muted">{t("import.pasteHelp")}</p>
         <textarea className="field field-mono mt-2 h-48 w-full resize-y text-xs" value={pasteText} onChange={(e) => setPasteText(e.target.value)} autoFocus />
         <div className="mt-3 flex justify-end gap-2">

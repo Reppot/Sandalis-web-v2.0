@@ -2,14 +2,16 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import type { UiIcon } from "@/shared/config/assets";
 import { useT } from "@/shared/i18n";
+import { UiGlyph } from "@/shared/ui/glyph";
 
 export interface ModalProps {
   open: boolean;
   onClose: () => void;
   title: string;
-  /** Иконка интерфейса (PNG из /api/v1/assets/ui). */
-  icon?: string | null;
+  /** Иконка интерфейса из набора (backend/static/ui). */
+  icon?: UiIcon | null;
   children: React.ReactNode;
   widthClass?: string;
   /** Фоновое изображение под затемнением (фон раздела). */
@@ -42,7 +44,7 @@ export const Modal: React.FC<ModalProps> = ({ open, onClose, title, icon, childr
         <div className="pointer-events-none absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(8,12,9,0.55), rgba(8,12,9,0.85))" }} aria-hidden />
         <header className="relative flex items-center gap-3 border-b border-white/10 px-4 py-3">
           {/* eslint-disable-next-line @next/next/no-img-element -- иконки с бэкенда, оптимизация не нужна */}
-          {icon && <img src={icon} alt="" width={34} height={34} className="ui-icon h-[34px] w-[34px] object-contain drop-shadow" />}
+          {icon && <UiGlyph icon={icon} size={34} />}
           <h2 className="panel-title truncate text-[0.82rem]">{title}</h2>
           <button onClick={onClose} className="btn ml-auto px-2 py-1" aria-label={t("common.close")}>
             ✕

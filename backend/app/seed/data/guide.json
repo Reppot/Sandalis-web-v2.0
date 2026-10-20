@@ -1,0 +1,2278 @@
+[
+ {
+  "kind": "guide_chapter",
+  "key": "start",
+  "sort": 0,
+  "payload": {
+   "icon": "terminal",
+   "title": {
+    "ru": "Вход и первые шаги",
+    "en": "Signing in",
+    "cs": "Přihlášení a první kroky"
+   },
+   "summary": {
+    "ru": "Терминал работает через Discord: командир создаёт клан из своего Discord-сервера, бойцы вступают по ссылке-приглашению, а гость может пользоваться инструментами без входа.",
+    "en": "The terminal uses Discord: the commander creates the clan from their Discord server, soldiers join with an invite link, and guests can use the tools without signing in.",
+    "cs": "Terminál funguje přes Discord: velitel založí klan ze svého Discord serveru, vojáci vstupují přes pozvánkový odkaz a host může používat nástroje bez přihlášení."
+   },
+   "shots": [
+    {
+     "id": "login",
+     "caption": {
+      "ru": "Экран входа",
+      "en": "Sign-in screen",
+      "cs": "Přihlašovací obrazovka"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/login.webp",
+      "en": "/api/v1/assets/guide/en/login.webp",
+      "cs": "/api/v1/assets/guide/cs/login.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 560,
+       "h": 752
+      },
+      "en": {
+       "w": 560,
+       "h": 752
+      },
+      "cs": {
+       "w": 560,
+       "h": 752
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 10.82,
+        "y": 52.97
+       },
+       {
+        "x": 10.82,
+        "y": 65.26
+       },
+       {
+        "x": 10.82,
+        "y": 72.81
+       },
+       {
+        "x": 10.82,
+        "y": 85.1
+       }
+      ],
+      "en": [
+       {
+        "x": 10.82,
+        "y": 52.97
+       },
+       {
+        "x": 10.82,
+        "y": 65.26
+       },
+       {
+        "x": 10.82,
+        "y": 72.81
+       },
+       {
+        "x": 10.82,
+        "y": 85.1
+       }
+      ],
+      "cs": [
+       {
+        "x": 10.82,
+        "y": 52.97
+       },
+       {
+        "x": 10.82,
+        "y": 65.26
+       },
+       {
+        "x": 10.82,
+        "y": 72.81
+       },
+       {
+        "x": 10.82,
+        "y": 85.1
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Язык интерфейса: русский, английский или чешский. Выбор запоминается.",
+       "Вход через Discord. Если вы пришли по ссылке-приглашению, кнопка называется «Вступить через Discord».",
+       "Владелец Discord-сервера клана после входа выбирает сервер и становится командиром с полными правами.",
+       "Гостевой доступ: калькуляторы, база кодов и обучение. Данные кланов гостю не видны."
+      ],
+      "en": [
+       "Interface language: Russian, English or Czech. Your choice is remembered.",
+       "Sign in with Discord. When you open an invite link the button reads “Join with Discord”.",
+       "The owner of the clan's Discord server picks the server after signing in and becomes the commander with full rights.",
+       "Guest access: calculators, code base and training. Clan data is never shown to guests."
+      ],
+      "cs": [
+       "Jazyk rozhraní: ruština, angličtina nebo čeština. Volba se zapamatuje.",
+       "Přihlášení přes Discord. Pokud jste přišli přes pozvánku, tlačítko se jmenuje „Vstoupit přes Discord“.",
+       "Vlastník Discord serveru klanu po přihlášení vybere server a stane se velitelem s plnými právy.",
+       "Přístup hosta: kalkulačky, databáze kódů a výcvik. Data klanů host nevidí."
+      ]
+     }
+    },
+    {
+     "id": "setup",
+     "caption": {
+      "ru": "Выбор сервера клана (владелец Discord-сервера)",
+      "en": "Picking the clan server (Discord server owner)",
+      "cs": "Výběr serveru klanu (vlastník Discord serveru)"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/setup.webp",
+      "en": "/api/v1/assets/guide/en/setup.webp",
+      "cs": "/api/v1/assets/guide/cs/setup.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 560,
+       "h": 841
+      },
+      "en": {
+       "w": 560,
+       "h": 841
+      },
+      "cs": {
+       "w": 560,
+       "h": 841
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 10.82,
+        "y": 64.43
+       },
+       {
+        "x": 10.82,
+        "y": 72.28
+       },
+       {
+        "x": 10.82,
+        "y": 84.36
+       },
+       {
+        "x": 10.82,
+        "y": 93.35
+       }
+      ],
+      "en": [
+       {
+        "x": 10.82,
+        "y": 64.43
+       },
+       {
+        "x": 10.82,
+        "y": 72.28
+       },
+       {
+        "x": 10.82,
+        "y": 84.36
+       },
+       {
+        "x": 10.82,
+        "y": 93.35
+       }
+      ],
+      "cs": [
+       {
+        "x": 10.82,
+        "y": 64.43
+       },
+       {
+        "x": 10.82,
+        "y": 72.28
+       },
+       {
+        "x": 10.82,
+        "y": 84.36
+       },
+       {
+        "x": 10.82,
+        "y": 93.35
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Сервер, уже привязанный к клану терминала, — вход командиром этого клана.",
+       "Новый сервер: будет создан клан с названием и иконкой сервера, вы станете командиром.",
+       "Кланы, где вы уже состоите (например, по приглашению), — вход с вашей текущей ролью.",
+       "Назад к экрану входа. Список действует 15 минут после входа через Discord."
+      ],
+      "en": [
+       "A server already linked to a terminal clan — enter that clan as its commander.",
+       "A new server: a clan is created with the server's name and icon, and you become its commander.",
+       "Clans you already belong to (e.g. by invite) — enter with your current role.",
+       "Back to the sign-in screen. The list is valid for 15 minutes after the Discord sign-in."
+      ],
+      "cs": [
+       "Server už propojený s klanem terminálu — vstup jako velitel tohoto klanu.",
+       "Nový server: vznikne klan s názvem a ikonou serveru a vy se stanete velitelem.",
+       "Klany, kde už jste členem (např. přes pozvánku) — vstup s vaší současnou rolí.",
+       "Zpět na přihlášení. Seznam platí 15 minut po přihlášení přes Discord."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "layout",
+  "sort": 1,
+  "payload": {
+   "icon": "map",
+   "title": {
+    "ru": "Интерфейс терминала",
+    "en": "Terminal layout",
+    "cs": "Rozhraní terminálu"
+   },
+   "summary": {
+    "ru": "Шапка с бегущей строкой всегда остаётся сверху, слева — меню разделов. Вкладки, на которые у вас нет прав, не показываются.",
+    "en": "The header with the ticker always stays on top, the section menu is on the left. Tabs you have no rights for are hidden.",
+    "cs": "Hlavička s běžícím řádkem zůstává vždy nahoře, vlevo je menu sekcí. Záložky, ke kterým nemáte práva, se nezobrazují."
+   },
+   "shots": [
+    {
+     "id": "shell",
+     "caption": {
+      "ru": "Главный экран",
+      "en": "Main screen",
+      "cs": "Hlavní obrazovka"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/shell.webp",
+      "en": "/api/v1/assets/guide/en/shell.webp",
+      "cs": "/api/v1/assets/guide/cs/shell.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1440,
+       "h": 960
+      },
+      "en": {
+       "w": 1440,
+       "h": 960
+      },
+      "cs": {
+       "w": 1440,
+       "h": 960
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 3.26,
+        "y": 4.06
+       },
+       {
+        "x": 28.89,
+        "y": 4.27
+       },
+       {
+        "x": 67.94,
+        "y": 4.96
+       },
+       {
+        "x": 2.85,
+        "y": 18.85
+       },
+       {
+        "x": 5.69,
+        "y": 11.77
+       },
+       {
+        "x": 5.69,
+        "y": 92.4
+       }
+      ],
+      "en": [
+       {
+        "x": 3.26,
+        "y": 4.06
+       },
+       {
+        "x": 28.89,
+        "y": 4.27
+       },
+       {
+        "x": 70.9,
+        "y": 4.96
+       },
+       {
+        "x": 2.85,
+        "y": 18.85
+       },
+       {
+        "x": 5.69,
+        "y": 11.77
+       },
+       {
+        "x": 5.69,
+        "y": 92.4
+       }
+      ],
+      "cs": [
+       {
+        "x": 3.26,
+        "y": 4.06
+       },
+       {
+        "x": 28.89,
+        "y": 4.27
+       },
+       {
+        "x": 67.78,
+        "y": 4.96
+       },
+       {
+        "x": 2.85,
+        "y": 18.85
+       },
+       {
+        "x": 5.69,
+        "y": 11.77
+       },
+       {
+        "x": 5.69,
+        "y": 92.4
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Герб и название терминала.",
+       "Бегущая строка: склады, которые скоро исчезнут (красный — меньше часа, оранжевый — меньше суток). Наведите курсор, чтобы остановить.",
+       "Состояние связи с сервером, общий статус складов и время последней синхронизации.",
+       "Разделы терминала. Набор вкладок зависит от вашей роли в клане.",
+       "Свернуть или развернуть меню — останутся только иконки.",
+       "Ночная или упрощённая (светлая) тема."
+      ],
+      "en": [
+       "Crest and terminal name.",
+       "Ticker: stockpiles about to expire (red — under an hour, orange — under a day). Hover to pause it.",
+       "Server link status, overall stockpile status and the time of the last sync.",
+       "Terminal sections. Which tabs you see depends on your clan role.",
+       "Collapse or expand the menu — only icons stay visible.",
+       "Night or simplified (light) theme."
+      ],
+      "cs": [
+       "Erb a název terminálu.",
+       "Běžící řádek: sklady, které brzy zmizí (červená — méně než hodina, oranžová — méně než den). Najetím ho zastavíte.",
+       "Stav spojení se serverem, celkový stav skladů a čas poslední synchronizace.",
+       "Sekce terminálu. Které záložky vidíte, závisí na vaší roli v klanu.",
+       "Sbalit nebo rozbalit menu — zůstanou jen ikony.",
+       "Noční nebo zjednodušený (světlý) motiv."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "orders",
+  "sort": 2,
+  "payload": {
+   "icon": "orders",
+   "title": {
+    "ru": "Заказы: склад и конструктор",
+    "en": "Orders: stockpile and builder",
+    "cs": "Objednávky: sklad a konstruktor"
+   },
+   "summary": {
+    "ru": "Слева — содержимое закреплённого склада клана, справа — конструктор заказа. Готовый заказ отправляется в штаб как рапорт.",
+    "en": "On the left is the pinned clan stockpile, on the right the order builder. A finished order is sent to HQ as a report.",
+    "cs": "Vlevo je obsah připnutého skladu klanu, vpravo konstruktor objednávky. Hotová objednávka se odešle na štáb jako hlášení."
+   },
+   "shots": [
+    {
+     "id": "stockpile",
+     "caption": {
+      "ru": "Содержимое закреплённого склада",
+      "en": "Pinned stockpile contents",
+      "cs": "Obsah připnutého skladu"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/stockpile.webp",
+      "en": "/api/v1/assets/guide/en/stockpile.webp",
+      "cs": "/api/v1/assets/guide/cs/stockpile.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 654,
+       "h": 736
+      },
+      "en": {
+       "w": 654,
+       "h": 736
+      },
+      "cs": {
+       "w": 654,
+       "h": 736
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 5.35,
+        "y": 10.87
+       },
+       {
+        "x": 82.06,
+        "y": 9.47
+       },
+       {
+        "x": 10.24,
+        "y": 15.22
+       },
+       {
+        "x": 19.72,
+        "y": 15.22
+       },
+       {
+        "x": 48.36,
+        "y": 15.85
+       },
+       {
+        "x": 91.16,
+        "y": 15.9
+       },
+       {
+        "x": 5.35,
+        "y": 23.64
+       },
+       {
+        "x": 5.35,
+        "y": 27.42
+       },
+       {
+        "x": 5.35,
+        "y": 89.05
+       },
+       {
+        "x": 5.35,
+        "y": 94.31
+       }
+      ],
+      "en": [
+       {
+        "x": 5.35,
+        "y": 10.87
+       },
+       {
+        "x": 82.06,
+        "y": 9.47
+       },
+       {
+        "x": 10.24,
+        "y": 15.22
+       },
+       {
+        "x": 19.72,
+        "y": 15.22
+       },
+       {
+        "x": 39.98,
+        "y": 15.85
+       },
+       {
+        "x": 91.16,
+        "y": 15.9
+       },
+       {
+        "x": 5.35,
+        "y": 23.64
+       },
+       {
+        "x": 5.35,
+        "y": 27.42
+       },
+       {
+        "x": 5.35,
+        "y": 89.05
+       },
+       {
+        "x": 5.35,
+        "y": 94.31
+       }
+      ],
+      "cs": [
+       {
+        "x": 5.35,
+        "y": 10.87
+       },
+       {
+        "x": 82.06,
+        "y": 9.47
+       },
+       {
+        "x": 10.24,
+        "y": 15.22
+       },
+       {
+        "x": 19.72,
+        "y": 15.22
+       },
+       {
+        "x": 47.16,
+        "y": 15.85
+       },
+       {
+        "x": 91.16,
+        "y": 15.9
+       },
+       {
+        "x": 5.35,
+        "y": 23.64
+       },
+       {
+        "x": 5.35,
+        "y": 27.42
+       },
+       {
+        "x": 5.35,
+        "y": 89.05
+       },
+       {
+        "x": 5.35,
+        "y": 94.31
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Выбор склада клана — он закрепляется за этой вкладкой.",
+       "Создать, переименовать или удалить склад (бойцы и выше).",
+       "Загрузить отчёт сканера (JSON/TXT) — содержимое склада заменится.",
+       "Вставить строки из буфера обмена: «Название, 50» или «Название -> 50».",
+       "Распознать предметы прямо из файла сохранения MapData.sav.",
+       "Фильтр позиций склада по названию или коду. Рядом — очистка склада.",
+       "Когда и откуда склад обновлялся в последний раз.",
+       "Позиции склада с иконками и количеством.",
+       "Режим нижних кнопок: экспорт отчёта или импорт данных.",
+       "TXT, таблица XLSX, картинки PNG для Discord или буфер обмена."
+      ],
+      "en": [
+       "Pick a clan stockpile — it stays pinned to this tab.",
+       "Create, rename or delete a stockpile (soldiers and above).",
+       "Load a scanner report (JSON/TXT) — the stockpile contents are replaced.",
+       "Paste lines from the clipboard: “Name, 50” or “Name -> 50”.",
+       "Recognise items straight from the MapData.sav save file.",
+       "Filter stockpile lines by name or code. Next to it — clear the stockpile.",
+       "When and from which source the stockpile was last updated.",
+       "Stockpile lines with icons and quantities.",
+       "Mode of the buttons below: export a report or import data.",
+       "TXT, an XLSX sheet, PNG images for Discord or the clipboard."
+      ],
+      "cs": [
+       "Výběr skladu klanu — zůstane připnutý k této záložce.",
+       "Vytvořit, přejmenovat nebo smazat sklad (vojáci a výše).",
+       "Načíst výstup skeneru (JSON/TXT) — obsah skladu se nahradí.",
+       "Vložit řádky ze schránky: „Název, 50“ nebo „Název -> 50“.",
+       "Rozpoznat předměty přímo ze souboru MapData.sav.",
+       "Filtr položek skladu podle názvu nebo kódu. Vedle — vymazání skladu.",
+       "Kdy a odkud byl sklad naposledy aktualizován.",
+       "Položky skladu s ikonami a množstvím.",
+       "Režim tlačítek dole: export hlášení nebo import dat.",
+       "TXT, tabulka XLSX, obrázky PNG pro Discord nebo schránka."
+      ]
+     }
+    },
+    {
+     "id": "builder",
+     "caption": {
+      "ru": "Конструктор заказа",
+      "en": "Order builder",
+      "cs": "Konstruktor objednávky"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/builder.webp",
+      "en": "/api/v1/assets/guide/en/builder.webp",
+      "cs": "/api/v1/assets/guide/cs/builder.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 654,
+       "h": 920
+      },
+      "en": {
+       "w": 654,
+       "h": 920
+      },
+      "cs": {
+       "w": 654,
+       "h": 920
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 31.37,
+        "y": 10.33
+       },
+       {
+        "x": 51.56,
+        "y": 10.33
+       },
+       {
+        "x": 63.18,
+        "y": 10.33
+       },
+       {
+        "x": 94.72,
+        "y": 10.33
+       },
+       {
+        "x": 7.34,
+        "y": 19.24
+       },
+       {
+        "x": 7.34,
+        "y": 33.59
+       },
+       {
+        "x": 89.22,
+        "y": 33.59
+       },
+       {
+        "x": 6.73,
+        "y": 66.85
+       },
+       {
+        "x": 96.71,
+        "y": 84.78
+       },
+       {
+        "x": 5.35,
+        "y": 95.51
+       }
+      ],
+      "en": [
+       {
+        "x": 37.19,
+        "y": 10.33
+       },
+       {
+        "x": 57.38,
+        "y": 10.33
+       },
+       {
+        "x": 69,
+        "y": 10.33
+       },
+       {
+        "x": 94.72,
+        "y": 10.33
+       },
+       {
+        "x": 7.34,
+        "y": 19.24
+       },
+       {
+        "x": 7.34,
+        "y": 33.59
+       },
+       {
+        "x": 89.22,
+        "y": 33.59
+       },
+       {
+        "x": 6.73,
+        "y": 66.85
+       },
+       {
+        "x": 96.71,
+        "y": 84.78
+       },
+       {
+        "x": 5.35,
+        "y": 95.51
+       }
+      ],
+      "cs": [
+       {
+        "x": 25.55,
+        "y": 10.33
+       },
+       {
+        "x": 45.73,
+        "y": 10.33
+       },
+       {
+        "x": 57.35,
+        "y": 10.33
+       },
+       {
+        "x": 94.72,
+        "y": 10.33
+       },
+       {
+        "x": 7.34,
+        "y": 19.24
+       },
+       {
+        "x": 7.34,
+        "y": 33.59
+       },
+       {
+        "x": 89.22,
+        "y": 33.59
+       },
+       {
+        "x": 6.73,
+        "y": 66.85
+       },
+       {
+        "x": 96.71,
+        "y": 84.78
+       },
+       {
+        "x": 5.35,
+        "y": 95.51
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Выбранный предмет — нажмите на него в матрице ниже.",
+       "Количество. Enter сразу добавляет строку.",
+       "Единица: ящики или штуки.",
+       "Добавить строку в заказ.",
+       "Поиск по русскому и английскому названию или коду; под ним — категории.",
+       "Матрица предметов каталога.",
+       "Очистить весь заказ (нужно подтвердить вторым нажатием).",
+       "Строки заказа: ± меняют количество, ✕ убирает строку. Черновик хранится в браузере.",
+       "Отправить рапорт в штаб — он появится в «Текущих заказах клана».",
+       "Выгрузить заказ без отправки: TXT, XLSX, PNG или буфер."
+      ],
+      "en": [
+       "The selected item — click it in the matrix below.",
+       "Quantity. Enter adds the line right away.",
+       "Unit: crates or pieces.",
+       "Add the line to the order.",
+       "Search by Russian or English name or code; categories are below.",
+       "Catalog item matrix.",
+       "Clear the whole order (press again to confirm).",
+       "Order lines: ± change the quantity, ✕ removes a line. The draft is kept in the browser.",
+       "Send the report to HQ — it appears in “Current clan orders”.",
+       "Export the order without sending it: TXT, XLSX, PNG or clipboard."
+      ],
+      "cs": [
+       "Vybraný předmět — klikněte na něj v matici níže.",
+       "Množství. Enter řádek rovnou přidá.",
+       "Jednotka: bedny nebo kusy.",
+       "Přidat řádek do objednávky.",
+       "Hledání podle ruského či anglického názvu nebo kódu; pod ním kategorie.",
+       "Matice předmětů katalogu.",
+       "Vymazat celou objednávku (potvrďte druhým stisknutím).",
+       "Řádky objednávky: ± mění množství, ✕ řádek odebere. Koncept se ukládá v prohlížeči.",
+       "Odeslat hlášení na štáb — objeví se v „Aktuálních objednávkách klanu“.",
+       "Exportovat objednávku bez odeslání: TXT, XLSX, PNG nebo schránka."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "reports",
+  "sort": 3,
+  "payload": {
+   "icon": "reports",
+   "title": {
+    "ru": "Текущие заказы клана",
+    "en": "Current clan orders",
+    "cs": "Aktuální objednávky klanu"
+   },
+   "summary": {
+    "ru": "Все рапорты из конструктора: офицеры меняют статус, любой боец может выгрузить рапорт или отправить его в канал Discord клана.",
+    "en": "All reports from the builder: officers change their status, any soldier can export a report or post it to the clan's Discord channel.",
+    "cs": "Všechna hlášení z konstruktoru: důstojníci mění stav, každý voják může hlášení exportovat nebo poslat do kanálu Discordu klanu."
+   },
+   "shots": [
+    {
+     "id": "reports",
+     "caption": {
+      "ru": "Рапорты штаба",
+      "en": "HQ reports",
+      "cs": "Hlášení štábu"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/reports.webp",
+      "en": "/api/v1/assets/guide/en/reports.webp",
+      "cs": "/api/v1/assets/guide/cs/reports.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 457
+      },
+      "en": {
+       "w": 1319,
+       "h": 457
+      },
+      "cs": {
+       "w": 1319,
+       "h": 465
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 2.65,
+        "y": 29.11
+       },
+       {
+        "x": 70.34,
+        "y": 28.85
+       },
+       {
+        "x": 1.5,
+        "y": 43.59
+       },
+       {
+        "x": 48.26,
+        "y": 43.37
+       },
+       {
+        "x": 10.83,
+        "y": 74.59
+       },
+       {
+        "x": 35.49,
+        "y": 74.59
+       },
+       {
+        "x": 43.82,
+        "y": 74.59
+       },
+       {
+        "x": 2.35,
+        "y": 90.18
+       }
+      ],
+      "en": [
+       {
+        "x": 2.65,
+        "y": 29.11
+       },
+       {
+        "x": 71.53,
+        "y": 28.85
+       },
+       {
+        "x": 1.5,
+        "y": 43.59
+       },
+       {
+        "x": 48.26,
+        "y": 43.37
+       },
+       {
+        "x": 7.08,
+        "y": 74.59
+       },
+       {
+        "x": 26.92,
+        "y": 74.59
+       },
+       {
+        "x": 35.78,
+        "y": 74.59
+       },
+       {
+        "x": 2.35,
+        "y": 90.18
+       }
+      ],
+      "cs": [
+       {
+        "x": 2.65,
+        "y": 28.61
+       },
+       {
+        "x": 70.34,
+        "y": 28.35
+       },
+       {
+        "x": 1.5,
+        "y": 42.84
+       },
+       {
+        "x": 48.26,
+        "y": 42.63
+       },
+       {
+        "x": 7.08,
+        "y": 76.71
+       },
+       {
+        "x": 31.2,
+        "y": 76.71
+       },
+       {
+        "x": 40.6,
+        "y": 76.71
+       },
+       {
+        "x": 2.35,
+        "y": 92.04
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Фильтр: текущие, выполненные, отменённые или все.",
+       "Поиск по названию рапорта или предмету.",
+       "Рапорт: нажмите на заголовок, чтобы раскрыть все строки.",
+       "Статус: открыт, в работе, выполнен, отменён.",
+       "Смена статуса — взять в работу, выполнить, отменить.",
+       "Загрузить строки рапорта в конструктор для правки или повтора.",
+       "Отправить рапорт картинкой в канал Discord (вебхук задаётся в кабинете).",
+       "Выгрузка рапорта в TXT, XLSX, PNG или буфер."
+      ],
+      "en": [
+       "Filter: current, completed, cancelled or all.",
+       "Search by report title or item.",
+       "A report: click the title to expand all lines.",
+       "Status: open, in progress, done, cancelled.",
+       "Change the status — take on, complete, cancel.",
+       "Load the report lines into the builder to edit or repeat it.",
+       "Post the report as an image to the Discord channel (the webhook is set in the profile).",
+       "Export the report as TXT, XLSX, PNG or to the clipboard."
+      ],
+      "cs": [
+       "Filtr: aktuální, splněné, zrušené nebo vše.",
+       "Hledání podle názvu hlášení nebo předmětu.",
+       "Hlášení: kliknutím na nadpis rozbalíte všechny řádky.",
+       "Stav: otevřené, v řešení, splněno, zrušeno.",
+       "Změna stavu — převzít, splnit, zrušit.",
+       "Načíst řádky hlášení do konstruktoru k úpravě nebo opakování.",
+       "Poslat hlášení jako obrázek do kanálu Discord (webhook se nastavuje v profilu).",
+       "Export hlášení do TXT, XLSX, PNG nebo schránky."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "timers",
+  "sort": 4,
+  "payload": {
+   "icon": "timers",
+   "title": {
+    "ru": "Таймеры деспавна складов",
+    "en": "Stockpile despawn timers",
+    "cs": "Časovače despawnu skladů"
+   },
+   "summary": {
+    "ru": "Склад в Foxhole исчезает через 48 часов без обновления. Терминал считает время для каждого склада клана и предупреждает в бегущей строке.",
+    "en": "A Foxhole stockpile disappears after 48 hours without a refresh. The terminal tracks the time for every clan stockpile and warns in the ticker.",
+    "cs": "Sklad ve Foxhole zmizí po 48 hodinách bez obnovení. Terminál hlídá čas každého skladu klanu a varuje v běžícím řádku."
+   },
+   "shots": [
+    {
+     "id": "timers",
+     "caption": {
+      "ru": "Матрица таймеров",
+      "en": "Timer matrix",
+      "cs": "Matice časovačů"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/timers.webp",
+      "en": "/api/v1/assets/guide/en/timers.webp",
+      "cs": "/api/v1/assets/guide/cs/timers.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 377
+      },
+      "en": {
+       "w": 1319,
+       "h": 377
+      },
+      "cs": {
+       "w": 1319,
+       "h": 377
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 41,
+        "y": 4.87
+       },
+       {
+        "x": 75.11,
+        "y": 14.15
+       },
+       {
+        "x": 98.41,
+        "y": 14.06
+       },
+       {
+        "x": 1.5,
+        "y": 32
+       },
+       {
+        "x": 88.32,
+        "y": 33.12
+       },
+       {
+        "x": 97.88,
+        "y": 35
+       }
+      ],
+      "en": [
+       {
+        "x": 36.37,
+        "y": 4.87
+       },
+       {
+        "x": 76.3,
+        "y": 14.15
+       },
+       {
+        "x": 98.41,
+        "y": 14.06
+       },
+       {
+        "x": 1.5,
+        "y": 32
+       },
+       {
+        "x": 88.32,
+        "y": 33.12
+       },
+       {
+        "x": 97.88,
+        "y": 35
+       }
+      ],
+      "cs": [
+       {
+        "x": 41.23,
+        "y": 4.87
+       },
+       {
+        "x": 75.7,
+        "y": 14.15
+       },
+       {
+        "x": 98.41,
+        "y": 14.06
+       },
+       {
+        "x": 1.5,
+        "y": 32
+       },
+       {
+        "x": 88.32,
+        "y": 33.12
+       },
+       {
+        "x": 97.88,
+        "y": 35
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Сколько складов в зоне риска: меньше часа, меньше суток и в безопасности.",
+       "Поиск по сектору или складу.",
+       "Поставить новый склад на мониторинг: гекс, локация и стартовое время (офицеры).",
+       "Карточка склада: полоса показывает остаток от 48 часов, цвет — уровень риска.",
+       "Оставшееся время до исчезновения склада.",
+       "Открыть канал связи склада: обновить таймер, журнал, снять с мониторинга."
+      ],
+      "en": [
+       "How many stockpiles are at risk: under an hour, under a day and safe.",
+       "Search by sector or stockpile.",
+       "Start monitoring a new stockpile: hex, location and starting time (officers).",
+       "Stockpile card: the bar shows what is left of 48 hours, the colour shows the risk.",
+       "Time left until the stockpile disappears.",
+       "Open the stockpile channel: refresh the timer, log, stop monitoring."
+      ],
+      "cs": [
+       "Kolik skladů je v ohrožení: méně než hodina, méně než den a v bezpečí.",
+       "Hledání podle sektoru nebo skladu.",
+       "Zahájit sledování nového skladu: hex, lokace a počáteční čas (důstojníci).",
+       "Karta skladu: pruh ukazuje zbytek ze 48 hodin, barva míru rizika.",
+       "Zbývající čas do zmizení skladu.",
+       "Otevřít kanál skladu: obnovit časovač, deník, ukončit sledování."
+      ]
+     }
+    },
+    {
+     "id": "timer-modal",
+     "caption": {
+      "ru": "Канал связи склада",
+      "en": "Stockpile channel",
+      "cs": "Komunikační kanál skladu"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/timer-modal.webp",
+      "en": "/api/v1/assets/guide/en/timer-modal.webp",
+      "cs": "/api/v1/assets/guide/cs/timer-modal.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 672,
+       "h": 600
+      },
+      "en": {
+       "w": 672,
+       "h": 600
+      },
+      "cs": {
+       "w": 672,
+       "h": 600
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 96.88,
+        "y": 13.33
+       },
+       {
+        "x": 5.21,
+        "y": 32.68
+       },
+       {
+        "x": 5.21,
+        "y": 64.01
+       },
+       {
+        "x": 5.21,
+        "y": 72.35
+       },
+       {
+        "x": 5.21,
+        "y": 85.08
+       },
+       {
+        "x": 53.27,
+        "y": 85.08
+       },
+       {
+        "x": 96.88,
+        "y": 92.69
+       }
+      ],
+      "en": [
+       {
+        "x": 96.88,
+        "y": 13.33
+       },
+       {
+        "x": 5.21,
+        "y": 32.68
+       },
+       {
+        "x": 5.21,
+        "y": 64.01
+       },
+       {
+        "x": 5.21,
+        "y": 72.35
+       },
+       {
+        "x": 5.21,
+        "y": 85.08
+       },
+       {
+        "x": 53.27,
+        "y": 85.08
+       },
+       {
+        "x": 96.88,
+        "y": 92.69
+       }
+      ],
+      "cs": [
+       {
+        "x": 96.88,
+        "y": 13.33
+       },
+       {
+        "x": 5.21,
+        "y": 32.68
+       },
+       {
+        "x": 5.21,
+        "y": 64.01
+       },
+       {
+        "x": 5.21,
+        "y": 72.35
+       },
+       {
+        "x": 5.21,
+        "y": 85.08
+       },
+       {
+        "x": 53.27,
+        "y": 85.08
+       },
+       {
+        "x": 96.88,
+        "y": 92.69
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Сколько осталось до исчезновения.",
+       "Журнал: кто и когда обновлял склад, заметки интендантов.",
+       "Добавить заметку в журнал.",
+       "Точное время из игры: дни, часы, минуты.",
+       "После обновления склада в игре — сбросить на 48 часов одной кнопкой.",
+       "Задать введённое время.",
+       "Снять склад с мониторинга (с подтверждением)."
+      ],
+      "en": [
+       "Time left before it disappears.",
+       "Log: who refreshed the stockpile and when, quartermaster notes.",
+       "Add a note to the log.",
+       "Exact time from the game: days, hours, minutes.",
+       "After refreshing the stockpile in game — reset to 48 hours with one click.",
+       "Apply the time you entered.",
+       "Stop monitoring the stockpile (asks to confirm)."
+      ],
+      "cs": [
+       "Kolik zbývá do zmizení.",
+       "Deník: kdo a kdy sklad obnovil, poznámky intendantů.",
+       "Přidat poznámku do deníku.",
+       "Přesný čas ze hry: dny, hodiny, minuty.",
+       "Po obnovení skladu ve hře — jedním tlačítkem nastavit 48 hodin.",
+       "Nastavit zadaný čas.",
+       "Ukončit sledování skladu (s potvrzením)."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "codes",
+  "sort": 5,
+  "payload": {
+   "icon": "codes",
+   "title": {
+    "ru": "База кодов предметов",
+    "en": "Item code base",
+    "cs": "Databáze kódů předmětů"
+   },
+   "summary": {
+    "ru": "Справочник всех предметов Foxhole: технический код, английское и русское название, категория и фракция. Им пользуются сканер, склад и конструктор.",
+    "en": "A reference of every Foxhole item: technical code, English and Russian names, category and faction. The scanner, stockpile and builder rely on it.",
+    "cs": "Přehled všech předmětů Foxhole: technický kód, anglický a ruský název, kategorie a frakce. Využívá ho skener, sklad i konstruktor."
+   },
+   "shots": [
+    {
+     "id": "codes",
+     "caption": {
+      "ru": "Реестр кодов",
+      "en": "Code registry",
+      "cs": "Registr kódů"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/codes.webp",
+      "en": "/api/v1/assets/guide/en/codes.webp",
+      "cs": "/api/v1/assets/guide/cs/codes.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1440,
+       "h": 960
+      },
+      "en": {
+       "w": 1440,
+       "h": 960
+      },
+      "cs": {
+       "w": 1440,
+       "h": 960
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 72.36,
+        "y": 12.6
+       },
+       {
+        "x": 10,
+        "y": 24.69
+       },
+       {
+        "x": 75.84,
+        "y": 23.25
+       },
+       {
+        "x": 97.71,
+        "y": 23.63
+       },
+       {
+        "x": 76.7,
+        "y": 28.06
+       },
+       {
+        "x": 97.71,
+        "y": 28.06
+       },
+       {
+        "x": 8.89,
+        "y": 42.46
+       }
+      ],
+      "en": [
+       {
+        "x": 75.15,
+        "y": 12.6
+       },
+       {
+        "x": 10,
+        "y": 24.69
+       },
+       {
+        "x": 76.39,
+        "y": 23.25
+       },
+       {
+        "x": 97.71,
+        "y": 23.63
+       },
+       {
+        "x": 76.15,
+        "y": 28.06
+       },
+       {
+        "x": 97.71,
+        "y": 28.06
+       },
+       {
+        "x": 8.89,
+        "y": 42.46
+       }
+      ],
+      "cs": [
+       {
+        "x": 76.26,
+        "y": 12.6
+       },
+       {
+        "x": 10,
+        "y": 24.69
+       },
+       {
+        "x": 78.02,
+        "y": 23.25
+       },
+       {
+        "x": 97.71,
+        "y": 23.63
+       },
+       {
+        "x": 78.33,
+        "y": 28.06
+       },
+       {
+        "x": 97.71,
+        "y": 28.06
+       },
+       {
+        "x": 8.89,
+        "y": 42.46
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Всего записей, сколько с иконкой и сколько требуют проверки.",
+       "Поиск по коду, английскому или русскому названию.",
+       "Фильтры по категории и фракции.",
+       "Показать только спорные записи.",
+       "Скопировать отфильтрованные строки (JSON) или скачать CSV.",
+       "Сравнить сырую выгрузку склада из игры с реестром: что распознано, что нет.",
+       "Таблица реестра."
+      ],
+      "en": [
+       "Total records, how many have an icon and how many need review.",
+       "Search by code, English or Russian name.",
+       "Category and faction filters.",
+       "Show disputed records only.",
+       "Copy the filtered lines (JSON) or download a CSV.",
+       "Compare a raw in-game stockpile export with the registry: what is recognised and what is not.",
+       "The registry table."
+      ],
+      "cs": [
+       "Celkem záznamů, kolik má ikonu a kolik je třeba ověřit.",
+       "Hledání podle kódu, anglického nebo ruského názvu.",
+       "Filtry podle kategorie a frakce.",
+       "Zobrazit jen sporné záznamy.",
+       "Zkopírovat filtrované řádky (JSON) nebo stáhnout CSV.",
+       "Porovnat surový výpis skladu ze hry s registrem: co je rozpoznáno a co ne.",
+       "Tabulka registru."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "tools",
+  "sort": 6,
+  "payload": {
+   "icon": "tools",
+   "title": {
+    "ru": "Инструменты: калькуляторы",
+    "en": "Tools: calculators",
+    "cs": "Nástroje: kalkulačky"
+   },
+   "summary": {
+    "ru": "Калькуляторы фабрики, MPF и молотка (Refinery) считают ресурсы, ящики и время по данным foxhole.wiki.gg. Ниже — проверенные внешние сервисы клана.",
+    "en": "The Factory, MPF and Refinery calculators work out resources, crates and time from foxhole.wiki.gg data. Trusted external clan services are listed below.",
+    "cs": "Kalkulačky továrny, MPF a rafinerie počítají suroviny, bedny a čas podle dat foxhole.wiki.gg. Níže jsou ověřené externí služby klanu."
+   },
+   "shots": [
+    {
+     "id": "tools-tabs",
+     "caption": {
+      "ru": "Выбор калькулятора",
+      "en": "Choosing a calculator",
+      "cs": "Výběr kalkulačky"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/tools-tabs.webp",
+      "en": "/api/v1/assets/guide/en/tools-tabs.webp",
+      "cs": "/api/v1/assets/guide/cs/tools-tabs.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 115
+      },
+      "en": {
+       "w": 1319,
+       "h": 115
+      },
+      "cs": {
+       "w": 1319,
+       "h": 115
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 2.2,
+        "y": 51.88
+       },
+       {
+        "x": 35.18,
+        "y": 51.88
+       },
+       {
+        "x": 68.16,
+        "y": 51.88
+       }
+      ],
+      "en": [
+       {
+        "x": 2.2,
+        "y": 51.88
+       },
+       {
+        "x": 35.18,
+        "y": 51.88
+       },
+       {
+        "x": 68.16,
+        "y": 51.88
+       }
+      ],
+      "cs": [
+       {
+        "x": 2.2,
+        "y": 51.88
+       },
+       {
+        "x": 35.18,
+        "y": 51.88
+       },
+       {
+        "x": 68.16,
+        "y": 51.88
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Калькулятор фабрики: очередь до 4 ящиков (техника — 5), цена без скидки.",
+       "MPF: заказ 3–9 ящиков (техника и сооружения 3–5), скидка 10–50% на каждый следующий ящик.",
+       "Молоток (Refinery): сколько сырья и времени нужно на материалы."
+      ],
+      "en": [
+       "Factory calculator: queue up to 4 crates (vehicles — 5), full price.",
+       "MPF: an order of 3–9 crates (vehicles and structures 3–5), 10–50% off every next crate.",
+       "Refinery: how much raw material and time the materials need."
+      ],
+      "cs": [
+       "Kalkulačka továrny: fronta až 4 bedny (vozidla — 5), plná cena.",
+       "MPF: objednávka 3–9 beden (vozidla a stavby 3–5), sleva 10–50 % na každou další bednu.",
+       "Rafinerie: kolik suroviny a času je potřeba na materiály."
+      ]
+     }
+    },
+    {
+     "id": "mpf",
+     "caption": {
+      "ru": "Калькулятор MPF",
+      "en": "MPF calculator",
+      "cs": "Kalkulačka MPF"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/mpf.webp",
+      "en": "/api/v1/assets/guide/en/mpf.webp",
+      "cs": "/api/v1/assets/guide/cs/mpf.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1440,
+       "h": 960
+      },
+      "en": {
+       "w": 1440,
+       "h": 960
+      },
+      "cs": {
+       "w": 1440,
+       "h": 960
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 97.49,
+        "y": 11.39
+       },
+       {
+        "x": 10,
+        "y": 26.81
+       },
+       {
+        "x": 10,
+        "y": 31.39
+       },
+       {
+        "x": 10,
+        "y": 39.36
+       },
+       {
+        "x": 90.51,
+        "y": 36.5
+       },
+       {
+        "x": 97.49,
+        "y": 36.32
+       },
+       {
+        "x": 74.72,
+        "y": 52.73
+       },
+       {
+        "x": 74.72,
+        "y": 73.67
+       }
+      ],
+      "en": [
+       {
+        "x": 97.49,
+        "y": 11.39
+       },
+       {
+        "x": 10,
+        "y": 26.81
+       },
+       {
+        "x": 10,
+        "y": 31.39
+       },
+       {
+        "x": 10,
+        "y": 39.36
+       },
+       {
+        "x": 90.51,
+        "y": 36.5
+       },
+       {
+        "x": 97.49,
+        "y": 36.32
+       },
+       {
+        "x": 74.72,
+        "y": 52.73
+       },
+       {
+        "x": 74.72,
+        "y": 73.67
+       }
+      ],
+      "cs": [
+       {
+        "x": 97.49,
+        "y": 11.39
+       },
+       {
+        "x": 10,
+        "y": 26.81
+       },
+       {
+        "x": 10,
+        "y": 31.39
+       },
+       {
+        "x": 10,
+        "y": 39.36
+       },
+       {
+        "x": 90.03,
+        "y": 36.5
+       },
+       {
+        "x": 97.49,
+        "y": 36.32
+       },
+       {
+        "x": 74.72,
+        "y": 52.73
+       },
+       {
+        "x": 74.72,
+        "y": 73.67
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "PRODUCTION — игровые лимиты заказа; PLANNING — любое количество, разбивается на заказы.",
+       "Поиск предмета; рядом — фильтр фракции.",
+       "Категории производства.",
+       "Карточка: ＋ добавляет ящик (в MPF первый клик сразу даёт минимальные 3), внизу — цена ящика.",
+       "Количество ящиков в очереди — кнопки ± или ввод с клавиатуры.",
+       "Убрать позицию из очереди.",
+       "Итог: ресурсы со скидкой MPF, ящики, время и процент экономии.",
+       "Выгрузить расчёт или скопировать его кнопкой «Поделиться планом»."
+      ],
+      "en": [
+       "PRODUCTION — in-game order limits; PLANNING — any amount, split into orders.",
+       "Item search; the faction filter is next to it.",
+       "Production categories.",
+       "Card: ＋ adds a crate (in MPF the first click adds the minimum of 3), the crate price is at the bottom.",
+       "Crates in the queue — ± buttons or type a number.",
+       "Remove the item from the queue.",
+       "Totals: resources with the MPF discount, crates, time and the saving.",
+       "Export the calculation or copy it with “Share plan”."
+      ],
+      "cs": [
+       "PRODUCTION — herní limity objednávky; PLANNING — libovolné množství rozdělené na objednávky.",
+       "Hledání předmětu; vedle je filtr frakce.",
+       "Kategorie výroby.",
+       "Karta: ＋ přidá bednu (v MPF první klik rovnou přidá minimální 3), dole je cena bedny.",
+       "Počet beden ve frontě — tlačítka ± nebo zadání číslem.",
+       "Odebrat položku z fronty.",
+       "Souhrn: suroviny se slevou MPF, bedny, čas a úspora.",
+       "Exportovat výpočet nebo ho zkopírovat tlačítkem „Sdílet plán“."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "training",
+  "sort": 7,
+  "payload": {
+   "icon": "training",
+   "title": {
+    "ru": "Обучение",
+    "en": "Training",
+    "cs": "Výcvik"
+   },
+   "summary": {
+    "ru": "Учебные модули штаба: работа с терминалом, форматы отчётов сканера, правила таймеров. Новые модули появляются по мере готовности.",
+    "en": "HQ training modules: using the terminal, scanner report formats, timer rules. New modules appear as they are ready.",
+    "cs": "Výcvikové moduly štábu: práce s terminálem, formáty výstupů skeneru, pravidla časovačů. Nové moduly přibývají postupně."
+   },
+   "shots": [
+    {
+     "id": "training",
+     "caption": {
+      "ru": "Учебный центр",
+      "en": "Training center",
+      "cs": "Výcvikové centrum"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/training.webp",
+      "en": "/api/v1/assets/guide/en/training.webp",
+      "cs": "/api/v1/assets/guide/cs/training.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1440,
+       "h": 960
+      },
+      "en": {
+       "w": 1440,
+       "h": 960
+      },
+      "cs": {
+       "w": 1440,
+       "h": 960
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 56.41,
+        "y": 26.5
+       },
+       {
+        "x": 20.8,
+        "y": 33.69
+       },
+       {
+        "x": 66.45,
+        "y": 62.7
+       }
+      ],
+      "en": [
+       {
+        "x": 57.97,
+        "y": 24.38
+       },
+       {
+        "x": 20.8,
+        "y": 31.57
+       },
+       {
+        "x": 66.45,
+        "y": 60.58
+       }
+      ],
+      "cs": [
+       {
+        "x": 54.85,
+        "y": 24.38
+       },
+       {
+        "x": 20.8,
+        "y": 31.57
+       },
+       {
+        "x": 66.45,
+        "y": 60.58
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Сколько модулей уже доступно.",
+       "Доступный модуль — нажмите, чтобы раскрыть текст.",
+       "Модуль в разработке."
+      ],
+      "en": [
+       "How many modules are available.",
+       "An available module — click to open it.",
+       "A module in development."
+      ],
+      "cs": [
+       "Kolik modulů je k dispozici.",
+       "Dostupný modul — kliknutím ho otevřete.",
+       "Modul ve vývoji."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "cabinet",
+  "sort": 8,
+  "payload": {
+   "icon": "cabinet",
+   "title": {
+    "ru": "Личный кабинет и управление кланом",
+    "en": "Profile and clan management",
+    "cs": "Profil a správa klanu"
+   },
+   "summary": {
+    "ru": "Профиль, роль и права, язык интерфейса. Командир и администраторы здесь же подключают канал Discord, приглашают бойцов и выпускают токены для ботов.",
+    "en": "Profile, role and rights, interface language. The commander and admins also connect the Discord channel, invite soldiers and issue bot tokens here.",
+    "cs": "Profil, role a práva, jazyk rozhraní. Velitel a administrátoři tu také připojují kanál Discord, zvou vojáky a vydávají tokeny pro boty."
+   },
+   "shots": [
+    {
+     "id": "profile",
+     "caption": {
+      "ru": "Профиль участника",
+      "en": "Member profile",
+      "cs": "Profil člena"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/profile.webp",
+      "en": "/api/v1/assets/guide/en/profile.webp",
+      "cs": "/api/v1/assets/guide/cs/profile.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1440,
+       "h": 960
+      },
+      "en": {
+       "w": 1440,
+       "h": 960
+      },
+      "cs": {
+       "w": 1440,
+       "h": 960
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 33.38,
+        "y": 32.92
+       },
+       {
+        "x": 97.43,
+        "y": 32.54
+       },
+       {
+        "x": 8.82,
+        "y": 41.04
+       },
+       {
+        "x": 56.46,
+        "y": 48.08
+       }
+      ],
+      "en": [
+       {
+        "x": 33.38,
+        "y": 32.92
+       },
+       {
+        "x": 97.43,
+        "y": 32.54
+       },
+       {
+        "x": 8.82,
+        "y": 41.04
+       },
+       {
+        "x": 56.46,
+        "y": 48.08
+       }
+      ],
+      "cs": [
+       {
+        "x": 32.95,
+        "y": 32.92
+       },
+       {
+        "x": 97.43,
+        "y": 32.54
+       },
+       {
+        "x": 8.82,
+        "y": 41.04
+       },
+       {
+        "x": 56.46,
+        "y": 48.08
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Ваша роль в клане: командир, администратор, офицер, боец или гость.",
+       "Выйти из терминала на этом устройстве.",
+       "Данные участника: ID, позывной, клан и способ входа.",
+       "Права роли: что вам разрешено в терминале."
+      ],
+      "en": [
+       "Your clan role: commander, admin, officer, soldier or guest.",
+       "Sign out of the terminal on this device.",
+       "Member details: ID, callsign, clan and sign-in method.",
+       "Role rights: what you are allowed to do in the terminal."
+      ],
+      "cs": [
+       "Vaše role v klanu: velitel, administrátor, důstojník, voják nebo host.",
+       "Odhlásit se z terminálu na tomto zařízení.",
+       "Údaje člena: ID, volací znak, klan a způsob přihlášení.",
+       "Práva role: co smíte v terminálu dělat."
+      ]
+     }
+    },
+    {
+     "id": "language",
+     "caption": {
+      "ru": "Язык интерфейса",
+      "en": "Interface language",
+      "cs": "Jazyk rozhraní"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/language.webp",
+      "en": "/api/v1/assets/guide/en/language.webp",
+      "cs": "/api/v1/assets/guide/cs/language.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 140
+      },
+      "en": {
+       "w": 1319,
+       "h": 140
+      },
+      "cs": {
+       "w": 1319,
+       "h": 140
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 2.65,
+        "y": 78.5
+       }
+      ],
+      "en": [
+       {
+        "x": 2.65,
+        "y": 78.5
+       }
+      ],
+      "cs": [
+       {
+        "x": 2.65,
+        "y": 78.5
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Русский, English или Čeština. Выбор сохраняется в профиле, на этом языке приходят и сообщения сервера."
+      ],
+      "en": [
+       "Русский, English or Čeština. The choice is saved to your profile; server messages use it too."
+      ],
+      "cs": [
+       "Русский, English nebo Čeština. Volba se uloží do profilu, v tomto jazyce chodí i zprávy serveru."
+      ]
+     }
+    },
+    {
+     "id": "webhook",
+     "caption": {
+      "ru": "Канал Discord для рапортов (админ+)",
+      "en": "Discord channel for reports (admin+)",
+      "cs": "Kanál Discord pro hlášení (admin+)"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/webhook.webp",
+      "en": "/api/v1/assets/guide/en/webhook.webp",
+      "cs": "/api/v1/assets/guide/cs/webhook.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 175
+      },
+      "en": {
+       "w": 1319,
+       "h": 175
+      },
+      "cs": {
+       "w": 1319,
+       "h": 175
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 2.65,
+        "y": 78.57
+       },
+       {
+        "x": 98.41,
+        "y": 74.99
+       }
+      ],
+      "en": [
+       {
+        "x": 2.65,
+        "y": 78.57
+       },
+       {
+        "x": 98.41,
+        "y": 74.99
+       }
+      ],
+      "cs": [
+       {
+        "x": 2.65,
+        "y": 78.57
+       },
+       {
+        "x": 98.41,
+        "y": 74.99
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "URL вебхука канала: Discord → Настройки канала → Интеграции → Вебхуки → «Скопировать URL».",
+       "Сохранить. После этого в рапортах работает кнопка «В Discord»."
+      ],
+      "en": [
+       "Channel webhook URL: Discord → Channel settings → Integrations → Webhooks → “Copy Webhook URL”.",
+       "Save. After that the “To Discord” button works in reports."
+      ],
+      "cs": [
+       "URL webhooku kanálu: Discord → Nastavení kanálu → Integrace → Webhooky → „Kopírovat URL“.",
+       "Uložit. Potom v hlášeních funguje tlačítko „Do Discordu“."
+      ]
+     }
+    },
+    {
+     "id": "invites",
+     "caption": {
+      "ru": "Приглашения в клан (офицер+)",
+      "en": "Clan invites (officer+)",
+      "cs": "Pozvánky do klanu (důstojník+)"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/invites.webp",
+      "en": "/api/v1/assets/guide/en/invites.webp",
+      "cs": "/api/v1/assets/guide/cs/invites.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 225
+      },
+      "en": {
+       "w": 1319,
+       "h": 225
+      },
+      "cs": {
+       "w": 1319,
+       "h": 225
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 2.65,
+        "y": 44.19
+       },
+       {
+        "x": 91.72,
+        "y": 10.71
+       },
+       {
+        "x": 76.4,
+        "y": 44.19
+       },
+       {
+        "x": 11.73,
+        "y": 64.63
+       },
+       {
+        "x": 97.54,
+        "y": 64.04
+       }
+      ],
+      "en": [
+       {
+        "x": 2.65,
+        "y": 44.19
+       },
+       {
+        "x": 93.54,
+        "y": 10.71
+       },
+       {
+        "x": 76.4,
+        "y": 44.19
+       },
+       {
+        "x": 11.73,
+        "y": 64.63
+       },
+       {
+        "x": 97.54,
+        "y": 64.04
+       }
+      ],
+      "cs": [
+       {
+        "x": 2.65,
+        "y": 44.19
+       },
+       {
+        "x": 93.54,
+        "y": 10.71
+       },
+       {
+        "x": 76.4,
+        "y": 44.19
+       },
+       {
+        "x": 11.73,
+        "y": 64.63
+       },
+       {
+        "x": 97.54,
+        "y": 64.04
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Роль, которую получит вступивший: гость, боец или офицер.",
+       "Сколько раз можно воспользоваться ссылкой и сколько часов она действует.",
+       "Создать приглашение (администраторы).",
+       "Скопировать ссылку-приглашение и отправить бойцу: он откроет её и войдёт через Discord.",
+       "Отозвать приглашение."
+      ],
+      "en": [
+       "The role the newcomer gets: guest, soldier or officer.",
+       "How many times the link can be used and how many hours it is valid.",
+       "Create an invite (admins).",
+       "Copy the invite link and send it to the soldier: they open it and sign in with Discord.",
+       "Revoke the invite."
+      ],
+      "cs": [
+       "Role, kterou nováček dostane: host, voják nebo důstojník.",
+       "Kolikrát lze odkaz použít a kolik hodin platí.",
+       "Vytvořit pozvánku (administrátoři).",
+       "Zkopírovat pozvánkový odkaz a poslat ho vojákovi: otevře ho a přihlásí se přes Discord.",
+       "Zrušit pozvánku."
+      ]
+     }
+    },
+    {
+     "id": "token",
+     "caption": {
+      "ru": "API-токен для бота (админ+)",
+      "en": "API token for a bot (admin+)",
+      "cs": "API token pro bota (admin+)"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/token.webp",
+      "en": "/api/v1/assets/guide/en/token.webp",
+      "cs": "/api/v1/assets/guide/cs/token.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 137
+      },
+      "en": {
+       "w": 1319,
+       "h": 137
+      },
+      "cs": {
+       "w": 1319,
+       "h": 137
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 2.65,
+        "y": 72.29
+       },
+       {
+        "x": 27.24,
+        "y": 72.57
+       },
+       {
+        "x": 76.4,
+        "y": 72.57
+       }
+      ],
+      "en": [
+       {
+        "x": 2.65,
+        "y": 72.29
+       },
+       {
+        "x": 27.24,
+        "y": 72.57
+       },
+       {
+        "x": 76.4,
+        "y": 72.57
+       }
+      ],
+      "cs": [
+       {
+        "x": 2.65,
+        "y": 72.29
+       },
+       {
+        "x": 27.24,
+        "y": 72.57
+       },
+       {
+        "x": 76.4,
+        "y": 72.57
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Название токена, например «discord-bot».",
+       "Роль бота — чаще всего «Гость (только чтение)».",
+       "Выпустить токен. Он показывается один раз — сохраните его."
+      ],
+      "en": [
+       "Token name, e.g. “discord-bot”.",
+       "The bot's role — usually “Guest (read only)”.",
+       "Issue the token. It is shown only once — save it."
+      ],
+      "cs": [
+       "Název tokenu, např. „discord-bot“.",
+       "Role bota — nejčastěji „Host (jen čtení)“.",
+       "Vydat token. Zobrazí se jen jednou — uložte si ho."
+      ]
+     }
+    }
+   ]
+  }
+ }
+]

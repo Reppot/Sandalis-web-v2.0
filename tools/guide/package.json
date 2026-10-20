@@ -1,0 +1,12 @@
+{
+  "name": "sindaris-guide-generator",
+  "private": true,
+  "type": "module",
+  "description": "Скриншоты и метки для вкладки «Навигация»: node generate.mjs (см. README.md)",
+  "scripts": {
+    "generate": "node generate.mjs"
+  },
+  "dependencies": {
+    "puppeteer-core": "23.11.1"
+  }
+}

@@ -436,6 +436,34 @@ body {
 /* ───────────────────────── СТАТУС-ИНДИКАТОРЫ ───────────────────────── */
 .status-dot { width: 8px; height: 8px; border-radius: 999px; box-shadow: 0 0 10px currentColor; }
 
+/* «Навигация»: руководство со скриншотами и метками. */
+.guide-toc { position: sticky; top: calc(var(--chrome-h, 72px) + 0.75rem); }
+.guide-toc-item { display: flex; width: 100%; min-width: 12rem; align-items: center; gap: 0.55rem; border: 1px solid transparent; border-radius: 4px; padding: 0.5rem 0.6rem; color: rgba(229, 231, 235, 0.85); font-size: 0.8rem; text-align: left; transition: background 0.2s ease, border-color 0.2s ease; }
+.guide-toc-item:hover, .guide-toc-item:focus-visible { border-color: var(--line-2); background: rgba(0, 0, 0, 0.3); outline: none; }
+.guide-toc-item.is-active { border-color: var(--accent); background: rgba(163, 230, 53, 0.1); color: var(--accent); }
+.guide-toc-num { display: grid; width: 1.35rem; height: 1.35rem; flex-shrink: 0; place-items: center; border: 1px solid var(--line-2); border-radius: 3px; font-family: var(--font-mono); font-size: 0.65rem; }
+.guide-shot { position: relative; margin-inline: auto; overflow: hidden; border: 1px solid var(--line-2); border-radius: 4px; background: #000; }
+.guide-shot img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.guide-marker { position: absolute; display: grid; width: 1.7rem; height: 1.7rem; place-items: center; border: 2px solid #0b0f0a; border-radius: 999px; background: var(--accent); color: #0b0f0a; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 800; box-shadow: 0 0 0 2px var(--accent), 0 4px 14px rgba(0, 0, 0, 0.6); transform: translate(-50%, -50%); transition: transform 0.15s ease, box-shadow 0.15s ease; cursor: pointer; }
+.guide-marker.is-active, .guide-marker:hover { transform: translate(-50%, -50%) scale(1.25); box-shadow: 0 0 0 3px #fff, 0 0 18px var(--accent); z-index: 2; }
+.guide-marker-static { position: static; flex-shrink: 0; transform: none; cursor: default; }
+.guide-marker-static:hover { transform: scale(1.1); }
+.guide-notes { display: grid; gap: 0.4rem; }
+@media (min-width: 900px) { .guide-notes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.guide-notes li { display: flex; align-items: flex-start; gap: 0.6rem; border: 1px solid transparent; border-radius: 4px; padding: 0.45rem 0.55rem; color: rgba(229, 231, 235, 0.88); font-size: 0.82rem; line-height: 1.45; }
+.guide-notes li.is-active { border-color: var(--accent); background: rgba(163, 230, 53, 0.08); }
+@media (max-width: 1023px) { .guide-toc { position: static; } }
+
+/* Иконка интерфейса (Tabler, MIT): SVG как маска, цвет — акцент текущей темы. */
+.ui-glyph {
+  display: inline-block;
+  flex-shrink: 0;
+  color: var(--accent);
+  background-color: currentColor;
+  -webkit-mask: no-repeat center / contain;
+  mask: no-repeat center / contain;
+}
+
 /* Анимация интерфейсных иконок. GameItemIcon намеренно не получает этот класс. */
 .ui-icon,
 .ui-icon-svg,

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { EmptyState, Loading, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, uiIcon, useT } from "@/shared";
+import { EmptyState, Loading, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, UiGlyph, useT } from "@/shared";
 import { timerPlace, useClock, useRiskSummary, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 import { RegisterTimerModal, TimerManagerModal } from "@/features/timers/ui/TimerModals";
 
@@ -33,20 +33,19 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
       <section className="panel panel-corners rounded-md px-4 py-2.5">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <div className="flex items-center gap-2">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={uiIcon("24-hour-clock")} alt="" width={30} height={30} className="ui-icon h-[30px] w-[30px] object-contain" />
+            <UiGlyph icon="timers" size={30} />
             <h2 className="panel-title">{t("timers.title")}</h2>
           </div>
-          <Stat label={`🚨 ${t("timers.critical")}`} value={risk.critical} color="var(--danger)" />
+          <Stat guide="timers-stats" label={`🚨 ${t("timers.critical")}`} value={risk.critical} color="var(--danger)" />
           <Stat label={`⚠️ ${t("timers.warning")}`} value={risk.warning} color="var(--warn)" />
           <Stat label={`✅ ${t("timers.safe")}`} value={risk.safe} color="var(--tk-safe)" />
           <div className="ml-auto flex flex-wrap items-center gap-2">
-            <input className="field w-40 py-1.5 text-xs" placeholder={t("timers.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
+            <input className="field w-40 py-1.5 text-xs" data-guide="timers-search" placeholder={t("timers.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
             <button className="btn" onClick={() => void refresh()} title={t("common.syncHint")}>
               ⟳ <span className="hidden sm:inline">{t("common.sync")}</span>
             </button>
             {canWrite && (
-              <button className="btn btn-primary" onClick={() => setAdding(true)}>
+              <button className="btn btn-primary" data-guide="timers-register" onClick={() => setAdding(true)}>
                 ➕ <span className="hidden sm:inline">{t("timers.register")}</span>
                 <span className="sm:hidden">{t("timers.registerShort")}</span>
               </button>
@@ -60,7 +59,7 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
           <div className="panel rounded-md"><Loading label={t("timers.loading")} /></div>
         ) : visible.length === 0 ? (
           <div className="panel panel-corners rounded-md">
-            <EmptyState icon={uiIcon("barracks")} title={timers.length ? t("common.nothingFound") : t("timers.empty")} hint={canWrite ? undefined : t("timers.officersOnly")}>
+            <EmptyState icon="stockpile" title={timers.length ? t("common.nothingFound") : t("timers.empty")} hint={canWrite ? undefined : t("timers.officersOnly")}>
               {connection === "offline" && <div className="hud-label text-danger">{t("common.noDb")}</div>}
             </EmptyState>
           </div>
@@ -79,10 +78,10 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
   );
 };
 
-const Stat: React.FC<{ label: string; value: number; color: string }> = ({ label, value, color }) => {
+const Stat: React.FC<{ label: string; value: number; color: string; guide?: string }> = ({ label, value, color, guide }) => {
   const t = useT();
   return (
-  <div className="flex items-center gap-2 font-mono text-[0.72rem] font-bold tracking-wide" style={{ color }}>
+  <div data-guide={guide} className="flex items-center gap-2 font-mono text-[0.72rem] font-bold tracking-wide" style={{ color }}>
     <span>{label}:</span>
     <span className="rounded border px-1.5 py-0.5 tabular-nums" style={{ borderColor: color, background: "rgba(0,0,0,0.3)" }}>
       {t("timers.bases", { n: value })}
@@ -125,11 +124,11 @@ const TimerCard: React.FC<{ timer: MonitoredTimer; now: number; onManage: () => 
           </div>
         </div>
         <div className="flex items-center justify-between gap-4 sm:justify-end">
-          <div className="text-right">
+          <div data-guide="timer-left" className="text-right">
             <div className="hud-label text-white/60">{done ? t("timers.completed") : ts > 0 ? t(sev === "critical" ? "timers.sevCritical" : sev === "warning" ? "timers.sevWarning" : "timers.sevSafe") : t("timers.timerExpired")}</div>
             <div className={`timer-value ${sev === "critical" && ts > 0 && !done ? "pulse" : ""}`}>{done ? "—" : ts > 0 ? formatCountdown(ts, timeUnits(t)) : "00:00:00"}</div>
           </div>
-          <button className="btn h-[34px] min-w-[110px]" onClick={onManage}>{t("timers.manage")}</button>
+          <button className="btn h-[34px] min-w-[110px]" data-guide="timer-manage" onClick={onManage}>{t("timers.manage")}</button>
         </div>
       </div>
     </li>

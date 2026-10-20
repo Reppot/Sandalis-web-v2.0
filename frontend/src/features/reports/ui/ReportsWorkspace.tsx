@@ -14,7 +14,6 @@ import {
   errorText,
   formatDateTime,
   renderPages,
-  uiIcon,
   useConfirm,
   useDocExport,
   useI18n,
@@ -22,6 +21,7 @@ import {
   type ExportDoc,
   type MessageKey,
   type Translate,
+  UiGlyph,
 } from "@/shared";
 
 type Filter = "active" | "all" | "done" | "cancelled";
@@ -163,8 +163,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
       <section className="panel panel-corners rounded-md p-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={uiIcon("log-file")} alt="" width={40} height={40} className="ui-icon h-10 w-10 object-contain" />
+            <UiGlyph icon="reports" size={40} />
             <div>
               <div className="hud-label text-muted">{t("reports.kicker")}</div>
               <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">📋 {t("reports.title")}</h1>
@@ -179,14 +178,14 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
         </div>
         <div className="stencil-line mt-3" />
         <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-center">
-          <div className="flex gap-1.5 overflow-x-auto">
+          <div data-guide="reports-filters" className="flex gap-1.5 overflow-x-auto">
             {FILTERS.map((f) => (
               <button key={f.key} className={`chip h-9 shrink-0 px-4 ${filter === f.key ? "is-active" : ""}`} onClick={() => setFilter(f.key)}>
                 {t(f.label)}
               </button>
             ))}
           </div>
-          <input className="field field-mono lg:ml-auto lg:w-72" placeholder={t("reports.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
+          <input className="field field-mono lg:ml-auto lg:w-72" data-guide="reports-search" placeholder={t("reports.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
           <button className="btn" onClick={() => void load()}>⟳ {t("common.sync")}</button>
         </div>
       </section>
@@ -195,7 +194,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
         <div className="panel rounded-md"><Loading label={t("reports.loading")} /></div>
       ) : visible.length === 0 ? (
         <div className="panel panel-corners rounded-md">
-          <EmptyState icon={uiIcon("parchment")} title={reports.length ? t("common.nothingFound") : t("reports.empty")} />
+          <EmptyState icon="orders" title={reports.length ? t("common.nothingFound") : t("reports.empty")} />
         </div>
       ) : (
         <ul className="grid gap-3 xl:grid-cols-2">
@@ -203,7 +202,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
             const open = expanded === report.id;
             const busy = busyId === report.id;
             return (
-              <li key={report.id} className="panel panel-corners flex flex-col rounded-md p-3">
+              <li data-guide="report-card" key={report.id} className="panel panel-corners flex flex-col rounded-md p-3">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <button className="flex min-w-0 flex-1 items-start gap-2 text-left" onClick={() => setExpanded(open ? null : report.id)}>
                     <span className="mt-0.5 shrink-0 text-white/50">{open ? "▾" : "▸"}</span>
@@ -215,7 +214,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                       </span>
                     </span>
                   </button>
-                  <span className="hud-label shrink-0 rounded border px-1.5 py-0.5" style={{ color: STATUS_COLOR[report.status], borderColor: STATUS_COLOR[report.status] }}>
+                  <span data-guide="report-status" className="hud-label shrink-0 rounded border px-1.5 py-0.5" style={{ color: STATUS_COLOR[report.status], borderColor: STATUS_COLOR[report.status] }}>
                     {t(REPORT_STATUS_LABEL[report.status])}
                   </span>
                 </div>
@@ -241,14 +240,14 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                 )}
                 {report.note && <p className="mt-2 pl-5 text-[0.75rem] text-white/70">📝 {report.note}</p>}
 
-                <div className="mt-3 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
+                <div data-guide="report-actions" className="mt-3 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
                   {canWrite &&
                     REPORT_TRANSITIONS[report.status].map((next) => (
                       <button key={next} className={`btn px-2 py-1 text-[0.65rem] ${next === "cancelled" ? "btn-danger" : next === "done" ? "btn-primary" : ""}`} disabled={busy} onClick={() => void setStatus(report, next)}>
                         {t(ACTION_LABEL[next])}
                       </button>
                     ))}
-                  <button className="btn px-2 py-1 text-[0.65rem]" disabled={busy} title={t("reports.toBuilderHint")} onClick={() => {
+                  <button className="btn px-2 py-1 text-[0.65rem]" disabled={busy} data-guide="report-builder" title={t("reports.toBuilderHint")} onClick={() => {
                     orderDraft.write(orderDraft.fromReport(report));
                     notify({ title: t("builder.short"), message: t("reports.loadedToBuilder", { title: report.title }), tone: "info" });
                     onOpenConstructor();
@@ -256,7 +255,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                     ⤴ {t("reports.toBuilder")}
                   </button>
                   {canWrite && (
-                    <button className="btn px-2 py-1 text-[0.65rem]" style={{ borderColor: "#5865F2", color: "#c7d2fe" }} disabled={busy} onClick={() => void sendToDiscord(report)}>
+                    <button className="btn px-2 py-1 text-[0.65rem]" data-guide="report-discord" style={{ borderColor: "#5865F2", color: "#c7d2fe" }} disabled={busy} onClick={() => void sendToDiscord(report)}>
                       {busy ? <span className="pulse">{t("common.sending")}</span> : `📨 ${t("reports.toDiscord")}`}
                     </button>
                   )}

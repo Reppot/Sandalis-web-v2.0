@@ -3,6 +3,8 @@
 import * as React from "react";
 import { useT } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils";
+import type { UiIcon } from "@/shared/config/assets";
+import { UiGlyph } from "@/shared/ui/glyph";
 
 /* Базовые элементы терминала поверх классов .btn/.field/.panel из globals.css. */
 
@@ -84,10 +86,9 @@ export const Loading: React.FC<{ label?: string; className?: string }> = ({ labe
   );
 };
 
-export const EmptyState: React.FC<{ icon?: string | null; title: string; hint?: string; children?: React.ReactNode }> = ({ icon, title, hint, children }) => (
+export const EmptyState: React.FC<{ icon?: UiIcon | null; title: string; hint?: string; children?: React.ReactNode }> = ({ icon, title, hint, children }) => (
   <div className="flex min-h-[160px] flex-col items-center justify-center gap-2 px-4 text-center">
-    {/* eslint-disable-next-line @next/next/no-img-element */}
-    {icon && <img src={icon} alt="" width={56} height={56} className="ui-icon opacity-70" />}
+    {icon && <UiGlyph icon={icon} size={56} className="opacity-70" />}
     <div className="text-sm text-white/85">{title}</div>
     {hint && <div className="hud-label text-muted">{hint}</div>}
     {children}

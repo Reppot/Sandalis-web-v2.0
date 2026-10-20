@@ -46,3 +46,5 @@ __pycache__/
 venv/
 .pytest_cache/
 .mypy_cache/
+tools/guide/node_modules
+tools/guide/debug-*.png

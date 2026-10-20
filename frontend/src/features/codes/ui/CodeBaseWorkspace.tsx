@@ -81,7 +81,7 @@ export const CodeBaseWorkspace: React.FC = () => {
             <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">⌘ {t("codes.title")}</h1>
             <p className="mt-1 max-w-3xl text-[0.8rem] text-white/70">{t("codes.subtitle")}</p>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2" data-guide="codes-stats">
             <Stat label={t("codes.total")} value={entries.length} />
             <Stat label={t("codes.withIcon")} value={entries.filter((e) => e.iconUrl).length} color="var(--accent)" />
             <Stat label={t("codes.needReview")} value={reviewCount} color="var(--warn)" />
@@ -90,8 +90,8 @@ export const CodeBaseWorkspace: React.FC = () => {
         <div className="stencil-line mt-3" />
 
         <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-center">
-          <input className="field field-mono min-w-0 flex-1" placeholder={t("codes.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
-          <select className="field w-full lg:w-44" value={category} onChange={(e) => setCategory(e.target.value)}>
+          <input className="field field-mono min-w-0 flex-1" data-guide="codes-search" placeholder={t("codes.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
+          <select data-guide="codes-filters" className="field w-full lg:w-44" value={category} onChange={(e) => setCategory(e.target.value)}>
             <option value="all">{t("codes.allCategories")}</option>
             {list<{ label: string }>("catalog_category").map((c) => (
               <option key={c.key} value={c.key}>{c.payload.label}</option>
@@ -103,7 +103,7 @@ export const CodeBaseWorkspace: React.FC = () => {
               <option key={key} value={key}>{t(name)}</option>
             ))}
           </select>
-          <button className={`btn ${reviewOnly ? "btn-active btn-warn" : ""}`} onClick={() => setReviewOnly((v) => !v)}>
+          <button className={`btn ${reviewOnly ? "btn-active btn-warn" : ""}`} data-guide="codes-review" onClick={() => setReviewOnly((v) => !v)}>
             {reviewOnly ? `✓ ${t("codes.disputedOnly")}` : t("codes.disputedOnly")}
           </button>
         </div>
@@ -111,12 +111,12 @@ export const CodeBaseWorkspace: React.FC = () => {
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <span className="hud-label text-muted">{t("codes.shown")}: <b className="text-white">{filtered.length}</b> / {entries.length}</span>
           <span className="flex-1" />
-          <button className="btn" onClick={() => void copyText(toJson(filtered)).then((ok) => notify(ok ? { title: t("codes.short"), message: t("codes.copied", { n: filtered.length }), tone: "success" } : { title: t("export.clipboardTitle"), message: t("export.clipboardUnavailable"), tone: "warning" }))}>
+          <button className="btn" data-guide="codes-copy" onClick={() => void copyText(toJson(filtered)).then((ok) => notify(ok ? { title: t("codes.short"), message: t("codes.copied", { n: filtered.length }), tone: "success" } : { title: t("export.clipboardTitle"), message: t("export.clipboardUnavailable"), tone: "warning" }))}>
             ⧉ {t("codes.copy")}
           </button>
           <button className="btn" onClick={() => downloadBlob(new Blob([toCsv(filtered, t)], { type: "text/csv;charset=utf-8" }), "sindaris-code-base.csv")}>CSV</button>
           <button className="btn" onClick={() => downloadBlob(new Blob([toJson(filtered)], { type: "application/json;charset=utf-8" }), "sindaris-code-base.json")}>JSON</button>
-          <button className={`btn ${compareOpen ? "btn-active" : ""}`} onClick={() => setCompareOpen((v) => !v)}>⇄ {t("codes.export")}</button>
+          <button className={`btn ${compareOpen ? "btn-active" : ""}`} data-guide="codes-compare" onClick={() => setCompareOpen((v) => !v)}>⇄ {t("codes.export")}</button>
         </div>
       </section>
 
@@ -152,7 +152,7 @@ export const CodeBaseWorkspace: React.FC = () => {
           <Loading label={t("codes.loading")} />
         ) : (
           <div className="scroll-area max-h-[calc(100dvh-330px)] overflow-auto">
-            <table className="w-full min-w-[900px] border-collapse text-left text-[0.76rem]">
+            <table data-guide="codes-table" className="w-full min-w-[900px] border-collapse text-left text-[0.76rem]">
               <thead className="sticky top-0 z-10 bg-[#0b110c] text-[0.65rem] tracking-[0.12em] text-white/60 uppercase">
                 <tr>
                   <th className="px-4 py-3" />

@@ -13,7 +13,7 @@ async def main() -> None:
     async with engine.begin() as conn:
         stats = await run(conn)
     await engine.dispose()
-    logging.info("catalog=%(catalog)s recipes=%(recipes)s content_inserted=%(content_inserted)s content_translated=%(content_translated)s", stats)
+    logging.info("catalog=%(catalog)s recipes=%(recipes)s content_inserted=%(content_inserted)s content_translated=%(content_translated)s guide=%(guide)s", stats)
 
 
 if __name__ == "__main__":

@@ -16,7 +16,6 @@ import {
   errorText,
   formatDateTime,
   readStorage,
-  uiIcon,
   useConfirm,
   useDocExport,
   useI18n,
@@ -25,6 +24,7 @@ import {
   xlsxToText,
   type ExportFormat,
   type PanelMode,
+  UiGlyph,
 } from "@/shared";
 
 const SOURCE_LABEL: Record<string, string> = {
@@ -208,7 +208,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
   };
 
   return (
-    <section className="panel panel-corners flex flex-col rounded-md p-4">
+    <section data-guide="stock-panel" className="panel panel-corners flex flex-col rounded-md p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="panel-title">📦 {t("stock.title")}</h2>
         <div className="flex items-center gap-2">
@@ -219,7 +219,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
       <div className="stencil-line mt-2" />
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <select className="field w-full flex-1 sm:w-auto" value={pinnedId ?? ""} onChange={(e) => setPinnedId(e.target.value || null)} disabled={loading}>
+        <select data-guide="stock-select" className="field w-full flex-1 sm:w-auto" value={pinnedId ?? ""} onChange={(e) => setPinnedId(e.target.value || null)} disabled={loading}>
           {stockpiles.length === 0 && <option value="">{t("stock.none")}</option>}
           {stockpiles.map((s) => (
             <option key={s.id} value={s.id}>
@@ -229,7 +229,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
         </select>
         {canWrite && (
           <>
-            <button className="btn" onClick={() => setEditing("create")} title={t("stock.new")}>＋</button>
+            <button className="btn" data-guide="stock-new" onClick={() => setEditing("create")} title={t("stock.new")}>＋</button>
             <button className="btn" onClick={() => setEditing("rename")} disabled={!pinned} title={t("stock.rename")}>✎</button>
             <button
               className={`btn btn-danger ${armed === "delete" ? "btn-active" : ""}`}
@@ -257,21 +257,19 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
 
       {canWrite && (
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <button className="btn btn-icon" onClick={() => pick(textInput)} title={t("stock.loadFile")} disabled={busy || !pinned}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={uiIcon("json")} alt="JSON" width={26} height={26} className="ui-icon" />
+          <button className="btn btn-icon" onClick={() => pick(textInput)} data-guide="stock-load" title={t("stock.loadFile")} disabled={busy || !pinned}>
+            <UiGlyph icon="file-json" size={26} />
           </button>
-          <button className="btn btn-icon" onClick={() => void readClipboard()} title={t("stock.paste")} disabled={busy || !pinned}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={uiIcon("log-file")} alt="LOG" width={26} height={26} className="ui-icon" />
+          <button className="btn btn-icon" onClick={() => void readClipboard()} data-guide="stock-paste" title={t("stock.paste")} disabled={busy || !pinned}>
+            <UiGlyph icon="clipboard" size={26} />
           </button>
-          <button className="btn" onClick={() => pick(savInput)} title={t("stock.scanHint")} disabled={busy || !pinned}>
+          <button className="btn" onClick={() => pick(savInput)} data-guide="stock-scan" title={t("stock.scanHint")} disabled={busy || !pinned}>
             <span>📡</span>
             <span className="hidden sm:inline">{t("stock.scan")}</span>
             <span className="sm:hidden">.SAV</span>
           </button>
           <div className="ml-auto flex items-center gap-2">
-            <input className="field w-36 py-1.5 text-xs sm:w-44" placeholder={t("stock.filter")} value={query} onChange={(e) => setQuery(e.target.value)} />
+            <input className="field w-36 py-1.5 text-xs sm:w-44" data-guide="stock-filter" placeholder={t("stock.filter")} value={query} onChange={(e) => setQuery(e.target.value)} />
             <button
               className={`btn btn-danger px-2 ${armed === "clear" ? "btn-active" : ""}`}
               title={t("stock.clear")}
@@ -300,7 +298,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
         </div>
       )}
 
-      <div className="hud-label mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
+      <div data-guide="stock-sync" className="hud-label mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
         <span>
           {t("stock.sync")}:{" "}
           <span className="text-white/80">
@@ -310,14 +308,14 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
         {busy && <span className="pulse text-warn">● {t("common.processing")}</span>}
       </div>
 
-      <div className="scroll-area panel-inner mt-3 max-h-[46vh] min-h-[200px] flex-1 rounded p-1.5">
+      <div data-guide="stock-list" className="scroll-area panel-inner mt-3 max-h-[46vh] min-h-[200px] flex-1 rounded p-1.5">
         {loading ? (
           <Loading label={t("stock.loading")} />
         ) : !pinned ? (
-          <EmptyState icon={uiIcon("pallets")} title={t("stock.notPicked")} hint={canWrite ? t("stock.createHint") : t("stock.membersRegister")} />
+          <EmptyState icon="crates" title={t("stock.notPicked")} hint={canWrite ? t("stock.createHint") : t("stock.membersRegister")} />
         ) : visible.length === 0 ? (
           <EmptyState
-            icon={uiIcon("pallets")}
+            icon="crates"
             title={items.length ? t("common.nothingFilter") : t("stock.empty")}
             hint={t("stock.formatHint")}
           />
@@ -348,7 +346,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
       }} />
       <input ref={savInput} type="file" accept=".sav,application/octet-stream" className="hidden" onChange={(e) => void onScan(e.target.files?.[0])} />
 
-      <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("import.pasteTitle")} icon={uiIcon("log-file")} widthClass="max-w-lg">
+      <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("import.pasteTitle")} icon="clipboard" widthClass="max-w-lg">
         <p className="hud-label text-muted">{t("import.pasteHelp")}</p>
         <textarea className="field field-mono mt-2 h-48 w-full resize-y text-xs" placeholder={t("import.pastePlaceholder")} value={pasteText} onChange={(e) => setPasteText(e.target.value)} autoFocus />
         <div className="mt-3 flex justify-end gap-2">
@@ -413,7 +411,7 @@ const StockpileFormModal: React.FC<{
   };
 
   return (
-    <Modal open={Boolean(mode)} onClose={onClose} title={mode === "rename" ? t("stock.rename") : t("stock.newClan")} icon={uiIcon("barracks")} widthClass="max-w-md">
+    <Modal open={Boolean(mode)} onClose={onClose} title={mode === "rename" ? t("stock.rename") : t("stock.newClan")} icon="stockpile" widthClass="max-w-md">
       <div className="grid gap-3">
         <Field label={t("timers.regionHex")} list={listId} value={region} onChange={(e) => setRegion(e.target.value)} placeholder="The Moors" autoFocus />
         <datalist id={listId}>

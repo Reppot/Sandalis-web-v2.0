@@ -5,7 +5,8 @@
   (обновление номенклатуры = новый JSON + повторный запуск);
 * app_content — только добавляются недостающие записи: правки, сделанные через
   API (например, новый URL видео входа), сид не затирает. Исключение — переводы
-  en/cs (content_i18n.json → payload.i18n): системные данные, обновляются всегда.
+  en/cs (content_i18n.json → payload.i18n) и руководство «Навигация» (guide.json,
+  генерирует backend/scripts/guide): системные данные, обновляются всегда.
 
 Запуск: `python -m app.seed` (Render делает это после `alembic upgrade head`).
 """
@@ -90,6 +91,18 @@ async def seed_content_i18n(conn: AsyncConnection, i18n: dict[str, dict[str, Any
     return updated
 
 
+async def seed_guide(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int:
+    """Главы руководства перезаписываются целиком: скриншоты и метки — артефакт сборки."""
+    for chunk in _chunks(rows):
+        stmt = insert(AppContent).values(chunk)
+        await conn.execute(stmt.on_conflict_do_update(
+            constraint="uq_app_content_kind_key",
+            set_={"payload": stmt.excluded.payload, "sort": stmt.excluded.sort,
+                  "is_active": True, "updated_at": func.now()},
+        ))
+    return len(rows)
+
+
 async def run(conn: AsyncConnection) -> dict[str, int]:
     return {
         "catalog": await seed_catalog(conn, load("catalog.json")),
@@ -98,4 +111,5 @@ async def run(conn: AsyncConnection) -> dict[str, int]:
         "content_translated": await seed_content_i18n(
             conn, json.loads((DATA_DIR / "content_i18n.json").read_text(encoding="utf-8"))
         ),
+        "guide": await seed_guide(conn, load("guide.json")) if (DATA_DIR / "guide.json").exists() else 0,
     }

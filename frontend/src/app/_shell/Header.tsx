@@ -31,7 +31,7 @@ export const Header: React.FC = () => {
   return (
     <header className="chrome relative rounded-md px-3 py-2 md:px-4">
       <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-4 gap-y-2 xl:grid-cols-[auto_minmax(320px,1fr)_auto]">
-        <div className="flex items-center gap-3">
+        <div data-guide="shell-brand" className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           {logo && <img src={logo} alt={t("common.crest")} width={44} height={44} className="ui-icon crest-frame h-11 w-11 rounded-md object-cover" />}
           <div className="leading-none">
@@ -43,11 +43,11 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        <div className="order-3 col-span-2 w-full min-w-0 xl:order-none xl:col-span-1">
+        <div data-guide="shell-ticker" className="order-3 col-span-2 w-full min-w-0 xl:order-none xl:col-span-1">
           <Ticker />
         </div>
 
-        <div className="flex items-center justify-end gap-2 md:gap-3">
+        <div data-guide="shell-status" className="flex items-center justify-end gap-2 md:gap-3">
           <StatusChip label={t("header.link")} value={link.label} color={link.color} dotClass={link.cls} />
           <StatusChip label={t("header.system")} value={system.label} color={system.color} className="hidden sm:flex" />
           <StatusChip label={t("header.sync")} value={formatClock(lastSync)} color="var(--tk-safe)" mono className="hidden md:flex" title={t("header.syncHint")} />

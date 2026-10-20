@@ -31,7 +31,7 @@ export const DiscordWebhookPanel: React.FC = () => {
   };
 
   return (
-    <section className="panel panel-corners rounded-md p-4">
+    <section data-guide="cab-webhook" className="panel panel-corners rounded-md p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="panel-title">📨 {t("webhook.title")}</div>
         <span className={`cabinet-pill ${settings?.discord_webhook_configured ? "cabinet-pill-online" : ""}`}>

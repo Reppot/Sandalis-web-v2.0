@@ -1,7 +1,7 @@
 import { Scopes, type Scope } from "@/entities/session";
 import type { MessageKey, UiIcon } from "@/shared";
 
-export type TabKey = "orders" | "reports" | "timers" | "codes" | "tools" | "training" | "cabinet";
+export type TabKey = "orders" | "reports" | "timers" | "codes" | "tools" | "training" | "guide" | "cabinet";
 
 export interface NavTab {
   key: TabKey;
@@ -13,13 +13,14 @@ export interface NavTab {
 }
 
 export const TABS: NavTab[] = [
-  { key: "orders", icon: "parchment", background: "orders", anyOf: [Scopes.STOCKPILES_READ, Scopes.ORDERS_READ] },
-  { key: "reports", icon: "log-file", background: "reports", anyOf: [Scopes.ORDERS_READ] },
-  { key: "timers", icon: "24-hour-clock", background: "timers", anyOf: [Scopes.TIMERS_READ] },
-  { key: "codes", icon: "braces", background: "codes" },
-  { key: "tools", icon: "browsing", background: "tools" },
-  { key: "training", icon: "brain", background: "training" },
-  { key: "cabinet", icon: "business", background: "cabinet" },
+  { key: "orders", icon: "orders", background: "orders", anyOf: [Scopes.STOCKPILES_READ, Scopes.ORDERS_READ] },
+  { key: "reports", icon: "reports", background: "reports", anyOf: [Scopes.ORDERS_READ] },
+  { key: "timers", icon: "timers", background: "timers", anyOf: [Scopes.TIMERS_READ] },
+  { key: "codes", icon: "codes", background: "codes" },
+  { key: "tools", icon: "tools", background: "tools" },
+  { key: "training", icon: "training", background: "training" },
+  { key: "guide", icon: "guide", background: "training" },
+  { key: "cabinet", icon: "cabinet", background: "cabinet" },
 ];
 
 /** Подписи вкладки в словаре: nav.<key>.label / .short / .hint. */

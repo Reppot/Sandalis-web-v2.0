@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent, type TrainingModulePayload } from "@/entities/content";
-import { Loading, assetUrl, uiIcon, useT } from "@/shared";
+import { Loading, assetUrl, UiGlyph, uiIconFromAsset, useT } from "@/shared";
 
 /** Учебный центр штаба: модули обучения из реестра контента (правятся без релиза фронта). */
 export const TrainingWorkspace: React.FC = () => {
@@ -20,8 +20,7 @@ export const TrainingWorkspace: React.FC = () => {
           <div className="relative shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             {logo && <img src={logo} alt={t("common.crest")} width={112} height={112} className="ui-icon crest-frame h-24 w-24 rounded-md object-cover md:h-28 md:w-28" />}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={uiIcon("brain")} alt="" width={44} height={44} className="ui-icon absolute -right-3 -bottom-3 h-11 w-11 object-contain drop-shadow-lg" />
+            <UiGlyph icon="training" size={44} className="absolute -right-3 -bottom-3" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="hud-label text-muted">{t("training.kicker")}</div>
@@ -51,8 +50,12 @@ export const TrainingWorkspace: React.FC = () => {
               return (
                 <article key={key} className={`panel-inner flex flex-col rounded p-3 transition-all ${open ? "ring-1 ring-[var(--accent)]" : ""} ${wip ? "opacity-80" : ""} ${open && m.body.length ? "md:col-span-2 xl:col-span-3" : ""}`}>
                   <button className="flex w-full items-start gap-3 text-left" onClick={() => setOpenId(open ? null : key)} disabled={wip}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={assetUrl(m.icon) ?? ""} alt="" width={40} height={40} className="ui-icon h-10 w-10 shrink-0 object-contain drop-shadow" />
+                    {uiIconFromAsset(m.icon) ? (
+                      <UiGlyph icon={uiIconFromAsset(m.icon)!} size={40} className="shrink-0" />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={assetUrl(m.icon) ?? ""} alt="" width={40} height={40} className="ui-icon h-10 w-10 shrink-0 object-contain drop-shadow" />
+                    )}
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
                         <h3 className="truncate text-[0.9rem] font-bold text-white">{m.title}</h3>

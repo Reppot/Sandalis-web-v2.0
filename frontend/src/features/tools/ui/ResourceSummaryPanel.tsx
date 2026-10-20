@@ -84,7 +84,7 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
           {count ? children : <div className="hud-label py-8 text-center text-muted">{emptyHint}</div>}
         </div>
         <div className="factory-totals shrink-0">
-          <div className="hud-label mb-2 text-accent">{t("tools.totals")}</div>
+          <div data-guide="tool-totals" className="hud-label mb-2 text-accent">{t("tools.totals")}</div>
           <div className="factory-total-grid">
             {[...report.resources, ...report.stats].map((line) => (
               <div key={`${line.name}-${line.unit}`} className="min-w-0">

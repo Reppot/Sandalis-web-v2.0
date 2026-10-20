@@ -15,6 +15,8 @@ from app.schemas.content import ContentKind, ContentRead, ContentUpsert
 
 router = APIRouter(prefix="/content", tags=["content"])
 
+LAZY_KINDS = ("guide_chapter",)
+
 
 @router.get(
     "",
@@ -22,7 +24,8 @@ router = APIRouter(prefix="/content", tags=["content"])
     summary="Реестр контента интерфейса (публичный: нужен экрану входа до авторизации)",
     description=(
         "kind: media, external_tool, training_module, ticker_phrase, region, material, "
-        "catalog_category, factory_category, refinery_group. Без kind — всё сразу."
+        "catalog_category, factory_category, refinery_group, guide_chapter. Без kind — всё, "
+        "кроме guide_chapter (руководство запрашивается отдельно)."
     ),
 )
 async def list_content(
@@ -32,6 +35,9 @@ async def list_content(
     stmt = select(AppContent).where(AppContent.is_active.is_(True))
     if kind:
         stmt = stmt.where(AppContent.kind.in_(kind))
+    else:
+        # руководство (скриншоты, метки, тексты ×3 языка) грузит только вкладка «Навигация»
+        stmt = stmt.where(AppContent.kind.notin_(LAZY_KINDS))
     stmt = stmt.order_by(AppContent.kind, AppContent.sort, AppContent.key)
     return [ContentRead.model_validate(r) for r in (await session.execute(stmt)).scalars()]
 

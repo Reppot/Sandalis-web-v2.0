@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { stockpileApi } from "@/entities/stockpile";
-import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, uiIcon, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
+import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
 import { timersApi, type TimerEvent } from "@/features/timers/api";
 import { timerPlace, useClock, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 
@@ -105,14 +105,14 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
     });
 
   return (
-    <Modal open onClose={onClose} title={t("timers.channelTitle", { location })} icon={uiIcon("24-hour-clock")} widthClass="max-w-2xl" backdropImage={media("bg_timers")}>
+    <Modal open onClose={onClose} title={t("timers.channelTitle", { location })} icon="timers" widthClass="max-w-2xl" backdropImage={media("bg_timers")}>
       <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
         <div className="space-y-1 text-[0.85rem]">
           <div>🗺️ {t("timers.region")}: <span className="text-accent">{region ?? "—"}</span></div>
           <div>📍 {t("timers.location")}: <span className="text-accent">{location}</span></div>
           {timer.note && <div className="text-white/70">📝 {timer.note}</div>}
         </div>
-        <div className="panel-inner rounded px-4 py-2 text-center">
+        <div data-guide="tmodal-left" className="panel-inner rounded px-4 py-2 text-center">
           <div className="hud-label text-muted">{t("timers.left")}</div>
           <div className="timer-value" style={{ color: SEV_COLOR[sev], textShadow: `0 0 14px ${SEV_COLOR[sev]}66` }}>
             {timer.completed_at ? t("timers.completed") : ts > 0 ? formatCountdown(ts, timeUnits(t)) : t("timers.expired")}
@@ -121,7 +121,7 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
       </div>
 
       <div className="hud-label mt-4 text-white/80">📜 {t("timers.log")}:</div>
-      <div ref={logRef} className="console-log scroll-area mt-1 h-44 rounded px-3 py-2 leading-relaxed">
+      <div data-guide="tmodal-log" ref={logRef} className="console-log scroll-area mt-1 h-44 rounded px-3 py-2 leading-relaxed">
         {events.length === 0 ? (
           <div className="opacity-60">{t("timers.logEmpty")}</div>
         ) : (
@@ -136,20 +136,21 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
       {canWrite && (
         <>
           <div className="mt-3 flex gap-2">
-            <input className="field field-mono flex-1 text-xs" placeholder={t("timers.notePlaceholder")} value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void addNote()} />
+            <input className="field field-mono flex-1 text-xs" data-guide="tmodal-note" placeholder={t("timers.notePlaceholder")} value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void addNote()} />
             <button className="btn" disabled={busy || !note.trim()} onClick={() => void addNote()}>📝 {t("timers.toLog")}</button>
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4" data-guide="tmodal-time">
             <TimeInputs value={time} onChange={setTime} />
           </div>
 
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <button className="btn" style={{ background: "#1e291b", color: "#a3e635", borderColor: "#16a34a" }} disabled={busy} onClick={() => void restart(RESET_SECONDS)}>
+            <button className="btn" data-guide="tmodal-reset" style={{ background: "#1e291b", color: "#a3e635", borderColor: "#16a34a" }} disabled={busy} onClick={() => void restart(RESET_SECONDS)}>
               ♻️ {t("timers.reset48")}
             </button>
             <button
               className="btn btn-primary"
+              data-guide="tmodal-set"
               disabled={busy}
               onClick={() => {
                 const seconds = toSeconds(time);
@@ -164,6 +165,7 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
           <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
             <span className="hud-label text-muted">{t("timers.createdBy", { name: timer.created_by })}</span>
             <button
+              data-guide="tmodal-remove"
               className={`btn btn-danger ${armed === "delete" ? "btn-active" : ""}`}
               disabled={busy}
               onClick={() =>
@@ -230,7 +232,7 @@ export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={t("timers.registerTitle")} icon={uiIcon("barracks")} widthClass="max-w-lg" backdropImage={media("bg_storage")}>
+    <Modal open={open} onClose={onClose} title={t("timers.registerTitle")} icon="stockpile" widthClass="max-w-lg" backdropImage={media("bg_storage")}>
       <div className="grid gap-3">
         <Field label={t("timers.regionHex")} list={listId} placeholder="Clanshead Valley" value={region} onChange={(e) => setRegion(e.target.value)} autoFocus />
         <datalist id={listId}>

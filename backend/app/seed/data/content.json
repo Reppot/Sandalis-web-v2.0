@@ -890,7 +890,7 @@
   "payload": {
    "title": "Работа с терминалом SINDARIS",
    "status": "ready",
-   "icon": "/api/v1/assets/ui/browsing.png",
+   "icon": "/api/v1/assets/ui/terminal.svg",
    "summary": "Склад, конструктор заказа, рапорты и экспорт.",
    "body": [
     "1. «Заказы» → левая панель: выберите закреплённый склад и загрузите отчёт сканера (JSON/TXT, XLSX, буфер обмена) или просканируйте MapData.sav.",
@@ -907,7 +907,7 @@
   "payload": {
    "title": "Форматы отчётов сканера",
    "status": "ready",
-   "icon": "/api/v1/assets/ui/json.png",
+   "icon": "/api/v1/assets/ui/file-json.svg",
    "summary": "Какие строки понимает парсер терминала.",
    "body": [
     "• «Название предмета, 50» — классический формат сканера.",
@@ -926,7 +926,7 @@
   "payload": {
    "title": "Таймеры деспавна складов",
    "status": "ready",
-   "icon": "/api/v1/assets/ui/24-hour-clock.png",
+   "icon": "/api/v1/assets/ui/timers.svg",
    "summary": "Правило 48 часов и протокол обновления.",
    "body": [
     "• Публичные и приватные склады Foxhole исчезают через 48 часов без обновления.",
@@ -944,7 +944,7 @@
   "payload": {
    "title": "Основы логистики Foxhole",
    "status": "wip",
-   "icon": "/api/v1/assets/ui/pallets.png",
+   "icon": "/api/v1/assets/ui/truck.svg",
    "summary": "Цепочки снабжения, MPF, фасилити.",
    "body": []
   }
@@ -956,7 +956,7 @@
   "payload": {
    "title": "Протокол рапорта снабжения",
    "status": "wip",
-   "icon": "/api/v1/assets/ui/parchment.png",
+   "icon": "/api/v1/assets/ui/document.svg",
    "summary": "Стандарт оформления заявок для штаба клана.",
    "body": []
   }
@@ -968,7 +968,7 @@
   "payload": {
    "title": "Передовая логистика",
    "status": "wip",
-   "icon": "/api/v1/assets/ui/deadline.png",
+   "icon": "/api/v1/assets/ui/alarm.svg",
    "summary": "Доставка под огнём, приоритеты, маршруты.",
    "body": []
   }

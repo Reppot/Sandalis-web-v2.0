@@ -10,6 +10,7 @@ import { SupplyWorkspace } from "@/features/supply";
 import { TerminalProvider, TimersWorkspace } from "@/features/timers";
 import { ToolsWorkspace } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
+import { GuideWorkspace } from "@/features/guide";
 import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
@@ -84,6 +85,8 @@ export default function TerminalPage() {
         return <ToolsWorkspace />;
       case "training":
         return <TrainingWorkspace />;
+      case "guide":
+        return <GuideWorkspace />;
       case "cabinet":
         return <CabinetWorkspace />;
     }
