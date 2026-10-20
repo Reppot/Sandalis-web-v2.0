@@ -26,6 +26,8 @@ import {
   type ExportFormat,
   type PanelMode,
   UiGlyph,
+  PagedMore,
+  usePaged,
 } from "@/shared";
 
 const SOURCE_LABEL: Record<string, string> = {
@@ -188,6 +190,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
     const q = query.trim().toLowerCase();
     return q ? items.filter((i) => `${i.name ?? ""} ${i.nameEn ?? ""} ${i.itemCode}`.toLowerCase().includes(q)) : items;
   }, [items, query]);
+  const page = usePaged(visible, 100, query);
 
   const onAction = (fmt: ExportFormat) => {
     if (mode === "import") {
@@ -323,7 +326,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
           />
         ) : (
           <ul className="flex flex-col gap-0.5">
-            {visible.map((item) => (
+            {page.items.map((item) => (
               <li key={item.id} className="row-item">
                 <span className="flex min-w-0 items-center gap-2">
                   <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 64 : 32} label={itemLabel(item)} />
@@ -334,6 +337,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
             ))}
           </ul>
         )}
+        {visible.length > 0 && <PagedMore page={page} />}
       </div>
 
       <ExportBar mode={mode} onToggleMode={() => setMode((m) => (m === "export" ? "import" : "export"))} onAction={onAction} busy={busy} />

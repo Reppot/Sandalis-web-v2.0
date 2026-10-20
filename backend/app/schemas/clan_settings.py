@@ -87,8 +87,12 @@ class DiscordMemberRead(BaseModel):
 
 
 class DiscordMembersRead(BaseModel):
+    """Страница участников. next_after — курсор «Загрузить ещё» (None — конец списка)."""
     status: Literal["ok", "no_bot", "intent_required", "no_guild"]
     members: list[DiscordMemberRead]
+    next_after: str | None = None
+    total: int | None = None        # участников на сервере (только первая страница)
+    joined_total: int = 0           # вступили в терминал
 
 
 class PermissionGroupRead(BaseModel):

@@ -249,7 +249,7 @@ async def fetch_user_guilds(access_token: str) -> list[DiscordGuild]:
 
 def owned_guilds(guilds: list[DiscordGuild]) -> list[DiscordGuild]:
     """Серверы во владении — для выбора сервера клана."""
-    return [g for g in guilds if g.owner][:25]   # кука выбора — не больше пары килобайт
+    return [g for g in guilds if g.owner]
 
 
 async def fetch_owned_guilds(access_token: str) -> list[DiscordGuild]:

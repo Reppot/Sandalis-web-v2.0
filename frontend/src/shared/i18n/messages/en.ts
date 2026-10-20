@@ -26,6 +26,9 @@ export const en: Record<MessageKey, string> = {
   "common.noData": "no data",
   "common.processing": "PROCESSING...",
   "common.more": "{n} more",
+  "common.loadMore": "Load {n} more",
+  "common.shownOf": "Showing {shown} of {total}",
+  "mgmt.joinedTotal": "joined the terminal: {n}",
   "common.pos": "{n} ITEMS",
   "common.total": "Total quantity",
 

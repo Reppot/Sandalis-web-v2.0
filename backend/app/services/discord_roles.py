@@ -83,40 +83,62 @@ async def fetch_guild_roles(guild_id: str) -> list[dict[str, Any]] | None:
     return sorted(roles, key=lambda x: -x["position"])
 
 
-async def fetch_guild_members(guild_id: str) -> tuple[str, list[dict[str, Any]]]:
-    """Участники сервера (бот). Статус: ok | no_bot | intent_required (нужен
-    Server Members Intent в Developer Portal → Bot)."""
+def _member_row(m: dict[str, Any]) -> dict[str, Any] | None:
+    user = m.get("user") or {}
+    if user.get("bot") or not user.get("id"):
+        return None
+    return {
+        "id": str(user["id"]),
+        "name": m.get("nick") or user.get("global_name") or user.get("username") or str(user["id"]),
+        "roles": [str(x) for x in m.get("roles") or []],
+    }
+
+
+async def fetch_members_page(
+    guild_id: str, *, after: str = "0", limit: int = 100, query: str = ""
+) -> tuple[str, list[dict[str, Any]], str | None]:
+    """Одна страница участников сервера (бот) — список не грузится целиком, даже
+    если на сервере 10 000 человек. Без query: по возрастанию id после `after`,
+    курсор следующей страницы — id последнего (None — страниц больше нет).
+    С query: поиск Discord по началу ника/имени, одна страница."""
     if not settings.DISCORD_BOT_TOKEN:
-        return "no_bot", []
-    members: list[dict[str, Any]] = []
-    after = "0"
+        return "no_bot", [], None
     try:
         async with get_http_client() as client:
-            for _ in range(10):                      # до 10 000 участников
+            if query:
+                r = await client.get(_api(f"/guilds/{guild_id}/members/search"), headers=_bot_headers(),
+                                     params={"query": query, "limit": limit})
+            else:
                 r = await client.get(_api(f"/guilds/{guild_id}/members"), headers=_bot_headers(),
-                                     params={"limit": 1000, "after": after})
-                if r.status_code == 403:
-                    return "intent_required", []
-                if r.status_code // 100 != 2:
-                    return "no_bot", []
-                page = r.json()
-                if not isinstance(page, list) or not page:
-                    break
-                for m in page:
-                    user = m.get("user") or {}
-                    if user.get("bot"):
-                        continue
-                    members.append({
-                        "id": str(user.get("id")),
-                        "name": m.get("nick") or user.get("global_name") or user.get("username") or str(user.get("id")),
-                        "roles": [str(x) for x in m.get("roles") or []],
-                    })
-                after = str((page[-1].get("user") or {}).get("id") or after)
-                if len(page) < 1000:
-                    break
+                                     params={"limit": limit, "after": after or "0"})
+        if r.status_code == 403:
+            return "intent_required", [], None
+        if r.status_code // 100 != 2:
+            return "no_bot", [], None
+        page = r.json()
     except (httpx.HTTPError, ValueError):
-        return "no_bot", []
-    return "ok", members
+        return "no_bot", [], None
+    if not isinstance(page, list):
+        return "no_bot", [], None
+    rows = [row for row in map(_member_row, page) if row]
+    last = str((page[-1].get("user") or {}).get("id") or "") if page else ""
+    cursor = last if (not query and len(page) >= limit and last) else None
+    return "ok", rows, cursor
+
+
+async def fetch_member_count(guild_id: str) -> int | None:
+    """Примерное число участников сервера (бот, with_counts)."""
+    if not settings.DISCORD_BOT_TOKEN:
+        return None
+    try:
+        async with get_http_client() as client:
+            r = await client.get(_api(f"/guilds/{guild_id}"), headers=_bot_headers(), params={"with_counts": "true"})
+        if r.status_code // 100 != 2:
+            return None
+        n = r.json().get("approximate_member_count")
+    except (httpx.HTTPError, ValueError, AttributeError):
+        return None
+    return int(n) if isinstance(n, int) else None
 
 
 def bot_invite_url(guild_id: str | None) -> str | None:

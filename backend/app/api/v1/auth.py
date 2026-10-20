@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import secrets
 import uuid
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 from fastapi import APIRouter, Cookie, Depends, Header, Query, Response, status
 from fastapi.responses import JSONResponse, RedirectResponse
-from sqlalchemy import select
+from sqlalchemy import delete, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import (
     ClanSession,
@@ -21,6 +23,7 @@ from app.core.i18n import Translator, normalize_locale
 from app.core.permissions import Scopes
 from app.core.security import Principal
 from app.models.rbac import User
+from app.models.setup import DiscordSetup
 from app.schemas.auth import (
     ClanApiTokenCreate,
     ClanApiTokenCreated,
@@ -96,11 +99,26 @@ def _set_setup_cookie(response: Response, value: str) -> None:
     )
 
 
-def _setup_state(raw: str | None) -> dict:
-    body = unseal(raw)
+async def _store_setup(session: AsyncSession, body: dict) -> str:
+    """Состояние выбора сервера — в БД, в куку только подписанный id: список
+    серверов и ролей у владельцев многих серверов не влезает в лимит куки ~4 КБ."""
+    now = datetime.now(UTC)
+    await session.execute(delete(DiscordSetup).where(DiscordSetup.expires_at < now))
+    sid = secrets.token_urlsafe(24)
+    session.add(DiscordSetup(
+        id=sid, payload=body, expires_at=now + timedelta(seconds=settings.DISCORD_SETUP_TTL_SEC),
+    ))
+    await session.flush()
+    return seal({"sid": sid}, settings.DISCORD_SETUP_TTL_SEC)
+
+
+async def _setup_row(session: AsyncSession, raw: str | None) -> DiscordSetup:
+    sealed = unseal(raw)
+    row = await session.get(DiscordSetup, sealed["sid"]) if sealed and isinstance(sealed.get("sid"), str) else None
+    body = row.payload if row is not None and row.expires_at > datetime.now(UTC) else None
     if not body or not isinstance(body.get("uid"), str) or not isinstance(body.get("guilds"), list):
         raise UnauthorizedError(message_key="setup.expired", domain="auth", code="setup_expired")
-    return body
+    return row
 
 
 # ---------------- current principal ----------------------------------------- #
@@ -285,8 +303,8 @@ async def discord_callback(
         )
         if owned or joins:
             # владелец серверов: выбор сервера клана (или уже существующего клана)
-            await service.commit()
-            setup = seal(
+            setup = await _store_setup(
+                service.session,
                 {
                     "uid": profile.id,
                     "name": profile.display_name,
@@ -296,8 +314,8 @@ async def discord_callback(
                     ],
                     "joins": joins,
                 },
-                settings.DISCORD_SETUP_TTL_SEC,
             )
+            await service.commit()
             if json_mode:
                 body = JSONResponse(
                     {"setup_required": True}, status_code=status.HTTP_202_ACCEPTED
@@ -343,7 +361,7 @@ async def discord_setup(
     service: AuthServiceDep,
     setup_cookie: Annotated[str | None, Cookie(alias=SETUP_COOKIE)] = None,
 ) -> DiscordSetupRead:
-    body = _setup_state(setup_cookie)
+    body = (await _setup_row(service.session, setup_cookie)).payload
     guilds, memberships = await service.setup_options(user_id=body["uid"], guilds=body["guilds"])
     return DiscordSetupRead(
         display_name=body.get("name") or body["uid"],
@@ -366,7 +384,8 @@ async def discord_setup_select(
     translator: AuthTranslator,
     setup_cookie: Annotated[str | None, Cookie(alias=SETUP_COOKIE)] = None,
 ) -> TokenResponse:
-    body = _setup_state(setup_cookie)
+    row = await _setup_row(service.session, setup_cookie)
+    body = row.payload
     user_id, name = body["uid"], body.get("name") or body["uid"]
     if payload.guild_id:
         guild = next((g for g in body["guilds"] if g.get("id") == payload.guild_id), None)
@@ -398,6 +417,7 @@ async def discord_setup_select(
 
     token = service.issue_token(membership, user_id, name)
     token.message = message
+    await service.session.delete(row)
     await service.commit()
     _set_session_cookie(response, token.access_token)
     response.delete_cookie(key=SETUP_COOKIE, path="/")

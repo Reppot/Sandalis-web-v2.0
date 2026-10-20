@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { Scopes, type Can } from "@/entities/session";
-import { EmptyState, Loading, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, UiGlyph, useT } from "@/shared";
+import { EmptyState, Loading, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, UiGlyph, useT, PagedMore, usePaged } from "@/shared";
 import { timerPlace, useClock, useRiskSummary, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 import { RegisterTimerModal, TimerManagerModal } from "@/features/timers/ui/TimerModals";
 
@@ -27,6 +27,7 @@ export const TimersWorkspace: React.FC<{ can: Can }> = ({ can }) => {
       return `${region ?? ""} ${location}`.toLowerCase().includes(q);
     });
   }, [timers, query]);
+  const page = usePaged(visible, 30, query);
 
   const managed = managedId ? timers.find((t) => t.id === managedId) ?? null : null;
 
@@ -67,11 +68,12 @@ export const TimersWorkspace: React.FC<{ can: Can }> = ({ can }) => {
           </div>
         ) : (
           <ul className="flex flex-col gap-2.5">
-            {visible.map((t) => (
+            {page.items.map((t) => (
               <TimerCard key={t.id} timer={t} now={now} onManage={() => setManagedId(t.id)} />
             ))}
           </ul>
         )}
+        {visible.length > 0 && <PagedMore page={page} />}
       </section>
 
       {managed && <TimerManagerModal timer={managed} can={can} onClose={() => setManagedId(null)} />}

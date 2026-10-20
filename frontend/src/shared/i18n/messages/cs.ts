@@ -26,6 +26,9 @@ export const cs: Record<MessageKey, string> = {
   "common.noData": "žádná data",
   "common.processing": "ZPRACOVÁNÍ...",
   "common.more": "a dalších {n}",
+  "common.loadMore": "Načíst dalších {n}",
+  "common.shownOf": "Zobrazeno {shown} z {total}",
+  "mgmt.joinedTotal": "připojeno k terminálu: {n}",
   "common.pos": "{n} POL.",
   "common.total": "Celkové množství",
 

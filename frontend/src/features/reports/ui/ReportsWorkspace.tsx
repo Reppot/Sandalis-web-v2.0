@@ -23,6 +23,8 @@ import {
   type MessageKey,
   type Translate,
   UiGlyph,
+  PagedMore,
+  usePaged,
 } from "@/shared";
 
 type Filter = "active" | "all" | "done" | "cancelled";
@@ -103,6 +105,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
     if (!q) return reports;
     return reports.filter((r) => r.title.toLowerCase().includes(q) || r.lines.some((l) => l.name.toLowerCase().includes(q)));
   }, [reports, query]);
+  const page = usePaged(visible, 20, query);
 
   const replace = (report: Report) => setReports((prev) => prev.map((r) => (r.id === report.id ? report : r)));
 
@@ -198,7 +201,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
         </div>
       ) : (
         <ul className="grid gap-3 xl:grid-cols-2">
-          {visible.map((report) => {
+          {page.items.map((report) => {
             const open = expanded === report.id;
             const busy = busyId === report.id;
             return (
@@ -271,6 +274,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
           })}
         </ul>
       )}
+      {visible.length > 0 && <PagedMore page={page} />}
       {previewModal}
     </div>
   );

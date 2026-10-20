@@ -1781,11 +1781,37 @@ paths:
     get:
       tags:
       - clan
-      summary: 'Участники клана: сервер Discord (бот) + вступившие в терминал (командир)'
+      summary: 'Участники клана постранично: сервер Discord (бот) + вступившие в терминал (командир)'
       operationId: read_members_api_v1_clan_members_get
       security:
       - ClanJWT: []
       parameters:
+      - name: after
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 24
+          pattern: ^\d*$
+          default: ''
+          title: After
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 10
+          default: 100
+          title: Limit
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+          maxLength: 64
+          default: ''
+          title: Q
       - name: X-Clan-Token
         in: header
         required: false
@@ -3765,11 +3791,26 @@ components:
             $ref: '#/components/schemas/DiscordMemberRead'
           type: array
           title: Members
+        next_after:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next After
+        total:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total
+        joined_total:
+          type: integer
+          title: Joined Total
+          default: 0
       type: object
       required:
       - status
       - members
       title: DiscordMembersRead
+      description: Страница участников. next_after — курсор «Загрузить ещё» (None — конец списка).
     DiscordRoleRead:
       properties:
         id:

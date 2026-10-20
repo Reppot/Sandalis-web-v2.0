@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 
 from app.api.deps import CurrentPrincipal
@@ -33,7 +33,8 @@ from app.services.discord_roles import (
     LEVELS,
     access_for,
     bot_invite_url,
-    fetch_guild_members,
+    fetch_member_count,
+    fetch_members_page,
     fetch_guild_roles,
     preset_scopes,
     snapshot_at,
@@ -142,10 +143,21 @@ async def update_discord_roles(payload: DiscordRolesUpdate, service: SettingsSer
 
 
 @router.get("/members", response_model=DiscordMembersRead,
-            summary="Участники клана: сервер Discord (бот) + вступившие в терминал (командир)")
-async def read_members(service: SettingsServiceDep, _: OwnerDep) -> DiscordMembersRead:
+            summary="Участники клана постранично: сервер Discord (бот) + вступившие в терминал (командир)")
+async def read_members(
+    service: SettingsServiceDep,
+    _: OwnerDep,
+    after: Annotated[str, Query(max_length=24, pattern=r"^\d*$")] = "",
+    limit: Annotated[int, Query(ge=10, le=500)] = 100,
+    q: Annotated[str, Query(max_length=64)] = "",
+) -> DiscordMembersRead:
+    query = q.strip()
     guild_id = await _guild_id(service)
-    status, discord = await fetch_guild_members(guild_id) if guild_id else ("no_guild", [])
+    if guild_id:
+        status, discord, next_after = await fetch_members_page(guild_id, after=after, limit=limit, query=query)
+    else:
+        status, discord, next_after = "no_guild", [], None
+    total = await fetch_member_count(guild_id) if guild_id and not after and not query and status == "ok" else None
     row = await service.get()
     snapshot = list(row.discord_roles) if row else []
     by_id = {r["id"]: r for r in snapshot}
@@ -157,6 +169,7 @@ async def read_members(service: SettingsServiceDep, _: OwnerDep) -> DiscordMembe
                 .where(ClanMembership.clan_id == service.clan_id, ClanMembership.is_active.is_(True))
             )).all()
         }
+    joined_total = len(joined)
 
     def terminal_perms(m: ClanMembership) -> list[str]:
         return ["*"] if m.role == ClanRole.OWNER else sorted(scopes_for(m.role, m.extra_scopes, m.revoked_scopes) & ALL_PERMISSIONS)
@@ -172,11 +185,27 @@ async def read_members(service: SettingsServiceDep, _: OwnerDep) -> DiscordMembe
             in_discord=True, joined=m is not None, role=m.role.value if m else None,
             permissions=terminal_perms(m) if m else access["permissions"],
         ))
-    for uid, (m, name) in joined.items():      # вступили, но бот их не видит (ушли с сервера / нет intent)
+
+    # вступили, но бот их не видит (ушли с сервера / нет intent). Список Discord идёт по
+    # возрастанию id, поэтому «ушедший» попадает на страницу, в чей диапазон id входит.
+    def belongs_here(uid: str, name: str | None) -> bool:
+        if status != "ok":
+            return not after and not query          # бот недоступен — все вступившие на первой странице
+        if query:
+            return query.lower() in (name or uid).lower()
+        if not uid.isdigit():
+            return next_after is None
+        return int(uid) > int(after or 0) and (next_after is None or int(uid) <= int(next_after))
+
+    for uid, (m, name) in joined.items():
+        if not belongs_here(uid, name):
+            continue
         members.append(DiscordMemberRead(
             id=uid, name=name or uid, roles=[], level=ROLE_LEVEL.get(m.role, CUSTOM) if not (m.extra_scopes or m.revoked_scopes) else CUSTOM,
             in_discord=False, joined=True, role=m.role.value, permissions=terminal_perms(m),
         ))
     order = {"owner": 0, "high": 1, "medium": 2, CUSTOM: 3, "basic": 4, "guest": 5}
     members.sort(key=lambda x: (not x.joined, order.get(x.level, 9), x.name.lower()))
-    return DiscordMembersRead(status=status, members=members)
+    return DiscordMembersRead(
+        status=status, members=members, next_after=next_after, total=total, joined_total=joined_total,
+    )

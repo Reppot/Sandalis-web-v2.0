@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { EmptyState, Loading, Modal, UiGlyph, cn, errorText, formatDateTime, useNotify, useT, type MessageKey } from "@/shared";
-import { managementApi, type AccessLevel, type ClanMember, type DiscordRole, type DiscordRoles, type PermissionCatalog } from "@/features/management/api";
+import { EmptyState, LoadMore, Loading, Modal, PagedMore, UiGlyph, cn, errorText, formatDateTime, roleColor, useNotify, usePaged, useT, type MessageKey } from "@/shared";
+import { MEMBERS_PAGE, managementApi, type AccessLevel, type ClanMember, type DiscordRole, type DiscordRoles, type MembersPage, type PermissionCatalog } from "@/features/management/api";
 
 const LEVELS: { value: AccessLevel; label: MessageKey }[] = [
   { value: "basic", label: "level.basic" },
@@ -16,7 +16,7 @@ const LEVEL_LABEL: Record<string, MessageKey> = {
 const LEVEL_COLOR: Record<string, string> = {
   owner: "var(--accent)", high: "#f472b6", medium: "#60a5fa", custom: "#fbbf24", basic: "rgba(229,231,235,0.75)", guest: "var(--muted)",
 };
-const hex = (color: number) => (color ? `#${color.toString(16).padStart(6, "0")}` : "rgba(229,231,235,0.55)");
+const hex = roleColor;
 const permKey = (p: string) => `perm.${p}` as MessageKey;
 
 type View = "members" | "roles";
@@ -163,29 +163,71 @@ const BotPanel: React.FC<{ onChanged: () => void }> = ({ onChanged }) => {
 const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog }) => {
   const t = useT();
   const notify = useNotify();
-  const [data, setData] = React.useState<Awaited<ReturnType<typeof managementApi.members>> | null>(null);
+  // список приходит страницами по MEMBERS_PAGE: на сервере может быть 10 000 человек
+  const [data, setData] = React.useState<MembersPage | null>(null);
+  const [loadingMore, setLoadingMore] = React.useState(false);
   const [query, setQuery] = React.useState("");
+  const [found, setFound] = React.useState<ClanMember[] | null>(null);
   const [open, setOpen] = React.useState<string | null>(null);
+  const fail = React.useCallback(
+    (err: unknown) => notify({ title: t("nav.management.label"), message: errorText(err, t("mgmt.loadFailed")), tone: "danger" }),
+    [notify, t],
+  );
 
   const load = React.useCallback(() => {
     setData(null);
-    managementApi
-      .members()
-      .then(setData)
-      .catch((err) => notify({ title: t("nav.management.label"), message: errorText(err, t("mgmt.loadFailed")), tone: "danger" }));
-  }, [notify, t]);
+    managementApi.members().then(setData).catch(fail);
+  }, [fail]);
   React.useEffect(load, [load]);
+
+  const loadMore = async () => {
+    if (!data?.nextAfter) return;
+    setLoadingMore(true);
+    try {
+      const next = await managementApi.members({ after: data.nextAfter });
+      setData((prev) => prev && {
+        ...next,
+        total: prev.total,
+        members: [...prev.members, ...next.members.filter((m) => !prev.members.some((p) => p.id === m.id))],
+      });
+    } catch (err) {
+      fail(err);
+    } finally {
+      setLoadingMore(false);
+    }
+  };
+
+  // поиск: по загруженным (ник и роли) + поиск Discord по нику среди всех участников сервера
+  React.useEffect(() => {
+    const q = query.trim();
+    if (q.length < 2) return setFound(null);
+    const timer = window.setTimeout(() => {
+      managementApi.members({ q }).then((r) => setFound(r.members)).catch(() => setFound([]));
+    }, 400);
+    return () => window.clearTimeout(timer);
+  }, [query]);
 
   const filtered = React.useMemo(() => {
     const q = query.trim().toLowerCase();
-    return (data?.members ?? []).filter((m) => !q || `${m.name} ${m.roles.map((r) => r.name).join(" ")}`.toLowerCase().includes(q));
-  }, [data, query]);
+    const loaded = data?.members ?? [];
+    if (!q) return loaded;
+    const local = loaded.filter((m) => `${m.name} ${m.roles.map((r) => r.name).join(" ")}`.toLowerCase().includes(q));
+    const ids = new Set(local.map((m) => m.id));
+    return [...local, ...(found ?? []).filter((m) => !ids.has(m.id))];
+  }, [data, query, found]);
+  // без поиска страницы уже приходят с сервера; с поиском — режем найденное локально
+  const searching = Boolean(query.trim());
+  const page = usePaged(filtered, MEMBERS_PAGE, query);
+  const rows = searching ? page.items : filtered;
   const total = catalog ? catalog.groups.reduce((n, g) => n + g.permissions.length, 0) : 0;
 
   return (
     <section data-guide="mgmt-members" className="panel panel-corners rounded-md p-4">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <h2 className="panel-title flex-1">👥 {t("mgmt.members")}{data ? ` • ${data.members.length}` : ""}</h2>
+        <h2 className="panel-title flex-1">
+          👥 {t("mgmt.members")}{data ? ` • ${data.total ?? data.members.length}` : ""}
+          {data ? <span className="hud-label ml-2 text-safe">{t("mgmt.joinedTotal", { n: data.joinedTotal })}</span> : null}
+        </h2>
         <input className="field field-mono w-full py-1.5 text-xs sm:w-64" placeholder={t("mgmt.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
         <button type="button" className="btn" onClick={load}>⟳ {t("common.sync")}</button>
       </div>
@@ -199,7 +241,7 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
         <EmptyState icon="cabinet" title={t("mgmt.noMembers")} />
       ) : (
         <ul className="mt-3 flex flex-col gap-1.5">
-          {filtered.map((m) => {
+          {rows.map((m) => {
             const expanded = open === m.id;
             return (
               <li key={m.id} className={cn("panel-inner rounded px-3 py-2", !m.joined && "opacity-75")}>
@@ -239,6 +281,9 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
           })}
         </ul>
       )}
+      {data && (searching
+        ? <PagedMore page={page} />
+        : <LoadMore shown={data.members.length} total={data.total} next={data.nextAfter ? MEMBERS_PAGE : 0} onMore={() => void loadMore()} busy={loadingMore} />)}
     </section>
   );
 };
@@ -298,6 +343,7 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
   };
 
   const synced = Boolean(data?.syncedAt);
+  const rolesPage = usePaged(data?.roles ?? [], 60);
 
   return (
     <section data-guide="mgmt-roles" className="panel panel-corners rounded-md p-4">
@@ -324,7 +370,7 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
                 <p className="hud-label mt-3 text-muted">{t("droles.empty")}</p>
               ) : (
                 <ul className="mt-2 grid gap-1.5 lg:grid-cols-2">
-                  {data.roles.map((role) => {
+                  {rolesPage.items.map((role) => {
                     const level = levels[role.id] ?? "basic";
                     return (
                       <li key={role.id} className="row-item flex items-center gap-2 text-xs">
@@ -347,6 +393,7 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
                   })}
                 </ul>
               )}
+              <PagedMore page={rolesPage} />
               <div className="mt-3 flex items-center justify-end gap-2">
                 {dirty && <span className="hud-label text-warn">{t("mgmt.unsaved")}</span>}
                 <button type="button" className="btn btn-primary" data-guide="mgmt-save" disabled={busy || !dirty} onClick={() => void act(() => managementApi.save(levels, perms))}>

@@ -25,6 +25,9 @@ export const ru = {
   "common.noData": "нет данных",
   "common.processing": "ОБРАБОТКА...",
   "common.more": "ещё {n}",
+  "common.loadMore": "Загрузить ещё {n}",
+  "common.shownOf": "Показано {shown} из {total}",
+  "mgmt.joinedTotal": "вступили в терминал: {n}",
   "common.pos": "{n} ПОЗ.",
   "common.total": "Суммарное количество",
 

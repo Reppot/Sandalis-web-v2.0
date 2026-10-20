@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { UserSession } from "@/entities/session";
-import { env, errorText, useT, type MessageKey } from "@/shared";
+import { env, errorText, roleColor, useT, type MessageKey } from "@/shared";
 import { authApi, type AccessLevel, type DiscordSetup, type SetupChoice } from "@/features/cabinet/api/authApi";
 import { LanguageSwitch } from "@/features/cabinet/ui/LanguageSwitch";
 
@@ -156,7 +156,6 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
 };
 
 const LEVEL_KEY: Record<AccessLevel, MessageKey> = { basic: "level.basic", medium: "level.medium", high: "level.high" };
-const roleColor = (color: number) => (color ? `#${color.toString(16).padStart(6, "0")}` : "rgba(229,231,235,0.55)");
 
 /** Выбор после входа: свои серверы (клан), кланы с ботом (вступить), свои кланы (войти). */
 const ServerPicker: React.FC<{

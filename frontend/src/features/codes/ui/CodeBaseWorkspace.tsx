@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { catalogApi, type FoxholeItem, type ParseResult } from "@/entities/item";
-import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, useNotify, useT, type MessageKey, type Translate } from "@/shared";
+import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged } from "@/shared";
 
 const FACTIONS: Record<string, MessageKey> = { colonial: "codes.faction.colonial", warden: "codes.faction.warden", neutral: "codes.faction.neutral" };
 
@@ -50,6 +50,7 @@ export const CodeBaseWorkspace: React.FC = () => {
       return (!needle || hay.includes(needle)) && (category === "all" || e.category === category) && (faction === "all" || e.faction === faction) && (!reviewOnly || e.needsReview);
     });
   }, [entries, query, category, faction, reviewOnly]);
+  const page = usePaged(filtered, 100, [query, category, faction, reviewOnly].join("|"));
 
   const reviewCount = entries.filter((e) => e.needsReview).length;
 
@@ -165,7 +166,7 @@ export const CodeBaseWorkspace: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {filtered.map((e) => (
+                {page.items.map((e) => (
                   <tr key={e.code} className="border-t border-white/5 transition-colors hover:bg-lime-300/10">
                     <td className="px-4 py-1.5"><ItemIcon sources={[assetUrl(e.iconUrl)]} size={30} label={e.name} /></td>
                     <td className="px-3 py-2 font-mono font-bold text-accent">{e.code}</td>
@@ -179,6 +180,7 @@ export const CodeBaseWorkspace: React.FC = () => {
               </tbody>
             </table>
             {!filtered.length && <div className="hud-label px-4 py-12 text-center text-muted">{t("common.nothingFilter")}</div>}
+            <PagedMore page={page} />
           </div>
         )}
       </section>

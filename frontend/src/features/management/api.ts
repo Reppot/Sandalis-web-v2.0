@@ -23,6 +23,16 @@ export interface DiscordRoles {
   roles: DiscordRole[];
 }
 
+export const MEMBERS_PAGE = 100;
+
+export interface MembersPage {
+  status: "ok" | "no_bot" | "intent_required" | "no_guild";
+  members: ClanMember[];
+  nextAfter: string | null;
+  total: number | null;
+  joinedTotal: number;
+}
+
 export interface ClanMember {
   id: string;
   name: string;
@@ -83,11 +93,18 @@ export const managementApi = {
     const r = await apiClient.put<Saved>("/api/v1/clan/discord-roles", { levels, permissions });
     return { roles: toRoles(r.roles), message: r.message };
   },
-  async members(): Promise<{ status: "ok" | "no_bot" | "intent_required" | "no_guild"; members: ClanMember[] }> {
-    const r = await apiClient.get<{ status: "ok" | "no_bot" | "intent_required" | "no_guild"; members: MemberDto[] }>("/api/v1/clan/members");
+  /** Страница участников: after — курсор предыдущей страницы, q — поиск Discord по нику. */
+  async members(params: { after?: string; q?: string; limit?: number } = {}): Promise<MembersPage> {
+    const r = await apiClient.get<{ status: MembersPage["status"]; members: MemberDto[]; next_after: string | null; total: number | null; joined_total: number }>(
+      "/api/v1/clan/members",
+      { params: { after: params.after ?? "", q: params.q ?? "", limit: params.limit ?? MEMBERS_PAGE } },
+    );
     return {
       status: r.status,
       members: r.members.map((m) => ({ id: m.id, name: m.name, roles: m.roles, level: m.level, inDiscord: m.in_discord, joined: m.joined, role: m.role, permissions: m.permissions })),
+      nextAfter: r.next_after,
+      total: r.total,
+      joinedTotal: r.joined_total,
     };
   },
   permissions(): Promise<PermissionCatalog> {

@@ -164,6 +164,50 @@ export const QuantityStepper: React.FC<{ value: number; onChange: (next: number)
   );
 };
 
+/**
+ * Постраничный вывод больших списков: сначала `step` строк, дальше — «Загрузить ещё».
+ * Счётчик сбрасывается при смене resetKey (поиск, фильтр), но не при фоновом обновлении данных.
+ */
+export interface Paged<T> {
+  items: T[];
+  shown: number;
+  total: number;
+  next: number;
+  more: () => void;
+}
+export function usePaged<T>(items: readonly T[], step = 50, resetKey?: unknown): Paged<T> {
+  const [limit, setLimit] = React.useState(step);
+  React.useEffect(() => setLimit(step), [resetKey, step]);
+  const shown = Math.min(limit, items.length);
+  return {
+    items: items.slice(0, limit),
+    shown,
+    total: items.length,
+    next: Math.min(step, items.length - shown),
+    more: () => setLimit((l) => l + step),
+  };
+}
+
+/** «Показано N из M» + кнопка «Загрузить ещё». next=0 — кнопка скрыта. */
+export const LoadMore: React.FC<{ shown: number; total?: number | null; next: number; onMore: () => void; busy?: boolean }> = ({ shown, total, next, onMore, busy }) => {
+  const t = useT();
+  if (next <= 0 && (total == null || total <= shown)) return null;
+  return (
+    <div className="load-more">
+      <span className="hud-label text-muted">{t("common.shownOf", { shown, total: total ?? "?" })}</span>
+      {next > 0 && (
+        <button type="button" className="btn" disabled={busy} onClick={onMore}>
+          {busy ? t("common.loading") : `⬇ ${t("common.loadMore", { n: next })}`}
+        </button>
+      )}
+    </div>
+  );
+};
+
+export const PagedMore: React.FC<{ page: Paged<unknown> }> = ({ page }) => (
+  <LoadMore shown={page.shown} total={page.total} next={page.next} onMore={page.more} />
+);
+
 /** Кнопка-подтверждение: первый клик взводит, второй (в течение 3 с) выполняет. */
 export function useConfirm(timeoutMs = 3000): [string | null, (key: string, action: () => void) => void] {
   const [armed, setArmed] = React.useState<string | null>(null);

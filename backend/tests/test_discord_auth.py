@@ -12,6 +12,7 @@ from urllib.parse import parse_qs
 from types import SimpleNamespace
 from typing import Any, Iterator
 
+import httpx
 import respx
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
@@ -789,7 +790,7 @@ def test_discord_roles_owner_endpoints(db, monkeypatch):
                 assert [x["level"] for x in ok.json()["roles"]["roles"]] == ["high", "basic"]
 
                 members = (await c.get(f"{API}/clan/members", headers=owner)).json()
-                assert members["status"] == "ok"
+                assert members["status"] == "ok" and members["next_after"] is None
                 assert [(m["name"], [r["name"] for r in m["roles"]], m["level"], m["joined"]) for m in members["members"]] == [
                     ("Пилот Один", ["Пилот"], "basic", False)]
 
@@ -834,5 +835,53 @@ def test_custom_role_grants_exact_permissions(db, monkeypatch):
             # роль Пилот + Офицер(средний) — объединение прав
             r = await discord_login(c, [R_PILOT, R_OFFICER])
             assert r.status_code == 200, r.text
+
+    run(main())
+
+
+def test_setup_cookie_stays_small_for_owner_of_many_guilds(db, monkeypatch):
+    """Состояние выбора — в БД: кука не растёт со списком серверов (лимит ~4 КБ)."""
+    many = [
+        {"id": str(910000000000000000 + i), "name": f"Сервер клана с длинным названием №{i}",
+         "icon": "a" * 32, "owner": True}
+        for i in range(120)
+    ]
+
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        with discord_mock(guilds=many):
+            async with client() as c:
+                r = await c.get(
+                    f"{API}/auth/discord/callback", params={"code": "abc", "state": make_state()}
+                )
+                assert r.status_code == 302, r.text
+                assert len(c.cookies["sindaris_discord_setup"]) < 200
+                body = (await c.get(f"{API}/auth/discord/setup")).json()
+                assert len(body["guilds"]) == 120
+
+    run(main())
+
+
+def test_members_are_paged_with_cursor(db, monkeypatch):
+    """10 000 участников не грузятся разом: страница + курсор «Загрузить ещё»."""
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        monkeypatch.setattr(settings, "DISCORD_BOT_TOKEN", "bot-token", raising=True)
+        await link_guild(SNAPSHOT)
+        await seed_membership("CLAN_R", role=ClanRole.MEMBER)      # вступил, но ушёл с сервера
+        owner = {"Authorization": "Bearer " + issue_access_token(user_id="boss", clan_id="CLAN_R", role=ClanRole.OWNER)}
+        first = [{"user": {"id": str(100 + i), "username": f"u{i}"}, "roles": []} for i in range(10)]
+        with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+            members = mock.get(f"{BASE}/guilds/{ROLE_GUILD}/members")
+            members.side_effect = [httpx.Response(200, json=first), httpx.Response(200, json=first[:3])]
+            mock.get(f"{BASE}/guilds/{ROLE_GUILD}").respond(json={"approximate_member_count": 13})
+            async with client() as c:
+                page1 = (await c.get(f"{API}/clan/members", params={"limit": 10}, headers=owner)).json()
+                assert page1["next_after"] == "109" and page1["total"] == 13
+                assert len(page1["members"]) == 10
+                assert members.calls[0].request.url.params["after"] == "0"
+                page2 = (await c.get(f"{API}/clan/members", params={"limit": 10, "after": "109"}, headers=owner)).json()
+                assert page2["next_after"] is None and page2["total"] is None
+                assert members.calls[1].request.url.params["after"] == "109"
 
     run(main())
