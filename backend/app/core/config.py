@@ -51,6 +51,9 @@ class Settings(BaseSettings):
     DISCORD_CLIENT_SECRET: str = ""
     DISCORD_REDIRECT_URI: str = ""
     DISCORD_OAUTH_STATE_TTL_SEC: int = 600   # срок жизни подписанного state
+    # Токен бота клана: только чтобы показать названия ролей сервера при сопоставлении
+    # (бот добавляется на сервер без прав). Пусто — сопоставление по ролям недоступно.
+    DISCORD_BOT_TOKEN: str = ""
 
     # --- Frontend / session-cookie --------------------------------------
     FRONTEND_URL: str = "http://localhost:3000"

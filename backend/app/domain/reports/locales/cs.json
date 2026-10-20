@@ -30,6 +30,7 @@
     }
   },
   "settings": {
-    "saved": "Nastavení klanu uloženo."
+    "saved": "Nastavení klanu uloženo.",
+    "roles_saved": "Přiřazení rolí Discordu uloženo. Role se aktualizují při dalším přihlášení členů."
   }
 }

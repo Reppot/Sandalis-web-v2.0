@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -32,6 +32,36 @@ class ClanSettingsUpdate(BaseModel):
         if not value.startswith(DISCORD_WEBHOOK_PREFIXES):
             raise ValueError("expected a Discord webhook URL (https://discord.com/api/webhooks/...)")
         return value
+
+
+class DiscordRoleRead(BaseModel):
+    id: str
+    name: str
+    color: int
+    position: int
+
+
+class DiscordRolesRead(BaseModel):
+    """Экран «Роли Discord»: роли сервера клана и их сопоставление."""
+    guild_id: str | None            # null — клан не привязан к Discord-серверу
+    bot_configured: bool            # задан DISCORD_BOT_TOKEN
+    bot_in_guild: bool              # бот видит сервер (роли загружены)
+    bot_invite_url: str | None
+    enabled: bool
+    roles: list[DiscordRoleRead]
+    role_map: dict[str, str]
+
+
+class DiscordRolesUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    enabled: bool
+    role_map: dict[Annotated[str, Field(pattern=r"^\d{5,25}$")], Literal["guest", "member", "officer", "admin"]]
+
+
+class DiscordRolesSaved(BaseModel):
+    roles: DiscordRolesRead
+    message: str
 
 
 class ClanSettingsSaved(BaseModel):

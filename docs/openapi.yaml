@@ -48,7 +48,8 @@ paths:
       - content
       summary: 'Реестр контента интерфейса (публичный: нужен экрану входа до авторизации)'
       description: 'kind: media, external_tool, training_module, ticker_phrase, region, material, catalog_category,
-        factory_category, refinery_group. Без kind — всё сразу.'
+        factory_category, refinery_group, guide_chapter. Без kind — всё, кроме guide_chapter (руководство
+        запрашивается отдельно).'
       operationId: list_content_api_v1_content_get
       parameters:
       - name: kind
@@ -128,14 +129,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -172,14 +173,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Clan-Token
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -210,14 +211,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Clan-Token
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -398,14 +399,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Clan-Token
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -482,14 +483,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -535,14 +536,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -602,14 +603,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '204':
           description: Successful Response
@@ -915,14 +916,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -968,14 +969,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -1035,14 +1036,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -1095,14 +1096,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -1161,14 +1162,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '204':
           description: Successful Response
@@ -1218,14 +1219,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -1305,14 +1306,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -1358,14 +1359,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -1425,14 +1426,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -1485,14 +1486,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -1551,14 +1552,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '204':
           description: Successful Response
@@ -1608,14 +1609,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -1677,14 +1678,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         content:
           multipart/form-data:
@@ -1736,14 +1737,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -1789,14 +1790,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -1810,6 +1811,119 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ClanSettingsSaved'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/clan/discord-roles:
+    get:
+      tags:
+      - clan
+      summary: Роли Discord-сервера клана и их сопоставление с ролями терминала (admin+)
+      operationId: read_discord_roles_api_v1_clan_discord_roles_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscordRolesRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - clan
+      summary: Сохранить сопоставление ролей Discord (admin+)
+      operationId: update_discord_roles_api_v1_clan_discord_roles_put
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscordRolesUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscordRolesSaved'
         '422':
           description: Validation Error
           content:
@@ -1907,14 +2021,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -1961,14 +2075,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2021,14 +2135,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2085,14 +2199,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2151,14 +2265,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -2254,14 +2368,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -2342,14 +2456,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -2416,14 +2530,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -2469,14 +2583,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2536,14 +2650,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -2596,14 +2710,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2662,14 +2776,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '204':
           description: Successful Response
@@ -2719,14 +2833,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2785,14 +2899,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2858,14 +2972,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -2930,14 +3044,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '204':
           description: Successful Response
@@ -3018,14 +3132,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -3071,14 +3185,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -3138,14 +3252,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -3198,14 +3312,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -3264,14 +3378,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '204':
           description: Successful Response
@@ -3330,14 +3444,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       responses:
         '200':
           description: Successful Response
@@ -3393,14 +3507,14 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      - name: sandalis_session
+      - name: sindaris_session
         in: cookie
         required: false
         schema:
           anyOf:
           - type: string
           - type: 'null'
-          title: Sandalis Session
+          title: Sindaris Session
       requestBody:
         required: true
         content:
@@ -3692,6 +3806,103 @@ components:
       - clan_id
       title: DevTokenRequest
       description: Выдача токена для разработки/администрирования (ENV!=prod либо DEV_AUTH_SECRET).
+    DiscordRoleRead:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        color:
+          type: integer
+          title: Color
+        position:
+          type: integer
+          title: Position
+      type: object
+      required:
+      - id
+      - name
+      - color
+      - position
+      title: DiscordRoleRead
+    DiscordRolesRead:
+      properties:
+        guild_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Guild Id
+        bot_configured:
+          type: boolean
+          title: Bot Configured
+        bot_in_guild:
+          type: boolean
+          title: Bot In Guild
+        bot_invite_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bot Invite Url
+        enabled:
+          type: boolean
+          title: Enabled
+        roles:
+          items:
+            $ref: '#/components/schemas/DiscordRoleRead'
+          type: array
+          title: Roles
+        role_map:
+          additionalProperties:
+            type: string
+          type: object
+          title: Role Map
+      type: object
+      required:
+      - guild_id
+      - bot_configured
+      - bot_in_guild
+      - bot_invite_url
+      - enabled
+      - roles
+      - role_map
+      title: DiscordRolesRead
+      description: 'Экран «Роли Discord»: роли сервера клана и их сопоставление.'
+    DiscordRolesSaved:
+      properties:
+        roles:
+          $ref: '#/components/schemas/DiscordRolesRead'
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - roles
+      - message
+      title: DiscordRolesSaved
+    DiscordRolesUpdate:
+      properties:
+        enabled:
+          type: boolean
+          title: Enabled
+        role_map:
+          patternProperties:
+            ^\d{5,25}$:
+              type: string
+              enum:
+              - guest
+              - member
+              - officer
+              - admin
+          type: object
+          title: Role Map
+      additionalProperties: false
+      type: object
+      required:
+      - enabled
+      - role_map
+      title: DiscordRolesUpdate
     DiscordSent:
       properties:
         report:

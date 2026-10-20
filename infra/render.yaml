@@ -33,6 +33,9 @@ services:
         sync: false
       - key: DISCORD_CLIENT_SECRET
         sync: false
+      # токен бота клана: чтение ролей сервера для «Роли Discord» (бот без прав)
+      - key: DISCORD_BOT_TOKEN
+        sync: false
       # тот же URL — в Discord Developer Portal → OAuth2 → Redirects
       - key: DISCORD_REDIRECT_URI
         value: https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback

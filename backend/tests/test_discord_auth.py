@@ -726,3 +726,116 @@ def test_guest_uses_tools_but_sees_no_clan_data(db, monkeypatch):
             assert (await c.post(f"{API}/stockpiles", json={"name": "X", "region": "Y"})).status_code == 403
 
     run(main())
+
+
+# --------------------------------------------------------------------------- #
+# роли Discord-сервера -> роли терминала
+# --------------------------------------------------------------------------- #
+ROLE_GUILD = "700000000000000001"
+
+
+async def link_guild_with_roles(role_map: dict[str, str], enabled: bool = True) -> None:
+    from app.models.clan_settings import ClanSettings
+
+    await seed_clan("CLAN_R", "Roles Clan")
+    async with AsyncSessionLocal() as s:
+        with bypass_clan_filter():
+            clan = await s.get(Clan, "CLAN_R")
+            clan.discord_guild_id = ROLE_GUILD
+            s.add(ClanSettings(clan_id="CLAN_R", discord_role_sync=enabled, discord_role_map=role_map))
+            await s.commit()
+
+
+def member_mock(mock, roles: list[str]) -> None:
+    mock.post(f"{BASE}/oauth2/token").respond(json=TOKEN_RESPONSE)
+    mock.get(f"{BASE}/users/@me").respond(json=PROFILE)
+    mock.get(f"{BASE}/users/@me/guilds").respond(json=[{"id": ROLE_GUILD, "name": "Clan", "owner": False}])
+    mock.get(f"{BASE}/users/@me/guilds/{ROLE_GUILD}/member").respond(json={"roles": roles, "nick": None})
+
+
+def test_discord_roles_grant_and_update_membership(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        await link_guild_with_roles({"100000000000000111": "officer", "100000000000000222": "member"})
+
+        async def login(roles: list[str]) -> dict:
+            with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+                member_mock(mock, roles)
+                async with client() as c:
+                    r = await c.get(f"{API}/auth/discord/callback",
+                                    params={"code": "abc", "state": make_state(), "response": "json"})
+                    return {"status": r.status_code, **(r.json() if r.status_code == 200 else {})}
+
+        # участник сервера с ролью «111» входит без приглашения офицером
+        r = await login(["100000000000000999", "100000000000000222", "100000000000000111"])
+        assert r["status"] == 200, r
+        assert r["me"]["clan_id"] == "CLAN_R" and r["me"]["role"] == "officer"
+        # роль сняли в Discord — при следующем входе роль терминала понижается
+        r = await login(["100000000000000222"])
+        assert r["me"]["role"] == "member"
+        # без сопоставленных ролей роль не меняется
+        r = await login(["100000000000000999"])
+        assert r["me"]["role"] == "member"
+
+    run(main())
+
+
+def test_discord_roles_sync_disabled_and_owner_untouched(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        await link_guild_with_roles({"100000000000000111": "officer"}, enabled=False)
+        with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+            member_mock(mock, ["100000000000000111"])
+            async with client() as c:
+                r = await c.get(f"{API}/auth/discord/callback",
+                                params={"code": "abc", "state": make_state(), "response": "json"})
+                assert r.status_code == 403            # синхронизация выключена — нужен invite
+
+        await seed_membership("CLAN_R", role=ClanRole.OWNER)
+        async with AsyncSessionLocal() as s:
+            from app.models.clan_settings import ClanSettings
+            with bypass_clan_filter():
+                row = (await s.execute(select(ClanSettings).where(ClanSettings.clan_id == "CLAN_R"))).scalar_one()
+                row.discord_role_sync = True
+                await s.commit()
+        with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+            member_mock(mock, ["100000000000000111"])
+            async with client() as c:
+                r = await c.get(f"{API}/auth/discord/callback",
+                                params={"code": "abc", "state": make_state(), "response": "json"})
+                assert r.json()["me"]["role"] == "owner"   # командира роль Discord не понижает
+
+    run(main())
+
+
+def test_discord_roles_admin_endpoint(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        monkeypatch.setattr(settings, "DISCORD_BOT_TOKEN", "bot-token", raising=True)
+        await link_guild_with_roles({})
+        admin = {"Authorization": "Bearer " + issue_access_token(user_id="boss", clan_id="CLAN_R", role=ClanRole.ADMIN)}
+        member = {"Authorization": "Bearer " + issue_access_token(user_id="u", clan_id="CLAN_R", role=ClanRole.MEMBER)}
+        with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+            mock.get(f"{BASE}/guilds/{ROLE_GUILD}/roles").respond(json=[
+                {"id": ROLE_GUILD, "name": "@everyone", "position": 0},
+                {"id": "100000000000000111", "name": "Офицер", "position": 5, "color": 15158332},
+                {"id": "100000000000000222", "name": "Боец", "position": 3},
+                {"id": "100000000000000333", "name": "Bot role", "position": 9, "managed": True},
+            ])
+            async with client() as c:
+                assert (await c.get(f"{API}/clan/discord-roles", headers=member)).status_code == 403
+                r = await c.get(f"{API}/clan/discord-roles", headers=admin)
+                assert r.status_code == 200, r.text
+                body = r.json()
+                assert body["guild_id"] == ROLE_GUILD and body["bot_in_guild"] is True
+                assert [x["name"] for x in body["roles"]] == ["Офицер", "Боец"]
+                assert "guild_id=" + ROLE_GUILD in body["bot_invite_url"]
+
+                bad = await c.put(f"{API}/clan/discord-roles", json={"enabled": True, "role_map": {"100000000000000111": "owner"}}, headers=admin)
+                assert bad.status_code == 422
+                ok = await c.put(f"{API}/clan/discord-roles", json={"enabled": True, "role_map": {"100000000000000111": "officer"}}, headers=admin)
+                assert ok.status_code == 200, ok.text
+                assert ok.json()["roles"]["enabled"] is True
+                assert ok.json()["roles"]["role_map"] == {"100000000000000111": "officer"}
+
+    run(main())

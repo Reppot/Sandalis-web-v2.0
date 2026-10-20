@@ -40,7 +40,8 @@ from app.services.discord_oauth import (
     build_authorize_url,
     error_redirect_url,
     exchange_code,
-    fetch_owned_guilds,
+    fetch_user_guilds,
+    owned_guilds,
     fetch_profile,
     make_state,
     safe_return_to,
@@ -336,6 +337,13 @@ async def discord_callback(
             locale=profile.locale,
         )
 
+        # роли сервера клана -> роли терминала (участник сервера входит без приглашения)
+        guilds = await fetch_user_guilds(token.access_token)
+        await service.sync_discord_roles(
+            user_id=profile.id, display_name=profile.display_name,
+            access_token=token.access_token, guild_ids=[g.id for g in guilds],
+        )
+
         if oauth_state.invite:
             # invite-ссылка: вступление в клан с ролью кода
             membership, _ = await service.redeem_invite(
@@ -344,7 +352,7 @@ async def discord_callback(
                 display_name=profile.display_name,
             )
         else:
-            owned = [] if oauth_state.clan_id else await fetch_owned_guilds(token.access_token)
+            owned = [] if oauth_state.clan_id else owned_guilds(guilds)
             if owned:
                 # владелец серверов: выбор сервера клана (или уже существующего клана)
                 await service.commit()

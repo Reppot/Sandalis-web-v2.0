@@ -104,3 +104,53 @@ export const clanSettingsApi = {
     return apiClient.put("/api/v1/clan/settings", { discord_webhook_url: url || null });
   },
 };
+
+export type SyncableRole = Extract<ClanRole, "guest" | "member" | "officer" | "admin">;
+
+export interface DiscordRole {
+  id: string;
+  name: string;
+  color: number;
+  position: number;
+}
+
+export interface DiscordRoles {
+  guildId: string | null;
+  botConfigured: boolean;
+  botInGuild: boolean;
+  botInviteUrl: string | null;
+  enabled: boolean;
+  roles: DiscordRole[];
+  roleMap: Record<string, SyncableRole>;
+}
+
+interface DiscordRolesDto {
+  guild_id: string | null;
+  bot_configured: boolean;
+  bot_in_guild: boolean;
+  bot_invite_url: string | null;
+  enabled: boolean;
+  roles: DiscordRole[];
+  role_map: Record<string, SyncableRole>;
+}
+
+const toDiscordRoles = (d: DiscordRolesDto): DiscordRoles => ({
+  guildId: d.guild_id,
+  botConfigured: d.bot_configured,
+  botInGuild: d.bot_in_guild,
+  botInviteUrl: d.bot_invite_url,
+  enabled: d.enabled,
+  roles: d.roles,
+  roleMap: d.role_map,
+});
+
+/** Роли Discord-сервера клана -> роли терминала (admin+). */
+export const discordRolesApi = {
+  async get(): Promise<DiscordRoles> {
+    return toDiscordRoles(await apiClient.get<DiscordRolesDto>("/api/v1/clan/discord-roles"));
+  },
+  async save(enabled: boolean, roleMap: Record<string, SyncableRole>): Promise<{ roles: DiscordRoles; message: string }> {
+    const r = await apiClient.put<{ roles: DiscordRolesDto; message: string }>("/api/v1/clan/discord-roles", { enabled, role_map: roleMap });
+    return { roles: toDiscordRoles(r.roles), message: r.message };
+  },
+};

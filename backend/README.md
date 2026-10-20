@@ -118,6 +118,10 @@ https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
 
 3. Scopes: `identify guilds` (email не нужен; guilds — найти серверы во владении).
 4. `Client ID` -> `DISCORD_CLIENT_ID`, `Client Secret` -> `DISCORD_CLIENT_SECRET`.
+5. «Бот» -> Reset Token -> `DISCORD_BOT_TOKEN` (только для «Роли Discord»: бот добавляется на сервер
+   клана без прав кнопкой в кабинете и нужен лишь чтобы прочитать названия ролей).
+   Вход запрашивает scopes `identify guilds guilds.members.read`: роли пользователя на сервере
+   клана читаются его же токеном, и при входе выдаётся самая старшая сопоставленная роль.
 
 ---
 

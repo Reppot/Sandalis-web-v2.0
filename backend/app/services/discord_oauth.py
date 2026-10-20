@@ -168,7 +168,7 @@ def build_authorize_url(state: str) -> str:
         "client_id": settings.DISCORD_CLIENT_ID,
         "redirect_uri": settings.DISCORD_REDIRECT_URI,
         "response_type": "code",
-        "scope": "identify guilds",
+        "scope": "identify guilds guilds.members.read",
         "state": state,
         "prompt": "consent",
     }
@@ -221,9 +221,9 @@ async def fetch_profile(access_token: str) -> DiscordUserProfile:
         raise _auth_error("discord.profile_failed", "profile_failed") from exc
 
 
-async def fetch_owned_guilds(access_token: str) -> list[DiscordGuild]:
-    """Серверы, где пользователь — владелец. Сбой Discord не роняет вход:
-    без списка пользователь просто не увидит выбор сервера."""
+async def fetch_user_guilds(access_token: str) -> list[DiscordGuild]:
+    """Все серверы пользователя (scope guilds). Сбой Discord не роняет вход:
+    без списка не будет выбора сервера и синхронизации ролей."""
     url = f"{settings.DISCORD_API_BASE_URL.rstrip('/')}/users/@me/guilds"
     try:
         async with get_http_client() as client:
@@ -241,12 +241,19 @@ async def fetch_owned_guilds(access_token: str) -> list[DiscordGuild]:
     guilds: list[DiscordGuild] = []
     for item in payload:
         try:
-            guild = DiscordGuild.model_validate(item)
+            guilds.append(DiscordGuild.model_validate(item))
         except ValueError:
             continue
-        if guild.owner:
-            guilds.append(guild)
-    return guilds[:25]   # кука выбора — не больше пары килобайт
+    return guilds
+
+
+def owned_guilds(guilds: list[DiscordGuild]) -> list[DiscordGuild]:
+    """Серверы во владении — для выбора сервера клана."""
+    return [g for g in guilds if g.owner][:25]   # кука выбора — не больше пары килобайт
+
+
+async def fetch_owned_guilds(access_token: str) -> list[DiscordGuild]:
+    return owned_guilds(await fetch_user_guilds(access_token))
 
 
 def avatar_url(profile: DiscordUserProfile) -> str | None:

@@ -30,6 +30,7 @@
     }
   },
   "settings": {
-    "saved": "Clan settings saved."
+    "saved": "Clan settings saved.",
+    "roles_saved": "Discord role mapping saved. Roles update the next time members sign in."
   }
 }

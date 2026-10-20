@@ -181,6 +181,19 @@ class AuthService:
         with bypass_clan_filter():
             return (await self.session.execute(stmt.limit(1))).scalars().first()
 
+    async def sync_discord_roles(
+        self, *, user_id: str, display_name: str, access_token: str, guild_ids: list[str]
+    ) -> int:
+        from app.services.discord_roles import sync_member_roles
+
+        async def upsert(**kw):  # noqa: ANN003, ANN202
+            return await self._upsert_identity(**kw, locale=self.t.locale)
+
+        return await sync_member_roles(
+            self.session, upsert, user_id=user_id, display_name=display_name,
+            access_token=access_token, guild_ids=guild_ids,
+        )
+
     # ---------------- выбор сервера клана (владелец Discord-сервера) ------------ #
     async def setup_options(
         self, *, user_id: str, guilds: list[dict]
