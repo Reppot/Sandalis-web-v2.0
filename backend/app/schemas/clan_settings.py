@@ -35,7 +35,7 @@ class ClanSettingsUpdate(BaseModel):
         return value
 
 
-Level = Literal["basic", "medium", "high"]
+Level = Literal["basic", "medium", "high", "custom"]
 
 
 class DiscordRoleRead(BaseModel):
@@ -44,6 +44,7 @@ class DiscordRoleRead(BaseModel):
     color: int
     position: int
     level: Level
+    permissions: list[str]          # для custom — выбранные права, иначе права пресета
 
 
 class DiscordRolesRead(BaseModel):
@@ -60,6 +61,8 @@ class DiscordRolesUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     levels: dict[Annotated[str, Field(pattern=r"^\d{5,25}$")], Level]
+    # права для ролей с уровнем custom
+    permissions: dict[Annotated[str, Field(pattern=r"^\d{5,25}$")], list[Annotated[str, Field(max_length=40)]]] = {}
 
 
 class DiscordRolesSaved(BaseModel):
@@ -67,18 +70,36 @@ class DiscordRolesSaved(BaseModel):
     message: str
 
 
+class MemberRoleRead(BaseModel):
+    name: str
+    color: int
+
+
 class DiscordMemberRead(BaseModel):
     id: str
     name: str
-    roles: list[str]
-    level: Level
-    joined: bool                    # уже вступил в терминал
+    roles: list[MemberRoleRead]     # роли Discord-сервера (из снимка)
+    level: str                      # owner | high | medium | custom | basic | guest
+    in_discord: bool                # виден ботом на сервере
+    joined: bool                    # вступил в терминал
     role: str | None                # роль в терминале, если вступил
+    permissions: list[str]          # итоговые права (owner — ["*"])
 
 
 class DiscordMembersRead(BaseModel):
     status: Literal["ok", "no_bot", "intent_required", "no_guild"]
     members: list[DiscordMemberRead]
+
+
+class PermissionGroupRead(BaseModel):
+    key: str
+    permissions: list[str]
+
+
+class PermissionCatalogRead(BaseModel):
+    """Все действия сайта по группам и состав пресетов уровней."""
+    groups: list[PermissionGroupRead]
+    presets: dict[str, list[str]]
 
 
 class ClanSettingsSaved(BaseModel):

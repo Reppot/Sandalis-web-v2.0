@@ -1572,11 +1572,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/clan/permissions:
+    get:
+      tags:
+      - clan
+      summary: Все действия сайта и состав пресетов уровней (командир)
+      operationId: read_permission_catalog_api_v1_clan_permissions_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermissionCatalogRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/clan/discord-roles:
     get:
       tags:
       - clan
-      summary: Роли Discord-сервера клана и уровни доступа (командир)
+      summary: 'Роли Discord-сервера клана: уровни и права (командир)'
       operationId: read_discord_roles_api_v1_clan_discord_roles_get
       security:
       - ClanJWT: []
@@ -1629,7 +1667,7 @@ paths:
     put:
       tags:
       - clan
-      summary: 'Уровни доступа ролей: basic | medium | high (командир)'
+      summary: 'Уровни ролей: basic | medium | high | custom (+ права custom) (командир)'
       operationId: update_discord_roles_api_v1_clan_discord_roles_put
       security:
       - ClanJWT: []
@@ -1739,12 +1777,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/clan/discord-members:
+  /api/v1/clan/members:
     get:
       tags:
       - clan
-      summary: Участники Discord-сервера клана глазами бота (командир)
-      operationId: read_discord_members_api_v1_clan_discord_members_get
+      summary: 'Участники клана: сервер Discord (бот) + вступившие в терминал (командир)'
+      operationId: read_members_api_v1_clan_members_get
       security:
       - ClanJWT: []
       parameters:
@@ -3679,16 +3717,15 @@ components:
           title: Name
         roles:
           items:
-            type: string
+            $ref: '#/components/schemas/MemberRoleRead'
           type: array
           title: Roles
         level:
           type: string
-          enum:
-          - basic
-          - medium
-          - high
           title: Level
+        in_discord:
+          type: boolean
+          title: In Discord
         joined:
           type: boolean
           title: Joined
@@ -3697,14 +3734,21 @@ components:
           - type: string
           - type: 'null'
           title: Role
+        permissions:
+          items:
+            type: string
+          type: array
+          title: Permissions
       type: object
       required:
       - id
       - name
       - roles
       - level
+      - in_discord
       - joined
       - role
+      - permissions
       title: DiscordMemberRead
     DiscordMembersRead:
       properties:
@@ -3746,7 +3790,13 @@ components:
           - basic
           - medium
           - high
+          - custom
           title: Level
+        permissions:
+          items:
+            type: string
+          type: array
+          title: Permissions
       type: object
       required:
       - id
@@ -3754,6 +3804,7 @@ components:
       - color
       - position
       - level
+      - permissions
       title: DiscordRoleRead
     DiscordRolesRead:
       properties:
@@ -3816,8 +3867,19 @@ components:
               - basic
               - medium
               - high
+              - custom
           type: object
           title: Levels
+        permissions:
+          patternProperties:
+            ^\d{5,25}$:
+              items:
+                type: string
+                maxLength: 40
+              type: array
+          type: object
+          title: Permissions
+          default: {}
       additionalProperties: false
       type: object
       required:
@@ -3961,6 +4023,19 @@ components:
       - display_name
       title: MeRead
       description: Кто я и что мне можно — зеркало Principal для фронта.
+    MemberRoleRead:
+      properties:
+        name:
+          type: string
+          title: Name
+        color:
+          type: integer
+          title: Color
+      type: object
+      required:
+      - name
+      - color
+      title: MemberRoleRead
     OrderCreate:
       properties:
         title:
@@ -4294,6 +4369,41 @@ components:
       - item
       title: ParsedLineRead
       description: 'Строка отчёта: исходное название, количество, единица и найденный предмет каталога.'
+    PermissionCatalogRead:
+      properties:
+        groups:
+          items:
+            $ref: '#/components/schemas/PermissionGroupRead'
+          type: array
+          title: Groups
+        presets:
+          additionalProperties:
+            items:
+              type: string
+            type: array
+          type: object
+          title: Presets
+      type: object
+      required:
+      - groups
+      - presets
+      title: PermissionCatalogRead
+      description: Все действия сайта по группам и состав пресетов уровней.
+    PermissionGroupRead:
+      properties:
+        key:
+          type: string
+          title: Key
+        permissions:
+          items:
+            type: string
+          type: array
+          title: Permissions
+      type: object
+      required:
+      - key
+      - permissions
+      title: PermissionGroupRead
     PingOut:
       properties:
         status:

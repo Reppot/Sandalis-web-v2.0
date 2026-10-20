@@ -21,3 +21,5 @@ class ClanSettings(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     discord_roles: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
     discord_roles_synced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     discord_role_map: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict, server_default="{}", nullable=False)
+    # права ролей с уровнем custom: {id роли: [scope, ...]}
+    discord_role_perms: Mapped[dict[str, list[str]]] = mapped_column(JSONB, default=dict, server_default="{}", nullable=False)

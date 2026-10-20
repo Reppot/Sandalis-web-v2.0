@@ -2,18 +2,18 @@
 
 import * as React from "react";
 import type { Stockpile } from "@/entities/stockpile";
+import { Scopes, type Can } from "@/entities/session";
 import { useT } from "@/shared";
 import { OrderBuilder } from "@/features/supply/ui/OrderBuilder";
 import { StorageMonitor } from "@/features/supply/ui/StorageMonitor";
 
 interface SupplyWorkspaceProps {
-  canWriteStockpiles: boolean;
-  canWriteOrders: boolean;
+  can: Can;
   onReportSubmitted: () => void;
 }
 
 /** Вкладка «Заказы»: монитор закреплённого склада + конструктор заказа (как /orders старого сайта). */
-export const SupplyWorkspace: React.FC<SupplyWorkspaceProps> = ({ canWriteStockpiles, canWriteOrders, onReportSubmitted }) => {
+export const SupplyWorkspace: React.FC<SupplyWorkspaceProps> = ({ can, onReportSubmitted }) => {
   const t = useT();
   const [showStockpile, setShowStockpile] = React.useState(true);
   const [showConstructor, setShowConstructor] = React.useState(true);
@@ -35,10 +35,10 @@ export const SupplyWorkspace: React.FC<SupplyWorkspaceProps> = ({ canWriteStockp
       </div>
       <div className="grid gap-2.5 md:gap-3 lg:grid-cols-2">
         <div className={`${showStockpile ? "block" : "hidden"} min-w-0 ${stockpileFull ? "lg:col-span-2" : ""}`}>
-          <StorageMonitor canWrite={canWriteStockpiles} isFullWidth={stockpileFull} onPinned={onPinned} />
+          <StorageMonitor can={can} isFullWidth={stockpileFull} onPinned={onPinned} />
         </div>
         <div className={`${showConstructor ? "block" : "hidden"} min-w-0 ${constructorFull ? "lg:col-span-2" : ""}`}>
-          <OrderBuilder canWrite={canWriteOrders} isFullWidth={constructorFull} pinned={pinned} onSubmitted={onReportSubmitted} />
+          <OrderBuilder canWrite={can(Scopes.REPORTS_CREATE)} isFullWidth={constructorFull} pinned={pinned} onSubmitted={onReportSubmitted} />
         </div>
       </div>
     </div>

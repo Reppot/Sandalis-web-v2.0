@@ -54,7 +54,7 @@ async def list_content(
 async def upsert_content(
     session: DbDep,
     payload: ContentUpsert,
-    principal: Annotated[Principal, Depends(PermissionChecker([Scopes.CLAN_SETTINGS_WRITE]))],
+    principal: Annotated[Principal, Depends(PermissionChecker([Scopes.CLAN_CONTENT]))],
     kind: Annotated[str, Path(pattern=r"^[a-z_]{1,32}$")],
     key: Annotated[str, Path(min_length=1, max_length=64)],
 ) -> ContentRead:

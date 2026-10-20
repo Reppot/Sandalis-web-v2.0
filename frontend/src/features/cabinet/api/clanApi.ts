@@ -1,7 +1,6 @@
 import { apiClient } from "@/shared";
 import type { CreatedInviteEnvelope, Page } from "@/shared";
 import type { ClanRole } from "@/entities/session";
-import type { AccessLevel } from "@/features/cabinet/api/authApi";
 
 export type GrantableRole = Extract<ClanRole, "guest" | "member" | "officer">;
 
@@ -103,69 +102,5 @@ export const clanSettingsApi = {
   /** null или "" — отключить отправку рапортов в Discord. */
   setWebhook(url: string | null): Promise<{ settings: ClanSettings; message: string }> {
     return apiClient.put("/api/v1/clan/settings", { discord_webhook_url: url || null });
-  },
-};
-
-export interface DiscordRole {
-  id: string;
-  name: string;
-  color: number;
-  position: number;
-  level: AccessLevel;
-}
-
-export interface DiscordRoles {
-  guildId: string | null;
-  botConfigured: boolean;
-  botInGuild: boolean;
-  botInviteUrl: string | null;
-  syncedAt: string | null;
-  roles: DiscordRole[];
-}
-
-export interface DiscordMember {
-  id: string;
-  name: string;
-  roles: string[];
-  level: AccessLevel;
-  joined: boolean;
-  role: ClanRole | null;
-}
-
-interface DiscordRolesDto {
-  guild_id: string | null;
-  bot_configured: boolean;
-  bot_in_guild: boolean;
-  bot_invite_url: string | null;
-  synced_at: string | null;
-  roles: DiscordRole[];
-}
-
-const toDiscordRoles = (d: DiscordRolesDto): DiscordRoles => ({
-  guildId: d.guild_id,
-  botConfigured: d.bot_configured,
-  botInGuild: d.bot_in_guild,
-  botInviteUrl: d.bot_invite_url,
-  syncedAt: d.synced_at,
-  roles: d.roles,
-});
-
-type Saved = { roles: DiscordRolesDto; message: string };
-
-/** «Роли Discord» — только командир клана. */
-export const discordRolesApi = {
-  async get(): Promise<DiscordRoles> {
-    return toDiscordRoles(await apiClient.get<DiscordRolesDto>("/api/v1/clan/discord-roles"));
-  },
-  async pull(): Promise<{ roles: DiscordRoles; message: string }> {
-    const r = await apiClient.post<Saved>("/api/v1/clan/discord-roles/pull");
-    return { roles: toDiscordRoles(r.roles), message: r.message };
-  },
-  async save(levels: Record<string, AccessLevel>): Promise<{ roles: DiscordRoles; message: string }> {
-    const r = await apiClient.put<Saved>("/api/v1/clan/discord-roles", { levels });
-    return { roles: toDiscordRoles(r.roles), message: r.message };
-  },
-  async members(): Promise<{ status: "ok" | "no_bot" | "intent_required" | "no_guild"; members: DiscordMember[] }> {
-    return apiClient.get("/api/v1/clan/discord-members");
   },
 };

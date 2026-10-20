@@ -12,19 +12,19 @@ from app.core.security import decode_access_token, issue_access_token
 class TestRoleMatrix:
     def test_member_can_write_orders_but_not_delete(self):
         scopes = scopes_for(ClanRole.MEMBER)
-        assert has_scope(scopes, Scopes.ORDERS_WRITE)
-        assert not has_scope(scopes, Scopes.ORDERS_DELETE)
+        assert has_scope(scopes, Scopes.REPORTS_CREATE)
+        assert not has_scope(scopes, Scopes.REPORTS_DELETE)
 
     def test_officer_gets_orders_delete(self):
-        assert has_scope(scopes_for(ClanRole.OFFICER), Scopes.ORDERS_DELETE)
+        assert has_scope(scopes_for(ClanRole.OFFICER), Scopes.REPORTS_DELETE)
 
     def test_guest_is_read_only(self):
         scopes = scopes_for(ClanRole.GUEST)
-        assert has_scope(scopes, Scopes.ORDERS_READ)
-        assert not has_scope(scopes, Scopes.ORDERS_WRITE)
+        assert has_scope(scopes, Scopes.REPORTS_READ)
+        assert not has_scope(scopes, Scopes.REPORTS_CREATE)
 
     def test_admin_extends_officer(self):
-        assert has_scope(scopes_for(ClanRole.ADMIN), Scopes.CLAN_MEMBERS_WRITE)
+        assert has_scope(scopes_for(ClanRole.ADMIN), Scopes.CLAN_WEBHOOK)
 
     def test_owner_wildcard_matches_everything(self):
         scopes = scopes_for(ClanRole.OWNER)
@@ -56,7 +56,7 @@ class TestTokens:
         assert principal.user_id == "u-1"
         assert principal.clan_id == "CLAN_A"
         assert principal.role is ClanRole.OFFICER
-        assert principal.can(Scopes.ORDERS_DELETE)
+        assert principal.can(Scopes.REPORTS_DELETE)
         assert principal.session_id is not None
 
     def test_expired_token_is_unauthorized(self):

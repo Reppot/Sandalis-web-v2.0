@@ -284,13 +284,62 @@ export const CHAPTERS = [
     ],
   },
   {
+    key: "management",
+    icon: "map",
+    title: L("Управление (командир)", "Management (commander)", "Správa (velitel)"),
+    summary: L(
+      "Вкладка видна только командиру клана — владельцу Discord-сервера. Здесь список всех участников с ролями сервера и правами, а также уровни доступа ролей: пресеты базовый, средний, высокий или кастомный набор действий.",
+      "Only the clan commander — the Discord server owner — sees this tab. It lists every member with their server roles and rights, and sets each role's access: basic, medium, high presets or a custom set of actions.",
+      "Záložku vidí jen velitel klanu — vlastník Discord serveru. Je zde seznam všech členů s rolemi serveru a právy a úrovně přístupu rolí: předvolby základní, střední, vysoký nebo vlastní sada akcí.",
+    ),
+    shots: [
+      {
+        id: "mgmt-members",
+        path: "/?tab=management",
+        mode: { clip: g("mgmt-members") },
+        prepare: "expandMember",
+        caption: L("Участники клана", "Clan members", "Členové klanu"),
+        markers: [
+          { sel: `${g("mgmt-members")} input`, note: L("Поиск по имени участника или роли Discord.", "Search by member name or Discord role.", "Hledání podle jména člena nebo role Discordu.") },
+          { sel: `${g("mgmt-members")} li`, at: "start", note: L("Участник: роли на сервере, итоговый уровень и вступил ли он в терминал. Нажмите, чтобы увидеть его итоговые права.", "A member: server roles, resulting level and whether they joined the terminal. Click to see their effective rights.", "Člen: role na serveru, výsledná úroveň a zda vstoupil do terminálu. Kliknutím zobrazíte jeho výsledná práva.") },
+          { sel: `${g("mgmt-members")} li .border-t`, at: "start", note: L("Итоговые права участника — объединение прав всех его ролей.", "The member's effective rights — the union of all their roles.", "Výsledná práva člena — sjednocení práv všech jeho rolí.") },
+        ],
+      },
+      {
+        id: "mgmt-roles",
+        path: "/?tab=management",
+        mode: { clip: g("mgmt-roles") },
+        prepare: "openRolesTab",
+        caption: L("Роли и уровни доступа", "Roles and access levels", "Role a úrovně přístupu"),
+        markers: [
+          { sel: `${g("mgmt-roles")} .btn-primary`, note: L("Добавить бота клана на сервер, затем «Подтянуть роли». Новые роли получают базовый уровень.", "Add the clan bot to the server, then “Pull roles”. New roles start at basic level.", "Přidejte bota klanu na server, pak „Načíst role“. Nové role mají základní úroveň.") },
+          { sel: g("mgmt-level"), note: L("Пресет доступа роли: базовый (рядовой), средний, высокий или кастомный.", "Role access preset: basic (private), medium, high or custom.", "Předvolba přístupu role: základní (řadový), střední, vysoký nebo vlastní.") },
+          { sel: g("mgmt-gear"), note: L("У кастомной роли — ⚙ и число выбранных действий: открывает окно настройки прав.", "A custom role shows ⚙ and the number of selected actions: opens its rights window.", "Vlastní role má ⚙ a počet vybraných akcí: otevře okno nastavení práv.") },
+          { sel: g("mgmt-save"), note: L("Сохранить. Участники получат новые права при следующем входе.", "Save. Members get the new rights at their next sign-in.", "Uložit. Členové dostanou nová práva při dalším přihlášení.") },
+        ],
+      },
+      {
+        id: "mgmt-role",
+        path: "/?tab=management",
+        mode: { clip: ".modal-panel" },
+        prepare: "openRoleModal",
+        caption: L("Права кастомной роли", "Custom role rights", "Práva vlastní role"),
+        markers: [
+          { sel: ".modal-panel .btn", note: L("Заполнить из пресета, выбрать всё или снять все отметки.", "Fill from a preset, select all or clear everything.", "Vyplnit z předvolby, vybrat vše nebo vše zrušit.") },
+          { sel: g("mgmt-perm-group"), at: "start", note: L("Действия сайта по разделам: склады, рапорты, таймеры, каталог, клан. Отмеченные — разрешены этой роли.", "Site actions by section: stockpiles, reports, timers, catalog, clan. Checked ones are allowed for this role.", "Akce webu podle sekcí: sklady, hlášení, časovače, katalog, klan. Zaškrtnuté jsou této roli povoleny.") },
+          { sel: g("mgmt-apply"), note: L("Применить и закрыть окно; затем сохраните роли.", "Apply and close; then save the roles.", "Použít a zavřít; potom role uložte.") },
+        ],
+      },
+    ],
+  },
+  {
     key: "cabinet",
     icon: "cabinet",
     title: L("Личный кабинет и управление кланом", "Profile and clan management", "Profil a správa klanu"),
     summary: L(
-      "Профиль, уровень доступа и права, язык интерфейса. Командир здесь же подтягивает роли Discord-сервера и назначает им уровни, а высокий уровень подключает канал Discord и выпускает токены для ботов.",
-      "Profile, access level and rights, interface language. The commander pulls the Discord server roles and assigns their levels here; high level connects the Discord channel and issues bot tokens.",
-      "Profil, úroveň přístupu a práva, jazyk rozhraní. Velitel tu načítá role Discord serveru a přiřazuje jim úrovně; vysoká úroveň připojuje kanál Discord a vydává tokeny pro boty.",
+      "Профиль, уровень доступа и права, язык интерфейса. С высоким доступом здесь же подключается канал Discord и выпускаются токены для ботов.",
+      "Profile, access level and rights, interface language. High access also connects the Discord channel and issues bot tokens here.",
+      "Profil, úroveň přístupu a práva, jazyk rozhraní. Vysoký přístup tu také připojuje kanál Discord a vydává tokeny pro boty.",
     ),
     shots: [
       {
@@ -322,18 +371,6 @@ export const CHAPTERS = [
         markers: [
           { sel: `${g("cab-webhook")} input`, note: L("URL вебхука канала: Discord → Настройки канала → Интеграции → Вебхуки → «Скопировать URL».", "Channel webhook URL: Discord → Channel settings → Integrations → Webhooks → “Copy Webhook URL”.", "URL webhooku kanálu: Discord → Nastavení kanálu → Integrace → Webhooky → „Kopírovat URL“.") },
           { sel: `${g("cab-webhook")} .btn-primary`, note: L("Сохранить. После этого в рапортах работает кнопка «В Discord».", "Save. After that the “To Discord” button works in reports.", "Uložit. Potom v hlášeních funguje tlačítko „Do Discordu“.") },
-        ],
-      },
-      {
-        id: "roles",
-        path: "/?tab=cabinet",
-        mode: { clip: g("cab-roles") },
-        caption: L("Роли Discord (только командир)", "Discord roles (commander only)", "Role Discordu (jen velitel)"),
-        markers: [
-          { sel: `${g("cab-roles")} .btn-primary`, note: L("Добавить бота клана на сервер (без прав), затем «Подтянуть роли». Пока роли не подтянуты, вступить в клан нельзя.", "Add the clan bot to the server (no permissions), then “Pull roles”. Until roles are pulled nobody can join the clan.", "Přidejte bota klanu na server (bez oprávnění), pak „Načíst role“. Dokud role nejsou načteny, do klanu nelze vstoupit.") },
-          { sel: `${g("cab-roles")} ul select`, note: L("Уровень доступа роли: базовый (рядовой, по умолчанию), средний или высокий. Участник получает самый высокий уровень среди своих ролей.", "Role access level: basic (private, default), medium or high. A member gets the highest level among their roles.", "Úroveň přístupu role: základní (řadový, výchozí), střední nebo vysoká. Člen dostane nejvyšší úroveň ze svých rolí.") },
-          { sel: `${g("cab-roles")} .justify-end button`, note: L("Сохранить уровни. Участники получат их при следующем входе.", "Save the levels. Members get them at their next sign-in.", "Uložit úrovně. Členové je dostanou při dalším přihlášení.") },
-          { sel: `${g("cab-roles")} .hud-label.text-accent`, note: L("Участники сервера: их роли, уровень и вступили ли они в терминал (нужен Server Members Intent у бота).", "Server members: their roles, level and whether they joined the terminal (needs the bot's Server Members Intent).", "Členové serveru: jejich role, úroveň a zda vstoupili do terminálu (bot potřebuje Server Members Intent).") },
         ],
       },
       {

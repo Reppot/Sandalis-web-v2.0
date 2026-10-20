@@ -39,7 +39,7 @@ def test_dev_token_and_me(db):
             assert m["user_id"] == "u-dev"
             assert m["clan_id"] == "CLAN_DEV"
             assert m["role"] == "admin"
-            assert "orders:write" in m["scopes"]
+            assert "reports:create" in m["scopes"]
 
             # upsert создал клан -> FK целостность, токен реально работает
             created = await c.post(

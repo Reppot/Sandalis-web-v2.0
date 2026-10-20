@@ -22,13 +22,14 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.permissions import ClanRole
+from app.core.permissions import ALL_PERMISSIONS, ROLE_SCOPES, ClanRole, Scopes
 from app.core.tenancy import bypass_clan_filter
 from app.models.clan_settings import ClanSettings
 from app.models.rbac import Clan, ClanMembership
 from app.services.discord_oauth import get_http_client
 
-LEVELS: Final[tuple[str, ...]] = ("basic", "medium", "high")
+LEVELS: Final[tuple[str, ...]] = ("basic", "medium", "high")       # пресеты (по возрастанию)
+CUSTOM: Final[str] = "custom"
 LEVEL_ROLE: Final[dict[str, ClanRole]] = {"basic": ClanRole.MEMBER, "medium": ClanRole.OFFICER, "high": ClanRole.ADMIN}
 DEFAULT_LEVEL: Final[str] = "basic"
 
@@ -130,8 +131,46 @@ def bot_invite_url(guild_id: str | None) -> str | None:
 # --------------------------------------------------------------------------- #
 # уровни
 # --------------------------------------------------------------------------- #
+def preset_scopes(level: str) -> frozenset[str]:
+    return ROLE_SCOPES[LEVEL_ROLE[level]]
+
+
+def access_for(member_roles: list[str], cs: ClanSettings | None) -> dict[str, Any]:
+    """Доступ участника по его ролям: пресеты дают роль терминала, кастомные роли —
+    свои наборы прав. Итог = объединение прав всех ролей; без ролей — базовый пресет.
+    Возвращает level (самый высокий пресет или custom), role, extra/revoked для JWT."""
+    snapshot = list(cs.discord_roles) if cs else []
+    role_map = dict(cs.discord_role_map or {}) if cs else {}
+    perms = dict(cs.discord_role_perms or {}) if cs else {}
+    known = {r["id"] for r in snapshot}
+    mine = [r for r in member_roles if r in known]
+    levels = [role_map.get(r, DEFAULT_LEVEL) for r in mine] or [DEFAULT_LEVEL]
+    presets = [lv for lv in levels if lv in LEVELS]
+    custom: set[str] = set()
+    for r in mine:
+        if role_map.get(r) == CUSTOM:
+            custom |= {x for x in perms.get(r, []) if x in ALL_PERMISSIONS}
+
+    if presets:
+        top = max(presets, key=LEVELS.index)
+        role = LEVEL_ROLE[top]
+        effective = set(ROLE_SCOPES[role]) | custom
+    else:                                   # только кастомные роли
+        top = CUSTOM
+        role = ClanRole.GUEST
+        effective = custom | {Scopes.CATALOG_READ}
+    base = set(ROLE_SCOPES[role])
+    return {
+        "level": CUSTOM if any(role_map.get(r) == CUSTOM for r in mine) else top,
+        "role": role,
+        "extra": sorted(effective - base),
+        "revoked": sorted(base - effective),
+        "permissions": sorted(effective),
+    }
+
+
 def level_of(member_roles: list[str], snapshot: list[dict[str, Any]], role_map: dict[str, str]) -> str:
-    """Самый высокий уровень среди ролей участника; без ролей/уровней — basic."""
+    """Самый высокий пресет среди ролей участника (для совместимости; custom учитывает access_for)."""
     known = {r["id"] for r in snapshot}
     levels = [role_map.get(r, DEFAULT_LEVEL) for r in member_roles if r in known]
     levels = [lv for lv in levels if lv in LEVELS] or [DEFAULT_LEVEL]
@@ -143,6 +182,15 @@ def roles_view(member_roles: list[str], snapshot: list[dict[str, Any]], role_map
     mine = set(member_roles)
     return [{"name": r["name"], "color": r["color"], "level": role_map.get(r["id"], DEFAULT_LEVEL)}
             for r in snapshot if r["id"] in mine]
+
+
+def apply_access(membership: ClanMembership, access: dict[str, Any]) -> None:
+    """Записать доступ в membership (owner не трогаем)."""
+    if membership.role == ClanRole.OWNER:
+        return
+    membership.role = access["role"]
+    membership.extra_scopes = access["extra"]
+    membership.revoked_scopes = access["revoked"]
 
 
 async def _linked_clans(session: AsyncSession, guild_ids: list[str]):  # noqa: ANN202
@@ -184,7 +232,8 @@ async def joinable_clans(
             "clan_id": clan.id,
             "name": clan.name,
             "icon_url": clan.icon_url,
-            "level": level_of(member_roles, cs.discord_roles, cs.discord_role_map or {}),
+            "level": access_for(member_roles, cs)["level"],
+            "discord_roles": member_roles,
             "roles": roles_view(member_roles, cs.discord_roles, cs.discord_role_map or {}),
         })
     return out
@@ -210,9 +259,10 @@ async def sync_existing_members(
             member_roles = await fetch_member_roles(access_token, clan.discord_guild_id)
             if member_roles is None:                 # ушёл с сервера или сбой — не трогаем
                 continue
-            role = LEVEL_ROLE[level_of(member_roles, cs.discord_roles, cs.discord_role_map or {})]
-            if membership.role != role:
-                membership.role = role
+            access = access_for(member_roles, cs)
+            before = (membership.role, list(membership.extra_scopes), list(membership.revoked_scopes))
+            apply_access(membership, access)
+            if before != (membership.role, list(membership.extra_scopes), list(membership.revoked_scopes)):
                 updated += 1
             await session.flush()
     return updated

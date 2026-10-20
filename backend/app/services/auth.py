@@ -30,7 +30,7 @@ DOMAIN = "auth"
 # Discord-серверы — числа, а dev/seed-кланы так не называются).
 GUEST_CLAN_SENTINEL: Final[str] = "__guest__"
 GUEST_REVOKED_SCOPES: Final[tuple[str, ...]] = (
-    Scopes.ORDERS_READ, Scopes.STOCKPILES_READ, Scopes.TIMERS_READ,
+    Scopes.REPORTS_READ, Scopes.STOCKPILES_READ, Scopes.TIMERS_READ,
 )
 
 ROLE_RANK: Final[dict[ClanRole, int]] = {
@@ -191,16 +191,19 @@ class AuthService:
 
     async def join_clan(self, *, user_id: str, display_name: str, join: dict) -> tuple[ClanMembership, str]:
         """Вступление в клан с экрана выбора: уровень посчитан при входе по ролям Discord."""
-        from app.services.discord_roles import LEVEL_ROLE
+        from app.models.clan_settings import ClanSettings
+        from app.services.discord_roles import access_for, apply_access
 
-        role = LEVEL_ROLE.get(join.get("level", "basic"), ClanRole.MEMBER)
+        with bypass_clan_filter():
+            cs = (await self.session.execute(
+                select(ClanSettings).where(ClanSettings.clan_id == join["clan_id"]))).scalar_one_or_none()
+        access = access_for(list(join.get("discord_roles") or []), cs)
         membership, clan_name = await self._upsert_identity(
-            clan_id=join["clan_id"], user_id=user_id, display_name=display_name, role=role, locale=self.t.locale,
+            clan_id=join["clan_id"], user_id=user_id, display_name=display_name, role=access["role"], locale=self.t.locale,
         )
         with bypass_clan_filter():
             membership.is_active = True
-            if membership.role != ClanRole.OWNER:
-                membership.role = role
+            apply_access(membership, access)
             await self.session.flush()
         return membership, clan_name
 

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
+import { Scopes, type Can } from "@/entities/session";
 import { catalogApi, type ParseResult } from "@/entities/item";
 import { stockpileApi, type Stockpile, type SyncSource } from "@/entities/stockpile";
 import {
@@ -35,7 +36,7 @@ const SOURCE_LABEL: Record<string, string> = {
 };
 
 interface StorageMonitorProps {
-  canWrite: boolean;
+  can: Can;
   isFullWidth: boolean;
   /** Склад закреплён/обновлён — конструктор берёт гекс и имя для шапки рапорта. */
   onPinned: (stockpile: Stockpile | null) => void;
@@ -45,7 +46,8 @@ interface StorageMonitorProps {
  * «Содержимое закреплённого склада»: выгрузка сканера (JSON/TXT, XLSX, буфер, MapData.sav)
  * разбирается сервером и целиком заменяет содержимое склада клана.
  */
-export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFullWidth, onPinned }) => {
+export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth, onPinned }) => {
+  const canItems = can(Scopes.STOCKPILES_ITEMS);
   const notify = useNotify();
   const { t, locale } = useI18n();
   const { media } = useContent();
@@ -189,7 +191,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
 
   const onAction = (fmt: ExportFormat) => {
     if (mode === "import") {
-      if (!canWrite) return notify({ title: t("common.access"), message: t("stock.membersOnly"), tone: "warning" });
+      if (!canItems) return notify({ title: t("common.access"), message: t("stock.membersOnly"), tone: "warning" });
       if (fmt === "txt") pick(textInput);
       else if (fmt === "xlsx") pick(xlsxInput);
       else if (fmt === "clipboard") void readClipboard();
@@ -227,11 +229,11 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
             </option>
           ))}
         </select>
-        {canWrite && (
+        {(
           <>
-            <button className="btn" data-guide="stock-new" onClick={() => setEditing("create")} title={t("stock.new")}>＋</button>
-            <button className="btn" onClick={() => setEditing("rename")} disabled={!pinned} title={t("stock.rename")}>✎</button>
-            <button
+            {can(Scopes.STOCKPILES_CREATE) && <button className="btn" data-guide="stock-new" onClick={() => setEditing("create")} title={t("stock.new")}>＋</button>}
+            {can(Scopes.STOCKPILES_EDIT) && <button className="btn" onClick={() => setEditing("rename")} disabled={!pinned} title={t("stock.rename")}>✎</button>}
+            {can(Scopes.STOCKPILES_DELETE) && <button
               className={`btn btn-danger ${armed === "delete" ? "btn-active" : ""}`}
               disabled={!pinned}
               title={t("stock.delete")}
@@ -250,12 +252,12 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
               }
             >
               {armed === "delete" ? "?" : "🗑"}
-            </button>
+            </button>}
           </>
         )}
       </div>
 
-      {canWrite && (
+      {canItems && (
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <button className="btn btn-icon" onClick={() => pick(textInput)} data-guide="stock-load" title={t("stock.loadFile")} disabled={busy || !pinned}>
             <UiGlyph icon="file-json" size={26} />
@@ -312,7 +314,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ canWrite, isFull
         {loading ? (
           <Loading label={t("stock.loading")} />
         ) : !pinned ? (
-          <EmptyState icon="crates" title={t("stock.notPicked")} hint={canWrite ? t("stock.createHint") : t("stock.membersRegister")} />
+          <EmptyState icon="crates" title={t("stock.notPicked")} hint={can(Scopes.STOCKPILES_CREATE) ? t("stock.createHint") : t("stock.membersRegister")} />
         ) : visible.length === 0 ? (
           <EmptyState
             icon="crates"

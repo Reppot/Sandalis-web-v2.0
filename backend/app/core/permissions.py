@@ -15,39 +15,68 @@ class ClanRole(StrEnum):
 
 # --- справочник прав (единая точка правды) --------------------------------- #
 class Scopes:
-    ORDERS_READ: Final = "orders:read"
-    ORDERS_WRITE: Final = "orders:write"
-    ORDERS_DELETE: Final = "orders:delete"
-    STOCKPILES_READ: Final = "stockpiles:read"
-    STOCKPILES_WRITE: Final = "stockpiles:write"
-    TIMERS_READ: Final = "timers:read"
-    TIMERS_WRITE: Final = "timers:write"
-    CATALOG_READ: Final = "catalog:read"
-    CLAN_MEMBERS_READ: Final = "clan:members:read"
-    CLAN_MEMBERS_WRITE: Final = "clan:members:write"
-    CLAN_SETTINGS_WRITE: Final = "clan:settings:write"
+    """Каждое право — одно действие на сайте. Командир собирает из них кастомный
+    доступ роли Discord; пресеты уровней ниже повторяют прежнее поведение ролей."""
+    # склады
+    STOCKPILES_READ: Final = "stockpiles:read"        # просмотр складов и содержимого
+    STOCKPILES_CREATE: Final = "stockpiles:create"    # создать склад
+    STOCKPILES_EDIT: Final = "stockpiles:edit"        # переименовать / сменить гекс
+    STOCKPILES_DELETE: Final = "stockpiles:delete"    # удалить склад
+    STOCKPILES_ITEMS: Final = "stockpiles:items"      # загрузить / изменить / очистить содержимое
+    # рапорты и заказы
+    REPORTS_READ: Final = "reports:read"              # текущие заказы клана
+    REPORTS_CREATE: Final = "reports:create"          # отправить рапорт из конструктора
+    REPORTS_STATUS: Final = "reports:status"          # в работу / выполнен / отменён
+    REPORTS_EDIT: Final = "reports:edit"              # править рапорт
+    REPORTS_DELETE: Final = "reports:delete"          # удалить рапорт
+    REPORTS_DISCORD: Final = "reports:discord"        # отправить рапорт в канал Discord
+    # таймеры
+    TIMERS_READ: Final = "timers:read"                # матрица таймеров, бегущая строка
+    TIMERS_CREATE: Final = "timers:create"            # поставить склад на мониторинг
+    TIMERS_UPDATE: Final = "timers:update"            # сбросить на 48 ч / задать время / завершить
+    TIMERS_LOG: Final = "timers:log"                  # заметки в журнал склада
+    TIMERS_DELETE: Final = "timers:delete"            # снять с мониторинга
+    # каталог и инструменты
+    CATALOG_READ: Final = "catalog:read"              # база кодов, калькуляторы
+    # клан
+    CLAN_MEMBERS_READ: Final = "clan:members:read"    # (резерв) список участников
+    CLAN_WEBHOOK: Final = "clan:webhook"              # канал Discord для рапортов
+    CLAN_TOKENS: Final = "clan:tokens"                # API-токены для ботов
+    CLAN_CONTENT: Final = "clan:content"              # общий контент сайта (видео, ссылки, обучение)
 
 
-_MEMBER: FrozenSet[str] = frozenset({
-    Scopes.ORDERS_READ, Scopes.ORDERS_WRITE,
-    Scopes.STOCKPILES_READ, Scopes.STOCKPILES_WRITE,
-    Scopes.TIMERS_READ, Scopes.CATALOG_READ,
+# Каталог для вкладки «Управление»: группы и порядок действий.
+PERMISSION_GROUPS: Final[tuple[tuple[str, tuple[str, ...]], ...]] = (
+    ("stockpiles", (Scopes.STOCKPILES_READ, Scopes.STOCKPILES_CREATE, Scopes.STOCKPILES_EDIT,
+                    Scopes.STOCKPILES_DELETE, Scopes.STOCKPILES_ITEMS)),
+    ("reports", (Scopes.REPORTS_READ, Scopes.REPORTS_CREATE, Scopes.REPORTS_STATUS, Scopes.REPORTS_EDIT,
+                 Scopes.REPORTS_DELETE, Scopes.REPORTS_DISCORD)),
+    ("timers", (Scopes.TIMERS_READ, Scopes.TIMERS_CREATE, Scopes.TIMERS_UPDATE, Scopes.TIMERS_LOG,
+                Scopes.TIMERS_DELETE)),
+    ("catalog", (Scopes.CATALOG_READ,)),
+    ("clan", (Scopes.CLAN_WEBHOOK, Scopes.CLAN_TOKENS, Scopes.CLAN_CONTENT)),
+)
+ALL_PERMISSIONS: Final[frozenset[str]] = frozenset(p for _, group in PERMISSION_GROUPS for p in group)
+
+_GUEST: FrozenSet[str] = frozenset({
+    Scopes.STOCKPILES_READ, Scopes.REPORTS_READ, Scopes.TIMERS_READ, Scopes.CATALOG_READ,
+})
+
+_MEMBER: FrozenSet[str] = _GUEST | frozenset({
+    Scopes.STOCKPILES_CREATE, Scopes.STOCKPILES_EDIT, Scopes.STOCKPILES_DELETE, Scopes.STOCKPILES_ITEMS,
+    Scopes.REPORTS_CREATE, Scopes.REPORTS_STATUS, Scopes.REPORTS_EDIT, Scopes.REPORTS_DISCORD,
 })
 
 _OFFICER: FrozenSet[str] = _MEMBER | frozenset({
-    Scopes.ORDERS_DELETE, Scopes.TIMERS_WRITE, Scopes.CLAN_MEMBERS_READ,
+    Scopes.REPORTS_DELETE, Scopes.TIMERS_CREATE, Scopes.TIMERS_UPDATE, Scopes.TIMERS_LOG,
+    Scopes.TIMERS_DELETE, Scopes.CLAN_MEMBERS_READ,
 })
 
 ROLE_SCOPES: Final[dict[ClanRole, FrozenSet[str]]] = {
-    ClanRole.GUEST: frozenset({
-        Scopes.ORDERS_READ, Scopes.STOCKPILES_READ,
-        Scopes.TIMERS_READ, Scopes.CATALOG_READ,
-    }),
+    ClanRole.GUEST: _GUEST,
     ClanRole.MEMBER: _MEMBER,
     ClanRole.OFFICER: _OFFICER,
-    ClanRole.ADMIN: _OFFICER | frozenset({
-        Scopes.CLAN_MEMBERS_WRITE, Scopes.CLAN_SETTINGS_WRITE,
-    }),
+    ClanRole.ADMIN: _OFFICER | frozenset({Scopes.CLAN_WEBHOOK, Scopes.CLAN_TOKENS, Scopes.CLAN_CONTENT}),
     ClanRole.OWNER: frozenset({"*"}),   # wildcard
 }
 

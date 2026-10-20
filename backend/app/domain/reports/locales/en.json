@@ -37,6 +37,7 @@
     "owner_only": "Only the clan commander (server owner) manages Discord roles.",
     "bot_missing": "The clan bot cannot see the server: add it with “Add bot”.",
     "pulled": "Server roles pulled: {n}. New roles start at basic level.",
-    "saved": "Access levels saved. Members get them at their next sign-in."
+    "saved": "Access levels saved. Members get them at their next sign-in.",
+    "unknown_permission": "Unknown permissions: {permissions}."
   }
 }

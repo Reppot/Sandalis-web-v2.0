@@ -75,6 +75,22 @@ const PREPARE = {
     await tabs[1].click();
     await page.waitForSelector(".factory-item-card");
   },
+  async expandMember(page) {
+    await page.waitForSelector('[data-guide="mgmt-members"] li button', { timeout: 30000 });
+    await page.click('[data-guide="mgmt-members"] li button');
+  },
+  async openRolesTab(page) {
+    await page.waitForSelector("[role=tab]", { timeout: 30000 });
+    const tabs = await page.$$("main [role=tab]");
+    await tabs[1].click();
+    await page.waitForSelector('[data-guide="mgmt-level"]', { timeout: 30000 });
+  },
+  async openRoleModal(page) {
+    await PREPARE.openRolesTab(page);
+    await page.waitForSelector('[data-guide="mgmt-gear"]', { timeout: 30000 });
+    await page.click('[data-guide="mgmt-gear"]');
+    await page.waitForSelector(".modal-panel [data-guide=mgmt-perm-group]", { timeout: 30000 });
+  },
   async fillMpf(page) {
     await PREPARE.openMpf(page);
     const cards = await page.$$(".factory-item-card");

@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
+import { Scopes, type Can } from "@/entities/session";
 import { REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
@@ -48,8 +49,7 @@ const ACTION_LABEL: Record<ReportStatus, MessageKey> = {
 };
 
 interface ReportsWorkspaceProps {
-  canWrite: boolean;
-  canDelete: boolean;
+  can: Can;
   /** Строки рапорта загружены в черновик — открыть вкладку «Заказы». */
   onOpenConstructor: () => void;
 }
@@ -68,7 +68,7 @@ function toDoc(report: Report, t: Translate): ExportDoc {
 const unitLabel = (unit: string, t: Translate) => t(unit === "crate" ? "unit.crate" : "unit.unit");
 
 /** «Текущие заказы клана» — рапорты снабжения штаба: статусы, экспорт, отправка в Discord. */
-export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, canDelete, onOpenConstructor }) => {
+export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenConstructor }) => {
   const notify = useNotify();
   const { t } = useI18n();
   const { media } = useContent();
@@ -241,7 +241,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                 {report.note && <p className="mt-2 pl-5 text-[0.75rem] text-white/70">📝 {report.note}</p>}
 
                 <div data-guide="report-actions" className="mt-3 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
-                  {canWrite &&
+                  {can(Scopes.REPORTS_STATUS) &&
                     REPORT_TRANSITIONS[report.status].map((next) => (
                       <button key={next} className={`btn px-2 py-1 text-[0.65rem] ${next === "cancelled" ? "btn-danger" : next === "done" ? "btn-primary" : ""}`} disabled={busy} onClick={() => void setStatus(report, next)}>
                         {t(ACTION_LABEL[next])}
@@ -254,12 +254,12 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                   }}>
                     ⤴ {t("reports.toBuilder")}
                   </button>
-                  {canWrite && (
+                  {can(Scopes.REPORTS_DISCORD) && (
                     <button className="btn px-2 py-1 text-[0.65rem]" data-guide="report-discord" style={{ borderColor: "#5865F2", color: "#c7d2fe" }} disabled={busy} onClick={() => void sendToDiscord(report)}>
                       {busy ? <span className="pulse">{t("common.sending")}</span> : `📨 ${t("reports.toDiscord")}`}
                     </button>
                   )}
-                  {canDelete && (
+                  {can(Scopes.REPORTS_DELETE) && (
                     <button className={`btn btn-danger ml-auto px-2 py-1 text-[0.65rem] ${armed === report.id ? "btn-active" : ""}`} disabled={busy} onClick={() => confirm(report.id, () => void remove(report))}>
                       {armed === report.id ? t("common.confirmQ") : "🗑"}
                     </button>

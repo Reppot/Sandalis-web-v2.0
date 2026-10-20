@@ -139,12 +139,12 @@ class PermissionChecker:
 
         @router.post(
             "",
-            dependencies=[Depends(PermissionChecker(["orders:write", "stockpiles:read"]))],
+            dependencies=[Depends(PermissionChecker(["reports:create", "stockpiles:read"]))],
         )
 
     или как значение (тогда вернёт Principal):
 
-        principal: Annotated[Principal, Depends(PermissionChecker(["orders:write"]))]
+        principal: Annotated[Principal, Depends(PermissionChecker(["reports:create"]))]
     """
 
     __slots__ = ("scopes", "mode")

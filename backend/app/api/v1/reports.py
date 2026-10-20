@@ -80,7 +80,7 @@ async def _many(service: ReportService, reports: Sequence[OrderReport]) -> list[
     "",
     response_model=Page[ReportRead],
     summary="Текущие заказы клана: рапорты снабжения (новые первыми)",
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_READ]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
 async def list_reports(
     service: ServiceDep,
@@ -97,7 +97,7 @@ async def list_reports(
 @router.get(
     "/{report_id}",
     response_model=ReportRead,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_READ]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
 async def get_report(report_id: uuid.UUID, service: ServiceDep) -> ReportRead:
     return await _one(service, await service.get_report(report_id))
@@ -108,7 +108,7 @@ async def get_report(report_id: uuid.UUID, service: ServiceDep) -> ReportRead:
     response_model=ReportSaved,
     status_code=status.HTTP_201_CREATED,
     summary="Отправить рапорт в штаб (строки без кода резолвятся по названию)",
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_CREATE]))],
 )
 async def create_report(payload: ReportCreate, service: ServiceDep) -> ReportSaved:
     report, message = await service.create_report(payload)
@@ -118,7 +118,7 @@ async def create_report(payload: ReportCreate, service: ServiceDep) -> ReportSav
 @router.patch(
     "/{report_id}",
     response_model=ReportSaved,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_EDIT]))],
 )
 async def update_report(
     report_id: uuid.UUID, payload: ReportUpdate, service: ServiceDep
@@ -130,7 +130,7 @@ async def update_report(
 @router.post(
     "/{report_id}/status",
     response_model=ReportSaved,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_STATUS]))],
 )
 async def change_status(
     report_id: uuid.UUID, payload: ReportStatusUpdate, service: ServiceDep
@@ -142,7 +142,7 @@ async def change_status(
 @router.delete(
     "/{report_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_DELETE]))],  # officer+
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_DELETE]))],  # officer+
 )
 async def delete_report(report_id: uuid.UUID, service: ServiceDep) -> Response:
     await service.delete_report(report_id)
@@ -157,7 +157,7 @@ async def delete_report(report_id: uuid.UUID, service: ServiceDep) -> Response:
         "Эмбед со строками рапорта; необязательный PNG (графический рапорт, сформированный "
         "клиентом) прикладывается картинкой. Без настроенного вебхука — 409 discord_not_configured."
     ),
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_DISCORD]))],
 )
 async def send_to_discord(
     report_id: uuid.UUID,
@@ -183,7 +183,7 @@ async def send_to_discord(
     "/settings",
     response_model=ClanSettingsRead,
     summary="Настройки клана (вебхук Discord — только признак и хвост)",
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_READ]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
 async def read_settings(service: SettingsServiceDep) -> ClanSettingsRead:
     return to_read(await service.get())
@@ -193,7 +193,7 @@ async def read_settings(service: SettingsServiceDep) -> ClanSettingsRead:
     "/settings",
     response_model=ClanSettingsSaved,
     summary="Изменить настройки клана (admin+)",
-    dependencies=[Depends(PermissionChecker([Scopes.CLAN_SETTINGS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.CLAN_WEBHOOK]))],
 )
 async def update_settings(
     payload: ClanSettingsUpdate, service: SettingsServiceDep

@@ -68,7 +68,7 @@ async def list_timers(
     response_model=TimerCreated,
     status_code=status.HTTP_201_CREATED,
     summary="Создать таймер (ends_at ISO-8601 или legacy target_timestamp мс)",
-    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_WRITE]))],  # officer+
+    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_CREATE]))],  # officer+
 )
 async def create_timer(payload: TimerCreate, service: ServiceDep) -> TimerCreated:
     timer, message = await service.create_timer(payload)
@@ -87,7 +87,7 @@ async def get_timer(timer_id: uuid.UUID, service: ServiceDep) -> TimerRead:
 @router.patch(
     "/{timer_id}",
     response_model=TimerCreated,
-    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_UPDATE]))],
 )
 async def update_timer(
     timer_id: uuid.UUID, payload: TimerUpdate, service: ServiceDep
@@ -99,7 +99,7 @@ async def update_timer(
 @router.delete(
     "/{timer_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_DELETE]))],
 )
 async def delete_timer(timer_id: uuid.UUID, service: ServiceDep) -> Response:
     await service.delete_timer(timer_id)
@@ -126,7 +126,7 @@ async def list_events(
     response_model=TimerEventSaved,
     status_code=status.HTTP_201_CREATED,
     summary="Добавить заметку интенданта в журнал таймера",
-    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.TIMERS_LOG]))],
 )
 async def add_event(
     timer_id: uuid.UUID, payload: TimerEventCreate, service: ServiceDep

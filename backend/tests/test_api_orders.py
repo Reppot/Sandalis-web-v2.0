@@ -123,7 +123,7 @@ def test_orders_flow_tenancy_rbac_i18n(db):
                                headers={**member, "Accept-Language": "ru"})
             assert d.status_code == 403
             assert d.json()["error"]["message"] == \
-                "Недостаточно прав. Требуется доступ: orders:delete."
+                "Недостаточно прав. Требуется доступ: reports:delete."
 
             # --- officer удалить может ---------------------------------------
             officer = bearer(clan_id="CLAN_A", role=ClanRole.OFFICER)
@@ -195,7 +195,7 @@ def test_clan_token_auth(db):
             )
             assert no.status_code == 403
             assert no.json()["error"]["message"] == \
-                "Insufficient permissions. Required: orders:write."
+                "Insufficient permissions. Required: reports:create."
 
             # невалидный токен -> 401
             bad = await c.get(f"{API}/orders", headers={"X-Clan-Token": "wrong"})

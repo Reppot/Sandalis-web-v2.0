@@ -197,7 +197,7 @@ async def guest_login(response: Response, service: AuthServiceDep) -> TokenRespo
 async def create_clan_token(
     payload: ClanApiTokenCreate,
     service: AuthServiceDep,
-    principal: Annotated[Principal, Depends(PermissionChecker([Scopes.CLAN_SETTINGS_WRITE]))],
+    principal: Annotated[Principal, Depends(PermissionChecker([Scopes.CLAN_TOKENS]))],
 ) -> ClanApiTokenCreated:
     return await service.create_clan_api_token(principal, payload)
 

@@ -2,13 +2,15 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
+import { Scopes, type Can } from "@/entities/session";
 import { EmptyState, Loading, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, UiGlyph, useT } from "@/shared";
 import { timerPlace, useClock, useRiskSummary, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 import { RegisterTimerModal, TimerManagerModal } from "@/features/timers/ui/TimerModals";
 
 const BAR = { critical: "#ff5555", warning: "#ff9900", safe: "#a3e635" } as const;
 
-export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) => {
+export const TimersWorkspace: React.FC<{ can: Can }> = ({ can }) => {
+  const canCreate = can(Scopes.TIMERS_CREATE);
   const t = useT();
   const { timers, loading, refresh, connection } = useTerminal();
   const risk = useRiskSummary();
@@ -44,7 +46,7 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
             <button className="btn" onClick={() => void refresh()} title={t("common.syncHint")}>
               ⟳ <span className="hidden sm:inline">{t("common.sync")}</span>
             </button>
-            {canWrite && (
+            {canCreate && (
               <button className="btn btn-primary" data-guide="timers-register" onClick={() => setAdding(true)}>
                 ➕ <span className="hidden sm:inline">{t("timers.register")}</span>
                 <span className="sm:hidden">{t("timers.registerShort")}</span>
@@ -59,7 +61,7 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
           <div className="panel rounded-md"><Loading label={t("timers.loading")} /></div>
         ) : visible.length === 0 ? (
           <div className="panel panel-corners rounded-md">
-            <EmptyState icon="stockpile" title={timers.length ? t("common.nothingFound") : t("timers.empty")} hint={canWrite ? undefined : t("timers.officersOnly")}>
+            <EmptyState icon="stockpile" title={timers.length ? t("common.nothingFound") : t("timers.empty")} hint={canCreate ? undefined : t("timers.officersOnly")}>
               {connection === "offline" && <div className="hud-label text-danger">{t("common.noDb")}</div>}
             </EmptyState>
           </div>
@@ -72,7 +74,7 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
         )}
       </section>
 
-      {managed && <TimerManagerModal timer={managed} canWrite={canWrite} onClose={() => setManagedId(null)} />}
+      {managed && <TimerManagerModal timer={managed} can={can} onClose={() => setManagedId(null)} />}
       <RegisterTimerModal open={adding} onClose={() => setAdding(false)} />
     </div>
   );

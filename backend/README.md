@@ -327,7 +327,8 @@ POST /api/v1/auth/clan-token
 GET  /api/v1/clan/discord-roles             # командир: роли сервера и уровни
 POST /api/v1/clan/discord-roles/pull        # командир: подтянуть роли через бота
 PUT  /api/v1/clan/discord-roles             # командир: {levels: {role_id: basic|medium|high}}
-GET  /api/v1/clan/discord-members           # командир: участники сервера (Server Members Intent)
+GET  /api/v1/clan/members                   # командир: участники (сервер Discord + терминал) с правами
+GET  /api/v1/clan/permissions               # командир: все действия сайта и состав пресетов
 ```
 
 ### Current auth methods
@@ -339,7 +340,9 @@ Backend сейчас поддерживает:
 - `X-Clan-Token`;
 - Discord OAuth2 (`scope=identify guilds`) -> JWT/cookie, выбор сервера клана владельцем;
 - dev-token для локальной разработки;
-- вступление через бота клана: уровни доступа по ролям Discord (basic → member, medium → officer, high → admin);
+- вступление через бота клана: уровни доступа по ролям Discord (basic → member, medium → officer, high → admin,
+  custom → выбранные действия из `PERMISSION_GROUPS`; права участника — объединение прав его ролей);
+- права = отдельные действия (`app/core/permissions.py`: stockpiles:*, reports:*, timers:*, catalog:read, clan:*);
 - гостевой JWT (`gst`) — инструменты и каталог в пустом арендаторе `__guest__`, данные кланов недоступны.
 
 ### Discord auth files

@@ -11,6 +11,7 @@ import { TerminalProvider, TimersWorkspace } from "@/features/timers";
 import { ToolsWorkspace } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
 import { GuideWorkspace } from "@/features/guide";
+import { ManagementWorkspace } from "@/features/management";
 import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
@@ -53,7 +54,8 @@ export default function TerminalPage() {
     window.scrollTo({ top: 0 });
   }, []);
 
-  const tabs = React.useMemo(() => visibleTabs(can), [can]);
+  const isOwner = session?.role === "owner" && session.subjectType === "user";
+  const tabs = React.useMemo(() => visibleTabs(can, isOwner), [can, isOwner]);
   const current: TabKey = tabs.some((x) => x.key === tab) ? tab : tabs[0]?.key ?? "tools";
 
   const background = session ? media(`bg_${TABS.find((t) => t.key === current)?.background ?? "orders"}`) : media("bg_home");
@@ -74,11 +76,11 @@ export default function TerminalPage() {
   const workspace = (() => {
     switch (current) {
       case "orders":
-        return <SupplyWorkspace canWriteStockpiles={can(Scopes.STOCKPILES_WRITE)} canWriteOrders={can(Scopes.ORDERS_WRITE)} onReportSubmitted={() => select("reports")} />;
+        return <SupplyWorkspace can={can} onReportSubmitted={() => select("reports")} />;
       case "reports":
-        return <ReportsWorkspace canWrite={can(Scopes.ORDERS_WRITE)} canDelete={can(Scopes.ORDERS_DELETE)} onOpenConstructor={() => select("orders")} />;
+        return <ReportsWorkspace can={can} onOpenConstructor={() => select("orders")} />;
       case "timers":
-        return <TimersWorkspace canWrite={can(Scopes.TIMERS_WRITE, Scopes.STOCKPILES_WRITE)} />;
+        return <TimersWorkspace can={can} />;
       case "codes":
         return <CodeBaseWorkspace />;
       case "tools":
@@ -87,6 +89,8 @@ export default function TerminalPage() {
         return <TrainingWorkspace />;
       case "guide":
         return <GuideWorkspace />;
+      case "management":
+        return <ManagementWorkspace />;
       case "cabinet":
         return <CabinetWorkspace />;
     }

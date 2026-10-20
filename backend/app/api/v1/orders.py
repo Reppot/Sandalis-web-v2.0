@@ -46,7 +46,7 @@ ServiceDep = Annotated[OrderService, Depends(get_order_service)]
     "",
     response_model=Page[OrderRead],
     summary="Список заказов текущего клана",
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_READ]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
 async def list_orders(
     service: ServiceDep,
@@ -67,7 +67,7 @@ async def list_orders(
 @router.get(
     "/{order_id}",
     response_model=OrderRead,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_READ]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
 async def get_order(order_id: uuid.UUID, service: ServiceDep) -> OrderRead:
     return OrderRead.model_validate(await service.get_order(order_id))
@@ -84,7 +84,7 @@ async def create_order(
     service: ServiceDep,
     # вариант с получением Principal прямо из чекера
     principal: Annotated[
-        Principal, Depends(PermissionChecker([Scopes.ORDERS_WRITE, Scopes.STOCKPILES_READ]))
+        Principal, Depends(PermissionChecker([Scopes.REPORTS_CREATE, Scopes.STOCKPILES_READ]))
     ],
 ) -> OrderCreated:
     order, message = await service.create_order(payload)
@@ -94,7 +94,7 @@ async def create_order(
 @router.patch(
     "/{order_id}",
     response_model=OrderRead,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_EDIT]))],
 )
 async def update_order(
     order_id: uuid.UUID, payload: OrderUpdate, service: ServiceDep
@@ -105,7 +105,7 @@ async def update_order(
 @router.post(
     "/{order_id}/status",
     response_model=OrderCreated,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_STATUS]))],
 )
 async def change_status(
     order_id: uuid.UUID, payload: OrderStatusUpdate, service: ServiceDep
@@ -117,7 +117,7 @@ async def change_status(
 @router.delete(
     "/{order_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(PermissionChecker([Scopes.ORDERS_DELETE]))],  # officer+
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_DELETE]))],  # officer+
 )
 async def delete_order(order_id: uuid.UUID, service: ServiceDep) -> Response:
     await service.delete_order(order_id)

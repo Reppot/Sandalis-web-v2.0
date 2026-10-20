@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
+import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi } from "@/entities/stockpile";
 import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
 import { timersApi, type TimerEvent } from "@/features/timers/api";
@@ -37,7 +38,7 @@ const TimeInputs: React.FC<{ value: TimeValue; onChange: (v: TimeValue) => void 
 };
 
 /** «Канал связи» склада: остаток, журнал, заметки, сброс/установка времени, снятие с мониторинга. */
-export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrite: boolean; onClose: () => void }> = ({ timer, canWrite, onClose }) => {
+export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; can: Can; onClose: () => void }> = ({ timer, can, onClose }) => {
   const t = useT();
   const { upsertTimer, removeTimer } = useTerminal();
   const { media } = useContent();
@@ -133,13 +134,14 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
         )}
       </div>
 
-      {canWrite && (
+      {(
         <>
-          <div className="mt-3 flex gap-2">
+          {can(Scopes.TIMERS_LOG) && <div className="mt-3 flex gap-2">
             <input className="field field-mono flex-1 text-xs" data-guide="tmodal-note" placeholder={t("timers.notePlaceholder")} value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void addNote()} />
             <button className="btn" disabled={busy || !note.trim()} onClick={() => void addNote()}>📝 {t("timers.toLog")}</button>
-          </div>
+          </div>}
 
+          {can(Scopes.TIMERS_UPDATE) && <>
           <div className="mt-4" data-guide="tmodal-time">
             <TimeInputs value={time} onChange={setTime} />
           </div>
@@ -161,10 +163,11 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
               ✅ {t("timers.setTimer")}
             </button>
           </div>
+          </>}
 
           <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
             <span className="hud-label text-muted">{t("timers.createdBy", { name: timer.created_by })}</span>
-            <button
+            {can(Scopes.TIMERS_DELETE) && <button
               data-guide="tmodal-remove"
               className={`btn btn-danger ${armed === "delete" ? "btn-active" : ""}`}
               disabled={busy}
@@ -180,7 +183,7 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
               }
             >
               {armed === "delete" ? `⚠️ ${t("timers.confirmRemove")}` : `🗑 ${t("timers.remove")}`}
-            </button>
+            </button>}
           </div>
         </>
       )}

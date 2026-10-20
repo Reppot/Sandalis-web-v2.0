@@ -1832,8 +1832,307 @@
  },
  {
   "kind": "guide_chapter",
-  "key": "cabinet",
+  "key": "management",
   "sort": 8,
+  "payload": {
+   "icon": "map",
+   "title": {
+    "ru": "Управление (командир)",
+    "en": "Management (commander)",
+    "cs": "Správa (velitel)"
+   },
+   "summary": {
+    "ru": "Вкладка видна только командиру клана — владельцу Discord-сервера. Здесь список всех участников с ролями сервера и правами, а также уровни доступа ролей: пресеты базовый, средний, высокий или кастомный набор действий.",
+    "en": "Only the clan commander — the Discord server owner — sees this tab. It lists every member with their server roles and rights, and sets each role's access: basic, medium, high presets or a custom set of actions.",
+    "cs": "Záložku vidí jen velitel klanu — vlastník Discord serveru. Je zde seznam všech členů s rolemi serveru a právy a úrovně přístupu rolí: předvolby základní, střední, vysoký nebo vlastní sada akcí."
+   },
+   "shots": [
+    {
+     "id": "mgmt-members",
+     "caption": {
+      "ru": "Участники клана",
+      "en": "Clan members",
+      "cs": "Členové klanu"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/mgmt-members.webp",
+      "en": "/api/v1/assets/guide/en/mgmt-members.webp",
+      "cs": "/api/v1/assets/guide/cs/mgmt-members.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 230
+      },
+      "en": {
+       "w": 1319,
+       "h": 245
+      },
+      "cs": {
+       "w": 1319,
+       "h": 230
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 90.51,
+        "y": 9.27
+       },
+       {
+        "x": 2.65,
+        "y": 44.13
+       },
+       {
+        "x": 3.64,
+        "y": 61.96
+       }
+      ],
+      "en": [
+       {
+        "x": 91.7,
+        "y": 8.71
+       },
+       {
+        "x": 2.65,
+        "y": 41.43
+       },
+       {
+        "x": 3.64,
+        "y": 61.3
+       }
+      ],
+      "cs": [
+       {
+        "x": 90.51,
+        "y": 9.27
+       },
+       {
+        "x": 2.65,
+        "y": 44.13
+       },
+       {
+        "x": 3.64,
+        "y": 61.96
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Поиск по имени участника или роли Discord.",
+       "Участник: роли на сервере, итоговый уровень и вступил ли он в терминал. Нажмите, чтобы увидеть его итоговые права.",
+       "Итоговые права участника — объединение прав всех его ролей."
+      ],
+      "en": [
+       "Search by member name or Discord role.",
+       "A member: server roles, resulting level and whether they joined the terminal. Click to see their effective rights.",
+       "The member's effective rights — the union of all their roles."
+      ],
+      "cs": [
+       "Hledání podle jména člena nebo role Discordu.",
+       "Člen: role na serveru, výsledná úroveň a zda vstoupil do terminálu. Kliknutím zobrazíte jeho výsledná práva.",
+       "Výsledná práva člena — sjednocení práv všech jeho rolí."
+      ]
+     }
+    },
+    {
+     "id": "mgmt-roles",
+     "caption": {
+      "ru": "Роли и уровни доступа",
+      "en": "Roles and access levels",
+      "cs": "Role a úrovně přístupu"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/mgmt-roles.webp",
+      "en": "/api/v1/assets/guide/en/mgmt-roles.webp",
+      "cs": "/api/v1/assets/guide/cs/mgmt-roles.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 326
+      },
+      "en": {
+       "w": 1319,
+       "h": 307
+      },
+      "cs": {
+       "w": 1319,
+       "h": 307
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 90.51,
+        "y": 32.32
+       },
+       {
+        "x": 44.06,
+        "y": 59.12
+       },
+       {
+        "x": 48.61,
+        "y": 73.43
+       },
+       {
+        "x": 98.41,
+        "y": 86.42
+       }
+      ],
+      "en": [
+       {
+        "x": 91.7,
+        "y": 28.23
+       },
+       {
+        "x": 44.06,
+        "y": 56.68
+       },
+       {
+        "x": 48.61,
+        "y": 71.88
+       },
+       {
+        "x": 98.41,
+        "y": 85.67
+       }
+      ],
+      "cs": [
+       {
+        "x": 90.51,
+        "y": 28.23
+       },
+       {
+        "x": 44.06,
+        "y": 56.68
+       },
+       {
+        "x": 48.61,
+        "y": 71.88
+       },
+       {
+        "x": 98.41,
+        "y": 85.67
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Добавить бота клана на сервер, затем «Подтянуть роли». Новые роли получают базовый уровень.",
+       "Пресет доступа роли: базовый (рядовой), средний, высокий или кастомный.",
+       "У кастомной роли — ⚙ и число выбранных действий: открывает окно настройки прав.",
+       "Сохранить. Участники получат новые права при следующем входе."
+      ],
+      "en": [
+       "Add the clan bot to the server, then “Pull roles”. New roles start at basic level.",
+       "Role access preset: basic (private), medium, high or custom.",
+       "A custom role shows ⚙ and the number of selected actions: opens its rights window.",
+       "Save. Members get the new rights at their next sign-in."
+      ],
+      "cs": [
+       "Přidejte bota klanu na server, pak „Načíst role“. Nové role mají základní úroveň.",
+       "Předvolba přístupu role: základní (řadový), střední, vysoký nebo vlastní.",
+       "Vlastní role má ⚙ a počet vybraných akcí: otevře okno nastavení práv.",
+       "Uložit. Členové dostanou nová práva při dalším přihlášení."
+      ]
+     }
+    },
+    {
+     "id": "mgmt-role",
+     "caption": {
+      "ru": "Права кастомной роли",
+      "en": "Custom role rights",
+      "cs": "Práva vlastní role"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/mgmt-role.webp",
+      "en": "/api/v1/assets/guide/en/mgmt-role.webp",
+      "cs": "/api/v1/assets/guide/cs/mgmt-role.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 768,
+       "h": 884
+      },
+      "en": {
+       "w": 768,
+       "h": 884
+      },
+      "cs": {
+       "w": 768,
+       "h": 884
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 97.27,
+        "y": 2.56
+       },
+       {
+        "x": 4.56,
+        "y": 14.42
+       },
+       {
+        "x": 97.27,
+        "y": 95.42
+       }
+      ],
+      "en": [
+       {
+        "x": 97.27,
+        "y": 2.56
+       },
+       {
+        "x": 4.56,
+        "y": 14.42
+       },
+       {
+        "x": 97.27,
+        "y": 95.42
+       }
+      ],
+      "cs": [
+       {
+        "x": 97.27,
+        "y": 2.56
+       },
+       {
+        "x": 4.56,
+        "y": 14.42
+       },
+       {
+        "x": 97.27,
+        "y": 95.42
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Заполнить из пресета, выбрать всё или снять все отметки.",
+       "Действия сайта по разделам: склады, рапорты, таймеры, каталог, клан. Отмеченные — разрешены этой роли.",
+       "Применить и закрыть окно; затем сохраните роли."
+      ],
+      "en": [
+       "Fill from a preset, select all or clear everything.",
+       "Site actions by section: stockpiles, reports, timers, catalog, clan. Checked ones are allowed for this role.",
+       "Apply and close; then save the roles."
+      ],
+      "cs": [
+       "Vyplnit z předvolby, vybrat vše nebo vše zrušit.",
+       "Akce webu podle sekcí: sklady, hlášení, časovače, katalog, klan. Zaškrtnuté jsou této roli povoleny.",
+       "Použít a zavřít; potom role uložte."
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "kind": "guide_chapter",
+  "key": "cabinet",
+  "sort": 9,
   "payload": {
    "icon": "cabinet",
    "title": {
@@ -1842,9 +2141,9 @@
     "cs": "Profil a správa klanu"
    },
    "summary": {
-    "ru": "Профиль, уровень доступа и права, язык интерфейса. Командир здесь же подтягивает роли Discord-сервера и назначает им уровни, а высокий уровень подключает канал Discord и выпускает токены для ботов.",
-    "en": "Profile, access level and rights, interface language. The commander pulls the Discord server roles and assigns their levels here; high level connects the Discord channel and issues bot tokens.",
-    "cs": "Profil, úroveň přístupu a práva, jazyk rozhraní. Velitel tu načítá role Discord serveru a přiřazuje jim úrovně; vysoká úroveň připojuje kanál Discord a vydává tokeny pro boty."
+    "ru": "Профиль, уровень доступа и права, язык интерфейса. С высоким доступом здесь же подключается канал Discord и выпускаются токены для ботов.",
+    "en": "Profile, access level and rights, interface language. High access also connects the Discord channel and issues bot tokens here.",
+    "cs": "Profil, úroveň přístupu a práva, jazyk rozhraní. Vysoký přístup tu také připojuje kanál Discord a vydává tokeny pro boty."
    },
    "shots": [
     {
@@ -2078,109 +2377,6 @@
       "cs": [
        "URL webhooku kanálu: Discord → Nastavení kanálu → Integrace → Webhooky → „Kopírovat URL“.",
        "Uložit. Potom v hlášeních funguje tlačítko „Do Discordu“."
-      ]
-     }
-    },
-    {
-     "id": "roles",
-     "caption": {
-      "ru": "Роли Discord (только командир)",
-      "en": "Discord roles (commander only)",
-      "cs": "Role Discordu (jen velitel)"
-     },
-     "images": {
-      "ru": "/api/v1/assets/guide/ru/roles.webp",
-      "en": "/api/v1/assets/guide/en/roles.webp",
-      "cs": "/api/v1/assets/guide/cs/roles.webp"
-     },
-     "size": {
-      "ru": {
-       "w": 1319,
-       "h": 383
-      },
-      "en": {
-       "w": 1319,
-       "h": 383
-      },
-      "cs": {
-       "w": 1319,
-       "h": 383
-      }
-     },
-     "markers": {
-      "ru": [
-       {
-        "x": 90.51,
-        "y": 31.95
-       },
-       {
-        "x": 48.61,
-        "y": 50.62
-       },
-       {
-        "x": 98.41,
-        "y": 73.86
-       },
-       {
-        "x": 2.65,
-        "y": 89.69
-       }
-      ],
-      "en": [
-       {
-        "x": 91.7,
-        "y": 31.95
-       },
-       {
-        "x": 48.61,
-        "y": 50.62
-       },
-       {
-        "x": 98.41,
-        "y": 73.86
-       },
-       {
-        "x": 2.65,
-        "y": 89.69
-       }
-      ],
-      "cs": [
-       {
-        "x": 90.51,
-        "y": 31.95
-       },
-       {
-        "x": 48.61,
-        "y": 50.62
-       },
-       {
-        "x": 98.41,
-        "y": 73.86
-       },
-       {
-        "x": 2.65,
-        "y": 89.69
-       }
-      ]
-     },
-     "notes": {
-      "ru": [
-       "Добавить бота клана на сервер (без прав), затем «Подтянуть роли». Пока роли не подтянуты, вступить в клан нельзя.",
-       "Уровень доступа роли: базовый (рядовой, по умолчанию), средний или высокий. Участник получает самый высокий уровень среди своих ролей.",
-       "Сохранить уровни. Участники получат их при следующем входе.",
-       "Участники сервера: их роли, уровень и вступили ли они в терминал (нужен Server Members Intent у бота)."
-      ],
-      "en": [
-       "Add the clan bot to the server (no permissions), then “Pull roles”. Until roles are pulled nobody can join the clan.",
-       "Role access level: basic (private, default), medium or high. A member gets the highest level among their roles.",
-       "Save the levels. Members get them at their next sign-in.",
-       "Server members: their roles, level and whether they joined the terminal (needs the bot's Server Members Intent)."
-      ],
-      "cs": [
-       "Přidejte bota klanu na server (bez oprávnění), pak „Načíst role“. Dokud role nejsou načteny, do klanu nelze vstoupit.",
-       "Úroveň přístupu role: základní (řadový, výchozí), střední nebo vysoká. Člen dostane nejvyšší úroveň ze svých rolí.",
-       "Uložit úrovně. Členové je dostanou při dalším přihlášení.",
-       "Členové serveru: jejich role, úroveň a zda vstoupili do terminálu (bot potřebuje Server Members Intent)."
       ]
      }
     },

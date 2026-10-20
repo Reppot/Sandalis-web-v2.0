@@ -46,19 +46,28 @@ export function toUserSession(dto: MeReadDto): UserSession {
   };
 }
 
-/** Зеркало backend `app/core/permissions.py`. */
+/** Зеркало backend `app/core/permissions.py`: одно право — одно действие. */
 export const Scopes = {
-  ORDERS_READ: "orders:read",
-  ORDERS_WRITE: "orders:write",
-  ORDERS_DELETE: "orders:delete",
   STOCKPILES_READ: "stockpiles:read",
-  STOCKPILES_WRITE: "stockpiles:write",
+  STOCKPILES_CREATE: "stockpiles:create",
+  STOCKPILES_EDIT: "stockpiles:edit",
+  STOCKPILES_DELETE: "stockpiles:delete",
+  STOCKPILES_ITEMS: "stockpiles:items",
+  REPORTS_READ: "reports:read",
+  REPORTS_CREATE: "reports:create",
+  REPORTS_STATUS: "reports:status",
+  REPORTS_EDIT: "reports:edit",
+  REPORTS_DELETE: "reports:delete",
+  REPORTS_DISCORD: "reports:discord",
   TIMERS_READ: "timers:read",
-  TIMERS_WRITE: "timers:write",
+  TIMERS_CREATE: "timers:create",
+  TIMERS_UPDATE: "timers:update",
+  TIMERS_LOG: "timers:log",
+  TIMERS_DELETE: "timers:delete",
   CATALOG_READ: "catalog:read",
-  CLAN_MEMBERS_READ: "clan:members:read",
-  CLAN_MEMBERS_WRITE: "clan:members:write",
-  CLAN_SETTINGS_WRITE: "clan:settings:write",
+  CLAN_WEBHOOK: "clan:webhook",
+  CLAN_TOKENS: "clan:tokens",
+  CLAN_CONTENT: "clan:content",
 } as const;
 
 export type Scope = (typeof Scopes)[keyof typeof Scopes];
@@ -70,6 +79,9 @@ function scopeMatches(granted: string, required: string): boolean {
 }
 
 /** Та же семантика, что `has_scope` на бэкенде (owner = "*", "orders:*"). */
+/** Проверка прав, которую страница передаёт вкладкам. */
+export type Can = (...required: Scope[]) => boolean;
+
 export function hasScope(session: UserSession | null, ...required: Scope[]): boolean {
   if (!session) return false;
   return required.every((r) => session.scopes.some((g) => scopeMatches(g, r)));

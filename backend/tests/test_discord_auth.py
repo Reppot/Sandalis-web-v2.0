@@ -203,7 +203,7 @@ def test_callback_success_sets_cookie_and_me_works(db, monkeypatch):
                 assert m["avatar_url"] == (
                     f"https://cdn.discordapp.com/avatars/{DISCORD_ID}/{PROFILE['avatar']}.png"
                 )
-                assert "orders:write" in m["scopes"]
+                assert "reports:create" in m["scopes"]
 
                 # профиль реально доехал до Discord
                 assert mock.token.called and mock.profile.called
@@ -789,9 +789,51 @@ def test_discord_roles_owner_endpoints(db, monkeypatch):
                 assert ok.status_code == 200, ok.text
                 assert [x["level"] for x in ok.json()["roles"]["roles"]] == ["high", "basic"]
 
-                members = (await c.get(f"{API}/clan/discord-members", headers=owner)).json()
+                members = (await c.get(f"{API}/clan/members", headers=owner)).json()
                 assert members["status"] == "ok"
-                assert [(m["name"], m["roles"], m["level"], m["joined"]) for m in members["members"]] == [
+                assert [(m["name"], [r["name"] for r in m["roles"]], m["level"], m["joined"]) for m in members["members"]] == [
                     ("Пилот Один", ["Пилот"], "basic", False)]
+
+                catalog = (await c.get(f"{API}/clan/permissions", headers=owner)).json()
+                assert "timers:create" in [p for g in catalog["groups"] for p in g["permissions"]]
+                assert "timers:create" not in catalog["presets"]["basic"]
+                assert (await c.get(f"{API}/clan/permissions", headers=admin)).status_code == 403
+
+    run(main())
+
+
+def test_custom_role_grants_exact_permissions(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        monkeypatch.setattr(settings, "DISCORD_BOT_TOKEN", "bot-token", raising=True)
+        await link_guild(SNAPSHOT)
+        owner = {"Authorization": "Bearer " + issue_access_token(user_id="boss", clan_id="CLAN_R", role=ClanRole.OWNER)}
+        async with client() as c:
+            bad = await c.put(f"{API}/clan/discord-roles", headers=owner,
+                              json={"levels": {R_PILOT: "custom"}, "permissions": {R_PILOT: ["nuke:everything"]}})
+            assert bad.status_code == 422
+            ok = await c.put(f"{API}/clan/discord-roles", headers=owner, json={
+                "levels": {R_PILOT: "custom"},
+                "permissions": {R_PILOT: ["timers:read", "timers:create", "stockpiles:read"]},
+            })
+            assert ok.status_code == 200, ok.text
+            pilot = next(r for r in ok.json()["roles"]["roles"] if r["id"] == R_PILOT)
+            assert pilot["level"] == "custom" and pilot["permissions"] == ["stockpiles:read", "timers:create", "timers:read"]
+
+            r = await discord_login(c, [R_PILOT])
+            assert r.status_code == 202
+            [join] = (await c.get(f"{API}/auth/discord/setup")).json()["joins"]
+            assert join["level"] == "custom"
+            me = (await c.post(f"{API}/auth/discord/setup", json={"join_clan_id": "CLAN_R"})).json()["me"]
+            assert set(me["scopes"]) == {"catalog:read", "stockpiles:read", "timers:create", "timers:read"}
+            # кастомная роль — ровно эти действия
+            assert (await c.post(f"{API}/stockpiles", json={"name": "X", "region": "Y"})).status_code == 403
+            t = await c.post(f"{API}/timers", json={"title": "Depot", "duration_seconds": 3600,
+                                                     "ends_at": "2030-01-01T00:00:00Z"})
+            assert t.status_code == 201, t.text
+
+            # роль Пилот + Офицер(средний) — объединение прав
+            r = await discord_login(c, [R_PILOT, R_OFFICER])
+            assert r.status_code == 200, r.text
 
     run(main())

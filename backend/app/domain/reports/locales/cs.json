@@ -37,6 +37,7 @@
     "owner_only": "Role Discordu spravuje jen velitel klanu (vlastník serveru).",
     "bot_missing": "Bot klanu nevidí server: přidejte ho tlačítkem „Přidat bota“.",
     "pulled": "Role serveru načteny: {n}. Nové role mají základní úroveň.",
-    "saved": "Úrovně přístupu uloženy. Členové je dostanou při dalším přihlášení."
+    "saved": "Úrovně přístupu uloženy. Členové je dostanou při dalším přihlášení.",
+    "unknown_permission": "Neznámá oprávnění: {permissions}."
   }
 }

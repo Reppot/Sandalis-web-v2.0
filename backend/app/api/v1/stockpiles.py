@@ -97,7 +97,7 @@ async def list_stockpiles(
     response_model=StockpileCreated,
     status_code=status.HTTP_201_CREATED,
     summary="Создать склад",
-    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_CREATE]))],
 )
 async def create_stockpile(payload: StockpileCreate, service: ServiceDep) -> StockpileCreated:
     stockpile, message = await service.create_stockpile(payload)
@@ -118,7 +118,7 @@ async def get_stockpile(stockpile_id: uuid.UUID, service: ServiceDep) -> Stockpi
 @router.patch(
     "/{stockpile_id}",
     response_model=StockpileCreated,
-    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_EDIT]))],
 )
 async def update_stockpile(
     stockpile_id: uuid.UUID, payload: StockpileUpdate, service: ServiceDep
@@ -130,7 +130,7 @@ async def update_stockpile(
 @router.delete(
     "/{stockpile_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_DELETE]))],
 )
 async def delete_stockpile(stockpile_id: uuid.UUID, service: ServiceDep) -> Response:
     await service.delete_stockpile(stockpile_id)
@@ -142,7 +142,7 @@ async def delete_stockpile(stockpile_id: uuid.UUID, service: ServiceDep) -> Resp
     "/{stockpile_id}/items",
     response_model=StockpileContentsSaved,
     summary="Заменить содержимое склада выгрузкой сканера (монитор склада)",
-    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_ITEMS]))],
 )
 async def replace_contents(
     stockpile_id: uuid.UUID, payload: StockpileContentsReplace, service: ServiceDep
@@ -158,7 +158,7 @@ async def replace_contents(
     response_model=StockpileItemSaved,
     status_code=status.HTTP_201_CREATED,
     summary="Идемпотентный upsert позиции склада",
-    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_ITEMS]))],
 )
 async def upsert_item(
     stockpile_id: uuid.UUID, payload: StockpileItemUpsert, service: ServiceDep
@@ -170,7 +170,7 @@ async def upsert_item(
 @router.patch(
     "/{stockpile_id}/items/{item_code}",
     response_model=StockpileItemSaved,
-    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_ITEMS]))],
 )
 async def patch_item(
     stockpile_id: uuid.UUID, item_code: str, payload: StockpileItemPatch, service: ServiceDep
@@ -182,7 +182,7 @@ async def patch_item(
 @router.delete(
     "/{stockpile_id}/items/{item_code}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_WRITE]))],
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_ITEMS]))],
 )
 async def delete_item(stockpile_id: uuid.UUID, item_code: str, service: ServiceDep) -> Response:
     await service.delete_item(stockpile_id, item_code)
