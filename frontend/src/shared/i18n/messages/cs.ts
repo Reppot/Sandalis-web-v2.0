@@ -414,6 +414,7 @@ export const cs: Record<MessageKey, string> = {
   "tools.nothingSelected": "Nic nevybráno",
   "tools.collapse": "Sbalit",
   "tools.results": "Souhrn",
+  "tools.removeFromQueue": "Odebrat z fronty",
   "tools.clearList": "Vymazat seznam",
   "tools.exportTitle": "EXPORT VÝPOČTU",
   "tools.doc.tool": "Nástroj",

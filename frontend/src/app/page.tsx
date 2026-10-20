@@ -21,6 +21,23 @@ export default function TerminalPage() {
   const { session, loading, setSession, can } = useSession();
   const { media } = useContent();
   const [tab, setTab] = React.useState<TabKey>("orders");
+  const chromeRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    // браузер не должен «восстанавливать» прокрутку старой страницы при перезагрузке
+    if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
+  }, []);
+
+  // высота шапки -> --chrome-h: меню и шапка вместе ровно в высоту окна, лишнего скролла нет
+  React.useEffect(() => {
+    const el = chromeRef.current;
+    if (!el) return;
+    const apply = () => document.documentElement.style.setProperty("--chrome-h", `${el.offsetHeight}px`);
+    const ro = new ResizeObserver(apply);
+    ro.observe(el);
+    apply();
+    return () => ro.disconnect();
+  });
 
   React.useEffect(() => {
     const requested = new URLSearchParams(window.location.search).get("tab");
@@ -76,7 +93,9 @@ export default function TerminalPage() {
     <TerminalProvider enabled={can(Scopes.TIMERS_READ)}>
       <BackgroundLayer src={background} />
       <div className="relative flex min-h-dvh flex-col gap-2.5 p-2.5 md:gap-3 md:p-3">
-        <Header />
+        <div ref={chromeRef} className="z-40 md:sticky md:top-0">
+          <Header />
+        </div>
         <div className="flex flex-1 items-start gap-2.5 md:gap-3">
           <Sidebar tabs={tabs} active={current} onSelect={select} />
           <main key={current} className="min-w-0 flex-1 pb-20 md:pb-0">{workspace}</main>

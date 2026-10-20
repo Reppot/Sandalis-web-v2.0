@@ -167,6 +167,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
                 <span className="hud-label mt-0.5 block truncate text-muted">{planning ? t("tools.noLimit") : t("tools.limit", { n: queueLimit(recipe, facility) })}</span>
               </span>
               <QuantityStepper value={crates} unit={t("unit.crate")} label={rname(recipe)} onChange={(n) => setQuantity(recipe, n)} />
+              <button type="button" className="btn btn-danger px-2 py-1" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
             </div>
           ))}
         </ResourceSummaryPanel>

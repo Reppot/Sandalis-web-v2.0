@@ -21,6 +21,8 @@ export interface NotifyInput {
 
 type Notify = (input: NotifyInput) => void;
 
+const MAX_VISIBLE = 3;
+
 const NotificationContext = React.createContext<Notify>(() => {});
 
 const TONE_STYLES: Record<Tone, { border: string; glow: string; label: MessageKey }> = {
@@ -42,7 +44,12 @@ export const NotificationProvider: React.FC<React.PropsWithChildren> = ({ childr
     ({ title, message, tone = "info", ttl = 5200 }) => {
       if (!message) return;
       const id = ++counter.current;
-      setItems((prev) => [...prev.slice(-4), { id, title, message, tone }]);
+      // одинаковое уведомление (частые клики) не копится стопкой, а перезапускается;
+      // на экране не больше трёх
+      setItems((prev) => [
+        ...prev.filter((n) => n.title !== title || n.message !== message).slice(-(MAX_VISIBLE - 1)),
+        { id, title, message, tone },
+      ]);
       window.setTimeout(() => dismiss(id), ttl);
     },
     [dismiss],

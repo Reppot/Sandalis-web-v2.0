@@ -405,6 +405,12 @@ body {
 [data-theme="light"] .chip { border-color: rgba(156, 143, 128, 0.7); }
 
 /* ───────────────────────── БЕГУЩАЯ СТРОКА ───────────────────────── */
+/* Меню прилипает под липкой шапкой; вместе с отступами (0.75rem × 3) — ровно высота окна. */
+.sidebar-dock {
+  top: calc(var(--chrome-h, 72px) + 0.75rem);
+  height: calc(100dvh - var(--chrome-h, 72px) - 2.25rem);
+}
+
 .ticker {
   position: relative;
   overflow: hidden;

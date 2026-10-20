@@ -59,7 +59,7 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
         "panel panel-corners z-[55] flex flex-col rounded-md",
         "fixed inset-x-2 bottom-[5.25rem] max-h-[calc(100dvh-7rem)]",
         "md:right-3 md:bottom-3 md:left-auto md:w-[26rem]",
-        "lg:sticky lg:top-0 lg:right-auto lg:bottom-auto lg:left-auto lg:z-auto lg:max-h-[calc(100dvh-9.5rem)] lg:w-auto lg:self-start",
+        "lg:sticky lg:top-[calc(var(--chrome-h,72px)+0.75rem)] lg:right-auto lg:bottom-auto lg:left-auto lg:z-auto lg:max-h-[calc(100dvh-var(--chrome-h,72px)-2.25rem)] lg:w-auto lg:self-start",
       ].join(" ")}
     >
       <button type="button" className="flex w-full items-center gap-3 px-3 py-2.5 text-left lg:hidden" onClick={() => setMobileOpen((o) => !o)} aria-expanded={mobileOpen}>

@@ -24,7 +24,7 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
     });
 
   return (
-    <aside className="chrome hidden h-[calc(100dvh-1.5rem)] max-h-dvh shrink-0 flex-col gap-3 overflow-hidden rounded-md p-2.5 transition-[width] duration-300 ease-out md:sticky md:top-3 md:flex" style={{ width: expanded ? 280 : 85 }}>
+    <aside className="chrome sidebar-dock hidden shrink-0 flex-col gap-3 overflow-hidden rounded-md p-2.5 transition-[width] duration-300 ease-out md:sticky md:flex" style={{ width: expanded ? 280 : 85 }}>
       <div className={expanded ? "min-h-[46px] px-1" : "h-0 min-h-0"}>
         {expanded && (
           <div className="min-w-0 leading-tight">

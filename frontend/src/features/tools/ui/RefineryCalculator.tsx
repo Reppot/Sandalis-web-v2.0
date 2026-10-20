@@ -166,6 +166,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
                       <button type="button" className={`btn rounded-none border-0 px-1.5 py-1 text-[0.6rem] ${entry.unit === "unit" ? "btn-active" : ""}`} onClick={() => setUnit(recipe, "unit")} title={t("tools.perUnit")}>{t("builder.unitShort")}</button>
                     </div>
                   ) : null}
+                  <button type="button" className="btn btn-danger px-2 py-1" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
                 </div>
               </div>
             );

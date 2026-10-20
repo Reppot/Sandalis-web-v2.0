@@ -414,6 +414,7 @@ export const en: Record<MessageKey, string> = {
   "tools.nothingSelected": "Nothing selected",
   "tools.collapse": "Collapse",
   "tools.results": "Totals",
+  "tools.removeFromQueue": "Remove from queue",
   "tools.clearList": "Clear list",
   "tools.exportTitle": "CALCULATION EXPORT",
   "tools.doc.tool": "Tool",

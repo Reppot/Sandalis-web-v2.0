@@ -413,6 +413,7 @@ export const ru = {
   "tools.nothingSelected": "Ничего не выбрано",
   "tools.collapse": "Свернуть",
   "tools.results": "Итоги",
+  "tools.removeFromQueue": "Убрать из очереди",
   "tools.clearList": "Очистить список",
   "tools.exportTitle": "ЭКСПОРТ РАСЧЁТА",
   "tools.doc.tool": "Инструмент",
