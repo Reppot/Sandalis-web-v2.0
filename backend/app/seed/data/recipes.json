@@ -24,7 +24,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "rmat": 15
+    },
+    "max_crates": 9
+   }
   },
   "sort": 0
  },
@@ -53,7 +61,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "rmat": 15
+    },
+    "max_crates": 9
+   }
   },
   "sort": 1
  },
@@ -82,7 +98,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "rmat": 15
+    },
+    "max_crates": 9
+   }
   },
   "sort": 2
  },
@@ -112,7 +136,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 600,
+    "amount": 30,
+    "cost": {
+     "bmat": 120
+    },
+    "max_crates": 9
+   }
   },
   "sort": 3
  },
@@ -141,7 +173,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "rmat": 15
+    },
+    "max_crates": 9
+   }
   },
   "sort": 4
  },
@@ -170,7 +210,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 5,
+    "cost": {
+     "rmat": 25
+    },
+    "max_crates": 9
+   }
   },
   "sort": 5
  },
@@ -199,7 +247,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 5,
+    "cost": {
+     "rmat": 25
+    },
+    "max_crates": 9
+   }
   },
   "sort": 6
  },
@@ -229,7 +285,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 20,
+    "cost": {
+     "bmat": 100,
+     "emat": 40
+    },
+    "max_crates": 9
+   }
   },
   "sort": 7
  },
@@ -258,7 +323,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 300,
+    "amount": 40,
+    "cost": {
+     "bmat": 60
+    },
+    "max_crates": 9
+   }
   },
   "sort": 8
  },
@@ -288,7 +361,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 25,
+    "cost": {
+     "bmat": 100,
+     "emat": 40
+    },
+    "max_crates": 9
+   }
   },
   "sort": 9
  },
@@ -318,7 +400,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 200,
+    "amount": 40,
+    "cost": {
+     "bmat": 40
+    },
+    "max_crates": 9
+   }
   },
   "sort": 10
  },
@@ -348,7 +438,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 30,
+    "cost": {
+     "bmat": 60
+    },
+    "max_crates": 9
+   }
   },
   "sort": 11
  },
@@ -377,7 +475,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 125
+    },
+    "max_crates": 9
+   }
   },
   "sort": 12
  },
@@ -407,7 +513,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 400,
+    "amount": 40,
+    "cost": {
+     "bmat": 40
+    },
+    "max_crates": 9
+   }
   },
   "sort": 13
  },
@@ -436,7 +550,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 120
+    },
+    "max_crates": 9
+   }
   },
   "sort": 14
  },
@@ -465,7 +587,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 700,
+    "amount": 20,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 15
  },
@@ -494,7 +624,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 16
  },
@@ -523,7 +661,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 140
+    },
+    "max_crates": 9
+   }
   },
   "sort": 17
  },
@@ -552,7 +698,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 155
+    },
+    "max_crates": 9
+   }
   },
   "sort": 18
  },
@@ -570,8 +724,7 @@
    "colonial"
   ],
   "facilities": [
-   "factory",
-   "mpf"
+   "factory"
   ],
   "icon_url": "/api/v1/assets/items/SniperRifleC.webp",
   "output_quantity": 5,
@@ -582,7 +735,7 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": false
   },
   "sort": 19
  },
@@ -611,7 +764,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 700,
+    "amount": 20,
+    "cost": {
+     "bmat": 125
+    },
+    "max_crates": 9
+   }
   },
   "sort": 20
  },
@@ -640,7 +801,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 140
+    },
+    "max_crates": 9
+   }
   },
   "sort": 21
  },
@@ -669,7 +838,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 130
+    },
+    "max_crates": 9
+   }
   },
   "sort": 22
  },
@@ -698,7 +875,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 600,
+    "amount": 15,
+    "cost": {
+     "bmat": 70
+    },
+    "max_crates": 9
+   }
   },
   "sort": 23
  },
@@ -727,7 +912,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 700,
+    "amount": 20,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 24
  },
@@ -745,8 +938,7 @@
    "warden"
   ],
   "facilities": [
-   "factory",
-   "mpf"
+   "factory"
   ],
   "icon_url": "/api/v1/assets/items/SniperRifle.webp",
   "output_quantity": 3,
@@ -757,7 +949,7 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": false
   },
   "sort": 25
  },
@@ -787,7 +979,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 40,
+    "cost": {
+     "bmat": 80
+    },
+    "max_crates": 9
+   }
   },
   "sort": 26
  },
@@ -816,7 +1016,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1500,
+    "amount": 15,
+    "cost": {
+     "bmat": 130
+    },
+    "max_crates": 9
+   }
   },
   "sort": 27
  },
@@ -845,7 +1053,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 15,
+    "cost": {
+     "bmat": 80
+    },
+    "max_crates": 9
+   }
   },
   "sort": 28
  },
@@ -875,7 +1091,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 40,
+    "cost": {
+     "bmat": 80
+    },
+    "max_crates": 9
+   }
   },
   "sort": 29
  },
@@ -904,7 +1128,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 120
+    },
+    "max_crates": 9
+   }
   },
   "sort": 30
  },
@@ -933,7 +1165,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 120
+    },
+    "max_crates": 9
+   }
   },
   "sort": 31
  },
@@ -962,7 +1202,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 80
+    },
+    "max_crates": 9
+   }
   },
   "sort": 32
  },
@@ -991,15 +1239,23 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 120
+    },
+    "max_crates": 9
+   }
   },
   "sort": 33
  },
  {
   "id": "factory-9mm-smg",
   "kind": "factory",
-  "name": "9mm SMG",
-  "name_en": "9mm SMG",
+  "name": "9mm",
+  "name_en": "9mm",
   "item_code": null,
   "category": "small_arms",
   "item_class": null,
@@ -1021,7 +1277,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 40,
+    "cost": {
+     "bmat": 80
+    },
+    "max_crates": 9
+   }
   },
   "sort": 34
  },
@@ -1051,7 +1315,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 750,
+    "amount": 15,
+    "cost": {
+     "bmat": 80
+    },
+    "max_crates": 9
+   }
   },
   "sort": 35
  },
@@ -1081,7 +1353,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 5,
+    "cost": {
+     "bmat": 140
+    },
+    "max_crates": 9
+   }
   },
   "sort": 36
  },
@@ -1111,7 +1391,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 700,
+    "amount": 20,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 37
  },
@@ -1141,15 +1429,24 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 5
+    },
+    "max_crates": 9
+   }
   },
   "sort": 38
  },
  {
   "id": "factory-135-neville-anti-tank-rifle",
   "kind": "factory",
-  "name": "135 Neville Anti-Tank Rifle",
-  "name_en": "135 Neville Anti-Tank Rifle",
+  "name": "Neville Anti-Tank Rifle",
+  "name_en": "Neville Anti-Tank Rifle",
   "item_code": null,
   "category": "heavy_arms",
   "item_class": "Anti-Tank Rifle",
@@ -1170,7 +1467,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 370,
+    "amount": 3,
+    "cost": {
+     "bmat": 150
+    },
+    "max_crates": 9
+   }
   },
   "sort": 39
  },
@@ -1200,7 +1505,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 10,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 40
  },
@@ -1230,7 +1543,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 15
+    },
+    "max_crates": 9
+   }
   },
   "sort": 41
  },
@@ -1260,7 +1582,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 750,
+    "amount": 5,
+    "cost": {
+     "bmat": 125,
+     "rmat": 15
+    },
+    "max_crates": 9
+   }
   },
   "sort": 42
  },
@@ -1290,7 +1621,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 150,
+     "rmat": 40
+    },
+    "max_crates": 9
+   }
   },
   "sort": 43
  },
@@ -1321,7 +1661,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 15,
+    "cost": {
+     "bmat": 60,
+     "emat": 150
+    },
+    "max_crates": 9
+   }
   },
   "sort": 44
  },
@@ -1351,7 +1700,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2500,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 5
+    },
+    "max_crates": 9
+   }
   },
   "sort": 45
  },
@@ -1381,7 +1739,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 25
+    },
+    "max_crates": 9
+   }
   },
   "sort": 46
  },
@@ -1412,7 +1779,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 15,
+    "cost": {
+     "bmat": 60,
+     "emat": 150
+    },
+    "max_crates": 9
+   }
   },
   "sort": 47
  },
@@ -1442,7 +1818,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 10,
+    "cost": {
+     "bmat": 185,
+     "rmat": 25
+    },
+    "max_crates": 9
+   }
   },
   "sort": 48
  },
@@ -1472,7 +1857,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 35
+    },
+    "max_crates": 9
+   }
   },
   "sort": 49
  },
@@ -1502,7 +1896,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 5
+    },
+    "max_crates": 9
+   }
   },
   "sort": 50
  },
@@ -1532,7 +1935,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 10,
+    "cost": {
+     "bmat": 165,
+     "rmat": 30
+    },
+    "max_crates": 9
+   }
   },
   "sort": 51
  },
@@ -1563,7 +1975,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 75,
+     "emat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 52
  },
@@ -1593,7 +2014,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 5
+    },
+    "max_crates": 9
+   }
   },
   "sort": 53
  },
@@ -1623,7 +2053,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 5
+    },
+    "max_crates": 9
+   }
   },
   "sort": 54
  },
@@ -1653,7 +2092,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 5
+    },
+    "max_crates": 9
+   }
   },
   "sort": 55
  },
@@ -1684,7 +2132,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 20,
+    "cost": {
+     "bmat": 80,
+     "emat": 40
+    },
+    "max_crates": 9
+   }
   },
   "sort": 56
  },
@@ -1715,15 +2172,24 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 25
+    },
+    "max_crates": 9
+   }
   },
   "sort": 57
  },
  {
   "id": "factory-mortar-flare-shell",
   "kind": "factory",
-  "name": "Mortar Flare Shell",
-  "name_en": "Mortar Flare Shell",
+  "name": "Flare Mortar Shell",
+  "name_en": "Flare Mortar Shell",
   "item_code": null,
   "category": "heavy_arms",
   "item_class": null,
@@ -1746,15 +2212,24 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 15,
+    "cost": {
+     "bmat": 60,
+     "emat": 15
+    },
+    "max_crates": 9
+   }
   },
   "sort": 58
  },
  {
   "id": "factory-mortar-shrapnel-shell",
   "kind": "factory",
-  "name": "Mortar Shrapnel Shell",
-  "name_en": "Mortar Shrapnel Shell",
+  "name": "Shrapnel Mortar Shell",
+  "name_en": "Shrapnel Mortar Shell",
   "item_code": null,
   "category": "heavy_arms",
   "item_class": null,
@@ -1777,7 +2252,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 15,
+    "cost": {
+     "bmat": 60,
+     "emat": 20
+    },
+    "max_crates": 9
+   }
   },
   "sort": 59
  },
@@ -1808,7 +2292,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 15,
+    "cost": {
+     "bmat": 60,
+     "emat": 70
+    },
+    "max_crates": 9
+   }
   },
   "sort": 60
  },
@@ -1838,7 +2331,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 750,
+    "amount": 10,
+    "cost": {
+     "bmat": 85,
+     "emat": 70
+    },
+    "max_crates": 9
+   }
   },
   "sort": 61
  },
@@ -1868,7 +2370,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 750,
+    "amount": 10,
+    "cost": {
+     "bmat": 100,
+     "emat": 80
+    },
+    "max_crates": 9
+   }
   },
   "sort": 62
  },
@@ -1898,7 +2409,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 95,
+     "emat": 125
+    },
+    "max_crates": 9
+   }
   },
   "sort": 63
  },
@@ -1929,7 +2449,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 800,
+    "amount": 20,
+    "cost": {
+     "bmat": 100,
+     "emat": 20
+    },
+    "max_crates": 9
+   }
   },
   "sort": 64
  },
@@ -1960,7 +2489,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 750,
+    "amount": 10,
+    "cost": {
+     "bmat": 50,
+     "emat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 65
  },
@@ -1990,7 +2528,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2500,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 5
+    },
+    "max_crates": 9
+   }
   },
   "sort": 66
  },
@@ -2020,15 +2567,24 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "rmat": 35
+    },
+    "max_crates": 9
+   }
   },
   "sort": 67
  },
  {
   "id": "factory-r-p-g-shell",
   "kind": "factory",
-  "name": "R.P.G Shell",
-  "name_en": "R.P.G Shell",
+  "name": "RPG",
+  "name_en": "RPG",
   "item_code": null,
   "category": "heavy_arms",
   "item_class": null,
@@ -2051,7 +2607,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 15,
+    "cost": {
+     "bmat": 60,
+     "emat": 90
+    },
+    "max_crates": 9
+   }
   },
   "sort": 68
  },
@@ -2081,15 +2646,23 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 550,
+    "amount": 5,
+    "cost": {
+     "bmat": 120
+    },
+    "max_crates": 9
+   }
   },
   "sort": 69
  },
  {
   "id": "factory-shatter-missle",
   "kind": "factory",
-  "name": "Shatter Missle",
-  "name_en": "Shatter Missle",
+  "name": "Shatter Missile",
+  "name_en": "Shatter Missile",
   "item_code": null,
   "category": "heavy_ammunition",
   "item_class": null,
@@ -2112,7 +2685,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2500,
+    "amount": 5,
+    "cost": {
+     "bmat": 250,
+     "hemat": 250
+    },
+    "max_crates": 9
+   }
   },
   "sort": 70
  },
@@ -2143,7 +2725,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 650,
+    "amount": 5,
+    "cost": {
+     "bmat": 120,
+     "hemat": 60
+    },
+    "max_crates": 9
+   }
   },
   "sort": 71
  },
@@ -2174,7 +2765,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 550,
+    "amount": 5,
+    "cost": {
+     "bmat": 120,
+     "hemat": 10
+    },
+    "max_crates": 9
+   }
   },
   "sort": 72
  },
@@ -2205,7 +2805,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1500,
+    "amount": 5,
+    "cost": {
+     "bmat": 120,
+     "hemat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 73
  },
@@ -2236,7 +2845,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2500,
+    "amount": 5,
+    "cost": {
+     "bmat": 250,
+     "hemat": 200
+    },
+    "max_crates": 9
+   }
   },
   "sort": 74
  },
@@ -2267,7 +2885,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2000,
+    "amount": 20,
+    "cost": {
+     "bmat": 120,
+     "emat": 240
+    },
+    "max_crates": 9
+   }
   },
   "sort": 75
  },
@@ -2298,15 +2925,24 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2000,
+    "amount": 20,
+    "cost": {
+     "bmat": 160,
+     "emat": 240
+    },
+    "max_crates": 9
+   }
   },
   "sort": 76
  },
  {
   "id": "factory-e6881-b-hullbreaker-mine",
   "kind": "factory",
-  "name": "E6881-B Hullbreaker Mine",
-  "name_en": "E6881-B Hullbreaker Mine",
+  "name": "E681-B Hullbreaker Mine",
+  "name_en": "E681-B Hullbreaker Mine",
   "item_code": null,
   "category": "heavy_ammunition",
   "item_class": null,
@@ -2329,7 +2965,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 125,
+     "emat": 35
+    },
+    "max_crates": 9
+   }
   },
   "sort": 77
  },
@@ -2359,7 +3004,16 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 125,
+     "emat": 75
+    },
+    "max_crates": 9
+   }
   },
   "sort": 78
  },
@@ -3288,7 +3942,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 100,
+    "cost": {
+     "bmat": 250
+    },
+    "max_crates": 9
+   }
   },
   "sort": 110
  },
@@ -3317,7 +3979,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 3,
+    "cost": {
+     "bmat": 75
+    },
+    "max_crates": 5
+   }
   },
   "sort": 111
  },
@@ -3346,7 +4016,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2500,
+    "amount": 3,
+    "cost": {
+     "bmat": 150
+    },
+    "max_crates": 5
+   }
   },
   "sort": 112
  },
@@ -3375,7 +4053,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 113
  },
@@ -3403,7 +4089,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 8750,
+    "amount": 3,
+    "cost": {
+     "rmat": 525
+    },
+    "max_crates": 5
+   }
   },
   "sort": 114
  },
@@ -3431,7 +4125,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7500,
+    "amount": 3,
+    "cost": {
+     "bmat": 450
+    },
+    "max_crates": 5
+   }
   },
   "sort": 115
  },
@@ -3459,7 +4161,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 8750,
+    "amount": 3,
+    "cost": {
+     "rmat": 525
+    },
+    "max_crates": 5
+   }
   },
   "sort": 116
  },
@@ -3487,7 +4197,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 9750,
+    "amount": 3,
+    "cost": {
+     "rmat": 585
+    },
+    "max_crates": 5
+   }
   },
   "sort": 117
  },
@@ -3515,15 +4233,23 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 8750,
+    "amount": 3,
+    "cost": {
+     "rmat": 525
+    },
+    "max_crates": 5
+   }
   },
   "sort": 118
  },
  {
   "id": "factory-leary-snare-trap-127",
   "kind": "factory",
-  "name": "Leary Snare Trap 127",
-  "name_en": "Leary Snare Trap 127",
+  "name": "Leary Snare Trap 20",
+  "name_en": "Leary Snare Trap 20",
   "item_code": null,
   "category": "shipables",
   "item_class": null,
@@ -3543,7 +4269,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 3750,
+    "amount": 3,
+    "cost": {
+     "bmat": 225
+    },
+    "max_crates": 5
+   }
   },
   "sort": 119
  },
@@ -3571,7 +4305,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1750,
+    "amount": 3,
+    "cost": {
+     "rmat": 105
+    },
+    "max_crates": 5
+   }
   },
   "sort": 120
  },
@@ -3599,7 +4341,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6250,
+    "amount": 3,
+    "cost": {
+     "bmat": 375
+    },
+    "max_crates": 5
+   }
   },
   "sort": 121
  },
@@ -3627,7 +4377,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 122
  },
@@ -3656,7 +4414,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 3750,
+    "amount": 3,
+    "cost": {
+     "rmat": 225
+    },
+    "max_crates": 5
+   }
   },
   "sort": 123
  },
@@ -3685,7 +4451,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2500,
+    "amount": 3,
+    "cost": {
+     "rmat": 150
+    },
+    "max_crates": 5
+   }
   },
   "sort": 124
  },
@@ -3714,7 +4488,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 125
  },
@@ -3742,7 +4524,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 3,
+    "cost": {
+     "rmat": 75
+    },
+    "max_crates": 5
+   }
   },
   "sort": 126
  },
@@ -3770,7 +4560,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2000,
+    "amount": 3,
+    "cost": {
+     "rmat": 120
+    },
+    "max_crates": 5
+   }
   },
   "sort": 127
  },
@@ -3798,7 +4596,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 3,
+    "cost": {
+     "rmat": 75
+    },
+    "max_crates": 5
+   }
   },
   "sort": 128
  },
@@ -3826,7 +4632,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 8000,
+    "amount": 3,
+    "cost": {
+     "rmat": 480
+    },
+    "max_crates": 5
+   }
   },
   "sort": 129
  },
@@ -3854,7 +4668,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 3,
+    "cost": {
+     "rmat": 60
+    },
+    "max_crates": 5
+   }
   },
   "sort": 130
  },
@@ -3882,7 +4704,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 3,
+    "cost": {
+     "rmat": 60
+    },
+    "max_crates": 5
+   }
   },
   "sort": 131
  },
@@ -3910,7 +4740,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 3,
+    "cost": {
+     "rmat": 60
+    },
+    "max_crates": 5
+   }
   },
   "sort": 132
  },
@@ -3938,7 +4776,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1750,
+    "amount": 3,
+    "cost": {
+     "rmat": 105
+    },
+    "max_crates": 5
+   }
   },
   "sort": 133
  },
@@ -3966,7 +4812,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 3000,
+    "amount": 3,
+    "cost": {
+     "rmat": 180
+    },
+    "max_crates": 5
+   }
   },
   "sort": 134
  },
@@ -3994,7 +4848,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 3,
+    "cost": {
+     "rmat": 60
+    },
+    "max_crates": 5
+   }
   },
   "sort": 135
  },
@@ -4022,7 +4884,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6000,
+    "amount": 3,
+    "cost": {
+     "rmat": 360
+    },
+    "max_crates": 5
+   }
   },
   "sort": 136
  },
@@ -4050,7 +4920,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 3,
+    "cost": {
+     "rmat": 60
+    },
+    "max_crates": 5
+   }
   },
   "sort": 137
  },
@@ -4078,7 +4956,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 3,
+    "cost": {
+     "rmat": 60
+    },
+    "max_crates": 5
+   }
   },
   "sort": 138
  },
@@ -4106,7 +4992,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1750,
+    "amount": 3,
+    "cost": {
+     "rmat": 105
+    },
+    "max_crates": 5
+   }
   },
   "sort": 139
  },
@@ -4134,7 +5028,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2500,
+    "amount": 3,
+    "cost": {
+     "rmat": 150
+    },
+    "max_crates": 5
+   }
   },
   "sort": 140
  },
@@ -4162,7 +5064,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 2750,
+    "amount": 3,
+    "cost": {
+     "rmat": 165
+    },
+    "max_crates": 5
+   }
   },
   "sort": 141
  },
@@ -4190,7 +5100,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1000,
+    "amount": 3,
+    "cost": {
+     "rmat": 60
+    },
+    "max_crates": 5
+   }
   },
   "sort": 142
  },
@@ -4218,7 +5136,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5750,
+    "amount": 3,
+    "cost": {
+     "rmat": 345
+    },
+    "max_crates": 5
+   }
   },
   "sort": 143
  },
@@ -4246,7 +5172,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7500,
+    "amount": 3,
+    "cost": {
+     "bmat": 450
+    },
+    "max_crates": 5
+   }
   },
   "sort": 144
  },
@@ -4274,7 +5208,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7500,
+    "amount": 3,
+    "cost": {
+     "bmat": 450
+    },
+    "max_crates": 5
+   }
   },
   "sort": 145
  },
@@ -4302,7 +5244,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 146
  },
@@ -4330,15 +5280,23 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 147
  },
  {
   "id": "factory-bms-universal-assemly-rig",
   "kind": "factory",
-  "name": "BMS - Universal Assemly Rig",
-  "name_en": "BMS - Universal Assemly Rig",
+  "name": "BMS - Universal Assembly Rig",
+  "name_en": "BMS - Universal Assembly Rig",
   "item_code": null,
   "category": "vehicles",
   "item_class": "Construction Vehicle",
@@ -4359,7 +5317,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 148
  },
@@ -4388,7 +5354,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6250,
+    "amount": 3,
+    "cost": {
+     "bmat": 375
+    },
+    "max_crates": 5
+   }
   },
   "sort": 149
  },
@@ -4417,7 +5391,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1500,
+    "amount": 3,
+    "cost": {
+     "rmat": 90
+    },
+    "max_crates": 5
+   }
   },
   "sort": 150
  },
@@ -4445,7 +5427,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 151
  },
@@ -4473,7 +5463,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 152
  },
@@ -4501,7 +5499,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 8250,
+    "amount": 3,
+    "cost": {
+     "rmat": 495
+    },
+    "max_crates": 5
+   }
   },
   "sort": 153
  },
@@ -4529,7 +5535,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7500,
+    "amount": 3,
+    "cost": {
+     "rmat": 450
+    },
+    "max_crates": 5
+   }
   },
   "sort": 154
  },
@@ -4557,7 +5571,15 @@
   "data": {
    "number_produced_bonus": "2x bonus vehicles produced per crate",
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6750,
+    "amount": 5,
+    "cost": {
+     "rmat": 405
+    },
+    "max_crates": 5
+   }
   },
   "sort": 155
  },
@@ -4585,7 +5607,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "rmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 156
  },
@@ -4613,7 +5643,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 4250,
+    "amount": 3,
+    "cost": {
+     "bmat": 255
+    },
+    "max_crates": 5
+   }
   },
   "sort": 157
  },
@@ -4641,7 +5679,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7500,
+    "amount": 3,
+    "cost": {
+     "rmat": 450
+    },
+    "max_crates": 5
+   }
   },
   "sort": 158
  },
@@ -4669,7 +5715,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 8000,
+    "amount": 3,
+    "cost": {
+     "rmat": 480
+    },
+    "max_crates": 5
+   }
   },
   "sort": 159
  },
@@ -4697,7 +5751,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 4250,
+    "amount": 3,
+    "cost": {
+     "bmat": 255
+    },
+    "max_crates": 5
+   }
   },
   "sort": 160
  },
@@ -4725,7 +5787,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 3,
+    "cost": {
+     "rmat": 30
+    },
+    "max_crates": 5
+   }
   },
   "sort": 161
  },
@@ -4753,7 +5823,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1750,
+    "amount": 3,
+    "cost": {
+     "rmat": 105
+    },
+    "max_crates": 5
+   }
   },
   "sort": 162
  },
@@ -4781,7 +5859,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 3500,
+    "amount": 3,
+    "cost": {
+     "rmat": 210
+    },
+    "max_crates": 5
+   }
   },
   "sort": 163
  },
@@ -4809,7 +5895,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 500,
+    "amount": 3,
+    "cost": {
+     "rmat": 30
+    },
+    "max_crates": 5
+   }
   },
   "sort": 164
  },
@@ -4838,7 +5932,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 165
  },
@@ -4866,7 +5968,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6000,
+    "amount": 3,
+    "cost": {
+     "bmat": 360
+    },
+    "max_crates": 5
+   }
   },
   "sort": 166
  },
@@ -4894,7 +6004,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 167
  },
@@ -4922,7 +6040,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 168
  },
@@ -4950,7 +6076,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6000,
+    "amount": 3,
+    "cost": {
+     "bmat": 360
+    },
+    "max_crates": 5
+   }
   },
   "sort": 169
  },
@@ -4978,7 +6112,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "rmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 170
  },
@@ -5006,7 +6148,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7000,
+    "amount": 3,
+    "cost": {
+     "rmat": 420
+    },
+    "max_crates": 5
+   }
   },
   "sort": 171
  },
@@ -5034,7 +6184,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "rmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 172
  },
@@ -5062,7 +6220,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7000,
+    "amount": 3,
+    "cost": {
+     "rmat": 420
+    },
+    "max_crates": 5
+   }
   },
   "sort": 173
  },
@@ -5091,7 +6257,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
   },
   "sort": 174
  },
@@ -5119,7 +6293,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 10000,
+    "amount": 3,
+    "cost": {
+     "bmat": 600
+    },
+    "max_crates": 5
+   }
   },
   "sort": 175
  },
@@ -5147,7 +6329,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 12500,
+    "amount": 3,
+    "cost": {
+     "bmat": 750
+    },
+    "max_crates": 5
+   }
   },
   "sort": 176
  },
@@ -5176,7 +6366,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": false,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7500,
+    "amount": 3,
+    "cost": {
+     "bmat": 450
+    },
+    "max_crates": 5
+   }
   },
   "sort": 177
  },
@@ -5205,7 +6403,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 25000,
+    "amount": 3,
+    "cost": {
+     "bmat": 1500
+    },
+    "max_crates": 5
+   }
   },
   "sort": 178
  },
@@ -5233,7 +6439,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 25000,
+    "amount": 3,
+    "cost": {
+     "bmat": 1500
+    },
+    "max_crates": 5
+   }
   },
   "sort": 179
  },
@@ -5261,7 +6475,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 22500,
+    "amount": 3,
+    "cost": {
+     "bmat": 1350
+    },
+    "max_crates": 5
+   }
   },
   "sort": 180
  },
@@ -5290,7 +6512,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 7500,
+    "amount": 3,
+    "cost": {
+     "bmat": 450
+    },
+    "max_crates": 5
+   }
   },
   "sort": 181
  },
@@ -5319,7 +6549,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 10,
+    "cost": {
+     "bmat": 200
+    },
+    "max_crates": 9
+   }
   },
   "sort": 182
  },
@@ -5348,7 +6586,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 183
  },
@@ -5377,7 +6623,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 184
  },
@@ -5406,7 +6660,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 185
  },
@@ -5435,7 +6697,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 186
  },
@@ -5464,7 +6734,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 3,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 187
  },
@@ -5493,7 +6771,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 188
  },
@@ -5522,7 +6808,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 189
  },
@@ -5551,7 +6845,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 190
  },
@@ -5580,7 +6882,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 191
  },
@@ -5609,7 +6919,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 192
  },
@@ -5638,7 +6956,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 5,
+    "cost": {
+     "bmat": 150
+    },
+    "max_crates": 9
+   }
   },
   "sort": 193
  },
@@ -5667,7 +6993,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 194
  },
@@ -5696,7 +7030,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 195
  },
@@ -5725,7 +7067,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 196
  },
@@ -5754,7 +7104,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 3,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 197
  },
@@ -5783,7 +7141,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 198
  },
@@ -5812,7 +7178,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 199
  },
@@ -5841,7 +7215,15 @@
   "data": {
    "number_produced_bonus": null,
    "is_teched": true,
-   "is_mpf_craftable": true
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 900,
+    "amount": 15,
+    "cost": {
+     "bmat": 100
+    },
+    "max_crates": 9
+   }
   },
   "sort": 200
  },
@@ -6144,5 +7526,269 @@
    "personal_limit": 1000
   },
   "sort": 9
+ },
+ {
+  "id": "factory-950-70b-anti-aircraft-shell",
+  "kind": "factory",
+  "name": "Зенитный снаряд 950-70b",
+  "name_en": "950-70b Anti-Aircraft Shell",
+  "item_code": "AAAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/AAAmmo.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 100,
+   "hemat": 15
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 650,
+    "amount": 5,
+    "cost": {
+     "bmat": 100,
+     "hemat": 15
+    },
+    "max_crates": 9
+   }
+  },
+  "sort": 201
+ },
+ {
+  "id": "factory-absol-anti-aircraft-rounds",
+  "kind": "factory",
+  "name": "Зенитный снаряд “Absol”",
+  "name_en": "Absol Anti-Aircraft Rounds",
+  "item_code": "LightAAAmmo",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightAAAmmo.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 150,
+   "emat": 160
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 550,
+    "amount": 5,
+    "cost": {
+     "bmat": 150,
+     "emat": 160
+    },
+    "max_crates": 9
+   }
+  },
+  "sort": 202
+ },
+ {
+  "id": "factory-naval-buoy",
+  "kind": "factory",
+  "name": "Naval buoy",
+  "name_en": "Naval Buoy",
+  "item_code": "WaterWallMaterials",
+  "category": "heavy_ammunition",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "factory",
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/WaterWall.webp",
+  "output_quantity": 5,
+  "cost": {
+   "bmat": 150
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 1250,
+    "amount": 5,
+    "cost": {
+     "bmat": 150
+    },
+    "max_crates": 9
+   }
+  },
+  "sort": 203
+ },
+ {
+  "id": "factory-rooster-lamploader",
+  "kind": "factory",
+  "name": "Жидкостный прицеп",
+  "name_en": "Rooster - Lamploader",
+  "item_code": "TrailerLiquid",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/FuelTrailer.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 204
+ },
+ {
+  "id": "factory-rooster-tumblebox",
+  "kind": "factory",
+  "name": "Строительный прицеп",
+  "name_en": "Rooster - Tumblebox",
+  "item_code": "TrailerMaterial",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/MaterialTrailer.webp",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 300
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 5000,
+    "amount": 3,
+    "cost": {
+     "bmat": 300
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 205
+ },
+ {
+  "id": "factory-sharkey-devitt-birdeater-mk-i",
+  "kind": "factory",
+  "name": "Sharkey-Devitt Birdeater Mk. I",
+  "name_en": "Sharkey-Devitt Birdeater Mk. I",
+  "item_code": "LightTank3W",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightTank3WVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 375
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6250,
+    "amount": 3,
+    "cost": {
+     "rmat": 375
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 206
+ },
+ {
+  "id": "factory-ha-1-sagaris",
+  "kind": "factory",
+  "name": "HA-1 “Sagaris”",
+  "name_en": "HA-1 “Sagaris”",
+  "item_code": "LightTank3C",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightTank3CVehicle.webp",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 375
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6250,
+    "amount": 3,
+    "cost": {
+     "rmat": 375
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 207
  }
 ]

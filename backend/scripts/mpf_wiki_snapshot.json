@@ -1,0 +1,4688 @@
+{
+ ".44 Mag": {
+  "amount": 40,
+  "seconds": 400,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    96
+   ],
+   "4": [
+    120
+   ],
+   "5": [
+    140
+   ],
+   "6": [
+    160
+   ],
+   "7": [
+    180
+   ],
+   "8": [
+    200
+   ],
+   "9": [
+    220
+   ]
+  }
+ },
+ "12.7mm": {
+  "amount": 20,
+  "seconds": 700,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "7.62mm": {
+  "amount": 40,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    192
+   ],
+   "4": [
+    240
+   ],
+   "5": [
+    280
+   ],
+   "6": [
+    320
+   ],
+   "7": [
+    360
+   ],
+   "8": [
+    400
+   ],
+   "9": [
+    440
+   ]
+  }
+ },
+ "7.92mm": {
+  "amount": 30,
+  "seconds": 600,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    288
+   ],
+   "4": [
+    360
+   ],
+   "5": [
+    420
+   ],
+   "6": [
+    480
+   ],
+   "7": [
+    540
+   ],
+   "8": [
+    600
+   ],
+   "9": [
+    660
+   ]
+  }
+ },
+ "8mm": {
+  "amount": 40,
+  "seconds": 200,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    96
+   ],
+   "4": [
+    120
+   ],
+   "5": [
+    140
+   ],
+   "6": [
+    160
+   ],
+   "7": [
+    180
+   ],
+   "8": [
+    200
+   ],
+   "9": [
+    220
+   ]
+  }
+ },
+ "9mm": {
+  "amount": 40,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    192
+   ],
+   "4": [
+    240
+   ],
+   "5": [
+    280
+   ],
+   "6": [
+    320
+   ],
+   "7": [
+    360
+   ],
+   "8": [
+    400
+   ],
+   "9": [
+    440
+   ]
+  }
+ },
+ "A3 Harpa Fragmentation Grenade": {
+  "amount": 20,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    240,
+    96
+   ],
+   "4": [
+    300,
+    120
+   ],
+   "5": [
+    350,
+    140
+   ],
+   "6": [
+    400,
+    160
+   ],
+   "7": [
+    450,
+    180
+   ],
+   "8": [
+    500,
+    200
+   ],
+   "9": [
+    550,
+    220
+   ]
+  }
+ },
+ "Aalto Storm Rifle 24": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    35
+   ],
+   "4": [
+    44
+   ],
+   "5": [
+    51
+   ],
+   "6": [
+    58
+   ],
+   "7": [
+    65
+   ],
+   "8": [
+    72
+   ],
+   "9": [
+    79
+   ]
+  }
+ },
+ "Blakerow 871": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    336
+   ],
+   "4": [
+    420
+   ],
+   "5": [
+    490
+   ],
+   "6": [
+    560
+   ],
+   "7": [
+    630
+   ],
+   "8": [
+    700
+   ],
+   "9": [
+    770
+   ]
+  }
+ },
+ "Booker Storm Rifle Model 838": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    35
+   ],
+   "4": [
+    44
+   ],
+   "5": [
+    51
+   ],
+   "6": [
+    58
+   ],
+   "7": [
+    65
+   ],
+   "8": [
+    72
+   ],
+   "9": [
+    79
+   ]
+  }
+ },
+ "Buckshot": {
+  "amount": 40,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    192
+   ],
+   "4": [
+    240
+   ],
+   "5": [
+    280
+   ],
+   "6": [
+    320
+   ],
+   "7": [
+    360
+   ],
+   "8": [
+    400
+   ],
+   "9": [
+    440
+   ]
+  }
+ },
+ "Cascadier 873": {
+  "amount": 40,
+  "seconds": 300,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ],
+   "6": [
+    240
+   ],
+   "7": [
+    270
+   ],
+   "8": [
+    300
+   ],
+   "9": [
+    330
+   ]
+  }
+ },
+ "Clancy Cinder M3": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    312
+   ],
+   "4": [
+    390
+   ],
+   "5": [
+    455
+   ],
+   "6": [
+    520
+   ],
+   "7": [
+    585
+   ],
+   "8": [
+    650
+   ],
+   "9": [
+    715
+   ]
+  }
+ },
+ "Cometa T2-9": {
+  "amount": 30,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ],
+   "6": [
+    240
+   ],
+   "7": [
+    270
+   ],
+   "8": [
+    300
+   ],
+   "9": [
+    330
+   ]
+  }
+ },
+ "Fiddler Submachine Gun Model 868": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    288
+   ],
+   "4": [
+    360
+   ],
+   "5": [
+    420
+   ],
+   "6": [
+    480
+   ],
+   "7": [
+    540
+   ],
+   "8": [
+    600
+   ],
+   "9": [
+    660
+   ]
+  }
+ },
+ "Green Ash Grenade": {
+  "amount": 5,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    336
+   ],
+   "4": [
+    420
+   ],
+   "5": [
+    490
+   ],
+   "6": [
+    560
+   ],
+   "7": [
+    630
+   ],
+   "8": [
+    700
+   ],
+   "9": [
+    770
+   ]
+  }
+ },
+ "Malone MK.2": {
+  "amount": 5,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    59
+   ],
+   "4": [
+    74
+   ],
+   "5": [
+    86
+   ],
+   "6": [
+    98
+   ],
+   "7": [
+    110
+   ],
+   "8": [
+    122
+   ],
+   "9": [
+    134
+   ]
+  }
+ },
+ "No.1 “The Liar” Submachine Gun": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    288
+   ],
+   "4": [
+    360
+   ],
+   "5": [
+    420
+   ],
+   "6": [
+    480
+   ],
+   "7": [
+    540
+   ],
+   "8": [
+    600
+   ],
+   "9": [
+    660
+   ]
+  }
+ },
+ "No.2 Loughcaster": {
+  "amount": 20,
+  "seconds": 700,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "No.2B Hawthorne": {
+  "amount": 15,
+  "seconds": 600,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    168
+   ],
+   "4": [
+    210
+   ],
+   "5": [
+    245
+   ],
+   "6": [
+    280
+   ],
+   "7": [
+    315
+   ],
+   "8": [
+    350
+   ],
+   "9": [
+    385
+   ]
+  }
+ },
+ "No.4 The Pillory Scattergun": {
+  "amount": 15,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    192
+   ],
+   "4": [
+    240
+   ],
+   "5": [
+    280
+   ],
+   "6": [
+    320
+   ],
+   "7": [
+    360
+   ],
+   "8": [
+    400
+   ],
+   "9": [
+    440
+   ]
+  }
+ },
+ "PT-815 Smoke Grenade": {
+  "amount": 15,
+  "seconds": 750,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    192
+   ],
+   "4": [
+    240
+   ],
+   "5": [
+    280
+   ],
+   "6": [
+    320
+   ],
+   "7": [
+    360
+   ],
+   "8": [
+    400
+   ],
+   "9": [
+    440
+   ]
+  }
+ },
+ "Sampo Auto-Rifle 77": {
+  "amount": 20,
+  "seconds": 700,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    299
+   ],
+   "4": [
+    374
+   ],
+   "5": [
+    436
+   ],
+   "6": [
+    498
+   ],
+   "7": [
+    560
+   ],
+   "8": [
+    622
+   ],
+   "9": [
+    684
+   ]
+  }
+ },
+ "The Hangman 757": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    299
+   ],
+   "4": [
+    374
+   ],
+   "5": [
+    436
+   ],
+   "6": [
+    498
+   ],
+   "7": [
+    560
+   ],
+   "8": [
+    622
+   ],
+   "9": [
+    684
+   ]
+  }
+ },
+ "14.5mm": {
+  "amount": 10,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "30mm": {
+  "amount": 20,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    192,
+    96
+   ],
+   "4": [
+    240,
+    120
+   ],
+   "5": [
+    280,
+    140
+   ],
+   "6": [
+    320,
+    160
+   ],
+   "7": [
+    360,
+    180
+   ],
+   "8": [
+    400,
+    200
+   ],
+   "9": [
+    440,
+    220
+   ]
+  }
+ },
+ "Anti-Tank Sticky Bomb": {
+  "amount": 10,
+  "seconds": 750,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    120,
+    240
+   ],
+   "4": [
+    150,
+    300
+   ],
+   "5": [
+    175,
+    350
+   ],
+   "6": [
+    200,
+    400
+   ],
+   "7": [
+    225,
+    450
+   ],
+   "8": [
+    250,
+    500
+   ],
+   "9": [
+    275,
+    550
+   ]
+  }
+ },
+ "AP⧸RPG": {
+  "amount": 15,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    144,
+    360
+   ],
+   "4": [
+    180,
+    450
+   ],
+   "5": [
+    210,
+    525
+   ],
+   "6": [
+    240,
+    600
+   ],
+   "7": [
+    270,
+    675
+   ],
+   "8": [
+    300,
+    750
+   ],
+   "9": [
+    330,
+    825
+   ]
+  }
+ },
+ "ARC⧸RPG": {
+  "amount": 15,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    144,
+    360
+   ],
+   "4": [
+    180,
+    450
+   ],
+   "5": [
+    210,
+    525
+   ],
+   "6": [
+    240,
+    600
+   ],
+   "7": [
+    270,
+    675
+   ],
+   "8": [
+    300,
+    750
+   ],
+   "9": [
+    330,
+    825
+   ]
+  }
+ },
+ "B2 Varsi Anti-Tank Grenade": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    227,
+    299
+   ],
+   "4": [
+    284,
+    374
+   ],
+   "5": [
+    331,
+    436
+   ],
+   "6": [
+    378,
+    498
+   ],
+   "7": [
+    425,
+    560
+   ],
+   "8": [
+    472,
+    622
+   ],
+   "9": [
+    519,
+    684
+   ]
+  }
+ },
+ "BF5 White Ash Flask Grenade": {
+  "amount": 10,
+  "seconds": 750,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    240,
+    192
+   ],
+   "4": [
+    300,
+    240
+   ],
+   "5": [
+    350,
+    280
+   ],
+   "6": [
+    400,
+    320
+   ],
+   "7": [
+    450,
+    360
+   ],
+   "8": [
+    500,
+    400
+   ],
+   "9": [
+    550,
+    440
+   ]
+  }
+ },
+ "Bonesaw MK.3": {
+  "amount": 5,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    59
+   ],
+   "4": [
+    300,
+    74
+   ],
+   "5": [
+    350,
+    86
+   ],
+   "6": [
+    400,
+    98
+   ],
+   "7": [
+    450,
+    110
+   ],
+   "8": [
+    500,
+    122
+   ],
+   "9": [
+    550,
+    134
+   ]
+  }
+ },
+ "Carnyx Anti-Tank Rocket Launcher": {
+  "amount": 5,
+  "seconds": 750,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    299,
+    35
+   ],
+   "4": [
+    374,
+    44
+   ],
+   "5": [
+    436,
+    51
+   ],
+   "6": [
+    498,
+    58
+   ],
+   "7": [
+    560,
+    65
+   ],
+   "8": [
+    622,
+    72
+   ],
+   "9": [
+    684,
+    79
+   ]
+  }
+ },
+ "Cremari Mortar": {
+  "amount": 5,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    59
+   ],
+   "4": [
+    300,
+    74
+   ],
+   "5": [
+    350,
+    86
+   ],
+   "6": [
+    400,
+    98
+   ],
+   "7": [
+    450,
+    110
+   ],
+   "8": [
+    500,
+    122
+   ],
+   "9": [
+    550,
+    134
+   ]
+  }
+ },
+ "Cutler Foebreaker": {
+  "amount": 5,
+  "seconds": 2500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    11
+   ],
+   "4": [
+    300,
+    14
+   ],
+   "5": [
+    350,
+    16
+   ],
+   "6": [
+    400,
+    18
+   ],
+   "7": [
+    450,
+    20
+   ],
+   "8": [
+    500,
+    22
+   ],
+   "9": [
+    550,
+    24
+   ]
+  }
+ },
+ "Cutler Launcher 4": {
+  "amount": 5,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    83
+   ],
+   "4": [
+    300,
+    104
+   ],
+   "5": [
+    350,
+    121
+   ],
+   "6": [
+    400,
+    138
+   ],
+   "7": [
+    450,
+    155
+   ],
+   "8": [
+    500,
+    172
+   ],
+   "9": [
+    550,
+    189
+   ]
+  }
+ },
+ "Flare Mortar Shell": {
+  "amount": 15,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    144,
+    35
+   ],
+   "4": [
+    180,
+    44
+   ],
+   "5": [
+    210,
+    51
+   ],
+   "6": [
+    240,
+    58
+   ],
+   "7": [
+    270,
+    65
+   ],
+   "8": [
+    300,
+    72
+   ],
+   "9": [
+    330,
+    79
+   ]
+  }
+ },
+ "Malone Ratcatcher MK.1": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    11
+   ],
+   "4": [
+    300,
+    14
+   ],
+   "5": [
+    350,
+    16
+   ],
+   "6": [
+    400,
+    18
+   ],
+   "7": [
+    450,
+    20
+   ],
+   "8": [
+    500,
+    22
+   ],
+   "9": [
+    550,
+    24
+   ]
+  }
+ },
+ "Mammon 91-b": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    240,
+    48
+   ],
+   "4": [
+    300,
+    60
+   ],
+   "5": [
+    350,
+    70
+   ],
+   "6": [
+    400,
+    80
+   ],
+   "7": [
+    450,
+    90
+   ],
+   "8": [
+    500,
+    100
+   ],
+   "9": [
+    550,
+    110
+   ]
+  }
+ },
+ "Mortar Shell": {
+  "amount": 15,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    144,
+    168
+   ],
+   "4": [
+    180,
+    210
+   ],
+   "5": [
+    210,
+    245
+   ],
+   "6": [
+    240,
+    280
+   ],
+   "7": [
+    270,
+    315
+   ],
+   "8": [
+    300,
+    350
+   ],
+   "9": [
+    330,
+    385
+   ]
+  }
+ },
+ "Mounted Bonesaw MK.3": {
+  "amount": 5,
+  "seconds": 2500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    11
+   ],
+   "4": [
+    300,
+    14
+   ],
+   "5": [
+    350,
+    16
+   ],
+   "6": [
+    400,
+    18
+   ],
+   "7": [
+    450,
+    20
+   ],
+   "8": [
+    500,
+    22
+   ],
+   "9": [
+    550,
+    24
+   ]
+  }
+ },
+ "Neville Anti-Tank Rifle": {
+  "amount": 3,
+  "seconds": 370,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    360
+   ],
+   "4": [
+    450
+   ],
+   "5": [
+    525
+   ],
+   "6": [
+    600
+   ],
+   "7": [
+    675
+   ],
+   "8": [
+    750
+   ],
+   "9": [
+    825
+   ]
+  }
+ },
+ "RPG": {
+  "amount": 15,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    144,
+    216
+   ],
+   "4": [
+    180,
+    270
+   ],
+   "5": [
+    210,
+    315
+   ],
+   "6": [
+    240,
+    360
+   ],
+   "7": [
+    270,
+    405
+   ],
+   "8": [
+    300,
+    450
+   ],
+   "9": [
+    330,
+    495
+   ]
+  }
+ },
+ "Shrapnel Mortar Shell": {
+  "amount": 15,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    144,
+    48
+   ],
+   "4": [
+    180,
+    60
+   ],
+   "5": [
+    210,
+    70
+   ],
+   "6": [
+    240,
+    80
+   ],
+   "7": [
+    270,
+    90
+   ],
+   "8": [
+    300,
+    100
+   ],
+   "9": [
+    330,
+    110
+   ]
+  }
+ },
+ "Tremola Grenade GPb-1": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    179,
+    240
+   ],
+   "4": [
+    224,
+    300
+   ],
+   "5": [
+    261,
+    350
+   ],
+   "6": [
+    298,
+    400
+   ],
+   "7": [
+    335,
+    450
+   ],
+   "8": [
+    372,
+    500
+   ],
+   "9": [
+    409,
+    550
+   ]
+  }
+ },
+ "Willow's Bane Model 845": {
+  "amount": 10,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    395,
+    72
+   ],
+   "4": [
+    494,
+    90
+   ],
+   "5": [
+    576,
+    105
+   ],
+   "6": [
+    658,
+    120
+   ],
+   "7": [
+    740,
+    135
+   ],
+   "8": [
+    822,
+    150
+   ],
+   "9": [
+    904,
+    165
+   ]
+  }
+ },
+ "120mm": {
+  "amount": 5,
+  "seconds": 550,
+  "resources": [
+   "Basic Materials",
+   "Heavy Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    288,
+    24
+   ],
+   "4": [
+    360,
+    30
+   ],
+   "5": [
+    420,
+    35
+   ],
+   "6": [
+    480,
+    40
+   ],
+   "7": [
+    540,
+    45
+   ],
+   "8": [
+    600,
+    50
+   ],
+   "9": [
+    660,
+    55
+   ]
+  }
+ },
+ "150mm": {
+  "amount": 5,
+  "seconds": 650,
+  "resources": [
+   "Basic Materials",
+   "Heavy Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    288,
+    144
+   ],
+   "4": [
+    360,
+    180
+   ],
+   "5": [
+    420,
+    210
+   ],
+   "6": [
+    480,
+    240
+   ],
+   "7": [
+    540,
+    270
+   ],
+   "8": [
+    600,
+    300
+   ],
+   "9": [
+    660,
+    330
+   ]
+  }
+ },
+ "20mm": {
+  "amount": 5,
+  "seconds": 550,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    288
+   ],
+   "4": [
+    360
+   ],
+   "5": [
+    420
+   ],
+   "6": [
+    480
+   ],
+   "7": [
+    540
+   ],
+   "8": [
+    600
+   ],
+   "9": [
+    660
+   ]
+  }
+ },
+ "250mm “Fury” Shell": {
+  "amount": 5,
+  "seconds": 2500,
+  "resources": [
+   "Basic Materials",
+   "Heavy Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    600,
+    480
+   ],
+   "4": [
+    750,
+    600
+   ],
+   "5": [
+    875,
+    700
+   ],
+   "6": [
+    1000,
+    800
+   ],
+   "7": [
+    1125,
+    900
+   ],
+   "8": [
+    1250,
+    1000
+   ],
+   "9": [
+    1375,
+    1100
+   ]
+  }
+ },
+ "250mm “Purity” Shell": {
+  "amount": 5,
+  "seconds": 1500,
+  "resources": [
+   "Basic Materials",
+   "Heavy Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    288,
+    240
+   ],
+   "4": [
+    360,
+    300
+   ],
+   "5": [
+    420,
+    350
+   ],
+   "6": [
+    480,
+    400
+   ],
+   "7": [
+    540,
+    450
+   ],
+   "8": [
+    600,
+    500
+   ],
+   "9": [
+    660,
+    550
+   ]
+  }
+ },
+ "40mm": {
+  "amount": 20,
+  "seconds": 2000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    384,
+    576
+   ],
+   "4": [
+    480,
+    720
+   ],
+   "5": [
+    560,
+    840
+   ],
+   "6": [
+    640,
+    960
+   ],
+   "7": [
+    720,
+    1080
+   ],
+   "8": [
+    800,
+    1200
+   ],
+   "9": [
+    880,
+    1320
+   ]
+  }
+ },
+ "68mm": {
+  "amount": 20,
+  "seconds": 2000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    288,
+    576
+   ],
+   "4": [
+    360,
+    720
+   ],
+   "5": [
+    420,
+    840
+   ],
+   "6": [
+    480,
+    960
+   ],
+   "7": [
+    540,
+    1080
+   ],
+   "8": [
+    600,
+    1200
+   ],
+   "9": [
+    660,
+    1320
+   ]
+  }
+ },
+ "950-70b Anti-Aircraft Shell": {
+  "amount": 5,
+  "seconds": 650,
+  "resources": [
+   "Basic Materials",
+   "Heavy Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    240,
+    35
+   ],
+   "4": [
+    300,
+    44
+   ],
+   "5": [
+    350,
+    51
+   ],
+   "6": [
+    400,
+    58
+   ],
+   "7": [
+    450,
+    65
+   ],
+   "8": [
+    500,
+    72
+   ],
+   "9": [
+    550,
+    79
+   ]
+  }
+ },
+ "Absol Anti-Aircraft Rounds": {
+  "amount": 5,
+  "seconds": 550,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    360,
+    384
+   ],
+   "4": [
+    450,
+    480
+   ],
+   "5": [
+    525,
+    560
+   ],
+   "6": [
+    600,
+    640
+   ],
+   "7": [
+    675,
+    720
+   ],
+   "8": [
+    750,
+    800
+   ],
+   "9": [
+    825,
+    880
+   ]
+  }
+ },
+ "E681-B Hullbreaker Mine": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    299,
+    83
+   ],
+   "4": [
+    374,
+    104
+   ],
+   "5": [
+    436,
+    121
+   ],
+   "6": [
+    498,
+    138
+   ],
+   "7": [
+    560,
+    155
+   ],
+   "8": [
+    622,
+    172
+   ],
+   "9": [
+    684,
+    189
+   ]
+  }
+ },
+ "Naval Buoy": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    360
+   ],
+   "4": [
+    450
+   ],
+   "5": [
+    525
+   ],
+   "6": [
+    600
+   ],
+   "7": [
+    675
+   ],
+   "8": [
+    750
+   ],
+   "9": [
+    825
+   ]
+  }
+ },
+ "Quillback Torpedo": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    299,
+    179
+   ],
+   "4": [
+    374,
+    224
+   ],
+   "5": [
+    436,
+    261
+   ],
+   "6": [
+    498,
+    298
+   ],
+   "7": [
+    560,
+    335
+   ],
+   "8": [
+    622,
+    372
+   ],
+   "9": [
+    684,
+    409
+   ]
+  }
+ },
+ "Shatter Missile": {
+  "amount": 5,
+  "seconds": 2500,
+  "resources": [
+   "Basic Materials",
+   "Heavy Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    600,
+    600
+   ],
+   "4": [
+    750,
+    750
+   ],
+   "5": [
+    875,
+    875
+   ],
+   "6": [
+    1000,
+    1000
+   ],
+   "7": [
+    1125,
+    1125
+   ],
+   "8": [
+    1250,
+    1250
+   ],
+   "9": [
+    1375,
+    1375
+   ]
+  }
+ },
+ "Maintenance Supplies": {
+  "amount": 100,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    600
+   ],
+   "4": [
+    750
+   ],
+   "5": [
+    875
+   ],
+   "6": [
+    1000
+   ],
+   "7": [
+    1125
+   ],
+   "8": [
+    1250
+   ],
+   "9": [
+    1375
+   ]
+  }
+ },
+ "Caoivish Parka": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Gentleman's Peacoat": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Gunner's Breastplate": {
+  "amount": 5,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    360
+   ],
+   "4": [
+    450
+   ],
+   "5": [
+    525
+   ],
+   "6": [
+    600
+   ],
+   "7": [
+    675
+   ],
+   "8": [
+    750
+   ],
+   "9": [
+    825
+   ]
+  }
+ },
+ "Officer's Regalia": {
+  "amount": 3,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Outrider's Mantle": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Padded Boiler Suit": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Physician's Jacket": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Sapper Gear": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Specialist's Overcoat": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "68A-4 Ronan Fathomer": {
+  "amount": 3,
+  "seconds": 12500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    1800
+   ],
+   "4": [
+    2250
+   ],
+   "5": [
+    2625
+   ]
+  }
+ },
+ "74b-1 Ronan Gunship": {
+  "amount": 3,
+  "seconds": 7000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1008
+   ],
+   "4": [
+    1260
+   ],
+   "5": [
+    1470
+   ]
+  }
+ },
+ "81f-f Ronan Blackguard": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Balfour Falconer 250mm": {
+  "amount": 3,
+  "seconds": 1750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    251
+   ],
+   "4": [
+    314
+   ],
+   "5": [
+    366
+   ]
+  }
+ },
+ "Balfour Wolfhound 40mm": {
+  "amount": 3,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ]
+  }
+ },
+ "Bellweather by VAC": {
+  "amount": 3,
+  "seconds": 7500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    1080
+   ],
+   "4": [
+    1350
+   ],
+   "5": [
+    1575
+   ]
+  }
+ },
+ "BMS - Aquatipper": {
+  "amount": 3,
+  "seconds": 7500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    1080
+   ],
+   "4": [
+    1350
+   ],
+   "5": [
+    1575
+   ]
+  }
+ },
+ "BMS - Class 2 Mobile Auto-Crane": {
+  "amount": 3,
+  "seconds": 6250,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    899
+   ],
+   "4": [
+    1124
+   ],
+   "5": [
+    1311
+   ]
+  }
+ },
+ "BMS - Ironship": {
+  "amount": 3,
+  "seconds": 25000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    3600
+   ],
+   "4": [
+    4500
+   ],
+   "5": [
+    5250
+   ]
+  }
+ },
+ "BMS - Packmule Flatbed": {
+  "amount": 3,
+  "seconds": 1500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    216
+   ],
+   "4": [
+    270
+   ],
+   "5": [
+    315
+   ]
+  }
+ },
+ "BMS - Universal Assembly Rig": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Collins Cannon 68mm": {
+  "amount": 3,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ]
+  }
+ },
+ "Das Krokodil by VAC": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Devitt Mk. III": {
+  "amount": 3,
+  "seconds": 6000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    864
+   ],
+   "4": [
+    1080
+   ],
+   "5": [
+    1260
+   ]
+  }
+ },
+ "Drummond 100a": {
+  "amount": 3,
+  "seconds": 500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    72
+   ],
+   "4": [
+    90
+   ],
+   "5": [
+    105
+   ]
+  }
+ },
+ "Dunne Caravaner 2f": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Dunne Fuelrunner 2d": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Dunne Loadlugger 3c": {
+  "amount": 3,
+  "seconds": 6000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    864
+   ],
+   "4": [
+    1080
+   ],
+   "5": [
+    1260
+   ]
+  }
+ },
+ "Dunne Responder 3e": {
+  "amount": 3,
+  "seconds": 7500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    1080
+   ],
+   "4": [
+    1350
+   ],
+   "5": [
+    1575
+   ]
+  }
+ },
+ "Dunne Transport": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Gallagher Brigand Mk. I": {
+  "amount": 3,
+  "seconds": 7500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1080
+   ],
+   "4": [
+    1350
+   ],
+   "5": [
+    1575
+   ]
+  }
+ },
+ "King Spire Mk. I": {
+  "amount": 3,
+  "seconds": 3500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    504
+   ],
+   "4": [
+    630
+   ],
+   "5": [
+    735
+   ]
+  }
+ },
+ "Kivela Power Wheel 80-1": {
+  "amount": 3,
+  "seconds": 4250,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    611
+   ],
+   "4": [
+    764
+   ],
+   "5": [
+    891
+   ]
+  }
+ },
+ "Mulloy LPC": {
+  "amount": 3,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ]
+  }
+ },
+ "Niska Mk. I Gun Motor Carriage": {
+  "amount": 3,
+  "seconds": 3000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    432
+   ],
+   "4": [
+    540
+   ],
+   "5": [
+    630
+   ]
+  }
+ },
+ "Noble Widow MK. XIV": {
+  "amount": 3,
+  "seconds": 8000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1152
+   ],
+   "4": [
+    1440
+   ],
+   "5": [
+    1680
+   ]
+  }
+ },
+ "O'Brien V.110": {
+  "amount": 3,
+  "seconds": 1250,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    179
+   ],
+   "4": [
+    224
+   ],
+   "5": [
+    261
+   ]
+  }
+ },
+ "O'Brien V.190 Knave": {
+  "amount": 3,
+  "seconds": 2000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    288
+   ],
+   "4": [
+    360
+   ],
+   "5": [
+    420
+   ]
+  }
+ },
+ "Rinnspeir Ornitier-Class Gunship": {
+  "amount": 3,
+  "seconds": 22500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    3240
+   ],
+   "4": [
+    4050
+   ],
+   "5": [
+    4725
+   ]
+  }
+ },
+ "Rooster - Junkwagon": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Rooster - Lamploader": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Rooster - Tumblebox": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Sharkey-Devitt Birdeater Mk. I": {
+  "amount": 3,
+  "seconds": 6250,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    899
+   ],
+   "4": [
+    1124
+   ],
+   "5": [
+    1311
+   ]
+  }
+ },
+ "Silverhand - Mk. IV": {
+  "amount": 3,
+  "seconds": 8000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1152
+   ],
+   "4": [
+    1440
+   ],
+   "5": [
+    1680
+   ]
+  }
+ },
+ "Swallowtail 988/127-2": {
+  "amount": 3,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ]
+  }
+ },
+ "Concrete Mixer": {
+  "amount": 3,
+  "seconds": 3750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    539
+   ],
+   "4": [
+    674
+   ],
+   "5": [
+    786
+   ]
+  }
+ },
+ "Construction Equipment": {
+  "amount": 3,
+  "seconds": 2500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    360
+   ],
+   "4": [
+    450
+   ],
+   "5": [
+    525
+   ]
+  }
+ },
+ "Huber Exalt 150mm": {
+  "amount": 3,
+  "seconds": 8750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1259
+   ],
+   "4": [
+    1574
+   ],
+   "5": [
+    1836
+   ]
+  }
+ },
+ "Huber Lariat 120mm": {
+  "amount": 3,
+  "seconds": 1750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    251
+   ],
+   "4": [
+    314
+   ],
+   "5": [
+    366
+   ]
+  }
+ },
+ "Leary AA-70 Bolas": {
+  "amount": 3,
+  "seconds": 8750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1259
+   ],
+   "4": [
+    1574
+   ],
+   "5": [
+    1836
+   ]
+  }
+ },
+ "Leary Shellbore 68mm": {
+  "amount": 3,
+  "seconds": 7500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    1080
+   ],
+   "4": [
+    1350
+   ],
+   "5": [
+    1575
+   ]
+  }
+ },
+ "Leary Snare Trap 20": {
+  "amount": 3,
+  "seconds": 3750,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    539
+   ],
+   "4": [
+    674
+   ],
+   "5": [
+    786
+   ]
+  }
+ },
+ "Liquid Container": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Material Pallet": {
+  "amount": 3,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    179
+   ],
+   "4": [
+    224
+   ],
+   "5": [
+    261
+   ]
+  }
+ },
+ "Resource Container": {
+  "amount": 3,
+  "seconds": 2500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    360
+   ],
+   "4": [
+    450
+   ],
+   "5": [
+    525
+   ]
+  }
+ },
+ "Shipping Container": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "“Dusk” ce.III": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    35
+   ],
+   "4": [
+    44
+   ],
+   "5": [
+    51
+   ],
+   "6": [
+    58
+   ],
+   "7": [
+    65
+   ],
+   "8": [
+    72
+   ],
+   "9": [
+    79
+   ]
+  }
+ },
+ "“Lionclaw” mc.VIII": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    288
+   ],
+   "4": [
+    360
+   ],
+   "5": [
+    420
+   ],
+   "6": [
+    480
+   ],
+   "7": [
+    540
+   ],
+   "8": [
+    600
+   ],
+   "9": [
+    660
+   ]
+  }
+ },
+ "“The Pitch Gun” mc.V": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    192
+   ],
+   "4": [
+    240
+   ],
+   "5": [
+    280
+   ],
+   "6": [
+    320
+   ],
+   "7": [
+    360
+   ],
+   "8": [
+    400
+   ],
+   "9": [
+    440
+   ]
+  }
+ },
+ "Argenti r.II Rifle": {
+  "amount": 20,
+  "seconds": 700,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Bomastone Grenade": {
+  "amount": 25,
+  "seconds": 1000,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    240,
+    96
+   ],
+   "4": [
+    300,
+    120
+   ],
+   "5": [
+    350,
+    140
+   ],
+   "6": [
+    400,
+    160
+   ],
+   "7": [
+    450,
+    180
+   ],
+   "8": [
+    500,
+    200
+   ],
+   "9": [
+    550,
+    220
+   ]
+  }
+ },
+ "Catara mo.II": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    35
+   ],
+   "4": [
+    44
+   ],
+   "5": [
+    51
+   ],
+   "6": [
+    58
+   ],
+   "7": [
+    65
+   ],
+   "8": [
+    72
+   ],
+   "9": [
+    79
+   ]
+  }
+ },
+ "Catena rt.IV Auto-Rifle": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    288
+   ],
+   "4": [
+    360
+   ],
+   "5": [
+    420
+   ],
+   "6": [
+    480
+   ],
+   "7": [
+    540
+   ],
+   "8": [
+    600
+   ],
+   "9": [
+    660
+   ]
+  }
+ },
+ "Fuscina pi.I": {
+  "amount": 20,
+  "seconds": 800,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    336
+   ],
+   "4": [
+    420
+   ],
+   "5": [
+    490
+   ],
+   "6": [
+    560
+   ],
+   "7": [
+    630
+   ],
+   "8": [
+    700
+   ],
+   "9": [
+    770
+   ]
+  }
+ },
+ "KRF1-750 Dragonfly": {
+  "amount": 15,
+  "seconds": 1500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    312
+   ],
+   "4": [
+    390
+   ],
+   "5": [
+    455
+   ],
+   "6": [
+    520
+   ],
+   "7": [
+    585
+   ],
+   "8": [
+    650
+   ],
+   "9": [
+    715
+   ]
+  }
+ },
+ "KRN886-127 Gast Machine Gun": {
+  "amount": 5,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    59
+   ],
+   "4": [
+    74
+   ],
+   "5": [
+    86
+   ],
+   "6": [
+    98
+   ],
+   "7": [
+    110
+   ],
+   "8": [
+    122
+   ],
+   "9": [
+    134
+   ]
+  }
+ },
+ "KRR2-790 Omen": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    371
+   ],
+   "4": [
+    464
+   ],
+   "5": [
+    541
+   ],
+   "6": [
+    618
+   ],
+   "7": [
+    695
+   ],
+   "8": [
+    772
+   ],
+   "9": [
+    849
+   ]
+  }
+ },
+ "Volta r.I Repeater": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "“Molten Wind” v.II Flame Torch": {
+  "amount": 10,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    443,
+    59
+   ],
+   "4": [
+    554,
+    74
+   ],
+   "5": [
+    646,
+    86
+   ],
+   "6": [
+    738,
+    98
+   ],
+   "7": [
+    830,
+    110
+   ],
+   "8": [
+    922,
+    122
+   ],
+   "9": [
+    1014,
+    134
+   ]
+  }
+ },
+ "“Typhon” ra.XII": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    11
+   ],
+   "4": [
+    300,
+    14
+   ],
+   "5": [
+    350,
+    16
+   ],
+   "6": [
+    400,
+    18
+   ],
+   "7": [
+    450,
+    20
+   ],
+   "8": [
+    500,
+    22
+   ],
+   "9": [
+    550,
+    24
+   ]
+  }
+ },
+ "Bane 45": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    360,
+    96
+   ],
+   "4": [
+    450,
+    120
+   ],
+   "5": [
+    525,
+    140
+   ],
+   "6": [
+    600,
+    160
+   ],
+   "7": [
+    675,
+    180
+   ],
+   "8": [
+    750,
+    200
+   ],
+   "9": [
+    825,
+    220
+   ]
+  }
+ },
+ "Daucus isg.III": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    11
+   ],
+   "4": [
+    300,
+    14
+   ],
+   "5": [
+    350,
+    16
+   ],
+   "6": [
+    400,
+    18
+   ],
+   "7": [
+    450,
+    20
+   ],
+   "8": [
+    500,
+    22
+   ],
+   "9": [
+    550,
+    24
+   ]
+  }
+ },
+ "Ignifist 30": {
+  "amount": 10,
+  "seconds": 750,
+  "resources": [
+   "Basic Materials",
+   "Explosive Powder"
+  ],
+  "totals": {
+   "3": [
+    203,
+    168
+   ],
+   "4": [
+    254,
+    210
+   ],
+   "5": [
+    296,
+    245
+   ],
+   "6": [
+    338,
+    280
+   ],
+   "7": [
+    380,
+    315
+   ],
+   "8": [
+    422,
+    350
+   ],
+   "9": [
+    464,
+    385
+   ]
+  }
+ },
+ "KLG901-2 Lunaire F": {
+  "amount": 5,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    83
+   ],
+   "4": [
+    300,
+    104
+   ],
+   "5": [
+    350,
+    121
+   ],
+   "6": [
+    400,
+    138
+   ],
+   "7": [
+    450,
+    155
+   ],
+   "8": [
+    500,
+    172
+   ],
+   "9": [
+    550,
+    189
+   ]
+  }
+ },
+ "Lamentum mm.IV": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    11
+   ],
+   "4": [
+    300,
+    14
+   ],
+   "5": [
+    350,
+    16
+   ],
+   "6": [
+    400,
+    18
+   ],
+   "7": [
+    450,
+    20
+   ],
+   "8": [
+    500,
+    22
+   ],
+   "9": [
+    550,
+    24
+   ]
+  }
+ },
+ "Mounted Fissura gd.I": {
+  "amount": 5,
+  "seconds": 1250,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    11
+   ],
+   "4": [
+    300,
+    14
+   ],
+   "5": [
+    350,
+    16
+   ],
+   "6": [
+    400,
+    18
+   ],
+   "7": [
+    450,
+    20
+   ],
+   "8": [
+    500,
+    22
+   ],
+   "9": [
+    550,
+    24
+   ]
+  }
+ },
+ "Venom c.II 35": {
+  "amount": 5,
+  "seconds": 500,
+  "resources": [
+   "Basic Materials",
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    240,
+    35
+   ],
+   "4": [
+    300,
+    44
+   ],
+   "5": [
+    350,
+    51
+   ],
+   "6": [
+    400,
+    58
+   ],
+   "7": [
+    450,
+    65
+   ],
+   "8": [
+    500,
+    72
+   ],
+   "9": [
+    550,
+    79
+   ]
+  }
+ },
+ "Fabri Rucksack": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Grenadier's Baldric": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Heavy Topcoat": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Legionary's Oilcoat": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Medic Fatigues": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Officialis' Attire": {
+  "amount": 3,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Recon Camo": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Remex Garb": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Tankman's Coveralls": {
+  "amount": 15,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    240
+   ],
+   "4": [
+    300
+   ],
+   "5": [
+    350
+   ],
+   "6": [
+    400
+   ],
+   "7": [
+    450
+   ],
+   "8": [
+    500
+   ],
+   "9": [
+    550
+   ]
+  }
+ },
+ "Velian Flak Vest": {
+  "amount": 10,
+  "seconds": 900,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    480
+   ],
+   "4": [
+    600
+   ],
+   "5": [
+    700
+   ],
+   "6": [
+    800
+   ],
+   "7": [
+    900
+   ],
+   "8": [
+    1000
+   ],
+   "9": [
+    1100
+   ]
+  }
+ },
+ "03MM “Caster”": {
+  "amount": 3,
+  "seconds": 4250,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    611
+   ],
+   "4": [
+    764
+   ],
+   "5": [
+    891
+   ]
+  }
+ },
+ "120-68 “Koronides” Field Gun": {
+  "amount": 3,
+  "seconds": 2500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    360
+   ],
+   "4": [
+    450
+   ],
+   "5": [
+    525
+   ]
+  }
+ },
+ "30-250 “Tisiphone” Field Cannon": {
+  "amount": 3,
+  "seconds": 1750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    251
+   ],
+   "4": [
+    314
+   ],
+   "5": [
+    366
+   ]
+  }
+ },
+ "85K-b “Falchion”": {
+  "amount": 5,
+  "seconds": 6750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    971
+   ],
+   "4": [
+    1214
+   ],
+   "5": [
+    1416
+   ]
+  }
+ },
+ "86K-a “Bardiche”": {
+  "amount": 3,
+  "seconds": 8250,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1187
+   ],
+   "4": [
+    1484
+   ],
+   "5": [
+    1731
+   ]
+  }
+ },
+ "90T-v “Nemesis”": {
+  "amount": 3,
+  "seconds": 7500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1080
+   ],
+   "4": [
+    1350
+   ],
+   "5": [
+    1575
+   ]
+  }
+ },
+ "AA-2 Battering Ram": {
+  "amount": 3,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ]
+  }
+ },
+ "AB-8 “Acheron”": {
+  "amount": 3,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ]
+  }
+ },
+ "G40 “Sagittarii”": {
+  "amount": 3,
+  "seconds": 1000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    144
+   ],
+   "4": [
+    180
+   ],
+   "5": [
+    210
+   ]
+  }
+ },
+ "H-5 “Hatchet”": {
+  "amount": 3,
+  "seconds": 5750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    827
+   ],
+   "4": [
+    1034
+   ],
+   "5": [
+    1206
+   ]
+  }
+ },
+ "HA-1 “Sagaris”": {
+  "amount": 3,
+  "seconds": 6250,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    899
+   ],
+   "4": [
+    1124
+   ],
+   "5": [
+    1311
+   ]
+  }
+ },
+ "HC-2 “Scorpion”": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "HH-a “Javelin”": {
+  "amount": 3,
+  "seconds": 2750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    395
+   ],
+   "4": [
+    494
+   ],
+   "5": [
+    576
+   ]
+  }
+ },
+ "K-81e “Sombre”": {
+  "amount": 3,
+  "seconds": 10000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    1440
+   ],
+   "4": [
+    1800
+   ],
+   "5": [
+    2100
+   ]
+  }
+ },
+ "R-1 Hauler": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "R-12 - “Salus” Ambulance": {
+  "amount": 3,
+  "seconds": 7500,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    1080
+   ],
+   "4": [
+    1350
+   ],
+   "5": [
+    1575
+   ]
+  }
+ },
+ "R-15 - “Chariot”": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "R-5 “Atlas” Hauler": {
+  "amount": 3,
+  "seconds": 6000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    864
+   ],
+   "4": [
+    1080
+   ],
+   "5": [
+    1260
+   ]
+  }
+ },
+ "RR-3 “Stolon” Tanker": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Strider": {
+  "amount": 3,
+  "seconds": 25000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    3600
+   ],
+   "4": [
+    4500
+   ],
+   "5": [
+    5250
+   ]
+  }
+ },
+ "T12 “Actaeon” Tankette": {
+  "amount": 3,
+  "seconds": 1750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    251
+   ],
+   "4": [
+    314
+   ],
+   "5": [
+    366
+   ]
+  }
+ },
+ "T3 “Xiphos”": {
+  "amount": 3,
+  "seconds": 1250,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    179
+   ],
+   "4": [
+    224
+   ],
+   "5": [
+    261
+   ]
+  }
+ },
+ "Type B - “Lucian”": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "Type C - “Charon”": {
+  "amount": 3,
+  "seconds": 7000,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1008
+   ],
+   "4": [
+    1260
+   ],
+   "5": [
+    1470
+   ]
+  }
+ },
+ "UV-05a “Argonaut”": {
+  "amount": 3,
+  "seconds": 500,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    72
+   ],
+   "4": [
+    90
+   ],
+   "5": [
+    105
+   ]
+  }
+ },
+ "50-500 “Thunderbolt” Cannon": {
+  "amount": 3,
+  "seconds": 9750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1403
+   ],
+   "4": [
+    1754
+   ],
+   "5": [
+    2046
+   ]
+  }
+ },
+ "DAE 1b-2 “Serra”": {
+  "amount": 3,
+  "seconds": 5000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    720
+   ],
+   "4": [
+    900
+   ],
+   "5": [
+    1050
+   ]
+  }
+ },
+ "DAE 1o-3 “Polybolos”": {
+  "amount": 3,
+  "seconds": 6250,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    899
+   ],
+   "4": [
+    1124
+   ],
+   "5": [
+    1311
+   ]
+  }
+ },
+ "DAE 5b “Zeal”": {
+  "amount": 3,
+  "seconds": 8750,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    1259
+   ],
+   "4": [
+    1574
+   ],
+   "5": [
+    1836
+   ]
+  }
+ }
+}

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import type { Recipe } from "@/entities/recipe";
+import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
 import { ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, uiIcon, useI18n, useNotify, type MessageKey } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 
@@ -14,18 +14,22 @@ const FACTIONS: { key: string; label: MessageKey }[] = [
   { key: "warden", label: "codes.faction.warden" },
 ];
 
-/** MPF: каждый следующий ящик партии дешевле на 10% (максимум −50%). */
-function discountSum(base: number, crates: number, facility: Facility): number {
-  if (facility !== "mpf") return base * crates;
-  let total = 0;
-  for (let i = 1; i <= crates; i += 1) total += Math.floor(base * (1 - Math.min(0.5, i * 0.1)));
-  return total;
+const isShippable = (recipe: Recipe) => recipe.category === "vehicles" || recipe.category === "shipables";
+
+/** Игровой лимит заказа (режим PRODUCTION): MPF — 9 ящиков предметов / 5 техники и сооружений. */
+function queueLimit(recipe: Recipe, facility: Facility): number {
+  if (facility === "mpf") return mpfData(recipe)?.max_crates ?? (isShippable(recipe) ? 5 : 9);
+  return isShippable(recipe) ? 5 : 4;
 }
 
-/** Игровой лимит очереди (режим PRODUCTION). */
-function queueLimit(recipe: Recipe, facility: Facility): number {
-  if (facility === "mpf") return 9;
-  return recipe.category === "vehicles" || recipe.category === "shipables" ? 5 : 4;
+/** Цена ящика: в MPF — база из таблиц MPF, иначе — цена Factory. */
+const crateCost = (recipe: Recipe, facility: Facility) => (facility === "mpf" ? mpfData(recipe)?.cost : undefined) ?? recipe.cost;
+
+/** Сколько ресурса уйдёт на crates ящиков (MPF — по заказам со скидкой). */
+function resourceCost(base: number, crates: number, recipe: Recipe, facility: Facility, planning: boolean): number {
+  if (facility !== "mpf") return base * crates;
+  const orders = planning ? mpfOrders(crates, queueLimit(recipe, facility)) : [crates];
+  return orders.reduce((sum, n) => sum + mpfOrderCost(base, n), 0);
 }
 
 export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[] }> = ({ facility, recipes }) => {
@@ -47,7 +51,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
     return recipes.filter(
       (r) =>
         (faction === "all" || r.factions.includes(faction)) &&
-        (planning || r.facilities.includes(facility)) &&
+        (facility === "mpf" ? r.facilities.includes("mpf") : planning || r.facilities.includes(facility)) &&
         (category === "all" || r.category === category) &&
         (!needle || `${r.name} ${r.name_en ?? ""} ${r.item_class ?? ""} ${r.description ?? ""}`.toLowerCase().includes(needle)),
     );
@@ -61,10 +65,23 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
   const report = React.useMemo<ToolReport>(() => {
     const materials: Record<string, number> = {};
     let crates = 0;
+    let fullPrice = 0;
+    let paid = 0;
+    // MPF: в каждой категории заказы идут друг за другом, категории — параллельно
+    const categorySeconds: Record<string, number> = {};
     for (const { recipe, crates: qty } of rows) {
       crates += qty;
-      for (const [key, value] of Object.entries(recipe.cost)) materials[key] = (materials[key] ?? 0) + discountSum(Number(value) || 0, qty, facility);
+      for (const [key, value] of Object.entries(crateCost(recipe, facility))) {
+        const base = Number(value) || 0;
+        const cost = resourceCost(base, qty, recipe, facility, planning);
+        materials[key] = (materials[key] ?? 0) + cost;
+        fullPrice += base * qty;
+        paid += cost;
+      }
+      const perCrate = facility === "mpf" ? mpfData(recipe)?.seconds ?? 0 : 60;
+      categorySeconds[recipe.category] = (categorySeconds[recipe.category] ?? 0) + perCrate * qty;
     }
+    const seconds = facility === "mpf" ? Math.max(0, ...Object.values(categorySeconds)) : crates * 60;
     const isFactory = facility === "factory";
     return {
       toolName: isFactory ? t("tools.factory") : "MPF — Mass Production Factory",
@@ -74,7 +91,8 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
       resources: Object.entries(materials).map(([key, value]) => ({ name: label("material", key), quantity: Math.round(value), unit: t("unit.unit"), icon: labelIcon("material", key) })),
       stats: [
         { name: t("tools.crates"), quantity: crates, unit: t("unit.crate") },
-        { name: t("tools.time"), quantity: formatDuration(crates * 60, timeUnits(t)), unit: "" },
+        { name: t("tools.time"), quantity: formatDuration(seconds, timeUnits(t)), unit: "" },
+        ...(isFactory || !fullPrice ? [] : [{ name: t("tools.mpfDiscount"), quantity: `${(((fullPrice - paid) / fullPrice) * 100).toFixed(1)}%`, unit: "" }]),
       ],
     };
   }, [rows, facility, planning, label, labelIcon, t, rname]);
@@ -83,9 +101,12 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
   const setQuantity = (recipe: Recipe, requested: number | ((current: number) => number)) => {
     const limit = queueLimit(recipe, facility);
     setPlan((prev) => {
-      const wanted = Math.max(0, Math.floor(typeof requested === "function" ? requested(prev[recipe.id] ?? 0) : requested));
-      const next = !planning && wanted > limit ? limit : wanted;
-      if (next !== wanted) {
+      const current = prev[recipe.id] ?? 0;
+      const wanted = Math.max(0, Math.floor(typeof requested === "function" ? requested(current) : requested));
+      let next = !planning && wanted > limit ? limit : wanted;
+      // заказ MPF — минимум 3 ящика: первый клик сразу даёт 3, уменьшение ниже 3 убирает позицию
+      if (facility === "mpf" && !planning && next > 0 && next < MPF_MIN_CRATES) next = wanted < current ? 0 : MPF_MIN_CRATES;
+      if (next !== wanted && wanted > limit) {
         window.setTimeout(() => notify({ title: t("tools.queueLimit"), message: t("tools.queueLimitMsg", { name: rname(recipe), limit }), tone: "warning" }));
       }
       const copy = { ...prev };
@@ -146,9 +167,9 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
                   {queued ? <span className="absolute top-2 left-2 rounded-sm border border-[#16a34a] bg-[#1e291b] px-1.5 py-0.5 font-mono text-[0.65rem] text-accent">{queued} {t("unit.crate")}</span> : null}
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={88} label={rname(recipe)} className="mt-3" />
                   <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{rname(recipe)}</strong>
-                  <small className="block w-full truncate text-[0.7rem] text-muted">{recipe.item_class ?? label("factory_category", recipe.category)} • x{recipe.output_quantity}</small>
+                  <small className="block w-full truncate text-[0.7rem] text-muted">{recipe.item_class ?? label("factory_category", recipe.category)} • x{(facility === "mpf" ? mpfData(recipe)?.amount : undefined) ?? recipe.output_quantity}</small>
                   <span className="mt-auto flex flex-wrap justify-center gap-1">
-                    {Object.entries(recipe.cost).map(([key, value]) => (
+                    {Object.entries(crateCost(recipe, facility)).map(([key, value]) => (
                       <span key={key} className="rounded-sm border border-white/10 bg-black/30 px-1.5 py-0.5 font-mono text-[0.62rem] text-white/80">{label("material", key)} {value}</span>
                     ))}
                   </span>
@@ -164,7 +185,15 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
               <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={56} label={rname(recipe)} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate text-sm text-white">{rname(recipe)}</span>
-                <span className="hud-label mt-0.5 block truncate text-muted">{planning ? t("tools.noLimit") : t("tools.limit", { n: queueLimit(recipe, facility) })}</span>
+                <span className="hud-label mt-0.5 block truncate text-muted">
+                  {facility === "mpf"
+                    ? planning
+                      ? t("tools.mpfOrders", { orders: mpfOrders(crates, queueLimit(recipe, facility)).join(" + ") })
+                      : t("tools.mpfLimit", { min: MPF_MIN_CRATES, max: queueLimit(recipe, facility) })
+                    : planning
+                      ? t("tools.noLimit")
+                      : t("tools.limit", { n: queueLimit(recipe, facility) })}
+                </span>
               </span>
               <QuantityStepper value={crates} unit={t("unit.crate")} label={rname(recipe)} onChange={(n) => setQuantity(recipe, n)} />
               <button type="button" className="btn btn-danger px-2 py-1" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
