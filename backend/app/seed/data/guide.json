@@ -1848,6 +1848,94 @@
    },
    "shots": [
     {
+     "id": "mgmt-bot",
+     "caption": {
+      "ru": "Бот клана на Discord-сервере",
+      "en": "Clan bot on the Discord server",
+      "cs": "Bot klanu na Discord serveru"
+     },
+     "images": {
+      "ru": "/api/v1/assets/guide/ru/mgmt-bot.webp",
+      "en": "/api/v1/assets/guide/en/mgmt-bot.webp",
+      "cs": "/api/v1/assets/guide/cs/mgmt-bot.webp"
+     },
+     "size": {
+      "ru": {
+       "w": 1319,
+       "h": 215
+      },
+      "en": {
+       "w": 1319,
+       "h": 215
+      },
+      "cs": {
+       "w": 1319,
+       "h": 215
+      }
+     },
+     "markers": {
+      "ru": [
+       {
+        "x": 2.65,
+        "y": 63.43
+       },
+       {
+        "x": 90.51,
+        "y": 79.24
+       },
+       {
+        "x": 98.41,
+        "y": 9.77
+       }
+      ],
+      "en": [
+       {
+        "x": 2.65,
+        "y": 63.43
+       },
+       {
+        "x": 91.7,
+        "y": 79.24
+       },
+       {
+        "x": 98.41,
+        "y": 9.77
+       }
+      ],
+      "cs": [
+       {
+        "x": 2.65,
+        "y": 63.43
+       },
+       {
+        "x": 90.51,
+        "y": 79.24
+       },
+       {
+        "x": 98.41,
+        "y": 9.77
+       }
+      ]
+     },
+     "notes": {
+      "ru": [
+       "Три шага: сервер привязан к клану, бот добавлен, роли подтянуты. Выполненные отмечены ✔.",
+       "Добавить бота клана на сервер — Discord откроет выбор сервера. Бот добавляется без прав.",
+       "Состояние: виден ли бот на сервере и сколько ролей подтянуто. «Подтянуть роли» появляется, когда бот на сервере."
+      ],
+      "en": [
+       "Three steps: server linked, bot added, roles pulled. Done steps are marked ✔.",
+       "Add the clan bot to the server — Discord opens the server picker. The bot needs no permissions.",
+       "Status: whether the bot sees the server and how many roles are pulled. “Pull roles” appears once the bot is on the server."
+      ],
+      "cs": [
+       "Tři kroky: server propojen, bot přidán, role načteny. Hotové kroky mají ✔.",
+       "Přidat bota klanu na server — Discord otevře výběr serveru. Bot nepotřebuje žádná oprávnění.",
+       "Stav: zda bot vidí server a kolik rolí je načteno. „Načíst role“ se objeví, když je bot na serveru."
+      ]
+     }
+    },
+    {
      "id": "mgmt-members",
      "caption": {
       "ru": "Участники клана",
@@ -1950,88 +2038,73 @@
      "size": {
       "ru": {
        "w": 1319,
-       "h": 326
+       "h": 283
       },
       "en": {
        "w": 1319,
-       "h": 307
+       "h": 264
       },
       "cs": {
        "w": 1319,
-       "h": 307
+       "h": 264
       }
      },
      "markers": {
       "ru": [
        {
-        "x": 90.51,
-        "y": 32.32
-       },
-       {
         "x": 44.06,
-        "y": 59.12
+        "y": 53.03
        },
        {
         "x": 48.61,
-        "y": 73.43
+        "y": 69.52
        },
        {
         "x": 98.41,
-        "y": 86.42
+        "y": 84.47
        }
       ],
       "en": [
        {
-        "x": 91.7,
-        "y": 28.23
-       },
-       {
         "x": 44.06,
-        "y": 56.68
+        "y": 49.75
        },
        {
         "x": 48.61,
-        "y": 71.88
+        "y": 67.43
        },
        {
         "x": 98.41,
-        "y": 85.67
+        "y": 83.46
        }
       ],
       "cs": [
        {
-        "x": 90.51,
-        "y": 28.23
-       },
-       {
         "x": 44.06,
-        "y": 56.68
+        "y": 49.75
        },
        {
         "x": 48.61,
-        "y": 71.88
+        "y": 67.43
        },
        {
         "x": 98.41,
-        "y": 85.67
+        "y": 83.46
        }
       ]
      },
      "notes": {
       "ru": [
-       "Добавить бота клана на сервер, затем «Подтянуть роли». Новые роли получают базовый уровень.",
        "Пресет доступа роли: базовый (рядовой), средний, высокий или кастомный.",
        "У кастомной роли — ⚙ и число выбранных действий: открывает окно настройки прав.",
        "Сохранить. Участники получат новые права при следующем входе."
       ],
       "en": [
-       "Add the clan bot to the server, then “Pull roles”. New roles start at basic level.",
        "Role access preset: basic (private), medium, high or custom.",
        "A custom role shows ⚙ and the number of selected actions: opens its rights window.",
        "Save. Members get the new rights at their next sign-in."
       ],
       "cs": [
-       "Přidejte bota klanu na server, pak „Načíst role“. Nové role mají základní úroveň.",
        "Předvolba přístupu role: základní (řadový), střední, vysoký nebo vlastní.",
        "Vlastní role má ⚙ a počet vybraných akcí: otevře okno nastavení práv.",
        "Uložit. Členové dostanou nová práva při dalším přihlášení."

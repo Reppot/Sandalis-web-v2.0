@@ -26,6 +26,8 @@ export const ManagementWorkspace: React.FC = () => {
   const t = useT();
   const [view, setView] = React.useState<View>("members");
   const [catalog, setCatalog] = React.useState<PermissionCatalog | null>(null);
+  // после «Подтянуть роли» окна участников и ролей перечитываются
+  const [revision, setRevision] = React.useState(0);
 
   React.useEffect(() => {
     managementApi.permissions().then(setCatalog).catch(() => setCatalog(null));
@@ -52,8 +54,104 @@ export const ManagementWorkspace: React.FC = () => {
         </div>
       </section>
 
-      {view === "members" ? <MembersView catalog={catalog} /> : <RolesView catalog={catalog} />}
+      <BotPanel onChanged={() => setRevision((r) => r + 1)} />
+
+      {view === "members" ? <MembersView key={revision} catalog={catalog} /> : <RolesView key={revision} catalog={catalog} />}
     </div>
+  );
+};
+
+// --------------------------------------------------------------------------- //
+// Бот клана на сервере: подключение и роли сервера
+// --------------------------------------------------------------------------- //
+const BotPanel: React.FC<{ onChanged: () => void }> = ({ onChanged }) => {
+  const t = useT();
+  const notify = useNotify();
+  const [data, setData] = React.useState<DiscordRoles | null>(null);
+  const [busy, setBusy] = React.useState(false);
+
+  const load = React.useCallback(() => {
+    setData(null);
+    managementApi
+      .roles()
+      .then(setData)
+      .catch((err) => notify({ title: "DISCORD", message: errorText(err, t("droles.loadFailed")), tone: "danger" }));
+  }, [notify, t]);
+  React.useEffect(load, [load]);
+
+  const pull = async () => {
+    setBusy(true);
+    try {
+      const r = await managementApi.pull();
+      setData(r.roles);
+      notify({ title: "DISCORD", message: r.message, tone: "success" });
+      onChanged();
+    } catch (err) {
+      notify({ title: "DISCORD", message: errorText(err, t("droles.saveFailed")), tone: "danger" });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const synced = Boolean(data?.syncedAt);
+  const steps: { done: boolean; label: MessageKey }[] = data
+    ? [
+        { done: Boolean(data.guildId), label: "mgmt.stepGuild" },
+        { done: data.botConfigured && data.botInGuild, label: "mgmt.stepBot" },
+        { done: synced, label: "mgmt.stepRoles" },
+      ]
+    : [];
+
+  return (
+    <section data-guide="mgmt-bot" className="panel panel-corners rounded-md p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="panel-title">🤖 {t("mgmt.botTitle")}</div>
+        {data?.guildId && (
+          <span className={cn("cabinet-pill", synced && data.botInGuild && "cabinet-pill-online")}>
+            {data.botInGuild ? `● ${t("mgmt.botOnline")}` : `○ ${t("mgmt.botOffline")}`}
+            {synced ? ` • ${t("droles.on")} • ${data.roles.length}` : ""}
+          </span>
+        )}
+      </div>
+      <div className="cabinet-rule" />
+      <p className="text-[0.78rem] text-white/70">{t("droles.hint")}</p>
+
+      {!data ? (
+        <Loading className="min-h-[90px]" />
+      ) : (
+        <>
+          <ol className="mt-3 grid gap-1.5 sm:grid-cols-3">
+            {steps.map((step, i) => (
+              <li key={step.label} className={cn("row-item text-xs", step.done ? "text-safe" : "text-muted")}>
+                <span className="font-mono">{step.done ? "✔" : `${i + 1}.`}</span>
+                <span className="min-w-0 flex-1">{t(step.label)}</span>
+              </li>
+            ))}
+          </ol>
+
+          {!data.guildId ? (
+            <p className="hud-label mt-3 text-warn">{t("droles.noGuild")}</p>
+          ) : !data.botConfigured ? (
+            <p className="hud-label mt-3 text-warn">{t("droles.noBotToken")}</p>
+          ) : (
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <p className={cn("hud-label flex-1", data.botInGuild ? "text-muted" : "text-warn")}>
+                {!data.botInGuild ? t("droles.addBot") : synced ? t("droles.synced", { at: formatDateTime(data.syncedAt!) }) : t("droles.notSynced")}
+              </p>
+              {data.botInviteUrl && (
+                <a className={cn("btn", !data.botInGuild && "btn-primary")} data-guide="mgmt-add-bot" href={data.botInviteUrl} target="_blank" rel="noreferrer">
+                  ＋ {t(data.botInGuild ? "mgmt.reinviteBot" : "droles.addBotButton")}
+                </a>
+              )}
+              {data.botInGuild && (
+                <button type="button" className="btn btn-primary" data-guide="mgmt-pull" disabled={busy} onClick={() => void pull()}>⇩ {t("droles.pull")}</button>
+              )}
+              <button type="button" className="btn" disabled={busy} onClick={load}>⟳ {t("common.sync")}</button>
+            </div>
+          )}
+        </>
+      )}
+    </section>
   );
 };
 
@@ -213,25 +311,10 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
 
       {!data ? (
         <Loading />
-      ) : !data.guildId ? (
-        <p className="hud-label mt-3 text-warn">{t("droles.noGuild")}</p>
-      ) : !data.botConfigured ? (
-        <p className="hud-label mt-3 text-warn">{t("droles.noBotToken")}</p>
+      ) : !synced ? (
+        <p className="hud-label mt-3 text-warn">{t("mgmt.connectFirst")}</p>
       ) : (
         <>
-          <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
-            <p className={cn("hud-label flex-1", data.botInGuild ? "text-muted" : "text-warn")}>
-              {!data.botInGuild ? t("droles.addBot") : synced ? t("droles.synced", { at: formatDateTime(data.syncedAt!) }) : t("droles.notSynced")}
-            </p>
-            {!data.botInGuild && data.botInviteUrl && (
-              <a className="btn btn-primary" href={data.botInviteUrl} target="_blank" rel="noreferrer">＋ {t("droles.addBotButton")}</a>
-            )}
-            {data.botInGuild && (
-              <button type="button" className="btn btn-primary" data-guide="mgmt-pull" disabled={busy} onClick={() => void act(() => managementApi.pull())}>⇩ {t("droles.pull")}</button>
-            )}
-            <button type="button" className="btn" disabled={busy} onClick={load}>⟳ {t("common.sync")}</button>
-          </div>
-
           {synced && (
             <>
               <p className="hud-label mt-3 text-muted">{t("droles.levelsHelp")} {t("mgmt.customHelp")}</p>

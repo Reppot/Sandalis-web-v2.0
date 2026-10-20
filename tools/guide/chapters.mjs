@@ -294,6 +294,17 @@ export const CHAPTERS = [
     ),
     shots: [
       {
+        id: "mgmt-bot",
+        path: "/?tab=management",
+        mode: { clip: g("mgmt-bot") },
+        caption: L("Бот клана на Discord-сервере", "Clan bot on the Discord server", "Bot klanu na Discord serveru"),
+        markers: [
+          { sel: `${g("mgmt-bot")} ol`, at: "start", note: L("Три шага: сервер привязан к клану, бот добавлен, роли подтянуты. Выполненные отмечены ✔.", "Three steps: server linked, bot added, roles pulled. Done steps are marked ✔.", "Tři kroky: server propojen, bot přidán, role načteny. Hotové kroky mají ✔.") },
+          { sel: g("mgmt-add-bot"), note: L("Добавить бота клана на сервер — Discord откроет выбор сервера. Бот добавляется без прав.", "Add the clan bot to the server — Discord opens the server picker. The bot needs no permissions.", "Přidat bota klanu na server — Discord otevře výběr serveru. Bot nepotřebuje žádná oprávnění.") },
+          { sel: `${g("mgmt-bot")} .cabinet-pill`, note: L("Состояние: виден ли бот на сервере и сколько ролей подтянуто. «Подтянуть роли» появляется, когда бот на сервере.", "Status: whether the bot sees the server and how many roles are pulled. “Pull roles” appears once the bot is on the server.", "Stav: zda bot vidí server a kolik rolí je načteno. „Načíst role“ se objeví, když je bot na serveru.") },
+        ],
+      },
+      {
         id: "mgmt-members",
         path: "/?tab=management",
         mode: { clip: g("mgmt-members") },
@@ -312,7 +323,6 @@ export const CHAPTERS = [
         prepare: "openRolesTab",
         caption: L("Роли и уровни доступа", "Roles and access levels", "Role a úrovně přístupu"),
         markers: [
-          { sel: `${g("mgmt-roles")} .btn-primary`, note: L("Добавить бота клана на сервер, затем «Подтянуть роли». Новые роли получают базовый уровень.", "Add the clan bot to the server, then “Pull roles”. New roles start at basic level.", "Přidejte bota klanu na server, pak „Načíst role“. Nové role mají základní úroveň.") },
           { sel: g("mgmt-level"), note: L("Пресет доступа роли: базовый (рядовой), средний, высокий или кастомный.", "Role access preset: basic (private), medium, high or custom.", "Předvolba přístupu role: základní (řadový), střední, vysoký nebo vlastní.") },
           { sel: g("mgmt-gear"), note: L("У кастомной роли — ⚙ и число выбранных действий: открывает окно настройки прав.", "A custom role shows ⚙ and the number of selected actions: opens its rights window.", "Vlastní role má ⚙ a počet vybraných akcí: otevře okno nastavení práv.") },
           { sel: g("mgmt-save"), note: L("Сохранить. Участники получат новые права при следующем входе.", "Save. Members get the new rights at their next sign-in.", "Uložit. Členové dostanou nová práva při dalším přihlášení.") },
