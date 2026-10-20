@@ -19,8 +19,10 @@ from app.schemas.auth import (
     ClanApiTokenCreate,
     ClanApiTokenCreated,
     DevTokenRequest,
+    InvitePreview,
     MeRead,
-    RedeemCodeRequest,
+    SetupGuildRead,
+    SetupMembershipRead,
     TokenResponse,
 )
 
@@ -135,6 +137,7 @@ class AuthService:
                     avatar_url=avatar_url,
                 )
             )
+            await self.session.flush()   # invite/выбор сервера ищут этого User дальше
             return
         user.display_name = display_name or user.display_name
         user.avatar_url = avatar_url
@@ -142,47 +145,201 @@ class AuthService:
             user.preferred_locale = normalize_locale(locale)
 
     async def resolve_discord_membership(
-        self, *, user_id: str, display_name: str, clan_id: str | None
+        self, *, user_id: str, display_name: str, clan_id: str | None  # noqa: ARG002
     ) -> ClanMembership:
         """Резолв кланового контекста для discord-юзера ДО аутентификации:
           * clan_id из state -> строго требовать membership в нём;
-          * без clan_id -> единственное активное, иначе последнее по created_at;
-          * нет ни одного -> DEFAULT_CLAN_ID (auto-join ролью DEFAULT_CLAN_ROLE)
-            либо 403 user.not_member.
+          * без clan_id -> последнее активное по created_at;
+          * нет ни одного -> 403 user.not_member (вступление — только по
+            invite-ссылке, владелец сервера создаёт клан через выбор сервера).
         """
+        found = await self._active_membership(user_id, clan_id)
+        if found is not None:
+            return found
+        raise PermissionDeniedError(
+            message_key="user.not_member" if clan_id else "user.no_clan",
+            domain=DOMAIN,
+            params={"user_id": user_id, "clan_id": clan_id or "-"},
+        )
+
+    async def _active_membership(self, user_id: str, clan_id: str | None) -> ClanMembership | None:
         stmt = select(ClanMembership).where(
             ClanMembership.user_id == user_id,
             ClanMembership.is_active.is_(True),
         )
         if clan_id:
             stmt = stmt.where(ClanMembership.clan_id == clan_id)
-        else:
-            stmt = stmt.order_by(ClanMembership.created_at.desc(), ClanMembership.id.desc())
-
+        stmt = stmt.order_by(ClanMembership.created_at.desc(), ClanMembership.id.desc())
         # bypass: клан ещё не известен — это и есть его поиск (core-слой).
         with bypass_clan_filter():
-            found = (
-                (await self.session.execute(stmt.limit(1))).scalars().first()
-                if clan_id is None
-                else (await self.session.execute(stmt)).scalar_one_or_none()
-            )
-            if found is not None:
-                return found
+            return (await self.session.execute(stmt.limit(1))).scalars().first()
 
-            if clan_id is None and settings.DEFAULT_CLAN_ID:
-                membership, _ = await self._upsert_identity(
-                    clan_id=settings.DEFAULT_CLAN_ID,
-                    user_id=user_id,
-                    display_name=display_name,
-                    role=settings.DEFAULT_CLAN_ROLE,
-                    locale=self.t.locale,
+    # ---------------- выбор сервера клана (владелец Discord-сервера) ------------ #
+    async def setup_options(
+        self, *, user_id: str, guilds: list[dict]
+    ) -> tuple[list[SetupGuildRead], list[SetupMembershipRead]]:
+        """Серверы, которыми владеет пользователь (с пометкой «уже клан»),
+        и кланы, где он уже состоит."""
+        ids = [g["id"] for g in guilds]
+        with bypass_clan_filter():
+            linked: dict[str, Clan] = {}
+            if ids:
+                found = await self.session.execute(select(Clan).where(Clan.discord_guild_id.in_(ids)))
+                linked = {c.discord_guild_id: c for c in found.scalars() if c.discord_guild_id}
+            rows = (
+                await self.session.execute(
+                    select(ClanMembership, Clan.name)
+                    .join(Clan, Clan.id == ClanMembership.clan_id)
+                    .where(ClanMembership.user_id == user_id, ClanMembership.is_active.is_(True))
+                    .order_by(ClanMembership.created_at.desc())
                 )
-                return membership
+            ).all()
+        options = [
+            SetupGuildRead(
+                id=g["id"],
+                name=g["name"],
+                icon_url=g.get("icon_url"),
+                clan_id=linked[g["id"]].id if g["id"] in linked else None,
+                clan_name=linked[g["id"]].name if g["id"] in linked else None,
+            )
+            for g in guilds
+        ]
+        memberships = [
+            SetupMembershipRead(clan_id=m.clan_id, clan_name=name, role=m.role) for m, name in rows
+        ]
+        return options, memberships
 
-        raise PermissionDeniedError(
-            message_key="user.not_member",
-            domain=DOMAIN,
-            params={"user_id": user_id, "clan_id": clan_id or settings.DEFAULT_CLAN_ID or "-"},
+    async def claim_guild(
+        self, *, user_id: str, display_name: str, guild: dict
+    ) -> tuple[ClanMembership, str]:
+        """Владелец сервера становится owner клана этого сервера.
+
+        Клан ищется по discord_guild_id; если его нет — к серверу привязывается
+        старый клан пользователя без сервера, где он уже owner (перенос данных
+        клана, созданного до привязки), иначе создаётся новый клан id = guild id.
+        """
+        with bypass_clan_filter():
+            clan = (
+                await self.session.execute(select(Clan).where(Clan.discord_guild_id == guild["id"]))
+            ).scalar_one_or_none()
+            if clan is None:
+                clan = (
+                    await self.session.execute(
+                        select(Clan)
+                        .join(ClanMembership, ClanMembership.clan_id == Clan.id)
+                        .where(
+                            ClanMembership.user_id == user_id,
+                            ClanMembership.role == ClanRole.OWNER,
+                            Clan.discord_guild_id.is_(None),
+                        )
+                        .order_by(Clan.created_at)
+                        .limit(1)
+                    )
+                ).scalars().first()
+            if clan is None:
+                clan = await self.session.get(Clan, guild["id"])
+            if clan is None:
+                clan = Clan(id=guild["id"], name=guild["name"] or guild["id"])
+                self.session.add(clan)
+            clan.discord_guild_id = guild["id"]
+            clan.name = guild["name"] or clan.name
+            clan.icon_url = guild.get("icon_url")
+            clan.is_active = True
+            await self.session.flush()
+
+        membership, _ = await self._upsert_identity(
+            clan_id=clan.id,
+            user_id=user_id,
+            display_name=display_name,
+            role=ClanRole.OWNER,
+            locale=self.t.locale,
+        )
+        with bypass_clan_filter():
+            # Discord подтвердил владение сервером — роль всегда owner
+            membership.role = ClanRole.OWNER
+            membership.is_active = True
+            await self.session.flush()
+        return membership, clan.name
+
+    # ---------------- invite-ссылка ---------------------------------------------- #
+    async def _invite(self, code_value: str, *, check_usage: bool = True) -> ClanInviteCode:
+        now = datetime.now(UTC)
+        with bypass_clan_filter():
+            code = (
+                await self.session.execute(
+                    select(ClanInviteCode).where(ClanInviteCode.code == code_value.strip().upper())
+                )
+            ).scalar_one_or_none()
+        if code is None or code.revoked_at is not None:
+            raise NotFoundError(message_key="code.invalid", domain=DOMAIN, code="invite_invalid")
+        if not check_usage:
+            return code
+        if code.expires_at is not None and code.expires_at < now:
+            raise ConflictError(message_key="code.expired", domain=DOMAIN, code="invite_expired")
+        if code.used_count >= code.max_uses:
+            raise ConflictError(message_key="code.exhausted", domain=DOMAIN, code="invite_exhausted")
+        return code
+
+    async def preview_invite(self, code_value: str) -> InvitePreview:
+        code = await self._invite(code_value)
+        with bypass_clan_filter():
+            clan = await self.session.get(Clan, code.clan_id)
+        return InvitePreview(
+            code=code.code,
+            clan_name=clan.name if clan else code.clan_id,
+            clan_icon_url=clan.icon_url if clan else None,
+            role=code.role,
+        )
+
+    async def redeem_invite(
+        self, *, code_value: str, user_id: str, display_name: str
+    ) -> tuple[ClanMembership, str]:
+        """Discord-пользователь вступает в клан по invite-ссылке. Повторный
+        переход уже состоящего участника не тратит использование и не меняет роль."""
+        code = await self._invite(code_value, check_usage=False)
+        existing = await self._active_membership(user_id, code.clan_id)
+        if existing is None:
+            await self._invite(code_value)       # срок и лимит — только для новых
+        membership, clan_name = await self._upsert_identity(
+            clan_id=code.clan_id,
+            user_id=user_id,
+            display_name=display_name,
+            role=code.role,
+            locale=self.t.locale,
+        )
+        if existing is None:
+            with bypass_clan_filter():
+                membership.is_active = True
+                code.used_count += 1
+                await self.session.flush()
+        return membership, clan_name
+
+    # ---------------- гостевой просмотр ------------------------------------------ #
+    def issue_guest_token(self) -> TokenResponse:
+        clan_id = settings.GUEST_CLAN_ID or settings.DEFAULT_CLAN_ID
+        if not clan_id:
+            raise PermissionDeniedError(message_key="guest.disabled", domain=DOMAIN, params={})
+        guest_id = f"guest:{secrets.token_hex(6)}"
+        token = issue_access_token(
+            user_id=guest_id,
+            clan_id=clan_id,
+            role=ClanRole.GUEST,
+            ttl_minutes=settings.GUEST_TOKEN_TTL_MIN,
+            guest=True,
+        )
+        me = MeRead(
+            subject_type="guest",
+            user_id=guest_id,
+            clan_id=clan_id,
+            role=ClanRole.GUEST,
+            scopes=sorted(scopes_for(ClanRole.GUEST)),
+            display_name=None,
+        )
+        return TokenResponse(
+            access_token=token,
+            expires_in=settings.GUEST_TOKEN_TTL_MIN * 60,
+            me=me,
+            message=self.t.t("guest.signed_in", domain=DOMAIN),
         )
 
     def _issue(self, membership: ClanMembership, user_id: str, display_name: str | None) -> TokenResponse:
@@ -239,40 +396,6 @@ class AuthService:
         await self.session.commit()
 
         response.message = self.t.t("dev.issued", domain=DOMAIN, user_id=payload.user_id)
-        return response
-
-    # ---------------- redeem invite code --------------------------------------- #
-    async def redeem_code(self, payload: RedeemCodeRequest, locale: str) -> TokenResponse:
-        now = datetime.now(UTC)
-        with bypass_clan_filter():
-            code = (
-                await self.session.execute(
-                    select(ClanInviteCode).where(ClanInviteCode.code == payload.code)
-                )
-            ).scalar_one_or_none()
-
-        if code is None or code.revoked_at is not None:
-            raise NotFoundError(message_key="code.invalid", domain=DOMAIN)
-        if code.expires_at is not None and code.expires_at < now:
-            raise ConflictError(message_key="code.expired", domain=DOMAIN)
-        if code.used_count >= code.max_uses:
-            raise ConflictError(message_key="code.exhausted", domain=DOMAIN)
-
-        membership, clan_name = await self._upsert_identity(
-            clan_id=code.clan_id,
-            user_id=payload.user_id,
-            display_name=payload.display_name,
-            role=code.role,
-            locale=locale,
-        )
-        with bypass_clan_filter():
-            code.used_count += 1
-        await self.session.commit()
-
-        response = self._issue(membership, payload.user_id, payload.display_name)
-        response.message = self.t.t(
-            "code.redeemed", domain=DOMAIN, clan=clan_name, role=membership.role.value
-        )
         return response
 
     # ---------------- clan api token (owner/admin) ------------------------------ #

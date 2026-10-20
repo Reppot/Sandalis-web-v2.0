@@ -17,7 +17,7 @@ class Principal(BaseModel):
     """Иммутабельный «кто я и что мне можно» на текущий запрос."""
     model_config = ConfigDict(frozen=True)
 
-    subject_type: Literal["user", "clan_token"] = "user"
+    subject_type: Literal["user", "clan_token", "guest"] = "user"
     user_id: str
     clan_id: str
     role: ClanRole
@@ -45,6 +45,7 @@ def issue_access_token(
     revoked_scopes: list[str] | None = None,
     display_name: str | None = None,
     ttl_minutes: int | None = None,
+    guest: bool = False,
 ) -> str:
     now = datetime.now(UTC)
     payload: dict[str, Any] = {
@@ -62,6 +63,8 @@ def issue_access_token(
         "exp": now + timedelta(minutes=ttl_minutes or settings.ACCESS_TOKEN_TTL_MIN),
         "jti": uuid.uuid4().hex,
     }
+    if guest:
+        payload["gst"] = True   # гостевой просмотр: без профиля и membership
     return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALG)
 
 
@@ -91,7 +94,7 @@ def decode_access_token(token: str) -> Principal:
         role = ClanRole.GUEST
 
     return Principal(
-        subject_type="user",
+        subject_type="guest" if payload.get("gst") else "user",
         user_id=str(payload["sub"]),
         clan_id=str(clan_id),
         role=role,

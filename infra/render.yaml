@@ -49,11 +49,9 @@ services:
         value: "10080"
       - key: ACCESS_TOKEN_TTL_MIN
         value: "10080"
+      # основной клан: гостевой просмотр (если GUEST_CLAN_ID пуст) и правка контента
       - key: DEFAULT_CLAN_ID
         value: SANDALIS
-      # owner — ТОЛЬКО на первый вход владельца, затем вернуть guest
-      - key: DEFAULT_CLAN_ROLE
-        value: guest
       - key: DEFAULT_LOCALE
         value: ru
 

@@ -27,7 +27,7 @@ export const CabinetWorkspace: React.FC = () => {
   const role = ROLE_LABEL[session.role] ? t(ROLE_LABEL[session.role]) : session.role;
   const cover = media("bg_cabinet");
   const avatar = assetUrl(session.avatarUrl);
-  const name = session.displayName ?? session.userId;
+  const name = session.subjectType === "guest" ? t("role.guest") : session.displayName ?? session.userId;
 
   return (
     <div className="tab-fade cabinet-page">
@@ -44,7 +44,7 @@ export const CabinetWorkspace: React.FC = () => {
             <span className="cabinet-online-dot" title={t("cabinet.online")} />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="hud-label text-accent">{t("cabinet.kicker")} • {session.subjectType === "user" ? "DISCORD LINK" : "CLAN TOKEN"}</div>
+            <div className="hud-label text-accent">{session.subjectType === "guest" ? t("cabinet.guestKicker") : `${t("cabinet.kicker")} • ${session.subjectType === "user" ? "DISCORD LINK" : "CLAN TOKEN"}`}</div>
             <h1 className="cabinet-name">{name}</h1>
             <div className="cabinet-username">ID {session.userId} <span>•</span> {t("cabinet.clanLower")} {session.clanId}</div>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -64,7 +64,7 @@ export const CabinetWorkspace: React.FC = () => {
           <InfoRow label={t("cabinet.callsign")} value={name} />
           <InfoRow label={t("cabinet.clan")} value={session.clanId} />
           <InfoRow label={t("cabinet.role")} value={role} accent />
-          <InfoRow label={t("cabinet.loginChannel")} value={t(session.subjectType === "user" ? "cabinet.viaDiscord" : "cabinet.viaToken")} />
+          <InfoRow label={t("cabinet.loginChannel")} value={t(session.subjectType === "user" ? "cabinet.viaDiscord" : session.subjectType === "guest" ? "cabinet.viaGuest" : "cabinet.viaToken")} />
         </section>
 
         <section className="panel panel-corners cabinet-card">
@@ -95,7 +95,7 @@ export const CabinetWorkspace: React.FC = () => {
         </section>
       </div>
 
-      <LanguagePanel />
+      <LanguagePanel persist={session.subjectType === "user"} />
       {can(Scopes.CLAN_SETTINGS_WRITE) && <DiscordWebhookPanel />}
       {can(Scopes.CLAN_MEMBERS_READ) && <InvitesPanel canManage={can(Scopes.CLAN_MEMBERS_WRITE)} />}
       {can(Scopes.CLAN_SETTINGS_WRITE) && <ClanTokenPanel />}

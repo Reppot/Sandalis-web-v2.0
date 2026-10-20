@@ -193,6 +193,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/me/locale:
+    put:
+      tags:
+      - auth
+      summary: Сменить язык интерфейса (ru/en/cs)
+      operationId: update_locale_api_v1_auth_me_locale_put
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocaleUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/auth/dev-token:
     post:
       tags:
@@ -243,12 +287,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
-  /api/v1/auth/redeem-code:
+  /api/v1/auth/guest:
     post:
       tags:
       - auth
-      summary: Вступление в клан по пригласительному коду (публичный, код = секрет)
-      operationId: redeem_code_api_v1_auth_redeem_code_post
+      summary: 'Гостевой доступ: только просмотр основного клана (GUEST_CLAN_ID / DEFAULT_CLAN_ID)'
+      operationId: guest_login_api_v1_auth_guest_post
       parameters:
       - name: Accept-Language
         in: header
@@ -266,12 +310,6 @@ paths:
           - type: string
           - type: 'null'
           title: X-Locale
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RedeemCodeRequest'
       responses:
         '200':
           description: Successful Response
@@ -279,6 +317,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TokenResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/invites/{code}/preview:
+    get:
+      tags:
+      - auth
+      summary: 'Публичное превью invite-ссылки: клан и роль (код = секрет)'
+      operationId: preview_invite_api_v1_auth_invites__code__preview_get
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Code
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvitePreview'
         '422':
           description: Validation Error
           content:
@@ -565,6 +645,15 @@ paths:
             maxLength: 512
           - type: 'null'
           title: Return To
+      - name: invite
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            maxLength: 24
+          - type: 'null'
+          title: Invite
       responses:
         '200':
           description: Successful Response
@@ -651,6 +740,99 @@ paths:
                 $ref: '#/components/schemas/TokenResponse'
         '302':
           description: Cookie + redirect to FRONTEND_URL
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/discord/setup:
+    get:
+      tags:
+      - auth
+      summary: 'Незавершённый Discord-вход: серверы во владении и кланы пользователя'
+      operationId: discord_setup_api_v1_auth_discord_setup_get
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_discord_setup
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Discord Setup
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiscordSetupRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - auth
+      summary: Выбрать сервер клана (станете owner) или существующий клан
+      operationId: discord_setup_select_api_v1_auth_discord_setup_post
+      parameters:
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_discord_setup
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Discord Setup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiscordSetupSelect'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
         '422':
           description: Validation Error
           content:
@@ -3522,6 +3704,51 @@ components:
       - report
       - message
       title: DiscordSent
+    DiscordSetupRead:
+      properties:
+        display_name:
+          type: string
+          title: Display Name
+        avatar_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Avatar Url
+        guilds:
+          items:
+            $ref: '#/components/schemas/SetupGuildRead'
+          type: array
+          title: Guilds
+        memberships:
+          items:
+            $ref: '#/components/schemas/SetupMembershipRead'
+          type: array
+          title: Memberships
+      type: object
+      required:
+      - display_name
+      - avatar_url
+      - guilds
+      - memberships
+      title: DiscordSetupRead
+      description: 'Незавершённый Discord-вход: выбор сервера клана (владелец) или клана.'
+    DiscordSetupSelect:
+      properties:
+        guild_id:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Guild Id
+        clan_id:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Clan Id
+      additionalProperties: false
+      type: object
+      title: DiscordSetupSelect
     HTTPValidationError:
       properties:
         detail:
@@ -3612,6 +3839,42 @@ components:
       - created_by
       - created_at
       title: InviteCodeRead
+    InvitePreview:
+      properties:
+        code:
+          type: string
+          title: Code
+        clan_name:
+          type: string
+          title: Clan Name
+        clan_icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Clan Icon Url
+        role:
+          $ref: '#/components/schemas/ClanRole'
+      type: object
+      required:
+      - code
+      - clan_name
+      - clan_icon_url
+      - role
+      title: InvitePreview
+      description: Публичное превью invite-ссылки для экрана входа.
+    LocaleUpdate:
+      properties:
+        locale:
+          type: string
+          maxLength: 8
+          minLength: 2
+          title: Locale
+      additionalProperties: false
+      type: object
+      required:
+      - locale
+      title: LocaleUpdate
+      description: 'Язык интерфейса пользователя: ru / en / cs (settings.SUPPORTED_LOCALES).'
     MeRead:
       properties:
         subject_type:
@@ -3619,6 +3882,7 @@ components:
           enum:
           - user
           - clan_token
+          - guest
           title: Subject Type
         user_id:
           type: string
@@ -3643,6 +3907,11 @@ components:
           - type: string
           - type: 'null'
           title: Avatar Url
+        locale:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Locale
       type: object
       required:
       - subject_type
@@ -4111,33 +4380,6 @@ components:
       - data
       title: RecipeRead
       description: 'Рецепт Factory/MPF/Refinery. cost — {"bmat": 100} / {"salvage": 2}; data — поля вида.'
-    RedeemCodeRequest:
-      properties:
-        code:
-          type: string
-          maxLength: 24
-          minLength: 4
-          title: Code
-        user_id:
-          type: string
-          maxLength: 64
-          minLength: 1
-          title: User Id
-        display_name:
-          type: string
-          maxLength: 120
-          minLength: 1
-          title: Display Name
-      additionalProperties: false
-      type: object
-      required:
-      - code
-      - user_id
-      - display_name
-      title: RedeemCodeRequest
-      description: 'Вступление в клан по пригласительному коду (стендин Discord OAuth: пока
-
-        личность передаёт клиент, в проде её даст OAuth-профиль Discord).'
     ReportCreate:
       properties:
         title:
@@ -4455,6 +4697,53 @@ components:
       - file_size
       - strict
       title: ScanResult
+    SetupGuildRead:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        clan_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Clan Id
+        clan_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Clan Name
+      type: object
+      required:
+      - id
+      - name
+      - icon_url
+      - clan_id
+      - clan_name
+      title: SetupGuildRead
+    SetupMembershipRead:
+      properties:
+        clan_id:
+          type: string
+          title: Clan Id
+        clan_name:
+          type: string
+          title: Clan Name
+        role:
+          $ref: '#/components/schemas/ClanRole'
+      type: object
+      required:
+      - clan_id
+      - clan_name
+      - role
+      title: SetupMembershipRead
     StockpileContentsReplace:
       properties:
         source:
@@ -4614,6 +4903,11 @@ components:
           - type: string
           - type: 'null'
           title: Name
+        name_en:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name En
         icon_url:
           anyOf:
           - type: string

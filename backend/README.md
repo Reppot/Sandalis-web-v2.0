@@ -45,7 +45,7 @@ Render deploy работает:
 
 ## Discord OAuth — реализовано (P0 закрыт)
 
-Discord OAuth2 (authorization code, `scope=identify`) возвращён в backend v2.0
+Discord OAuth2 (authorization code, `scope=identify guilds`) возвращён в backend v2.0
 в stateless-исполнении: таблица сессий не нужна, личность и клановый контекст
 живут в подписанном `state`, а сессия — в stateless JWT внутри session-cookie.
 
@@ -64,7 +64,7 @@ GET  /api/v1/auth/me                 # работает и по куке, и п�
    `DISCORD_CLIENT_SECRET` пусты, отвечает `503 discord.disabled` (локализовано).
 2. Иначе backend подписывает state (HMAC-SHA256 на `JWT_SECRET`, внутри `clan_id`,
    `return_to`, `nonce`, `exp = now + DISCORD_OAUTH_STATE_TTL_SEC`) и отдаёт 302
-   на Discord с `client_id`, `redirect_uri`, `response_type=code`, `scope=identify`.
+   на Discord с `client_id`, `redirect_uri`, `response_type=code`, `scope=identify guilds`.
 3. Discord возвращает пользователя на `/api/v1/auth/discord/callback`.
 4. Backend проверяет подпись и `exp` state — любая проблема даёт
    `401 discord.state_invalid`, до Discord-API запрос не доходит.
@@ -73,13 +73,16 @@ GET  /api/v1/auth/me                 # работает и по куке, и п�
 6. `GET {DISCORD_API_BASE_URL}/users/@me`, не-2xx -> `502 discord.profile_failed`.
 7. `User` апсертится: `id = discord_id`, `display_name = global_name or username`,
    `avatar_url = https://cdn.discordapp.com/avatars/{id}/{avatar}.png`.
-8. Резолвится `ClanMembership` (все запросы под `bypass_clan_filter()`):
+8. Резолвится клан (все запросы под `bypass_clan_filter()`):
+   - `invite` в state (ссылка `/?invite=INV-…`) -> вступление в клан с ролью кода;
    - `clan_id` из state -> строго требовать membership в этом клане;
-   - без `clan_id` -> единственное активное membership, а если их несколько —
-     последнее по `created_at`;
-   - нет ни одного -> если задан `DEFAULT_CLAN_ID`, юзер принимается в него
-     ролью `DEFAULT_CLAN_ROLE` (через `AuthService._upsert_identity`),
-     иначе `403 user.not_member`.
+   - пользователь владеет Discord-серверами (`GET /users/@me/guilds`, флаг `owner`) ->
+     подписанная кука `sindaris_discord_setup` и 302 на `FRONTEND_URL?setup=guild`:
+     фронт показывает выбор сервера (`GET/POST /auth/discord/setup`), выбранный
+     сервер становится кланом (`clans.discord_guild_id`), пользователь — `owner`;
+     старый клан без сервера, где он уже owner, привязывается к серверу (данные сохраняются);
+   - иначе последнее активное membership, а если его нет — `403 user.no_clan`
+     (автоматического вступления больше нет: только invite-ссылка).
 9. Выпускается JWT (`issue_access_token`) с `sub`, `clan_id`, `role`, scopes,
    `exp`, `iss`, `aud`.
 10. По умолчанию JWT кладётся в cookie (`HttpOnly`, `Secure=COOKIE_SECURE`,
@@ -113,7 +116,7 @@ http://localhost:8000/api/v1/auth/discord/callback
 https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
 ```
 
-3. Scopes: `identify` (email не нужен).
+3. Scopes: `identify guilds` (email не нужен; guilds — найти серверы во владении).
 4. `Client ID` -> `DISCORD_CLIENT_ID`, `Client Secret` -> `DISCORD_CLIENT_SECRET`.
 
 ---
@@ -311,7 +314,10 @@ principal: Annotated[
 ```text
 GET  /api/v1/auth/me
 POST /api/v1/auth/dev-token
-POST /api/v1/auth/redeem-code
+POST /api/v1/auth/guest                     # гостевой просмотр GUEST_CLAN_ID/DEFAULT_CLAN_ID
+GET  /api/v1/auth/invites/{code}/preview     # публичное превью invite-ссылки
+GET  /api/v1/auth/discord/setup              # серверы во владении после Discord-входа
+POST /api/v1/auth/discord/setup              # {guild_id} -> owner клана | {clan_id}
 POST /api/v1/auth/clan-token
 GET  /api/v1/auth/invites
 POST /api/v1/auth/invites
@@ -325,9 +331,10 @@ Backend сейчас поддерживает:
 - Bearer JWT;
 - session cookie (`SESSION_COOKIE_NAME`, ставится Discord-callback'ом);
 - `X-Clan-Token`;
-- Discord OAuth2 (`scope=identify`) -> JWT/cookie;
+- Discord OAuth2 (`scope=identify guilds`) -> JWT/cookie, выбор сервера клана владельцем;
 - dev-token для локальной разработки;
-- invite/redeem-code для вступления в клан.
+- invite-ссылки (`/?invite=CODE` -> Discord-вход) для вступления в клан;
+- гостевой JWT (`gst`) — только чтение основного клана.
 
 ### Discord auth files
 
@@ -920,8 +927,8 @@ SESSION_COOKIE_NAME=sindaris_session
 SESSION_TTL_MINUTES=10080     # 7 суток
 ACCESS_TOKEN_TTL_MIN=10080    # JWT живёт столько же, сколько кука
 
-DEFAULT_CLAN_ID=SANDALIS      # без этого первый Discord-пользователь получит ?error=forbidden
-DEFAULT_CLAN_ROLE=guest       # owner — ТОЛЬКО на первый вход владельца, затем вернуть guest
+DEFAULT_CLAN_ID=SANDALIS      # основной клан: его видит гостевой доступ, его admin+ правят контент
+GUEST_CLAN_ID=                # пусто -> DEFAULT_CLAN_ID; оба пусты -> гостевой вход выключен
 DEFAULT_LOCALE=ru
 ```
 
@@ -930,7 +937,7 @@ DEFAULT_LOCALE=ru
 
 ### Discord Developer Portal
 
-OAuth2 → Redirects (точное совпадение, scope `identify`):
+OAuth2 → Redirects (точное совпадение, scopes `identify guilds`):
 
 ```text
 https://sandalis-web-v2-0.onrender.com/api/v1/auth/discord/callback
@@ -944,17 +951,22 @@ http://localhost:3000/api/v1/auth/discord/callback
 
 | Код | Причина | Что делать |
 |---|---|---|
-| `forbidden` | У пользователя нет membership, `DEFAULT_CLAN_ID` не задан | Задать `DEFAULT_CLAN_ID`/`DEFAULT_CLAN_ROLE` или выдать invite-код |
+| `forbidden` | Нет клана и нет серверов во владении | Отправить пользователю invite-ссылку из кабинета |
+| `invite_invalid` / `invite_expired` / `invite_exhausted` | Ссылка отозвана, просрочена или исчерпана | Создать новую ссылку |
+| `setup_expired` | Выбор сервера не сделан за 15 минут | Повторить вход |
 | `state_invalid` | Просроченный/чужой state (TTL 10 мин) | Повторить вход |
 | `exchange_failed` | Discord отклонил код: неверный secret или redirect_uri | Сверить `DISCORD_CLIENT_SECRET` и `DISCORD_REDIRECT_URI` с порталом |
 | `disabled` | Пустые `DISCORD_CLIENT_ID`/`SECRET` | Заполнить в Environment |
 
 ### Первый вход владельца
 
-1. Выставить `DEFAULT_CLAN_ID=SANDALIS`, `DEFAULT_CLAN_ROLE=owner`.
-2. Открыть сайт, «Войти через Discord».
-3. В «Кабинете» роль — «Командир клана», права — «Полный доступ».
-4. Сменить `DEFAULT_CLAN_ROLE` на `guest`. Дальнейшие участники — Discord (гость) или invite-коды из кабинета.
+1. Владелец Discord-сервера клана открывает сайт → «Войти через Discord».
+2. Discord спрашивает доступ к списку серверов; после входа появляется «Выберите сервер клана».
+3. Выбор сервера → роль «Командир клана», права «Полный доступ». Если раньше владелец уже
+   был owner клана `SANDALIS`, этот клан привязывается к серверу, данные сохраняются;
+   иначе создаётся клан с id = ID сервера — тогда для гостевого просмотра выставьте
+   `GUEST_CLAN_ID` (и `CONTENT_ADMIN_CLAN_ID`) = этот id.
+4. Остальные — «Кабинет» → «Приглашения» → ссылка-приглашение (🔗), её открывают и входят через Discord.
 
 ### Локальные тесты
 
@@ -972,6 +984,6 @@ cd backend
 ### Известные ограничения / следующие шаги
 
 - Workers (`war_import`, `ffmpeg`, S3) в v2.0 не перенесены.
-- Нет seed-скрипта первого клана: клан создаётся через `DEFAULT_CLAN_ID` при первом Discord-входе.
+- Нет seed-скрипта первого клана: клан создаёт владелец Discord-сервера выбором сервера при входе.
 - Глобальный контент (видео входа, ссылки, обучение) правится через `PUT /api/v1/content/{kind}/{key}`
   (admin+ клана `CONTENT_ADMIN_CLAN_ID`/`DEFAULT_CLAN_ID`); страницы редактирования в интерфейсе нет.

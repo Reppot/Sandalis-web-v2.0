@@ -1,5 +1,5 @@
 export type ClanRole = "owner" | "admin" | "officer" | "member" | "guest";
-export type SubjectType = "user" | "clan_token";
+export type SubjectType = "user" | "clan_token" | "guest";
 
 /** Зеркало backend `MeRead`. */
 export interface UserSession {

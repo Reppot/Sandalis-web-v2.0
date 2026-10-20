@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Field, Loading, Select, cn, copyText, errorText, formatDateTime, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
+import { authApi } from "@/features/cabinet/api/authApi";
 import { clanApi, type GrantableRole, type InviteCode } from "@/features/cabinet/api/clanApi";
 
 const ROLE_LABEL: Record<GrantableRole, MessageKey> = { guest: "role.guest", member: "role.member", officer: "role.officer" };
@@ -101,10 +102,10 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
                 <button
                   type="button"
                   className="font-mono font-bold text-accent"
-                  title={t("invites.copy")}
-                  onClick={() => void copyText(invite.code).then((ok) => ok && notify({ title: t("invites.title"), message: t("invites.copied", { code: invite.code }), tone: "success" }))}
+                  title={t("invites.copyLink")}
+                  onClick={() => void copyText(authApi.inviteLink(invite.code)).then((ok) => ok && notify({ title: t("invites.title"), message: t("invites.linkCopied", { code: invite.code }), tone: "success" }))}
                 >
-                  {invite.code} ⧉
+                  🔗 {invite.code} ⧉
                 </button>
                 <span className="text-muted">{ROLE_LABEL[invite.role as GrantableRole] ? t(ROLE_LABEL[invite.role as GrantableRole]) : invite.role}</span>
                 <span className="font-mono text-muted">{invite.usedCount}/{invite.maxUses}</span>

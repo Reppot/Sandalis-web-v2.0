@@ -12,7 +12,8 @@
     "forbidden": "Invalid developer key."
   },
   "user": {
-    "not_member": "User {user_id} is not a member of clan {clan_id}."
+    "not_member": "User {user_id} is not a member of clan {clan_id}.",
+    "no_clan": "You are not in any clan. Ask your commander for an invite link or sign in as a guest."
   },
   "code": {
     "invalid": "Invite code not found or has been revoked.",
@@ -29,5 +30,17 @@
     "created": "Invite code {code} created.",
     "revoked": "Invite code {code} revoked.",
     "not_found": "Invite code was not found in your clan."
+  },
+  "setup": {
+    "expired": "Server selection expired — sign in with Discord again.",
+    "guild_not_owned": "You do not own this Discord server.",
+    "clan_not_member": "You are not a member of this clan.",
+    "nothing_selected": "Pick a server or a clan.",
+    "clan_created": "Clan “{clan}” is linked to your Discord server. You are the commander.",
+    "signed_in": "Welcome, {name}."
+  },
+  "guest": {
+    "disabled": "Guest access is disabled.",
+    "signed_in": "Guest access: read only."
   }
 }

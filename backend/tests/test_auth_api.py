@@ -70,54 +70,15 @@ def test_dev_token_and_me(db):
     run(main())
 
 
-def test_redeem_code_flow(db):
+def test_redeem_code_endpoint_removed(db):
+    """Вход по коду без Discord удалён: клиент мог назвать чужой user_id."""
     async def main() -> None:
-        await seed_clan("CLAN_A")
-        admin = bearer(clan_id="CLAN_A")
         async with client() as c:
-            inv = await c.post(f"{API}/auth/invites",
-                               json={"role": "member", "max_uses": 1}, headers=admin)
-            assert inv.status_code == 201, inv.text
-            code = inv.json()["invite"]["code"]
-            assert code.startswith("INV-")
-            assert inv.json()["message"] == f"Invite code {code} created."
-
-            ok = await c.post(
+            r = await c.post(
                 f"{API}/auth/redeem-code",
-                json={"code": code, "user_id": "newbie", "display_name": "Newbie"},
-                headers={"Accept-Language": "ru"},
+                json={"code": "INV-AAAA2222", "user_id": "x", "display_name": "X"},
             )
-            assert ok.status_code == 200, ok.text
-            assert ok.json()["message"] == "Вы вступили в клан «Alpha» с ролью «member»."
-            token = ok.json()["access_token"]
-            # веб-клиент живёт на куке (same-origin прокси), Bearer в теле — для ботов
-            assert f"{settings.SESSION_COOKIE_NAME}=" in ok.headers["set-cookie"]
-
-            me = await c.get(f"{API}/auth/me",
-                             headers={"Authorization": f"Bearer {token}"})
-            assert me.json()["clan_id"] == "CLAN_A"
-            assert me.json()["role"] == "member"
-            assert me.json()["avatar_url"] is None
-
-            # max_uses=1 исчерпан -> 409 (ru)
-            again = await c.post(
-                f"{API}/auth/redeem-code",
-                json={"code": code, "user_id": "second", "display_name": "Second"},
-                headers={"Accept-Language": "ru"},
-            )
-            assert again.status_code == 409
-            assert again.json()["error"]["message"] == \
-                "Количество использований кода исчерпано."
-
-            # такого кода нет -> 404 (cs)
-            bad = await c.post(
-                f"{API}/auth/redeem-code",
-                json={"code": "INV-XXXXXX99", "user_id": "x", "display_name": "X"},
-                headers={"Accept-Language": "cs"},
-            )
-            assert bad.status_code == 404
-            assert bad.json()["error"]["message"] == \
-                "Pozvánkový kód nebyl nalezen nebo byl zrušen."
+            assert r.status_code in (404, 405)
 
     run(main())
 

@@ -12,7 +12,7 @@ class MeRead(BaseModel):
     """Кто я и что мне можно — зеркало Principal для фронта."""
     model_config = ConfigDict(frozen=True)
 
-    subject_type: Literal["user", "clan_token"]
+    subject_type: Literal["user", "clan_token", "guest"]
     user_id: str
     clan_id: str
     role: ClanRole
@@ -80,6 +80,62 @@ class DiscordUserProfile(BaseModel):
     @property
     def display_name(self) -> str:
         return self.global_name or self.username or self.id
+
+
+class DiscordGuild(BaseModel):
+    """Сервер из GET /users/@me/guilds (scope=guilds)."""
+    model_config = ConfigDict(extra="ignore")
+
+    id: str
+    name: str = ""
+    icon: str | None = None
+    owner: bool = False
+
+    @field_validator("id", mode="before")
+    @classmethod
+    def _id_str(cls, value: object) -> object:
+        return value if isinstance(value, str) else str(value)
+
+    @property
+    def icon_url(self) -> str | None:
+        return f"https://cdn.discordapp.com/icons/{self.id}/{self.icon}.png" if self.icon else None
+
+
+class SetupGuildRead(BaseModel):
+    id: str
+    name: str
+    icon_url: str | None
+    clan_id: str | None          # уже привязан к клану терминала
+    clan_name: str | None
+
+
+class SetupMembershipRead(BaseModel):
+    clan_id: str
+    clan_name: str
+    role: ClanRole
+
+
+class DiscordSetupRead(BaseModel):
+    """Незавершённый Discord-вход: выбор сервера клана (владелец) или клана."""
+    display_name: str
+    avatar_url: str | None
+    guilds: list[SetupGuildRead]
+    memberships: list[SetupMembershipRead]
+
+
+class DiscordSetupSelect(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    guild_id: Annotated[str | None, Field(default=None, max_length=32)]
+    clan_id: Annotated[str | None, Field(default=None, max_length=64)]
+
+
+class InvitePreview(BaseModel):
+    """Публичное превью invite-ссылки для экрана входа."""
+    code: str
+    clan_name: str
+    clan_icon_url: str | None
+    role: ClanRole
 
 
 class DiscordTokenResponse(BaseModel):

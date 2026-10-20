@@ -39,14 +39,14 @@ export const LanguageSwitch: React.FC<{ persist?: boolean; className?: string }>
 };
 
 /** Карточка «Язык интерфейса» в личном кабинете. */
-export const LanguagePanel: React.FC = () => {
+export const LanguagePanel: React.FC<{ persist?: boolean }> = ({ persist }) => {
   const { t } = useI18n();
   return (
     <section className="panel panel-corners rounded-md p-4">
       <div className="panel-title">🌐 {t("lang.title")}</div>
       <div className="cabinet-rule" />
-      <p className="mb-3 text-[0.78rem] text-white/70">{t("lang.hint")}</p>
-      <LanguageSwitch persist />
+      <p className="mb-3 text-[0.78rem] text-white/70">{t(persist ? "lang.hint" : "lang.hintLocal")}</p>
+      <LanguageSwitch persist={persist} />
     </section>
   );
 };

@@ -1,4 +1,4 @@
-"""Discord OAuth2 (authorization code + scope=identify).
+"""Discord OAuth2 (authorization code + scope=identify guilds).
 
 Stateless-подход v2.0: state не хранится в таблице сессий, а подписывается
 HMAC-SHA256 на JWT_SECRET и несёт собственный `exp` (DISCORD_OAUTH_STATE_TTL_SEC).
@@ -25,7 +25,7 @@ import httpx
 
 from app.core.config import settings
 from app.core.errors import AppError, UnauthorizedError
-from app.schemas.auth import DiscordTokenResponse, DiscordUserProfile
+from app.schemas.auth import DiscordGuild, DiscordTokenResponse, DiscordUserProfile
 
 DOMAIN = "auth"
 STATE_SEP = "."
@@ -61,6 +61,7 @@ class OAuthState:
     clan_id: str | None = None
     return_to: str | None = None
     nonce: str = ""
+    invite: str | None = None
 
 
 def _sign(raw: str) -> str:
@@ -84,19 +85,45 @@ def _decode(raw: str) -> dict[str, Any]:
     return payload if isinstance(payload, dict) else {}
 
 
-def make_state(clan_id: str | None = None, return_to: str | None = None) -> str:
+def make_state(
+    clan_id: str | None = None, return_to: str | None = None, invite: str | None = None
+) -> str:
     """`<base64url(payload)>.<hmac-sha256>`; nonce -> уникальность, exp -> TTL."""
     now = int(time.time())
-    raw = _encode(
-        {
-            "clan_id": clan_id or None,
-            "return_to": return_to or None,
-            "nonce": secrets.token_urlsafe(16),
-            "iat": now,
-            "exp": now + settings.DISCORD_OAUTH_STATE_TTL_SEC + _STATE_MAX_SKEW_SEC,
-        }
-    )
+    body: dict[str, Any] = {
+        "clan_id": clan_id or None,
+        "return_to": return_to or None,
+        "nonce": secrets.token_urlsafe(16),
+        "iat": now,
+        "exp": now + settings.DISCORD_OAUTH_STATE_TTL_SEC + _STATE_MAX_SKEW_SEC,
+    }
+    if invite:
+        body["invite"] = invite
+    raw = _encode(body)
     return f"{raw}{STATE_SEP}{_sign(raw)}"
+
+
+def seal(body: dict[str, Any], ttl_sec: int) -> str:
+    """Подписанный самодостаточный блоб (кука выбора сервера) с exp."""
+    raw = _encode({**body, "exp": int(time.time()) + ttl_sec})
+    return f"{raw}{STATE_SEP}{_sign(raw)}"
+
+
+def unseal(value: str | None) -> dict[str, Any] | None:
+    """None при любой проблеме: подпись, формат, срок."""
+    if not value or STATE_SEP not in value:
+        return None
+    raw, _, signature = value.rpartition(STATE_SEP)
+    if not raw or not hmac.compare_digest(_sign(raw), signature):
+        return None
+    try:
+        body = _decode(raw)
+    except AppError:
+        return None
+    exp = body.get("exp")
+    if not isinstance(exp, int) or exp < int(time.time()):
+        return None
+    return body
 
 
 def verify_state(state: str | None) -> OAuthState:
@@ -122,10 +149,12 @@ def verify_state(state: str | None) -> OAuthState:
 
     clan_id = body.get("clan_id")
     return_to = body.get("return_to")
+    invite = body.get("invite")
     return OAuthState(
         clan_id=clan_id if isinstance(clan_id, str) and clan_id else None,
         return_to=return_to if isinstance(return_to, str) and return_to else None,
         nonce=nonce,
+        invite=invite if isinstance(invite, str) and invite else None,
     )
 
 
@@ -133,12 +162,13 @@ def verify_state(state: str | None) -> OAuthState:
 # Discord endpoints
 # --------------------------------------------------------------------------- #
 def build_authorize_url(state: str) -> str:
-    """Discord OAuth2 authorize: response_type=code, scope=identify."""
+    """Discord OAuth2 authorize: response_type=code, scope=identify guilds
+    (guilds — чтобы найти серверы, которыми пользователь владеет)."""
     params = {
         "client_id": settings.DISCORD_CLIENT_ID,
         "redirect_uri": settings.DISCORD_REDIRECT_URI,
         "response_type": "code",
-        "scope": "identify",
+        "scope": "identify guilds",
         "state": state,
         "prompt": "consent",
     }
@@ -191,6 +221,34 @@ async def fetch_profile(access_token: str) -> DiscordUserProfile:
         raise _auth_error("discord.profile_failed", "profile_failed") from exc
 
 
+async def fetch_owned_guilds(access_token: str) -> list[DiscordGuild]:
+    """Серверы, где пользователь — владелец. Сбой Discord не роняет вход:
+    без списка пользователь просто не увидит выбор сервера."""
+    url = f"{settings.DISCORD_API_BASE_URL.rstrip('/')}/users/@me/guilds"
+    try:
+        async with get_http_client() as client:
+            response = await client.get(
+                url,
+                headers={"Authorization": f"Bearer {access_token}", "Accept": "application/json"},
+            )
+        if response.status_code // 100 != 2:
+            return []
+        payload = response.json()
+    except (httpx.HTTPError, ValueError):
+        return []
+    if not isinstance(payload, list):
+        return []
+    guilds: list[DiscordGuild] = []
+    for item in payload:
+        try:
+            guild = DiscordGuild.model_validate(item)
+        except ValueError:
+            continue
+        if guild.owner:
+            guilds.append(guild)
+    return guilds[:25]   # кука выбора — не больше пары килобайт
+
+
 def avatar_url(profile: DiscordUserProfile) -> str | None:
     """CDN-ссылка на аватар; None, если у юзера дефолтный (hash пустой)."""
     if not profile.avatar:
@@ -224,6 +282,12 @@ def safe_return_to(return_to: str | None, base_url: str | None = None) -> str:
     ):
         return candidate
     return base
+
+
+def setup_redirect_url(base_url: str | None = None) -> str:
+    """FRONTEND_URL?setup=guild — фронт покажет выбор сервера клана."""
+    base = (base_url or settings.FRONTEND_URL).rstrip("/")
+    return f"{base}?{urlencode({'setup': 'guild'})}"
 
 
 def error_redirect_url(code: str, base_url: str | None = None) -> str:

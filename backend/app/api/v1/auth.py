@@ -4,7 +4,7 @@ import secrets
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Header, Query, Response, status
+from fastapi import APIRouter, Cookie, Depends, Header, Query, Response, status
 from fastapi.responses import JSONResponse, RedirectResponse
 from sqlalchemy import select
 
@@ -16,7 +16,7 @@ from app.api.deps import (
     domain_translator,
 )
 from app.core.config import settings
-from app.core.errors import AppError, PermissionDeniedError
+from app.core.errors import AppError, PermissionDeniedError, UnauthorizedError
 from app.core.i18n import Translator, normalize_locale
 from app.core.permissions import Scopes
 from app.core.security import Principal
@@ -25,9 +25,11 @@ from app.schemas.auth import (
     ClanApiTokenCreate,
     ClanApiTokenCreated,
     DevTokenRequest,
+    DiscordSetupRead,
+    DiscordSetupSelect,
+    InvitePreview,
     LocaleUpdate,
     MeRead,
-    RedeemCodeRequest,
     TokenResponse,
 )
 from app.schemas.code import InviteCodeCreate, InviteCodeCreated, InviteCodeRead
@@ -38,9 +40,13 @@ from app.services.discord_oauth import (
     build_authorize_url,
     error_redirect_url,
     exchange_code,
+    fetch_owned_guilds,
     fetch_profile,
     make_state,
     safe_return_to,
+    seal,
+    setup_redirect_url,
+    unseal,
     verify_state,
 )
 from app.services.invites import InviteService
@@ -80,6 +86,30 @@ def _set_session_cookie(response: Response, token: str) -> None:
         secure=settings.COOKIE_SECURE,
         samesite=settings.COOKIE_SAMESITE,
     )
+
+
+SETUP_COOKIE = "sindaris_discord_setup"
+
+
+def _set_setup_cookie(response: Response, value: str) -> None:
+    """Подписанный (HMAC) незавершённый вход: профиль + серверы-во-владении.
+    Живёт DISCORD_SETUP_TTL_SEC и стирается при выборе сервера."""
+    response.set_cookie(
+        key=SETUP_COOKIE,
+        value=value,
+        max_age=settings.DISCORD_SETUP_TTL_SEC,
+        path="/",
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+    )
+
+
+def _setup_state(raw: str | None) -> dict:
+    body = unseal(raw)
+    if not body or not isinstance(body.get("uid"), str) or not isinstance(body.get("guilds"), list):
+        raise UnauthorizedError(message_key="setup.expired", domain="auth", code="setup_expired")
+    return body
 
 
 # ---------------- current principal ----------------------------------------- #
@@ -157,20 +187,23 @@ async def issue_dev_token(
 
 
 @router.post(
-    "/redeem-code",
+    "/guest",
     response_model=TokenResponse,
-    summary="Вступление в клан по пригласительному коду (публичный, код = секрет)",
+    summary="Гостевой доступ: только просмотр основного клана (GUEST_CLAN_ID / DEFAULT_CLAN_ID)",
 )
-async def redeem_code(
-    payload: RedeemCodeRequest,
-    response: Response,
-    service: AuthServiceDep,
-    translator: AuthTranslator,
-) -> TokenResponse:
-    token = await service.redeem_code(payload, translator.locale)
-    # веб-клиент живёт на куке (same-origin через прокси фронта); Bearer в теле — для ботов/CLI
+async def guest_login(response: Response, service: AuthServiceDep) -> TokenResponse:
+    token = service.issue_guest_token()
     _set_session_cookie(response, token.access_token)
     return token
+
+
+@router.get(
+    "/invites/{code}/preview",
+    response_model=InvitePreview,
+    summary="Публичное превью invite-ссылки: клан и роль (код = секрет)",
+)
+async def preview_invite(code: str, service: AuthServiceDep) -> InvitePreview:
+    return await service.preview_invite(code)
 
 
 @router.post(
@@ -245,6 +278,7 @@ async def revoke_invite(invite_id: uuid.UUID, service: InviteServiceDep) -> Resp
 async def discord_login(
     clan_id: Annotated[str | None, Query(max_length=64)] = None,
     return_to: Annotated[str | None, Query(max_length=512)] = None,
+    invite: Annotated[str | None, Query(max_length=24)] = None,
 ) -> Response:
     if not settings.DISCORD_CLIENT_ID or not settings.DISCORD_CLIENT_SECRET:
         raise AppError(
@@ -254,7 +288,7 @@ async def discord_login(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             params={},
         )
-    state = make_state(clan_id=clan_id, return_to=return_to)
+    state = make_state(clan_id=clan_id, return_to=return_to, invite=invite)
     return RedirectResponse(build_authorize_url(state), status_code=status.HTTP_302_FOUND)
 
 
@@ -295,18 +329,49 @@ async def discord_callback(
         oauth_state = verify_state(state)
         token = await exchange_code(code)
         profile = await fetch_profile(token.access_token)
-
-        membership = await service.resolve_discord_membership(
-            user_id=profile.id,
-            display_name=profile.display_name,
-            clan_id=oauth_state.clan_id,
-        )
         await service.upsert_discord_user(
             user_id=profile.id,
             display_name=profile.display_name,
             avatar_url=avatar_url(profile),
             locale=profile.locale,
         )
+
+        if oauth_state.invite:
+            # invite-ссылка: вступление в клан с ролью кода
+            membership, _ = await service.redeem_invite(
+                code_value=oauth_state.invite,
+                user_id=profile.id,
+                display_name=profile.display_name,
+            )
+        else:
+            owned = [] if oauth_state.clan_id else await fetch_owned_guilds(token.access_token)
+            if owned:
+                # владелец серверов: выбор сервера клана (или уже существующего клана)
+                await service.commit()
+                setup = seal(
+                    {
+                        "uid": profile.id,
+                        "name": profile.display_name,
+                        "avatar": avatar_url(profile),
+                        "guilds": [
+                            {"id": g.id, "name": g.name, "icon_url": g.icon_url} for g in owned
+                        ],
+                    },
+                    settings.DISCORD_SETUP_TTL_SEC,
+                )
+                if json_mode:
+                    body = JSONResponse(
+                        {"setup_required": True}, status_code=status.HTTP_202_ACCEPTED
+                    )
+                else:
+                    body = RedirectResponse(setup_redirect_url(), status_code=status.HTTP_302_FOUND)
+                _set_setup_cookie(body, setup)
+                return body
+            membership = await service.resolve_discord_membership(
+                user_id=profile.id,
+                display_name=profile.display_name,
+                clan_id=oauth_state.clan_id,
+            )
 
         token_response = service.issue_token(membership, profile.id, profile.display_name)
         token_response.message = translator.t(
@@ -328,6 +393,69 @@ async def discord_callback(
     )
     _set_session_cookie(redirect, token_response.access_token)
     return redirect
+
+
+@router.get(
+    "/discord/setup",
+    response_model=DiscordSetupRead,
+    summary="Незавершённый Discord-вход: серверы во владении и кланы пользователя",
+)
+async def discord_setup(
+    service: AuthServiceDep,
+    setup_cookie: Annotated[str | None, Cookie(alias=SETUP_COOKIE)] = None,
+) -> DiscordSetupRead:
+    body = _setup_state(setup_cookie)
+    guilds, memberships = await service.setup_options(user_id=body["uid"], guilds=body["guilds"])
+    return DiscordSetupRead(
+        display_name=body.get("name") or body["uid"],
+        avatar_url=body.get("avatar"),
+        guilds=guilds,
+        memberships=memberships,
+    )
+
+
+@router.post(
+    "/discord/setup",
+    response_model=TokenResponse,
+    summary="Выбрать сервер клана (станете owner) или существующий клан",
+)
+async def discord_setup_select(
+    payload: DiscordSetupSelect,
+    response: Response,
+    service: AuthServiceDep,
+    translator: AuthTranslator,
+    setup_cookie: Annotated[str | None, Cookie(alias=SETUP_COOKIE)] = None,
+) -> TokenResponse:
+    body = _setup_state(setup_cookie)
+    user_id, name = body["uid"], body.get("name") or body["uid"]
+    if payload.guild_id:
+        guild = next((g for g in body["guilds"] if g.get("id") == payload.guild_id), None)
+        if guild is None:
+            raise PermissionDeniedError(message_key="setup.guild_not_owned", domain="auth", params={})
+        membership, clan_name = await service.claim_guild(user_id=user_id, display_name=name, guild=guild)
+        message = translator.t("setup.clan_created", domain="auth", clan=clan_name)
+    elif payload.clan_id:
+        try:
+            membership = await service.resolve_discord_membership(
+                user_id=user_id, display_name=name, clan_id=payload.clan_id
+            )
+        except PermissionDeniedError:
+            raise PermissionDeniedError(
+                message_key="setup.clan_not_member", domain="auth", params={}
+            ) from None
+        message = translator.t("setup.signed_in", domain="auth", name=name)
+    else:
+        raise AppError(
+            message_key="setup.nothing_selected", domain="auth", code="validation_error",
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, params={},
+        )
+
+    token = service.issue_token(membership, user_id, name)
+    token.message = message
+    await service.commit()
+    _set_session_cookie(response, token.access_token)
+    response.delete_cookie(key=SETUP_COOKIE, path="/")
+    return token
 
 
 @router.post(

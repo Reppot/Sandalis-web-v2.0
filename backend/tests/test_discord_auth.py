@@ -19,6 +19,7 @@ from sqlalchemy import select
 from app.core.config import settings
 from app.core.i18n import Translator
 from app.core.permissions import ClanRole
+from app.core.security import issue_access_token
 from app.core.tenancy import bypass_clan_filter
 from app.core.db import AsyncSessionLocal
 from app.main import app
@@ -68,7 +69,7 @@ def enable_discord(monkeypatch) -> None:
 
 @contextmanager
 def discord_mock(
-    *, token_status: int = 200, profile_status: int = 200
+    *, token_status: int = 200, profile_status: int = 200, guilds: list[dict] | None = None
 ) -> Iterator[SimpleNamespace]:
     with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
         token = mock.post(f"{BASE}/oauth2/token").respond(
@@ -79,7 +80,8 @@ def discord_mock(
             status_code=profile_status,
             json=PROFILE if profile_status // 100 == 2 else {"message": "401: Unauthorized"},
         )
-        yield SimpleNamespace(token=token, profile=profile)
+        owned = mock.get(f"{BASE}/users/@me/guilds").respond(status_code=200, json=guilds or [])
+        yield SimpleNamespace(token=token, profile=profile, guilds=owned)
 
 
 async def seed_membership(
@@ -150,7 +152,7 @@ def test_login_redirects_to_discord_with_signed_state(db, monkeypatch):
             location = r.headers["location"]
             assert location.startswith(settings.DISCORD_AUTHORIZE_URL)
             assert "client_id=client-123" in location
-            assert "scope=identify" in location
+            assert "scope=identify+guilds" in location
             assert "response_type=code" in location
             assert (
                 "redirect_uri=http%3A%2F%2Ftestserver%2Fapi%2Fv1%2Fauth%2Fdiscord%2Fcallback"
@@ -297,9 +299,7 @@ def test_callback_membership_required_and_default_clan_join(db, monkeypatch):
                 assert r.status_code == 403, r.text
                 body = r.json()
                 assert body["error"]["code"] == "forbidden"
-                assert body["error"]["message"] == (
-                    f"Пользователь {DISCORD_ID} не состоит в клане -."
-                )
+                assert body["error"]["message"].startswith("Вы не состоите ни в одном клане")
 
         # 2) redirect-режим той же ошибки -> 302 FRONTEND_URL?error=forbidden
         with discord_mock():
@@ -311,24 +311,15 @@ def test_callback_membership_required_and_default_clan_join(db, monkeypatch):
                 assert r.status_code == 302
                 assert r.headers["location"] == f"{settings.FRONTEND_URL}?error=forbidden"
 
-        # 3) DEFAULT_CLAN_ID -> auto-join ролью DEFAULT_CLAN_ROLE
+        # 3) DEFAULT_CLAN_ID больше не принимает автоматически: только invite
         monkeypatch.setattr(settings, "DEFAULT_CLAN_ID", "CLAN_DEFAULT", raising=True)
-        monkeypatch.setattr(settings, "DEFAULT_CLAN_ROLE", ClanRole.GUEST, raising=True)
         with discord_mock():
             async with client() as c:
                 r = await c.get(
                     f"{API}/auth/discord/callback",
                     params={"code": "abc", "state": make_state(), "response": "json"},
                 )
-                assert r.status_code == 200, r.text
-                assert r.json()["me"]["clan_id"] == "CLAN_DEFAULT"
-                assert r.json()["me"]["role"] == "guest"
-
-                me = await c.get(
-                    f"{API}/auth/me",
-                    headers={"Authorization": f"Bearer {r.json()['access_token']}"},
-                )
-                assert me.status_code == 200
+                assert r.status_code == 403, r.text
 
     run(main())
 
@@ -536,5 +527,199 @@ def test_logout_without_session_is_still_204(db):
         async with client() as c:
             r = await c.post(f"{API}/auth/logout", headers={"Accept-Language": "cs"})
             assert r.status_code == 204, r.text
+
+    run(main())
+
+
+# --------------------------------------------------------------------------- #
+# Владелец Discord-сервера: выбор сервера клана
+# --------------------------------------------------------------------------- #
+GUILDS = [
+    {"id": "900000000000000001", "name": "SINDARIS HQ", "icon": "abc", "owner": True},
+    {"id": "900000000000000002", "name": "Чужой сервер", "icon": None, "owner": False},
+    {"id": "900000000000000003", "name": "Второй сервер", "icon": None, "owner": True},
+]
+
+
+def test_owner_picks_guild_and_becomes_clan_owner(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        with discord_mock(guilds=GUILDS):
+            async with client() as c:
+                r = await c.get(
+                    f"{API}/auth/discord/callback", params={"code": "abc", "state": make_state()}
+                )
+                assert r.status_code == 302, r.text
+                assert r.headers["location"] == f"{settings.FRONTEND_URL}?setup=guild"
+                assert settings.SESSION_COOKIE_NAME not in c.cookies
+
+                setup = await c.get(f"{API}/auth/discord/setup")
+                assert setup.status_code == 200, setup.text
+                body = setup.json()
+                assert [g["id"] for g in body["guilds"]] == [
+                    "900000000000000001", "900000000000000003",
+                ]                                     # только серверы во владении
+                assert body["guilds"][0]["icon_url"].endswith("/900000000000000001/abc.png")
+                assert body["guilds"][0]["clan_id"] is None
+                assert body["memberships"] == []
+
+                # чужой (не во владении) сервер выбрать нельзя
+                bad = await c.post(
+                    f"{API}/auth/discord/setup", json={"guild_id": "900000000000000002"}
+                )
+                assert bad.status_code == 403
+
+                ok = await c.post(
+                    f"{API}/auth/discord/setup",
+                    json={"guild_id": "900000000000000001"},
+                    headers={"Accept-Language": "ru"},
+                )
+                assert ok.status_code == 200, ok.text
+                assert ok.json()["me"]["role"] == "owner"
+                assert ok.json()["me"]["clan_id"] == "900000000000000001"
+                assert "SINDARIS HQ" in ok.json()["message"]
+
+                me = await c.get(f"{API}/auth/me")
+                assert me.status_code == 200
+                assert me.json()["scopes"] == ["*"]
+
+                # кука выбора стёрта — повторный выбор требует нового входа
+                again = await c.get(f"{API}/auth/discord/setup")
+                assert again.status_code == 401
+
+        # повторный вход: сервер помечен как клан, членство видно
+        with discord_mock(guilds=GUILDS):
+            async with client() as c:
+                await c.get(f"{API}/auth/discord/callback", params={"code": "abc", "state": make_state()})
+                body = (await c.get(f"{API}/auth/discord/setup")).json()
+                assert body["guilds"][0]["clan_id"] == "900000000000000001"
+                assert body["memberships"][0]["role"] == "owner"
+                ok = await c.post(f"{API}/auth/discord/setup", json={"clan_id": "900000000000000001"})
+                assert ok.status_code == 200
+                denied = await c.post(f"{API}/auth/discord/setup", json={"clan_id": "CLAN_X"})
+                assert denied.status_code == 401        # кука уже потрачена
+
+    run(main())
+
+
+def test_owner_guild_links_existing_unlinked_clan(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        await seed_membership("SANDALIS", role=ClanRole.OWNER)
+        with discord_mock(guilds=GUILDS[:1]):
+            async with client() as c:
+                await c.get(f"{API}/auth/discord/callback", params={"code": "abc", "state": make_state()})
+                ok = await c.post(f"{API}/auth/discord/setup", json={"guild_id": "900000000000000001"})
+                assert ok.status_code == 200, ok.text
+                assert ok.json()["me"]["clan_id"] == "SANDALIS"   # данные клана сохранены
+        async with AsyncSessionLocal() as s:
+            clan = await s.get(Clan, "SANDALIS")
+            assert clan.discord_guild_id == "900000000000000001"
+            assert clan.name == "SINDARIS HQ"
+
+    run(main())
+
+
+def test_setup_requires_signed_cookie(db, monkeypatch):
+    async def main() -> None:
+        async with client() as c:
+            r = await c.get(f"{API}/auth/discord/setup")
+            assert r.status_code == 401
+            assert r.json()["error"]["code"] == "setup_expired"
+            c.cookies.set("sindaris_discord_setup", "forged.value")
+            r = await c.post(f"{API}/auth/discord/setup", json={"guild_id": "1"})
+            assert r.status_code == 401
+
+    run(main())
+
+
+# --------------------------------------------------------------------------- #
+# invite-ссылка через Discord
+# --------------------------------------------------------------------------- #
+def test_invite_link_joins_clan_via_discord(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        await seed_clan("CLAN_A")
+        admin = {"Authorization": "Bearer " + issue_access_token(
+            user_id="boss", clan_id="CLAN_A", role=ClanRole.ADMIN)}
+        async with client() as c:
+            inv = await c.post(f"{API}/auth/invites", json={"role": "officer", "max_uses": 1}, headers=admin)
+            code = inv.json()["invite"]["code"]
+
+            preview = await c.get(f"{API}/auth/invites/{code.lower()}/preview")
+            assert preview.status_code == 200
+            assert preview.json()["clan_name"] == "Alpha"
+            assert preview.json()["role"] == "officer"
+
+            login = await c.get(f"{API}/auth/discord/login", params={"invite": code})
+            raw_state = login.headers["location"].split("state=", 1)[1].split("&")[0]
+            assert verify_state(raw_state).invite == code
+
+        # владелец серверов по invite-ссылке идёт в клан, а не в выбор сервера
+        with discord_mock(guilds=GUILDS):
+            async with client() as c:
+                r = await c.get(
+                    f"{API}/auth/discord/callback",
+                    params={"code": "abc", "state": make_state(invite=code), "response": "json"},
+                )
+                assert r.status_code == 200, r.text
+                assert r.json()["me"]["clan_id"] == "CLAN_A"
+                assert r.json()["me"]["role"] == "officer"
+
+                # повторный переход участника не тратит код
+                r = await c.get(
+                    f"{API}/auth/discord/callback",
+                    params={"code": "abc", "state": make_state(invite=code), "response": "json"},
+                )
+                assert r.status_code == 200, r.text
+
+        # другой пользователь: код исчерпан -> redirect ?error=invite_exhausted
+        other = {**PROFILE, "id": "222", "global_name": "Other"}
+        with respx.mock(assert_all_mocked=False) as mock:
+            mock.post(f"{BASE}/oauth2/token").respond(json=TOKEN_RESPONSE)
+            mock.get(f"{BASE}/users/@me").respond(json=other)
+            async with client() as c:
+                r = await c.get(
+                    f"{API}/auth/discord/callback",
+                    params={"code": "abc", "state": make_state(invite=code)},
+                )
+                assert r.status_code == 302
+                assert r.headers["location"] == f"{settings.FRONTEND_URL}?error=invite_exhausted"
+
+        async with client() as c:
+            bad = await c.get(f"{API}/auth/invites/INV-NOPE0000/preview", headers={"Accept-Language": "cs"})
+            assert bad.status_code == 404
+            assert bad.json()["error"]["code"] == "invite_invalid"
+
+    run(main())
+
+
+# --------------------------------------------------------------------------- #
+# гостевой доступ
+# --------------------------------------------------------------------------- #
+def test_guest_access_is_read_only(db, monkeypatch):
+    async def main() -> None:
+        monkeypatch.setattr(settings, "DEFAULT_CLAN_ID", None, raising=True)
+        monkeypatch.setattr(settings, "GUEST_CLAN_ID", None, raising=True)
+        async with client() as c:
+            r = await c.post(f"{API}/auth/guest")
+            assert r.status_code == 403
+
+        await seed_clan("CLAN_A")
+        monkeypatch.setattr(settings, "DEFAULT_CLAN_ID", "CLAN_A", raising=True)
+        async with client() as c:
+            r = await c.post(f"{API}/auth/guest", headers={"Accept-Language": "ru"})
+            assert r.status_code == 200, r.text
+            assert r.json()["me"]["subject_type"] == "guest"
+            assert r.json()["me"]["role"] == "guest"
+
+            me = await c.get(f"{API}/auth/me")
+            assert me.json()["subject_type"] == "guest"
+            assert me.json()["clan_id"] == "CLAN_A"
+
+            assert (await c.get(f"{API}/stockpiles")).status_code == 200
+            write = await c.post(f"{API}/stockpiles", json={"name": "X", "region": "Y"})
+            assert write.status_code == 403
+            assert (await c.get(f"{API}/auth/invites")).status_code == 403
 
     run(main())

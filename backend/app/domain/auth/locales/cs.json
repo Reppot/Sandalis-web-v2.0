@@ -12,7 +12,8 @@
     "forbidden": "Neplatný vývojářský klíč."
   },
   "user": {
-    "not_member": "Uživatel {user_id} není členem klanu {clan_id}."
+    "not_member": "Uživatel {user_id} není členem klanu {clan_id}.",
+    "no_clan": "Nejste členem žádného klanu. Požádejte velitele o pozvánku nebo se přihlaste jako host."
   },
   "code": {
     "invalid": "Pozvánkový kód nebyl nalezen nebo byl zrušen.",
@@ -29,5 +30,17 @@
     "created": "Pozvánkový kód {code} byl vytvořen.",
     "revoked": "Pozvánkový kód {code} byl zrušen.",
     "not_found": "Pozvánkový kód nebyl ve vašem klanu nalezen."
+  },
+  "setup": {
+    "expired": "Čas na výběr serveru vypršel — přihlaste se přes Discord znovu.",
+    "guild_not_owned": "Tento Discord server nevlastníte.",
+    "clan_not_member": "Nejste členem tohoto klanu.",
+    "nothing_selected": "Vyberte server nebo klan.",
+    "clan_created": "Klan „{clan}“ je propojen s vaším Discord serverem. Jste velitel.",
+    "signed_in": "Vítejte, {name}."
+  },
+  "guest": {
+    "disabled": "Přístup pro hosty je vypnutý.",
+    "signed_in": "Přístup hosta: jen čtení."
   }
 }

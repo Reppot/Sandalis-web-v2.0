@@ -53,9 +53,8 @@ def test_invite_rbac_matrix(db):
             assert (await c.delete(f"{API}/auth/invites/{invite['id']}",
                                    headers=admin)).status_code == 204
 
-            red = await c.post(
-                f"{API}/auth/redeem-code",
-                json={"code": invite["code"], "user_id": "u1", "display_name": "U"},
+            red = await c.get(
+                f"{API}/auth/invites/{invite['code']}/preview",
                 headers={"Accept-Language": "ru"},
             )
             assert red.status_code == 404

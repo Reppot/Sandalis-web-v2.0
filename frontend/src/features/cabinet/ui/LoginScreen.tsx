@@ -4,7 +4,7 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { UserSession } from "@/entities/session";
 import { env, errorText, useT, type MessageKey } from "@/shared";
-import { authApi } from "@/features/cabinet/api/authApi";
+import { authApi, type DiscordSetup, type InvitePreview } from "@/features/cabinet/api/authApi";
 import { LanguageSwitch } from "@/features/cabinet/ui/LanguageSwitch";
 
 // Ключи = AppError.code, которые бэкенд кладёт в FRONTEND_URL?error=<code>.
@@ -14,6 +14,18 @@ const OAUTH_ERRORS: Record<string, MessageKey> = {
   exchange_failed: "login.err.exchange_failed",
   profile_failed: "login.err.profile_failed",
   disabled: "login.err.disabled",
+  invite_invalid: "login.err.invite_invalid",
+  invite_expired: "login.err.invite_expired",
+  invite_exhausted: "login.err.invite_exhausted",
+  setup_expired: "login.err.setup_expired",
+};
+
+const ROLE_KEY: Record<string, MessageKey> = {
+  owner: "role.owner",
+  admin: "role.admin",
+  officer: "role.officer",
+  member: "role.member",
+  guest: "role.guest",
 };
 
 const DiscordGlyph = () => (
@@ -24,7 +36,8 @@ const DiscordGlyph = () => (
 
 /**
  * Экран входа старого терминала: видео на фоне (URL — из реестра медиа в БД, а не из
- * локальной папки), Discord OAuth, вступление по invite-коду и dev-token для локалки.
+ * локальной папки), Discord OAuth, invite-ссылка, выбор сервера клана для владельца
+ * Discord-сервера и гостевой просмотр.
  */
 export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = ({ onLoggedIn }) => {
   const t = useT();
@@ -32,8 +45,10 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   const [oauthError, setOauthError] = React.useState("");
   const [error, setError] = React.useState("");
   const [busy, setBusy] = React.useState(false);
-  const [code, setCode] = React.useState("");
-  const [name, setName] = React.useState("");
+  const [invite, setInvite] = React.useState<string | null>(null);
+  const [invitePreview, setInvitePreview] = React.useState<InvitePreview | null>(null);
+  const [setupMode, setSetupMode] = React.useState(false);
+  const [setup, setSetup] = React.useState<DiscordSetup | null>(null);
   const [videoFailed, setVideoFailed] = React.useState(false);
   const [reducedMotion, setReducedMotion] = React.useState(false);
   const video = mediaEntry("login_video");
@@ -43,18 +58,40 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     const params = new URLSearchParams(window.location.search);
     const code = params.get("error");
-    if (code) {
-      setOauthError(code);
-      window.history.replaceState(null, "", window.location.pathname);
-    }
+    if (code) setOauthError(code);
+    const inviteCode = params.get("invite");
+    if (inviteCode) setInvite(inviteCode.trim().toUpperCase());
+    if (params.get("setup") === "guild") setSetupMode(true);
+    if (code || params.get("setup")) window.history.replaceState(null, "", window.location.pathname + (inviteCode ? `?invite=${encodeURIComponent(inviteCode)}` : ""));
   }, []);
+
+  React.useEffect(() => {
+    if (!invite) return;
+    authApi
+      .previewInvite(invite)
+      .then(setInvitePreview)
+      .catch((err) => setError(`[${t("login.denied")}] ${errorText(err, t("login.err.invite_invalid")).toUpperCase()}`));
+  }, [invite, t]);
+
+  React.useEffect(() => {
+    if (!setupMode) return;
+    authApi
+      .getSetup()
+      .then(setSetup)
+      .catch(() => {
+        setSetupMode(false);
+        setOauthError("setup_expired");
+      });
+  }, [setupMode]);
 
   const run = async (action: () => Promise<UserSession>) => {
     setBusy(true);
     setError("");
     setOauthError("");
     try {
-      onLoggedIn(await action());
+      const session = await action();
+      window.history.replaceState(null, "", window.location.pathname);
+      onLoggedIn(session);
     } catch (err) {
       setError(`[${t("login.denied")}] ${errorText(err, t("login.noLink")).toUpperCase()}`);
     } finally {
@@ -87,12 +124,32 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
 
         <div className="auth-rule" />
 
-        <div className="auth-form">
-          <a href={authApi.discordLoginUrl()} className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
-            <DiscordGlyph />
-            <span>{t("login.discord")}</span>
-          </a>
-        </div>
+        {setupMode ? (
+          <ServerPicker setup={setup} busy={busy} onPick={(choice) => void run(() => authApi.completeSetup(choice))} onCancel={() => setSetupMode(false)} />
+        ) : (
+          <>
+            {invitePreview && (
+              <div className="auth-invite relative z-[1]">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                {invitePreview.clanIconUrl && <img src={invitePreview.clanIconUrl} alt="" width={40} height={40} className="h-10 w-10 rounded-full" />}
+                <div className="min-w-0">
+                  <div className="auth-label mb-0.5">{t("login.invitedTo")}</div>
+                  <div className="truncate text-sm text-white">
+                    {invitePreview.clanName} • <span className="text-accent">{t(ROLE_KEY[invitePreview.role] ?? "role.member")}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="auth-form">
+              <a href={authApi.discordLoginUrl({ invite: invitePreview ? invite : null })} className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
+                <DiscordGlyph />
+                <span>{t(invitePreview ? "login.discordJoin" : "login.discord")}</span>
+              </a>
+              <p className="auth-hint">{t("login.ownerHint")}</p>
+            </div>
+          </>
+        )}
 
         {shownError && (
           <div className="auth-error relative z-[1]" role="alert">
@@ -101,33 +158,19 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
           </div>
         )}
 
-        <div className="auth-rule" />
-
-        <form
-          className="auth-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (code.trim() && name.trim()) void run(() => authApi.redeemInvite({ code: code.trim(), displayName: name.trim() }));
-          }}
-        >
-          <label htmlFor="invite-code" className="auth-label">{t("login.inviteLabel")}</label>
-          <div className="grid gap-2 sm:grid-cols-2">
-            <div className="auth-input-wrap">
-              <span className="auth-prompt" aria-hidden>@</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("login.callsign")} autoComplete="nickname" spellCheck={false} disabled={busy} />
+        {!setupMode && (
+          <>
+            <div className="auth-rule" />
+            <div className="auth-form">
+              <button type="button" className="btn auth-submit" disabled={busy} onClick={() => void run(() => authApi.loginAsGuest())}>
+                <span className={busy ? "pulse" : ""}>👁 {t("login.guest")}</span>
+              </button>
+              <p className="auth-hint">{t("login.guestHint")}</p>
             </div>
-            <div className={`auth-input-wrap ${shownError ? "auth-input-error" : ""}`}>
-              <span className="auth-prompt" aria-hidden>&gt;_</span>
-              <input id="invite-code" value={code} onChange={(e) => setCode(e.target.value)} placeholder="INV-XXXXXX" autoComplete="off" spellCheck={false} disabled={busy} />
-            </div>
-          </div>
-          <button type="submit" className="btn btn-primary auth-submit" disabled={!code.trim() || !name.trim() || busy}>
-            <span className={busy ? "pulse" : ""}>{busy ? t("login.checking") : t("login.connect")}</span>
-            {!busy && <span aria-hidden>↵</span>}
-          </button>
-        </form>
+          </>
+        )}
 
-        {env.enableDevLogin && (
+        {env.enableDevLogin && !setupMode && (
           <>
             <div className="auth-rule" />
             <button type="button" className="btn auth-submit" disabled={busy} onClick={() => void run(() => authApi.loginWithDevToken({ userId: "dev-admin", clanId: "SANDALIS", role: "owner", displayName: "DevAdmin" }))}>
@@ -137,5 +180,66 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
         )}
       </section>
     </main>
+  );
+};
+
+/** Выбор сервера клана: серверы Discord во владении + кланы, где пользователь уже состоит. */
+const ServerPicker: React.FC<{
+  setup: DiscordSetup | null;
+  busy: boolean;
+  onPick: (choice: { guildId: string } | { clanId: string }) => void;
+  onCancel: () => void;
+}> = ({ setup, busy, onPick, onCancel }) => {
+  const t = useT();
+  if (!setup) return <p className="hud-label pulse py-6 text-center text-muted">{t("setup.loading")}</p>;
+
+  return (
+    <div className="auth-form mt-0">
+      <div className="auth-label">{t("setup.title")}</div>
+      <p className="auth-hint mt-0 mb-3">{t("setup.hint", { name: setup.displayName })}</p>
+      <ul className="auth-servers scroll-area">
+        {setup.guilds.map((g) => (
+          <li key={g.id}>
+            <button type="button" className="auth-server" disabled={busy} onClick={() => onPick({ guildId: g.id })}>
+              {g.iconUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={g.iconUrl} alt="" width={40} height={40} className="auth-server-icon" />
+              ) : (
+                <span className="auth-server-icon auth-server-letter">{g.name.charAt(0).toUpperCase()}</span>
+              )}
+              <span className="min-w-0 flex-1 text-left">
+                <span className="block truncate text-sm text-white">{g.name}</span>
+                <span className={`hud-label block ${g.clanId ? "text-accent" : "text-muted"}`}>{g.clanId ? t("setup.linked") : t("setup.newClan")}</span>
+              </span>
+              <span className="text-accent" aria-hidden>▶</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      {setup.memberships.length > 0 && (
+        <>
+          <div className="auth-label mt-4">{t("setup.memberships")}</div>
+          <ul className="auth-servers">
+            {setup.memberships.map((m) => (
+              <li key={m.clanId}>
+                <button type="button" className="auth-server" disabled={busy} onClick={() => onPick({ clanId: m.clanId })}>
+                  <span className="auth-server-icon auth-server-letter">{m.clanName.charAt(0).toUpperCase()}</span>
+                  <span className="min-w-0 flex-1 text-left">
+                    <span className="block truncate text-sm text-white">{m.clanName}</span>
+                    <span className="hud-label block text-muted">{t(ROLE_KEY[m.role] ?? "role.member")}</span>
+                  </span>
+                  <span className="text-accent" aria-hidden>▶</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      <button type="button" className="btn mt-4 w-full" disabled={busy} onClick={onCancel}>
+        ← {t("setup.back")}
+      </button>
+    </div>
   );
 };

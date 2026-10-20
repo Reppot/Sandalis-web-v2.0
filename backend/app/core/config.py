@@ -60,10 +60,18 @@ class Settings(BaseSettings):
     COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
 
     # --- Bootstrap-аренда ------------------------------------------------
-    # Куда автоматически Deterministic-принять discord-юзера без membership.
-    # None -> 403 user.not_member (fail-closed).
+    # Основной клан сайта: его данные видит гостевой доступ (GUEST_CLAN_ID пуст)
+    # и его admin+ правят глобальный контент. Discord-юзеров сюда больше НЕ
+    # принимают автоматически: владелец сервера создаёт клан сам, остальные
+    # вступают по invite-ссылке.
     DEFAULT_CLAN_ID: str | None = None
-    DEFAULT_CLAN_ROLE: ClanRole = ClanRole.GUEST
+    DEFAULT_CLAN_ROLE: ClanRole = ClanRole.GUEST   # устарело: авто-вступление отключено
+    # Гостевой доступ «только просмотр» (POST /auth/guest). Пусто -> DEFAULT_CLAN_ID;
+    # оба пусты -> гостевой вход выключен.
+    GUEST_CLAN_ID: str | None = None
+    GUEST_TOKEN_TTL_MIN: int = 720
+    # Сколько живёт выбор сервера после Discord-входа (подписанная кука).
+    DISCORD_SETUP_TTL_SEC: int = 900
     # Глобальный контент (видео входа, ссылки, обучение) правят admin+ только этого
     # клана. Пусто -> DEFAULT_CLAN_ID.
     CONTENT_ADMIN_CLAN_ID: str | None = None

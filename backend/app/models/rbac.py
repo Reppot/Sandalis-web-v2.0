@@ -34,6 +34,9 @@ class Clan(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(120), nullable=False)
     default_locale: Mapped[str] = mapped_column(String(8), default="en", nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    # Discord-сервер клана: его владелец (флаг owner из OAuth scope=guilds) — owner клана
+    discord_guild_id: Mapped[str | None] = mapped_column(String(32), nullable=True, unique=True)
+    icon_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
 
 
 class User(Base, TimestampMixin):
