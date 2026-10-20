@@ -163,12 +163,15 @@ const BotPanel: React.FC<{ onChanged: () => void }> = ({ onChanged }) => {
 const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog }) => {
   const t = useT();
   const notify = useNotify();
-  // список приходит страницами по MEMBERS_PAGE: на сервере может быть 10 000 человек
+  // список приходит страницами по MEMBERS_PAGE: на сервере может быть 10 000 человек.
+  // Поиск (ник или роль) тоже идёт на сервере по всем участникам и тоже постранично.
   const [data, setData] = React.useState<MembersPage | null>(null);
+  const [found, setFound] = React.useState<MembersPage | null>(null);
   const [loadingMore, setLoadingMore] = React.useState(false);
   const [query, setQuery] = React.useState("");
-  const [found, setFound] = React.useState<ClanMember[] | null>(null);
   const [open, setOpen] = React.useState<string | null>(null);
+  const q = query.trim();
+  const searching = q.length >= 2;
   const fail = React.useCallback(
     (err: unknown) => notify({ title: t("nav.management.label"), message: errorText(err, t("mgmt.loadFailed")), tone: "danger" }),
     [notify, t],
@@ -180,14 +183,30 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
   }, [fail]);
   React.useEffect(load, [load]);
 
+  React.useEffect(() => {
+    setFound(null);
+    if (!searching) return;
+    let alive = true;
+    const timer = window.setTimeout(() => {
+      managementApi.members({ q }).then((r) => alive && setFound(r)).catch((err) => alive && fail(err));
+    }, 400);
+    return () => {
+      alive = false;
+      window.clearTimeout(timer);
+    };
+  }, [q, searching, fail]);
+
+  const current = searching ? found : data;
   const loadMore = async () => {
-    if (!data?.nextAfter) return;
+    if (!current?.nextAfter) return;
+    const set = searching ? setFound : setData;
     setLoadingMore(true);
     try {
-      const next = await managementApi.members({ after: data.nextAfter });
-      setData((prev) => prev && {
+      const next = await managementApi.members({ after: current.nextAfter, q: searching ? q : undefined });
+      set((prev) => prev && {
         ...next,
         total: prev.total,
+        joinedTotal: prev.joinedTotal,
         members: [...prev.members, ...next.members.filter((m) => !prev.members.some((p) => p.id === m.id))],
       });
     } catch (err) {
@@ -197,28 +216,13 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
     }
   };
 
-  // поиск: по загруженным (ник и роли) + поиск Discord по нику среди всех участников сервера
-  React.useEffect(() => {
-    const q = query.trim();
-    if (q.length < 2) return setFound(null);
-    const timer = window.setTimeout(() => {
-      managementApi.members({ q }).then((r) => setFound(r.members)).catch(() => setFound([]));
-    }, 400);
-    return () => window.clearTimeout(timer);
-  }, [query]);
-
+  // 1 символ — мгновенный фильтр по загруженным; от 2 — поиск по всему серверу
   const filtered = React.useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const loaded = data?.members ?? [];
-    if (!q) return loaded;
-    const local = loaded.filter((m) => `${m.name} ${m.roles.map((r) => r.name).join(" ")}`.toLowerCase().includes(q));
-    const ids = new Set(local.map((m) => m.id));
-    return [...local, ...(found ?? []).filter((m) => !ids.has(m.id))];
-  }, [data, query, found]);
-  // без поиска страницы уже приходят с сервера; с поиском — режем найденное локально
-  const searching = Boolean(query.trim());
-  const page = usePaged(filtered, MEMBERS_PAGE, query);
-  const rows = searching ? page.items : filtered;
+    const list = current?.members ?? [];
+    if (!q || searching) return list;
+    const needle = q.toLowerCase();
+    return list.filter((m) => `${m.name} ${m.roles.map((r) => r.name).join(" ")}`.toLowerCase().includes(needle));
+  }, [current, q, searching]);
   const total = catalog ? catalog.groups.reduce((n, g) => n + g.permissions.length, 0) : 0;
 
   return (
@@ -235,13 +239,13 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
       {data?.status === "no_bot" && <p className="hud-label mt-2 text-warn">{t("mgmt.noBotMembers")}</p>}
       {data?.status === "no_guild" && <p className="hud-label mt-2 text-warn">{t("droles.noGuild")}</p>}
 
-      {!data ? (
+      {!current ? (
         <Loading />
       ) : filtered.length === 0 ? (
         <EmptyState icon="cabinet" title={t("mgmt.noMembers")} />
       ) : (
         <ul className="mt-3 flex flex-col gap-1.5">
-          {rows.map((m) => {
+          {filtered.map((m) => {
             const expanded = open === m.id;
             return (
               <li key={m.id} className={cn("panel-inner rounded px-3 py-2", !m.joined && "opacity-75")}>
@@ -281,9 +285,15 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
           })}
         </ul>
       )}
-      {data && (searching
-        ? <PagedMore page={page} />
-        : <LoadMore shown={data.members.length} total={data.total} next={data.nextAfter ? MEMBERS_PAGE : 0} onMore={() => void loadMore()} busy={loadingMore} />)}
+      {current && (
+        <LoadMore
+          shown={current.members.length}
+          total={searching ? (current.nextAfter ? null : current.members.length) : current.total}
+          next={current.nextAfter ? MEMBERS_PAGE : 0}
+          onMore={() => void loadMore()}
+          busy={loadingMore}
+        />
+      )}
     </section>
   );
 };

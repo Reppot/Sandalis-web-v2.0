@@ -14,6 +14,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from collections.abc import Callable
 from typing import Any, Final
 from urllib.parse import urlencode
 
@@ -94,35 +95,49 @@ def _member_row(m: dict[str, Any]) -> dict[str, Any] | None:
     }
 
 
+MEMBERS_SCAN_PAGE: Final[int] = 1000      # максимум Discord за запрос
+MEMBERS_SCAN_LIMIT: Final[int] = 30       # до 30 000 участников за один поиск
+
+
 async def fetch_members_page(
-    guild_id: str, *, after: str = "0", limit: int = 100, query: str = ""
+    guild_id: str, *, after: str = "0", limit: int = 100,
+    match: Callable[[dict[str, Any]], bool] | None = None,
 ) -> tuple[str, list[dict[str, Any]], str | None]:
     """Одна страница участников сервера (бот) — список не грузится целиком, даже
-    если на сервере 10 000 человек. Без query: по возрастанию id после `after`,
-    курсор следующей страницы — id последнего (None — страниц больше нет).
-    С query: поиск Discord по началу ника/имени, одна страница."""
+    если на сервере 10 000 человек. Участники идут по возрастанию id после `after`;
+    курсор следующей страницы — id последнего отданного (None — дальше никого).
+
+    С match (поиск по нику или роли): бот листает сервер страницами по 1000 и
+    отбирает подходящих, пока не наберёт `limit` — у найденных тоже есть
+    «Загрузить ещё», а поиск идёт по всему серверу, не только по загруженным."""
     if not settings.DISCORD_BOT_TOKEN:
         return "no_bot", [], None
+    rows: list[dict[str, Any]] = []
+    cursor = after or "0"
+    batch = MEMBERS_SCAN_PAGE if match else limit
     try:
         async with get_http_client() as client:
-            if query:
-                r = await client.get(_api(f"/guilds/{guild_id}/members/search"), headers=_bot_headers(),
-                                     params={"query": query, "limit": limit})
-            else:
+            for _ in range(MEMBERS_SCAN_LIMIT if match else 1):
                 r = await client.get(_api(f"/guilds/{guild_id}/members"), headers=_bot_headers(),
-                                     params={"limit": limit, "after": after or "0"})
-        if r.status_code == 403:
-            return "intent_required", [], None
-        if r.status_code // 100 != 2:
-            return "no_bot", [], None
-        page = r.json()
+                                     params={"limit": batch, "after": cursor})
+                if r.status_code == 403:
+                    return "intent_required", [], None
+                if r.status_code // 100 != 2:
+                    return "no_bot", [], None
+                page = r.json()
+                if not isinstance(page, list):
+                    return "no_bot", [], None
+                for m in page:
+                    cursor = str((m.get("user") or {}).get("id") or cursor)
+                    row = _member_row(m)
+                    if row and (match is None or match(row)):
+                        rows.append(row)
+                        if match and len(rows) >= limit:
+                            return "ok", rows, cursor   # продолжить сразу после последнего найденного
+                if len(page) < batch:
+                    return "ok", rows, None             # сервер пройден до конца
     except (httpx.HTTPError, ValueError):
         return "no_bot", [], None
-    if not isinstance(page, list):
-        return "no_bot", [], None
-    rows = [row for row in map(_member_row, page) if row]
-    last = str((page[-1].get("user") or {}).get("id") or "") if page else ""
-    cursor = last if (not query and len(page) >= limit and last) else None
     return "ok", rows, cursor
 
 

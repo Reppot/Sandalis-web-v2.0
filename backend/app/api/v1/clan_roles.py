@@ -151,16 +151,24 @@ async def read_members(
     limit: Annotated[int, Query(ge=10, le=500)] = 100,
     q: Annotated[str, Query(max_length=64)] = "",
 ) -> DiscordMembersRead:
-    query = q.strip()
-    guild_id = await _guild_id(service)
-    if guild_id:
-        status, discord, next_after = await fetch_members_page(guild_id, after=after, limit=limit, query=query)
-    else:
-        status, discord, next_after = "no_guild", [], None
-    total = await fetch_member_count(guild_id) if guild_id and not after and not query and status == "ok" else None
+    query = q.strip().lower()
     row = await service.get()
     snapshot = list(row.discord_roles) if row else []
     by_id = {r["id"]: r for r in snapshot}
+    # поиск по нику и по названию роли — по всему серверу, постранично
+    hit_roles = {r["id"] for r in snapshot if query and query in r["name"].lower()}
+
+    def matches(d: dict) -> bool:
+        return query in d["name"].lower() or bool(hit_roles.intersection(d["roles"]))
+
+    guild_id = await _guild_id(service)
+    if guild_id:
+        status, discord, next_after = await fetch_members_page(
+            guild_id, after=after, limit=limit, match=matches if query else None,
+        )
+    else:
+        status, discord, next_after = "no_guild", [], None
+    total = await fetch_member_count(guild_id) if guild_id and not after and not query and status == "ok" else None
     with bypass_clan_filter():
         joined = {
             m.user_id: (m, name) for m, name in (await service.session.execute(
@@ -189,10 +197,10 @@ async def read_members(
     # вступили, но бот их не видит (ушли с сервера / нет intent). Список Discord идёт по
     # возрастанию id, поэтому «ушедший» попадает на страницу, в чей диапазон id входит.
     def belongs_here(uid: str, name: str | None) -> bool:
+        if query and query not in (name or uid).lower():
+            return False
         if status != "ok":
-            return not after and not query          # бот недоступен — все вступившие на первой странице
-        if query:
-            return query.lower() in (name or uid).lower()
+            return not after                        # бот недоступен — все вступившие на первой странице
         if not uid.isdigit():
             return next_after is None
         return int(uid) > int(after or 0) and (next_after is None or int(uid) <= int(next_after))

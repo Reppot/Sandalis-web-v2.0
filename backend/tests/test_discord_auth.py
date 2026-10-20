@@ -885,3 +885,33 @@ def test_members_are_paged_with_cursor(db, monkeypatch):
                 assert members.calls[1].request.url.params["after"] == "109"
 
     run(main())
+
+
+def test_member_search_by_role_scans_whole_server_with_cursor(db, monkeypatch):
+    """Поиск по роли: не первые 100 загруженных, а весь сервер, с «Загрузить ещё»."""
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        monkeypatch.setattr(settings, "DISCORD_BOT_TOKEN", "bot-token", raising=True)
+        await link_guild(SNAPSHOT)
+        owner = {"Authorization": "Bearer " + issue_access_token(user_id="boss", clan_id="CLAN_R", role=ClanRole.OWNER)}
+        # 1000 + 500 участников; роль «Пилот» у каждого десятого
+        def batch(start: int, n: int) -> list[dict]:
+            return [{"user": {"id": str(start + i), "username": f"u{start + i}"},
+                     "roles": [R_PILOT] if (start + i) % 10 == 0 else []} for i in range(n)]
+        pages = {"0": batch(1000, 1000), "1999": batch(2000, 500)}
+        with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+            route = mock.get(f"{BASE}/guilds/{ROLE_GUILD}/members")
+            route.side_effect = lambda req: httpx.Response(200, json=[
+                m for m in pages.get(req.url.params["after"], [])
+            ] if req.url.params["after"] in pages else [
+                m for m in batch(1000, 1500) if int(m["user"]["id"]) > int(req.url.params["after"])
+            ][: int(req.url.params["limit"])])
+            async with client() as c:
+                pilot = next(r["name"] for r in SNAPSHOT if r["id"] == R_PILOT)
+                p1 = (await c.get(f"{API}/clan/members", params={"q": pilot, "limit": 100}, headers=owner)).json()
+                assert len(p1["members"]) == 100 and p1["next_after"] == "1990"
+                p2 = (await c.get(f"{API}/clan/members", params={"q": pilot, "limit": 100, "after": p1["next_after"]}, headers=owner)).json()
+                assert len(p2["members"]) == 50 and p2["next_after"] is None
+                assert {m["id"] for m in p1["members"]}.isdisjoint(m["id"] for m in p2["members"])
+
+    run(main())
