@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import String, cast, func, update
+from sqlalchemy import String, cast, delete, func, update
 from sqlalchemy.dialects.postgresql import JSONB, insert
 from sqlalchemy.ext.asyncio import AsyncConnection
 
@@ -59,6 +59,17 @@ async def seed_recipes(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int
             set_={**{col: stmt.excluded[col] for col in updatable}, "updated_at": func.now()},
         ))
     return len(rows)
+
+
+async def seed_facility_recipes(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int:
+    """Рецепты построек (wiki Production) — генерируются целиком: рецепты, которых больше
+    нет на вики, удаляются."""
+    await conn.execute(
+        delete(ProductionRecipe).where(
+            ProductionRecipe.kind == "facility", ProductionRecipe.id.not_in([r["id"] for r in rows])
+        )
+    )
+    return await seed_recipes(conn, rows) if rows else 0
 
 
 async def seed_content(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int:
@@ -107,6 +118,8 @@ async def run(conn: AsyncConnection) -> dict[str, int]:
     return {
         "catalog": await seed_catalog(conn, load("catalog.json")),
         "recipes": await seed_recipes(conn, load("recipes.json")),
+        "facility_recipes": await seed_facility_recipes(conn, load("facility_recipes.json"))
+        if (DATA_DIR / "facility_recipes.json").exists() else 0,
         "content_inserted": await seed_content(conn, load("content.json")),
         "content_translated": await seed_content_i18n(
             conn, json.loads((DATA_DIR / "content_i18n.json").read_text(encoding="utf-8"))

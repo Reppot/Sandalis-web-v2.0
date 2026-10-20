@@ -50,6 +50,11 @@ def test_seed_is_idempotent_and_matches_counts(db):
             assert factory.json() and all("mpf" in r["facilities"] for r in factory.json())
             refinery = await c.get(f"{API}/recipes", params={"kind": "refinery"}, headers=auth)
             assert {r["id"] for r in refinery.json()} >= {"refinery-bmat", "refinery-rmat"}
+            facility = (await c.get(f"{API}/recipes", params={"kind": "facility"}, headers=auth)).json()
+            assert len(facility) == len(load("facility_recipes.json")) > 300
+            # у одного предмета несколько рецептов: Concrete Mixer и два режима Coal Refinery
+            concrete = [r for r in facility if r["name"] == "Concrete Materials"]
+            assert len(concrete) >= 2 and all(r["data"]["inputs"] for r in concrete)
 
             icon = await c.get(first_item["icon_url"])
             assert icon.status_code == 200

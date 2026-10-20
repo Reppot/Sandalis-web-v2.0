@@ -2217,7 +2217,7 @@ paths:
     get:
       tags:
       - catalog
-      summary: Рецепты Factory / MPF / Refinery (данные калькуляторов)
+      summary: Рецепты Factory / MPF / Refinery и построек (данные калькуляторов)
       operationId: list_recipes_api_v1_recipes_get
       security:
       - ClanJWT: []
@@ -2230,6 +2230,7 @@ paths:
           - enum:
             - factory
             - refinery
+            - facility
             type: string
           - type: 'null'
           title: Kind
@@ -4546,7 +4547,9 @@ components:
       - cost
       - data
       title: RecipeRead
-      description: 'Рецепт Factory/MPF/Refinery. cost — {"bmat": 100} / {"salvage": 2}; data — поля вида.'
+      description: 'Рецепт Factory/MPF/Refinery или постройки (kind="facility", wiki Production).
+
+        cost — {"bmat": 100} / {"salvage": 2} / {"Coal": 300}; data — поля вида.'
     ReportCreate:
       properties:
         title:

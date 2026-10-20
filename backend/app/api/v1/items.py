@@ -148,12 +148,12 @@ async def get_item(code: str, service: ServiceDep) -> CatalogItemRead:
 @recipes_router.get(
     "",
     response_model=list[RecipeRead],
-    summary="Рецепты Factory / MPF / Refinery (данные калькуляторов)",
+    summary="Рецепты Factory / MPF / Refinery и построек (данные калькуляторов)",
     dependencies=CatalogRead,
 )
 async def list_recipes(
     service: ServiceDep,
-    kind: Annotated[Literal["factory", "refinery"] | None, Query()] = None,
+    kind: Annotated[Literal["factory", "refinery", "facility"] | None, Query()] = None,
     facility: Annotated[Literal["factory", "mpf", "refinery"] | None, Query()] = None,
     faction: Annotated[str | None, Query(max_length=16)] = None,
     category: Annotated[str | None, Query(max_length=32)] = None,

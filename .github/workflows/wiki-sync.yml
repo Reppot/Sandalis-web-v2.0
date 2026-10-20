@@ -41,6 +41,9 @@ jobs:
           python scripts/mpf_wiki_parse.py /tmp/mpf.json scripts/mpf_wiki_snapshot.json
           python scripts/mpf_wiki_apply.py scripts/mpf_wiki_snapshot.json app/seed/data/recipes.json app/seed/data/catalog.json
 
+      - name: Facility recipes (Production)
+        run: python scripts/wiki_production_fetch.py
+
       - name: Validate seed JSON
         run: python -c "import json,pathlib; [json.loads(p.read_text(encoding='utf-8')) for p in pathlib.Path('app/seed/data').glob('*.json')]"
 

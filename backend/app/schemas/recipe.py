@@ -6,7 +6,8 @@ from pydantic import BaseModel, ConfigDict
 
 
 class RecipeRead(BaseModel):
-    """Рецепт Factory/MPF/Refinery. cost — {"bmat": 100} / {"salvage": 2}; data — поля вида."""
+    """Рецепт Factory/MPF/Refinery или постройки (kind="facility", wiki Production).
+    cost — {"bmat": 100} / {"salvage": 2} / {"Coal": 300}; data — поля вида."""
     model_config = ConfigDict(from_attributes=True)
 
     id: str

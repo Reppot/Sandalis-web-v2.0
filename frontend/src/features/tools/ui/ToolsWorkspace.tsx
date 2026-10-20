@@ -6,13 +6,15 @@ import { recipeApi, type Recipe } from "@/entities/recipe";
 import { Loading, errorText, UiGlyph, useNotify, useT, type MessageKey, type UiIcon } from "@/shared";
 import { FactoryCalculator } from "@/features/tools/ui/FactoryCalculator";
 import { RefineryCalculator } from "@/features/tools/ui/RefineryCalculator";
+import { FacilityCalculator } from "@/features/tools/ui/FacilityCalculator";
 
-type ClanToolId = "factory" | "mpf" | "refinery";
+type ClanToolId = "factory" | "mpf" | "refinery" | "facility";
 
 const CLAN_TOOLS: { id: ClanToolId; label: MessageKey; hint: MessageKey; icon: UiIcon }[] = [
   { id: "factory", label: "tools.factory", hint: "tools.factoryTab", icon: "factory" },
   { id: "mpf", label: "tools.mpf", hint: "tools.mpfTab", icon: "mpf" },
   { id: "refinery", label: "tools.refinery", hint: "tools.refineryTab", icon: "refinery" },
+  { id: "facility", label: "tools.facility", hint: "tools.facilityTab", icon: "facility" },
 ];
 
 /** «Инструменты»: калькуляторы клана на рецептах сервера + проверенные внешние сервисы. */
@@ -22,10 +24,20 @@ export const ToolsWorkspace: React.FC = () => {
   const { list } = useContent();
   const [active, setActive] = React.useState<ClanToolId | null>(null);
   const [recipes, setRecipes] = React.useState<{ factory: Recipe[]; refinery: Recipe[] } | null>(null);
+  // рецепты построек (~500) грузятся только при открытии калькулятора завода
+  const [facility, setFacility] = React.useState<Recipe[] | null>(null);
   const external = list<ExternalToolPayload>("external_tool");
 
   React.useEffect(() => {
-    if (!active || recipes) return;
+    if (active !== "facility" || facility) return;
+    recipeApi
+      .list("facility")
+      .then(setFacility)
+      .catch((err) => notify({ title: t("tools.recipes"), message: errorText(err, t("tools.recipesFailed")), tone: "danger" }));
+  }, [active, facility, notify, t]);
+
+  React.useEffect(() => {
+    if (!active || active === "facility" || recipes) return;
     Promise.all([recipeApi.list("factory"), recipeApi.list("refinery")])
       .then(([factory, refinery]) => setRecipes({ factory, refinery }))
       .catch((err) => notify({ title: t("tools.recipes"), message: errorText(err, t("tools.recipesFailed")), tone: "danger" }));
@@ -83,7 +95,9 @@ export const ToolsWorkspace: React.FC = () => {
 
       {active ? (
         <div role="tabpanel" className="min-w-0">
-          {!recipes ? (
+          {active === "facility" ? (
+            facility ? <FacilityCalculator recipes={facility} /> : <div className="panel rounded-md"><Loading label={t("tools.loading")} /></div>
+          ) : !recipes ? (
             <div className="panel rounded-md"><Loading label={t("tools.loading")} /></div>
           ) : active === "refinery" ? (
             <RefineryCalculator recipes={recipes.refinery} />
