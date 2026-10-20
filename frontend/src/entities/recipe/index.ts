@@ -89,6 +89,8 @@ export interface FacilityData {
   seconds: number;
   output_unit: string | null;
   byproducts: FacilityPart[];
+  /** Иконка постройки с вики (static/items/facilities). */
+  source_icon?: string | null;
 }
 
 export function facilityData(recipe: Recipe): FacilityData | null {

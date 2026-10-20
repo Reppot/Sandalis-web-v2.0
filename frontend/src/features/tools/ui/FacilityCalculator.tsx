@@ -32,7 +32,8 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
   const notify = useNotify();
   const { t } = useI18n();
   const [faction, setFaction] = React.useState("all");
-  const [source, setSource] = React.useState("all");
+  // выбранная постройка: null — ничего не выбрано (предметы видны только при поиске)
+  const [source, setSource] = React.useState<string | null>(null);
   const [query, setQuery] = React.useState("");
   const [plan, setPlan] = React.useState<PlanRow[]>([]);
   const [choice, setChoice] = React.useState<ChainChoice>({});
@@ -45,14 +46,26 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
     for (const r of recipes) map.set(r.name, [...(map.get(r.name) ?? []), r]);
     return map;
   }, [recipes]);
-  const sources = React.useMemo(() => Array.from(new Set(recipes.map((r) => facilityData(r)?.source ?? ""))).filter(Boolean).sort(), [recipes]);
+  /** Постройки-карточки: иконка с вики и число предметов (под фильтром фракции). */
+  const sources = React.useMemo(() => {
+    const map = new Map<string, { icon: string | null; items: Set<string> }>();
+    for (const r of recipes) {
+      const d = facilityData(r);
+      if (!d || !allowed(r)) continue;
+      const entry = map.get(d.source) ?? { icon: d.source_icon ?? null, items: new Set<string>() };
+      entry.items.add(r.name);
+      map.set(d.source, entry);
+    }
+    return [...map].map(([name, v]) => ({ name, icon: v.icon, count: v.items.size })).sort((a, b) => a.name.localeCompare(b.name));
+  }, [recipes, allowed]);
+  const totalItems = React.useMemo(() => new Set(recipes.filter(allowed).map((r) => r.name)).size, [recipes, allowed]);
 
   // карточка — предмет; рецепты под фильтром постройки и фракции
   const cards = React.useMemo(() => {
     const needle = query.trim().toLowerCase();
     const out: { name: string; recipes: Recipe[] }[] = [];
     for (const [name, list] of byName) {
-      const fit = list.filter((r) => allowed(r) && (source === "all" || facilityData(r)?.source === source));
+      const fit = list.filter((r) => allowed(r) && (!source || source === "all" || facilityData(r)?.source === source));
       if (!fit.length) continue;
       if (needle && !`${name} ${fit.map((r) => `${facilityData(r)?.source} ${r.item_class ?? ""}`).join(" ")}`.toLowerCase().includes(needle)) continue;
       out.push({ name, recipes: fit });
@@ -122,21 +135,40 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
 
       <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <section className="panel panel-corners factory-catalog">
-          <div className="factory-filters">
-            <input className="field h-11 flex-1" data-guide="facility-search" placeholder={t("facility.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
-            <select className="field h-11 w-full md:w-44" value={faction} onChange={(e) => setFaction(e.target.value)}>
+          <div className="flex items-center justify-between gap-2">
+            <span className="hud-label text-accent">{t("facility.sources")}</span>
+            <select className="field h-9 w-44 py-1 text-xs" value={faction} onChange={(e) => setFaction(e.target.value)}>
               {FACTIONS.map((f) => (
                 <option key={f.key} value={f.key}>{t(f.label)}</option>
               ))}
             </select>
           </div>
-          <div data-guide="facility-sources" className="factory-categories scroll-area">
-            <button className={`chip ${source === "all" ? "is-active" : ""}`} onClick={() => setSource("all")}>{t("facility.allSources")}</button>
-            {sources.map((s) => (
-              <button key={s} className={`chip ${source === s ? "is-active" : ""}`} onClick={() => setSource(s)}>{s}</button>
-            ))}
+          <div data-guide="facility-sources" className="facility-sources">
+            {[{ name: "all", icon: null as string | null, count: totalItems }, ...sources].map((s) => {
+              const on = source === s.name;
+              const label = s.name === "all" ? t("facility.allSources") : s.name;
+              return (
+                <button key={s.name} type="button" className={`facility-source ${on ? "is-active" : ""}`} aria-pressed={on} onClick={() => setSource(on ? null : s.name)}>
+                  {s.icon ? <ItemIcon sources={[assetUrl(s.icon)]} size={44} label={label} /> : <UiGlyph icon="facility" size={44} />}
+                  <span className="min-w-0 flex-1">
+                    <span className="facility-source-name">{label}</span>
+                    <span className="facility-source-count">{t("facility.items", { n: s.count })}</span>
+                  </span>
+                </button>
+              );
+            })}
           </div>
-          <div className="factory-count hud-label">{t("codes.shown")}: {cards.length} / {byName.size}</div>
+
+          <div className="factory-filters mt-3">
+            <input className="field h-11 flex-1" data-guide="facility-search" placeholder={t("facility.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
+          </div>
+          {!source && !query.trim() ? (
+            <div className="hud-label py-6 text-center text-muted">{t("facility.pickSource")}</div>
+          ) : (
+          <>
+          <div className="factory-count hud-label">
+            {source && source !== "all" ? `${source} • ` : ""}{t("codes.shown")}: {cards.length} / {totalItems}
+          </div>
 
           <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
             {page.items.map((card) => {
@@ -157,6 +189,8 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
             })}
           </div>
           <PagedMore page={page} />
+          </>
+          )}
         </section>
 
         <ResourceSummaryPanel report={report} title={t("facility.queue")} emptyHint={t("facility.queueHint")} onClear={() => setPlan([])}>

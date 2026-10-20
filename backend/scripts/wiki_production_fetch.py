@@ -26,6 +26,9 @@ UA = "SindarisTerminalBot/1.0 (+https://sandalis-web-v2-0.onrender.com)"
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "app/seed/data/catalog.json"
 OUT = ROOT / "app/seed/data/facility_recipes.json"
+# снимок wiki_items_fetch.py: имена файлов иконок построек (icondata/structures) и их URL
+SNAPSHOT = ROOT / "scripts/wiki_items_snapshot.json"
+BUILDING_ICONS = ROOT / "static/items/facilities"
 
 FIELDS = [
     "_pageName=page", "Source", "ProductionCategory",
@@ -73,8 +76,52 @@ def slug(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
 
 
+def building_icons() -> dict[str, str]:
+    """Иконки построек -> static/items/facilities/<slug>.<ext> (качаются один раз).
+    Возвращает {название постройки: URL ассета}."""
+    if not SNAPSHOT.exists():
+        return {}
+    snap = json.loads(SNAPSHOT.read_text(encoding="utf-8"))
+    files: dict[str, str] = {}
+    for row in snap["tables"].get("icondata", []) + snap["tables"].get("structures", []):
+        image = row.get("imageOverride") or row.get("image")
+        for key in ("name", "page"):
+            if image and row.get(key):
+                files.setdefault(row[key].lower(), image)
+    BUILDING_ICONS.mkdir(parents=True, exist_ok=True)
+    out: dict[str, str] = {}
+    for name, image in files.items():
+        url = snap["images"].get(image)
+        if not url:
+            continue
+        ext = ".jpg" if image.lower().endswith((".jpg", ".jpeg")) else ".png"
+        out[name] = f"{slug(name)}{ext}|{url}"
+    return out
+
+
+def ensure_icon(entry: str | None) -> str | None:
+    if not entry:
+        return None
+    filename, url = entry.split("|", 1)
+    dst = BUILDING_ICONS / filename
+    if not dst.exists():
+        req = urllib.request.Request(url, headers={"User-Agent": UA})
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                body = resp.read()
+        except OSError as exc:
+            print("  icon failed:", url, exc, file=sys.stderr)
+            return None
+        if not (body.startswith(bytes([0x89]) + b"PNG") or body.startswith(bytes([0xFF, 0xD8]))):
+            return None
+        dst.write_bytes(body)
+    return f"/api/v1/assets/items/facilities/{filename}"
+
+
 def main() -> None:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
+    icon_entries = building_icons()
+    source_icons: dict[str, str | None] = {}
     icons: dict[str, tuple[str, str | None]] = {}
     for c in catalog:
         for name in (c.get("english_name"), c.get("name")):
@@ -134,6 +181,7 @@ def main() -> None:
                 "byproducts": extras,
                 "crate": (r.get("IsCrateOutput") or "") in ("1", "Yes", "yes", "true"),
                 "page": r.get("page"),
+                "source_icon": source_icons.setdefault(source, ensure_icon(icon_entries.get(source.lower()))),
             },
             "sort": len(out),
         })

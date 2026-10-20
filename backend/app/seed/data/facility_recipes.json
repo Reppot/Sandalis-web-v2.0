@@ -37,7 +37,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": ".44 Mag"
+   "page": ".44 Mag",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 0
  },
@@ -87,7 +88,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“Dawn” Ve.II"
+   "page": "“Dawn” Ve.II",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 1
  },
@@ -129,7 +131,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“Dusk” ce.III"
+   "page": "“Dusk” ce.III",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 2
  },
@@ -171,7 +174,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“Lionclaw” mc.VIII"
+   "page": "“Lionclaw” mc.VIII",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 3
  },
@@ -221,7 +225,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“Molten Wind” v.II Ammo"
+   "page": "“Molten Wind” v.II Ammo",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 4
  },
@@ -271,7 +276,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“Molten Wind” v.II Flame Torch"
+   "page": "“Molten Wind” v.II Flame Torch",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 5
  },
@@ -321,7 +327,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“Quickhatch” Rt.I"
+   "page": "“Quickhatch” Rt.I",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 6
  },
@@ -363,7 +370,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“The Pitch Gun” mc.V"
+   "page": "“The Pitch Gun” mc.V",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 7
  },
@@ -405,7 +413,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "“Typhon” ra.XII"
+   "page": "“Typhon” ra.XII",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 8
  },
@@ -455,7 +464,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "“Typhon” ra.XII"
+   "page": "“Typhon” ra.XII",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 9
  },
@@ -497,7 +507,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "00MS “Stinger”"
+   "page": "00MS “Stinger”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 10
  },
@@ -539,7 +550,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "03MM “Caster”"
+   "page": "03MM “Caster”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 11
  },
@@ -581,7 +593,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "12.7mm"
+   "page": "12.7mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 12
  },
@@ -623,7 +636,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "120-68 “Koronides” Field Gun"
+   "page": "120-68 “Koronides” Field Gun",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 13
  },
@@ -673,7 +687,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "120mm"
+   "page": "120mm",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 14
  },
@@ -723,7 +738,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "120mm"
+   "page": "120mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 15
  },
@@ -765,7 +781,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "14.5mm"
+   "page": "14.5mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 16
  },
@@ -807,7 +824,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "14.5mm"
+   "page": "14.5mm",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 17
  },
@@ -857,7 +875,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "150mm"
+   "page": "150mm",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 18
  },
@@ -907,7 +926,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "150mm"
+   "page": "150mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 19
  },
@@ -949,7 +969,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "20mm"
+   "page": "20mm",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 20
  },
@@ -991,7 +1012,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "20mm"
+   "page": "20mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 21
  },
@@ -1041,7 +1063,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "228 Satterley Heavy Storm Rifle"
+   "page": "228 Satterley Heavy Storm Rifle",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 22
  },
@@ -1099,7 +1122,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "250mm “Fury” Shell"
+   "page": "250mm “Fury” Shell",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 23
  },
@@ -1149,7 +1173,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "250mm “Fury” Shell"
+   "page": "250mm “Fury” Shell",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 24
  },
@@ -1199,7 +1224,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "250mm “Purity” Shell"
+   "page": "250mm “Purity” Shell",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 25
  },
@@ -1249,7 +1275,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "250mm “Purity” Shell"
+   "page": "250mm “Purity” Shell",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 26
  },
@@ -1291,7 +1318,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "30-250 “Tisiphone” Field Cannon"
+   "page": "30-250 “Tisiphone” Field Cannon",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 27
  },
@@ -1341,7 +1369,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "300mm"
+   "page": "300mm",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 28
  },
@@ -1391,7 +1420,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "30mm"
+   "page": "30mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 29
  },
@@ -1441,7 +1471,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "30mm"
+   "page": "30mm",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 30
  },
@@ -1491,7 +1522,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "3C-High Explosive Rocket"
+   "page": "3C-High Explosive Rocket",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 31
  },
@@ -1549,7 +1581,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "40-250 “Alekto” Heavy Cannon"
+   "page": "40-250 “Alekto” Heavy Cannon",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 32
  },
@@ -1599,7 +1632,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "40-45 “Smelter”"
+   "page": "40-45 “Smelter”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 33
  },
@@ -1649,7 +1683,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "40mm"
+   "page": "40mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 34
  },
@@ -1699,7 +1734,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "40mm"
+   "page": "40mm",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 35
  },
@@ -1749,7 +1785,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "4C-Fire Rocket"
+   "page": "4C-Fire Rocket",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 36
  },
@@ -1791,7 +1828,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "50-500 “Thunderbolt” Cannon"
+   "page": "50-500 “Thunderbolt” Cannon",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 37
  },
@@ -1833,7 +1871,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "68A-4 Ronan Fathomer"
+   "page": "68A-4 Ronan Fathomer",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 38
  },
@@ -1883,7 +1922,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "68mm"
+   "page": "68mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 39
  },
@@ -1933,7 +1973,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "68mm"
+   "page": "68mm",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 40
  },
@@ -1975,7 +2016,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "7.62mm"
+   "page": "7.62mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 41
  },
@@ -2017,7 +2059,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "7.92mm"
+   "page": "7.92mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 42
  },
@@ -2059,7 +2102,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "74b-1 Ronan Gunship"
+   "page": "74b-1 Ronan Gunship",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 43
  },
@@ -2109,7 +2153,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "75mm"
+   "page": "75mm",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 44
  },
@@ -2151,7 +2196,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "81f-f Ronan Blackguard"
+   "page": "81f-f Ronan Blackguard",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 45
  },
@@ -2209,7 +2255,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "85K-a “Spatha”"
+   "page": "85K-a “Spatha”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 46
  },
@@ -2251,7 +2298,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "85K-b “Falchion”"
+   "page": "85K-b “Falchion”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 47
  },
@@ -2317,7 +2365,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "85V-g “Talos”"
+   "page": "85V-g “Talos”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 48
  },
@@ -2359,7 +2408,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "86K-a “Bardiche”"
+   "page": "86K-a “Bardiche”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 49
  },
@@ -2417,7 +2467,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "86K-c “Ranseur”"
+   "page": "86K-c “Ranseur”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 50
  },
@@ -2459,7 +2510,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "8mm"
+   "page": "8mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 51
  },
@@ -2501,7 +2553,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "90T-v “Nemesis”"
+   "page": "90T-v “Nemesis”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 52
  },
@@ -2551,7 +2604,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "912 Shrike Rounds"
+   "page": "912 Shrike Rounds",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 53
  },
@@ -2601,7 +2655,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "94.5mm"
+   "page": "94.5mm",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 54
  },
@@ -2659,7 +2714,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "945g “Stygian Bolt”"
+   "page": "945g “Stygian Bolt”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 55
  },
@@ -2709,7 +2765,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "950-70b Anti-Aircraft Shell"
+   "page": "950-70b Anti-Aircraft Shell",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 56
  },
@@ -2759,7 +2816,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "950-70b Anti-Aircraft Shell"
+   "page": "950-70b Anti-Aircraft Shell",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 57
  },
@@ -2801,7 +2859,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "9mm"
+   "page": "9mm",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 58
  },
@@ -2859,7 +2918,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "A0E-9 Rocket Parts"
+   "page": "A0E-9 Rocket Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 59
  },
@@ -2933,7 +2993,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "A0E-9 Rocket Parts"
+   "page": "A0E-9 Rocket Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 60
  },
@@ -3007,7 +3068,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "A0E-9 Rocket Parts"
+   "page": "A0E-9 Rocket Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 61
  },
@@ -3065,7 +3127,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "A0E-9 Rocket Platform"
+   "page": "A0E-9 Rocket Platform",
+   "source_icon": "/api/v1/assets/items/facilities/a0e-9-rocket-platform.jpg"
   },
   "sort": 62
  },
@@ -3115,7 +3178,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "A3 Harpa Fragmentation Grenade"
+   "page": "A3 Harpa Fragmentation Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 63
  },
@@ -3157,7 +3221,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "A51 Venti “Daedalus”"
+   "page": "A51 Venti “Daedalus”",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
   },
   "sort": 64
  },
@@ -3199,7 +3264,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "A59 Venti “Perdix”"
+   "page": "A59 Venti “Perdix”",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
   },
   "sort": 65
  },
@@ -3241,7 +3307,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "AA-2 Battering Ram"
+   "page": "AA-2 Battering Ram",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 66
  },
@@ -3283,7 +3350,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Aalto Storm Rifle 24"
+   "page": "Aalto Storm Rifle 24",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 67
  },
@@ -3333,7 +3401,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "AB-11 “Doru”"
+   "page": "AB-11 “Doru”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 68
  },
@@ -3375,7 +3444,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "AB-8 “Acheron”"
+   "page": "AB-8 “Acheron”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 69
  },
@@ -3425,7 +3495,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Abisme AT-99"
+   "page": "Abisme AT-99",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 70
  },
@@ -3475,7 +3546,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Absol Anti-Aircraft Rounds"
+   "page": "Absol Anti-Aircraft Rounds",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 71
  },
@@ -3525,7 +3597,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "AC-b “Trident”"
+   "page": "AC-b “Trident”",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 72
  },
@@ -3583,7 +3656,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Aegis Steelbreaker K5a"
+   "page": "Aegis Steelbreaker K5a",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 73
  },
@@ -3625,7 +3699,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Air Raid Siren"
+   "page": "Air Raid Siren",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 74
  },
@@ -3675,7 +3750,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Alligator Charge"
+   "page": "Alligator Charge",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 75
  },
@@ -3717,7 +3793,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Aluminum Alloy"
+   "page": "Aluminum Alloy",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 76
  },
@@ -3767,7 +3844,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Anti-Tank Sticky Bomb"
+   "page": "Anti-Tank Sticky Bomb",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 77
  },
@@ -3817,7 +3895,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Anti-Tank Sticky Bomb"
+   "page": "Anti-Tank Sticky Bomb",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 78
  },
@@ -3867,7 +3946,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "AP⧸RPG"
+   "page": "AP⧸RPG",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 79
  },
@@ -3917,7 +3997,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "AP⧸RPG"
+   "page": "AP⧸RPG",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 80
  },
@@ -3967,7 +4048,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "ARC⧸RPG"
+   "page": "ARC⧸RPG",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 81
  },
@@ -4017,7 +4099,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "ARC⧸RPG"
+   "page": "ARC⧸RPG",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 82
  },
@@ -4059,7 +4142,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Argenti r.II Rifle"
+   "page": "Argenti r.II Rifle",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 83
  },
@@ -4101,7 +4185,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Armoured Fighting Tractor"
+   "page": "Armoured Fighting Tractor",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 84
  },
@@ -4151,7 +4236,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Assembly Materials I"
+   "page": "Assembly Materials I",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 85
  },
@@ -4201,7 +4287,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Assembly Materials II"
+   "page": "Assembly Materials II",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 86
  },
@@ -4251,7 +4338,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Assembly Materials III"
+   "page": "Assembly Materials III",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 87
  },
@@ -4301,7 +4389,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Assembly Materials IV"
+   "page": "Assembly Materials IV",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 88
  },
@@ -4367,7 +4456,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Assembly Materials V"
+   "page": "Assembly Materials V",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 89
  },
@@ -4409,7 +4499,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "AU-A150 Taurine Rigger"
+   "page": "AU-A150 Taurine Rigger",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 90
  },
@@ -4451,7 +4542,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Auster's Harness"
+   "page": "Auster's Harness",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 91
  },
@@ -4493,7 +4585,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Aviator's Raiment"
+   "page": "Aviator's Raiment",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 92
  },
@@ -4543,7 +4636,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "B2 Varsi Anti-Tank Grenade"
+   "page": "B2 Varsi Anti-Tank Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 93
  },
@@ -4593,7 +4687,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "B2 Varsi Anti-Tank Grenade"
+   "page": "B2 Varsi Anti-Tank Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 94
  },
@@ -4635,7 +4730,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Balfour Falconer 250mm"
+   "page": "Balfour Falconer 250mm",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 95
  },
@@ -4685,7 +4781,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Balfour Rampart 68mm"
+   "page": "Balfour Rampart 68mm",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 96
  },
@@ -4743,7 +4840,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Balfour Stockade 75mm"
+   "page": "Balfour Stockade 75mm",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 97
  },
@@ -4785,7 +4883,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Balfour Wolfhound 40mm"
+   "page": "Balfour Wolfhound 40mm",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 98
  },
@@ -4827,7 +4926,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Bandages"
+   "page": "Bandages",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 99
  },
@@ -4877,7 +4977,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Bane 45"
+   "page": "Bane 45",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 100
  },
@@ -4919,7 +5020,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Barbed Wire (Material)"
+   "page": "Barbed Wire (Material)",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 101
  },
@@ -4969,7 +5071,8 @@
     }
    ],
    "crate": false,
-   "page": "Barbed Wire (Material)"
+   "page": "Barbed Wire (Material)",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 102
  },
@@ -5011,7 +5114,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Basic Materials"
+   "page": "Basic Materials",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 103
  },
@@ -5053,7 +5157,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Bellweather by VAC"
+   "page": "Bellweather by VAC",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 104
  },
@@ -5103,7 +5208,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "BF5 White Ash Flask Grenade"
+   "page": "BF5 White Ash Flask Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 105
  },
@@ -5153,7 +5259,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "BF5 White Ash Flask Grenade"
+   "page": "BF5 White Ash Flask Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 106
  },
@@ -5195,7 +5302,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Binoculars"
+   "page": "Binoculars",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 107
  },
@@ -5245,7 +5353,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Blacksteele"
+   "page": "Blacksteele",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 108
  },
@@ -5287,7 +5396,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Blakerow 871"
+   "page": "Blakerow 871",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 109
  },
@@ -5329,7 +5439,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Blood Plasma"
+   "page": "Blood Plasma",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 110
  },
@@ -5371,7 +5482,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Aquatipper"
+   "page": "BMS - Aquatipper",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 111
  },
@@ -5421,7 +5533,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Bluefin"
+   "page": "BMS - Bluefin",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 112
  },
@@ -5471,7 +5584,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Bowhead"
+   "page": "BMS - Bowhead",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 113
  },
@@ -5513,7 +5627,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Class 2 Mobile Auto-Crane"
+   "page": "BMS - Class 2 Mobile Auto-Crane",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 114
  },
@@ -5555,7 +5670,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Class 2 Mobile Auto-Crane"
+   "page": "BMS - Class 2 Mobile Auto-Crane",
+   "source_icon": null
   },
   "sort": 115
  },
@@ -5597,7 +5713,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Fabricator"
+   "page": "BMS - Fabricator",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 116
  },
@@ -5639,7 +5756,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Grouper"
+   "page": "BMS - Grouper",
+   "source_icon": null
   },
   "sort": 117
  },
@@ -5681,7 +5799,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Ironship"
+   "page": "BMS - Ironship",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 118
  },
@@ -5731,7 +5850,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Longhook"
+   "page": "BMS - Longhook",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 119
  },
@@ -5773,7 +5893,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Overseer Sky-Hauler"
+   "page": "BMS - Overseer Sky-Hauler",
+   "source_icon": "/api/v1/assets/items/facilities/crane-railway-track.png"
   },
   "sort": 120
  },
@@ -5815,7 +5936,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Packmule Flatbed"
+   "page": "BMS - Packmule Flatbed",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 121
  },
@@ -5865,7 +5987,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Scrap Hauler"
+   "page": "BMS - Scrap Hauler",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 122
  },
@@ -5907,7 +6030,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Universal Assembly Rig"
+   "page": "BMS - Universal Assembly Rig",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 123
  },
@@ -5949,7 +6073,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS - Universal Assembly Rig"
+   "page": "BMS - Universal Assembly Rig",
+   "source_icon": null
   },
   "sort": 124
  },
@@ -6007,7 +6132,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Black Bolt"
+   "page": "BMS Black Bolt",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 125
  },
@@ -6081,7 +6207,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Bloodtender"
+   "page": "BMS Bloodtender",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 126
  },
@@ -6139,7 +6266,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Holdout"
+   "page": "BMS Holdout",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 127
  },
@@ -6197,7 +6325,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Linerunner"
+   "page": "BMS Linerunner",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 128
  },
@@ -6255,7 +6384,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Longrider"
+   "page": "BMS Longrider",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 129
  },
@@ -6313,7 +6443,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Mineseeker"
+   "page": "BMS Mineseeker",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 130
  },
@@ -6371,7 +6502,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Railtruck"
+   "page": "BMS Railtruck",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 131
  },
@@ -6429,7 +6561,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Roadhouse"
+   "page": "BMS Roadhouse",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 132
  },
@@ -6487,7 +6620,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Rockhold"
+   "page": "BMS Rockhold",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 133
  },
@@ -6545,7 +6679,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Stowheel"
+   "page": "BMS Stowheel",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 134
  },
@@ -6603,7 +6738,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "BMS Tinderbox"
+   "page": "BMS Tinderbox",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 135
  },
@@ -6653,7 +6789,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Bomastone Grenade"
+   "page": "Bomastone Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 136
  },
@@ -6703,7 +6840,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Bonesaw MK.3"
+   "page": "Bonesaw MK.3",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 137
  },
@@ -6753,7 +6891,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Booker Greyhound Model 910"
+   "page": "Booker Greyhound Model 910",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 138
  },
@@ -6795,7 +6934,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Booker Storm Rifle Model 838"
+   "page": "Booker Storm Rifle Model 838",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 139
  },
@@ -6837,7 +6977,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Buckhorn CCQ-18"
+   "page": "Buckhorn CCQ-18",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 140
  },
@@ -6879,7 +7020,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Buckshot"
+   "page": "Buckshot",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 141
  },
@@ -6937,7 +7079,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Callahan (Battleship)"
+   "page": "Callahan (Battleship)",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 142
  },
@@ -6979,7 +7122,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Caoivish Parka"
+   "page": "Caoivish Parka",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 143
  },
@@ -7021,7 +7165,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Caoivish Parka"
+   "page": "Caoivish Parka",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 144
  },
@@ -7071,7 +7216,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Carnyx Anti-Tank Rocket Launcher"
+   "page": "Carnyx Anti-Tank Rocket Launcher",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 145
  },
@@ -7113,7 +7259,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Cascadier 873"
+   "page": "Cascadier 873",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 146
  },
@@ -7155,7 +7302,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Catara mo.II"
+   "page": "Catara mo.II",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 147
  },
@@ -7197,7 +7345,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Catena rt.IV Auto-Rifle"
+   "page": "Catena rt.IV Auto-Rifle",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 148
  },
@@ -7239,7 +7388,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Clancy Cinder M3"
+   "page": "Clancy Cinder M3",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 149
  },
@@ -7289,7 +7439,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Clancy-Raca M4"
+   "page": "Clancy-Raca M4",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 150
  },
@@ -7331,7 +7482,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Cloudrunner's Vesture"
+   "page": "Cloudrunner's Vesture",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 151
  },
@@ -7373,7 +7525,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Cnute Cliffwrest"
+   "page": "Cnute Cliffwrest",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 152
  },
@@ -7431,7 +7584,8 @@
     }
    ],
    "crate": false,
-   "page": "Coke"
+   "page": "Coke",
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
   },
   "sort": 153
  },
@@ -7481,7 +7635,8 @@
     }
    ],
    "crate": false,
-   "page": "Coke"
+   "page": "Coke",
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
   },
   "sort": 154
  },
@@ -7523,7 +7678,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Coke"
+   "page": "Coke",
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
   },
   "sort": 155
  },
@@ -7565,7 +7721,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Collins Cannon 68mm"
+   "page": "Collins Cannon 68mm",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 156
  },
@@ -7615,7 +7772,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Engine (Large)"
+   "page": "Colonial Aircraft Engine (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 157
  },
@@ -7665,7 +7823,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Engine (Large)"
+   "page": "Colonial Aircraft Engine (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 158
  },
@@ -7715,7 +7874,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Engine (Small)"
+   "page": "Colonial Aircraft Engine (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 159
  },
@@ -7765,7 +7925,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Engine (Small)"
+   "page": "Colonial Aircraft Engine (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 160
  },
@@ -7815,7 +7976,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Mechanical Parts (Large)"
+   "page": "Colonial Aircraft Mechanical Parts (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 161
  },
@@ -7865,7 +8027,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Mechanical Parts (Large)"
+   "page": "Colonial Aircraft Mechanical Parts (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 162
  },
@@ -7915,7 +8078,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Mechanical Parts (Small)"
+   "page": "Colonial Aircraft Mechanical Parts (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 163
  },
@@ -7965,7 +8129,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Colonial Aircraft Mechanical Parts (Small)"
+   "page": "Colonial Aircraft Mechanical Parts (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 164
  },
@@ -8007,7 +8172,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Cometa T2-9"
+   "page": "Cometa T2-9",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 165
  },
@@ -8049,7 +8215,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Components"
+   "page": "Components",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 166
  },
@@ -8114,7 +8281,8 @@
     }
    ],
    "crate": false,
-   "page": "Concrete Materials"
+   "page": "Concrete Materials",
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
   },
   "sort": 167
  },
@@ -8179,7 +8347,8 @@
     }
    ],
    "crate": false,
-   "page": "Concrete Materials"
+   "page": "Concrete Materials",
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
   },
   "sort": 168
  },
@@ -8221,7 +8390,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Concrete Materials"
+   "page": "Concrete Materials",
+   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png"
   },
   "sort": 169
  },
@@ -8263,7 +8433,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Concrete Mixer"
+   "page": "Concrete Mixer",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 170
  },
@@ -8313,7 +8484,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Conqueror"
+   "page": "Conqueror",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 171
  },
@@ -8355,7 +8527,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Construction Equipment"
+   "page": "Construction Equipment",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 172
  },
@@ -8405,7 +8578,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Construction Materials"
+   "page": "Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 173
  },
@@ -8447,7 +8621,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Construction Materials"
+   "page": "Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 174
  },
@@ -8497,7 +8672,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Construction Materials"
+   "page": "Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 175
  },
@@ -8555,7 +8731,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Construction Parts"
+   "page": "Construction Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 176
  },
@@ -8597,7 +8774,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Copper Alloy"
+   "page": "Copper Alloy",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 177
  },
@@ -8647,7 +8825,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Cremari Mortar"
+   "page": "Cremari Mortar",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 178
  },
@@ -8697,7 +8876,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Crow's Foot Mine"
+   "page": "Crow's Foot Mine",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 179
  },
@@ -8771,7 +8951,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Cullen Predator Mk. III"
+   "page": "Cullen Predator Mk. III",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 180
  },
@@ -8813,7 +8994,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Cutler Foebreaker"
+   "page": "Cutler Foebreaker",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 181
  },
@@ -8863,7 +9045,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Cutler Foebreaker"
+   "page": "Cutler Foebreaker",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 182
  },
@@ -8913,7 +9096,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Cutler Launcher 4"
+   "page": "Cutler Launcher 4",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 183
  },
@@ -8955,7 +9139,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "DAE 1b-2 “Serra”"
+   "page": "DAE 1b-2 “Serra”",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 184
  },
@@ -8997,7 +9182,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "DAE 1o-3 “Polybolos”"
+   "page": "DAE 1o-3 “Polybolos”",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 185
  },
@@ -9055,7 +9241,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "DAE 2a-1 “Ruptura”"
+   "page": "DAE 2a-1 “Ruptura”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 186
  },
@@ -9113,7 +9300,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "DAE 3b-2 “Hades' Net”"
+   "page": "DAE 3b-2 “Hades' Net”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 187
  },
@@ -9155,7 +9343,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "DAE 5b “Zeal”"
+   "page": "DAE 5b “Zeal”",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 188
  },
@@ -9213,7 +9402,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "DAE 5b “Zeal”"
+   "page": "DAE 5b “Zeal”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 189
  },
@@ -9279,7 +9469,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Daimon aK-5 “Harpy”"
+   "page": "Daimon aK-5 “Harpy”",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 190
  },
@@ -9321,7 +9512,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Das Krokodil by VAC"
+   "page": "Das Krokodil by VAC",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 191
  },
@@ -9363,7 +9555,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Daucus isg.III"
+   "page": "Daucus isg.III",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 192
  },
@@ -9413,7 +9606,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Daucus isg.III"
+   "page": "Daucus isg.III",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 193
  },
@@ -9471,7 +9665,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Devitt Ironhide Mk. IV"
+   "page": "Devitt Ironhide Mk. IV",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 194
  },
@@ -9513,7 +9708,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Devitt Mk. III"
+   "page": "Devitt Mk. III",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 195
  },
@@ -9571,7 +9767,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Devitt-Caine Mk. IV MMR"
+   "page": "Devitt-Caine Mk. IV MMR",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 196
  },
@@ -9613,7 +9810,8 @@
    "output_unit": "L",
    "byproducts": [],
    "crate": false,
-   "page": "Diesel"
+   "page": "Diesel",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 197
  },
@@ -9663,7 +9861,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Drummond Loscann 55c"
+   "page": "Drummond Loscann 55c",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 198
  },
@@ -9713,7 +9912,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Drummond Spitfire 100d"
+   "page": "Drummond Spitfire 100d",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 199
  },
@@ -9763,7 +9963,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Duncan's Coin 14.5mm"
+   "page": "Duncan's Coin 14.5mm",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 200
  },
@@ -9805,7 +10006,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Caravaner 2f"
+   "page": "Dunne Caravaner 2f",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 201
  },
@@ -9855,7 +10057,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Dousing Engine 3r"
+   "page": "Dunne Dousing Engine 3r",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 202
  },
@@ -9897,7 +10100,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Fuelrunner 2d"
+   "page": "Dunne Fuelrunner 2d",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 203
  },
@@ -9939,7 +10143,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Landrunner 12c"
+   "page": "Dunne Landrunner 12c",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 204
  },
@@ -9981,7 +10186,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Leatherback 2a"
+   "page": "Dunne Leatherback 2a",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 205
  },
@@ -10023,7 +10229,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Loadlugger 3c"
+   "page": "Dunne Loadlugger 3c",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 206
  },
@@ -10065,7 +10272,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Responder 3e"
+   "page": "Dunne Responder 3e",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 207
  },
@@ -10107,7 +10315,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Dunne Transport"
+   "page": "Dunne Transport",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 208
  },
@@ -10157,7 +10366,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "E680-S Rudder Lock"
+   "page": "E680-S Rudder Lock",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 209
  },
@@ -10199,7 +10409,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "E681-B Hullbreaker Mine"
+   "page": "E681-B Hullbreaker Mine",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 210
  },
@@ -10249,7 +10460,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "E681-B Hullbreaker Mine"
+   "page": "E681-B Hullbreaker Mine",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 211
  },
@@ -10291,7 +10503,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Eleos Infantry Dagger"
+   "page": "Eleos Infantry Dagger",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 212
  },
@@ -10333,7 +10546,8 @@
    "output_unit": "L",
    "byproducts": [],
    "crate": false,
-   "page": "Enriched Oil"
+   "page": "Enriched Oil",
+   "source_icon": "/api/v1/assets/items/facilities/offshore-platform.png"
   },
   "sort": 213
  },
@@ -10383,7 +10597,8 @@
    "output_unit": "L",
    "byproducts": [],
    "crate": false,
-   "page": "Enriched Oil"
+   "page": "Enriched Oil",
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
   },
   "sort": 214
  },
@@ -10425,7 +10640,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Explosive Powder"
+   "page": "Explosive Powder",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 215
  },
@@ -10467,7 +10683,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Fabri Rucksack"
+   "page": "Fabri Rucksack",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 216
  },
@@ -10509,7 +10726,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Fabri Rucksack"
+   "page": "Fabri Rucksack",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 217
  },
@@ -10551,7 +10769,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Falias Raiding Club"
+   "page": "Falias Raiding Club",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 218
  },
@@ -10593,7 +10812,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Fiddler Submachine Gun Model 868"
+   "page": "Fiddler Submachine Gun Model 868",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 219
  },
@@ -10635,7 +10855,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "First Aid Kit"
+   "page": "First Aid Kit",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 220
  },
@@ -10685,7 +10906,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Flame Ammo"
+   "page": "Flame Ammo",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 221
  },
@@ -10735,7 +10957,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Flare Mortar Shell"
+   "page": "Flare Mortar Shell",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 222
  },
@@ -10785,7 +11008,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Flare Mortar Shell"
+   "page": "Flare Mortar Shell",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 223
  },
@@ -10827,7 +11051,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Flight Mask"
+   "page": "Flight Mask",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 224
  },
@@ -10893,7 +11118,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Flood Juggernaut Mk. VII"
+   "page": "Flood Juggernaut Mk. VII",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 225
  },
@@ -10959,7 +11185,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Flood Mk. I"
+   "page": "Flood Mk. I",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 226
  },
@@ -11025,7 +11252,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Flood Mk. IX Stain"
+   "page": "Flood Mk. IX Stain",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 227
  },
@@ -11067,7 +11295,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Fuscina pi.I"
+   "page": "Fuscina pi.I",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 228
  },
@@ -11109,7 +11338,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "G40 “Sagittarii”"
+   "page": "G40 “Sagittarii”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 229
  },
@@ -11159,7 +11389,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "GA6 “Cestus”"
+   "page": "GA6 “Cestus”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 230
  },
@@ -11201,7 +11432,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gallagher Brigand Mk. I"
+   "page": "Gallagher Brigand Mk. I",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 231
  },
@@ -11259,7 +11491,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gallagher Highwayman Mk. III"
+   "page": "Gallagher Highwayman Mk. III",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 232
  },
@@ -11317,7 +11550,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gallagher Outlaw Mk. II"
+   "page": "Gallagher Outlaw Mk. II",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 233
  },
@@ -11383,7 +11617,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gallagher Thornfall Mk. VI"
+   "page": "Gallagher Thornfall Mk. VI",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 234
  },
@@ -11425,7 +11660,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Gas Mask"
+   "page": "Gas Mask",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 235
  },
@@ -11467,7 +11703,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Gas Mask"
+   "page": "Gas Mask",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 236
  },
@@ -11509,7 +11746,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Gentleman's Peacoat"
+   "page": "Gentleman's Peacoat",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 237
  },
@@ -11551,7 +11789,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Gentleman's Peacoat"
+   "page": "Gentleman's Peacoat",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 238
  },
@@ -11593,7 +11832,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gravel"
+   "page": "Gravel",
+   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png"
   },
   "sort": 239
  },
@@ -11635,7 +11875,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gravel"
+   "page": "Gravel",
+   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png"
   },
   "sort": 240
  },
@@ -11677,7 +11918,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gravel"
+   "page": "Gravel",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 241
  },
@@ -11719,7 +11961,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Gravel"
+   "page": "Gravel",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 242
  },
@@ -11761,7 +12004,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Green Ash Grenade"
+   "page": "Green Ash Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 243
  },
@@ -11803,7 +12047,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Grenadier's Baldric"
+   "page": "Grenadier's Baldric",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 244
  },
@@ -11845,7 +12090,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Grenadier's Baldric"
+   "page": "Grenadier's Baldric",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 245
  },
@@ -11887,7 +12133,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Gunner's Breastplate"
+   "page": "Gunner's Breastplate",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 246
  },
@@ -11929,7 +12176,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Gunner's Breastplate"
+   "page": "Gunner's Breastplate",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 247
  },
@@ -11987,7 +12235,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "H-10 “Pelekys”"
+   "page": "H-10 “Pelekys”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 248
  },
@@ -12045,7 +12294,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "H-19 “Vulcan”"
+   "page": "H-19 “Vulcan”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 249
  },
@@ -12087,7 +12337,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "H-5 “Hatchet”"
+   "page": "H-5 “Hatchet”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 250
  },
@@ -12145,7 +12396,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "H-8 “Kranesca”"
+   "page": "H-8 “Kranesca”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 251
  },
@@ -12187,7 +12439,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "HA-1 “Sagaris”"
+   "page": "HA-1 “Sagaris”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 252
  },
@@ -12237,7 +12490,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Havoc Charge"
+   "page": "Havoc Charge",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 253
  },
@@ -12287,7 +12541,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Havoc Charge"
+   "page": "Havoc Charge",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 254
  },
@@ -12329,7 +12584,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "HC-2 “Scorpion”"
+   "page": "HC-2 “Scorpion”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 255
  },
@@ -12379,7 +12635,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "HC-7 “Ballista”"
+   "page": "HC-7 “Ballista”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 256
  },
@@ -12421,7 +12678,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Heavy Explosive Powder"
+   "page": "Heavy Explosive Powder",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 257
  },
@@ -12463,7 +12721,8 @@
    "output_unit": "L",
    "byproducts": [],
    "crate": false,
-   "page": "Heavy Oil"
+   "page": "Heavy Oil",
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
   },
   "sort": 258
  },
@@ -12505,7 +12764,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Heavy Topcoat"
+   "page": "Heavy Topcoat",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 259
  },
@@ -12547,7 +12807,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Heavy Topcoat"
+   "page": "Heavy Topcoat",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 260
  },
@@ -12589,7 +12850,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "HH-a “Javelin”"
+   "page": "HH-a “Javelin”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 261
  },
@@ -12639,7 +12901,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "HH-b “Hoplite”"
+   "page": "HH-b “Hoplite”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 262
  },
@@ -12697,7 +12960,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "HH-d “Peltast”"
+   "page": "HH-d “Peltast”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 263
  },
@@ -12739,7 +13003,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Huber Exalt 150mm"
+   "page": "Huber Exalt 150mm",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 264
  },
@@ -12781,7 +13046,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Huber Lariat 120mm"
+   "page": "Huber Lariat 120mm",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 265
  },
@@ -12839,7 +13105,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Huber Starbreaker 94.5mm"
+   "page": "Huber Starbreaker 94.5mm",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 266
  },
@@ -12889,7 +13156,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Hydra's Whisper"
+   "page": "Hydra's Whisper",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 267
  },
@@ -12939,7 +13207,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Ignifist 30"
+   "page": "Ignifist 30",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 268
  },
@@ -12989,7 +13258,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Ignifist 30"
+   "page": "Ignifist 30",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 269
  },
@@ -13039,7 +13309,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Incendiary Mortar Shell"
+   "page": "Incendiary Mortar Shell",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 270
  },
@@ -13097,7 +13368,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Intelligence Center"
+   "page": "Intelligence Center",
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
   },
   "sort": 271
  },
@@ -13155,7 +13427,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Intelligence Center Parts"
+   "page": "Intelligence Center Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 272
  },
@@ -13197,7 +13470,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Interceptor PA-12"
+   "page": "Interceptor PA-12",
+   "source_icon": "/api/v1/assets/items/facilities/base-ship.png"
   },
   "sort": 273
  },
@@ -13239,7 +13513,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Iron Alloy"
+   "page": "Iron Alloy",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 274
  },
@@ -13281,7 +13556,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "K-81e “Sombre”"
+   "page": "K-81e “Sombre”",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 275
  },
@@ -13331,7 +13607,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "King Gallant Mk. II"
+   "page": "King Gallant Mk. II",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 276
  },
@@ -13389,7 +13666,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "King Jester Mk. I-1"
+   "page": "King Jester Mk. I-1",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 277
  },
@@ -13431,7 +13709,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "King Spire Mk. I"
+   "page": "King Spire Mk. I",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 278
  },
@@ -13473,7 +13752,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Kivela Power Wheel 80-1"
+   "page": "Kivela Power Wheel 80-1",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 279
  },
@@ -13523,7 +13803,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "KLG901-2 Lunaire F"
+   "page": "KLG901-2 Lunaire F",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 280
  },
@@ -13565,7 +13846,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "KRF1-750 Dragonfly"
+   "page": "KRF1-750 Dragonfly",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 281
  },
@@ -13607,7 +13889,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "KRN886-127 Gast Machine Gun"
+   "page": "KRN886-127 Gast Machine Gun",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 282
  },
@@ -13649,7 +13932,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "KRR2-790 Omen"
+   "page": "KRR2-790 Omen",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 283
  },
@@ -13699,7 +13983,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "KRR3-792 Auger"
+   "page": "KRR3-792 Auger",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 284
  },
@@ -13741,7 +14026,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Lamentum mm.IV"
+   "page": "Lamentum mm.IV",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 285
  },
@@ -13791,7 +14077,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Lamentum mm.IV"
+   "page": "Lamentum mm.IV",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 286
  },
@@ -13857,7 +14144,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Lance-25 “Hasta”"
+   "page": "Lance-25 “Hasta”",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 287
  },
@@ -13923,7 +14211,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Lance-36"
+   "page": "Lance-36",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 288
  },
@@ -13989,7 +14278,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Lance-46 “Sarissa”"
+   "page": "Lance-46 “Sarissa”",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 289
  },
@@ -14031,7 +14321,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Leary AA-70 Bolas"
+   "page": "Leary AA-70 Bolas",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 290
  },
@@ -14089,7 +14380,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Leary AA-70 Bolas"
+   "page": "Leary AA-70 Bolas",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 291
  },
@@ -14131,7 +14423,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Leary Shellbore 68mm"
+   "page": "Leary Shellbore 68mm",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 292
  },
@@ -14173,7 +14466,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Leary Snare Trap 20"
+   "page": "Leary Snare Trap 20",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 293
  },
@@ -14223,7 +14517,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Legion Vexillum"
+   "page": "Legion Vexillum",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 294
  },
@@ -14265,7 +14560,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Legionary's Oilcoat"
+   "page": "Legionary's Oilcoat",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 295
  },
@@ -14307,7 +14603,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Legionary's Oilcoat"
+   "page": "Legionary's Oilcoat",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 296
  },
@@ -14349,7 +14646,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Liquid Container"
+   "page": "Liquid Container",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 297
  },
@@ -14391,7 +14689,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Listening Kit"
+   "page": "Listening Kit",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 298
  },
@@ -14433,7 +14732,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Lodesman's Lorica"
+   "page": "Lodesman's Lorica",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 299
  },
@@ -14499,7 +14799,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Luminary Mk. II Harbinger"
+   "page": "Luminary Mk. II Harbinger",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 300
  },
@@ -14541,7 +14842,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Luminary Mk. IV Herald"
+   "page": "Luminary Mk. IV Herald",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
   },
   "sort": 301
  },
@@ -14583,7 +14885,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Luminary Mk. VI Emissary"
+   "page": "Luminary Mk. VI Emissary",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
   },
   "sort": 302
  },
@@ -14657,7 +14960,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "M925 Austringer Man-O-War"
+   "page": "M925 Austringer Man-O-War",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 303
  },
@@ -14699,7 +15003,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "MacConmara Shorerunner"
+   "page": "MacConmara Shorerunner",
+   "source_icon": "/api/v1/assets/items/facilities/base-ship.png"
   },
   "sort": 304
  },
@@ -14741,7 +15046,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Maintenance Supplies"
+   "page": "Maintenance Supplies",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 305
  },
@@ -14783,7 +15089,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Maintenance Supplies"
+   "page": "Maintenance Supplies",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 306
  },
@@ -14825,7 +15132,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Malone MK.2"
+   "page": "Malone MK.2",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 307
  },
@@ -14867,7 +15175,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Malone Ratcatcher MK.1"
+   "page": "Malone Ratcatcher MK.1",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 308
  },
@@ -14917,7 +15226,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Malone Ratcatcher MK.1"
+   "page": "Malone Ratcatcher MK.1",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 309
  },
@@ -14967,7 +15277,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Mammon 91-b"
+   "page": "Mammon 91-b",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 310
  },
@@ -15017,7 +15328,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Mark II Raidbreaker"
+   "page": "Mark II Raidbreaker",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 311
  },
@@ -15059,7 +15371,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Material Pallet"
+   "page": "Material Pallet",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 312
  },
@@ -15101,7 +15414,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Material Pallet"
+   "page": "Material Pallet",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 313
  },
@@ -15143,7 +15457,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Medic Fatigues"
+   "page": "Medic Fatigues",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 314
  },
@@ -15185,7 +15500,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Medic Fatigues"
+   "page": "Medic Fatigues",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 315
  },
@@ -15235,7 +15551,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Mercy"
+   "page": "Mercy",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 316
  },
@@ -15309,7 +15626,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Mergo-4 “Myrmidon”"
+   "page": "Mergo-4 “Myrmidon”",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 317
  },
@@ -15351,7 +15669,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Metal Beam"
+   "page": "Metal Beam",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 318
  },
@@ -15401,7 +15720,8 @@
     }
    ],
    "crate": false,
-   "page": "Metal Beam"
+   "page": "Metal Beam",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 319
  },
@@ -15451,7 +15771,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Model-7 “Evie”"
+   "page": "Model-7 “Evie”",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 320
  },
@@ -15501,7 +15822,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Moray Torpedo"
+   "page": "Moray Torpedo",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 321
  },
@@ -15551,7 +15873,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Mortar Shell"
+   "page": "Mortar Shell",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 322
  },
@@ -15601,7 +15924,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Mortar Shell"
+   "page": "Mortar Shell",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 323
  },
@@ -15643,7 +15967,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Mounted Bonesaw MK.3"
+   "page": "Mounted Bonesaw MK.3",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 324
  },
@@ -15693,7 +16018,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Mounted Bonesaw MK.3"
+   "page": "Mounted Bonesaw MK.3",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 325
  },
@@ -15735,7 +16061,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Mounted Fissura gd.I"
+   "page": "Mounted Fissura gd.I",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 326
  },
@@ -15785,7 +16112,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Mounted Fissura gd.I"
+   "page": "Mounted Fissura gd.I",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 327
  },
@@ -15827,7 +16155,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Mulloy LPC"
+   "page": "Mulloy LPC",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 328
  },
@@ -15877,7 +16206,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Nakki"
+   "page": "Nakki",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 329
  },
@@ -15919,7 +16249,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Naval Buoy"
+   "page": "Naval Buoy",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 330
  },
@@ -15961,7 +16292,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Naval Buoy"
+   "page": "Naval Buoy",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 331
  },
@@ -16043,7 +16375,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Naval Hull Segments"
+   "page": "Naval Hull Segments",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 332
  },
@@ -16093,7 +16426,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Naval Shell Plating"
+   "page": "Naval Shell Plating",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 333
  },
@@ -16143,7 +16477,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Naval Turbine Components"
+   "page": "Naval Turbine Components",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 334
  },
@@ -16185,7 +16520,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Neville Anti-Tank Rifle"
+   "page": "Neville Anti-Tank Rifle",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 335
  },
@@ -16227,7 +16563,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Niska Mk. I Gun Motor Carriage"
+   "page": "Niska Mk. I Gun Motor Carriage",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 336
  },
@@ -16285,7 +16622,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Niska Mk. II Blinder"
+   "page": "Niska Mk. II Blinder",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 337
  },
@@ -16335,7 +16673,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Niska Mk. III Scar Twin"
+   "page": "Niska Mk. III Scar Twin",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 338
  },
@@ -16393,7 +16732,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Niska-Rycker Mk. IX Skycaller"
+   "page": "Niska-Rycker Mk. IX Skycaller",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 339
  },
@@ -16435,7 +16775,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "No.1 “The Liar” Submachine Gun"
+   "page": "No.1 “The Liar” Submachine Gun",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 340
  },
@@ -16477,7 +16818,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "No.2 Loughcaster"
+   "page": "No.2 Loughcaster",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 341
  },
@@ -16519,7 +16861,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "No.2B Hawthorne"
+   "page": "No.2B Hawthorne",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 342
  },
@@ -16561,7 +16904,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "No.4 The Pillory Scattergun"
+   "page": "No.4 The Pillory Scattergun",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 343
  },
@@ -16619,7 +16963,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Noble Firebrand Mk. XVII"
+   "page": "Noble Firebrand Mk. XVII",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 344
  },
@@ -16661,7 +17006,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Noble Widow MK. XIV"
+   "page": "Noble Widow MK. XIV",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 345
  },
@@ -16735,7 +17081,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O-75b “Ares”"
+   "page": "O-75b “Ares”",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 346
  },
@@ -16785,7 +17132,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien V.101 Freeman"
+   "page": "O'Brien V.101 Freeman",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 347
  },
@@ -16827,7 +17175,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien V.110"
+   "page": "O'Brien V.110",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 348
  },
@@ -16877,7 +17226,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien V.113 Gravekeeper"
+   "page": "O'Brien V.113 Gravekeeper",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 349
  },
@@ -16927,7 +17277,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien V.121 Highlander"
+   "page": "O'Brien V.121 Highlander",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 350
  },
@@ -16977,7 +17328,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien V.130 Wild Jack"
+   "page": "O'Brien V.130 Wild Jack",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 351
  },
@@ -17019,7 +17371,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien V.190 Knave"
+   "page": "O'Brien V.190 Knave",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 352
  },
@@ -17077,7 +17430,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien V.200 Squire"
+   "page": "O'Brien V.200 Squire",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 353
  },
@@ -17135,7 +17489,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "O'Brien Warsmith v.215"
+   "page": "O'Brien Warsmith v.215",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 354
  },
@@ -17177,7 +17532,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Officer's Regalia"
+   "page": "Officer's Regalia",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 355
  },
@@ -17219,7 +17575,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Officer's Regalia"
+   "page": "Officer's Regalia",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 356
  },
@@ -17261,7 +17618,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Officialis' Attire"
+   "page": "Officialis' Attire",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 357
  },
@@ -17303,7 +17661,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Officialis' Attire"
+   "page": "Officialis' Attire",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 358
  },
@@ -17345,7 +17704,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Outrider's Mantle"
+   "page": "Outrider's Mantle",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 359
  },
@@ -17387,7 +17747,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Outrider's Mantle"
+   "page": "Outrider's Mantle",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 360
  },
@@ -17429,7 +17790,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Padded Boiler Suit"
+   "page": "Padded Boiler Suit",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 361
  },
@@ -17471,7 +17833,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Padded Boiler Suit"
+   "page": "Padded Boiler Suit",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 362
  },
@@ -17513,7 +17876,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Paratrooper's Ruck"
+   "page": "Paratrooper's Ruck",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 363
  },
@@ -17555,7 +17919,8 @@
    "output_unit": "L",
    "byproducts": [],
    "crate": false,
-   "page": "Petrol"
+   "page": "Petrol",
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
   },
   "sort": 364
  },
@@ -17605,7 +17970,8 @@
    "output_unit": "L",
    "byproducts": [],
    "crate": false,
-   "page": "Petrol"
+   "page": "Petrol",
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
   },
   "sort": 365
  },
@@ -17647,7 +18013,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Physician's Jacket"
+   "page": "Physician's Jacket",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 366
  },
@@ -17689,7 +18056,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Physician's Jacket"
+   "page": "Physician's Jacket",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 367
  },
@@ -17731,7 +18099,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Pipe"
+   "page": "Pipe",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 368
  },
@@ -17773,7 +18142,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "PL-1 “Phalanx”"
+   "page": "PL-1 “Phalanx”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 369
  },
@@ -17823,7 +18193,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Poseidon"
+   "page": "Poseidon",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 370
  },
@@ -17881,7 +18252,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Processed Construction Materials"
+   "page": "Processed Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 371
  },
@@ -17931,7 +18303,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Processed Construction Materials"
+   "page": "Processed Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 372
  },
@@ -17989,7 +18362,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Processed Construction Materials"
+   "page": "Processed Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 373
  },
@@ -18031,7 +18405,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "PT-815 Smoke Grenade"
+   "page": "PT-815 Smoke Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 374
  },
@@ -18073,7 +18448,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "PT-815 Smoke Grenade"
+   "page": "PT-815 Smoke Grenade",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 375
  },
@@ -18115,7 +18491,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Quillback Torpedo"
+   "page": "Quillback Torpedo",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 376
  },
@@ -18165,7 +18542,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Quillback Torpedo"
+   "page": "Quillback Torpedo",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 377
  },
@@ -18207,7 +18585,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-1 Hauler"
+   "page": "R-1 Hauler",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 378
  },
@@ -18249,7 +18628,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-12 - “Salus” Ambulance"
+   "page": "R-12 - “Salus” Ambulance",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 379
  },
@@ -18299,7 +18679,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-12b - “Salva” Flame Truck"
+   "page": "R-12b - “Salva” Flame Truck",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 380
  },
@@ -18341,7 +18722,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-15 - “Chariot”"
+   "page": "R-15 - “Chariot”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 381
  },
@@ -18399,7 +18781,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-17 “Retiarius” Skirmisher"
+   "page": "R-17 “Retiarius” Skirmisher",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 382
  },
@@ -18441,7 +18824,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-5 “Atlas” Hauler"
+   "page": "R-5 “Atlas” Hauler",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 383
  },
@@ -18483,7 +18867,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-5b “Sisyphus” Hauler"
+   "page": "R-5b “Sisyphus” Hauler",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 384
  },
@@ -18525,7 +18910,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "R-9 “Speartip” Escort"
+   "page": "R-9 “Speartip” Escort",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 385
  },
@@ -18567,7 +18953,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Radio"
+   "page": "Radio",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 386
  },
@@ -18609,7 +18996,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Radio Backpack"
+   "page": "Radio Backpack",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 387
  },
@@ -18667,7 +19055,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rare Alloys"
+   "page": "Rare Alloys",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 388
  },
@@ -18717,7 +19106,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rare Materials"
+   "page": "Rare Materials",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 389
  },
@@ -18759,7 +19149,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Recon Camo"
+   "page": "Recon Camo",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 390
  },
@@ -18801,7 +19192,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Recon Camo"
+   "page": "Recon Camo",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 391
  },
@@ -18843,7 +19235,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Refined Materials"
+   "page": "Refined Materials",
+   "source_icon": "/api/v1/assets/items/facilities/refinery.png"
   },
   "sort": 392
  },
@@ -18885,7 +19278,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Remex Garb"
+   "page": "Remex Garb",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 393
  },
@@ -18927,7 +19321,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Remex Garb"
+   "page": "Remex Garb",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 394
  },
@@ -18969,7 +19364,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Repurposed Truck"
+   "page": "Repurposed Truck",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 395
  },
@@ -19011,7 +19407,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Resource Container"
+   "page": "Resource Container",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 396
  },
@@ -19085,7 +19482,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rinnspeir Mk. I Zealot"
+   "page": "Rinnspeir Mk. I Zealot",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 397
  },
@@ -19127,7 +19525,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rinnspeir Ornitier-Class Gunship"
+   "page": "Rinnspeir Ornitier-Class Gunship",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 398
  },
@@ -19169,7 +19568,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rooster - Junkwagon"
+   "page": "Rooster - Junkwagon",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 399
  },
@@ -19211,7 +19611,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rooster - Lamploader"
+   "page": "Rooster - Lamploader",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 400
  },
@@ -19253,7 +19654,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rooster - Tumblebox"
+   "page": "Rooster - Tumblebox",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 401
  },
@@ -19303,7 +19705,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "RPG"
+   "page": "RPG",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 402
  },
@@ -19353,7 +19756,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "RPG"
+   "page": "RPG",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 403
  },
@@ -19395,7 +19799,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "RR-3 “Stolon” Tanker"
+   "page": "RR-3 “Stolon” Tanker",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 404
  },
@@ -19453,7 +19858,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Rycker 4/3-F Wasp Nest"
+   "page": "Rycker 4/3-F Wasp Nest",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 405
  },
@@ -19495,7 +19901,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Sampo Auto-Rifle 77"
+   "page": "Sampo Auto-Rifle 77",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 406
  },
@@ -19537,7 +19944,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Sandbag"
+   "page": "Sandbag",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 407
  },
@@ -19587,7 +19995,8 @@
     }
    ],
    "crate": false,
-   "page": "Sandbag"
+   "page": "Sandbag",
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
   },
   "sort": 408
  },
@@ -19629,7 +20038,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Sapper Gear"
+   "page": "Sapper Gear",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 409
  },
@@ -19671,7 +20081,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Sapper Gear"
+   "page": "Sapper Gear",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 410
  },
@@ -19729,7 +20140,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "SC-3 Aerial Interceptor Array"
+   "page": "SC-3 Aerial Interceptor Array",
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
   },
   "sort": 411
  },
@@ -19787,7 +20199,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "SC-3 Aerial Interceptor Array Parts"
+   "page": "SC-3 Aerial Interceptor Array Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 412
  },
@@ -19829,7 +20242,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Sharkey-Devitt Birdeater Mk. I"
+   "page": "Sharkey-Devitt Birdeater Mk. I",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 413
  },
@@ -19879,7 +20293,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Shatter Missile"
+   "page": "Shatter Missile",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 414
  },
@@ -19929,7 +20344,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Shatter Missile"
+   "page": "Shatter Missile",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 415
  },
@@ -19971,7 +20387,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Shipping Container"
+   "page": "Shipping Container",
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
   },
   "sort": 416
  },
@@ -20013,7 +20430,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Shovel"
+   "page": "Shovel",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 417
  },
@@ -20063,7 +20481,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Shrapnel Mortar Shell"
+   "page": "Shrapnel Mortar Shell",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 418
  },
@@ -20113,7 +20532,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Shrapnel Mortar Shell"
+   "page": "Shrapnel Mortar Shell",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 419
  },
@@ -20155,7 +20575,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Silverhand - Mk. IV"
+   "page": "Silverhand - Mk. IV",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 420
  },
@@ -20213,7 +20634,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Silverhand Chieftain - Mk. VI"
+   "page": "Silverhand Chieftain - Mk. VI",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 421
  },
@@ -20271,7 +20693,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Silverhand Lordscar - Mk. X"
+   "page": "Silverhand Lordscar - Mk. X",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 422
  },
@@ -20313,7 +20736,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Sledge Hammer"
+   "page": "Sledge Hammer",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 423
  },
@@ -20355,7 +20779,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Soldier Supplies"
+   "page": "Soldier Supplies",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 424
  },
@@ -20397,7 +20822,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Specialist's Overcoat"
+   "page": "Specialist's Overcoat",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 425
  },
@@ -20439,7 +20865,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Specialist's Overcoat"
+   "page": "Specialist's Overcoat",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 426
  },
@@ -20481,7 +20908,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Staff Car"
+   "page": "Staff Car",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 427
  },
@@ -20547,7 +20975,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Steel Construction Materials"
+   "page": "Steel Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 428
  },
@@ -20613,7 +21042,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Steel Construction Materials"
+   "page": "Steel Construction Materials",
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
   },
   "sort": 429
  },
@@ -20671,7 +21101,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Storm Cannon"
+   "page": "Storm Cannon",
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
   },
   "sort": 430
  },
@@ -20729,7 +21160,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Storm Cannon Parts"
+   "page": "Storm Cannon Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 431
  },
@@ -20771,7 +21203,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Storm Tank"
+   "page": "Storm Tank",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 432
  },
@@ -20813,7 +21246,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Strider"
+   "page": "Strider",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 433
  },
@@ -20871,7 +21305,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Structure Parts"
+   "page": "Structure Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 434
  },
@@ -20913,7 +21348,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Swallowtail 988/127-2"
+   "page": "Swallowtail 988/127-2",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 435
  },
@@ -20955,7 +21391,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "T12 “Actaeon” Tankette"
+   "page": "T12 “Actaeon” Tankette",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 436
  },
@@ -21013,7 +21450,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "T13 “Deioneus” Rocket Battery"
+   "page": "T13 “Deioneus” Rocket Battery",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 437
  },
@@ -21063,7 +21501,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "T14 “Vesta” Tankette"
+   "page": "T14 “Vesta” Tankette",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 438
  },
@@ -21113,7 +21552,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "T20 “Ixion” Tankette"
+   "page": "T20 “Ixion” Tankette",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 439
  },
@@ -21155,7 +21595,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "T3 “Xiphos”"
+   "page": "T3 “Xiphos”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 440
  },
@@ -21205,7 +21646,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "T5 “Percutio”"
+   "page": "T5 “Percutio”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 441
  },
@@ -21255,7 +21697,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "T8 “Gemini”"
+   "page": "T8 “Gemini”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 442
  },
@@ -21297,7 +21740,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Tankman's Coveralls"
+   "page": "Tankman's Coveralls",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 443
  },
@@ -21339,7 +21783,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Tankman's Coveralls"
+   "page": "Tankman's Coveralls",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 444
  },
@@ -21421,7 +21866,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Tempest Cannon RA-2"
+   "page": "Tempest Cannon RA-2",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 445
  },
@@ -21471,7 +21917,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Tenta Torpedo"
+   "page": "Tenta Torpedo",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 446
  },
@@ -21513,7 +21960,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "The Hangman 757"
+   "page": "The Hangman 757",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 447
  },
@@ -21563,7 +22011,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "The Ospreay"
+   "page": "The Ospreay",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 448
  },
@@ -21613,7 +22062,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Thermal Shielding"
+   "page": "Thermal Shielding",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 449
  },
@@ -21671,7 +22121,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Titan"
+   "page": "Titan",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 450
  },
@@ -21737,7 +22188,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Toxot-902 “Blind Silver”"
+   "page": "Toxot-902 “Blind Silver”",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 451
  },
@@ -21779,7 +22231,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Trauma Kit"
+   "page": "Trauma Kit",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 452
  },
@@ -21829,7 +22282,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Tremola Grenade GPb-1"
+   "page": "Tremola Grenade GPb-1",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 453
  },
@@ -21879,7 +22333,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Tremola Grenade GPb-1"
+   "page": "Tremola Grenade GPb-1",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 454
  },
@@ -21921,7 +22376,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Tripod"
+   "page": "Tripod",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 455
  },
@@ -21963,7 +22419,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Tripod"
+   "page": "Tripod",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 456
  },
@@ -22029,7 +22486,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Tulka I1.9 White Raven"
+   "page": "Tulka I1.9 White Raven",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 457
  },
@@ -22111,7 +22569,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Tulka P4 Welkinrive"
+   "page": "Tulka P4 Welkinrive",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 458
  },
@@ -22161,7 +22620,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Tümmler by VAC"
+   "page": "Tümmler by VAC",
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
   },
   "sort": 459
  },
@@ -22203,7 +22663,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Type B - “Lucian”"
+   "page": "Type B - “Lucian”",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 460
  },
@@ -22245,7 +22706,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Type C - “Charon”"
+   "page": "Type C - “Charon”",
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
   },
   "sort": 461
  },
@@ -22303,7 +22765,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Underground Fortress"
+   "page": "Underground Fortress",
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
   },
   "sort": 462
  },
@@ -22361,7 +22824,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Underground Fortress Parts"
+   "page": "Underground Fortress Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 463
  },
@@ -22411,7 +22875,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Unstable Substances"
+   "page": "Unstable Substances",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 464
  },
@@ -22453,7 +22918,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "UV-05a “Argonaut”"
+   "page": "UV-05a “Argonaut”",
+   "source_icon": "/api/v1/assets/items/facilities/garage.png"
   },
   "sort": 465
  },
@@ -22503,7 +22969,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "UV-24 “Icarus”"
+   "page": "UV-24 “Icarus”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 466
  },
@@ -22545,7 +23012,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "UV-5c “Odyssey”"
+   "page": "UV-5c “Odyssey”",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 467
  },
@@ -22627,7 +23095,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "V-1 Tzykalia"
+   "page": "V-1 Tzykalia",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 468
  },
@@ -22701,7 +23170,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "V-5b Pegasus"
+   "page": "V-5b Pegasus",
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
   },
   "sort": 469
  },
@@ -22743,7 +23213,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Velian Flak Vest"
+   "page": "Velian Flak Vest",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 470
  },
@@ -22785,7 +23256,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Velian Flak Vest"
+   "page": "Velian Flak Vest",
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
   },
   "sort": 471
  },
@@ -22835,7 +23307,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Venom c.II 35"
+   "page": "Venom c.II 35",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 472
  },
@@ -22877,7 +23350,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Volta r.I Repeater"
+   "page": "Volta r.I Repeater",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 473
  },
@@ -22927,7 +23401,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "War Ensign"
+   "page": "War Ensign",
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
   },
   "sort": 474
  },
@@ -22977,7 +23452,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Engine (Large)"
+   "page": "Warden Aircraft Engine (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 475
  },
@@ -23027,7 +23503,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Engine (Large)"
+   "page": "Warden Aircraft Engine (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 476
  },
@@ -23077,7 +23554,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Engine (Small)"
+   "page": "Warden Aircraft Engine (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 477
  },
@@ -23127,7 +23605,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Engine (Small)"
+   "page": "Warden Aircraft Engine (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 478
  },
@@ -23177,7 +23656,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Mechanical Parts (Large)"
+   "page": "Warden Aircraft Mechanical Parts (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 479
  },
@@ -23227,7 +23707,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Mechanical Parts (Large)"
+   "page": "Warden Aircraft Mechanical Parts (Large)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 480
  },
@@ -23277,7 +23758,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Mechanical Parts (Small)"
+   "page": "Warden Aircraft Mechanical Parts (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 481
  },
@@ -23327,7 +23809,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Warden Aircraft Mechanical Parts (Small)"
+   "page": "Warden Aircraft Mechanical Parts (Small)",
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
   },
   "sort": 482
  },
@@ -23369,7 +23852,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Water Bucket"
+   "page": "Water Bucket",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 483
  },
@@ -23427,7 +23911,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Weather Station"
+   "page": "Weather Station",
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
   },
   "sort": 484
  },
@@ -23485,7 +23970,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Weather Station Parts"
+   "page": "Weather Station Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
   },
   "sort": 485
  },
@@ -23535,7 +24021,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Willow's Bane Ammo"
+   "page": "Willow's Bane Ammo",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 486
  },
@@ -23585,7 +24072,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Willow's Bane Model 845"
+   "page": "Willow's Bane Model 845",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 487
  },
@@ -23627,7 +24115,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Wind Sock"
+   "page": "Wind Sock",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 488
  },
@@ -23669,7 +24158,8 @@
    "output_unit": null,
    "byproducts": [],
    "crate": true,
-   "page": "Wrench"
+   "page": "Wrench",
+   "source_icon": "/api/v1/assets/items/facilities/factory.png"
   },
   "sort": 489
  }
