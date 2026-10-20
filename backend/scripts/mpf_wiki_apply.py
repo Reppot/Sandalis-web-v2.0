@@ -81,7 +81,14 @@ for r in recipes:
     key = norm(r["name_en"])
     if key in by and "mpf" in r["facilities"]:
         used.add(key)
-        r["data"]["mpf"] = mpf_block(by[key][1])
+        block = mpf_block(by[key][1])
+        r["data"]["mpf"] = block
+        # в игре база MPF = цена Factory: калькулятор Factory берёт те же значения
+        if r["cost"] != block["cost"] or r["output_quantity"] != block["amount"]:
+            print("factory synced:", r["name_en"], r["cost"], "->", block["cost"],
+                  r["output_quantity"], "->", block["amount"])
+        r["cost"] = dict(block["cost"])
+        r["output_quantity"] = block["amount"]
     elif "mpf" in r["facilities"]:
         print("MPF recipe without wiki data:", r["name_en"])
 

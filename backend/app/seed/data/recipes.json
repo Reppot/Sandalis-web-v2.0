@@ -129,7 +129,7 @@
    "mpf"
   ],
   "icon_url": "/api/v1/assets/items/AssaultRifleAmmo.webp",
-  "output_quantity": 20,
+  "output_quantity": 30,
   "cost": {
    "bmat": 120
   },
@@ -1009,7 +1009,7 @@
    "mpf"
   ],
   "icon_url": "/api/v1/assets/items/ShotgunC.webp",
-  "output_quantity": 20,
+  "output_quantity": 15,
   "cost": {
    "bmat": 130
   },
@@ -1346,7 +1346,7 @@
    "mpf"
   ],
   "icon_url": "/api/v1/assets/items/DeadlyGas01.webp",
-  "output_quantity": 10,
+  "output_quantity": 5,
   "cost": {
    "bmat": 140
   },
@@ -1851,8 +1851,8 @@
   "icon_url": "/api/v1/assets/items/GrenadeLauncherC.webp",
   "output_quantity": 5,
   "cost": {
-   "bmat": 50,
-   "rmat": 15
+   "bmat": 100,
+   "rmat": 35
   },
   "data": {
    "number_produced_bonus": null,
@@ -5710,7 +5710,7 @@
   "icon_url": null,
   "output_quantity": 3,
   "cost": {
-   "rmat": 465
+   "rmat": 480
   },
   "data": {
    "number_produced_bonus": null,
@@ -5927,7 +5927,7 @@
   "icon_url": "/api/v1/assets/items/ResourceTrailer.webp",
   "output_quantity": 3,
   "cost": {
-   "rmat": 30
+   "bmat": 300
   },
   "data": {
    "number_produced_bonus": null,

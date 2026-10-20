@@ -477,7 +477,7 @@
   "faction": "neutral",
   "origin": "item",
   "icon_url": "/api/v1/assets/items/AssaultRifleAmmo.webp",
-  "crate_size": 20,
+  "crate_size": 30,
   "aliases": [
    "7.92 мм"
   ],
@@ -1975,7 +1975,7 @@
   "faction": "neutral",
   "origin": "item",
   "icon_url": "/api/v1/assets/items/DeadlyGas01.webp",
-  "crate_size": 10,
+  "crate_size": 5,
   "aliases": [],
   "needs_review": false
  },
@@ -4075,7 +4075,7 @@
   "faction": "colonial",
   "origin": "item",
   "icon_url": "/api/v1/assets/items/ShotgunC.webp",
-  "crate_size": 20,
+  "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
