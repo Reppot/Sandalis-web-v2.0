@@ -2,8 +2,8 @@
  {
   "id": "factory-dusk-ce-iii",
   "kind": "factory",
-  "name": "\"Dusk\" ce.III",
-  "name_en": "\"Dusk\" ce.III",
+  "name": "“Dusk” ce.III",
+  "name_en": "“Dusk” ce.III",
   "item_code": "AssaultRifleHeavyC",
   "category": "small_arms",
   "item_class": "Assault Rifle",
@@ -16,7 +16,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyC.png",
   "output_quantity": 20,
   "cost": {
    "rmat": 15
@@ -53,7 +53,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyWItem.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyW.png",
   "output_quantity": 20,
   "cost": {
    "rmat": 15
@@ -90,7 +90,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AssaultRifleItem.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleW.png",
   "output_quantity": 20,
   "cost": {
    "rmat": 15
@@ -128,7 +128,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AssaultRifleAmmo.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleAmmo.png",
   "output_quantity": 30,
   "cost": {
    "bmat": 120
@@ -165,7 +165,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleC.png",
   "output_quantity": 20,
   "cost": {
    "rmat": 15
@@ -202,7 +202,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MGC.webp",
+  "icon_url": "/api/v1/assets/items/MGC.png",
   "output_quantity": 5,
   "cost": {
    "rmat": 25
@@ -239,7 +239,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MGW.webp",
+  "icon_url": "/api/v1/assets/items/MGW.png",
   "output_quantity": 5,
   "cost": {
    "rmat": 25
@@ -276,7 +276,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GrenadeW.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 100,
@@ -315,7 +315,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/PistolLightW.webp",
+  "icon_url": "/api/v1/assets/items/PistolLightW.png",
   "output_quantity": 40,
   "cost": {
    "bmat": 60
@@ -352,7 +352,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GrenadeC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeC.png",
   "output_quantity": 25,
   "cost": {
    "bmat": 100,
@@ -392,7 +392,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/PistolAmmo.webp",
+  "icon_url": "/api/v1/assets/items/PistolAmmo.png",
   "output_quantity": 40,
   "cost": {
    "bmat": 40
@@ -430,7 +430,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Revolver.webp",
+  "icon_url": "/api/v1/assets/items/Revolver.png",
   "output_quantity": 30,
   "cost": {
    "bmat": 60
@@ -467,7 +467,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/RifleHeavyW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 125
@@ -542,7 +542,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleAutomaticC.webp",
+  "icon_url": "/api/v1/assets/items/RifleAutomaticC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 120
@@ -579,7 +579,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleC.webp",
+  "icon_url": "/api/v1/assets/items/RifleC.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 100
@@ -616,7 +616,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/RifleHeavyC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -653,7 +653,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleLightC.webp",
+  "icon_url": "/api/v1/assets/items/RifleLightC.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 140
@@ -690,7 +690,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleLongC.webp",
+  "icon_url": "/api/v1/assets/items/RifleLongC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 155
@@ -726,7 +726,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/SniperRifleC.webp",
+  "icon_url": "/api/v1/assets/items/SniperRifleC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 250,
@@ -756,7 +756,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleAutomaticW.webp",
+  "icon_url": "/api/v1/assets/items/RifleAutomaticW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 125
@@ -793,7 +793,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleLightC.webp",
+  "icon_url": "/api/v1/assets/items/RifleLightW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 140
@@ -830,7 +830,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleLongW.webp",
+  "icon_url": "/api/v1/assets/items/RifleLongW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 130
@@ -853,8 +853,8 @@
  {
   "id": "factory-no-2b-hawthorne",
   "kind": "factory",
-  "name": "No. 2B Hawthorne",
-  "name_en": "No. 2B Hawthorne",
+  "name": "No.2B Hawthorne",
+  "name_en": "No.2B Hawthorne",
   "item_code": "RifleShortW",
   "category": "small_arms",
   "item_class": "Rifle",
@@ -867,7 +867,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleShortW.webp",
+  "icon_url": "/api/v1/assets/items/RifleShortW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 70
@@ -904,7 +904,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleW.webp",
+  "icon_url": "/api/v1/assets/items/RifleW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 100
@@ -940,7 +940,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/SniperRifle.webp",
+  "icon_url": "/api/v1/assets/items/SniperRifleW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 250,
@@ -971,7 +971,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RifleAmmo.webp",
+  "icon_url": "/api/v1/assets/items/RifleAmmo.png",
   "output_quantity": 40,
   "cost": {
    "bmat": 80
@@ -1008,7 +1008,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ShotgunC.webp",
+  "icon_url": "/api/v1/assets/items/ShotgunC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 130
@@ -1045,7 +1045,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ShotgunW.webp",
+  "icon_url": "/api/v1/assets/items/ShotgunW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 80
@@ -1083,7 +1083,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ShotgunAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ShotgunAmmo.png",
   "output_quantity": 40,
   "cost": {
    "bmat": 80
@@ -1106,8 +1106,8 @@
  {
   "id": "factory-no-1-the-liar-submachinegun",
   "kind": "factory",
-  "name": "No.1 \"The Liar\" Submachinegun",
-  "name_en": "No.1 \"The Liar\" Submachinegun",
+  "name": "No.1 “The Liar” Submachine Gun",
+  "name_en": "No.1 “The Liar” Submachine Gun",
   "item_code": "SMGHeavyW",
   "category": "small_arms",
   "item_class": "Submachine Gun",
@@ -1120,7 +1120,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/SMGHeavyW.webp",
+  "icon_url": "/api/v1/assets/items/SMGHeavyW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 120
@@ -1157,7 +1157,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/SubMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/SMGW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 120
@@ -1180,8 +1180,8 @@
  {
   "id": "factory-the-pitch-gun-mc-v",
   "kind": "factory",
-  "name": "\"The Pitch Gun\" mc. V",
-  "name_en": "\"The Pitch Gun\" mc. V",
+  "name": "“The Pitch Gun” mc.V",
+  "name_en": "“The Pitch Gun” mc.V",
   "item_code": "SMGC",
   "category": "small_arms",
   "item_class": "Submachine Gun",
@@ -1194,7 +1194,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/SMGC.webp",
+  "icon_url": "/api/v1/assets/items/SMGC.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 80
@@ -1217,8 +1217,8 @@
  {
   "id": "factory-lionclaw-mc-viii",
   "kind": "factory",
-  "name": "\"Lionclaw\" mc.VIII",
-  "name_en": "\"Lionclaw\" mc.VIII",
+  "name": "“Lionclaw” mc.VIII",
+  "name_en": "“Lionclaw” mc.VIII",
   "item_code": "SMGHeavyC",
   "category": "small_arms",
   "item_class": "Submachine Gun",
@@ -1231,7 +1231,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/SMGHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/SMGHeavyC.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 120
@@ -1269,7 +1269,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SMGAmmo.png",
   "output_quantity": 40,
   "cost": {
    "bmat": 80
@@ -1307,7 +1307,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Smokegrenade.webp",
+  "icon_url": "/api/v1/assets/items/SmokeGrenade.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 80
@@ -1345,7 +1345,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/DeadlyGas01.webp",
+  "icon_url": "/api/v1/assets/items/GreenAsh.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 140
@@ -1383,7 +1383,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MachineGunAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MGAmmo.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 100
@@ -1406,8 +1406,8 @@
  {
   "id": "factory-typhon-ra-xii",
   "kind": "factory",
-  "name": "\"Typhon\" ra.XII",
-  "name_en": "\"Typhon\" ra.XII",
+  "name": "“Typhon” ra.XII",
+  "name_en": "“Typhon” ra.XII",
   "item_code": "ATRifleTC",
   "category": "heavy_arms",
   "item_class": "Mounted Anti-Tank Rifle",
@@ -1420,7 +1420,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRifleTC.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleTC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -1459,7 +1459,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRifle.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 150
@@ -1497,7 +1497,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRifleAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleAmmo.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 100
@@ -1534,7 +1534,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRpgC.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -1573,7 +1573,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Rocket.jpg",
+  "icon_url": "/api/v1/assets/items/ATRPGHeavyW.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 125,
@@ -1612,7 +1612,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRpgC.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGHeavyC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 150,
@@ -1637,8 +1637,8 @@
  {
   "id": "factory-ap-rpg",
   "kind": "factory",
-  "name": "AP/RPG",
-  "name_en": "AP/RPG",
+  "name": "AP⧸RPG",
+  "name_en": "AP⧸RPG",
   "item_code": "ATRPGAmmo",
   "category": "heavy_arms",
   "item_class": null,
@@ -1652,7 +1652,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRpgAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGAmmo.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 60,
@@ -1691,7 +1691,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRPGTW.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGTW.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -1730,7 +1730,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRPGTW.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGW.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -1755,8 +1755,8 @@
  {
   "id": "factory-arc-rpg",
   "kind": "factory",
-  "name": "ARC/RPG",
-  "name_en": "ARC/RPG",
+  "name": "ARC⧸RPG",
+  "name_en": "ARC⧸RPG",
   "item_code": "ATRPGIndirectAmmo",
   "category": "heavy_arms",
   "item_class": null,
@@ -1770,7 +1770,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATMortarAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGIndirectAmmo.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 60,
@@ -1795,8 +1795,8 @@
  {
   "id": "factory-molten-wind-v-ii-flame-torch",
   "kind": "factory",
-  "name": "\"Molten Wind\" v.II Flame Torch",
-  "name_en": "\"Molten Wind\" v.II Flame Torch",
+  "name": "“Molten Wind” v.II Flame Torch",
+  "name_en": "“Molten Wind” v.II Flame Torch",
   "item_code": "FlameTorchC",
   "category": "heavy_arms",
   "item_class": "Flamethrower",
@@ -1809,7 +1809,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FlamegunC.webp",
+  "icon_url": "/api/v1/assets/items/FlameTorchC.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 185,
@@ -1848,7 +1848,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GrenadeLauncherC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeLauncherC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -1887,7 +1887,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GrenadeLauncherTC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeLauncherTC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -1926,7 +1926,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FlamegunW.webp",
+  "icon_url": "/api/v1/assets/items/FlameTorchW.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 165,
@@ -1966,7 +1966,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/HELaunchedGrenade.webp",
+  "icon_url": "/api/v1/assets/items/HELaunchedGrenade.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 75,
@@ -2005,7 +2005,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/HeavyMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/MGTC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -2044,7 +2044,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MGW.webp",
+  "icon_url": "/api/v1/assets/items/MGTW.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -2083,7 +2083,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/InfantrySupportGun.webp",
+  "icon_url": "/api/v1/assets/items/ISGTC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -2123,7 +2123,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MiniTankAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MiniTankAmmo.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 80,
@@ -2163,7 +2163,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Mortar.webp",
+  "icon_url": "/api/v1/assets/items/Mortar.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -2203,7 +2203,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Mortar.webp",
+  "icon_url": "/api/v1/assets/items/MortarAmmoFL.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 60,
@@ -2243,7 +2243,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Mortar.webp",
+  "icon_url": "/api/v1/assets/items/MortarAmmoSH.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 60,
@@ -2283,7 +2283,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MortarAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MortarAmmo.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 60,
@@ -2322,7 +2322,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATRPGLightC.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGLightC.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 85,
@@ -2361,7 +2361,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATGrenadeW.webp",
+  "icon_url": "/api/v1/assets/items/ATGrenadeW.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 100,
@@ -2400,7 +2400,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATLaunchedGrenadeW.webp",
+  "icon_url": "/api/v1/assets/items/ATLaunchedGrenadeW.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 95,
@@ -2440,7 +2440,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/HEGrenade.webp",
+  "icon_url": "/api/v1/assets/items/HEGrenade.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 100,
@@ -2480,7 +2480,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/StickyBomb.webp",
+  "icon_url": "/api/v1/assets/items/StickyBomb.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 50,
@@ -2519,7 +2519,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RpgW.webp",
+  "icon_url": "/api/v1/assets/items/RPGTW.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -2558,7 +2558,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/RpgW.webp",
+  "icon_url": "/api/v1/assets/items/RpgW.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -2598,7 +2598,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RpgAmmo.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 60,
@@ -2638,7 +2638,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AircraftAmmo.webp",
+  "icon_url": "/api/v1/assets/items/AircraftAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 120
@@ -2676,7 +2676,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/DemolitionRocketAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 250,
@@ -2716,7 +2716,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/HeavyArtilleryAmmo.webp",
+  "icon_url": "/api/v1/assets/items/HeavyArtilleryAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 120,
@@ -2756,7 +2756,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightArtilleryAmmo.webp",
+  "icon_url": "/api/v1/assets/items/LightArtilleryAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 120,
@@ -2781,8 +2781,8 @@
  {
   "id": "factory-250mm-purity-shell",
   "kind": "factory",
-  "name": "250mm \"Purity\" Shell",
-  "name_en": "250mm \"Purity\" Shell",
+  "name": "250mm “Purity” Shell",
+  "name_en": "250mm “Purity” Shell",
   "item_code": "MortarTankAmmo",
   "category": "heavy_ammunition",
   "item_class": null,
@@ -2796,7 +2796,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.webp",
+  "icon_url": "/api/v1/assets/items/MortarTankAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 120,
@@ -2821,8 +2821,8 @@
  {
   "id": "factory-250mm-fury-shell",
   "kind": "factory",
-  "name": "250mm \"Fury\" Shell",
-  "name_en": "250mm \"Fury\" Shell",
+  "name": "250mm “Fury” Shell",
+  "name_en": "250mm “Fury” Shell",
   "item_code": "MortarTankAmmoBR",
   "category": "heavy_ammunition",
   "item_class": null,
@@ -2836,7 +2836,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.webp",
+  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 250,
@@ -2876,7 +2876,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ATAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATAmmo.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 120,
@@ -2916,7 +2916,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightTankAmmo.webp",
+  "icon_url": "/api/v1/assets/items/LightTankAmmo.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 160,
@@ -2956,7 +2956,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SurfaceWaterMine.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 125,
@@ -2995,7 +2995,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MiniTorpedoAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MiniTorpedoAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 125,
@@ -3034,7 +3034,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/BarbedWireMaterial.webp",
+  "icon_url": "/api/v1/assets/items/BarbedWireMaterials.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 15
@@ -3063,7 +3063,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Bayonet.webp",
+  "icon_url": "/api/v1/assets/items/Bayonet.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 40
@@ -3092,7 +3092,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Binoculars.webp",
+  "icon_url": "/api/v1/assets/items/Binoculars.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 75
@@ -3120,7 +3120,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Bangalore.webp",
+  "icon_url": "/api/v1/assets/items/ExplosiveLightC.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -3150,7 +3150,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/ExplosiveTripod.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 75,
@@ -3179,7 +3179,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/FlamePackW.webp",
+  "icon_url": "/api/v1/assets/items/FlameBackpackW.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 135,
@@ -3195,8 +3195,8 @@
  {
   "id": "factory-molten-wind-v-ii-ammo",
   "kind": "factory",
-  "name": "\"Molten Wind\" v.II Ammo",
-  "name_en": "\"Molten Wind\" v.II Ammo",
+  "name": "“Molten Wind” v.II Ammo",
+  "name_en": "“Molten Wind” v.II Ammo",
   "item_code": "FlameBackpackC",
   "category": "utilities",
   "item_class": "Flamethrower Ammo",
@@ -3208,7 +3208,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/FlamePackC.webp",
+  "icon_url": "/api/v1/assets/items/FlameBackpackC.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 160,
@@ -3238,7 +3238,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/ListeningKit.webp",
+  "icon_url": "/api/v1/assets/items/ListeningKit.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 150
@@ -3266,7 +3266,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MaceW.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 200
@@ -3295,7 +3295,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/MetalBeamMaterial.webp",
+  "icon_url": "/api/v1/assets/items/MetalBeamMaterials.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 25
@@ -3324,7 +3324,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/RadioBackpack.webp",
+  "icon_url": "/api/v1/assets/items/RadioBackpack.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 150
@@ -3353,7 +3353,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/SandbagMaterial.webp",
+  "icon_url": "/api/v1/assets/items/SandbagMaterials.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 15
@@ -3382,7 +3382,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SatchelChargeT.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 75,
@@ -3411,7 +3411,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/SatchelCharge.webp",
+  "icon_url": "/api/v1/assets/items/SatchelChargeW.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 150,
@@ -3441,7 +3441,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Shovel.webp",
+  "icon_url": "/api/v1/assets/items/Shovel.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 200
@@ -3470,7 +3470,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/SledgeHammer.webp",
+  "icon_url": "/api/v1/assets/items/SledgeHammer.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 200
@@ -3498,7 +3498,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/StilSwordC.webp",
+  "icon_url": "/api/v1/assets/items/SwordC.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 200
@@ -3527,7 +3527,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/DeployableTripod.webp",
+  "icon_url": "/api/v1/assets/items/Tripod.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100
@@ -3556,7 +3556,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/WindsockItem.webp",
+  "icon_url": "/api/v1/assets/items/WindsockT.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 150
@@ -3585,7 +3585,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/WorkWrench.webp",
+  "icon_url": "/api/v1/assets/items/WorkWrench.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 75
@@ -3614,7 +3614,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Water.webp",
+  "icon_url": "/api/v1/assets/items/WaterBucket.png",
   "output_quantity": 50,
   "cost": {
    "bmat": 80
@@ -3643,7 +3643,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Gasmask.webp",
+  "icon_url": "/api/v1/assets/items/GasMask.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 160
@@ -3672,7 +3672,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/GasMaskFilter.webp",
+  "icon_url": "/api/v1/assets/items/GasMaskFilter.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 100
@@ -3700,7 +3700,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/GrenadeAdapter.png",
   "output_quantity": 20,
   "cost": {
    "bmat": 85,
@@ -3730,7 +3730,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Radio.webp",
+  "icon_url": "/api/v1/assets/items/Radio.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 75
@@ -3788,7 +3788,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/Bandages.webp",
+  "icon_url": "/api/v1/assets/items/Bandages.png",
   "output_quantity": 50,
   "cost": {
    "bmat": 80
@@ -3817,7 +3817,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/FirstAidKit.webp",
+  "icon_url": "/api/v1/assets/items/FirstAidKit.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 60
@@ -3846,7 +3846,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/TraumaKit.webp",
+  "icon_url": "/api/v1/assets/items/TraumaKit.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 80
@@ -3875,7 +3875,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": "/api/v1/assets/items/BloodPlasma.webp",
+  "icon_url": "/api/v1/assets/items/BloodPlasma.png",
   "output_quantity": 50,
   "cost": {
    "bmat": 80
@@ -3904,7 +3904,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SoldierSupplies.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 80
@@ -3934,7 +3934,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MaintenanceSupplies.webp",
+  "icon_url": "/api/v1/assets/items/MaintenanceSupplies.png",
   "output_quantity": 100,
   "cost": {
    "bmat": 250
@@ -3957,8 +3957,8 @@
  {
   "id": "factory-material-pallet",
   "kind": "factory",
-  "name": "Material pallet",
-  "name_en": "Material pallet",
+  "name": "Material Pallet",
+  "name_en": "Material Pallet",
   "item_code": "MaterialPlatform",
   "category": "shipables",
   "item_class": null,
@@ -3971,7 +3971,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MaterialPlatform.webp",
+  "icon_url": "/api/v1/assets/items/MaterialPlatform.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 75
@@ -4008,7 +4008,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ResourceContainer.webp",
+  "icon_url": "/api/v1/assets/items/ResourceContainer.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 150
@@ -4045,7 +4045,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ShippingContainerStructure.webp",
+  "icon_url": "/api/v1/assets/items/ShippingContainer.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -4081,7 +4081,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedAircraftW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 525
@@ -4117,7 +4117,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/EmplacedAT.webp",
+  "icon_url": "/api/v1/assets/items/EmplacedATW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 450
@@ -4140,8 +4140,8 @@
  {
   "id": "factory-dae-5b-zeal",
   "kind": "factory",
-  "name": "DAE 5b \"Zeal\"",
-  "name_en": "DAE 5b \"Zeal\"",
+  "name": "DAE 5b “Zeal”",
+  "name_en": "DAE 5b “Zeal”",
   "item_code": "EmplacedAircraftC",
   "category": "shipables",
   "item_class": null,
@@ -4153,7 +4153,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedAircraftC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 525
@@ -4176,8 +4176,8 @@
  {
   "id": "factory-50-500-thunderbolt-cannon",
   "kind": "factory",
-  "name": "50-500 \"Thunderbolt\" Cannon",
-  "name_en": "50-500 \"Thunderbolt\" Cannon",
+  "name": "50-500 “Thunderbolt” Cannon",
+  "name_en": "50-500 “Thunderbolt” Cannon",
   "item_code": "EmplacedHeavyArtilleryC",
   "category": "shipables",
   "item_class": null,
@@ -4189,7 +4189,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedHeavyArtilleryC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 585
@@ -4225,7 +4225,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/HeavyArtilleryAmmo.webp",
+  "icon_url": "/api/v1/assets/items/EmplacedHeavyArtilleryW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 525
@@ -4261,7 +4261,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedInfantryW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 225
@@ -4297,7 +4297,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AircraftAmmo.webp",
+  "icon_url": "/api/v1/assets/items/EmplacedLightArtilleryW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 105
@@ -4320,8 +4320,8 @@
  {
   "id": "factory-dae-1o-3-polybolos",
   "kind": "factory",
-  "name": "DAE 1o-3 \"Polybolos\"",
-  "name_en": "DAE 1o-3 \"Polybolos\"",
+  "name": "DAE 1o-3 “Polybolos”",
+  "name_en": "DAE 1o-3 “Polybolos”",
   "item_code": "EmplacedIndirectC",
   "category": "shipables",
   "item_class": null,
@@ -4333,7 +4333,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedIndirectC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 375
@@ -4356,8 +4356,8 @@
  {
   "id": "factory-dae-1b-2-serra",
   "kind": "factory",
-  "name": "DAE 1b-2 \"Serra\"",
-  "name_en": "DAE 1b-2 \"Serra\"",
+  "name": "DAE 1b-2 “Serra”",
+  "name_en": "DAE 1b-2 “Serra”",
   "item_code": "EmplacedInfantryC",
   "category": "shipables",
   "item_class": null,
@@ -4369,7 +4369,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedInfantryC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -4406,7 +4406,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ConcreteMixerIcon.png",
+  "icon_url": "/api/v1/assets/items/ConcreteMixer.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 225
@@ -4443,7 +4443,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ConstructionEquipment.webp",
+  "icon_url": "/api/v1/assets/items/ConstructionEquipment.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 150
@@ -4480,7 +4480,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LiquidContainer.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -4503,8 +4503,8 @@
  {
   "id": "factory-t3-xiphos",
   "kind": "factory",
-  "name": "T3 \"Xiphos\"",
-  "name_en": "T3 \"Xiphos\"",
+  "name": "T3 “Xiphos”",
+  "name_en": "T3 “Xiphos”",
   "item_code": "ArmoredCarC",
   "category": "vehicles",
   "item_class": "Armored Car",
@@ -4516,7 +4516,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ArmoredCarVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 75
@@ -4539,8 +4539,8 @@
  {
   "id": "factory-obrien-v-190-knave",
   "kind": "factory",
-  "name": "O'Brien v.190 Knave",
-  "name_en": "O'Brien v.190 Knave",
+  "name": "O'Brien V.190 Knave",
+  "name_en": "O'Brien V.190 Knave",
   "item_code": "ArmoredCar2TwinW",
   "category": "vehicles",
   "item_class": "Armored Car",
@@ -4552,7 +4552,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ArmoredCarTwinW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCar2TwinW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 120
@@ -4575,8 +4575,8 @@
  {
   "id": "factory-obrien-v-110",
   "kind": "factory",
-  "name": "O'Brien v.110",
-  "name_en": "O'Brien v.110",
+  "name": "O'Brien V.110",
+  "name_en": "O'Brien V.110",
   "item_code": "ArmoredCarW",
   "category": "vehicles",
   "item_class": "Armored Car",
@@ -4588,7 +4588,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ArmoredCarWarVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 75
@@ -4624,7 +4624,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/DestroyerTankWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/DestroyerTankW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 480
@@ -4660,7 +4660,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldAT2W.webp",
+  "icon_url": "/api/v1/assets/items/FieldATW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 60
@@ -4696,7 +4696,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldCannonWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FieldCannonW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 60
@@ -4732,7 +4732,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldMachineGunWar.webp",
+  "icon_url": "/api/v1/assets/items/FieldMGW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 60
@@ -4768,7 +4768,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldMortarW.webp",
+  "icon_url": "/api/v1/assets/items/FieldMortarW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 105
@@ -4804,7 +4804,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/HalfTrackWarVehicle.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 180
@@ -4840,7 +4840,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LandingCraftWarVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/LandingCraftW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 60
@@ -4876,7 +4876,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightTankWarDefensiveVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTankW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 360
@@ -4912,7 +4912,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldAntiTankColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FieldATC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 60
@@ -4935,8 +4935,8 @@
  {
   "id": "factory-g40-sagittarii",
   "kind": "factory",
-  "name": "G40 \"Sagittarii\"",
-  "name_en": "G40 \"Sagittarii\"",
+  "name": "G40 “Sagittarii”",
+  "name_en": "G40 “Sagittarii”",
   "item_code": "FieldMGC",
   "category": "vehicles",
   "item_class": "Field Machine Gun",
@@ -4948,7 +4948,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/FieldMGC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 60
@@ -4971,8 +4971,8 @@
  {
   "id": "factory-30-250-tisiphone-field-cannon",
   "kind": "factory",
-  "name": "30-250 \"Tisiphone\" Field Cannon",
-  "name_en": "30-250 \"Tisiphone\" Field Cannon",
+  "name": "30-250 “Tisiphone” Field Cannon",
+  "name_en": "30-250 “Tisiphone” Field Cannon",
   "item_code": "FieldMortarC",
   "category": "vehicles",
   "item_class": "Field Mortar",
@@ -4984,7 +4984,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldMortarC.webp",
+  "icon_url": "/api/v1/assets/items/FieldMortarC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 105
@@ -5007,8 +5007,8 @@
  {
   "id": "factory-120-68-koronides-field-gun",
   "kind": "factory",
-  "name": "120-68 \"Koronides\" Field Gun",
-  "name_en": "120-68 \"Koronides\" Field Gun",
+  "name": "120-68 “Koronides” Field Gun",
+  "name_en": "120-68 “Koronides” Field Gun",
   "item_code": "LargeFieldLightArtilleryC",
   "category": "vehicles",
   "item_class": "Field Artillery",
@@ -5020,7 +5020,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FieldArtilleryColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LargeFieldLightArtilleryC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 150
@@ -5043,8 +5043,8 @@
  {
   "id": "factory-hh-a-javelin",
   "kind": "factory",
-  "name": "HH-a \"Javelin\"",
-  "name_en": "HH-a \"Javelin\"",
+  "name": "HH-a “Javelin”",
+  "name_en": "HH-a “Javelin”",
   "item_code": "HalfTrackC",
   "category": "vehicles",
   "item_class": "Half-Track",
@@ -5056,7 +5056,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/HalfTrackColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 165
@@ -5079,8 +5079,8 @@
  {
   "id": "factory-ab-8-acheron",
   "kind": "factory",
-  "name": "AB-8 \"Acheron\"",
-  "name_en": "AB-8 \"Acheron\"",
+  "name": "AB-8 “Acheron”",
+  "name_en": "AB-8 “Acheron”",
   "item_code": "LandingCraftC",
   "category": "vehicles",
   "item_class": "Landing APC",
@@ -5092,7 +5092,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LandingCraftVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/LandingCraftC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 60
@@ -5115,8 +5115,8 @@
  {
   "id": "factory-h5-hatchet",
   "kind": "factory",
-  "name": "H5 \"Hatchet\"",
-  "name_en": "H5 \"Hatchet\"",
+  "name": "H-5 “Hatchet”",
+  "name_en": "H-5 “Hatchet”",
   "item_code": "LightTankC",
   "category": "vehicles",
   "item_class": "Light Tank",
@@ -5128,7 +5128,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightTankColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTankC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 345
@@ -5151,8 +5151,8 @@
  {
   "id": "factory-r-12-salus-ambulance",
   "kind": "factory",
-  "name": "r-12 - \"Salus\" Ambulance",
-  "name_en": "r-12 - \"Salus\" Ambulance",
+  "name": "R-12 - “Salus” Ambulance",
+  "name_en": "R-12 - “Salus” Ambulance",
   "item_code": "AmbulanceC",
   "category": "vehicles",
   "item_class": "Ambulance",
@@ -5164,7 +5164,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Ambulance.webp",
+  "icon_url": "/api/v1/assets/items/AmbulanceC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 450
@@ -5200,7 +5200,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Ambulance.webp",
+  "icon_url": "/api/v1/assets/items/AmbulanceW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 450
@@ -5223,8 +5223,8 @@
  {
   "id": "factory-r-15-chariot",
   "kind": "factory",
-  "name": "R-15 - \"Chariot\"",
-  "name_en": "R-15 - \"Chariot\"",
+  "name": "R-15 - “Chariot”",
+  "name_en": "R-15 - “Chariot”",
   "item_code": "BusC",
   "category": "vehicles",
   "item_class": "Transport Bus",
@@ -5236,7 +5236,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/BusC.webp",
+  "icon_url": "/api/v1/assets/items/BusC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -5259,8 +5259,8 @@
  {
   "id": "factory-dunne-caravaner-2f",
   "kind": "factory",
-  "name": "Dunne Caravaner 2F",
-  "name_en": "Dunne Caravaner 2F",
+  "name": "Dunne Caravaner 2f",
+  "name_en": "Dunne Caravaner 2f",
   "item_code": "BusW",
   "category": "vehicles",
   "item_class": "Transport Bus",
@@ -5272,7 +5272,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/BusWar.webp",
+  "icon_url": "/api/v1/assets/items/BusW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -5309,7 +5309,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/Construction.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -5346,7 +5346,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/CraneVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Crane.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 375
@@ -5383,7 +5383,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FlatbedTruckVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FlatbedTruck.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 90
@@ -5406,8 +5406,8 @@
  {
   "id": "factory-rr-3-stolon-tanker",
   "kind": "factory",
-  "name": "RR-3 \"Stolon\" Tanker.",
-  "name_en": "RR-3 \"Stolon\" Tanker.",
+  "name": "RR-3 “Stolon” Tanker",
+  "name_en": "RR-3 “Stolon” Tanker",
   "item_code": "TruckLiquidC",
   "category": "vehicles",
   "item_class": "Fuel Tanker",
@@ -5419,7 +5419,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/OilTankerC.webp",
+  "icon_url": "/api/v1/assets/items/TruckLiquidC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -5455,7 +5455,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/OilTankerWar.webp",
+  "icon_url": "/api/v1/assets/items/TruckLiquidW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -5478,8 +5478,8 @@
  {
   "id": "factory-86k-a-bardiche",
   "kind": "factory",
-  "name": "86K-a \"Bardiche\"",
-  "name_en": "86K-a \"Bardiche\"",
+  "name": "86K-a “Bardiche”",
+  "name_en": "86K-a “Bardiche”",
   "item_code": "MediumTank2C",
   "category": "vehicles",
   "item_class": "Assault Tank",
@@ -5491,7 +5491,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MediumTank2C.webp",
+  "icon_url": "/api/v1/assets/items/MediumTank2C.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 495
@@ -5514,8 +5514,8 @@
  {
   "id": "factory-90t-v-nemesis",
   "kind": "factory",
-  "name": "90T-v \"Nemesis\"",
-  "name_en": "90T-v \"Nemesis\"",
+  "name": "90T-v “Nemesis”",
+  "name_en": "90T-v “Nemesis”",
   "item_code": "MediumTank3C",
   "category": "vehicles",
   "item_class": "Assault Tank",
@@ -5527,7 +5527,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MediumTank3C.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 450
@@ -5550,8 +5550,8 @@
  {
   "id": "factory-85k-b-falchion",
   "kind": "factory",
-  "name": "85K-b \"Falchion\"",
-  "name_en": "85K-b \"Falchion\"",
+  "name": "85K-b “Falchion”",
+  "name_en": "85K-b “Falchion”",
   "item_code": "MediumTankC",
   "category": "vehicles",
   "item_class": "Assault Tank",
@@ -5563,7 +5563,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ColonialMediumTank.webp",
+  "icon_url": "/api/v1/assets/items/MediumTankC.png",
   "output_quantity": 5,
   "cost": {
    "rmat": 405
@@ -5586,8 +5586,8 @@
  {
   "id": "factory-hc-2-scorpion",
   "kind": "factory",
-  "name": "HC-2 \"Scorpion\"",
-  "name_en": "HC-2 \"Scorpion\"",
+  "name": "HC-2 “Scorpion”",
+  "name_en": "HC-2 “Scorpion”",
   "item_code": "LightTank2InfantryC",
   "category": "vehicles",
   "item_class": "Light Infantry Tank",
@@ -5599,7 +5599,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightTank2InfantryCVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTank2InfantryC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 300
@@ -5622,8 +5622,8 @@
  {
   "id": "factory-03mm-caster",
   "kind": "factory",
-  "name": "03MM \"Caster\"",
-  "name_en": "03MM \"Caster\"",
+  "name": "03MM “Caster”",
+  "name_en": "03MM “Caster”",
   "item_code": "MotorcycleC",
   "category": "vehicles",
   "item_class": "Motorcyle",
@@ -5635,7 +5635,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MotorcycleVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/MotorcycleC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 255
@@ -5671,7 +5671,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MediumTank2W.webp",
+  "icon_url": "/api/v1/assets/items/MediumTank2W.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 450
@@ -5707,7 +5707,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MediumTankW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 480
@@ -5766,8 +5766,8 @@
  {
   "id": "factory-uv-05a-argonaut",
   "kind": "factory",
-  "name": "UV-05a \"Argonaut\"",
-  "name_en": "UV-05a \"Argonaut\"",
+  "name": "UV-05a “Argonaut”",
+  "name_en": "UV-05a “Argonaut”",
   "item_code": "ScoutVehicleMobilityC",
   "category": "vehicles",
   "item_class": "Light Utility Vehicle",
@@ -5779,7 +5779,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ScoutVehicleMobilityVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/ScoutVehicleMobilityC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 30
@@ -5802,8 +5802,8 @@
  {
   "id": "factory-t12-actaeon-tankette",
   "kind": "factory",
-  "name": "T12 \"Actaeon\" Tankette",
-  "name_en": "T12 \"Actaeon\" Tankette",
+  "name": "T12 “Actaeon” Tankette",
+  "name_en": "T12 “Actaeon” Tankette",
   "item_code": "TanketteC",
   "category": "vehicles",
   "item_class": "Armored Car",
@@ -5815,7 +5815,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/TanketteCVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TanketteC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 105
@@ -5851,7 +5851,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ScoutTankW.webp",
+  "icon_url": "/api/v1/assets/items/ScoutTankW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 210
@@ -5924,7 +5924,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ResourceTrailer.webp",
+  "icon_url": "/api/v1/assets/items/TrailerResource.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -5960,7 +5960,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TruckResourceW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 360
@@ -5996,7 +5996,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/TruckWarVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TruckW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -6032,7 +6032,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/TruckVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/TruckC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -6055,8 +6055,8 @@
  {
   "id": "factory-r-5-atlas-hauler",
   "kind": "factory",
-  "name": "R-5 \"Atlas\" Hauler",
-  "name_en": "R-5 \"Atlas\" Hauler",
+  "name": "R-5 “Atlas” Hauler",
+  "name_en": "R-5 “Atlas” Hauler",
   "item_code": "TruckResourceC",
   "category": "vehicles",
   "item_class": "Truck",
@@ -6068,7 +6068,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/TruckUtilityVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/TruckResourceC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 360
@@ -6091,8 +6091,8 @@
  {
   "id": "factory-type-b-lucian",
   "kind": "factory",
-  "name": "Type B - \"Lucian\"",
-  "name_en": "Type B - \"Lucian\"",
+  "name": "Type B - “Lucian”",
+  "name_en": "Type B - “Lucian”",
   "item_code": "Gunboat2C",
   "category": "vehicles",
   "item_class": "Siege Boat",
@@ -6104,7 +6104,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GunBoat2CVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Gunboat2C.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 300
@@ -6127,8 +6127,8 @@
  {
   "id": "factory-type-c-charon",
   "kind": "factory",
-  "name": "Type C - \"Charon\"",
-  "name_en": "Type C - \"Charon\"",
+  "name": "Type C - “Charon”",
+  "name_en": "Type C - “Charon”",
   "item_code": "GunboatC",
   "category": "vehicles",
   "item_class": "Gunboat",
@@ -6140,7 +6140,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GunBoatCHull.webp",
+  "icon_url": "/api/v1/assets/items/GunboatC.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 420
@@ -6176,7 +6176,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Gunboat2W.webp",
+  "icon_url": "/api/v1/assets/items/Gunboat2W.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 300
@@ -6212,7 +6212,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GunboatW.webp",
+  "icon_url": "/api/v1/assets/items/GunboatW.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 420
@@ -6249,7 +6249,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightFreighterVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FreighterLight.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -6272,8 +6272,8 @@
  {
   "id": "factory-k-81e-sombre",
   "kind": "factory",
-  "name": "K-81e \"Sombre\"",
-  "name_en": "K-81e \"Sombre\"",
+  "name": "K-81e “Sombre”",
+  "name_en": "K-81e “Sombre”",
   "item_code": "LightBoatInfantryC",
   "category": "vehicles",
   "item_class": "Infantry Boat",
@@ -6285,7 +6285,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightBoatInfantryC.webp",
+  "icon_url": "/api/v1/assets/items/LightBoatInfantryC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 600
@@ -6321,7 +6321,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightBoatInfantryWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightBoatInfantryW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 750
@@ -6358,7 +6358,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/BargeVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Barge.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 450
@@ -6395,7 +6395,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Freighter02Item.webp",
+  "icon_url": "/api/v1/assets/items/Freighter.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 1500
@@ -6431,7 +6431,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MediumBoatC.webp",
+  "icon_url": "/api/v1/assets/items/MediumBoatC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 1500
@@ -6467,7 +6467,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MediumBoatWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/MediumBoatW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 1350
@@ -6504,7 +6504,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/Mineboat.webp",
+  "icon_url": "/api/v1/assets/items/MineBoat.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 450
@@ -6541,7 +6541,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ArmourUniformC.webp",
+  "icon_url": "/api/v1/assets/items/ArmourUniformC.png",
   "output_quantity": 10,
   "cost": {
    "bmat": 200
@@ -6578,7 +6578,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/EngineerUniformC.webp",
+  "icon_url": "/api/v1/assets/items/EngineerUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6615,7 +6615,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/GrenadeUniformC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6652,7 +6652,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MedicUniformC.webp",
+  "icon_url": "/api/v1/assets/items/MedicUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6689,7 +6689,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/NavalUniformC.webp",
+  "icon_url": "/api/v1/assets/items/NavalUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6726,7 +6726,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/OfficerUniformC.webp",
+  "icon_url": "/api/v1/assets/items/OfficerUniformC.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 100
@@ -6763,7 +6763,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RainUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6800,7 +6800,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ScoutUniformC.webp",
+  "icon_url": "/api/v1/assets/items/ScoutUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6837,7 +6837,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/SnowUniformC.webp",
+  "icon_url": "/api/v1/assets/items/SnowUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6874,7 +6874,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/TankUniformC.webp",
+  "icon_url": "/api/v1/assets/items/TankUniformC.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6911,7 +6911,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AmmoUniformW.webp",
+  "icon_url": "/api/v1/assets/items/AmmoUniformW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -6948,7 +6948,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ArmourUniformW.webp",
+  "icon_url": "/api/v1/assets/items/ArmourUniformW.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 150
@@ -6985,7 +6985,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/EngineerUniformW.webp",
+  "icon_url": "/api/v1/assets/items/EngineerUniformW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -7022,7 +7022,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MedicUniformW.webp",
+  "icon_url": "/api/v1/assets/items/MedicUniformW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -7059,7 +7059,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/NavalUniformW.webp",
+  "icon_url": "/api/v1/assets/items/NavalUniformW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -7096,7 +7096,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/OfficerUniformW.webp",
+  "icon_url": "/api/v1/assets/items/OfficerUniformW.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 100
@@ -7133,7 +7133,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/ScoutUniformW.webp",
+  "icon_url": "/api/v1/assets/items/ScoutUniformW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -7170,7 +7170,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SnowUniformW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -7207,7 +7207,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/TankUniformW.webp",
+  "icon_url": "/api/v1/assets/items/TankUniformW.png",
   "output_quantity": 15,
   "cost": {
    "bmat": 100
@@ -7230,7 +7230,7 @@
  {
   "id": "refinery-bmat",
   "kind": "refinery",
-  "name": "Базовые материалы",
+  "name": "Basic Materials",
   "name_en": "Basic Materials",
   "item_code": null,
   "category": "materials",
@@ -7260,7 +7260,7 @@
  {
   "id": "refinery-emat",
   "kind": "refinery",
-  "name": "Порох",
+  "name": "Explosive Powder",
   "name_en": "Explosive Powder",
   "item_code": null,
   "category": "materials",
@@ -7290,7 +7290,7 @@
  {
   "id": "refinery-rmat",
   "kind": "refinery",
-  "name": "Рафинированные материалы",
+  "name": "Refined Materials",
   "name_en": "Refined Materials",
   "item_code": null,
   "category": "materials",
@@ -7320,7 +7320,7 @@
  {
   "id": "refinery-hemat",
   "kind": "refinery",
-  "name": "Тяжёлый порох",
+  "name": "Heavy Explosive Powder",
   "name_en": "Heavy Explosive Powder",
   "item_code": null,
   "category": "materials",
@@ -7350,7 +7350,7 @@
  {
   "id": "refinery-diesel",
   "kind": "refinery",
-  "name": "Дизель",
+  "name": "Diesel",
   "name_en": "Diesel",
   "item_code": null,
   "category": "fuel",
@@ -7380,7 +7380,7 @@
  {
   "id": "refinery-gravel-coal",
   "kind": "refinery",
-  "name": "Гравий (из угля)",
+  "name": "Gravel",
   "name_en": "Gravel",
   "item_code": null,
   "category": "construction",
@@ -7410,7 +7410,7 @@
  {
   "id": "refinery-gravel-salvage",
   "kind": "refinery",
-  "name": "Гравий (из металлолома)",
+  "name": "Gravel",
   "name_en": "Gravel",
   "item_code": null,
   "category": "construction",
@@ -7440,7 +7440,7 @@
  {
   "id": "refinery-alloy-aluminum",
   "kind": "refinery",
-  "name": "Алюминиевый сплав",
+  "name": "Aluminum Alloy",
   "name_en": "Aluminum Alloy",
   "item_code": null,
   "category": "alloys",
@@ -7470,7 +7470,7 @@
  {
   "id": "refinery-alloy-copper",
   "kind": "refinery",
-  "name": "Медный сплав",
+  "name": "Copper Alloy",
   "name_en": "Copper Alloy",
   "item_code": null,
   "category": "alloys",
@@ -7500,7 +7500,7 @@
  {
   "id": "refinery-alloy-iron",
   "kind": "refinery",
-  "name": "Железный сплав",
+  "name": "Iron Alloy",
   "name_en": "Iron Alloy",
   "item_code": null,
   "category": "alloys",
@@ -7530,7 +7530,7 @@
  {
   "id": "factory-950-70b-anti-aircraft-shell",
   "kind": "factory",
-  "name": "Зенитный снаряд 950-70b",
+  "name": "950-70b Anti-Aircraft Shell",
   "name_en": "950-70b Anti-Aircraft Shell",
   "item_code": "AAAmmo",
   "category": "heavy_ammunition",
@@ -7545,7 +7545,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/AAAmmo.webp",
+  "icon_url": "/api/v1/assets/items/AAAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 100,
@@ -7570,7 +7570,7 @@
  {
   "id": "factory-absol-anti-aircraft-rounds",
   "kind": "factory",
-  "name": "Зенитный снаряд “Absol”",
+  "name": "Absol Anti-Aircraft Rounds",
   "name_en": "Absol Anti-Aircraft Rounds",
   "item_code": "LightAAAmmo",
   "category": "heavy_ammunition",
@@ -7585,7 +7585,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightAAAmmo.webp",
+  "icon_url": "/api/v1/assets/items/LightAAAmmo.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 150,
@@ -7610,7 +7610,7 @@
  {
   "id": "factory-naval-buoy",
   "kind": "factory",
-  "name": "Naval buoy",
+  "name": "Naval Buoy",
   "name_en": "Naval Buoy",
   "item_code": "WaterWallMaterials",
   "category": "heavy_ammunition",
@@ -7625,7 +7625,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/WaterWall.webp",
+  "icon_url": "/api/v1/assets/items/WaterWallMaterials.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 150
@@ -7648,7 +7648,7 @@
  {
   "id": "factory-rooster-lamploader",
   "kind": "factory",
-  "name": "Жидкостный прицеп",
+  "name": "Rooster - Lamploader",
   "name_en": "Rooster - Lamploader",
   "item_code": "TrailerLiquid",
   "category": "vehicles",
@@ -7662,7 +7662,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/FuelTrailer.webp",
+  "icon_url": "/api/v1/assets/items/TrailerLiquid.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -7685,7 +7685,7 @@
  {
   "id": "factory-rooster-tumblebox",
   "kind": "factory",
-  "name": "Строительный прицеп",
+  "name": "Rooster - Tumblebox",
   "name_en": "Rooster - Tumblebox",
   "item_code": "TrailerMaterial",
   "category": "vehicles",
@@ -7699,7 +7699,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/MaterialTrailer.webp",
+  "icon_url": "/api/v1/assets/items/TrailerMaterial.png",
   "output_quantity": 3,
   "cost": {
    "bmat": 300
@@ -7735,7 +7735,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightTank3WVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTank3W.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 375
@@ -7771,7 +7771,7 @@
   "facilities": [
    "mpf"
   ],
-  "icon_url": "/api/v1/assets/items/LightTank3CVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTank3C.png",
   "output_quantity": 3,
   "cost": {
    "rmat": 375

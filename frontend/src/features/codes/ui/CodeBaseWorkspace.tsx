@@ -8,14 +8,14 @@ import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, useNoti
 const FACTIONS: Record<string, MessageKey> = { colonial: "codes.faction.colonial", warden: "codes.faction.warden", neutral: "codes.faction.neutral" };
 
 function toJson(entries: FoxholeItem[]): string {
-  return JSON.stringify(entries.map((e) => ({ code: e.code, nameEn: e.englishName, nameRu: e.name, icon: e.iconUrl })), null, 2);
+  return JSON.stringify(entries.map((e) => ({ code: e.code, name: e.englishName, aliases: e.aliases, icon: e.iconUrl })), null, 2);
 }
 
 function toCsv(entries: FoxholeItem[], t: Translate): string {
   const esc = (v: string | null) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   return [
     [t("codes.col.code"), "English name", t("codes.col.ru"), t("codes.col.category"), t("codes.col.faction"), t("codes.col.icon")].map(esc).join(","),
-    ...entries.map((e) => [e.code, e.englishName, e.name, e.category, e.faction, e.iconUrl].map(esc).join(",")),
+    ...entries.map((e) => [e.code, e.englishName, e.aliases.join("; "), e.category, e.faction, e.iconUrl].map(esc).join(",")),
   ].join("\n");
 }
 
@@ -170,7 +170,7 @@ export const CodeBaseWorkspace: React.FC = () => {
                     <td className="px-4 py-1.5"><ItemIcon sources={[assetUrl(e.iconUrl)]} size={30} label={e.name} /></td>
                     <td className="px-3 py-2 font-mono font-bold text-accent">{e.code}</td>
                     <td className="max-w-[280px] px-3 py-2 text-white/85">{e.englishName}</td>
-                    <td className="max-w-[280px] px-3 py-2 text-white">{e.name}</td>
+                    <td className="max-w-[280px] px-3 py-2 text-white/70">{e.aliases.join(" • ") || "—"}</td>
                     <td className="px-3 py-2"><span className="chip cursor-default">{label("catalog_category", e.category)}</span></td>
                     <td className="px-3 py-2 text-white/70">{FACTIONS[e.faction] ? t(FACTIONS[e.faction]) : e.faction}</td>
                     <td className="px-4 py-2">{e.needsReview ? <span className="text-warn">⚠ {t("codes.review")}</span> : <span className="text-safe">● {t("codes.reference")}</span>}</td>

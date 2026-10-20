@@ -1,0 +1,56 @@
+name: Sync items with Foxhole Wiki
+
+# Раз в неделю (и по кнопке) подтягивает с foxhole.wiki.gg английские названия, иконки,
+# новые предметы и таблицы MPF, коммитит изменения в main — Render передеплоит сайт,
+# а сид обновит catalog_items и production_recipes.
+on:
+  schedule:
+    - cron: "17 5 * * 1"   # понедельник, 05:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wiki-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Items, vehicles, icons
+        run: |
+          python scripts/wiki_items_fetch.py
+          python scripts/wiki_items_apply.py
+
+      - name: MPF tables
+        run: |
+          curl -fsS -A "SindarisTerminalBot/1.0" -o /tmp/mpf.json \
+            "https://foxhole.wiki.gg/api.php?action=parse&page=Mass_Production_Factory&prop=text&format=json&formatversion=2"
+          python scripts/mpf_wiki_parse.py /tmp/mpf.json scripts/mpf_wiki_snapshot.json
+          python scripts/mpf_wiki_apply.py scripts/mpf_wiki_snapshot.json app/seed/data/recipes.json app/seed/data/catalog.json
+
+      - name: Validate seed JSON
+        run: python -c "import json,pathlib; [json.loads(p.read_text(encoding='utf-8')) for p in pathlib.Path('app/seed/data').glob('*.json')]"
+
+      - name: Commit changes
+        run: |
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "No changes on the wiki"; exit 0
+          fi
+          git config user.name "sindaris-wiki-sync"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A app/seed/data static/items scripts
+          git commit -m "chore(data): sync items with foxhole.wiki.gg"
+          git push origin HEAD:main

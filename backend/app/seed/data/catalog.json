@@ -1,14 +1,16 @@
 [
  {
   "code": "AAAmmo",
-  "name": "Зенитный снаряд 950-70b",
+  "name": "950-70b Anti-Aircraft Shell",
   "english_name": "950-70b Anti-Aircraft Shell",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AAAmmo.webp",
+  "icon_url": "/api/v1/assets/items/AAAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Зенитный снаряд 950-70b"
+  ],
   "needs_review": false
  },
  {
@@ -18,22 +20,23 @@
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/Anti-Air_Gun.jpg",
+  "icon_url": "/api/v1/assets/items/AAGunAI.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "AircraftAmmo",
-  "name": "20мм",
+  "name": "20mm",
   "english_name": "20mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AircraftAmmo.webp",
+  "icon_url": "/api/v1/assets/items/AircraftAmmo.png",
   "crate_size": 5,
   "aliases": [
-   "20мм (зенитные) патроны"
+   "20мм (зенитные) патроны",
+   "20мм"
   ],
   "needs_review": false
  },
@@ -44,7 +47,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftBomberC.webp",
+  "icon_url": "/api/v1/assets/items/AircraftBomberC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -56,7 +59,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftBomberW.webp",
+  "icon_url": "/api/v1/assets/items/AircraftBomberW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -80,7 +83,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftDiveC.webp",
+  "icon_url": "/api/v1/assets/items/AircraftDiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -92,7 +95,7 @@
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/AircraftFactory.webp",
+  "icon_url": "/api/v1/assets/items/AircraftFactory.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -104,7 +107,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftFigtherC.webp",
+  "icon_url": "/api/v1/assets/items/AircraftFighterC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -116,7 +119,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftFighterWIcon.webp",
+  "icon_url": "/api/v1/assets/items/AircraftFighterW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -128,7 +131,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftParatrooperCIcon.webp",
+  "icon_url": "/api/v1/assets/items/AircraftParatrooperC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -140,7 +143,199 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftParatrooperWIcon.webp",
+  "icon_url": "/api/v1/assets/items/AircraftParatrooperW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeEngineC",
+  "name": "Colonial Aircraft Engine (Large)",
+  "english_name": "Colonial Aircraft Engine (Large)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeEngineC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeEngineW",
+  "name": "Warden Aircraft Engine (Large)",
+  "english_name": "Warden Aircraft Engine (Large)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeEngineW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeEngineWreckedC",
+  "name": "Damaged Colonial Aircraft Engine (Large)",
+  "english_name": "Damaged Colonial Aircraft Engine (Large)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeEngineWreckedC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeEngineWreckedW",
+  "name": "Damaged Warden Aircraft Engine (Large)",
+  "english_name": "Damaged Warden Aircraft Engine (Large)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeEngineWreckedW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeMechanicalC",
+  "name": "Colonial Aircraft Mechanical Parts (Large)",
+  "english_name": "Colonial Aircraft Mechanical Parts (Large)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeMechanicalC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeMechanicalW",
+  "name": "Warden Aircraft Mechanical Parts (Large)",
+  "english_name": "Warden Aircraft Mechanical Parts (Large)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeMechanicalW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeMechanicalWreckedC",
+  "name": "Damaged Colonial Aircraft Mechanical Parts (Large)",
+  "english_name": "Damaged Colonial Aircraft Mechanical Parts (Large)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeMechanicalWreckedC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartLargeMechanicalWreckedW",
+  "name": "Damaged Warden Aircraft Mechanical Parts (Large)",
+  "english_name": "Damaged Warden Aircraft Mechanical Parts (Large)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartLargeMechanicalWreckedW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallEngineC",
+  "name": "Colonial Aircraft Engine (Small)",
+  "english_name": "Colonial Aircraft Engine (Small)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallEngineC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallEngineW",
+  "name": "Warden Aircraft Engine (Small)",
+  "english_name": "Warden Aircraft Engine (Small)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallEngineW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallEngineWreckedC",
+  "name": "Damaged Colonial Aircraft Engine (Small)",
+  "english_name": "Damaged Colonial Aircraft Engine (Small)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallEngineWreckedC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallEngineWreckedW",
+  "name": "Damaged Warden Aircraft Engine (Small)",
+  "english_name": "Damaged Warden Aircraft Engine (Small)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallEngineWreckedW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallMechanicalC",
+  "name": "Colonial Aircraft Mechanical Parts (Small)",
+  "english_name": "Colonial Aircraft Mechanical Parts (Small)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallMechanicalC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallMechanicalW",
+  "name": "Warden Aircraft Mechanical Parts (Small)",
+  "english_name": "Warden Aircraft Mechanical Parts (Small)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallMechanicalW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallMechanicalWreckedC",
+  "name": "Damaged Colonial Aircraft Mechanical Parts (Small)",
+  "english_name": "Damaged Colonial Aircraft Mechanical Parts (Small)",
+  "category": "other",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallMechanicalWreckedC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftPartSmallMechanicalWreckedW",
+  "name": "Damaged Warden Aircraft Mechanical Parts (Small)",
+  "english_name": "Damaged Warden Aircraft Mechanical Parts (Small)",
+  "category": "other",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/AircraftPartSmallMechanicalWreckedW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -152,7 +347,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftScout2CIcon.webp",
+  "icon_url": "/api/v1/assets/items/AircraftScout2C.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -164,10 +359,10 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/AircraftScout2W.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "AircraftScoutC",
@@ -176,7 +371,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftScoutCIcon.webp",
+  "icon_url": "/api/v1/assets/items/AircraftScoutC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -188,7 +383,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftScoutWIcon.webp",
+  "icon_url": "/api/v1/assets/items/AircraftScoutW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -200,7 +395,7 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AircraftTorpedoAmmo.webp",
+  "icon_url": "/api/v1/assets/items/AircraftTorpedoAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -212,7 +407,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AircraftTorpedoWIcon.webp",
+  "icon_url": "/api/v1/assets/items/AircraftTorpedoW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -224,10 +419,10 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/AircraftWaterW.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "AirSirenT",
@@ -236,7 +431,7 @@
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AirSirenT.webp",
+  "icon_url": "/api/v1/assets/items/AirSirenT.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -248,22 +443,24 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ResouceAluminumIcon.png",
+  "icon_url": "/api/v1/assets/items/Aluminum.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "AluminumA",
-  "name": "Алюминий",
+  "name": "Aluminum Alloy",
   "english_name": "Aluminum Alloy",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/AluminumA.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Алюминий"
+  ],
+  "needs_review": false
  },
  {
   "code": "AmbulanceC",
@@ -272,7 +469,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/Ambulance.webp",
+  "icon_url": "/api/v1/assets/items/AmbulanceC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -284,57 +481,65 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AmbulanceFlameC.webp",
+  "icon_url": "/api/v1/assets/items/AmbulanceFlameC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "AmbulanceFlameW",
-  "name": "пожарная машина",
+  "name": "Dunne Dousing Engine 3r",
   "english_name": "Dunne Dousing Engine 3r",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AmbulanceFlameW.webp",
+  "icon_url": "/api/v1/assets/items/AmbulanceFlameW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "пожарная машина"
+  ],
   "needs_review": false
  },
  {
   "code": "AmbulanceW",
-  "name": "скорая помощь",
+  "name": "Dunne Responder 3e",
   "english_name": "Dunne Responder 3e",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/Ambulance.webp",
+  "icon_url": "/api/v1/assets/items/AmbulanceW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "скорая помощь"
+  ],
   "needs_review": false
  },
  {
   "code": "AmmoUniformW",
-  "name": "шинель специалиста",
+  "name": "Specialist's Overcoat",
   "english_name": "Specialist's Overcoat",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AmmoUniformW.webp",
+  "icon_url": "/api/v1/assets/items/AmmoUniformW.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "шинель специалиста"
+  ],
   "needs_review": false
  },
  {
   "code": "ArmoredCar2LargeW",
-  "name": "бронированная дюна",
+  "name": "O'Brien V.101 Freeman",
   "english_name": "O'Brien V.101 Freeman",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarOffensiveWVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCar2LargeW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "бронированная дюна"
+  ],
   "needs_review": false
  },
  {
@@ -344,19 +549,19 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCar2MultiW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCar2MultiW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ArmoredCar2TwinW",
-  "name": "O'Brien V.101 Freeman / Twin AC",
+  "name": "O'Brien V.190 Knave",
   "english_name": "O'Brien V.190 Knave",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarTwinW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCar2TwinW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -368,10 +573,10 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/ArmoredCarATW.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "ArmoredCarC",
@@ -380,33 +585,37 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ArmoredCarFlameW",
-  "name": "Бронеавтомобиль с огнемётом",
+  "name": "O'Brien V.130 Wild Jack",
   "english_name": "O'Brien V.130 Wild Jack",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarFlameWarVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarFlameW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Бронеавтомобиль с огнемётом"
+  ],
   "needs_review": false
  },
  {
   "code": "ArmoredCarMobilityW",
-  "name": "Мобильная бронемашина",
+  "name": "O'Brien V.121 Highlander",
   "english_name": "O'Brien V.121 Highlander",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarMobilityWarVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarMobilityW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Мобильная бронемашина"
+  ],
   "needs_review": false
  },
  {
@@ -416,7 +625,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarOffensiveCVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -428,19 +637,19 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarTwinC.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarTwinC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ArmoredCarW",
-  "name": "O",
+  "name": "O'Brien V.110",
   "english_name": "O'Brien V.110",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ArmoredCarWarVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/ArmoredCarW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -452,34 +661,37 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ArmourUniformC.webp",
+  "icon_url": "/api/v1/assets/items/ArmourUniformC.png",
   "crate_size": 10,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ArmourUniformW",
-  "name": "Стальная кираса",
+  "name": "Gunner's Breastplate",
   "english_name": "Gunner's Breastplate",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ArmourUniformW.webp",
+  "icon_url": "/api/v1/assets/items/ArmourUniformW.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Стальная кираса"
+  ],
   "needs_review": false
  },
  {
   "code": "AssaultRifleAmmo",
-  "name": "7.92-мм",
+  "name": "7.92mm",
   "english_name": "7.92mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AssaultRifleAmmo.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleAmmo.png",
   "crate_size": 30,
   "aliases": [
-   "7.92 мм"
+   "7.92 мм",
+   "7.92-мм"
   ],
   "needs_review": false
  },
@@ -490,7 +702,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/LightMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleC.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
@@ -502,7 +714,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyC.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
@@ -514,7 +726,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyWItem.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleHeavyW.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
@@ -526,45 +738,51 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AssaultRifleItem.webp",
+  "icon_url": "/api/v1/assets/items/AssaultRifleW.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ATAmmo",
-  "name": "68-мм",
+  "name": "68mm",
   "english_name": "68mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATAmmo.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "68-мм"
+  ],
   "needs_review": false
  },
  {
   "code": "ATGrenadeW",
-  "name": "Граната BF5 White Ash Flask",
+  "name": "BF5 White Ash Flask Grenade",
   "english_name": "BF5 White Ash Flask Grenade",
   "category": "ammo",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATGrenadeW.webp",
+  "icon_url": "/api/v1/assets/items/ATGrenadeW.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "Граната BF5 White Ash Flask"
+  ],
   "needs_review": false
  },
  {
   "code": "ATLargeAmmo",
-  "name": "94.5мм снаряды",
+  "name": "94.5mm",
   "english_name": "94.5mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATLargeAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATLargeAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "94.5мм снаряды"
+  ],
   "needs_review": false
  },
  {
@@ -574,21 +792,23 @@
   "category": "ammo",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATLaunchedGrenadeW.webp",
+  "icon_url": "/api/v1/assets/items/ATLaunchedGrenadeW.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ATRifleAmmo",
-  "name": "14.5 мм",
+  "name": "14.5mm",
   "english_name": "14.5mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRifleAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleAmmo.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "14.5 мм"
+  ],
   "needs_review": false
  },
  {
@@ -598,7 +818,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRifleAssaultWtga.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleAssaultW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -610,7 +830,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRifleAutomaticW.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleAutomaticW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -622,7 +842,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRifleLightC.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleLightC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -634,7 +854,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRifleSniperCtga.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleSniperC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -646,33 +866,37 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRifleTC.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleTC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ATRifleW",
-  "name": "противотанковое ружье 20мм",
+  "name": "Neville Anti-Tank Rifle",
   "english_name": "Neville Anti-Tank Rifle",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRifle.webp",
+  "icon_url": "/api/v1/assets/items/ATRifleW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "противотанковое ружье 20мм"
+  ],
   "needs_review": false
  },
  {
   "code": "ATRPGAmmo",
-  "name": "АРПГ Снаряды",
+  "name": "AP⧸RPG",
   "english_name": "AP⧸RPG",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRpgAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGAmmo.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "АРПГ Снаряды"
+  ],
   "needs_review": false
  },
  {
@@ -682,7 +906,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRpgC.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -694,8 +918,20 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRpgC.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGHeavyC.png",
   "crate_size": 5,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "ATRPGHeavyW",
+  "name": "Carnyx Anti-Tank Rocket Launcher",
+  "english_name": "Carnyx Anti-Tank Rocket Launcher",
+  "category": "weapons",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/ATRPGHeavyW.png",
+  "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
@@ -706,7 +942,7 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATMortarAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGIndirectAmmo.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
@@ -718,7 +954,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRPGLightC.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGLightC.png",
   "crate_size": 10,
   "aliases": [],
   "needs_review": false
@@ -730,32 +966,48 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRPGTW.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGTW.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ATRPGW",
-  "name": "Противотанковый РПГ (станковый)",
+  "name": "Bonesaw MK.3",
   "english_name": "Bonesaw MK.3",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ATRPGTW.webp",
+  "icon_url": "/api/v1/assets/items/ATRPGW.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Противотанковый РПГ (станковый)"
+  ],
   "needs_review": false
  },
  {
   "code": "Bandages",
-  "name": "бинт",
+  "name": "Bandages",
   "english_name": "Bandages",
   "category": "medical",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Bandages.webp",
+  "icon_url": "/api/v1/assets/items/Bandages.png",
   "crate_size": 50,
+  "aliases": [
+   "бинт"
+  ],
+  "needs_review": false
+ },
+ {
+  "code": "BannerTC",
+  "name": "Legion Vexillum",
+  "english_name": "Legion Vexillum",
+  "category": "equipment",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/BannerTC.png",
+  "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
@@ -766,33 +1018,37 @@
   "category": "equipment",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/BannerTWItemIcon.webp",
+  "icon_url": "/api/v1/assets/items/BannerTW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "BarbedWireMaterials",
-  "name": "колючая проволока",
+  "name": "Barbed Wire",
   "english_name": "Barbed Wire",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/BarbedWireMaterial.webp",
+  "icon_url": "/api/v1/assets/items/BarbedWireMaterials.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "колючая проволока"
+  ],
   "needs_review": false
  },
  {
   "code": "Barge",
-  "name": "баржа",
+  "name": "BMS - Aquatipper",
   "english_name": "BMS - Aquatipper",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BargeVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Barge.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "баржа"
+  ],
   "needs_review": false
  },
  {
@@ -802,7 +1058,7 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/BattleTankAmmo.webp",
+  "icon_url": "/api/v1/assets/items/BattleTankAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -814,7 +1070,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BattleTankATC.webp",
+  "icon_url": "/api/v1/assets/items/BattleTankATC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -826,7 +1082,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BattleTankC.webp",
+  "icon_url": "/api/v1/assets/items/BattleTankC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -838,7 +1094,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BattleTankWarDefensiveVehicle.webp",
+  "icon_url": "/api/v1/assets/items/BattleTankDefensiveW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -850,7 +1106,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BattleTankHeavyArtilleryC.webp",
+  "icon_url": "/api/v1/assets/items/BattleTankHeavyArtilleryC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -862,7 +1118,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BattleTankHeavyArtilleryW.webp",
+  "icon_url": "/api/v1/assets/items/BattleTankHeavyArtilleryW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -874,21 +1130,23 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BattleTankWar.webp",
+  "icon_url": "/api/v1/assets/items/BattleTankW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "Bayonet",
-  "name": "штык-нож",
+  "name": "Buckhorn CCQ-18",
   "english_name": "Buckhorn CCQ-18",
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Bayonet.webp",
+  "icon_url": "/api/v1/assets/items/Bayonet.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "штык-нож"
+  ],
   "needs_review": false
  },
  {
@@ -898,33 +1156,37 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/RelicBicycleVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Bicycle.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "Binoculars",
-  "name": "бинокль",
+  "name": "Binoculars",
   "english_name": "Binoculars",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Binoculars.webp",
+  "icon_url": "/api/v1/assets/items/Binoculars.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "бинокль"
+  ],
   "needs_review": false
  },
  {
   "code": "BloodPlasma",
-  "name": "Плазма",
+  "name": "Blood Plasma",
   "english_name": "Blood Plasma",
   "category": "medical",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/BloodPlasma.webp",
+  "icon_url": "/api/v1/assets/items/BloodPlasma.png",
   "crate_size": 50,
-  "aliases": [],
+  "aliases": [
+   "Плазма"
+  ],
   "needs_review": false
  },
  {
@@ -934,10 +1196,10 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/BomberAmmo.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "BusC",
@@ -946,34 +1208,37 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BusC.webp",
+  "icon_url": "/api/v1/assets/items/BusC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "BusW",
-  "name": "автобус",
+  "name": "Dunne Caravaner 2f",
   "english_name": "Dunne Caravaner 2f",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/BusWar.webp",
+  "icon_url": "/api/v1/assets/items/BusW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "автобус"
+  ],
   "needs_review": false
  },
  {
   "code": "Cloth",
-  "name": "Базовые материалы",
+  "name": "Basic Materials",
   "english_name": "Basic Materials",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Cloth.webp",
+  "icon_url": "/api/v1/assets/items/Cloth.png",
   "crate_size": 1,
   "aliases": [
-   "биматы"
+   "биматы",
+   "Базовые материалы"
   ],
   "needs_review": false
  },
@@ -984,21 +1249,23 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/CoalIcon.webp",
+  "icon_url": "/api/v1/assets/items/Coal.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "Components",
-  "name": "Компоненты",
+  "name": "Components",
   "english_name": "Components",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ComponentsIcon.webp",
+  "icon_url": "/api/v1/assets/items/Components.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Компоненты"
+  ],
   "needs_review": false
  },
  {
@@ -1008,57 +1275,65 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ConcreteBag.webp",
+  "icon_url": "/api/v1/assets/items/Concrete.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ConcreteMixer",
-  "name": "Бетономешалка",
-  "english_name": "Бетономешалка",
+  "name": "Concrete Mixer",
+  "english_name": "Concrete Mixer",
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/ConcreteMixerIcon.png",
+  "icon_url": "/api/v1/assets/items/ConcreteMixer.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Бетономешалка"
+  ],
+  "needs_review": false
  },
  {
   "code": "Construction",
-  "name": "CV (тир 1)",
+  "name": "BMS - Universal Assembly Rig",
   "english_name": "BMS - Universal Assembly Rig",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ConstructionVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Construction.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "CV (тир 1)"
+  ],
   "needs_review": false
  },
  {
   "code": "ConstructionEquipment",
-  "name": "Строительное оборудование",
-  "english_name": "Строительное оборудование",
+  "name": "Construction Equipment",
+  "english_name": "Construction Equipment",
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/ConstructionEquipment.webp",
+  "icon_url": "/api/v1/assets/items/ConstructionEquipment.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Строительное оборудование"
+  ],
+  "needs_review": false
  },
  {
   "code": "ConstructionUtility",
-  "name": "Строительная техника",
+  "name": "BMS - Fabricator",
   "english_name": "BMS - Fabricator",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/AdvancedConstructionVehicle.webp",
+  "icon_url": "/api/v1/assets/items/ConstructionUtility.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Строительная техника"
+  ],
   "needs_review": false
  },
  {
@@ -1068,34 +1343,37 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ResourceCopperRefined.png",
+  "icon_url": "/api/v1/assets/items/Copper.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "CopperA",
-  "name": "Медь",
+  "name": "Copper Alloy",
   "english_name": "Copper Alloy",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/CopperA.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Медь"
+  ],
+  "needs_review": false
  },
  {
   "code": "Crane",
-  "name": "Мобильный автокран БМС 2 класса",
+  "name": "BMS - Class 2 Mobile Auto-Crane",
   "english_name": "BMS - Class 2 Mobile Auto-Crane",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/CraneVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Crane.png",
   "crate_size": 3,
   "aliases": [
-   "мобильный кран"
+   "мобильный кран",
+   "Мобильный автокран БМС 2 класса"
   ],
   "needs_review": false
  },
@@ -1106,10 +1384,10 @@
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/Crate.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "CriticalSoldier",
@@ -1118,21 +1396,23 @@
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/CriticallyWounded.webp",
+  "icon_url": "/api/v1/assets/items/CriticalSoldier.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "DemolitionRocketAmmo",
-  "name": "Разрушающая ракета",
+  "name": "Shatter Missile",
   "english_name": "Shatter Missile",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/DemolitionRocketAmmo.webp",
+  "icon_url": "/api/v1/assets/items/DemolitionRocketAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Разрушающая ракета"
+  ],
   "needs_review": false
  },
  {
@@ -1142,7 +1422,7 @@
   "category": "structures",
   "faction": "colonial",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/ATRifleTC.webp",
+  "icon_url": "/api/v1/assets/items/DeployedATRifleTC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1154,7 +1434,7 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/DepthCharge.webp",
+  "icon_url": "/api/v1/assets/items/DepthChargeAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1166,7 +1446,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/DestroyerTankFlameW.webp",
+  "icon_url": "/api/v1/assets/items/DestroyerTankFlameW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1178,21 +1458,23 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/DestroyerTankWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/DestroyerTankW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "Diesel",
-  "name": "Дизель",
+  "name": "Diesel",
   "english_name": "Diesel",
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ResourceFuel.webp",
+  "icon_url": "/api/v1/assets/items/Diesel.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Дизель"
+  ],
   "needs_review": false
  },
  {
@@ -1202,22 +1484,22 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/DiveBomberAmmo.webp",
+  "icon_url": "/api/v1/assets/items/DiveBomberAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "EmplacedAircraftC",
-  "name": "DAE 5b Zeal",
+  "name": "DAE 5b “Zeal”",
   "english_name": "DAE 5b “Zeal”",
   "category": "structures",
   "faction": "colonial",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedAircraftC.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "EmplacedAircraftW",
@@ -1226,58 +1508,60 @@
   "category": "structures",
   "faction": "warden",
   "origin": "structure",
-  "icon_url": null,
-  "crate_size": 3,
-  "aliases": [],
-  "needs_review": true
- },
- {
-  "code": "EmplacedATLargeW",
-  "name": "Huber Starbreaker 94.5",
-  "english_name": "Huber Starbreaker 94.5mm",
-  "category": "structures",
-  "faction": "warden",
-  "origin": "structure",
-  "icon_url": null,
-  "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
- },
- {
-  "code": "EmplacedATW",
-  "name": "Leary Shellbore 68-мм",
-  "english_name": "Leary Shellbore 68mm",
-  "category": "structures",
-  "faction": "warden",
-  "origin": "structure",
-  "icon_url": "/api/v1/assets/items/EmplacedAT.webp",
+  "icon_url": "/api/v1/assets/items/EmplacedAircraftW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
+  "code": "EmplacedATLargeW",
+  "name": "Huber Starbreaker 94.5mm",
+  "english_name": "Huber Starbreaker 94.5mm",
+  "category": "structures",
+  "faction": "warden",
+  "origin": "structure",
+  "icon_url": "/api/v1/assets/items/EmplacedATLargeW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "EmplacedATW",
+  "name": "Leary Shellbore 68mm",
+  "english_name": "Leary Shellbore 68mm",
+  "category": "structures",
+  "faction": "warden",
+  "origin": "structure",
+  "icon_url": "/api/v1/assets/items/EmplacedATW.png",
+  "crate_size": 3,
+  "aliases": [
+   "Leary Shellbore 68-мм"
+  ],
+  "needs_review": false
+ },
+ {
   "code": "EmplacedCannonLargeC",
-  "name": "DAE 2a-1 Ruptura",
+  "name": "DAE 2a-1 “Ruptura”",
   "english_name": "DAE 2a-1 “Ruptura”",
   "category": "structures",
   "faction": "colonial",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedCannonLargeC.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "EmplacedHeavyArtilleryC",
-  "name": "50-500 Thunderbolt Cannon",
+  "name": "50-500 “Thunderbolt” Cannon",
   "english_name": "50-500 “Thunderbolt” Cannon",
   "category": "structures",
   "faction": "colonial",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedHeavyArtilleryC.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "EmplacedHeavyArtilleryW",
@@ -1286,34 +1570,34 @@
   "category": "structures",
   "faction": "warden",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedHeavyArtilleryW.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "EmplacedIndirectC",
-  "name": "DAE 1o-3 Polybolos",
+  "name": "DAE 1o-3 “Polybolos”",
   "english_name": "DAE 1o-3 “Polybolos”",
   "category": "structures",
   "faction": "colonial",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedIndirectC.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "EmplacedInfantryC",
-  "name": "DAE 1b-2 Serra",
+  "name": "DAE 1b-2 “Serra”",
   "english_name": "DAE 1b-2 “Serra”",
   "category": "structures",
   "faction": "colonial",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedInfantryC.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "EmplacedInfantryW",
@@ -1322,34 +1606,36 @@
   "category": "structures",
   "faction": "warden",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/EmplacedMG.webp",
+  "icon_url": "/api/v1/assets/items/EmplacedInfantryW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "EmplacedLightArtilleryW",
-  "name": "Huber Lariat 120мм",
+  "name": "Huber Lariat 120mm",
   "english_name": "Huber Lariat 120mm",
   "category": "structures",
   "faction": "warden",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedLightArtilleryW.png",
   "crate_size": 3,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Huber Lariat 120мм"
+  ],
+  "needs_review": false
  },
  {
   "code": "EmplacedMultiC",
-  "name": "DAE 3b-2 Hades Net",
+  "name": "DAE 3b-2 “Hades' Net”",
   "english_name": "DAE 3b-2 “Hades' Net”",
   "category": "structures",
   "faction": "colonial",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/EmplacedMultiC.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "EngineerUniformC",
@@ -1358,35 +1644,38 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/EngineerUniformC.webp",
+  "icon_url": "/api/v1/assets/items/EngineerUniformC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "EngineerUniformW",
-  "name": "Сапёрное снаряжение",
+  "name": "Sapper Gear",
   "english_name": "Sapper Gear",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/EngineerUniformW.webp",
+  "icon_url": "/api/v1/assets/items/EngineerUniformW.png",
   "crate_size": 15,
   "aliases": [
-   "форма инженера"
+   "форма инженера",
+   "Сапёрное снаряжение"
   ],
   "needs_review": false
  },
  {
   "code": "Explosive",
-  "name": "порох",
+  "name": "Explosive Powder",
   "english_name": "Explosive Powder",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ExplosiveTripod.webp",
+  "icon_url": "/api/v1/assets/items/Explosive.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "порох"
+  ],
   "needs_review": false
  },
  {
@@ -1396,22 +1685,24 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Bangalore.webp",
+  "icon_url": "/api/v1/assets/items/ExplosiveLightC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ExplosiveTripod",
-  "name": "Станковый Fissura gd.I",
-  "english_name": "Станковый Fissura gd.I",
+  "name": "Havoc Charge",
+  "english_name": "Havoc Charge",
   "category": "weapons",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/ExplosiveTripod.webp",
+  "icon_url": "/api/v1/assets/items/ExplosiveTripod.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Станковый Fissura gd.I"
+  ],
+  "needs_review": false
  },
  {
   "code": "FacilityCoal1",
@@ -1420,7 +1711,7 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/CokeIcon.webp",
+  "icon_url": "/api/v1/assets/items/FacilityCoal1.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1432,21 +1723,23 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ComponentsDamaged.webp",
+  "icon_url": "/api/v1/assets/items/FacilityComponents1.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FacilityMaterials1",
-  "name": "Сборочные материалы I",
+  "name": "Construction Materials",
   "english_name": "Construction Materials",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FacilityMaterials10.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials1.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Сборочные материалы I"
+  ],
   "needs_review": false
  },
  {
@@ -1456,7 +1749,19 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FacilityMaterials10.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials10.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "FacilityMaterials11",
+  "name": "Thermal Shielding",
+  "english_name": "Thermal Shielding",
+  "category": "materials",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials11.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1468,7 +1773,19 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FacilityMaterials12.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials12.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "FacilityMaterials2",
+  "name": "Processed Construction Materials",
+  "english_name": "Processed Construction Materials",
+  "category": "materials",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials2.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1480,21 +1797,23 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SteelConstructionMaterials.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials3.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FacilityMaterials4",
-  "name": "Сборочные материалы IV",
+  "name": "Assembly Materials I",
   "english_name": "Assembly Materials I",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FacilityMaterials09.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials4.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Сборочные материалы IV"
+  ],
   "needs_review": false
  },
  {
@@ -1504,10 +1823,10 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/FacilityMaterials5.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "FacilityMaterials6",
@@ -1516,10 +1835,10 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/FacilityMaterials6.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "FacilityMaterials7",
@@ -1528,7 +1847,7 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AssemblyMaterials4.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials7.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1540,7 +1859,7 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AssemblyMaterials5.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials8.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1552,47 +1871,52 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FacilityMaterials09.webp",
+  "icon_url": "/api/v1/assets/items/FacilityMaterials9.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FacilityOil1",
-  "name": "Нефть для объекта I",
+  "name": "Heavy Oil",
   "english_name": "Heavy Oil",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/FacilityOil1.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Нефть для объекта I"
+  ],
+  "needs_review": false
  },
  {
   "code": "FacilityOil2",
-  "name": "Обогащенное топливо",
+  "name": "Enriched Oil",
   "english_name": "Enriched Oil",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/FacilityOil2.png",
   "crate_size": 1,
   "aliases": [
-   "Нефть для объекта II"
+   "Нефть для объекта II",
+   "Обогащенное топливо"
   ],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "FacilityOil3",
-  "name": "Нефть для объекта III",
-  "english_name": "Нефть для объекта III",
+  "name": "Facility Oil III (legacy)",
+  "english_name": "Facility Oil III (legacy)",
   "category": "materials",
   "faction": "neutral",
   "origin": null,
   "icon_url": null,
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Нефть для объекта III"
+  ],
   "needs_review": true
  },
  {
@@ -1602,7 +1926,7 @@
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FilterPower.webp",
+  "icon_url": "/api/v1/assets/items/FacilityPower.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1614,7 +1938,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldAT2C.webp",
+  "icon_url": "/api/v1/assets/items/FieldAT2C.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1626,7 +1950,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldAT2W.webp",
+  "icon_url": "/api/v1/assets/items/FieldAT2W.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1638,7 +1962,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldAntiTankColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FieldATC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -1650,21 +1974,23 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldCannonOffensiveW.webp",
+  "icon_url": "/api/v1/assets/items/FieldATDamageW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FieldATW",
-  "name": "Полевая противотанковая пушка",
+  "name": "Collins Cannon 68mm",
   "english_name": "Collins Cannon 68mm",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldAT2W.webp",
+  "icon_url": "/api/v1/assets/items/FieldATW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Полевая противотанковая пушка"
+  ],
   "needs_review": false
  },
  {
@@ -1674,21 +2000,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldATOffensiveC.webp",
+  "icon_url": "/api/v1/assets/items/FieldCannonDamageC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FieldCannonW",
-  "name": "Полевое орудие",
+  "name": "Balfour Wolfhound 40mm",
   "english_name": "Balfour Wolfhound 40mm",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldCannonWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FieldCannonW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Полевое орудие"
+  ],
   "needs_review": false
  },
  {
@@ -1698,21 +2026,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/FieldMGC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FieldMGW",
-  "name": "Полевой пулемёт",
+  "name": "Swallowtail 988/127-2",
   "english_name": "Swallowtail 988/127-2",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldMachineGunWar.webp",
+  "icon_url": "/api/v1/assets/items/FieldMGW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Полевой пулемёт"
+  ],
   "needs_review": false
  },
  {
@@ -1722,7 +2052,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldMortarC.webp",
+  "icon_url": "/api/v1/assets/items/FieldMortarC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -1734,7 +2064,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldMortarW.webp",
+  "icon_url": "/api/v1/assets/items/FieldMortarW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -1746,7 +2076,7 @@
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/FirePitIcon.webp",
+  "icon_url": "/api/v1/assets/items/FirePitT2.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -1758,33 +2088,37 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FlameRocketAmmo.webp",
+  "icon_url": "/api/v1/assets/items/FireRocketAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FirstAidKit",
-  "name": "Набор Первой Помощи",
+  "name": "First Aid Kit",
   "english_name": "First Aid Kit",
   "category": "medical",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FirstAidKit.webp",
+  "icon_url": "/api/v1/assets/items/FirstAidKit.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "Набор Первой Помощи"
+  ],
   "needs_review": false
  },
  {
   "code": "FlameAmmo",
-  "name": "Огненные патроны",
+  "name": "Flame Ammo",
   "english_name": "Flame Ammo",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FlameAmmo.webp",
+  "icon_url": "/api/v1/assets/items/FlameAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Огненные патроны"
+  ],
   "needs_review": false
  },
  {
@@ -1794,21 +2128,23 @@
   "category": "ammo",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FlamePackC.webp",
+  "icon_url": "/api/v1/assets/items/FlameBackpackC.png",
   "crate_size": 10,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FlameBackpackW",
-  "name": "Топливо для Willow",
+  "name": "Willow's Bane Ammo",
   "english_name": "Willow's Bane Ammo",
   "category": "ammo",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FlamePackW.webp",
+  "icon_url": "/api/v1/assets/items/FlameBackpackW.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "Топливо для Willow"
+  ],
   "needs_review": false
  },
  {
@@ -1818,7 +2154,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FlamegunC.webp",
+  "icon_url": "/api/v1/assets/items/FlameTorchC.png",
   "crate_size": 10,
   "aliases": [],
   "needs_review": false
@@ -1830,58 +2166,66 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/FlamegunW.webp",
+  "icon_url": "/api/v1/assets/items/FlameTorchW.png",
   "crate_size": 10,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "FlatbedTruck",
-  "name": "Флэтбед (пакмул)",
+  "name": "BMS - Packmule Flatbed",
   "english_name": "BMS - Packmule Flatbed",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FlatbedTruckVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FlatbedTruck.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Флэтбед (пакмул)"
+  ],
   "needs_review": false
  },
  {
   "code": "FortConstructionPart",
-  "name": "Строительные детали",
-  "english_name": "Строительные детали",
+  "name": "Construction Parts",
+  "english_name": "Construction Parts",
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/ConstructionPartsShippable.webp",
+  "icon_url": "/api/v1/assets/items/FortConstructionPart.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Строительные детали"
+  ],
+  "needs_review": false
  },
  {
   "code": "FortGarrisonStationPart",
-  "name": "Детали подземной крепости",
-  "english_name": "Детали подземной крепости",
+  "name": "Underground Fortress Parts",
+  "english_name": "Underground Fortress Parts",
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/FortGarrisonStation.webp",
+  "icon_url": "/api/v1/assets/items/FortGarrisonStationPart.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Детали подземной крепости"
+  ],
+  "needs_review": false
  },
  {
   "code": "FortIntelCenterPart",
-  "name": "Разведывательный Центр",
-  "english_name": "Разведывательный Центр",
+  "name": "Intelligence Center Parts",
+  "english_name": "Intelligence Center Parts",
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/IntelCenterShippable.png",
+  "icon_url": "/api/v1/assets/items/FortIntelCenterPart.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Разведывательный Центр"
+  ],
+  "needs_review": false
  },
  {
   "code": "FortLargeRadarPart",
@@ -1890,106 +2234,122 @@
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/FortLargeRadarShippble.webp",
+  "icon_url": "/api/v1/assets/items/FortLargeRadarPart.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "FortLRArtilleryPart",
-  "name": "Детали Штурмового Орудия",
-  "english_name": "Детали Штурмового Орудия",
+  "name": "Storm Cannon Parts",
+  "english_name": "Storm Cannon Parts",
   "category": "weapons",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/StormCannonShippable.webp",
+  "icon_url": "/api/v1/assets/items/FortLRArtilleryPart.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Детали Штурмового Орудия"
+  ],
+  "needs_review": false
  },
  {
   "code": "FortWeatherStationPart",
-  "name": "Детали погодной станции",
-  "english_name": "Детали погодной станции",
+  "name": "Weather Station Parts",
+  "english_name": "Weather Station Parts",
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/WeatherStationShippable.png",
+  "icon_url": "/api/v1/assets/items/FortWeatherStationPart.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Детали погодной станции"
+  ],
+  "needs_review": false
  },
  {
   "code": "Freighter",
-  "name": "судно Ironship",
+  "name": "BMS - Ironship",
   "english_name": "BMS - Ironship",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/Freighter02Item.webp",
+  "icon_url": "/api/v1/assets/items/Freighter.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "судно Ironship"
+  ],
   "needs_review": false
  },
  {
   "code": "FreighterLight",
-  "name": "судно Krokodil",
+  "name": "Das Krokodil by VAC",
   "english_name": "Das Krokodil by VAC",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightFreighterVehicle.webp",
+  "icon_url": "/api/v1/assets/items/FreighterLight.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "судно Krokodil"
+  ],
   "needs_review": false
  },
  {
   "code": "GasMask",
-  "name": "противогаз",
+  "name": "Gas Mask",
   "english_name": "Gas Mask",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Gasmask.webp",
+  "icon_url": "/api/v1/assets/items/GasMask.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "противогаз"
+  ],
   "needs_review": false
  },
  {
   "code": "GasMaskFilter",
-  "name": "Фильтр для противогаза",
+  "name": "Gas Mask Filter",
   "english_name": "Gas Mask Filter",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/GasMaskFilter.webp",
+  "icon_url": "/api/v1/assets/items/GasMaskFilter.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Фильтр для противогаза"
+  ],
   "needs_review": false
  },
  {
   "code": "GreenAsh",
-  "name": "газовая граната",
+  "name": "Green Ash Grenade",
   "english_name": "Green Ash Grenade",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/DeadlyGas01.webp",
+  "icon_url": "/api/v1/assets/items/GreenAsh.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "газовая граната"
+  ],
   "needs_review": false
  },
  {
   "code": "GrenadeAdapter",
-  "name": "Подствольный гранатомёт",
-  "english_name": "Подствольный гранатомёт",
+  "name": "The Ospreay",
+  "english_name": "The Ospreay",
   "category": "ammo",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/GrenadeAdapter.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeAdapter.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Подствольный гранатомёт"
+  ],
+  "needs_review": false
  },
  {
   "code": "GrenadeC",
@@ -1998,7 +2358,7 @@
   "category": "ammo",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/GrenadeC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeC.png",
   "crate_size": 25,
   "aliases": [],
   "needs_review": false
@@ -2010,7 +2370,7 @@
   "category": "ammo",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/GrenadeLauncherC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeLauncherC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -2022,7 +2382,7 @@
   "category": "ammo",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/GrenadeLauncherTC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeLauncherTC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -2034,33 +2394,37 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/GrenadeUniformC.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeUniformC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "GrenadeW",
-  "name": "Осколочная граната",
+  "name": "A3 Harpa Fragmentation Grenade",
   "english_name": "A3 Harpa Fragmentation Grenade",
   "category": "ammo",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/GrenadeW.webp",
+  "icon_url": "/api/v1/assets/items/GrenadeW.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Осколочная граната"
+  ],
   "needs_review": false
  },
  {
   "code": "GroundMaterials",
-  "name": "гравий",
+  "name": "Gravel",
   "english_name": "Gravel",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/GroundMaterials.webp",
+  "icon_url": "/api/v1/assets/items/GroundMaterials.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "гравий"
+  ],
   "needs_review": false
  },
  {
@@ -2070,21 +2434,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/GunBoat2CVehicle.webp",
+  "icon_url": "/api/v1/assets/items/Gunboat2C.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "Gunboat2W",
-  "name": "БТР-Амфибия (Mulloy)",
+  "name": "81f-f Ronan Blackguard",
   "english_name": "81f-f Ronan Blackguard",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/Gunboat2W.webp",
+  "icon_url": "/api/v1/assets/items/Gunboat2W.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "БТР-Амфибия (Mulloy)"
+  ],
   "needs_review": false
  },
  {
@@ -2094,7 +2460,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/GunBoatCHull.webp",
+  "icon_url": "/api/v1/assets/items/GunboatC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -2106,7 +2472,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/GunboatW.webp",
+  "icon_url": "/api/v1/assets/items/GunboatW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -2118,7 +2484,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HalfTrackArtilleryC.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackArtilleryC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2130,7 +2496,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HalfTrackColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -2142,7 +2508,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HalfTrackColHeavyArmorVehicle.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackDefensiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2154,7 +2520,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HalftrackMultiW.webp",
+  "icon_url": "/api/v1/assets/items/HalftrackMultiW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2166,7 +2532,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HalfTrackOffensiveWarVehicle.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackOffensiveW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2178,21 +2544,23 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HalftrackTwinW.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackTwinW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "HalfTrackW",
-  "name": "Полугусеничный бронеавтомобиль",
+  "name": "Niska Mk. I Gun Motor Carriage",
   "english_name": "Niska Mk. I Gun Motor Carriage",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HalfTrackWarVehicle.webp",
+  "icon_url": "/api/v1/assets/items/HalfTrackW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Полугусеничный бронеавтомобиль"
+  ],
   "needs_review": false
  },
  {
@@ -2202,35 +2570,38 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/Harvester.webp",
+  "icon_url": "/api/v1/assets/items/Harvester.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "HeavyArtilleryAmmo",
-  "name": "150-мм",
+  "name": "150mm",
   "english_name": "150mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/HeavyArtilleryAmmo.webp",
+  "icon_url": "/api/v1/assets/items/HeavyArtilleryAmmo.png",
   "crate_size": 5,
   "aliases": [
-   "150мм снаряды"
+   "150мм снаряды",
+   "150-мм"
   ],
   "needs_review": false
  },
  {
   "code": "HeavyExplosive",
-  "name": "Тяжёлая взрывчатка",
+  "name": "Heavy Explosive Powder",
   "english_name": "Heavy Explosive Powder",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/HeavyExplosiveMaterials.webp",
+  "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Тяжёлая взрывчатка"
+  ],
   "needs_review": false
  },
  {
@@ -2240,45 +2611,51 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HeavyTruckCVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/HeavyTruckC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "HeavyTruckW",
-  "name": "кнут",
+  "name": "Cnute Cliffwrest",
   "english_name": "Cnute Cliffwrest",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/HeavyTruckW.webp",
+  "icon_url": "/api/v1/assets/items/HeavyTruckW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "кнут"
+  ],
   "needs_review": false
  },
  {
   "code": "HEGrenade",
-  "name": "Маммонка",
+  "name": "Mammon 91-b",
   "english_name": "Mammon 91-b",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/HEGrenade.webp",
+  "icon_url": "/api/v1/assets/items/HEGrenade.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Маммонка"
+  ],
   "needs_review": false
  },
  {
   "code": "HELaunchedGrenade",
-  "name": "Осколочный снаряд РПГ",
+  "name": "Tremola Grenade GPb-1",
   "english_name": "Tremola Grenade GPb-1",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/HELaunchedGrenade.webp",
+  "icon_url": "/api/v1/assets/items/HELaunchedGrenade.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Осколочный снаряд РПГ"
+  ],
   "needs_review": false
  },
  {
@@ -2288,7 +2665,7 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/HERocketAmmo.webp",
+  "icon_url": "/api/v1/assets/items/HERocketAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2300,7 +2677,7 @@
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RunestoneSIcon.png",
+  "icon_url": "/api/v1/assets/items/In06KItem.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2312,7 +2689,7 @@
   "category": "weapons",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/InfantryMine.webp",
+  "icon_url": "/api/v1/assets/items/InfantryMine.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2324,7 +2701,7 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ResouceIron.png",
+  "icon_url": "/api/v1/assets/items/Iron.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2336,7 +2713,7 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ResouceIronRefined.png",
+  "icon_url": "/api/v1/assets/items/IronA.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2348,21 +2725,23 @@
   "category": "other",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/InfantrySupportGun.webp",
+  "icon_url": "/api/v1/assets/items/ISGTC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "LandingCraftC",
-  "name": "десантный катер",
+  "name": "AB-8 “Acheron”",
   "english_name": "AB-8 “Acheron”",
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LandingCraftVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/LandingCraftC.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "десантный катер"
+  ],
   "needs_review": false
  },
  {
@@ -2372,21 +2751,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LandingCraftOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "LandingCraftW",
-  "name": "БТР-Амфибия (Mulloy)",
+  "name": "Mulloy LPC",
   "english_name": "Mulloy LPC",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LandingCraftWarVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/LandingCraftW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "БТР-Амфибия (Mulloy)"
+  ],
   "needs_review": false
  },
  {
@@ -2396,7 +2777,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LandingShipC.webp",
+  "icon_url": "/api/v1/assets/items/LandingShipC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2408,7 +2789,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LandingShipW.webp",
+  "icon_url": "/api/v1/assets/items/LandingShipW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2420,7 +2801,7 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LargeCrane.webp",
+  "icon_url": "/api/v1/assets/items/LargeCrane.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2432,7 +2813,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldATHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/LargeFieldATC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2444,7 +2825,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldCannonHeavyW.webp",
+  "icon_url": "/api/v1/assets/items/LargeFieldCannonW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2456,7 +2837,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldArtilleryColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LargeFieldLightArtilleryC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -2468,21 +2849,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LargeFieldMortarC.webp",
+  "icon_url": "/api/v1/assets/items/LargeFieldMortarC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "LargeFieldMultiW",
-  "name": "Полевая многозарядная установка",
+  "name": "Rycker 4/3-F Wasp Nest",
   "english_name": "Rycker 4/3-F Wasp Nest",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FieldMultiWItem.webp",
+  "icon_url": "/api/v1/assets/items/LargeFieldMultiW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Полевая многозарядная установка"
+  ],
   "needs_review": false
  },
  {
@@ -2492,7 +2875,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LargeshipAircraftC.webp",
+  "icon_url": "/api/v1/assets/items/LargeShipAircraftC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2504,7 +2887,7 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LargeShipBaseShip.webp",
+  "icon_url": "/api/v1/assets/items/LargeShipBaseShip.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2516,7 +2899,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LargeShipBattleshipAircraftW.webp",
+  "icon_url": "/api/v1/assets/items/LargeShipBattleshipAircraftW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2528,7 +2911,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LargeShipDestroyerW.webp",
+  "icon_url": "/api/v1/assets/items/LargeShipDestroyerW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2540,10 +2923,10 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LargeShipResourceShip.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "LargeShipStorageShip",
@@ -2552,34 +2935,37 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": null,
-  "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
- },
- {
-  "code": "LightAAAmmo",
-  "name": "Зенитный снаряд “Absol”",
-  "english_name": "Absol Anti-Aircraft Rounds",
-  "category": "ammo",
-  "faction": "neutral",
-  "origin": "item",
-  "icon_url": "/api/v1/assets/items/LightAAAmmo.webp",
+  "icon_url": "/api/v1/assets/items/LargeShipStorageShip.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
+  "code": "LightAAAmmo",
+  "name": "Absol Anti-Aircraft Rounds",
+  "english_name": "Absol Anti-Aircraft Rounds",
+  "category": "ammo",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/LightAAAmmo.png",
+  "crate_size": 1,
+  "aliases": [
+   "Зенитный снаряд “Absol”"
+  ],
+  "needs_review": false
+ },
+ {
   "code": "LightArtilleryAmmo",
-  "name": "120-мм",
+  "name": "120mm",
   "english_name": "120mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/LightArtilleryAmmo.webp",
+  "icon_url": "/api/v1/assets/items/LightArtilleryAmmo.png",
   "crate_size": 5,
   "aliases": [
-   "120мм снаряды"
+   "120мм снаряды",
+   "120-мм"
   ],
   "needs_review": false
  },
@@ -2590,21 +2976,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightBoatInfantryC.webp",
+  "icon_url": "/api/v1/assets/items/LightBoatInfantryC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "LightBoatInfantryW",
-  "name": "лёгкая пехотная лодка",
+  "name": "68A-4 Ronan Fathomer",
   "english_name": "68A-4 Ronan Fathomer",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightBoatInfantryWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightBoatInfantryW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "лёгкая пехотная лодка"
+  ],
   "needs_review": false
  },
  {
@@ -2614,7 +3002,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTank2InfantryCVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTank2InfantryC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -2626,7 +3014,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTank3CVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTank3C.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2638,45 +3026,51 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTank3WVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTank3W.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "LightTankAmmo",
-  "name": "40-мм",
+  "name": "40mm",
   "english_name": "40mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/LightTankAmmo.webp",
+  "icon_url": "/api/v1/assets/items/LightTankAmmo.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "40-мм"
+  ],
   "needs_review": false
  },
  {
   "code": "LightTankArtilleryW",
-  "name": "Легкий арт-танк",
+  "name": "Devitt-Caine Mk. IV MMR",
   "english_name": "Devitt-Caine Mk. IV MMR",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTankArtilleryWar.webp",
+  "icon_url": "/api/v1/assets/items/LightTankArtilleryW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Легкий арт-танк"
+  ],
   "needs_review": false
  },
  {
   "code": "LightTankC",
-  "name": "строительный прицеп",
+  "name": "H-5 “Hatchet”",
   "english_name": "H-5 “Hatchet”",
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTankColVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTankC.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "строительный прицеп"
+  ],
   "needs_review": false
  },
  {
@@ -2686,7 +3080,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTankWarDefensiveVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTankDefensiveW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2698,7 +3092,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTankFlameC.webp",
+  "icon_url": "/api/v1/assets/items/LightTankFlameC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2710,7 +3104,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTankColMobilityVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTankMobilityC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2722,7 +3116,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTankOffensiveCVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTankOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2734,33 +3128,37 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/LightTankWarDefensiveVehicle.webp",
+  "icon_url": "/api/v1/assets/items/LightTankW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "LiquidContainer",
-  "name": "Жидкостный контейнер",
+  "name": "Liquid Container",
   "english_name": "Liquid Container",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LiquidContainer.png",
   "crate_size": 3,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Жидкостный контейнер"
+  ],
+  "needs_review": false
  },
  {
   "code": "ListeningKit",
-  "name": "Набор для прослушивания",
+  "name": "Listening Kit",
   "english_name": "Listening Kit",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ListeningKit.webp",
+  "icon_url": "/api/v1/assets/items/ListeningKit.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Набор для прослушивания"
+  ],
   "needs_review": false
  },
  {
@@ -2770,7 +3168,7 @@
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/LongRangedArtillery.webp",
+  "icon_url": "/api/v1/assets/items/LRArtillery.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2782,7 +3180,7 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/LRArtilleryAmmo.webp",
+  "icon_url": "/api/v1/assets/items/LRArtilleryAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2794,34 +3192,61 @@
   "category": "other",
   "faction": "warden",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MaceW.png",
   "crate_size": 10,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "MaintenanceSupplies",
-  "name": "Припасы Обслуживания",
+  "name": "Maintenance Supplies",
   "english_name": "Maintenance Supplies",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MaintenanceSupplies.webp",
+  "icon_url": "/api/v1/assets/items/MaintenanceSupplies.png",
   "crate_size": 100,
   "aliases": [
-   "Сопли"
+   "Сопли",
+   "Припасы Обслуживания"
   ],
   "needs_review": false
  },
  {
   "code": "MaterialPlatform",
-  "name": "Поддон для материалов",
+  "name": "Material Pallet",
   "english_name": "Material Pallet",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/MaterialPlatform.webp",
+  "icon_url": "/api/v1/assets/items/MaterialPlatform.png",
   "crate_size": 3,
+  "aliases": [
+   "Поддон для материалов"
+  ],
+  "needs_review": false
+ },
+ {
+  "code": "Mech",
+  "name": "Centurion MV-2",
+  "english_name": "Centurion MV-2",
+  "category": "vehicles",
+  "faction": "colonial",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/Mech.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "MechW",
+  "name": "Herne QMW 1a Scourge Hunter",
+  "english_name": "Herne QMW 1a Scourge Hunter",
+  "category": "vehicles",
+  "faction": "warden",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/MechW.png",
+  "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
@@ -2832,47 +3257,52 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MedicUniformC.webp",
+  "icon_url": "/api/v1/assets/items/MedicUniformC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "MedicUniformW",
-  "name": "Куртка врача",
+  "name": "Physician's Jacket",
   "english_name": "Physician's Jacket",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MedicUniformW.webp",
+  "icon_url": "/api/v1/assets/items/MedicUniformW.png",
   "crate_size": 15,
   "aliases": [
-   "форма медика"
+   "форма медика",
+   "Куртка врача"
   ],
   "needs_review": false
  },
  {
   "code": "MediumBoatC",
-  "name": "пожарная машина",
+  "name": "Strider",
   "english_name": "Strider",
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumBoatC.webp",
+  "icon_url": "/api/v1/assets/items/MediumBoatC.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "пожарная машина"
+  ],
   "needs_review": false
  },
  {
   "code": "MediumBoatW",
-  "name": "Средняя лодка варденов",
+  "name": "Rinnspeir Ornitier-Class Gunship",
   "english_name": "Rinnspeir Ornitier-Class Gunship",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumBoatWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/MediumBoatW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Средняя лодка варденов"
+  ],
   "needs_review": false
  },
  {
@@ -2882,7 +3312,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTank2C.webp",
+  "icon_url": "/api/v1/assets/items/MediumTank2C.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -2894,7 +3324,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTank2IndirectW.webp",
+  "icon_url": "/api/v1/assets/items/MediumTank2IndirectW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2906,7 +3336,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTank2MultiW.webp",
+  "icon_url": "/api/v1/assets/items/MediumTank2MultiW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2918,7 +3348,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTank2RangeW.webp",
+  "icon_url": "/api/v1/assets/items/MediumTank2RangeW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2930,21 +3360,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MediumTank2TwinC.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "MediumTank2W",
-  "name": "Средний танк (тир 2)",
+  "name": "Gallagher Brigand Mk. I",
   "english_name": "Gallagher Brigand Mk. I",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTank2W.webp",
+  "icon_url": "/api/v1/assets/items/MediumTank2W.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Средний танк (тир 2)"
+  ],
   "needs_review": false
  },
  {
@@ -2954,10 +3386,10 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MediumTank3C.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "MediumTankATW",
@@ -2966,7 +3398,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTankATW.webp",
+  "icon_url": "/api/v1/assets/items/MediumTankATW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -2978,7 +3410,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ColonialMediumTank.webp",
+  "icon_url": "/api/v1/assets/items/MediumTankC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -2990,7 +3422,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTankLargeC.webp",
+  "icon_url": "/api/v1/assets/items/MediumTankLargeC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3002,7 +3434,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ColonialMediumTankOffensive.webp",
+  "icon_url": "/api/v1/assets/items/MediumTankOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3014,7 +3446,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MediumTankSiegeWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/MediumTankSiegeW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3026,10 +3458,10 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MediumTankW.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "Metal",
@@ -3038,33 +3470,37 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Salvage.webp",
+  "icon_url": "/api/v1/assets/items/Metal.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "MetalBeamMaterials",
-  "name": "металлическая балка",
+  "name": "Metal Beam",
   "english_name": "Metal Beam",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MetalBeamMaterial.webp",
+  "icon_url": "/api/v1/assets/items/MetalBeamMaterials.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "металлическая балка"
+  ],
   "needs_review": false
  },
  {
   "code": "MGAmmo",
-  "name": "12.7 мм (пулемётные) патроны",
+  "name": "12.7mm",
   "english_name": "12.7mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MachineGunAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MGAmmo.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "12.7 мм (пулемётные) патроны"
+  ],
   "needs_review": false
  },
  {
@@ -3074,7 +3510,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MGC.webp",
+  "icon_url": "/api/v1/assets/items/MGC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -3086,21 +3522,23 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/HeavyMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/MGTC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "MGTW",
-  "name": "Станковый пулемет варденов",
+  "name": "Malone Ratcatcher MK.1",
   "english_name": "Malone Ratcatcher MK.1",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MGW.webp",
+  "icon_url": "/api/v1/assets/items/MGTW.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Станковый пулемет варденов"
+  ],
   "needs_review": false
  },
  {
@@ -3110,7 +3548,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MGW.webp",
+  "icon_url": "/api/v1/assets/items/MGW.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -3122,117 +3560,135 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/Mineboat.webp",
+  "icon_url": "/api/v1/assets/items/MineBoat.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "MiniTankAmmo",
-  "name": "Снаряды малого танка",
+  "name": "30mm",
   "english_name": "30mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MiniTankAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MiniTankAmmo.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Снаряды малого танка"
+  ],
   "needs_review": false
  },
  {
   "code": "MiniTorpedoAmmo",
-  "name": "торпеда",
+  "name": "Quillback Torpedo",
   "english_name": "Quillback Torpedo",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MiniTorpedoAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MiniTorpedoAmmo.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "торпеда"
+  ],
   "needs_review": false
  },
  {
   "code": "Mortar",
-  "name": "миномёт",
+  "name": "Cremari Mortar",
   "english_name": "Cremari Mortar",
   "category": "weapons",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Mortar.webp",
+  "icon_url": "/api/v1/assets/items/Mortar.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "миномёт"
+  ],
   "needs_review": false
  },
  {
   "code": "MortarAmmo",
-  "name": "миномётный снаряд",
+  "name": "Mortar Shell",
   "english_name": "Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MortarAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MortarAmmo.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "миномётный снаряд"
+  ],
   "needs_review": false
  },
  {
   "code": "MortarAmmoFL",
-  "name": "Осветительный миномётный снаряд",
+  "name": "Flare Mortar Shell",
   "english_name": "Flare Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MortarAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MortarAmmoFL.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Осветительный миномётный снаряд"
+  ],
   "needs_review": false
  },
  {
   "code": "MortarAmmoFlame",
-  "name": "Зажигательный миномётный снаряд",
+  "name": "Incendiary Mortar Shell",
   "english_name": "Incendiary Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MortarAmmoFlame.webp",
+  "icon_url": "/api/v1/assets/items/MortarAmmoFlame.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Зажигательный миномётный снаряд"
+  ],
   "needs_review": false
  },
  {
   "code": "MortarAmmoSH",
-  "name": "Осколочный миномётный снаряд",
+  "name": "Shrapnel Mortar Shell",
   "english_name": "Shrapnel Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MortarAmmo.webp",
+  "icon_url": "/api/v1/assets/items/MortarAmmoSH.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Осколочный миномётный снаряд"
+  ],
   "needs_review": false
  },
  {
   "code": "MortarTankAmmo",
-  "name": "Снаряд миномётного танка",
+  "name": "250mm “Purity” Shell",
   "english_name": "250mm “Purity” Shell",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.webp",
+  "icon_url": "/api/v1/assets/items/MortarTankAmmo.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Снаряд миномётного танка"
+  ],
   "needs_review": false
  },
  {
   "code": "MortarTankAmmoBR",
-  "name": "Снаряд миномётного танка (бронебойный)",
+  "name": "250mm “Fury” Shell",
   "english_name": "250mm “Fury” Shell",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.webp",
+  "icon_url": "/api/v1/assets/items/MortarTankAmmoBR.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Снаряд миномётного танка (бронебойный)"
+  ],
   "needs_review": false
  },
  {
@@ -3242,7 +3698,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MortarTankVehicle.webp",
+  "icon_url": "/api/v1/assets/items/MortarTankC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3254,7 +3710,7 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/Motorboat.webp",
+  "icon_url": "/api/v1/assets/items/Motorboat.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3266,7 +3722,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MotorcycleVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/MotorcycleC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -3278,21 +3734,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/MotorcycleOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "MotorcycleW",
-  "name": "Мотоцикл",
+  "name": "Kivela Power Wheel 80-1",
   "english_name": "Kivela Power Wheel 80-1",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
   "icon_url": "/api/v1/assets/items/MotorcycleW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Мотоцикл"
+  ],
   "needs_review": false
  },
  {
@@ -3302,21 +3760,23 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/NavalUniformC.webp",
+  "icon_url": "/api/v1/assets/items/NavalUniformC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "NavalUniformW",
-  "name": "форма моряка",
+  "name": "Gentleman's Peacoat",
   "english_name": "Gentleman's Peacoat",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/NavalUniformW.webp",
+  "icon_url": "/api/v1/assets/items/NavalUniformW.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "форма моряка"
+  ],
   "needs_review": false
  },
  {
@@ -3326,34 +3786,38 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/OfficerUniformC.webp",
+  "icon_url": "/api/v1/assets/items/OfficerUniformC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "OfficerUniformW",
-  "name": "офицерская форма",
+  "name": "Officer's Regalia",
   "english_name": "Officer's Regalia",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/OfficerUniformW.webp",
+  "icon_url": "/api/v1/assets/items/OfficerUniformW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "офицерская форма"
+  ],
   "needs_review": false
  },
  {
   "code": "Oil",
-  "name": "Нефть",
+  "name": "Oil",
   "english_name": "Oil",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/Oil.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Нефть"
+  ],
+  "needs_review": false
  },
  {
   "code": "ParatrooperBackpack",
@@ -3362,7 +3826,7 @@
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ParatrooperBackpack.webp",
+  "icon_url": "/api/v1/assets/items/ParatrooperBackpack.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3374,33 +3838,49 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ParatrooperUniformC.webp",
+  "icon_url": "/api/v1/assets/items/ParatrooperUniformC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "ParatrooperUniformW",
+  "name": "Cloudrunner's Vesture",
+  "english_name": "Cloudrunner's Vesture",
+  "category": "uniforms",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/ParatrooperUniformW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "Petrol",
-  "name": "Бензин",
+  "name": "Petrol",
   "english_name": "Petrol",
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RefinedFuel.webp",
+  "icon_url": "/api/v1/assets/items/Petrol.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Бензин"
+  ],
   "needs_review": false
  },
  {
   "code": "PilotMask",
-  "name": "Маска пилота",
+  "name": "Flight Mask",
   "english_name": "Flight Mask",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/PilotMask.webp",
+  "icon_url": "/api/v1/assets/items/PilotMask.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Маска пилота"
+  ],
   "needs_review": false
  },
  {
@@ -3410,7 +3890,7 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/PilotUniformC.webp",
+  "icon_url": "/api/v1/assets/items/PilotUniformC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3422,7 +3902,7 @@
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/PilotUniformW.webp",
+  "icon_url": "/api/v1/assets/items/PilotUniformW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3434,21 +3914,23 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/EngineRoomPipe.webp",
+  "icon_url": "/api/v1/assets/items/PipeMaterials.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "PistolAmmo",
-  "name": "8мм (пистолет)",
+  "name": "8mm",
   "english_name": "8mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/PistolAmmo.webp",
+  "icon_url": "/api/v1/assets/items/PistolAmmo.png",
   "crate_size": 40,
-  "aliases": [],
+  "aliases": [
+   "8мм (пистолет)"
+  ],
   "needs_review": false
  },
  {
@@ -3458,7 +3940,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/PistolC.webp",
+  "icon_url": "/api/v1/assets/items/PistolC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3470,7 +3952,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/PistolLightW.webp",
+  "icon_url": "/api/v1/assets/items/PistolLightW.png",
   "crate_size": 40,
   "aliases": [],
   "needs_review": false
@@ -3482,7 +3964,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/PistolW.webp",
+  "icon_url": "/api/v1/assets/items/PistolW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3501,51 +3983,95 @@
  },
  {
   "code": "Radio",
-  "name": "рация",
+  "name": "Radio",
   "english_name": "Radio",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Radio.webp",
+  "icon_url": "/api/v1/assets/items/Radio.png",
   "crate_size": 5,
+  "aliases": [
+   "рация"
+  ],
+  "needs_review": false
+ },
+ {
+  "code": "RadioAircraft",
+  "name": "Liaison Transmitter",
+  "english_name": "Liaison Transmitter",
+  "category": "equipment",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/RadioAircraft.png",
+  "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "RadioBackpack",
-  "name": "Радиорюкзак",
+  "name": "Radio Backpack",
   "english_name": "Radio Backpack",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RadioBackpack.webp",
+  "icon_url": "/api/v1/assets/items/RadioBackpack.png",
   "crate_size": 5,
+  "aliases": [
+   "Радиорюкзак"
+  ],
+  "needs_review": false
+ },
+ {
+  "code": "RainUniformC",
+  "name": "Legionary's Oilcoat",
+  "english_name": "Legionary's Oilcoat",
+  "category": "uniforms",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/RainUniformC.png",
+  "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "RareMaterials",
-  "name": "Редкие материалы",
-  "english_name": "Редкие материалы",
+  "name": "Rare Materials (legacy)",
+  "english_name": "Rare Materials (legacy)",
   "category": "materials",
   "faction": "neutral",
   "origin": null,
   "icon_url": "/api/v1/assets/items/RareMaterials.webp",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Редкие материалы"
+  ],
   "needs_review": true
  },
  {
   "code": "RareMetal",
-  "name": "Редкий металл",
+  "name": "Rare Metal",
   "english_name": "Rare Metal",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RareMetal.png",
+  "crate_size": 1,
+  "aliases": [
+   "Редкий металл"
+  ],
+  "needs_review": false
+ },
+ {
+  "code": "RelicMaterials",
+  "name": "Relic Materials",
+  "english_name": "Relic Materials",
+  "category": "materials",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/RelicMaterials.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "ReservePower",
@@ -3561,50 +4087,58 @@
  },
  {
   "code": "ResourceContainer",
-  "name": "контейнер для ресурсов",
+  "name": "Resource Container",
   "english_name": "Resource Container",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/ResourceContainer.webp",
+  "icon_url": "/api/v1/assets/items/ResourceContainer.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "контейнер для ресурсов"
+  ],
   "needs_review": false
  },
  {
   "code": "Revolver",
-  "name": "револьвер",
+  "name": "Cometa T2-9",
   "english_name": "Cometa T2-9",
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Revolver.webp",
+  "icon_url": "/api/v1/assets/items/Revolver.png",
   "crate_size": 30,
-  "aliases": [],
+  "aliases": [
+   "револьвер"
+  ],
   "needs_review": false
  },
  {
   "code": "RevolverAmmo",
-  "name": ".44 Магнум",
+  "name": ".44 Mag",
   "english_name": ".44 Mag",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RevolverAmmo.webp",
+  "icon_url": "/api/v1/assets/items/RevolverAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   ".44 Магнум"
+  ],
   "needs_review": false
  },
  {
   "code": "RifleAmmo",
-  "name": "7.62-мм",
+  "name": "7.62mm",
   "english_name": "7.62mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleAmmo.webp",
+  "icon_url": "/api/v1/assets/items/RifleAmmo.png",
   "crate_size": 40,
-  "aliases": [],
+  "aliases": [
+   "7.62-мм"
+  ],
   "needs_review": false
  },
  {
@@ -3614,22 +4148,23 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleAutomaticC.webp",
+  "icon_url": "/api/v1/assets/items/RifleAutomaticC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "RifleAutomaticW",
-  "name": "Автоматическая винтовка Sampo 77",
+  "name": "Sampo Auto-Rifle 77",
   "english_name": "Sampo Auto-Rifle 77",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleAutomaticW.webp",
+  "icon_url": "/api/v1/assets/items/RifleAutomaticW.png",
   "crate_size": 20,
   "aliases": [
-   "Винтовка Sampo 77"
+   "Винтовка Sampo 77",
+   "Автоматическая винтовка Sampo 77"
   ],
   "needs_review": false
  },
@@ -3640,7 +4175,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleC.webp",
+  "icon_url": "/api/v1/assets/items/RifleC.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
@@ -3652,21 +4187,23 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/RifleHeavyC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "RifleHeavyW",
-  "name": "Хангман 757",
+  "name": "The Hangman 757",
   "english_name": "The Hangman 757",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/RifleHeavyW.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Хангман 757"
+  ],
   "needs_review": false
  },
  {
@@ -3676,21 +4213,23 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleLightC.webp",
+  "icon_url": "/api/v1/assets/items/RifleLightC.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "RifleLightW",
-  "name": "винтовка Blakerov",
+  "name": "Blakerow 871",
   "english_name": "Blakerow 871",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleLightC.webp",
+  "icon_url": "/api/v1/assets/items/RifleLightW.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "винтовка Blakerov"
+  ],
   "needs_review": false
  },
  {
@@ -3700,7 +4239,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleLongC.webp",
+  "icon_url": "/api/v1/assets/items/RifleLongC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
@@ -3712,7 +4251,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleLongW.webp",
+  "icon_url": "/api/v1/assets/items/RifleLongW.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
@@ -3724,21 +4263,23 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleShortW.webp",
+  "icon_url": "/api/v1/assets/items/RifleShortW.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "RifleW",
-  "name": "Винтовка No.2 Loughcaster",
+  "name": "No.2 Loughcaster",
   "english_name": "No.2 Loughcaster",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RifleW.webp",
+  "icon_url": "/api/v1/assets/items/RifleW.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Винтовка No.2 Loughcaster"
+  ],
   "needs_review": false
  },
  {
@@ -3755,39 +4296,45 @@
  },
  {
   "code": "RocketPartBottom",
-  "name": "AOE-9 Ракетный Ускоритель",
+  "name": "A0E-9 Rocket Booster",
   "english_name": "A0E-9 Rocket Booster",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RocketPartBottom.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "AOE-9 Ракетный Ускоритель"
+  ],
+  "needs_review": false
  },
  {
   "code": "RocketPartCenter",
-  "name": "Корпус ракеты AOE-9",
+  "name": "A0E-9 Rocket Body",
   "english_name": "A0E-9 Rocket Body",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RocketPartCenter.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Корпус ракеты AOE-9"
+  ],
+  "needs_review": false
  },
  {
   "code": "RocketPartTop",
-  "name": "AOE-9 ракетная боеголовка",
+  "name": "A0E-9 Rocket Warhead",
   "english_name": "A0E-9 Rocket Warhead",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RocketPartTop.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "AOE-9 ракетная боеголовка"
+  ],
+  "needs_review": false
  },
  {
   "code": "RocketSite",
@@ -3796,33 +4343,37 @@
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/RocketSite.webp",
+  "icon_url": "/api/v1/assets/items/RocketSite.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "RpgAmmo",
-  "name": "снаряд РПГ",
+  "name": "RPG",
   "english_name": "RPG",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RpgAmmo.webp",
+  "icon_url": "/api/v1/assets/items/RpgAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "снаряд РПГ"
+  ],
   "needs_review": false
  },
  {
   "code": "RPGTW",
-  "name": "РПГ (танковый вариант)",
+  "name": "Cutler Foebreaker",
   "english_name": "Cutler Foebreaker",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RpgW.webp",
+  "icon_url": "/api/v1/assets/items/RPGTW.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "РПГ (танковый вариант)"
+  ],
   "needs_review": false
  },
  {
@@ -3832,45 +4383,51 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RpgW.webp",
+  "icon_url": "/api/v1/assets/items/RpgW.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "SandbagMaterials",
-  "name": "Мешки с песком (материалы)",
+  "name": "Sandbag",
   "english_name": "Sandbag",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SandbagMaterial.webp",
+  "icon_url": "/api/v1/assets/items/SandbagMaterials.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Мешки с песком (материалы)"
+  ],
   "needs_review": false
  },
  {
   "code": "SatchelChargeT",
-  "name": "Заряд Аллигатор",
-  "english_name": "Заряд Аллигатор",
+  "name": "Havoc Charge Detonator",
+  "english_name": "Havoc Charge Detonator",
   "category": "other",
   "faction": "neutral",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/SatchelCharge.webp",
+  "icon_url": "/api/v1/assets/items/SatchelChargeT.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Заряд Аллигатор"
+  ],
+  "needs_review": false
  },
  {
   "code": "SatchelChargeW",
-  "name": "Хавок Заряд",
+  "name": "Alligator Charge",
   "english_name": "Alligator Charge",
   "category": "other",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SatchelCharge.webp",
+  "icon_url": "/api/v1/assets/items/SatchelChargeW.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "Хавок Заряд"
+  ],
   "needs_review": false
  },
  {
@@ -3880,7 +4437,7 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ScoutTankMultiW.webp",
+  "icon_url": "/api/v1/assets/items/ScoutTankMultiW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -3892,21 +4449,23 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ScoutTankOffensiveW.webp",
+  "icon_url": "/api/v1/assets/items/ScoutTankOffensiveW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ScoutTankW",
-  "name": "King Spire Mk.1 (скаут танк)",
+  "name": "King Spire Mk. I",
   "english_name": "King Spire Mk. I",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ScoutTankW.webp",
+  "icon_url": "/api/v1/assets/items/ScoutTankW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "King Spire Mk.1 (скаут танк)"
+  ],
   "needs_review": false
  },
  {
@@ -3916,22 +4475,23 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ScoutUniformC.webp",
+  "icon_url": "/api/v1/assets/items/ScoutUniformC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ScoutUniformW",
-  "name": "Дозорная мантия",
+  "name": "Outrider's Mantle",
   "english_name": "Outrider's Mantle",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ScoutUniformW.webp",
+  "icon_url": "/api/v1/assets/items/ScoutUniformW.png",
   "crate_size": 15,
   "aliases": [
-   "форма разведчика"
+   "форма разведчика",
+   "Дозорная мантия"
   ],
   "needs_review": false
  },
@@ -3942,7 +4502,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ScoutVehicleMobilityVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/ScoutVehicleMobilityC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -3954,33 +4514,35 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ScoutVehicleOffensiveVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/ScoutVehicleOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ScoutVehicleOffensiveW",
-  "name": "Spitfire",
+  "name": "Drummond Spitfire 100d",
   "english_name": "Drummond Spitfire 100d",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ScoutVehicleOffensiveWarVehicleW.webp",
+  "icon_url": "/api/v1/assets/items/ScoutVehicleOffensiveW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ScoutVehicleUtilityC",
-  "name": "Машина скорой помощи",
+  "name": "UV-5c “Odyssey”",
   "english_name": "UV-5c “Odyssey”",
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ScoutVehicleUtilityCVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/ScoutVehicleUtilityC.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Машина скорой помощи"
+  ],
   "needs_review": false
  },
  {
@@ -3990,81 +4552,93 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/ScoutVehicleUtilityW.png",
   "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "ScoutVehicleW",
-  "name": "O'Brien V.110 / Скаут",
+  "name": "Drummond 100a",
   "english_name": "Drummond 100a",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
   "icon_url": "/api/v1/assets/items/ScoutVehicleWarVehicleW.webp",
   "crate_size": 3,
-  "aliases": [],
-  "needs_review": false
+  "aliases": [
+   "Драммонд 100a"
+  ],
+  "needs_review": true
  },
  {
   "code": "ShipPart1",
-  "name": "Корабельный сегмент корпуса",
+  "name": "Naval Hull Segments",
   "english_name": "Naval Hull Segments",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/ShipPart1.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Корабельный сегмент корпуса"
+  ],
+  "needs_review": false
  },
  {
   "code": "ShipPart2",
-  "name": "Корабельная обшивка корпуса",
+  "name": "Naval Shell Plating",
   "english_name": "Naval Shell Plating",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/ShipPart2.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Корабельная обшивка корпуса"
+  ],
+  "needs_review": false
  },
  {
   "code": "ShipPart3",
-  "name": "Компоненты морских турбин",
+  "name": "Naval Turbine Components",
   "english_name": "Naval Turbine Components",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/ShipPart3.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Компоненты морских турбин"
+  ],
+  "needs_review": false
  },
  {
   "code": "ShippingContainer",
-  "name": "Грузовой контейнер",
+  "name": "Shipping Container",
   "english_name": "Shipping Container",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": "/api/v1/assets/items/ShippingContainerStructure.webp",
+  "icon_url": "/api/v1/assets/items/ShippingContainer.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Грузовой контейнер"
+  ],
   "needs_review": false
  },
  {
   "code": "ShotgunAmmo",
-  "name": "дробь",
+  "name": "Buckshot",
   "english_name": "Buckshot",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ShotgunAmmo.webp",
+  "icon_url": "/api/v1/assets/items/ShotgunAmmo.png",
   "crate_size": 40,
-  "aliases": [],
+  "aliases": [
+   "дробь"
+  ],
   "needs_review": false
  },
  {
@@ -4074,57 +4648,65 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ShotgunC.webp",
+  "icon_url": "/api/v1/assets/items/ShotgunC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "ShotgunW",
-  "name": "дробовик",
+  "name": "No.4 The Pillory Scattergun",
   "english_name": "No.4 The Pillory Scattergun",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/ShotgunW.webp",
+  "icon_url": "/api/v1/assets/items/ShotgunW.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "дробовик"
+  ],
   "needs_review": false
  },
  {
   "code": "Shovel",
-  "name": "лопата",
+  "name": "Shovel",
   "english_name": "Shovel",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Shovel.webp",
+  "icon_url": "/api/v1/assets/items/Shovel.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "лопата"
+  ],
   "needs_review": false
  },
  {
   "code": "SledgeHammer",
-  "name": "кувалда",
+  "name": "Sledge Hammer",
   "english_name": "Sledge Hammer",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SledgeHammer.webp",
+  "icon_url": "/api/v1/assets/items/SledgeHammer.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "кувалда"
+  ],
   "needs_review": false
  },
  {
   "code": "SMGAmmo",
-  "name": "9мм",
+  "name": "9mm",
   "english_name": "9mm",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SubMachineGunAmmo.webp",
+  "icon_url": "/api/v1/assets/items/SMGAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "9мм"
+  ],
   "needs_review": false
  },
  {
@@ -4134,7 +4716,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SMGC.webp",
+  "icon_url": "/api/v1/assets/items/SMGC.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
@@ -4146,47 +4728,52 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SMGHeavyC.webp",
+  "icon_url": "/api/v1/assets/items/SMGHeavyC.png",
   "crate_size": 20,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "SMGHeavyW",
-  "name": "Пистолет-пулемёт No.1 ",
+  "name": "No.1 “The Liar” Submachine Gun",
   "english_name": "No.1 “The Liar” Submachine Gun",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SMGHeavyW.webp",
+  "icon_url": "/api/v1/assets/items/SMGHeavyW.png",
   "crate_size": 20,
   "aliases": [
-   "Пистолет-пулемёт No.1"
+   "Пистолет-пулемёт No.1",
+   "Пистолет-пулемёт No.1 "
   ],
   "needs_review": false
  },
  {
   "code": "SMGW",
-  "name": "Пистолет пулемет Fiddler",
+  "name": "Fiddler Submachine Gun Model 868",
   "english_name": "Fiddler Submachine Gun Model 868",
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SubMachineGun.webp",
+  "icon_url": "/api/v1/assets/items/SMGW.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Пистолет пулемет Fiddler"
+  ],
   "needs_review": false
  },
  {
   "code": "SmokeGrenade",
-  "name": "дымовая граната",
+  "name": "PT-815 Smoke Grenade",
   "english_name": "PT-815 Smoke Grenade",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Smokegrenade.webp",
+  "icon_url": "/api/v1/assets/items/SmokeGrenade.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "дымовая граната"
+  ],
   "needs_review": false
  },
  {
@@ -4196,7 +4783,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SniperRifleC.webp",
+  "icon_url": "/api/v1/assets/items/SniperRifleC.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -4208,7 +4795,7 @@
   "category": "weapons",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SniperRifle.webp",
+  "icon_url": "/api/v1/assets/items/SniperRifleW.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -4220,36 +4807,51 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SnowUniformC.webp",
+  "icon_url": "/api/v1/assets/items/SnowUniformC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "SnowUniformW",
-  "name": "Парка Caoivish",
-  "english_name": "Парка Caoivish",
+  "name": "Caoivish Parka",
+  "english_name": "Caoivish Parka",
   "category": "uniforms",
   "faction": "warden",
   "origin": null,
-  "icon_url": "/api/v1/assets/items/SnowUniformW.webp",
+  "icon_url": "/api/v1/assets/items/SnowUniformW.png",
   "crate_size": 1,
   "aliases": [
-   "зимняя униформа"
+   "зимняя униформа",
+   "Парка Caoivish"
   ],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "SoldierSupplies",
-  "name": "рубашки",
+  "name": "Soldier Supplies",
   "english_name": "Soldier Supplies",
   "category": "medical",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SoldierSupplies.png",
   "crate_size": 10,
+  "aliases": [
+   "рубашки"
+  ],
+  "needs_review": false
+ },
+ {
+  "code": "SoldierUniformC",
+  "name": "Legionary Fatigues",
+  "english_name": "Legionary Fatigues",
+  "category": "uniforms",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/SoldierUniformC.png",
+  "crate_size": 1,
   "aliases": [],
-  "needs_review": true
+  "needs_review": false
  },
  {
   "code": "SoldierUniformW",
@@ -4258,34 +4860,38 @@
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SoldierUniformW.webp",
+  "icon_url": "/api/v1/assets/items/SoldierUniformW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "StickyBomb",
-  "name": "липкая бомба (стика)",
+  "name": "Anti-Tank Sticky Bomb",
   "english_name": "Anti-Tank Sticky Bomb",
   "category": "weapons",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/StickyBomb.webp",
+  "icon_url": "/api/v1/assets/items/StickyBomb.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "липкая бомба (стика)"
+  ],
   "needs_review": false
  },
  {
   "code": "StructureCrate",
-  "name": "Ящик с сооружениями",
+  "name": "Shippable Crate",
   "english_name": "Shippable Crate",
   "category": "structures",
   "faction": "neutral",
   "origin": "structure",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/StructureCrate.png",
   "crate_size": 1,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "Ящик с сооружениями"
+  ],
+  "needs_review": false
  },
  {
   "code": "Sulfur",
@@ -4294,7 +4900,7 @@
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Sulfur.webp",
+  "icon_url": "/api/v1/assets/items/Sulfur.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4306,7 +4912,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/SuperTankCtem.webp",
+  "icon_url": "/api/v1/assets/items/SuperTankC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4318,21 +4924,23 @@
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/SuperTankWVehicle.webp",
+  "icon_url": "/api/v1/assets/items/SuperTankW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "SurfaceWaterMine",
-  "name": "Морская мина E681-B",
+  "name": "E681-B Hullbreaker Mine",
   "english_name": "E681-B Hullbreaker Mine",
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SurfaceMine.webp",
+  "icon_url": "/api/v1/assets/items/SurfaceWaterMine.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Морская мина E681-B"
+  ],
   "needs_review": false
  },
  {
@@ -4342,7 +4950,7 @@
   "category": "weapons",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/StilSwordC.webp",
+  "icon_url": "/api/v1/assets/items/SwordC.png",
   "crate_size": 10,
   "aliases": [],
   "needs_review": false
@@ -4354,7 +4962,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TanketteCVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TanketteC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
@@ -4366,7 +4974,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TanketteFlameC.webp",
+  "icon_url": "/api/v1/assets/items/TanketteFlameC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4378,7 +4986,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TanketteMultiC.webp",
+  "icon_url": "/api/v1/assets/items/TanketteMultiC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4390,7 +4998,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TanketteOffensiveCVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TanketteOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4402,7 +5010,7 @@
   "category": "weapons",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/AntiTankMine.webp",
+  "icon_url": "/api/v1/assets/items/TankMine.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4414,21 +5022,23 @@
   "category": "uniforms",
   "faction": "colonial",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/TankUniformC.webp",
+  "icon_url": "/api/v1/assets/items/TankUniformC.png",
   "crate_size": 15,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "TankUniformW",
-  "name": "форма танкиста",
+  "name": "Padded Boiler Suit",
   "english_name": "Padded Boiler Suit",
   "category": "uniforms",
   "faction": "warden",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/TankUniformW.webp",
+  "icon_url": "/api/v1/assets/items/TankUniformW.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "форма танкиста"
+  ],
   "needs_review": false
  },
  {
@@ -4438,45 +5048,51 @@
   "category": "ammo",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Torpedo.webp",
+  "icon_url": "/api/v1/assets/items/TorpedoAmmo.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "TrailerLiquid",
-  "name": "Жидкостный прицеп",
+  "name": "Rooster - Lamploader",
   "english_name": "Rooster - Lamploader",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/FuelTrailer.webp",
+  "icon_url": "/api/v1/assets/items/TrailerLiquid.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Жидкостный прицеп"
+  ],
   "needs_review": false
  },
  {
   "code": "TrailerMaterial",
-  "name": "строительный прицеп",
+  "name": "Rooster - Tumblebox",
   "english_name": "Rooster - Tumblebox",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/MaterialTrailer.webp",
+  "icon_url": "/api/v1/assets/items/TrailerMaterial.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "строительный прицеп"
+  ],
   "needs_review": false
  },
  {
   "code": "TrailerResource",
-  "name": "Ресурсный прицеп",
+  "name": "Rooster - Junkwagon",
   "english_name": "Rooster - Junkwagon",
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/ResourceTrailer.webp",
+  "icon_url": "/api/v1/assets/items/TrailerResource.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Ресурсный прицеп"
+  ],
   "needs_review": false
  },
  {
@@ -4486,33 +5102,37 @@
   "category": "vehicles",
   "faction": "neutral",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TrainLRArtilleryVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TrainLRArtillery.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "TraumaKit",
-  "name": "Травма-аптечка",
+  "name": "Trauma Kit",
   "english_name": "Trauma Kit",
   "category": "medical",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/TraumaKit.webp",
+  "icon_url": "/api/v1/assets/items/TraumaKit.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "Травма-аптечка"
+  ],
   "needs_review": false
  },
  {
   "code": "Tripod",
-  "name": "Тренога",
+  "name": "Tripod",
   "english_name": "Tripod",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/DeployableTripod.webp",
+  "icon_url": "/api/v1/assets/items/Tripod.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Тренога"
+  ],
   "needs_review": false
  },
  {
@@ -4522,21 +5142,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/TruckC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "TruckDefensiveW",
-  "name": "Дюна",
+  "name": "Dunne Leatherback 2a",
   "english_name": "Dunne Leatherback 2a",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckDefensiveW.webp",
+  "icon_url": "/api/v1/assets/items/TruckDefensiveW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Дюна"
+  ],
   "needs_review": false
  },
  {
@@ -4546,21 +5168,23 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/OilTankerC.webp",
+  "icon_url": "/api/v1/assets/items/TruckLiquidC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "TruckLiquidW",
-  "name": "Дюна бензовоз",
+  "name": "Dunne Fuelrunner 2d",
   "english_name": "Dunne Fuelrunner 2d",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/OilTankerWar.webp",
+  "icon_url": "/api/v1/assets/items/TruckLiquidW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "Дюна бензовоз"
+  ],
   "needs_review": false
  },
  {
@@ -4570,19 +5194,19 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckMobilityCVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TruckMobilityC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "TruckMobilityW",
-  "name": "Landrunner",
+  "name": "Dunne Landrunner 12c",
   "english_name": "Dunne Landrunner 12c",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckMobilityWarVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TruckMobilityW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4594,7 +5218,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckMultiC.webp",
+  "icon_url": "/api/v1/assets/items/TruckMultiC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4606,7 +5230,7 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckOffensiveVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/TruckOffensiveC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4618,69 +5242,79 @@
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckUtilityVehicleC.webp",
+  "icon_url": "/api/v1/assets/items/TruckResourceC.png",
   "crate_size": 3,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "TruckResourceW",
-  "name": "самосвал",
+  "name": "Dunne Loadlugger 3c",
   "english_name": "Dunne Loadlugger 3c",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TruckResourceW.png",
   "crate_size": 3,
-  "aliases": [],
-  "needs_review": true
+  "aliases": [
+   "самосвал"
+  ],
+  "needs_review": false
  },
  {
   "code": "TruckW",
-  "name": "грузовик",
+  "name": "Dunne Transport",
   "english_name": "Dunne Transport",
   "category": "vehicles",
   "faction": "warden",
   "origin": "vehicle",
-  "icon_url": "/api/v1/assets/items/TruckWarVehicle.webp",
+  "icon_url": "/api/v1/assets/items/TruckW.png",
   "crate_size": 3,
-  "aliases": [],
+  "aliases": [
+   "грузовик"
+  ],
   "needs_review": false
  },
  {
   "code": "Unknown",
-  "name": "Неизвестно",
-  "english_name": "Неизвестно",
+  "name": "Unknown",
+  "english_name": "Unknown",
   "category": "other",
   "faction": "neutral",
   "origin": null,
   "icon_url": null,
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Неизвестно"
+  ],
   "needs_review": true
  },
  {
   "code": "Water",
-  "name": "вода",
+  "name": "Water",
   "english_name": "Water",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Water.webp",
+  "icon_url": "/api/v1/assets/items/Water.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "вода"
+  ],
   "needs_review": false
  },
  {
   "code": "WaterBucket",
-  "name": "Ведро для воды",
+  "name": "Water Bucket",
   "english_name": "Water Bucket",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Water.webp",
+  "icon_url": "/api/v1/assets/items/WaterBucket.png",
   "crate_size": 50,
-  "aliases": [],
+  "aliases": [
+   "Ведро для воды"
+  ],
   "needs_review": false
  },
  {
@@ -4690,19 +5324,19 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/SeaMine.webp",
+  "icon_url": "/api/v1/assets/items/WaterMine.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "WaterWallMaterials",
-  "name": "naval buoy",
+  "name": "Naval Buoy",
   "english_name": "Naval Buoy",
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/WaterWall.webp",
+  "icon_url": "/api/v1/assets/items/WaterWallMaterials.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4714,7 +5348,7 @@
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/WindsockItem.webp",
+  "icon_url": "/api/v1/assets/items/WindsockT.png",
   "crate_size": 5,
   "aliases": [],
   "needs_review": false
@@ -4726,7 +5360,7 @@
   "category": "materials",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/RefinedMaterials.webp",
+  "icon_url": "/api/v1/assets/items/Wood.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4738,21 +5372,23 @@
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Hammer.webp",
+  "icon_url": "/api/v1/assets/items/WorkHammer.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
  {
   "code": "WorkWrench",
-  "name": "Гаечный ключ",
+  "name": "Wrench",
   "english_name": "Wrench",
   "category": "equipment",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/WorkWrench.webp",
+  "icon_url": "/api/v1/assets/items/WorkWrench.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Гаечный ключ"
+  ],
   "needs_review": false
  },
  {
@@ -4762,7 +5398,7 @@
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Wounded.webp",
+  "icon_url": "/api/v1/assets/items/WoundedCarriedPlayer.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4774,7 +5410,7 @@
   "category": "other",
   "faction": "neutral",
   "origin": "item",
-  "icon_url": "/api/v1/assets/items/Salvage02.webp",
+  "icon_url": "/api/v1/assets/items/Wreckage.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
