@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.errors import ConflictError, NotFoundError, PermissionDeniedError
 from app.core.i18n import Translator, normalize_locale
-from app.core.permissions import ClanRole, scopes_for
+from app.core.permissions import ClanRole, Scopes, scopes_for
 from app.core.security import decode_access_token, hash_clan_token, issue_access_token  # noqa: F401
 from app.core.tenancy import bypass_clan_filter
 from app.models.code import ClanInviteCode
@@ -27,6 +27,13 @@ from app.schemas.auth import (
 )
 
 DOMAIN = "auth"
+
+# Арендатор без данных для анонимного гостя (клан с таким id создать нельзя:
+# Discord-серверы — числа, а dev/seed-кланы так не называются).
+GUEST_CLAN_SENTINEL: Final[str] = "__guest__"
+GUEST_REVOKED_SCOPES: Final[tuple[str, ...]] = (
+    Scopes.ORDERS_READ, Scopes.STOCKPILES_READ, Scopes.TIMERS_READ,
+)
 
 ROLE_RANK: Final[dict[ClanRole, int]] = {
     ClanRole.GUEST: 0,
@@ -316,23 +323,27 @@ class AuthService:
 
     # ---------------- гостевой просмотр ------------------------------------------ #
     def issue_guest_token(self) -> TokenResponse:
-        clan_id = settings.GUEST_CLAN_ID or settings.DEFAULT_CLAN_ID
-        if not clan_id:
+        """Гость пользуется инструментами (каталог, рецепты, коды, обучение), но
+        не видит ни одного клана: свой пустой арендатор + отозванные чтения
+        складов, заказов/рапортов и таймеров. Двойная защита: даже ручка, забывшая
+        проверку scope, отфильтрует данные по несуществующему клану."""
+        if not settings.GUEST_ACCESS_ENABLED:
             raise PermissionDeniedError(message_key="guest.disabled", domain=DOMAIN, params={})
         guest_id = f"guest:{secrets.token_hex(6)}"
         token = issue_access_token(
             user_id=guest_id,
-            clan_id=clan_id,
+            clan_id=GUEST_CLAN_SENTINEL,
             role=ClanRole.GUEST,
+            revoked_scopes=list(GUEST_REVOKED_SCOPES),
             ttl_minutes=settings.GUEST_TOKEN_TTL_MIN,
             guest=True,
         )
         me = MeRead(
             subject_type="guest",
             user_id=guest_id,
-            clan_id=clan_id,
+            clan_id=GUEST_CLAN_SENTINEL,
             role=ClanRole.GUEST,
-            scopes=sorted(scopes_for(ClanRole.GUEST)),
+            scopes=sorted(scopes_for(ClanRole.GUEST, (), GUEST_REVOKED_SCOPES)),
             display_name=None,
         )
         return TokenResponse(

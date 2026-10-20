@@ -60,15 +60,14 @@ class Settings(BaseSettings):
     COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
 
     # --- Bootstrap-аренда ------------------------------------------------
-    # Основной клан сайта: его данные видит гостевой доступ (GUEST_CLAN_ID пуст)
-    # и его admin+ правят глобальный контент. Discord-юзеров сюда больше НЕ
+    # Основной клан сайта: его admin+ правят глобальный контент. Discord-юзеров сюда больше НЕ
     # принимают автоматически: владелец сервера создаёт клан сам, остальные
     # вступают по invite-ссылке.
     DEFAULT_CLAN_ID: str | None = None
     DEFAULT_CLAN_ROLE: ClanRole = ClanRole.GUEST   # устарело: авто-вступление отключено
-    # Гостевой доступ «только просмотр» (POST /auth/guest). Пусто -> DEFAULT_CLAN_ID;
-    # оба пусты -> гостевой вход выключен.
-    GUEST_CLAN_ID: str | None = None
+    # Гостевой доступ (POST /auth/guest): только инструменты и каталог. Гость живёт
+    # в пустом изолированном арендаторе GUEST_CLAN_SENTINEL и не видит данных кланов.
+    GUEST_ACCESS_ENABLED: bool = True
     GUEST_TOKEN_TTL_MIN: int = 720
     # Сколько живёт выбор сервера после Discord-входа (подписанная кука).
     DISCORD_SETUP_TTL_SEC: int = 900

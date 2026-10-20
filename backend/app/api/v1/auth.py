@@ -189,7 +189,7 @@ async def issue_dev_token(
 @router.post(
     "/guest",
     response_model=TokenResponse,
-    summary="Гостевой доступ: только просмотр основного клана (GUEST_CLAN_ID / DEFAULT_CLAN_ID)",
+    summary="Гостевой доступ: инструменты и каталог, без данных какого-либо клана",
 )
 async def guest_login(response: Response, service: AuthServiceDep) -> TokenResponse:
     token = service.issue_guest_token()

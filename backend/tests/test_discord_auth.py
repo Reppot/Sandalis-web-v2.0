@@ -25,7 +25,7 @@ from app.core.db import AsyncSessionLocal
 from app.main import app
 from app.models.rbac import Clan, ClanMembership, User
 from app.services.discord_oauth import make_state, verify_state
-from tests.conftest import run, seed_clan
+from tests.conftest import run, seed_catalog_item, seed_clan, seed_stockpile_with_stock
 
 API = "/api/v1"
 BASE = settings.DISCORD_API_BASE_URL
@@ -697,29 +697,32 @@ def test_invite_link_joins_clan_via_discord(db, monkeypatch):
 # --------------------------------------------------------------------------- #
 # гостевой доступ
 # --------------------------------------------------------------------------- #
-def test_guest_access_is_read_only(db, monkeypatch):
+def test_guest_uses_tools_but_sees_no_clan_data(db, monkeypatch):
     async def main() -> None:
-        monkeypatch.setattr(settings, "DEFAULT_CLAN_ID", None, raising=True)
-        monkeypatch.setattr(settings, "GUEST_CLAN_ID", None, raising=True)
+        monkeypatch.setattr(settings, "GUEST_ACCESS_ENABLED", False, raising=True)
         async with client() as c:
-            r = await c.post(f"{API}/auth/guest")
-            assert r.status_code == 403
+            assert (await c.post(f"{API}/auth/guest")).status_code == 403
 
-        await seed_clan("CLAN_A")
+        monkeypatch.setattr(settings, "GUEST_ACCESS_ENABLED", True, raising=True)
         monkeypatch.setattr(settings, "DEFAULT_CLAN_ID", "CLAN_A", raising=True)
+        await seed_catalog_item("rifle")
+        await seed_stockpile_with_stock(clan_id="CLAN_A")
         async with client() as c:
             r = await c.post(f"{API}/auth/guest", headers={"Accept-Language": "ru"})
             assert r.status_code == 200, r.text
-            assert r.json()["me"]["subject_type"] == "guest"
-            assert r.json()["me"]["role"] == "guest"
+            me = r.json()["me"]
+            assert me["subject_type"] == "guest"
+            assert me["clan_id"] == "__guest__"          # ни SANDALIS, ни другой клан
+            assert me["scopes"] == ["catalog:read"]
 
-            me = await c.get(f"{API}/auth/me")
-            assert me.json()["subject_type"] == "guest"
-            assert me.json()["clan_id"] == "CLAN_A"
-
-            assert (await c.get(f"{API}/stockpiles")).status_code == 200
-            write = await c.post(f"{API}/stockpiles", json={"name": "X", "region": "Y"})
-            assert write.status_code == 403
-            assert (await c.get(f"{API}/auth/invites")).status_code == 403
+            # инструменты работают
+            assert (await c.get(f"{API}/items")).status_code == 200
+            assert (await c.get(f"{API}/content")).status_code == 200
+            assert (await c.get(f"{API}/recipes")).status_code == 200
+            # данные кланов — нет
+            for path in ("stockpiles", "timers", "reports", "orders", "auth/invites", "clan/settings"):
+                resp = await c.get(f"{API}/{path}")
+                assert resp.status_code in (403, 404), (path, resp.status_code, resp.text)
+            assert (await c.post(f"{API}/stockpiles", json={"name": "X", "region": "Y"})).status_code == 403
 
     run(main())

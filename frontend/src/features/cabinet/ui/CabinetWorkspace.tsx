@@ -24,6 +24,7 @@ export const CabinetWorkspace: React.FC = () => {
   const { session, logout, can } = useSession();
   const { media } = useContent();
   if (!session) return null;
+  const guest = session.subjectType === "guest";
   const role = ROLE_LABEL[session.role] ? t(ROLE_LABEL[session.role]) : session.role;
   const cover = media("bg_cabinet");
   const avatar = assetUrl(session.avatarUrl);
@@ -46,7 +47,7 @@ export const CabinetWorkspace: React.FC = () => {
           <div className="min-w-0 flex-1">
             <div className="hud-label text-accent">{session.subjectType === "guest" ? t("cabinet.guestKicker") : `${t("cabinet.kicker")} • ${session.subjectType === "user" ? "DISCORD LINK" : "CLAN TOKEN"}`}</div>
             <h1 className="cabinet-name">{name}</h1>
-            <div className="cabinet-username">ID {session.userId} <span>•</span> {t("cabinet.clanLower")} {session.clanId}</div>
+            <div className="cabinet-username">ID {session.userId}{guest ? null : <> <span>•</span> {t("cabinet.clanLower")} {session.clanId}</>}</div>
             <div className="mt-3 flex flex-wrap gap-2">
               <span className="cabinet-pill cabinet-pill-online">● {t("cabinet.online")}</span>
               <span className="cabinet-pill">◈ {role}</span>
@@ -62,7 +63,7 @@ export const CabinetWorkspace: React.FC = () => {
           <div className="cabinet-rule" />
           <InfoRow label={t("cabinet.memberId")} value={session.userId} mono />
           <InfoRow label={t("cabinet.callsign")} value={name} />
-          <InfoRow label={t("cabinet.clan")} value={session.clanId} />
+          {!guest && <InfoRow label={t("cabinet.clan")} value={session.clanId} />}
           <InfoRow label={t("cabinet.role")} value={role} accent />
           <InfoRow label={t("cabinet.loginChannel")} value={t(session.subjectType === "user" ? "cabinet.viaDiscord" : session.subjectType === "guest" ? "cabinet.viaGuest" : "cabinet.viaToken")} />
         </section>

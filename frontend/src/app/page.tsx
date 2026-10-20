@@ -13,7 +13,7 @@ import { TrainingWorkspace } from "@/features/training";
 import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
-import { TABS, isTabKey, type TabKey } from "@/app/_shell/tabs";
+import { TABS, isTabKey, visibleTabs, type TabKey } from "@/app/_shell/tabs";
 import { useT } from "@/shared";
 
 export default function TerminalPage() {
@@ -35,7 +35,10 @@ export default function TerminalPage() {
     window.scrollTo({ top: 0 });
   }, []);
 
-  const background = session ? media(`bg_${TABS.find((t) => t.key === tab)?.background ?? "orders"}`) : media("bg_home");
+  const tabs = React.useMemo(() => visibleTabs(can), [can]);
+  const current: TabKey = tabs.some((x) => x.key === tab) ? tab : tabs[0]?.key ?? "tools";
+
+  const background = session ? media(`bg_${TABS.find((t) => t.key === current)?.background ?? "orders"}`) : media("bg_home");
 
   if (loading) {
     return (
@@ -51,7 +54,7 @@ export default function TerminalPage() {
   if (!session) return <LoginScreen onLoggedIn={setSession} />;
 
   const workspace = (() => {
-    switch (tab) {
+    switch (current) {
       case "orders":
         return <SupplyWorkspace canWriteStockpiles={can(Scopes.STOCKPILES_WRITE)} canWriteOrders={can(Scopes.ORDERS_WRITE)} onReportSubmitted={() => select("reports")} />;
       case "reports":
@@ -75,10 +78,10 @@ export default function TerminalPage() {
       <div className="relative flex min-h-dvh flex-col gap-2.5 p-2.5 md:gap-3 md:p-3">
         <Header />
         <div className="flex flex-1 items-start gap-2.5 md:gap-3">
-          <Sidebar active={tab} onSelect={select} />
-          <main key={tab} className="min-w-0 flex-1 pb-20 md:pb-0">{workspace}</main>
+          <Sidebar tabs={tabs} active={current} onSelect={select} />
+          <main key={current} className="min-w-0 flex-1 pb-20 md:pb-0">{workspace}</main>
         </div>
-        <MobileNav active={tab} onSelect={select} />
+        <MobileNav tabs={tabs} active={current} onSelect={select} />
       </div>
     </TerminalProvider>
   );

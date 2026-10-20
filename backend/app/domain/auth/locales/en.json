@@ -41,6 +41,6 @@
   },
   "guest": {
     "disabled": "Guest access is disabled.",
-    "signed_in": "Guest access: read only."
+    "signed_in": "Guest access: tools only, clan data is hidden."
   }
 }

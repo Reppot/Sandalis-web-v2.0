@@ -314,7 +314,7 @@ principal: Annotated[
 ```text
 GET  /api/v1/auth/me
 POST /api/v1/auth/dev-token
-POST /api/v1/auth/guest                     # гостевой просмотр GUEST_CLAN_ID/DEFAULT_CLAN_ID
+POST /api/v1/auth/guest                     # гость: только инструменты/каталог, клан __guest__
 GET  /api/v1/auth/invites/{code}/preview     # публичное превью invite-ссылки
 GET  /api/v1/auth/discord/setup              # серверы во владении после Discord-входа
 POST /api/v1/auth/discord/setup              # {guild_id} -> owner клана | {clan_id}
@@ -334,7 +334,7 @@ Backend сейчас поддерживает:
 - Discord OAuth2 (`scope=identify guilds`) -> JWT/cookie, выбор сервера клана владельцем;
 - dev-token для локальной разработки;
 - invite-ссылки (`/?invite=CODE` -> Discord-вход) для вступления в клан;
-- гостевой JWT (`gst`) — только чтение основного клана.
+- гостевой JWT (`gst`) — инструменты и каталог в пустом арендаторе `__guest__`, данные кланов недоступны.
 
 ### Discord auth files
 
@@ -927,8 +927,8 @@ SESSION_COOKIE_NAME=sindaris_session
 SESSION_TTL_MINUTES=10080     # 7 суток
 ACCESS_TOKEN_TTL_MIN=10080    # JWT живёт столько же, сколько кука
 
-DEFAULT_CLAN_ID=SANDALIS      # основной клан: его видит гостевой доступ, его admin+ правят контент
-GUEST_CLAN_ID=                # пусто -> DEFAULT_CLAN_ID; оба пусты -> гостевой вход выключен
+DEFAULT_CLAN_ID=SANDALIS      # основной клан: его admin+ правят глобальный контент
+GUEST_ACCESS_ENABLED=true     # гость видит только инструменты, данные кланов — никогда
 DEFAULT_LOCALE=ru
 ```
 
@@ -964,8 +964,8 @@ http://localhost:3000/api/v1/auth/discord/callback
 2. Discord спрашивает доступ к списку серверов; после входа появляется «Выберите сервер клана».
 3. Выбор сервера → роль «Командир клана», права «Полный доступ». Если раньше владелец уже
    был owner клана `SANDALIS`, этот клан привязывается к серверу, данные сохраняются;
-   иначе создаётся клан с id = ID сервера — тогда для гостевого просмотра выставьте
-   `GUEST_CLAN_ID` (и `CONTENT_ADMIN_CLAN_ID`) = этот id.
+   иначе создаётся клан с id = ID сервера — тогда для правки контента выставьте
+   `CONTENT_ADMIN_CLAN_ID` = этот id.
 4. Остальные — «Кабинет» → «Приглашения» → ссылка-приглашение (🔗), её открывают и входят через Discord.
 
 ### Локальные тесты
