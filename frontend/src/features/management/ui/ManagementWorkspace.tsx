@@ -94,11 +94,13 @@ const BotPanel: React.FC<{ onChanged: () => void }> = ({ onChanged }) => {
   };
 
   const synced = Boolean(data?.syncedAt);
+  // ✔ только после живой проверки: бот видит именно сервер этого клана
+  const verified = Boolean(data?.guildId && data.botConfigured && data.botInGuild);
   const steps: { done: boolean; label: MessageKey }[] = data
     ? [
-        { done: Boolean(data.guildId), label: "mgmt.stepGuild" },
-        { done: data.botConfigured && data.botInGuild, label: "mgmt.stepBot" },
-        { done: synced, label: "mgmt.stepRoles" },
+        { done: verified, label: "mgmt.stepGuild" },
+        { done: verified, label: "mgmt.stepBot" },
+        { done: verified && synced, label: "mgmt.stepRoles" },
       ]
     : [];
 
@@ -107,9 +109,9 @@ const BotPanel: React.FC<{ onChanged: () => void }> = ({ onChanged }) => {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="panel-title">🤖 {t("mgmt.botTitle")}</div>
         {data?.guildId && (
-          <span className={cn("cabinet-pill", synced && data.botInGuild && "cabinet-pill-online")}>
-            {data.botInGuild ? `● ${t("mgmt.botOnline")}` : `○ ${t("mgmt.botOffline")}`}
-            {synced ? ` • ${t("droles.on")} • ${data.roles.length}` : ""}
+          <span className={cn("cabinet-pill", verified && "cabinet-pill-online")}>
+            {verified ? `● ${t("mgmt.botOnline")}` : `○ ${t("mgmt.botOffline")}`}
+            {verified && synced ? ` • ${t("droles.on")} • ${data.roles.length}` : ""}
           </span>
         )}
       </div>

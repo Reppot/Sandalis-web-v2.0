@@ -91,3 +91,16 @@ class TestTokens:
         with pytest.raises(UnauthorizedError) as err:
             decode_access_token(forged)
         assert err.value.message_key == "errors.clan_context_missing"
+
+
+def test_previous_token_generation_is_rejected():
+    import jwt as _jwt
+    from app.core.config import settings
+
+    token = issue_access_token(user_id="u", clan_id="C", role=ClanRole.MEMBER)
+    payload = _jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALG],
+                          audience=settings.JWT_AUDIENCE, issuer=settings.JWT_ISSUER)
+    payload.pop("gen")                      # токен, выданный до очистки данных
+    old = _jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALG)
+    with pytest.raises(UnauthorizedError):
+        decode_access_token(old)

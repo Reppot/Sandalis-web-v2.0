@@ -247,28 +247,14 @@ class AuthService:
     ) -> tuple[ClanMembership, str]:
         """Владелец сервера становится owner клана этого сервера.
 
-        Клан ищется по discord_guild_id; если его нет — к серверу привязывается
-        старый клан пользователя без сервера, где он уже owner (перенос данных
-        клана, созданного до привязки), иначе создаётся новый клан id = guild id.
+        Клан ищется по discord_guild_id, иначе создаётся новый клан id = guild id.
+        Данные одного клана никогда не переходят к серверу другого.
         """
         with bypass_clan_filter():
             clan = (
                 await self.session.execute(select(Clan).where(Clan.discord_guild_id == guild["id"]))
             ).scalar_one_or_none()
-            if clan is None:
-                clan = (
-                    await self.session.execute(
-                        select(Clan)
-                        .join(ClanMembership, ClanMembership.clan_id == Clan.id)
-                        .where(
-                            ClanMembership.user_id == user_id,
-                            ClanMembership.role == ClanRole.OWNER,
-                            Clan.discord_guild_id.is_(None),
-                        )
-                        .order_by(Clan.created_at)
-                        .limit(1)
-                    )
-                ).scalars().first()
+            # каждый сервер — свой клан: чужие и старые кланы к серверу не привязываются
             if clan is None:
                 clan = await self.session.get(Clan, guild["id"])
             if clan is None:

@@ -602,7 +602,7 @@ def test_owner_picks_guild_and_becomes_clan_owner(db, monkeypatch):
     run(main())
 
 
-def test_owner_guild_links_existing_unlinked_clan(db, monkeypatch):
+def test_owner_guild_never_takes_over_another_clan(db, monkeypatch):
     async def main() -> None:
         enable_discord(monkeypatch)
         await seed_membership("SANDALIS", role=ClanRole.OWNER)
@@ -611,11 +611,10 @@ def test_owner_guild_links_existing_unlinked_clan(db, monkeypatch):
                 await c.get(f"{API}/auth/discord/callback", params={"code": "abc", "state": make_state()})
                 ok = await c.post(f"{API}/auth/discord/setup", json={"guild_id": "900000000000000001"})
                 assert ok.status_code == 200, ok.text
-                assert ok.json()["me"]["clan_id"] == "SANDALIS"   # данные клана сохранены
+                assert ok.json()["me"]["clan_id"] == "900000000000000001"   # новый клан сервера
         async with AsyncSessionLocal() as s:
-            clan = await s.get(Clan, "SANDALIS")
-            assert clan.discord_guild_id == "900000000000000001"
-            assert clan.name == "SINDARIS HQ"
+            assert (await s.get(Clan, "SANDALIS")).discord_guild_id is None   # старый клан не тронут
+            assert (await s.get(Clan, "900000000000000001")).name == "SINDARIS HQ"
 
     run(main())
 

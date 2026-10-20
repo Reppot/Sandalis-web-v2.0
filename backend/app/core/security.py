@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import uuid
 from datetime import UTC, datetime, timedelta
-from typing import Any, Literal
+from typing import Any, Final, Literal
 
 import jwt
 from pydantic import BaseModel, ConfigDict, Field
@@ -36,6 +36,11 @@ def hash_clan_token(raw: str) -> str:
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
+# Поколение сессий: увеличение отзывает все выданные ранее JWT (куки всех посетителей).
+# 2 — очистка данных кланов 2026-10-21 (миграция 0010_reset_clan_data).
+TOKEN_GENERATION: Final[int] = 2
+
+
 def issue_access_token(
     *,
     user_id: str,
@@ -62,6 +67,7 @@ def issue_access_token(
         "nbf": now,
         "exp": now + timedelta(minutes=ttl_minutes or settings.ACCESS_TOKEN_TTL_MIN),
         "jti": uuid.uuid4().hex,
+        "gen": TOKEN_GENERATION,
     }
     if guest:
         payload["gst"] = True   # гостевой просмотр: без профиля и membership
@@ -87,6 +93,10 @@ def decode_access_token(token: str) -> Principal:
     clan_id = payload.get("clan_id")
     if not clan_id:
         raise UnauthorizedError(message_key="errors.clan_context_missing")
+
+    if payload.get("gen") != TOKEN_GENERATION:
+        # токен прежнего поколения (до очистки данных) — нужен новый вход
+        raise UnauthorizedError(message_key="errors.token_expired", code="token_expired")
 
     try:
         role = ClanRole(payload.get("role", ClanRole.GUEST))
