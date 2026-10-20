@@ -17,7 +17,7 @@ const PHRASE_HOLD_SECONDS = 12;
 /** Бегущая строка: склады, которым осталось меньше суток, + фразы штаба из реестра контента. */
 export const Ticker: React.FC = () => {
   const t = useT();
-  const { timers, loading, connection } = useTerminal();
+  const { timers, loading, connection, enabled } = useTerminal();
   const { list } = useContent();
   const now = useClock();
   const [phrase, setPhrase] = React.useState("");
@@ -58,9 +58,10 @@ export const Ticker: React.FC = () => {
     if (phrase) out.push({ text: `🟢 ${phrase}`, tone: "safe" });
     if (loading) out.push({ text: t("ticker.loading"), tone: "safe" });
     else if (connection === "offline") out.push({ text: t("ticker.offline"), tone: "critical" });
-    if (!out.length) out.push({ text: t("ticker.allSafe"), tone: "safe" });
+    // «все склады в безопасности» — только тем, кто видит склады клана
+    if (!out.length) out.push({ text: enabled ? t("ticker.allSafe") : "SINDARIS LOGISTICS OVERWATCH", tone: "safe" });
     return out;
-  }, [timers, now, phrase, loading, connection, t]);
+  }, [timers, now, phrase, loading, connection, enabled, t]);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const trackRef = React.useRef<HTMLDivElement>(null);

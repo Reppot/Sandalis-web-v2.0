@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import mimetypes
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -70,6 +71,12 @@ app.include_router(api_router, prefix=settings.API_V1_PREFIX)
 # ссылки на них хранятся в БД (catalog_items.icon_url, app_content). Видео в git не кладём:
 # его URL (Supabase Storage) тоже в app_content.
 STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+
+
+# slim-образ Python не знает .webp/.svg: иначе иконки и скриншоты руководства
+# уходят как application/octet-stream
+mimetypes.add_type("image/webp", ".webp")
+mimetypes.add_type("image/svg+xml", ".svg")
 
 
 class CachedStaticFiles(StaticFiles):

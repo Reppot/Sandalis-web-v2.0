@@ -138,7 +138,7 @@ const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; active?: number | n
     // высокие снимки (экран входа, модальные окна) целиком помещаются по высоте экрана
     <div className="guide-shot" style={{ aspectRatio: `${size.w} / ${size.h}`, width: `min(100%, calc(78dvh * ${size.w / size.h}))` }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={pick(shot.caption, locale)} width={size.w} height={size.h} loading="lazy" />
+      <img src={src} alt={pick(shot.caption, locale)} width={size.w} height={size.h} />
       {markers.map((m, i) => (
         <button
           key={i}

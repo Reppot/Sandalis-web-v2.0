@@ -19,6 +19,8 @@ interface TerminalContextValue {
   connection: Connection;
   lastSync: Date | null;
   refresh: () => Promise<void>;
+  /** Есть ли у сессии доступ к таймерам (гость — нет). */
+  enabled: boolean;
   upsertTimer: (timer: Timer) => void;
   removeTimer: (id: string) => void;
 }
@@ -59,7 +61,14 @@ export const TerminalProvider: React.FC<React.PropsWithChildren<{ enabled: boole
   }, [enabled]);
 
   React.useEffect(() => {
-    if (!enabled) return;
+    if (!enabled) {
+      // нет прав на таймеры (гость): нечего синхронизировать — не «висим» в загрузке
+      setTimers([]);
+      setStockpiles([]);
+      setLoading(false);
+      setConnection("online");
+      return;
+    }
     void refresh();
     const poll = window.setInterval(() => void refresh(), POLL_MS);
     const onFocus = () => void refresh();
@@ -86,8 +95,8 @@ export const TerminalProvider: React.FC<React.PropsWithChildren<{ enabled: boole
     const monitored = timers
       .map((t) => ({ ...t, stockpile: t.stockpile_id ? byId.get(t.stockpile_id) ?? null : null }))
       .sort((a, b) => new Date(a.ends_at).getTime() - new Date(b.ends_at).getTime());
-    return { timers: monitored, stockpiles, loading, connection, lastSync, refresh, upsertTimer, removeTimer };
-  }, [timers, stockpiles, loading, connection, lastSync, refresh, upsertTimer, removeTimer]);
+    return { enabled, timers: monitored, stockpiles, loading, connection, lastSync, refresh, upsertTimer, removeTimer };
+  }, [enabled, timers, stockpiles, loading, connection, lastSync, refresh, upsertTimer, removeTimer]);
 
   return (
     <TerminalContext.Provider value={value}>
