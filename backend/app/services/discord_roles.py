@@ -124,7 +124,9 @@ def bot_invite_url(guild_id: str | None) -> str | None:
         return None
     params = {"client_id": settings.DISCORD_CLIENT_ID, "scope": "bot", "permissions": "0"}
     if guild_id:
-        params |= {"guild_id": guild_id, "disable_guild_select": "true"}
+        # сервер клана подставлен заранее, но не зафиксирован: если у аккаунта нет прав
+        # на этот сервер, Discord иначе показывает пустой список и не даёт выбрать другой
+        params["guild_id"] = guild_id
     return f"https://discord.com/oauth2/authorize?{urlencode(params)}"
 
 
