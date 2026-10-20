@@ -1,26 +1,30 @@
-import type { UiIcon } from "@/shared";
+import type { MessageKey, UiIcon } from "@/shared";
 
 export type TabKey = "orders" | "reports" | "timers" | "codes" | "tools" | "training" | "cabinet";
 
 export interface NavTab {
   key: TabKey;
-  label: string;
-  short: string;
   icon: UiIcon;
-  hint: string;
   /** Ключ фона раздела в реестре медиа (bg_<ключ>). */
   background: string;
 }
 
 export const TABS: NavTab[] = [
-  { key: "orders", label: "Заказы", short: "Заказы", icon: "parchment", hint: "Конструктор заказов и монитор склада", background: "orders" },
-  { key: "reports", label: "Текущие заказы клана", short: "Рапорты", icon: "log-file", hint: "Рапорты снабжения: статусы, экспорт, Discord", background: "reports" },
-  { key: "timers", label: "Таймеры", short: "Таймеры", icon: "24-hour-clock", hint: "Таймеры деспавна складов", background: "timers" },
-  { key: "codes", label: "База кодов", short: "Коды", icon: "braces", hint: "Реестр кодов предметов Foxhole", background: "codes" },
-  { key: "tools", label: "Инструменты", short: "Утилиты", icon: "browsing", hint: "Калькуляторы клана и внешние сервисы", background: "tools" },
-  { key: "training", label: "Обучение", short: "Обучение", icon: "brain", hint: "Учебный центр штаба", background: "training" },
-  { key: "cabinet", label: "Личный кабинет", short: "Кабинет", icon: "business", hint: "Профиль участника и управление кланом", background: "cabinet" },
+  { key: "orders", icon: "parchment", background: "orders" },
+  { key: "reports", icon: "log-file", background: "reports" },
+  { key: "timers", icon: "24-hour-clock", background: "timers" },
+  { key: "codes", icon: "braces", background: "codes" },
+  { key: "tools", icon: "browsing", background: "tools" },
+  { key: "training", icon: "brain", background: "training" },
+  { key: "cabinet", icon: "business", background: "cabinet" },
 ];
+
+/** Подписи вкладки в словаре: nav.<key>.label / .short / .hint. */
+export const tabKeys = (key: TabKey) => ({
+  label: `nav.${key}.label` as MessageKey,
+  short: `nav.${key}.short` as MessageKey,
+  hint: `nav.${key}.hint` as MessageKey,
+});
 
 export function isTabKey(value: string | null): value is TabKey {
   return TABS.some((t) => t.key === value);

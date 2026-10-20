@@ -21,6 +21,13 @@ export class ApiError extends Error {
   }
 }
 
+// Язык интерфейса: бэкенд отвечает локализованными message/ошибками по X-Locale.
+let apiLocale = "ru";
+
+export function setApiLocale(locale: string): void {
+  apiLocale = locale;
+}
+
 // 401 посреди работы = кука истекла. Сессионный провайдер подписывается и
 // сбрасывает session, чтобы вкладки показали экран входа, а не сырую ошибку.
 let unauthorizedHandler: (() => void) | null = null;
@@ -71,8 +78,8 @@ export const apiClient = {
 
     const defaultHeaders: Record<string, string> = {
       Accept: "application/json",
-      "X-Locale": "ru",
-      "Accept-Language": "ru",
+      "X-Locale": apiLocale,
+      "Accept-Language": apiLocale,
     };
     // FormData сам выставит multipart-границу
     if (rest.body && !(rest.body instanceof FormData)) {

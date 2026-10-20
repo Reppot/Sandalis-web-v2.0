@@ -65,6 +65,7 @@ class StockpileItemRead(BaseModel):
     updated_at: datetime
     # витрина из каталога — клиенту не нужно отдельно резолвить коды
     name: str | None = None
+    name_en: str | None = None
     icon_url: str | None = None
 
 

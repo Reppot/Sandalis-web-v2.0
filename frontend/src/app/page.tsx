@@ -14,8 +14,10 @@ import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
 import { TABS, isTabKey, type TabKey } from "@/app/_shell/tabs";
+import { useT } from "@/shared";
 
 export default function TerminalPage() {
+  const t = useT();
   const { session, loading, setSession, can } = useSession();
   const { media } = useContent();
   const [tab, setTab] = React.useState<TabKey>("orders");
@@ -40,7 +42,7 @@ export default function TerminalPage() {
       <>
         <BackgroundLayer src={media("bg_home")} />
         <div className="hud-label flex min-h-dvh items-center justify-center text-muted">
-          <span className="pulse">📡 УСТАНОВКА КАНАЛА СВЯЗИ...</span>
+          <span className="pulse">{t("app.connecting")}</span>
         </div>
       </>
     );

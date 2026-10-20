@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { DAY, HOUR, formatCountdown, secondsLeft } from "@/shared";
+import { DAY, HOUR, formatCountdown, secondsLeft, timeUnits, useT } from "@/shared";
 import { timerPlace, useClock, useTerminal } from "@/features/timers/model";
 
 interface Segment {
@@ -16,6 +16,7 @@ const PHRASE_HOLD_SECONDS = 12;
 
 /** Бегущая строка: склады, которым осталось меньше суток, + фразы штаба из реестра контента. */
 export const Ticker: React.FC = () => {
+  const t = useT();
   const { timers, loading, connection } = useTerminal();
   const { list } = useContent();
   const now = useClock();
@@ -39,26 +40,27 @@ export const Ticker: React.FC = () => {
   }, [now, phrases]);
 
   const segments = React.useMemo<Segment[]>(() => {
+    const units = timeUnits(t);
     const out: Segment[] = [];
-    for (const t of timers) {
-      if (t.completed_at || !now) continue;
-      const ts = secondsLeft(t.ends_at, now);
+    for (const timer of timers) {
+      if (timer.completed_at || !now) continue;
+      const ts = secondsLeft(timer.ends_at, now);
       if (ts >= DAY) continue;
-      const { region, location } = timerPlace(t);
+      const { region, location } = timerPlace(timer);
       const where = region ? `${region} (${location})` : location;
       if (ts <= 0) {
-        out.push({ text: `🔴 [ПОТЕРЯН] Склад ${where} — таймер истёк! Немедленно обновите удержание!`, tone: "critical" });
+        out.push({ text: t("ticker.lost", { where }), tone: "critical" });
         continue;
       }
       const crit = ts < HOUR;
-      out.push({ text: `${crit ? "🔴 [КРИТИЧЕСКИ]" : "🟠 [ВНИМАНИЕ]"} Склад ${where} пропадёт через ${formatCountdown(ts)}!`, tone: crit ? "critical" : "warning" });
+      out.push({ text: t(crit ? "ticker.critical" : "ticker.warning", { where, left: formatCountdown(ts, units) }), tone: crit ? "critical" : "warning" });
     }
     if (phrase) out.push({ text: `🟢 ${phrase}`, tone: "safe" });
-    if (loading) out.push({ text: "📡 ЗАГРУЗКА ВОЕННЫХ СПУТНИКОВ СЕКТОРА...", tone: "safe" });
-    else if (connection === "offline") out.push({ text: "🔴 [СВЯЗЬ] ПОТЕРЯН КАНАЛ С БАЗОЙ СЕКТОРОВ — ПОВТОРНОЕ ПОДКЛЮЧЕНИЕ...", tone: "critical" });
-    if (!out.length) out.push({ text: "🟢 ВСЕ СЕКТОРА СНАБЖЕНИЯ В ПОЛНОЙ БЕЗОПАСНОСТИ", tone: "safe" });
+    if (loading) out.push({ text: t("ticker.loading"), tone: "safe" });
+    else if (connection === "offline") out.push({ text: t("ticker.offline"), tone: "critical" });
+    if (!out.length) out.push({ text: t("ticker.allSafe"), tone: "safe" });
     return out;
-  }, [timers, now, phrase, loading, connection]);
+  }, [timers, now, phrase, loading, connection, t]);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   const trackRef = React.useRef<HTMLDivElement>(null);
@@ -113,7 +115,7 @@ export const Ticker: React.FC = () => {
       onMouseEnter={() => (paused.current = true)}
       onMouseLeave={() => (paused.current = false)}
       role="marquee"
-      aria-label="Лента предупреждений"
+      aria-label={t("ticker.aria")}
     >
       <div ref={trackRef} className="ticker-track">
         {renderCopy(false)}

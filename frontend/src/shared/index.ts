@@ -12,3 +12,4 @@ export * from "./ui/modal";
 export * from "./ui/notify";
 export * from "./ui/theme";
 export * from "./ui/export";
+export * from "./i18n";

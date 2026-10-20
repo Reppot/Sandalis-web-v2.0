@@ -10,6 +10,8 @@ export interface UserSession {
   scopes: string[];
   displayName: string | null;
   avatarUrl: string | null;
+  /** Язык интерфейса из профиля (users.preferred_locale). */
+  locale: string | null;
 }
 
 export interface MeReadDto {
@@ -20,6 +22,7 @@ export interface MeReadDto {
   scopes: string[];
   display_name: string | null;
   avatar_url?: string | null;
+  locale?: string | null;
 }
 
 export interface TokenResponseDto {
@@ -39,6 +42,7 @@ export function toUserSession(dto: MeReadDto): UserSession {
     scopes: dto.scopes,
     displayName: dto.display_name,
     avatarUrl: dto.avatar_url ?? null,
+    locale: dto.locale ?? null,
   };
 }
 

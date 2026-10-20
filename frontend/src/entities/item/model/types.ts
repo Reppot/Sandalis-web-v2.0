@@ -68,4 +68,7 @@ export interface ScanResult extends ParseResult {
   strict: boolean;
 }
 
-export const UNIT_LABEL: Record<ItemUnit, string> = { crate: "ящ.", unit: "шт." };
+/** Название предмета на языке интерфейса: в игре есть русское и английское, чешского нет. */
+export function itemName(item: Pick<FoxholeItem, "name" | "englishName">, locale: string): string {
+  return locale === "ru" ? item.name : item.englishName || item.name;
+}

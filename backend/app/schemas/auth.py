@@ -19,6 +19,14 @@ class MeRead(BaseModel):
     scopes: list[str]
     display_name: str | None
     avatar_url: str | None = None   # Discord CDN; None у dev/invite-юзеров и clan_token
+    locale: str | None = None       # язык интерфейса из профиля (users.preferred_locale)
+
+
+class LocaleUpdate(BaseModel):
+    """Язык интерфейса пользователя: ru / en / cs (settings.SUPPORTED_LOCALES)."""
+    model_config = ConfigDict(extra="forbid")
+
+    locale: Annotated[str, Field(min_length=2, max_length=8)]
 
 
 class DevTokenRequest(BaseModel):

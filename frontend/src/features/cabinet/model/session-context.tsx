@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { hasScope, type Scope, type UserSession } from "@/entities/session";
-import { ApiError, setUnauthorizedHandler } from "@/shared";
+import { ApiError, setUnauthorizedHandler, useI18n } from "@/shared";
 import { authApi } from "@/features/cabinet/api/authApi";
 
 interface SessionContextValue {
@@ -18,6 +18,7 @@ interface SessionContextValue {
 const SessionContext = React.createContext<SessionContextValue | null>(null);
 
 export const SessionProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { adoptProfileLocale } = useI18n();
   const [session, setSession] = React.useState<UserSession | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
@@ -26,6 +27,7 @@ export const SessionProvider: React.FC<React.PropsWithChildren> = ({ children })
     try {
       const data = await authApi.getMe();
       setSession(data);
+      adoptProfileLocale(data.locale);
       setError(null);
     } catch (err) {
       setSession(null);
@@ -35,7 +37,7 @@ export const SessionProvider: React.FC<React.PropsWithChildren> = ({ children })
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [adoptProfileLocale]);
 
   React.useEffect(() => {
     // кука истекла посреди работы — показываем экран входа вместо ошибок вкладок

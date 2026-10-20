@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useT, type MessageKey } from "@/shared/i18n";
 
 export type Tone = "info" | "success" | "warning" | "danger";
 
@@ -22,15 +23,16 @@ type Notify = (input: NotifyInput) => void;
 
 const NotificationContext = React.createContext<Notify>(() => {});
 
-const TONE_STYLES: Record<Tone, { border: string; glow: string; label: string }> = {
-  info: { border: "#a3e635", glow: "rgba(163,230,53,0.25)", label: "СИСТЕМА" },
-  success: { border: "#86efac", glow: "rgba(134,239,172,0.25)", label: "ПОДТВЕРЖДЕНО" },
-  warning: { border: "#f59e0b", glow: "rgba(245,158,11,0.25)", label: "ВНИМАНИЕ" },
-  danger: { border: "#ef4444", glow: "rgba(239,68,68,0.3)", label: "СБОЙ" },
+const TONE_STYLES: Record<Tone, { border: string; glow: string; label: MessageKey }> = {
+  info: { border: "#a3e635", glow: "rgba(163,230,53,0.25)", label: "notify.info" },
+  success: { border: "#86efac", glow: "rgba(134,239,172,0.25)", label: "notify.success" },
+  warning: { border: "#f59e0b", glow: "rgba(245,158,11,0.25)", label: "notify.warning" },
+  danger: { border: "#ef4444", glow: "rgba(239,68,68,0.3)", label: "notify.danger" },
 };
 
 /** Тосты терминала: локализованные message бэкенда и ошибки действий в одном месте. */
 export const NotificationProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const tr = useT();
   const [items, setItems] = React.useState<Notice[]>([]);
   const counter = React.useRef(0);
 
@@ -62,14 +64,14 @@ export const NotificationProvider: React.FC<React.PropsWithChildren> = ({ childr
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <div className="hud-label" style={{ color: t.border }}>
-                    {t.label} • {n.title}
+                    {tr(t.label)} • {n.title}
                   </div>
                   <div className="mt-1 text-[0.8rem] leading-snug whitespace-pre-line text-white/90">{n.message}</div>
                 </div>
                 <button
                   onClick={() => dismiss(n.id)}
                   className="hud-label shrink-0 rounded border border-white/15 px-1.5 py-0.5 text-white/70 hover:border-white/50 hover:text-white"
-                  aria-label="Закрыть"
+                  aria-label={tr("common.close")}
                 >
                   ✕
                 </button>

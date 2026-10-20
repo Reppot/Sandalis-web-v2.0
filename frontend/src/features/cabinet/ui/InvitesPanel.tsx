@@ -1,21 +1,22 @@
 "use client";
 
 import * as React from "react";
-import { Field, Loading, Select, cn, copyText, errorText, formatDateTime, useConfirm, useNotify } from "@/shared";
+import { Field, Loading, Select, cn, copyText, errorText, formatDateTime, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
 import { clanApi, type GrantableRole, type InviteCode } from "@/features/cabinet/api/clanApi";
 
-const ROLE_LABEL: Record<GrantableRole, string> = { guest: "Гость", member: "Боец", officer: "Офицер" };
+const ROLE_LABEL: Record<GrantableRole, MessageKey> = { guest: "role.guest", member: "role.member", officer: "role.officer" };
 
-function inviteState(invite: InviteCode): { label: string; active: boolean } {
-  if (invite.revokedAt) return { label: "отозван", active: false };
-  if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) return { label: "истёк", active: false };
-  if (invite.usedCount >= invite.maxUses) return { label: "исчерпан", active: false };
-  return { label: "активен", active: true };
+function inviteState(invite: InviteCode): { label: MessageKey; active: boolean } {
+  if (invite.revokedAt) return { label: "invites.revoked", active: false };
+  if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) return { label: "invites.expired", active: false };
+  if (invite.usedCount >= invite.maxUses) return { label: "invites.exhausted", active: false };
+  return { label: "invites.active", active: true };
 }
 
 /** Пригласительные коды клана: officer+ видит, admin+ создаёт и отзывает. */
 export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) => {
   const notify = useNotify();
+  const t = useT();
   const [invites, setInvites] = React.useState<InviteCode[]>([]);
   const [showRevoked, setShowRevoked] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
@@ -30,7 +31,7 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
     try {
       setInvites(await clanApi.listInvites(showRevoked));
     } catch (err) {
-      notify({ title: "ПРИГЛАШЕНИЯ", message: errorText(err, "Не удалось загрузить приглашения"), tone: "danger" });
+      notify({ title: t("invites.title"), message: errorText(err, t("invites.loadFailed")), tone: "danger" });
     } finally {
       setLoading(false);
     }
@@ -45,9 +46,9 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
     try {
       const { invite, message } = await clanApi.createInvite({ role, maxUses, expiresInHours: hours > 0 ? hours : null });
       setInvites((prev) => [invite, ...prev]);
-      notify({ title: "ПРИГЛАШЕНИЯ", message, tone: "success" });
+      notify({ title: t("invites.title"), message, tone: "success" });
     } catch (err) {
-      notify({ title: "ПРИГЛАШЕНИЯ", message: errorText(err, "Не удалось создать код"), tone: "danger" });
+      notify({ title: t("invites.title"), message: errorText(err, t("invites.createFailed")), tone: "danger" });
     } finally {
       setCreating(false);
     }
@@ -56,41 +57,41 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
   const revoke = async (invite: InviteCode) => {
     try {
       await clanApi.revokeInvite(invite.id);
-      notify({ title: "ПРИГЛАШЕНИЯ", message: `Код ${invite.code} отозван.`, tone: "warning" });
+      notify({ title: t("invites.title"), message: t("invites.revokedMsg", { code: invite.code }), tone: "warning" });
       await load();
     } catch (err) {
-      notify({ title: "ПРИГЛАШЕНИЯ", message: errorText(err, "Не удалось отозвать код"), tone: "danger" });
+      notify({ title: t("invites.title"), message: errorText(err, t("invites.revokeFailed")), tone: "danger" });
     }
   };
 
   return (
     <section className="panel panel-corners rounded-md p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="panel-title">🎟 Приглашения в клан</div>
+        <div className="panel-title">🎟 {t("invites.heading")}</div>
         <label className="hud-label flex cursor-pointer items-center gap-2 text-muted">
           <input type="checkbox" checked={showRevoked} onChange={(e) => setShowRevoked(e.target.checked)} />
-          отозванные
+          {t("invites.showRevoked")}
         </label>
       </div>
       <div className="cabinet-rule" />
 
       {canManage && (
         <div className="grid grid-cols-2 items-end gap-3 md:grid-cols-4">
-          <Select label="Роль" value={role} onChange={(e) => setRole(e.target.value as GrantableRole)}>
+          <Select label={t("cabinet.role")} value={role} onChange={(e) => setRole(e.target.value as GrantableRole)}>
             {(Object.keys(ROLE_LABEL) as GrantableRole[]).map((r) => (
-              <option key={r} value={r}>{ROLE_LABEL[r]}</option>
+              <option key={r} value={r}>{t(ROLE_LABEL[r])}</option>
             ))}
           </Select>
-          <Field label="Использований" type="number" min={1} max={1000} value={maxUses} onChange={(e) => setMaxUses(Math.max(1, parseInt(e.target.value, 10) || 1))} />
-          <Field label="Срок, ч (0 = бессрочно)" type="number" min={0} max={720} value={hours} onChange={(e) => setHours(Math.max(0, parseInt(e.target.value, 10) || 0))} />
-          <button className="btn btn-primary h-[38px]" disabled={creating} onClick={() => void create()}>{creating ? "ПЕРЕДАЧА..." : "＋ Создать код"}</button>
+          <Field label={t("invites.uses")} type="number" min={1} max={1000} value={maxUses} onChange={(e) => setMaxUses(Math.max(1, parseInt(e.target.value, 10) || 1))} />
+          <Field label={t("invites.ttl")} type="number" min={0} max={720} value={hours} onChange={(e) => setHours(Math.max(0, parseInt(e.target.value, 10) || 0))} />
+          <button className="btn btn-primary h-[38px]" disabled={creating} onClick={() => void create()}>{creating ? t("common.sending") : `＋ ${t("invites.create")}`}</button>
         </div>
       )}
 
       {loading ? (
-        <Loading label="📡 ЗАГРУЗКА КОДОВ..." className="min-h-[90px]" />
+        <Loading label={t("invites.loading")} className="min-h-[90px]" />
       ) : invites.length === 0 ? (
-        <p className="hud-label py-4 text-center text-muted">Приглашений нет</p>
+        <p className="hud-label py-4 text-center text-muted">{t("invites.none")}</p>
       ) : (
         <ul className="scroll-area mt-3 flex max-h-80 flex-col gap-1">
           {invites.map((invite) => {
@@ -100,15 +101,15 @@ export const InvitesPanel: React.FC<{ canManage: boolean }> = ({ canManage }) =>
                 <button
                   type="button"
                   className="font-mono font-bold text-accent"
-                  title="Скопировать код"
-                  onClick={() => void copyText(invite.code).then((ok) => ok && notify({ title: "ПРИГЛАШЕНИЯ", message: `Код ${invite.code} скопирован`, tone: "success" }))}
+                  title={t("invites.copy")}
+                  onClick={() => void copyText(invite.code).then((ok) => ok && notify({ title: t("invites.title"), message: t("invites.copied", { code: invite.code }), tone: "success" }))}
                 >
                   {invite.code} ⧉
                 </button>
-                <span className="text-muted">{ROLE_LABEL[invite.role as GrantableRole] ?? invite.role}</span>
+                <span className="text-muted">{ROLE_LABEL[invite.role as GrantableRole] ? t(ROLE_LABEL[invite.role as GrantableRole]) : invite.role}</span>
                 <span className="font-mono text-muted">{invite.usedCount}/{invite.maxUses}</span>
-                <span className="hidden text-muted md:inline">{invite.expiresAt ? `до ${formatDateTime(invite.expiresAt)}` : "бессрочно"}</span>
-                <span className={state.active ? "text-safe" : "text-muted"}>{state.label}</span>
+                <span className="hidden text-muted md:inline">{invite.expiresAt ? t("invites.until", { at: formatDateTime(invite.expiresAt) }) : t("invites.forever")}</span>
+                <span className={state.active ? "text-safe" : "text-muted"}>{t(state.label)}</span>
                 {canManage && state.active ? (
                   <button className={`btn btn-danger px-2 py-0.5 ${armed === invite.id ? "btn-active" : ""}`} onClick={() => confirm(invite.id, () => void revoke(invite))}>
                     {armed === invite.id ? "?" : "✕"}

@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { ExportBar, ItemIcon, useDocExport, type ExportDoc } from "@/shared";
+import { ExportBar, ItemIcon, useDocExport, useI18n, type ExportDoc, type Translate } from "@/shared";
 
 export interface SummaryLine {
   name: string;
@@ -21,23 +21,22 @@ export interface ToolReport {
   stats: SummaryLine[];
 }
 
-export function toolDoc(report: ToolReport): ExportDoc {
+export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
   const strip = ({ name, quantity, unit, note }: SummaryLine) => ({ name, quantity, unit, note });
   return {
     title: `SINDARIS • ${report.toolName}`,
-    header: [`Инструмент: ${report.toolName}`, `Режим: ${report.subtitle}`, `Позиций: ${report.items.length} • Ресурсов: ${report.resources.length}`],
+    header: [`${t("tools.doc.tool")}: ${report.toolName}`, `${t("tools.doc.mode")}: ${report.subtitle}`, `${t("doc.lines")}: ${report.items.length} • ${t("tools.doc.resources")}: ${report.resources.length}`],
     sections: [
-      { label: `ВЫБРАННЫЕ ПРЕДМЕТЫ • ${report.items.length}`, rows: report.items.map(strip) },
-      { label: `ИТОГОВЫЕ РЕСУРСЫ • ${report.resources.length}`, rows: report.resources.map(strip) },
-      ...(report.stats.length ? [{ label: "СВОДКА", rows: report.stats.map(strip) }] : []),
+      { label: `${t("tools.doc.selected")} • ${report.items.length}`, rows: report.items.map(strip) },
+      { label: `${t("tools.doc.totals")} • ${report.resources.length}`, rows: report.resources.map(strip) },
+      ...(report.stats.length ? [{ label: t("tools.doc.summary"), rows: report.stats.map(strip) }] : []),
     ],
     fileBase: report.fileBase,
-    sheetName: "Предметы",
-    footer: "SINDARIS LOGISTICS OVERWATCH • РАСЧЁТ ИНСТРУМЕНТОВ КЛАНА",
+    sheetName: t("tools.doc.sheet"),
+    footer: `SINDARIS LOGISTICS OVERWATCH • ${t("tools.doc.footer")}`,
   };
 }
 
-const fmt = (v: number | string) => (typeof v === "number" ? v.toLocaleString("ru-RU") : v);
 
 /**
  * Итоговые ресурсы калькулятора: на телефоне — аккордеон над нижней навигацией,
@@ -45,6 +44,8 @@ const fmt = (v: number | string) => (typeof v === "number" ? v.toLocaleString("r
  * Не вкладывать внутрь .panel: backdrop-filter ломает position: fixed.
  */
 export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: ToolReport; title: string; emptyHint: string; onClear: () => void }>> = ({ report, title, emptyHint, onClear, children }) => {
+  const { t, dateLocale } = useI18n();
+  const fmt = (v: number | string) => (typeof v === "number" ? v.toLocaleString(dateLocale) : v);
   const { media } = useContent();
   const { run, previewModal } = useDocExport(media("bg_report_texture"));
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -53,7 +54,7 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
 
   return (
     <aside
-      aria-label={`${title}: итоговые ресурсы`}
+      aria-label={`${title}: ${t("tools.totals")}`}
       className={[
         "panel panel-corners z-[55] flex flex-col rounded-md",
         "fixed inset-x-2 bottom-[5.25rem] max-h-[calc(100dvh-7rem)]",
@@ -65,9 +66,9 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
         <span className="status-dot shrink-0" style={{ color: "var(--accent)", background: "var(--accent)" }} />
         <span className="min-w-0 flex-1">
           <span className="panel-title block truncate">{report.toolName}</span>
-          <span className="hud-label mt-0.5 block truncate text-muted">{count ? `${count} поз. • ${preview || "ресурсы не требуются"}` : "Ничего не выбрано"}</span>
+          <span className="hud-label mt-0.5 block truncate text-muted">{count ? `${t("common.pos", { n: count })} • ${preview || t("tools.noResources")}` : t("tools.nothingSelected")}</span>
         </span>
-        <span className="hud-label shrink-0 text-accent">{mobileOpen ? "▼ Свернуть" : "▲ Итоги"}</span>
+        <span className="hud-label shrink-0 text-accent">{mobileOpen ? `▼ ${t("tools.collapse")}` : `▲ ${t("tools.results")}`}</span>
       </button>
 
       <div className={`${mobileOpen ? "flex" : "hidden"} min-h-0 flex-1 flex-col overflow-y-auto border-t border-white/10 p-3 lg:flex lg:overflow-hidden lg:border-t-0 lg:p-4`}>
@@ -76,14 +77,14 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
             <div className="panel-title">{title}</div>
             <div className="hud-label mt-1 text-muted">{report.subtitle}</div>
           </div>
-          <button type="button" className="btn btn-danger px-2" onClick={onClear} disabled={!count} title="Очистить список">✕</button>
+          <button type="button" className="btn btn-danger px-2" onClick={onClear} disabled={!count} title={t("tools.clearList")}>✕</button>
         </div>
         <div className="factory-rule" />
         <div className="factory-plan-list scroll-area min-h-[120px] max-lg:flex-none max-lg:overflow-visible lg:min-h-[140px]">
           {count ? children : <div className="hud-label py-8 text-center text-muted">{emptyHint}</div>}
         </div>
         <div className="factory-totals shrink-0">
-          <div className="hud-label mb-2 text-accent">Итоговые ресурсы</div>
+          <div className="hud-label mb-2 text-accent">{t("tools.totals")}</div>
           <div className="factory-total-grid">
             {[...report.resources, ...report.stats].map((line) => (
               <div key={`${line.name}-${line.unit}`} className="min-w-0">
@@ -95,7 +96,7 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
               </div>
             ))}
           </div>
-          <ExportBar title="ЭКСПОРТ РАСЧЁТА" onAction={(f) => void run(toolDoc(report), f)} />
+          <ExportBar title={t("tools.exportTitle")} onAction={(f) => void run(toolDoc(report, t), f)} />
         </div>
       </div>
       {previewModal}

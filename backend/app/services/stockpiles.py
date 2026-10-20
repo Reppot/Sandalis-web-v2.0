@@ -247,14 +247,14 @@ class StockpileService(ClanScopedService):
             "stockpile.synced", domain=DOMAIN, name=stockpile.name, count=len(items)
         )
 
-    async def catalog_brief(self, codes: Iterable[str]) -> dict[str, tuple[str, str | None]]:
-        """code -> (русское название, иконка) для витрины позиций склада."""
+    async def catalog_brief(self, codes: Iterable[str]) -> dict[str, tuple[str, str, str | None]]:
+        """code -> (русское название, английское название, иконка) для витрины позиций."""
         wanted = set(codes)
         if not wanted:
             return {}
         rows = await self.session.execute(
-            select(CatalogItem.code, CatalogItem.name, CatalogItem.icon_url).where(
-                CatalogItem.code.in_(wanted)
-            )
+            select(
+                CatalogItem.code, CatalogItem.name, CatalogItem.english_name, CatalogItem.icon_url
+            ).where(CatalogItem.code.in_(wanted))
         )
-        return {code: (name, icon) for code, name, icon in rows.all()}
+        return {code: (name, name_en, icon) for code, name, name_en, icon in rows.all()}

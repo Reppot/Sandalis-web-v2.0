@@ -3,18 +3,18 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { catalogApi, type FoxholeItem, type ParseResult } from "@/entities/item";
-import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, useNotify } from "@/shared";
+import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, useNotify, useT, type MessageKey, type Translate } from "@/shared";
 
-const FACTIONS: Record<string, string> = { colonial: "Колонисты", warden: "Варден", neutral: "Нейтральные" };
+const FACTIONS: Record<string, MessageKey> = { colonial: "codes.faction.colonial", warden: "codes.faction.warden", neutral: "codes.faction.neutral" };
 
 function toJson(entries: FoxholeItem[]): string {
   return JSON.stringify(entries.map((e) => ({ code: e.code, nameEn: e.englishName, nameRu: e.name, icon: e.iconUrl })), null, 2);
 }
 
-function toCsv(entries: FoxholeItem[]): string {
+function toCsv(entries: FoxholeItem[], t: Translate): string {
   const esc = (v: string | null) => `"${String(v ?? "").replace(/"/g, '""')}"`;
   return [
-    ["Код JSON", "English name", "Русское название", "Категория", "Фракция", "Иконка"].map(esc).join(","),
+    [t("codes.col.code"), "English name", t("codes.col.ru"), t("codes.col.category"), t("codes.col.faction"), t("codes.col.icon")].map(esc).join(","),
     ...entries.map((e) => [e.code, e.englishName, e.name, e.category, e.faction, e.iconUrl].map(esc).join(",")),
   ].join("\n");
 }
@@ -22,6 +22,7 @@ function toCsv(entries: FoxholeItem[]): string {
 /** Реестр кодов Foxhole — каталог сервера, тот же, что у сканера и конструктора. */
 export const CodeBaseWorkspace: React.FC = () => {
   const notify = useNotify();
+  const t = useT();
   const { label, list } = useContent();
   const [entries, setEntries] = React.useState<FoxholeItem[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -38,9 +39,9 @@ export const CodeBaseWorkspace: React.FC = () => {
     catalogApi
       .all()
       .then(setEntries)
-      .catch((err) => notify({ title: "БАЗА КОДОВ", message: errorText(err, "Каталог недоступен"), tone: "danger" }))
+      .catch((err) => notify({ title: t("codes.short"), message: errorText(err, t("builder.catalogFailed")), tone: "danger" }))
       .finally(() => setLoading(false));
-  }, [notify]);
+  }, [notify, t]);
 
   const filtered = React.useMemo(() => {
     const needle = query.trim().toLocaleLowerCase("ru-RU");
@@ -59,13 +60,13 @@ export const CodeBaseWorkspace: React.FC = () => {
       const result = await catalogApi.parse(rawExport);
       setCompare(result);
       notify({
-        title: "СРАВНЕНИЕ ВЫГРУЗКИ СКЛАДА",
-        message: `Строк: ${result.lines.length} • совпало: ${result.matched} • неизвестных: ${result.unknown.length}`,
+        title: t("codes.compareTitle"),
+        message: t("codes.compareStats", { lines: result.lines.length, matched: result.matched, unknown: result.unknown.length }),
         tone: result.unknown.length ? "warning" : "success",
       });
     } catch (err) {
       setCompare(null);
-      notify({ title: "ВЫГРУЗКА СКЛАДА", message: errorText(err, "Невалидная выгрузка"), tone: "danger" });
+      notify({ title: t("codes.export"), message: errorText(err, t("codes.invalidExport")), tone: "danger" });
     } finally {
       setComparing(false);
     }
@@ -77,64 +78,64 @@ export const CodeBaseWorkspace: React.FC = () => {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <div className="hud-label text-muted">Foxhole logistics intelligence registry</div>
-            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">⌘ База кодов предметов Foxhole</h1>
-            <p className="mt-1 max-w-3xl text-[0.8rem] text-white/70">Код JSON, English name, русское название и иконка. Реестр хранится на сервере и используется сканером MapData, монитором склада и конструктором.</p>
+            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">⌘ {t("codes.title")}</h1>
+            <p className="mt-1 max-w-3xl text-[0.8rem] text-white/70">{t("codes.subtitle")}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Stat label="ВСЕГО ЗАПИСЕЙ" value={entries.length} />
-            <Stat label="С ИКОНКОЙ" value={entries.filter((e) => e.iconUrl).length} color="var(--accent)" />
-            <Stat label="ТРЕБУЮТ ПРОВЕРКИ" value={reviewCount} color="var(--warn)" />
+            <Stat label={t("codes.total")} value={entries.length} />
+            <Stat label={t("codes.withIcon")} value={entries.filter((e) => e.iconUrl).length} color="var(--accent)" />
+            <Stat label={t("codes.needReview")} value={reviewCount} color="var(--warn)" />
           </div>
         </div>
         <div className="stencil-line mt-3" />
 
         <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-center">
-          <input className="field field-mono min-w-0 flex-1" placeholder="Поиск: код, EN, RU…" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <input className="field field-mono min-w-0 flex-1" placeholder={t("codes.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
           <select className="field w-full lg:w-44" value={category} onChange={(e) => setCategory(e.target.value)}>
-            <option value="all">Все категории</option>
+            <option value="all">{t("codes.allCategories")}</option>
             {list<{ label: string }>("catalog_category").map((c) => (
               <option key={c.key} value={c.key}>{c.payload.label}</option>
             ))}
           </select>
           <select className="field w-full lg:w-40" value={faction} onChange={(e) => setFaction(e.target.value)}>
-            <option value="all">Все фракции</option>
+            <option value="all">{t("codes.allFactions")}</option>
             {Object.entries(FACTIONS).map(([key, name]) => (
-              <option key={key} value={key}>{name}</option>
+              <option key={key} value={key}>{t(name)}</option>
             ))}
           </select>
           <button className={`btn ${reviewOnly ? "btn-active btn-warn" : ""}`} onClick={() => setReviewOnly((v) => !v)}>
-            {reviewOnly ? "✓ только спорные" : "только спорные"}
+            {reviewOnly ? `✓ ${t("codes.disputedOnly")}` : t("codes.disputedOnly")}
           </button>
         </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="hud-label text-muted">Показано: <b className="text-white">{filtered.length}</b> / {entries.length}</span>
+          <span className="hud-label text-muted">{t("codes.shown")}: <b className="text-white">{filtered.length}</b> / {entries.length}</span>
           <span className="flex-1" />
-          <button className="btn" onClick={() => void copyText(toJson(filtered)).then((ok) => notify(ok ? { title: "БАЗА КОДОВ", message: `Скопировано строк: ${filtered.length}`, tone: "success" } : { title: "БУФЕР ОБМЕНА", message: "Браузер не разрешил доступ к буферу обмена.", tone: "warning" }))}>
-            ⧉ Копировать строки
+          <button className="btn" onClick={() => void copyText(toJson(filtered)).then((ok) => notify(ok ? { title: t("codes.short"), message: t("codes.copied", { n: filtered.length }), tone: "success" } : { title: t("export.clipboardTitle"), message: t("export.clipboardUnavailable"), tone: "warning" }))}>
+            ⧉ {t("codes.copy")}
           </button>
-          <button className="btn" onClick={() => downloadBlob(new Blob([toCsv(filtered)], { type: "text/csv;charset=utf-8" }), "sindaris-code-base.csv")}>CSV</button>
+          <button className="btn" onClick={() => downloadBlob(new Blob([toCsv(filtered, t)], { type: "text/csv;charset=utf-8" }), "sindaris-code-base.csv")}>CSV</button>
           <button className="btn" onClick={() => downloadBlob(new Blob([toJson(filtered)], { type: "application/json;charset=utf-8" }), "sindaris-code-base.json")}>JSON</button>
-          <button className={`btn ${compareOpen ? "btn-active" : ""}`} onClick={() => setCompareOpen((v) => !v)}>⇄ ВЫГРУЗКА СКЛАДА</button>
+          <button className={`btn ${compareOpen ? "btn-active" : ""}`} onClick={() => setCompareOpen((v) => !v)}>⇄ {t("codes.export")}</button>
         </div>
       </section>
 
       {compareOpen && (
         <section className="panel rounded-md p-4">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="panel-title mr-auto text-[0.78rem]">Сравнение с сырой выгрузкой склада</h2>
-            {compare && <span className="hud-label text-muted">строк: {compare.lines.length} • совпало: {compare.matched} • неизвестных: {compare.unknown.length} • Σ: {compare.lines.reduce((n, l) => n + l.count, 0)}</span>}
+            <h2 className="panel-title mr-auto text-[0.78rem]">{t("codes.compareHeading")}</h2>
+            {compare && <span className="hud-label text-muted">{t("codes.compareStats", { lines: compare.lines.length, matched: compare.matched, unknown: compare.unknown.length })} • Σ: {compare.lines.reduce((n, l) => n + l.count, 0)}</span>}
           </div>
-          <textarea className="field field-mono mt-3 h-48 resize-y text-xs" placeholder={"Вставьте текстовый отчёт Foxhole:\nClanshead Valley - The King - Морской порт - Public - X: 0.49 Y: 0.38,2026.09.20-08.25.33\nНазвание предмета (Ящик),0\nНазвание техники,1"} value={rawExport} onChange={(e) => setRawExport(e.target.value)} />
+          <textarea className="field field-mono mt-3 h-48 resize-y text-xs" placeholder={t("codes.comparePlaceholder")} value={rawExport} onChange={(e) => setRawExport(e.target.value)} />
           {compare?.unknown.length ? (
             <div className="mt-2 text-xs text-warn">
-              Не найдены в реестре: {compare.unknown.slice(0, 8).join(" • ")}
-              {compare.unknown.length > 8 ? ` • ещё ${compare.unknown.length - 8}` : ""}
+              {t("codes.notFound")}: {compare.unknown.slice(0, 8).join(" • ")}
+              {compare.unknown.length > 8 ? ` • ${t("common.more", { n: compare.unknown.length - 8 })}` : ""}
             </div>
           ) : null}
           <div className="mt-2 flex justify-end">
             <button className="btn btn-primary" disabled={comparing || !rawExport.trim()} onClick={() => void runCompare()}>
-              {comparing ? "ПЕРЕДАЧА..." : "Сравнить выгрузку"}
+              {comparing ? t("common.sending") : t("codes.compare")}
             </button>
           </div>
         </section>
@@ -143,24 +144,24 @@ export const CodeBaseWorkspace: React.FC = () => {
       <section className="panel panel-corners min-h-0 flex-1 overflow-hidden rounded-md">
         <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
           <div>
-            <h2 className="panel-title text-[0.78rem]">Реестр кодов Foxhole</h2>
-            <div className="hud-label mt-1 text-muted">Оригинальные технические имена • источник: каталог сервера</div>
+            <h2 className="panel-title text-[0.78rem]">{t("codes.registry")}</h2>
+            <div className="hud-label mt-1 text-muted">{t("codes.registryHint")}</div>
           </div>
         </div>
         {loading ? (
-          <Loading label="📡 ЗАГРУЗКА РЕЕСТРА..." />
+          <Loading label={t("codes.loading")} />
         ) : (
           <div className="scroll-area max-h-[calc(100dvh-330px)] overflow-auto">
             <table className="w-full min-w-[900px] border-collapse text-left text-[0.76rem]">
               <thead className="sticky top-0 z-10 bg-[#0b110c] text-[0.65rem] tracking-[0.12em] text-white/60 uppercase">
                 <tr>
                   <th className="px-4 py-3" />
-                  <th className="px-3 py-3">Код JSON</th>
+                  <th className="px-3 py-3">{t("codes.col.code")}</th>
                   <th className="px-3 py-3">English name</th>
-                  <th className="px-3 py-3">Русское название</th>
-                  <th className="px-3 py-3">Категория</th>
-                  <th className="px-3 py-3">Фракция</th>
-                  <th className="px-4 py-3">Статус</th>
+                  <th className="px-3 py-3">{t("codes.col.ru")}</th>
+                  <th className="px-3 py-3">{t("codes.col.category")}</th>
+                  <th className="px-3 py-3">{t("codes.col.faction")}</th>
+                  <th className="px-4 py-3">{t("doc.status")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -171,13 +172,13 @@ export const CodeBaseWorkspace: React.FC = () => {
                     <td className="max-w-[280px] px-3 py-2 text-white/85">{e.englishName}</td>
                     <td className="max-w-[280px] px-3 py-2 text-white">{e.name}</td>
                     <td className="px-3 py-2"><span className="chip cursor-default">{label("catalog_category", e.category)}</span></td>
-                    <td className="px-3 py-2 text-white/70">{FACTIONS[e.faction] ?? e.faction}</td>
-                    <td className="px-4 py-2">{e.needsReview ? <span className="text-warn">⚠ проверка</span> : <span className="text-safe">● эталон</span>}</td>
+                    <td className="px-3 py-2 text-white/70">{FACTIONS[e.faction] ? t(FACTIONS[e.faction]) : e.faction}</td>
+                    <td className="px-4 py-2">{e.needsReview ? <span className="text-warn">⚠ {t("codes.review")}</span> : <span className="text-safe">● {t("codes.reference")}</span>}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            {!filtered.length && <div className="hud-label px-4 py-12 text-center text-muted">По заданным фильтрам записей не найдено.</div>}
+            {!filtered.length && <div className="hud-label px-4 py-12 text-center text-muted">{t("common.nothingFilter")}</div>}
           </div>
         )}
       </section>

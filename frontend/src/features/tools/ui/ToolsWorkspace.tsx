@@ -3,21 +3,22 @@
 import * as React from "react";
 import { useContent, type ExternalToolPayload } from "@/entities/content";
 import { recipeApi, type Recipe } from "@/entities/recipe";
-import { Loading, errorText, uiIcon, useNotify, type UiIcon } from "@/shared";
+import { Loading, errorText, uiIcon, useNotify, useT, type MessageKey, type UiIcon } from "@/shared";
 import { FactoryCalculator } from "@/features/tools/ui/FactoryCalculator";
 import { RefineryCalculator } from "@/features/tools/ui/RefineryCalculator";
 
 type ClanToolId = "factory" | "mpf" | "refinery";
 
-const CLAN_TOOLS: { id: ClanToolId; label: string; hint: string; icon: UiIcon }[] = [
-  { id: "factory", label: "Калькулятор фабрики", hint: "Factory • очередь, лимиты, материалы", icon: "business" },
-  { id: "mpf", label: "MPF", hint: "Mass Production Factory • скидка за партию", icon: "conveyor-belt" },
-  { id: "refinery", label: "Калькулятор молотка (Refinery)", hint: "Сырьё → материалы • время переработки", icon: "pallets" },
+const CLAN_TOOLS: { id: ClanToolId; label: MessageKey; hint: MessageKey; icon: UiIcon }[] = [
+  { id: "factory", label: "tools.factory", hint: "tools.factoryTab", icon: "business" },
+  { id: "mpf", label: "tools.mpf", hint: "tools.mpfTab", icon: "conveyor-belt" },
+  { id: "refinery", label: "tools.refinery", hint: "tools.refineryTab", icon: "pallets" },
 ];
 
 /** «Инструменты»: калькуляторы клана на рецептах сервера + проверенные внешние сервисы. */
 export const ToolsWorkspace: React.FC = () => {
   const notify = useNotify();
+  const t = useT();
   const { list } = useContent();
   const [active, setActive] = React.useState<ClanToolId | null>(null);
   const [recipes, setRecipes] = React.useState<{ factory: Recipe[]; refinery: Recipe[] } | null>(null);
@@ -27,8 +28,8 @@ export const ToolsWorkspace: React.FC = () => {
     if (!active || recipes) return;
     Promise.all([recipeApi.list("factory"), recipeApi.list("refinery")])
       .then(([factory, refinery]) => setRecipes({ factory, refinery }))
-      .catch((err) => notify({ title: "РЕЦЕПТЫ", message: errorText(err, "Рецепты недоступны"), tone: "danger" }));
-  }, [active, recipes, notify]);
+      .catch((err) => notify({ title: t("tools.recipes"), message: errorText(err, t("tools.recipesFailed")), tone: "danger" }));
+  }, [active, recipes, notify, t]);
 
   return (
     <div className="tab-fade tools-page">
@@ -37,22 +38,22 @@ export const ToolsWorkspace: React.FC = () => {
           <span className="tools-signal" aria-hidden />
           <div className="min-w-0">
             <div className="hud-label text-muted">SINDARIS FIELD UTILITIES</div>
-            <h1 className="panel-title mt-1 text-[1.05rem] md:text-[1.3rem]">▣ Инструменты</h1>
-            <p className="mt-1 text-sm text-white/70">Калькуляторы клана и проверенные внешние сервисы Foxhole.</p>
+            <h1 className="panel-title mt-1 text-[1.05rem] md:text-[1.3rem]">▣ {t("nav.tools.label")}</h1>
+            <p className="mt-1 text-sm text-white/70">{t("tools.subtitle")}</p>
           </div>
         </div>
         <span className="tools-header-status">
-          <span className="status-dot" /> {CLAN_TOOLS.length} МОДУЛЯ • {external.length} ССЫЛОК
+          <span className="status-dot" /> {t("tools.modules", { n: CLAN_TOOLS.length })} • {t("tools.links", { n: external.length })}
         </span>
       </section>
 
-      <nav className="panel panel-corners rounded-md p-2.5" aria-label="Инструменты клана">
+      <nav className="panel panel-corners rounded-md p-2.5" aria-label={t("tools.clanTools")}>
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
-          <span className="hud-label text-accent">ИНСТРУМЕНТЫ КЛАНА</span>
+          <span className="hud-label text-accent">{t("tools.clanTools")}</span>
           {active ? (
-            <button type="button" className="btn btn-danger px-2 py-1" onClick={() => setActive(null)}>✕ Сбросить выбор</button>
+            <button type="button" className="btn btn-danger px-2 py-1" onClick={() => setActive(null)}>✕ {t("tools.resetPick")}</button>
           ) : (
-            <span className="hud-label text-muted">Выберите вкладку</span>
+            <span className="hud-label text-muted">{t("tools.pickTab")}</span>
           )}
         </div>
         <div className="flex gap-2 overflow-x-auto pb-1" role="tablist">
@@ -66,13 +67,13 @@ export const ToolsWorkspace: React.FC = () => {
                 aria-selected={on}
                 className={`btn h-auto min-h-[58px] min-w-[13.5rem] flex-1 justify-start gap-3 px-3 py-2 text-left whitespace-normal ${on ? "btn-active" : ""}`}
                 onClick={() => setActive(on ? null : tool.id)}
-                title={on ? "Повторный клик сбрасывает выбор" : tool.hint}
+                title={on ? t("tools.clickAgain") : t(tool.hint)}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={uiIcon(tool.icon)} alt="" width={36} height={36} className="ui-icon h-9 w-9 shrink-0 object-contain" />
                 <span className="min-w-0">
-                  <span className={`block text-[0.78rem] ${on ? "text-accent" : "text-white"}`}>{tool.label}</span>
-                  <span className="mt-1 block text-[0.62rem] font-normal tracking-normal text-white/60 normal-case">{tool.hint}</span>
+                  <span className={`block text-[0.78rem] ${on ? "text-accent" : "text-white"}`}>{t(tool.label)}</span>
+                  <span className="mt-1 block text-[0.62rem] font-normal tracking-normal text-white/60 normal-case">{t(tool.hint)}</span>
                 </span>
                 {on ? <span className="status-dot ml-auto shrink-0" style={{ color: "var(--accent)", background: "var(--accent)" }} aria-hidden /> : null}
               </button>
@@ -84,7 +85,7 @@ export const ToolsWorkspace: React.FC = () => {
       {active ? (
         <div role="tabpanel" className="min-w-0">
           {!recipes ? (
-            <div className="panel rounded-md"><Loading label="📡 ЗАГРУЗКА РЕЦЕПТОВ..." /></div>
+            <div className="panel rounded-md"><Loading label={t("tools.loading")} /></div>
           ) : active === "refinery" ? (
             <RefineryCalculator recipes={recipes.refinery} />
           ) : (
@@ -94,11 +95,11 @@ export const ToolsWorkspace: React.FC = () => {
       ) : (
         <section className="panel panel-corners rounded-md p-4">
           <div className="flex items-center gap-2">
-            <span className="hud-label text-accent">СТОРОННИЕ РЕСУРСЫ</span>
-            <span className="badge-count min-w-0 px-2">{external.length} ССЫЛОК</span>
+            <span className="hud-label text-accent">{t("tools.thirdParty")}</span>
+            <span className="badge-count min-w-0 px-2">{t("tools.links", { n: external.length })}</span>
           </div>
-          <h2 className="panel-title mt-1 text-[0.95rem]">🔗 Внешние инструменты клана</h2>
-          <p className="mt-1 text-[0.8rem] text-white/65">Проверенные сторонние сервисы для карты, планирования баз, артиллерии и воздушного боя.</p>
+          <h2 className="panel-title mt-1 text-[0.95rem]">🔗 {t("tools.external")}</h2>
+          <p className="mt-1 text-[0.8rem] text-white/65">{t("tools.externalHint")}</p>
           <div className="external-tools-grid mt-3">
             {external.map(({ key, payload }) => (
               <a key={key} className="external-tool-card" href={payload.url} target="_blank" rel="noreferrer">

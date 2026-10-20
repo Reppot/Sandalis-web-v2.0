@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
+import { useT } from "@/shared/i18n";
 
 export interface ModalProps {
   open: boolean;
@@ -17,6 +18,7 @@ export interface ModalProps {
 }
 
 export const Modal: React.FC<ModalProps> = ({ open, onClose, title, icon, children, widthClass = "max-w-xl", backdropImage, footer }) => {
+  const t = useT();
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
@@ -42,7 +44,7 @@ export const Modal: React.FC<ModalProps> = ({ open, onClose, title, icon, childr
           {/* eslint-disable-next-line @next/next/no-img-element -- иконки с бэкенда, оптимизация не нужна */}
           {icon && <img src={icon} alt="" width={34} height={34} className="ui-icon h-[34px] w-[34px] object-contain drop-shadow" />}
           <h2 className="panel-title truncate text-[0.82rem]">{title}</h2>
-          <button onClick={onClose} className="btn ml-auto px-2 py-1" aria-label="Закрыть">
+          <button onClick={onClose} className="btn ml-auto px-2 py-1" aria-label={t("common.close")}>
             ✕
           </button>
         </header>

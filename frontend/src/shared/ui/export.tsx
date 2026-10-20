@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { uiIcon } from "@/shared/config/assets";
+import { useT, type MessageKey, type Translate } from "@/shared/i18n";
 import {
   buildTxt,
   canvasToBlob,
@@ -12,6 +13,7 @@ import {
   exportXlsx,
   renderPages,
   type ExportDoc,
+  type ExportLabels,
 } from "@/shared/lib/exporters";
 import { fileStamp } from "@/shared/lib/time";
 import { Modal } from "@/shared/ui/modal";
@@ -20,12 +22,25 @@ import { useNotify } from "@/shared/ui/notify";
 export type ExportFormat = "txt" | "xlsx" | "png" | "clipboard";
 export type PanelMode = "export" | "import";
 
-const FORMATS: { fmt: ExportFormat; label: string; icon: string; importable: boolean; hintExport: string; hintImport: string }[] = [
-  { fmt: "txt", label: "TXT", icon: uiIcon("txt-file"), importable: true, hintExport: "Выгрузить рапорт в TXT", hintImport: "Загрузить JSON/TXT отчёт сканера" },
-  { fmt: "xlsx", label: "XLSX", icon: uiIcon("xls"), importable: true, hintExport: "Выгрузить таблицу XLSX", hintImport: "Загрузить таблицу XLSX" },
-  { fmt: "png", label: "PNG", icon: uiIcon("png-file"), importable: false, hintExport: "Сформировать графические страницы", hintImport: "Импорт из PNG недоступен" },
-  { fmt: "clipboard", label: "БУФЕР", icon: uiIcon("log-file"), importable: true, hintExport: "Скопировать первую страницу в буфер обмена", hintImport: "Вставить данные из буфера обмена" },
+const FORMATS: { fmt: ExportFormat; label: MessageKey; icon: string; importable: boolean; hintExport: MessageKey; hintImport: MessageKey }[] = [
+  { fmt: "txt", label: "export.fmt.txt", icon: uiIcon("txt-file"), importable: true, hintExport: "export.hint.txt", hintImport: "export.hint.txtImport" },
+  { fmt: "xlsx", label: "export.fmt.xlsx", icon: uiIcon("xls"), importable: true, hintExport: "export.hint.xlsx", hintImport: "export.hint.xlsxImport" },
+  { fmt: "png", label: "export.fmt.png", icon: uiIcon("png-file"), importable: false, hintExport: "export.hint.png", hintImport: "export.hint.pngImport" },
+  { fmt: "clipboard", label: "export.fmt.clipboard", icon: uiIcon("log-file"), importable: true, hintExport: "export.hint.clipboard", hintImport: "export.hint.clipboardImport" },
 ];
+
+/** Подписи файлов экспорта на текущем языке. */
+export function exportLabels(t: Translate): ExportLabels {
+  return {
+    generated: t("export.file.generated"),
+    page: t("export.file.page"),
+    sheet: t("export.file.sheet"),
+    name: t("export.file.name"),
+    quantity: t("export.file.quantity"),
+    unit: t("export.file.unit"),
+    footer: t("export.file.footer"),
+  };
+}
 
 interface ExportBarProps {
   onAction: (fmt: ExportFormat) => void;
@@ -36,25 +51,26 @@ interface ExportBarProps {
   title?: string;
 }
 
-export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onToggleMode, title = "ЭКСПОРТ РАПОРТА" }) => {
+export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onToggleMode, title }) => {
+  const t = useT();
   const isImport = mode === "import";
   return (
     <div className="mt-3 flex flex-col gap-2">
       {mode && onToggleMode ? (
-        <button className={`btn w-full justify-between ${isImport ? "btn-warn btn-active" : ""}`} onClick={onToggleMode} title="Переключить режим панели">
+        <button className={`btn w-full justify-between ${isImport ? "btn-warn btn-active" : ""}`} onClick={onToggleMode} title={t("export.toggleHint")}>
           <span className="flex items-center gap-2">
             <span className={`status-dot ${isImport ? "pulse" : ""}`} style={{ color: isImport ? "var(--warn)" : "var(--accent)", background: isImport ? "var(--warn)" : "var(--accent)" }} />
-            {isImport ? "РЕЖИМ: ИМПОРТ ДАННЫХ" : "РЕЖИМ: ЭКСПОРТ ДАННЫХ"}
+            {isImport ? t("export.modeImport") : t("export.modeExport")}
           </span>
-          <span className="hud-label opacity-70">{isImport ? "⬇ чтение файлов" : "⬆ выгрузка рапортов"}</span>
+          <span className="hud-label opacity-70">{isImport ? t("export.modeImportHint") : t("export.modeExportHint")}</span>
         </button>
       ) : (
         <div className="flex items-center justify-between gap-2">
           <span className="hud-label flex items-center gap-2 text-accent">
             <span className="status-dot" style={{ color: "var(--accent)", background: "var(--accent)" }} />
-            {title}
+            {title ?? t("export.title")}
           </span>
-          <span className="hud-label opacity-70">⬆ выгрузка</span>
+          <span className="hud-label opacity-70">{t("export.upload")}</span>
         </div>
       )}
       <div className="grid grid-cols-4 gap-2">
@@ -65,11 +81,11 @@ export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onTo
             className="btn h-[42px] px-1"
             disabled={busy || (isImport && !f.importable)}
             onClick={() => onAction(f.fmt)}
-            title={isImport ? f.hintImport : f.hintExport}
+            title={t(isImport ? f.hintImport : f.hintExport)}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={f.icon} alt="" width={22} height={22} className="ui-icon h-[22px] w-[22px] object-contain" />
-            <span className="hidden sm:inline">{f.label}</span>
+            <span className="hidden sm:inline">{t(f.label)}</span>
           </button>
         ))}
       </div>
@@ -83,36 +99,38 @@ export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onTo
  */
 export function useDocExport(textureUrl: string | null | undefined) {
   const notify = useNotify();
+  const t = useT();
   const [preview, setPreview] = React.useState<ExportDoc | null>(null);
 
   const run = React.useCallback(
-    async (doc: ExportDoc, fmt: ExportFormat) => {
+    async (input: ExportDoc, fmt: ExportFormat) => {
+      const doc: ExportDoc = { ...input, labels: input.labels ?? exportLabels(t) };
       const rows = doc.sections.reduce((n, s) => n + s.rows.length, 0);
       if (!rows) {
-        notify({ title: "ПУСТЫЕ ДАННЫЕ", message: "Нет элементов для формирования рапорта!", tone: "warning" });
+        notify({ title: t("export.emptyTitle"), message: t("export.empty"), tone: "warning" });
         return;
       }
       if (fmt === "txt") {
         exportTxt(doc);
-        notify({ title: "ЭКСПОРТ TXT", message: `Рапорт из ${rows} позиций сформирован.`, tone: "success" });
+        notify({ title: t("export.txtTitle"), message: t("export.txtDone", { n: rows }), tone: "success" });
       } else if (fmt === "xlsx") {
         await exportXlsx(doc);
-        notify({ title: "ЭКСПОРТ XLSX", message: "Таблица сформирована!", tone: "success" });
+        notify({ title: t("export.xlsxTitle"), message: t("export.xlsxDone"), tone: "success" });
       } else if (fmt === "png") {
         setPreview(doc);
       } else {
         const [first] = await renderPages(doc, textureUrl);
         const blob = first ? await canvasToBlob(first) : null;
         if (blob && (await copyBlobToClipboard(blob))) {
-          notify({ title: "FAST SHARE", message: "Первая страница скопирована — вставляйте в Discord через Ctrl+V!", tone: "success" });
+          notify({ title: t("export.fastShare"), message: t("export.copiedImage"), tone: "success" });
         } else if (await copyText(buildTxt(doc))) {
-          notify({ title: "БУФЕР ОБМЕНА", message: "Браузер не разрешил копировать изображение — рапорт скопирован текстом.", tone: "warning" });
+          notify({ title: t("export.clipboardTitle"), message: t("export.copiedText"), tone: "warning" });
         } else {
-          notify({ title: "БУФЕР ОБМЕНА", message: "Буфер обмена недоступен в этом браузере.", tone: "danger" });
+          notify({ title: t("export.clipboardTitle"), message: t("export.clipboardUnavailable"), tone: "danger" });
         }
       }
     },
-    [notify, textureUrl],
+    [notify, textureUrl, t],
   );
 
   const previewModal = <PagesPreviewModal doc={preview} textureUrl={textureUrl} onClose={() => setPreview(null)} />;
@@ -121,6 +139,7 @@ export function useDocExport(textureUrl: string | null | undefined) {
 
 const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | null | undefined; onClose: () => void }> = ({ doc, textureUrl, onClose }) => {
   const notify = useNotify();
+  const t = useT();
   const [pages, setPages] = React.useState<{ doc: ExportDoc; urls: string[]; canvases: HTMLCanvasElement[] } | null>(null);
   const ready = pages && pages.doc === doc ? pages : null;
 
@@ -136,7 +155,8 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
   }, [doc, textureUrl]);
 
   if (!doc) return null;
-  const name = (i: number, total: number) => `${fileStamp()}_${doc.fileBase}_Стр_${i + 1}_из_${total}.png`.replace(/[^\wа-яА-ЯёЁ.-]+/g, "_");
+  const pageLabel = doc.labels?.page ?? t("export.file.page");
+  const name = (i: number, total: number) => `${fileStamp()}_${doc.fileBase}_${i + 1}_${total}.png`.replace(/[^\wа-яА-ЯёЁ.-]+/g, "_");
 
   const downloadAll = async () => {
     if (!ready) return;
@@ -145,7 +165,7 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
       if (blob) downloadBlob(blob, name(i, ready.canvases.length));
       await new Promise((r) => window.setTimeout(r, 350));
     }
-    notify({ title: "ПЕЙДЖИНГ ЗАВЕРШЁН", message: `Страниц выгружено: ${ready.canvases.length}`, tone: "success" });
+    notify({ title: t("export.pagingTitle"), message: t("export.pagingDone", { n: ready.canvases.length }), tone: "success" });
   };
 
   const copyPage = async (i: number) => {
@@ -153,8 +173,8 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
     const ok = blob ? await copyBlobToClipboard(blob) : false;
     notify(
       ok
-        ? { title: "FAST SHARE", message: `Страница ${i + 1} скопирована — вставляйте в Discord через Ctrl+V!`, tone: "success" }
-        : { title: "БУФЕР ОБМЕНА", message: "Браузер не разрешил копирование изображения. Скачайте PNG.", tone: "warning" },
+        ? { title: t("export.fastShare"), message: t("export.copiedPage", { n: i + 1 }), tone: "success" }
+        : { title: t("export.clipboardTitle"), message: t("export.copyPageDenied"), tone: "warning" },
     );
   };
 
@@ -162,34 +182,34 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
     <Modal
       open
       onClose={onClose}
-      title={`Графический рапорт • ${ready?.canvases.length ?? "…"} стр.`}
+      title={t("export.previewTitle", { n: ready?.canvases.length ?? "…" })}
       icon={uiIcon("png-file")}
       widthClass="max-w-4xl"
       footer={
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="hud-label text-muted">Страницы 650×1000 px • до 14 строк на лист</span>
+          <span className="hud-label text-muted">{t("export.previewHint")}</span>
           <div className="flex gap-2">
-            <button className="btn" onClick={onClose}>Закрыть</button>
-            <button className="btn btn-primary" onClick={() => void downloadAll()} disabled={!ready}>⬇ Скачать все страницы</button>
+            <button className="btn" onClick={onClose}>{t("common.close")}</button>
+            <button className="btn btn-primary" onClick={() => void downloadAll()} disabled={!ready}>{t("export.downloadAll")}</button>
           </div>
         </div>
       }
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {!ready ? (
-          <div className="hud-label pulse col-span-full py-10 text-center text-muted">РЕНДЕРИНГ СТРАНИЦ...</div>
+          <div className="hud-label pulse col-span-full py-10 text-center text-muted">{t("export.rendering")}</div>
         ) : (
           ready.urls.map((url, i) => (
             <figure key={i} className="panel-inner flex flex-col gap-2 rounded p-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt={`Страница ${i + 1}`} className="w-full rounded border border-white/10" />
+              <img src={url} alt={`${pageLabel} ${i + 1}`} className="w-full rounded border border-white/10" />
               <figcaption className="flex items-center justify-between gap-2">
-                <span className="hud-label text-muted">Стр. {i + 1}/{ready.urls.length}</span>
+                <span className="hud-label text-muted">{pageLabel} {i + 1}/{ready.urls.length}</span>
                 <span className="flex gap-1">
-                  <button className="btn px-2 py-1" onClick={() => void copyPage(i)} title="В буфер обмена">📋</button>
+                  <button className="btn px-2 py-1" onClick={() => void copyPage(i)} title={t("export.toClipboard")}>📋</button>
                   <button
                     className="btn px-2 py-1"
-                    title="Скачать PNG"
+                    title={t("export.downloadPng")}
                     onClick={async () => {
                       const blob = await canvasToBlob(ready.canvases[i]);
                       if (blob) downloadBlob(blob, name(i, ready.canvases.length));

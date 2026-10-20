@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { UNIT_LABEL } from "@/entities/item";
 import { REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
@@ -18,17 +17,20 @@ import {
   uiIcon,
   useConfirm,
   useDocExport,
+  useI18n,
   useNotify,
   type ExportDoc,
+  type MessageKey,
+  type Translate,
 } from "@/shared";
 
 type Filter = "active" | "all" | "done" | "cancelled";
 
-const FILTERS: { key: Filter; label: string; statuses?: ReportStatus[] }[] = [
-  { key: "active", label: "Текущие", statuses: ["open", "in_progress"] },
-  { key: "done", label: "Выполненные", statuses: ["done"] },
-  { key: "cancelled", label: "Отменённые", statuses: ["cancelled"] },
-  { key: "all", label: "Все" },
+const FILTERS: { key: Filter; label: MessageKey; statuses?: ReportStatus[] }[] = [
+  { key: "active", label: "reports.filter.active", statuses: ["open", "in_progress"] },
+  { key: "done", label: "reports.filter.done", statuses: ["done"] },
+  { key: "cancelled", label: "reports.filter.cancelled", statuses: ["cancelled"] },
+  { key: "all", label: "common.all" },
 ];
 
 const STATUS_COLOR: Record<ReportStatus, string> = {
@@ -38,11 +40,11 @@ const STATUS_COLOR: Record<ReportStatus, string> = {
   cancelled: "var(--danger)",
 };
 
-const ACTION_LABEL: Record<ReportStatus, string> = {
-  open: "↺ Вернуть в очередь",
-  in_progress: "▶ Взять в работу",
-  done: "✔ Выполнен",
-  cancelled: "✕ Отменить",
+const ACTION_LABEL: Record<ReportStatus, MessageKey> = {
+  open: "reports.action.open",
+  in_progress: "reports.action.in_progress",
+  done: "reports.action.done",
+  cancelled: "reports.action.cancelled",
 };
 
 interface ReportsWorkspaceProps {
@@ -52,20 +54,23 @@ interface ReportsWorkspaceProps {
   onOpenConstructor: () => void;
 }
 
-function toDoc(report: Report): ExportDoc {
-  const meta = [report.meta.region && `Гекс: ${report.meta.region}`, report.meta.stockpile && `Склад: ${report.meta.stockpile}`].filter(Boolean) as string[];
+function toDoc(report: Report, t: Translate): ExportDoc {
+  const meta = [report.meta.region && `${t("doc.hex")}: ${report.meta.region}`, report.meta.stockpile && `${t("doc.stockpile")}: ${report.meta.stockpile}`].filter(Boolean) as string[];
   return {
     title: `SINDARIS • ${report.title}`,
-    header: [...meta, `Автор: ${report.created_by_name ?? report.created_by} • ${formatDateTime(report.created_at)}`, `Статус: ${REPORT_STATUS_LABEL[report.status]}`],
-    sections: [{ rows: report.lines.map((l) => ({ name: l.name, quantity: l.quantity, unit: UNIT_LABEL[l.unit] })) }],
-    fileBase: `SINDARIS_рапорт_${report.title}`.slice(0, 60),
-    sheetName: "Рапорт",
+    header: [...meta, `${t("doc.author")}: ${report.created_by_name ?? report.created_by} • ${formatDateTime(report.created_at)}`, `${t("doc.status")}: ${t(REPORT_STATUS_LABEL[report.status])}`],
+    sections: [{ rows: report.lines.map((l) => ({ name: l.name, quantity: l.quantity, unit: unitLabel(l.unit, t) })) }],
+    fileBase: `SINDARIS_report_${report.title}`.slice(0, 60),
+    sheetName: t("reports.report"),
   };
 }
+
+const unitLabel = (unit: string, t: Translate) => t(unit === "crate" ? "unit.crate" : "unit.unit");
 
 /** «Текущие заказы клана» — рапорты снабжения штаба: статусы, экспорт, отправка в Discord. */
 export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, canDelete, onOpenConstructor }) => {
   const notify = useNotify();
+  const { t } = useI18n();
   const { media } = useContent();
   const texture = media("bg_report_texture");
   const { run: exportDoc, previewModal } = useDocExport(texture);
@@ -82,12 +87,12 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
     try {
       setReports(await reportApi.list(FILTERS.find((f) => f.key === filter)?.statuses));
     } catch (err) {
-      notify({ title: "РАПОРТЫ", message: errorText(err, "Архив рапортов недоступен"), tone: "danger" });
+      notify({ title: t("reports.reports"), message: errorText(err, t("reports.loadFailed")), tone: "danger" });
       setReports([]);
     } finally {
       setLoading(false);
     }
-  }, [filter, notify]);
+  }, [filter, notify, t]);
 
   React.useEffect(() => {
     void load();
@@ -114,26 +119,26 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
     act(report.id, async () => {
       try {
         const r = await reportApi.setStatus(report.id, status);
-        notify({ title: "РАПОРТ", message: r.message, tone: "success" });
+        notify({ title: t("reports.report"), message: r.message, tone: "success" });
         const keep = FILTERS.find((f) => f.key === filter)?.statuses;
         if (keep && !keep.includes(status)) setReports((prev) => prev.filter((x) => x.id !== report.id));
         else replace(r.report);
       } catch (err) {
-        notify({ title: "РАПОРТ", message: errorText(err, "Статус не изменён"), tone: "danger" });
+        notify({ title: t("reports.report"), message: errorText(err, t("reports.statusFailed")), tone: "danger" });
       }
     });
 
   const sendToDiscord = (report: Report) =>
     act(report.id, async () => {
       try {
-        const [first] = await renderPages(toDoc(report), texture);
+        const [first] = await renderPages(toDoc(report, t), texture);
         const image = first ? await canvasToBlob(first) : null;
         const r = await reportApi.sendToDiscord(report.id, image);
         replace(r.report);
         notify({ title: "DISCORD", message: r.message, tone: "success" });
       } catch (err) {
         const notConfigured = err instanceof ApiError && err.code === "discord_not_configured";
-        notify({ title: "DISCORD", message: errorText(err, "Discord не принял сообщение"), tone: notConfigured ? "warning" : "danger", ttl: 8000 });
+        notify({ title: "DISCORD", message: errorText(err, t("reports.discordFailed")), tone: notConfigured ? "warning" : "danger", ttl: 8000 });
       }
     });
 
@@ -142,9 +147,9 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
       try {
         await reportApi.delete(report.id);
         setReports((prev) => prev.filter((r) => r.id !== report.id));
-        notify({ title: "АРХИВ", message: `Рапорт «${report.title}» удалён.`, tone: "warning" });
+        notify({ title: t("reports.archive"), message: t("reports.deleted", { title: report.title }), tone: "warning" });
       } catch (err) {
-        notify({ title: "АРХИВ", message: errorText(err, "Рапорт не удалён"), tone: "danger" });
+        notify({ title: t("reports.archive"), message: errorText(err, t("reports.deleteFailed")), tone: "danger" });
       }
     });
 
@@ -161,14 +166,14 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={uiIcon("log-file")} alt="" width={40} height={40} className="ui-icon h-10 w-10 object-contain" />
             <div>
-              <div className="hud-label text-muted">Архив рапортов штаба</div>
-              <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">📋 Текущие заказы клана</h1>
-              <p className="mt-1 text-[0.8rem] text-white/70">Рапорты из конструктора заказа: статусы, выгрузка и отправка в канал Discord.</p>
+              <div className="hud-label text-muted">{t("reports.kicker")}</div>
+              <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">📋 {t("reports.title")}</h1>
+              <p className="mt-1 text-[0.8rem] text-white/70">{t("reports.subtitle")}</p>
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <span className="badge-count min-w-0 px-2">{reports.length} РАПОРТ.</span>
-            <span className="badge-count min-w-0 px-2">{totals.lines} ПОЗ.</span>
+            <span className="badge-count min-w-0 px-2">{t("reports.count", { n: reports.length })}</span>
+            <span className="badge-count min-w-0 px-2">{t("common.pos", { n: totals.lines })}</span>
             <span className="badge-count min-w-0 px-2">Σ {totals.units}</span>
           </div>
         </div>
@@ -177,20 +182,20 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
           <div className="flex gap-1.5 overflow-x-auto">
             {FILTERS.map((f) => (
               <button key={f.key} className={`chip h-9 shrink-0 px-4 ${filter === f.key ? "is-active" : ""}`} onClick={() => setFilter(f.key)}>
-                {f.label}
+                {t(f.label)}
               </button>
             ))}
           </div>
-          <input className="field field-mono lg:ml-auto lg:w-72" placeholder="🔍 Поиск по рапорту или предмету..." value={query} onChange={(e) => setQuery(e.target.value)} />
-          <button className="btn" onClick={() => void load()}>⟳ Синхр.</button>
+          <input className="field field-mono lg:ml-auto lg:w-72" placeholder={t("reports.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
+          <button className="btn" onClick={() => void load()}>⟳ {t("common.sync")}</button>
         </div>
       </section>
 
       {loading ? (
-        <div className="panel rounded-md"><Loading label="📡 ЗАГРУЗКА АРХИВА РАПОРТОВ..." /></div>
+        <div className="panel rounded-md"><Loading label={t("reports.loading")} /></div>
       ) : visible.length === 0 ? (
         <div className="panel panel-corners rounded-md">
-          <EmptyState icon={uiIcon("parchment")} title={reports.length ? "Ничего не найдено по запросу" : "Рапортов нет — соберите заказ в конструкторе и отправьте его в штаб"} />
+          <EmptyState icon={uiIcon("parchment")} title={reports.length ? t("common.nothingFound") : t("reports.empty")} />
         </div>
       ) : (
         <ul className="grid gap-3 xl:grid-cols-2">
@@ -211,12 +216,12 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                     </span>
                   </button>
                   <span className="hud-label shrink-0 rounded border px-1.5 py-0.5" style={{ color: STATUS_COLOR[report.status], borderColor: STATUS_COLOR[report.status] }}>
-                    {REPORT_STATUS_LABEL[report.status]}
+                    {t(REPORT_STATUS_LABEL[report.status])}
                   </span>
                 </div>
 
                 <div className="mt-2 flex flex-wrap items-center gap-2 pl-5">
-                  <span className="badge-count">{report.lines_count} поз.</span>
+                  <span className="badge-count">{t("common.pos", { n: report.lines_count })}</span>
                   <span className="badge-count">Σ {report.total_quantity}</span>
                   {report.discord_sent_at && <span className="hud-label text-accent" title={formatDateTime(report.discord_sent_at)}>✓ DISCORD</span>}
                 </div>
@@ -227,7 +232,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                       <li key={line.id} className="flex items-center gap-2 text-[0.78rem] text-white/85">
                         <ItemIcon sources={[assetUrl(line.icon_url)]} size={28} label={line.name} />
                         <span className="min-w-0 truncate">{line.name}</span>
-                        <span className="badge-count ml-auto min-w-0 shrink-0 px-2">{line.quantity} {UNIT_LABEL[line.unit]}</span>
+                        <span className="badge-count ml-auto min-w-0 shrink-0 px-2">{line.quantity} {unitLabel(line.unit, t)}</span>
                       </li>
                     ))}
                   </ul>
@@ -240,28 +245,28 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ canWrite, ca
                   {canWrite &&
                     REPORT_TRANSITIONS[report.status].map((next) => (
                       <button key={next} className={`btn px-2 py-1 text-[0.65rem] ${next === "cancelled" ? "btn-danger" : next === "done" ? "btn-primary" : ""}`} disabled={busy} onClick={() => void setStatus(report, next)}>
-                        {ACTION_LABEL[next]}
+                        {t(ACTION_LABEL[next])}
                       </button>
                     ))}
-                  <button className="btn px-2 py-1 text-[0.65rem]" disabled={busy} title="Загрузить строки в конструктор заказа" onClick={() => {
+                  <button className="btn px-2 py-1 text-[0.65rem]" disabled={busy} title={t("reports.toBuilderHint")} onClick={() => {
                     orderDraft.write(orderDraft.fromReport(report));
-                    notify({ title: "КОНСТРУКТОР", message: `Рапорт «${report.title}» загружен в конструктор.`, tone: "info" });
+                    notify({ title: t("builder.short"), message: t("reports.loadedToBuilder", { title: report.title }), tone: "info" });
                     onOpenConstructor();
                   }}>
-                    ⤴ В конструктор
+                    ⤴ {t("reports.toBuilder")}
                   </button>
                   {canWrite && (
                     <button className="btn px-2 py-1 text-[0.65rem]" style={{ borderColor: "#5865F2", color: "#c7d2fe" }} disabled={busy} onClick={() => void sendToDiscord(report)}>
-                      {busy ? <span className="pulse">ПЕРЕДАЧА...</span> : "📨 В Discord"}
+                      {busy ? <span className="pulse">{t("common.sending")}</span> : `📨 ${t("reports.toDiscord")}`}
                     </button>
                   )}
                   {canDelete && (
                     <button className={`btn btn-danger ml-auto px-2 py-1 text-[0.65rem] ${armed === report.id ? "btn-active" : ""}`} disabled={busy} onClick={() => confirm(report.id, () => void remove(report))}>
-                      {armed === report.id ? "Подтвердить?" : "🗑"}
+                      {armed === report.id ? t("common.confirmQ") : "🗑"}
                     </button>
                   )}
                 </div>
-                <ExportBar title="ВЫГРУЗКА РАПОРТА" onAction={(fmt) => void exportDoc(toDoc(report), fmt)} busy={busy} />
+                <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t), fmt)} busy={busy} />
               </li>
             );
           })}

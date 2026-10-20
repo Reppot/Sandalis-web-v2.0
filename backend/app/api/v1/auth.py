@@ -17,7 +17,7 @@ from app.api.deps import (
 )
 from app.core.config import settings
 from app.core.errors import AppError, PermissionDeniedError
-from app.core.i18n import Translator
+from app.core.i18n import Translator, normalize_locale
 from app.core.permissions import Scopes
 from app.core.security import Principal
 from app.models.rbac import User
@@ -25,6 +25,7 @@ from app.schemas.auth import (
     ClanApiTokenCreate,
     ClanApiTokenCreated,
     DevTokenRequest,
+    LocaleUpdate,
     MeRead,
     RedeemCodeRequest,
     TokenResponse,
@@ -85,9 +86,20 @@ def _set_session_cookie(response: Response, token: str) -> None:
 @router.get("/me", response_model=MeRead, summary="Кто я: user/clan/role/scopes/avatar")
 async def read_me(principal: CurrentPrincipal, session: DbDep) -> MeRead:
     avatar: str | None = None
+    locale: str | None = None
     if principal.subject_type == "user":
-        # User глобальный (не clan-scoped) — аватар в JWT не кладём, читаем из БД
-        avatar = await session.scalar(select(User.avatar_url).where(User.id == principal.user_id))
+        # User глобальный (не clan-scoped) — аватар и язык в JWT не кладём, читаем из БД
+        row = (
+            await session.execute(
+                select(User.avatar_url, User.preferred_locale).where(User.id == principal.user_id)
+            )
+        ).first()
+        if row:
+            avatar, locale = row
+    return _me(principal, avatar, locale)
+
+
+def _me(principal: Principal, avatar: str | None, locale: str | None) -> MeRead:
     return MeRead(
         subject_type=principal.subject_type,
         user_id=principal.user_id,
@@ -96,7 +108,29 @@ async def read_me(principal: CurrentPrincipal, session: DbDep) -> MeRead:
         scopes=sorted(principal.scopes),
         display_name=principal.display_name,
         avatar_url=avatar,
+        locale=locale,
     )
+
+
+@router.put("/me/locale", response_model=MeRead, summary="Сменить язык интерфейса (ru/en/cs)")
+async def update_locale(
+    payload: LocaleUpdate, principal: CurrentPrincipal, session: DbDep
+) -> MeRead:
+    locale = normalize_locale(payload.locale)
+    if locale is None:
+        raise AppError(
+            message_key="errors.validation", code="unsupported_locale",
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, params={},
+        )
+    avatar: str | None = None
+    if principal.subject_type == "user":
+        user = await session.get(User, principal.user_id)
+        if user is not None:
+            user.preferred_locale = locale
+            avatar = user.avatar_url
+            await session.commit()
+    # clan_token (бот) профиля не имеет — язык живёт только на клиенте
+    return _me(principal, avatar, locale)
 
 
 # ---------------- token issuance -------------------------------------------- #

@@ -4,7 +4,8 @@
 * catalog_items и production_recipes — данные игры: перезаписываются сидом
   (обновление номенклатуры = новый JSON + повторный запуск);
 * app_content — только добавляются недостающие записи: правки, сделанные через
-  API (например, новый URL видео входа), сид не затирает.
+  API (например, новый URL видео входа), сид не затирает. Исключение — переводы
+  en/cs (content_i18n.json → payload.i18n): системные данные, обновляются всегда.
 
 Запуск: `python -m app.seed` (Render делает это после `alembic upgrade head`).
 """
@@ -14,8 +15,8 @@ import json
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import func
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import String, cast, func, update
+from sqlalchemy.dialects.postgresql import JSONB, insert
 from sqlalchemy.ext.asyncio import AsyncConnection
 
 from app.models.catalog import CatalogItem
@@ -70,9 +71,31 @@ async def seed_content(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int
     return inserted
 
 
+async def seed_content_i18n(conn: AsyncConnection, i18n: dict[str, dict[str, Any]]) -> int:
+    """Переводы en/cs — системные данные: payload.i18n перезаписывается всегда,
+    остальные поля payload (возможно, правленые админом) не трогаются."""
+    updated = 0
+    for kind, entries in i18n.items():
+        for key, translations in entries.items():
+            result = await conn.execute(
+                update(AppContent)
+                .where(AppContent.kind == kind, AppContent.key == key)
+                .values(payload=AppContent.payload.op("||")(
+                    func.jsonb_build_object(
+                        "i18n", cast(cast(json.dumps(translations, ensure_ascii=False), String), JSONB)
+                    )
+                ))
+            )
+            updated += result.rowcount or 0
+    return updated
+
+
 async def run(conn: AsyncConnection) -> dict[str, int]:
     return {
         "catalog": await seed_catalog(conn, load("catalog.json")),
         "recipes": await seed_recipes(conn, load("recipes.json")),
         "content_inserted": await seed_content(conn, load("content.json")),
+        "content_translated": await seed_content_i18n(
+            conn, json.loads((DATA_DIR / "content_i18n.json").read_text(encoding="utf-8"))
+        ),
     }

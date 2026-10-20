@@ -1,5 +1,5 @@
 import { STORAGE_KEYS, apiClient, readStorage, writeStorage } from "@/shared";
-import type { Page } from "@/shared";
+import type { MessageKey, Page } from "@/shared";
 import type { ItemUnit } from "@/entities/item";
 
 export type ReportStatus = "open" | "in_progress" | "done" | "cancelled";
@@ -44,11 +44,11 @@ export interface ReportLineInput {
   unit: ItemUnit;
 }
 
-export const REPORT_STATUS_LABEL: Record<ReportStatus, string> = {
-  open: "ОТКРЫТ",
-  in_progress: "В РАБОТЕ",
-  done: "ВЫПОЛНЕН",
-  cancelled: "ОТМЕНЁН",
+export const REPORT_STATUS_LABEL: Record<ReportStatus, MessageKey> = {
+  open: "reports.status.open",
+  in_progress: "reports.status.in_progress",
+  done: "reports.status.done",
+  cancelled: "reports.status.cancelled",
 };
 
 /** Зеркало REPORT_TRANSITIONS бэкенда (app/models/report.py). */

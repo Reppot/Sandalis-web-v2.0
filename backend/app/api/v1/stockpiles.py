@@ -60,10 +60,9 @@ async def _detail(
 ) -> StockpileDetailRead:
     brief = await service.catalog_brief(i.item_code for i in items)
     item_reads = [
-        StockpileItemRead.model_validate(i).model_copy(update={
-            "name": brief.get(i.item_code, (None, None))[0],
-            "icon_url": brief.get(i.item_code, (None, None))[1],
-        })
+        StockpileItemRead.model_validate(i).model_copy(update=dict(
+            zip(("name", "name_en", "icon_url"), brief.get(i.item_code, (None, None, None)))
+        ))
         for i in items
     ]
     read = StockpileDetailRead.model_validate(stockpile)

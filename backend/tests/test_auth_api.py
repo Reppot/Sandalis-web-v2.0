@@ -120,3 +120,22 @@ def test_redeem_code_flow(db):
                 "Pozvánkový kód nebyl nalezen nebo byl zrušen."
 
     run(main())
+
+
+def test_locale_preference_roundtrip(db):
+    async def main() -> None:
+        async with client() as c:
+            r = await c.post(f"{API}/auth/dev-token", json={"user_id": "u-loc", "clan_id": "CLAN_L"})
+            auth = {"Authorization": f"Bearer {r.json()['access_token']}"}
+            # стартовый язык — язык запроса при регистрации (здесь DEFAULT_LOCALE)
+            assert (await c.get(f"{API}/auth/me", headers=auth)).json()["locale"] == settings.DEFAULT_LOCALE
+
+            saved = await c.put(f"{API}/auth/me/locale", json={"locale": "cs-CZ"}, headers=auth)
+            assert saved.status_code == 200, saved.text
+            assert saved.json()["locale"] == "cs"
+            assert (await c.get(f"{API}/auth/me", headers=auth)).json()["locale"] == "cs"
+
+            bad = await c.put(f"{API}/auth/me/locale", json={"locale": "de"}, headers=auth)
+            assert bad.status_code == 422
+
+    run(main())

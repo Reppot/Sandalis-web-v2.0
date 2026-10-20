@@ -35,6 +35,11 @@ export const authApi = {
     return toUserSession(dto);
   },
 
+  /** Язык интерфейса в профиле — тот же выбор на других устройствах и в десктоп-клиенте. */
+  async setLocale(locale: string): Promise<void> {
+    await apiClient.put<MeReadDto>("/api/v1/auth/me/locale", { locale });
+  },
+
   async logout(): Promise<void> {
     await apiClient.post<void>("/api/v1/auth/logout");
   },

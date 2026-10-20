@@ -4,6 +4,7 @@
  */
 export const STORAGE_KEYS = {
   theme: "sindaris-theme",
+  locale: "sindaris-locale",
   sidebar: "sindaris-sidebar",
   orderDraft: "sindaris-order-draft",
   pinnedStockpile: "sindaris-pinned-stockpile",

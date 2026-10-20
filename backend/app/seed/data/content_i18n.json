@@ -1,0 +1,448 @@
+{
+ "external_tool": {
+  "foxwar-net": {
+   "en": {
+    "tag": "Map & planning",
+    "description": "Interactive map for planning and artillery, with squad commands shown to every team member at once."
+   },
+   "cs": {
+    "tag": "Mapa a plánování",
+    "description": "Interaktivní mapa pro plánování a dělostřelectvo s povely, které vidí všichni členové týmu současně."
+   }
+  },
+  "foxhole-hq": {
+   "en": {
+    "tag": "3D models & map",
+    "description": "Huge library of 3D models of structures and vehicles, plus a map with user notes."
+   },
+   "cs": {
+    "tag": "3D modely a mapa",
+    "description": "Obrovská knihovna 3D modelů staveb a techniky a mapa s uživatelskými poznámkami."
+   }
+  },
+  "foxhole-planner": {
+   "en": {
+    "tag": "Base planner",
+    "description": "Base layout planner with many ready-made presets of forts, depots and defensive lines."
+   },
+   "cs": {
+    "tag": "Plánovač staveb",
+    "description": "Plánovač zástavby základen s mnoha hotovými předlohami pevností, skladů a obranných linií."
+   }
+  },
+  "fharty-artillery-calculator": {
+   "en": {
+    "tag": "Artillery",
+    "description": "Simple and fast calculator for artillery distances and corrections."
+   },
+   "cs": {
+    "tag": "Dělostřelectvo",
+    "description": "Jednoduchá a rychlá kalkulačka dělostřeleckých vzdáleností a korekcí."
+   }
+  },
+  "plane-damage-calculator": {
+   "en": {
+    "tag": "Aviation",
+    "description": "Damage calculator for air combat: compare aircraft, weapons and survivability."
+   },
+   "cs": {
+    "tag": "Letectvo",
+    "description": "Kalkulačka poškození pro vzdušný boj: porovnání letadel, výzbroje a odolnosti."
+   }
+  },
+  "sravdar-map": {
+   "en": {
+    "tag": "Map",
+    "description": "Interactive Foxhole map with live tiles."
+   },
+   "cs": {
+    "tag": "Mapa",
+    "description": "Interaktivní mapa Foxhole s živými dlaždicemi."
+   }
+  }
+ },
+ "material": {
+  "bmat": {
+   "en": {
+    "label": "BMATS"
+   },
+   "cs": {
+    "label": "BMATY"
+   }
+  },
+  "rmat": {
+   "en": {
+    "label": "RMATS"
+   },
+   "cs": {
+    "label": "RMATY"
+   }
+  },
+  "emat": {
+   "en": {
+    "label": "EMATS"
+   },
+   "cs": {
+    "label": "EMATY"
+   }
+  },
+  "hemat": {
+   "en": {
+    "label": "HEMATS"
+   },
+   "cs": {
+    "label": "HEMATY"
+   }
+  },
+  "salvage": {
+   "en": {
+    "label": "Salvage"
+   },
+   "cs": {
+    "label": "Šrot"
+   }
+  },
+  "components": {
+   "en": {
+    "label": "Components"
+   },
+   "cs": {
+    "label": "Součástky"
+   }
+  },
+  "sulfur": {
+   "en": {
+    "label": "Sulfur"
+   },
+   "cs": {
+    "label": "Síra"
+   }
+  },
+  "coal": {
+   "en": {
+    "label": "Coal"
+   },
+   "cs": {
+    "label": "Uhlí"
+   }
+  },
+  "aluminum": {
+   "en": {
+    "label": "Aluminum"
+   },
+   "cs": {
+    "label": "Hliník"
+   }
+  },
+  "copper": {
+   "en": {
+    "label": "Copper"
+   },
+   "cs": {
+    "label": "Měď"
+   }
+  },
+  "iron": {
+   "en": {
+    "label": "Iron"
+   },
+   "cs": {
+    "label": "Železo"
+   }
+  }
+ },
+ "catalog_category": {
+  "weapons": {
+   "en": {
+    "label": "Weapons"
+   },
+   "cs": {
+    "label": "Zbraně"
+   }
+  },
+  "ammo": {
+   "en": {
+    "label": "Ammunition"
+   },
+   "cs": {
+    "label": "Munice"
+   }
+  },
+  "materials": {
+   "en": {
+    "label": "Materials"
+   },
+   "cs": {
+    "label": "Materiály"
+   }
+  },
+  "medical": {
+   "en": {
+    "label": "Medical"
+   },
+   "cs": {
+    "label": "Zdravotnictví"
+   }
+  },
+  "equipment": {
+   "en": {
+    "label": "Equipment"
+   },
+   "cs": {
+    "label": "Vybavení"
+   }
+  },
+  "uniforms": {
+   "en": {
+    "label": "Uniforms"
+   },
+   "cs": {
+    "label": "Uniformy"
+   }
+  },
+  "vehicles": {
+   "en": {
+    "label": "Vehicles"
+   },
+   "cs": {
+    "label": "Technika"
+   }
+  },
+  "structures": {
+   "en": {
+    "label": "Structures"
+   },
+   "cs": {
+    "label": "Stavby"
+   }
+  },
+  "other": {
+   "en": {
+    "label": "Other"
+   },
+   "cs": {
+    "label": "Ostatní"
+   }
+  }
+ },
+ "factory_category": {
+  "small_arms": {
+   "en": {
+    "label": "Small arms"
+   },
+   "cs": {
+    "label": "Ruční zbraně"
+   }
+  },
+  "heavy_arms": {
+   "en": {
+    "label": "Heavy arms"
+   },
+   "cs": {
+    "label": "Těžké zbraně"
+   }
+  },
+  "heavy_ammunition": {
+   "en": {
+    "label": "Heavy ammunition"
+   },
+   "cs": {
+    "label": "Těžká munice"
+   }
+  },
+  "utilities": {
+   "en": {
+    "label": "Utilities"
+   },
+   "cs": {
+    "label": "Vybavení"
+   }
+  },
+  "resource": {
+   "en": {
+    "label": "Resources"
+   },
+   "cs": {
+    "label": "Suroviny"
+   }
+  },
+  "medical": {
+   "en": {
+    "label": "Medical"
+   },
+   "cs": {
+    "label": "Zdravotnictví"
+   }
+  },
+  "uniforms": {
+   "en": {
+    "label": "Uniforms"
+   },
+   "cs": {
+    "label": "Uniformy"
+   }
+  },
+  "vehicles": {
+   "en": {
+    "label": "Vehicles"
+   },
+   "cs": {
+    "label": "Technika"
+   }
+  },
+  "shipables": {
+   "en": {
+    "label": "Shippables"
+   },
+   "cs": {
+    "label": "Stavby"
+   }
+  },
+  "supplies": {
+   "en": {
+    "label": "Supplies"
+   },
+   "cs": {
+    "label": "Zásoby"
+   }
+  }
+ },
+ "refinery_group": {
+  "materials": {
+   "en": {
+    "label": "Materials"
+   },
+   "cs": {
+    "label": "Materiály"
+   }
+  },
+  "fuel": {
+   "en": {
+    "label": "Fuel"
+   },
+   "cs": {
+    "label": "Palivo"
+   }
+  },
+  "construction": {
+   "en": {
+    "label": "Construction"
+   },
+   "cs": {
+    "label": "Stavební materiály"
+   }
+  },
+  "alloys": {
+   "en": {
+    "label": "Alloys"
+   },
+   "cs": {
+    "label": "Slitiny"
+   }
+  }
+ },
+ "training_module": {
+  "terminal": {
+   "en": {
+    "title": "Working with the SINDARIS terminal",
+    "summary": "Stockpile, order builder, reports and export.",
+    "body": [
+     "1. “Orders” → left panel: pick the pinned stockpile and load a scanner report (JSON/TXT, XLSX, clipboard) or scan MapData.sav.",
+     "2. Right panel: pick an item from the matrix (search by name, English name or code), set the amount and unit (CRATE/PCS), press “Add to order”.",
+     "3. The “MODE” button switches the bottom keys between export (TXT/XLSX/PNG/clipboard) and import.",
+     "4. “Send report to HQ” stores the order on the server — it appears under “Clan orders”, where it can be exported or sent to Discord."
+    ]
+   },
+   "cs": {
+    "title": "Práce s terminálem SINDARIS",
+    "summary": "Sklad, sestavovač objednávky, hlášení a export.",
+    "body": [
+     "1. „Objednávky“ → levý panel: vyberte připnutý sklad a nahrajte hlášení skeneru (JSON/TXT, XLSX, schránka) nebo naskenujte MapData.sav.",
+     "2. Pravý panel: vyberte předmět z matice (hledání podle názvu, anglického názvu nebo kódu), zadejte množství a jednotku (BED/KS) a stiskněte „Přidat do objednávky“.",
+     "3. Tlačítko „REŽIM“ přepíná spodní klávesy mezi exportem (TXT/XLSX/PNG/schránka) a importem.",
+     "4. „Odeslat hlášení na velitelství“ uloží objednávku na server — objeví se v „Objednávkách klanu“, odkud ji lze exportovat nebo poslat do Discordu."
+    ]
+   }
+  },
+  "formats": {
+   "en": {
+    "title": "Scanner report formats",
+    "summary": "Which lines the terminal parser understands.",
+    "body": [
+     "• “Item name, 50” — classic scanner format.",
+     "• “Item name -> 50 pcs” — terminal export format.",
+     "• “Item name: 12 crates” — Discord message format.",
+     "• Markers •, *, “pcs”, “crates” are stripped automatically.",
+     "• JSON: an array of {name, count} objects or a dictionary {\"Name\": 50}.",
+     "• MapData.sav: the server looks up catalog item codes and reads their amounts."
+    ]
+   },
+   "cs": {
+    "title": "Formáty hlášení skeneru",
+    "summary": "Jakým řádkům parser terminálu rozumí.",
+    "body": [
+     "• „Název předmětu, 50“ — klasický formát skeneru.",
+     "• „Název předmětu -> 50 ks“ — formát exportu terminálu.",
+     "• „Název předmětu: 12 beden“ — formát zpráv z Discordu.",
+     "• Značky •, *, „ks“, „bedny“ se odstraní automaticky.",
+     "• JSON: pole objektů {name, count} nebo slovník {\"Název\": 50}.",
+     "• MapData.sav: server vyhledá kódy předmětů z katalogu a přečte jejich množství."
+    ]
+   }
+  },
+  "timers": {
+   "en": {
+    "title": "Stockpile decay timers",
+    "summary": "The 48-hour rule and the refresh protocol.",
+    "body": [
+     "• Public and private Foxhole stockpiles disappear after 48 hours without a refresh.",
+     "• Red — under 1 hour: send someone to refresh the stockpile right now.",
+     "• Orange — under 24 hours: plan a refresh during the next shift.",
+     "• After refreshing in game press “Reset to 48 hours” or set the exact time.",
+     "• Every action is recorded in the timer log with a timestamp and author."
+    ]
+   },
+   "cs": {
+    "title": "Časovače rozpadu skladů",
+    "summary": "Pravidlo 48 hodin a postup obnovy.",
+    "body": [
+     "• Veřejné i soukromé sklady ve Foxhole zmizí po 48 hodinách bez obnovení.",
+     "• Červená — méně než 1 hodina: okamžitě pošlete někoho sklad obnovit.",
+     "• Oranžová — méně než 24 hodin: naplánujte obnovu v příští směně.",
+     "• Po obnovení ve hře stiskněte „Resetovat na 48 hodin“ nebo nastavte přesný čas.",
+     "• Každá akce se zapisuje do deníku časovače s časem a autorem."
+    ]
+   }
+  },
+  "logistics": {
+   "en": {
+    "title": "Foxhole logistics basics",
+    "summary": "Supply chains, MPF, facilities."
+   },
+   "cs": {
+    "title": "Základy logistiky Foxhole",
+    "summary": "Zásobovací řetězce, MPF, zařízení."
+   }
+  },
+  "protocol": {
+   "en": {
+    "title": "Supply report protocol",
+    "summary": "Standard for clan HQ requests."
+   },
+   "cs": {
+    "title": "Protokol hlášení zásobování",
+    "summary": "Standard pro žádosti na velitelství klanu."
+   }
+  },
+  "front": {
+   "en": {
+    "title": "Frontline logistics",
+    "summary": "Delivery under fire, priorities, routes."
+   },
+   "cs": {
+    "title": "Logistika na frontě",
+    "summary": "Doprava pod palbou, priority, trasy."
+   }
+  }
+ }
+}

@@ -9,7 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.errors import ConflictError, NotFoundError, PermissionDeniedError
-from app.core.i18n import Translator
+from app.core.i18n import Translator, normalize_locale
 from app.core.permissions import ClanRole, scopes_for
 from app.core.security import decode_access_token, hash_clan_token, issue_access_token  # noqa: F401
 from app.core.tenancy import bypass_clan_filter
@@ -129,15 +129,17 @@ class AuthService:
                 User(
                     id=user_id,
                     display_name=display_name or user_id,
-                    preferred_locale=locale,
+                    # локаль Discord — только стартовое значение; дальше язык
+                    # выбирает сам пользователь (PUT /auth/me/locale)
+                    preferred_locale=normalize_locale(locale),
                     avatar_url=avatar_url,
                 )
             )
             return
         user.display_name = display_name or user.display_name
         user.avatar_url = avatar_url
-        if locale:
-            user.preferred_locale = locale
+        if locale and not user.preferred_locale:
+            user.preferred_locale = normalize_locale(locale)
 
     async def resolve_discord_membership(
         self, *, user_id: str, display_name: str, clan_id: str | None

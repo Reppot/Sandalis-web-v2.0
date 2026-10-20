@@ -3,16 +3,17 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { UserSession } from "@/entities/session";
-import { env, errorText } from "@/shared";
+import { env, errorText, useT, type MessageKey } from "@/shared";
 import { authApi } from "@/features/cabinet/api/authApi";
+import { LanguageSwitch } from "@/features/cabinet/ui/LanguageSwitch";
 
 // Ключи = AppError.code, которые бэкенд кладёт в FRONTEND_URL?error=<code>.
-const OAUTH_ERRORS: Record<string, string> = {
-  forbidden: "[ОТКАЗАНО] ЭТОТ DISCORD-АККАУНТ НЕ СОСТОИТ В КЛАНЕ — ВСТУПИТЕ ПО INVITE-КОДУ",
-  state_invalid: "[СИСТЕМА] СЕССИЯ АВТОРИЗАЦИИ ИСТЕКЛА — ПОПРОБУЙТЕ СНОВА",
-  exchange_failed: "[СИСТЕМА] DISCORD ОТКЛОНИЛ ВХОД ИЛИ ПРОИЗОШЛА ОШИБКА",
-  profile_failed: "[СИСТЕМА] НЕ УДАЛОСЬ ПОЛУЧИТЬ ПРОФИЛЬ DISCORD",
-  disabled: "[СИСТЕМА] DISCORD OAUTH НЕ НАСТРОЕН НА СЕРВЕРЕ",
+const OAUTH_ERRORS: Record<string, MessageKey> = {
+  forbidden: "login.err.forbidden",
+  state_invalid: "login.err.state_invalid",
+  exchange_failed: "login.err.exchange_failed",
+  profile_failed: "login.err.profile_failed",
+  disabled: "login.err.disabled",
 };
 
 const DiscordGlyph = () => (
@@ -26,7 +27,9 @@ const DiscordGlyph = () => (
  * локальной папки), Discord OAuth, вступление по invite-коду и dev-token для локалки.
  */
 export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = ({ onLoggedIn }) => {
+  const t = useT();
   const { mediaEntry, media } = useContent();
+  const [oauthError, setOauthError] = React.useState("");
   const [error, setError] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   const [code, setCode] = React.useState("");
@@ -39,9 +42,9 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   React.useEffect(() => {
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     const params = new URLSearchParams(window.location.search);
-    const oauthError = params.get("error");
-    if (oauthError) {
-      setError(OAUTH_ERRORS[oauthError] ?? "[СИСТЕМА] ОШИБКА АВТОРИЗАЦИИ");
+    const code = params.get("error");
+    if (code) {
+      setOauthError(code);
       window.history.replaceState(null, "", window.location.pathname);
     }
   }, []);
@@ -49,15 +52,17 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   const run = async (action: () => Promise<UserSession>) => {
     setBusy(true);
     setError("");
+    setOauthError("");
     try {
       onLoggedIn(await action());
     } catch (err) {
-      setError(`[ОТКАЗАНО] ${errorText(err, "НЕТ СВЯЗИ С КАНАЛОМ АВТОРИЗАЦИИ").toUpperCase()}`);
+      setError(`[${t("login.denied")}] ${errorText(err, t("login.noLink")).toUpperCase()}`);
     } finally {
       setBusy(false);
     }
   };
 
+  const shownError = error || (oauthError ? t(OAUTH_ERRORS[oauthError] ?? "login.err.generic") : "");
   const poster = video?.poster ? (video.poster.startsWith("/") ? `${env.apiUrl}${video.poster}` : video.poster) : media("bg_home");
 
   return (
@@ -74,9 +79,10 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
         <div className="auth-scanline" aria-hidden />
         <div className="auth-header">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          {logo && <img src={logo} alt="Герб клана SINDARIS" width={180} height={230} className="auth-logo" />}
+          {logo && <img src={logo} alt={t("common.crest")} width={180} height={230} className="auth-logo" />}
           <h1 className="auth-title">SINDARIS Terminal</h1>
           <p className="auth-subtitle">LOGISTICS OVERWATCH • FOXHOLE</p>
+          <LanguageSwitch className="mt-3 justify-center" />
         </div>
 
         <div className="auth-rule" />
@@ -84,14 +90,14 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
         <div className="auth-form">
           <a href={authApi.discordLoginUrl()} className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
             <DiscordGlyph />
-            <span>ВОЙТИ ЧЕРЕЗ DISCORD</span>
+            <span>{t("login.discord")}</span>
           </a>
         </div>
 
-        {error && (
+        {shownError && (
           <div className="auth-error relative z-[1]" role="alert">
             <span className="auth-error-mark">!</span>
-            <span>{error}</span>
+            <span>{shownError}</span>
           </div>
         )}
 
@@ -104,19 +110,19 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
             if (code.trim() && name.trim()) void run(() => authApi.redeemInvite({ code: code.trim(), displayName: name.trim() }));
           }}
         >
-          <label htmlFor="invite-code" className="auth-label">РЕЗЕРВНЫЙ ВХОД: INVITE-КОД КЛАНА</label>
+          <label htmlFor="invite-code" className="auth-label">{t("login.inviteLabel")}</label>
           <div className="grid gap-2 sm:grid-cols-2">
             <div className="auth-input-wrap">
               <span className="auth-prompt" aria-hidden>@</span>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="ПОЗЫВНОЙ" autoComplete="nickname" spellCheck={false} disabled={busy} />
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("login.callsign")} autoComplete="nickname" spellCheck={false} disabled={busy} />
             </div>
-            <div className={`auth-input-wrap ${error ? "auth-input-error" : ""}`}>
+            <div className={`auth-input-wrap ${shownError ? "auth-input-error" : ""}`}>
               <span className="auth-prompt" aria-hidden>&gt;_</span>
               <input id="invite-code" value={code} onChange={(e) => setCode(e.target.value)} placeholder="INV-XXXXXX" autoComplete="off" spellCheck={false} disabled={busy} />
             </div>
           </div>
           <button type="submit" className="btn btn-primary auth-submit" disabled={!code.trim() || !name.trim() || busy}>
-            <span className={busy ? "pulse" : ""}>{busy ? "ПРОВЕРКА КЛЮЧА..." : "ИНИЦИАЛИЗИРОВАТЬ ПОДКЛЮЧЕНИЕ"}</span>
+            <span className={busy ? "pulse" : ""}>{busy ? t("login.checking") : t("login.connect")}</span>
             {!busy && <span aria-hidden>↵</span>}
           </button>
         </form>

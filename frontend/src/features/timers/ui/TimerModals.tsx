@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { stockpileApi } from "@/entities/stockpile";
-import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, uiIcon, useConfirm, useNotify } from "@/shared";
+import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, uiIcon, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
 import { timersApi, type TimerEvent } from "@/features/timers/api";
 import { timerPlace, useClock, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 
@@ -21,13 +21,14 @@ function toSeconds(v: TimeValue): number {
 }
 
 const TimeInputs: React.FC<{ value: TimeValue; onChange: (v: TimeValue) => void }> = ({ value, onChange }) => {
+  const t = useT();
   const clean = (v: string) => v.replace(/[^\d]/g, "").slice(0, 4);
-  const fields: [string, keyof TimeValue][] = [["ДНИ", "days"], ["ЧАСЫ", "hours"], ["МИНУТЫ", "minutes"]];
+  const fields: [MessageKey, keyof TimeValue][] = [["timers.days", "days"], ["timers.hours", "hours"], ["timers.minutes", "minutes"]];
   return (
     <div className="panel-inner flex flex-wrap items-center justify-center gap-3 rounded px-3 py-3">
       {fields.map(([label, key]) => (
         <label key={key} className="flex items-center gap-2">
-          <span className="hud-label text-white/80">{label}:</span>
+          <span className="hud-label text-white/80">{t(label)}:</span>
           <input className="field field-mono w-[62px] text-center" placeholder="0" inputMode="numeric" value={value[key]} onChange={(e) => onChange({ ...value, [key]: clean(e.target.value) })} />
         </label>
       ))}
@@ -37,6 +38,7 @@ const TimeInputs: React.FC<{ value: TimeValue; onChange: (v: TimeValue) => void 
 
 /** «Канал связи» склада: остаток, журнал, заметки, сброс/установка времени, снятие с мониторинга. */
 export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrite: boolean; onClose: () => void }> = ({ timer, canWrite, onClose }) => {
+  const t = useT();
   const { upsertTimer, removeTimer } = useTerminal();
   const { media } = useContent();
   const notify = useNotify();
@@ -77,10 +79,10 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
     setBusy(true);
     try {
       const message = await action();
-      if (message) notify({ title: "КАНАЛ СВЯЗИ", message, tone: "success" });
+      if (message) notify({ title: t("timers.channel"), message, tone: "success" });
       if (timer) await loadEvents(timer.id);
     } catch (err) {
-      notify({ title: "СБОЙ", message: errorText(err, "Сервер не принял команду"), tone: "danger" });
+      notify({ title: t("common.failure"), message: errorText(err, t("timers.commandFailed")), tone: "danger" });
     } finally {
       setBusy(false);
     }
@@ -103,25 +105,25 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
     });
 
   return (
-    <Modal open onClose={onClose} title={`🛠️ Канал связи: ${location}`} icon={uiIcon("24-hour-clock")} widthClass="max-w-2xl" backdropImage={media("bg_timers")}>
+    <Modal open onClose={onClose} title={t("timers.channelTitle", { location })} icon={uiIcon("24-hour-clock")} widthClass="max-w-2xl" backdropImage={media("bg_timers")}>
       <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
         <div className="space-y-1 text-[0.85rem]">
-          <div>🗺️ Регион: <span className="text-accent">{region ?? "—"}</span></div>
-          <div>📍 Локация: <span className="text-accent">{location}</span></div>
+          <div>🗺️ {t("timers.region")}: <span className="text-accent">{region ?? "—"}</span></div>
+          <div>📍 {t("timers.location")}: <span className="text-accent">{location}</span></div>
           {timer.note && <div className="text-white/70">📝 {timer.note}</div>}
         </div>
         <div className="panel-inner rounded px-4 py-2 text-center">
-          <div className="hud-label text-muted">Осталось</div>
+          <div className="hud-label text-muted">{t("timers.left")}</div>
           <div className="timer-value" style={{ color: SEV_COLOR[sev], textShadow: `0 0 14px ${SEV_COLOR[sev]}66` }}>
-            {timer.completed_at ? "ЗАВЕРШЁН" : ts > 0 ? formatCountdown(ts) : "ИСТЁК"}
+            {timer.completed_at ? t("timers.completed") : ts > 0 ? formatCountdown(ts, timeUnits(t)) : t("timers.expired")}
           </div>
         </div>
       </div>
 
-      <div className="hud-label mt-4 text-white/80">📜 Журнал обновлений склада:</div>
+      <div className="hud-label mt-4 text-white/80">📜 {t("timers.log")}:</div>
       <div ref={logRef} className="console-log scroll-area mt-1 h-44 rounded px-3 py-2 leading-relaxed">
         {events.length === 0 ? (
-          <div className="opacity-60">[СИСТЕМА]: Записей нет.</div>
+          <div className="opacity-60">{t("timers.logEmpty")}</div>
         ) : (
           events.map((e) => (
             <div key={e.id}>
@@ -134,8 +136,8 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
       {canWrite && (
         <>
           <div className="mt-3 flex gap-2">
-            <input className="field field-mono flex-1 text-xs" placeholder="Заметка интенданта в журнал..." value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void addNote()} />
-            <button className="btn" disabled={busy || !note.trim()} onClick={() => void addNote()}>📝 В журнал</button>
+            <input className="field field-mono flex-1 text-xs" placeholder={t("timers.notePlaceholder")} value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void addNote()} />
+            <button className="btn" disabled={busy || !note.trim()} onClick={() => void addNote()}>📝 {t("timers.toLog")}</button>
           </div>
 
           <div className="mt-4">
@@ -144,23 +146,23 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
 
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
             <button className="btn" style={{ background: "#1e291b", color: "#a3e635", borderColor: "#16a34a" }} disabled={busy} onClick={() => void restart(RESET_SECONDS)}>
-              ♻️ Сбросить на 48 часов
+              ♻️ {t("timers.reset48")}
             </button>
             <button
               className="btn btn-primary"
               disabled={busy}
               onClick={() => {
                 const seconds = toSeconds(time);
-                if (seconds <= 0) return notify({ title: "СБОЙ", message: "Итоговое время должно быть больше 0!", tone: "danger" });
+                if (seconds <= 0) return notify({ title: t("common.failure"), message: t("timers.timePositive"), tone: "danger" });
                 void restart(seconds);
               }}
             >
-              ✅ Задать таймер
+              ✅ {t("timers.setTimer")}
             </button>
           </div>
 
           <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
-            <span className="hud-label text-muted">Заведён: {timer.created_by}</span>
+            <span className="hud-label text-muted">{t("timers.createdBy", { name: timer.created_by })}</span>
             <button
               className={`btn btn-danger ${armed === "delete" ? "btn-active" : ""}`}
               disabled={busy}
@@ -170,12 +172,12 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
                     await timersApi.delete(timer.id);
                     removeTimer(timer.id);
                     onClose();
-                    return `Склад «${location}» снят с мониторинга.`;
+                    return t("timers.removed", { location });
                   }),
                 )
               }
             >
-              {armed === "delete" ? "⚠️ Подтвердить снятие" : "🗑 Снять с мониторинга"}
+              {armed === "delete" ? `⚠️ ${t("timers.confirmRemove")}` : `🗑 ${t("timers.remove")}`}
             </button>
           </div>
         </>
@@ -189,6 +191,7 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; canWrit
  * привязанный к нему. Если склад с таким именем уже есть — используется он.
  */
 export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
+  const t = useT();
   const { stockpiles, upsertTimer, refresh } = useTerminal();
   const { list, media } = useContent();
   const notify = useNotify();
@@ -208,8 +211,8 @@ export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }
 
   const submit = async () => {
     const seconds = toSeconds(time);
-    if (!region.trim() || !location.trim()) return notify({ title: "РЕГИСТРАЦИЯ", message: "Укажите регион (гекс) и локацию склада.", tone: "warning" });
-    if (seconds <= 0) return notify({ title: "РЕГИСТРАЦИЯ", message: "Время удержания должно быть больше 0.", tone: "warning" });
+    if (!region.trim() || !location.trim()) return notify({ title: t("timers.registerTitleShort"), message: t("timers.needRegion"), tone: "warning" });
+    if (seconds <= 0) return notify({ title: t("timers.registerTitleShort"), message: t("timers.timePositive"), tone: "warning" });
     setBusy(true);
     try {
       const existing = stockpiles.find((s) => s.name.toLowerCase() === location.trim().toLowerCase());
@@ -217,32 +220,32 @@ export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }
       const created = await timersApi.create({ title: location.trim(), durationSeconds: seconds, stockpileId: stockpile.id });
       upsertTimer(created.timer);
       void refresh();
-      notify({ title: "СКЛАД ЗАРЕГИСТРИРОВАН", message: `${region} ▶ ${location} поставлен на мониторинг.`, tone: "success" });
+      notify({ title: t("timers.registered"), message: t("timers.registeredMsg", { region, location }), tone: "success" });
       onClose();
     } catch (err) {
-      notify({ title: "СБОЙ", message: errorText(err, "Не удалось зарегистрировать склад"), tone: "danger" });
+      notify({ title: t("common.failure"), message: errorText(err, t("timers.registerFailed")), tone: "danger" });
     } finally {
       setBusy(false);
     }
   };
 
   return (
-    <Modal open={open} onClose={onClose} title="Регистрация склада в матрице секторов" icon={uiIcon("barracks")} widthClass="max-w-lg" backdropImage={media("bg_storage")}>
+    <Modal open={open} onClose={onClose} title={t("timers.registerTitle")} icon={uiIcon("barracks")} widthClass="max-w-lg" backdropImage={media("bg_storage")}>
       <div className="grid gap-3">
-        <Field label="Регион / гекс" list={listId} placeholder="Clanshead Valley" value={region} onChange={(e) => setRegion(e.target.value)} autoFocus />
+        <Field label={t("timers.regionHex")} list={listId} placeholder="Clanshead Valley" value={region} onChange={(e) => setRegion(e.target.value)} autoFocus />
         <datalist id={listId}>
           {regions.map((r) => (
             <option key={r.key} value={r.payload.name} />
           ))}
         </datalist>
-        <Field label="Локация / тип склада" placeholder="Порт, Склад снабжения, Бункерная база..." value={location} onChange={(e) => setLocation(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void submit()} />
+        <Field label={t("timers.locationType")} placeholder={t("timers.locationPlaceholder")} value={location} onChange={(e) => setLocation(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void submit()} />
         <div>
-          <div className="hud-label mb-1 text-muted">Стартовое удержание (по умолчанию 48 ч)</div>
+          <div className="hud-label mb-1 text-muted">{t("timers.startHold")}</div>
           <TimeInputs value={time} onChange={setTime} />
         </div>
         <div className="flex justify-end gap-2">
-          <Button onClick={onClose}>Отмена</Button>
-          <Button variant="primary" isLoading={busy} onClick={() => void submit()}>🏳️ Поставить на мониторинг</Button>
+          <Button onClick={onClose}>{t("common.cancel")}</Button>
+          <Button variant="primary" isLoading={busy} onClick={() => void submit()}>🏳️ {t("timers.monitor")}</Button>
         </div>
       </div>
     </Modal>

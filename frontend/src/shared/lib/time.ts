@@ -17,13 +17,22 @@ export function severityOf(seconds: number): Severity {
   return "safe";
 }
 
+/** Буквы единиц времени: д/ч/м/с, d/h/m/s, d/h/m/s — из словаря (keys time.*). */
+export interface TimeUnits {
+  d: string;
+  h: string;
+  m: string;
+  s: string;
+}
+const RU_UNITS: TimeUnits = { d: "д", h: "ч", m: "м", s: "с" };
+
 /** «1д 03ч 05м 09с» или «03:05:09». */
-export function formatCountdown(ts: number): string {
+export function formatCountdown(ts: number, u: TimeUnits = RU_UNITS): string {
   const d = Math.floor(ts / DAY);
   const h = Math.floor((ts % DAY) / HOUR);
   const m = Math.floor((ts % HOUR) / 60);
   const s = ts % 60;
-  return d > 0 ? `${d}д ${pad(h)}ч ${pad(m)}м ${pad(s)}с` : `${pad(h)}:${pad(m)}:${pad(s)}`;
+  return d > 0 ? `${d}${u.d} ${pad(h)}${u.h} ${pad(m)}${u.m} ${pad(s)}${u.s}` : `${pad(h)}:${pad(m)}:${pad(s)}`;
 }
 
 export function formatClock(date: Date | number | string | null | undefined): string {
@@ -43,13 +52,13 @@ export function fileStamp(date: Date = new Date()): string {
 }
 
 /** «1ч 05м», «6м», «—». */
-export function formatDuration(totalSeconds: number): string {
+export function formatDuration(totalSeconds: number, u: TimeUnits = RU_UNITS): string {
   if (!totalSeconds) return "—";
   const seconds = Math.ceil(totalSeconds);
   const hours = Math.floor(seconds / HOUR);
   const minutes = Math.floor((seconds % HOUR) / 60);
   const rest = seconds % 60;
-  if (hours) return `${hours}ч ${pad(minutes)}м`;
-  if (minutes) return `${minutes}м ${pad(rest)}с`;
-  return `${rest}с`;
+  if (hours) return `${hours}${u.h} ${pad(minutes)}${u.m}`;
+  if (minutes) return `${minutes}${u.m} ${pad(rest)}${u.s}`;
+  return `${rest}${u.s}`;
 }

@@ -2,10 +2,11 @@
 
 import * as React from "react";
 import { useContent, type TrainingModulePayload } from "@/entities/content";
-import { Loading, assetUrl, uiIcon } from "@/shared";
+import { Loading, assetUrl, uiIcon, useT } from "@/shared";
 
 /** Учебный центр штаба: модули обучения из реестра контента (правятся без релиза фронта). */
 export const TrainingWorkspace: React.FC = () => {
+  const t = useT();
   const { list, media, loading } = useContent();
   const modules = list<TrainingModulePayload>("training_module");
   const [openId, setOpenId] = React.useState<string | null>("terminal");
@@ -18,19 +19,19 @@ export const TrainingWorkspace: React.FC = () => {
         <div className="flex flex-col items-center gap-4 text-center md:flex-row md:text-left">
           <div className="relative shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            {logo && <img src={logo} alt="Герб клана SINDARIS" width={112} height={112} className="ui-icon crest-frame h-24 w-24 rounded-md object-cover md:h-28 md:w-28" />}
+            {logo && <img src={logo} alt={t("common.crest")} width={112} height={112} className="ui-icon crest-frame h-24 w-24 rounded-md object-cover md:h-28 md:w-28" />}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={uiIcon("brain")} alt="" width={44} height={44} className="ui-icon absolute -right-3 -bottom-3 h-11 w-11 object-contain drop-shadow-lg" />
           </div>
           <div className="min-w-0 flex-1">
-            <div className="hud-label text-muted">Учебный центр штаба клана</div>
-            <h1 className="title-brand mt-1 text-[1.35rem] md:text-[1.7rem]">📚 Обучение</h1>
+            <div className="hud-label text-muted">{t("training.kicker")}</div>
+            <h1 className="title-brand mt-1 text-[1.35rem] md:text-[1.7rem]">📚 {t("nav.training.label")}</h1>
             <p className="mt-2 text-[0.85rem] text-white/85">
-              Базовые модули по работе с терминалом уже доступны — остальные разделы пополняются по мере утверждения интендантской службой.
+              {t("training.subtitle")}
             </p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
-              <span className="badge-count min-w-0 px-2">ДОСТУПНО: {ready}</span>
-              <span className="badge-count min-w-0 px-2" style={{ color: "var(--warn)", borderColor: "var(--warn)" }}>В РАЗРАБОТКЕ: {modules.length - ready}</span>
+              <span className="badge-count min-w-0 px-2">{t("training.available")}: {ready}</span>
+              <span className="badge-count min-w-0 px-2" style={{ color: "var(--warn)", borderColor: "var(--warn)" }}>{t("training.wip")}: {modules.length - ready}</span>
               <div className="progress-track w-40">
                 <div className="progress-bar" style={{ width: `${modules.length ? (ready / modules.length) * 100 : 0}%`, background: "var(--accent)" }} />
               </div>
@@ -56,7 +57,7 @@ export const TrainingWorkspace: React.FC = () => {
                       <div className="flex items-center justify-between gap-2">
                         <h3 className="truncate text-[0.9rem] font-bold text-white">{m.title}</h3>
                         <span className="hud-label shrink-0 rounded border px-1.5 py-0.5" style={{ color: wip ? "var(--warn)" : "var(--accent)", borderColor: wip ? "var(--warn)" : "var(--accent)" }}>
-                          {wip ? "В РАЗРАБОТКЕ" : open ? "ОТКРЫТО" : "ДОСТУПНО"}
+                          {t(wip ? "training.wip" : open ? "training.open" : "training.available")}
                         </span>
                       </div>
                       <p className="mt-1 text-[0.78rem] text-white/70">{m.summary}</p>

@@ -2,13 +2,14 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { EmptyState, Loading, formatCountdown, formatDateTime, secondsLeft, severityOf, uiIcon } from "@/shared";
+import { EmptyState, Loading, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, uiIcon, useT } from "@/shared";
 import { timerPlace, useClock, useRiskSummary, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 import { RegisterTimerModal, TimerManagerModal } from "@/features/timers/ui/TimerModals";
 
 const BAR = { critical: "#ff5555", warning: "#ff9900", safe: "#a3e635" } as const;
 
 export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) => {
+  const t = useT();
   const { timers, loading, refresh, connection } = useTerminal();
   const risk = useRiskSummary();
   const now = useClock();
@@ -34,20 +35,20 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
           <div className="flex items-center gap-2">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={uiIcon("24-hour-clock")} alt="" width={30} height={30} className="ui-icon h-[30px] w-[30px] object-contain" />
-            <h2 className="panel-title">Матрица таймеров деспавна</h2>
+            <h2 className="panel-title">{t("timers.title")}</h2>
           </div>
-          <Stat label="🚨 КРИТИЧЕСКИ (<1ч)" value={risk.critical} color="var(--danger)" />
-          <Stat label="⚠️ ВНИМАНИЕ (<24ч)" value={risk.warning} color="var(--warn)" />
-          <Stat label="✅ В БЕЗОПАСНОСТИ (>1д)" value={risk.safe} color="var(--tk-safe)" />
+          <Stat label={`🚨 ${t("timers.critical")}`} value={risk.critical} color="var(--danger)" />
+          <Stat label={`⚠️ ${t("timers.warning")}`} value={risk.warning} color="var(--warn)" />
+          <Stat label={`✅ ${t("timers.safe")}`} value={risk.safe} color="var(--tk-safe)" />
           <div className="ml-auto flex flex-wrap items-center gap-2">
-            <input className="field w-40 py-1.5 text-xs" placeholder="Поиск сектора..." value={query} onChange={(e) => setQuery(e.target.value)} />
-            <button className="btn" onClick={() => void refresh()} title="Обновить данные с сервера">
-              ⟳ <span className="hidden sm:inline">Синхр.</span>
+            <input className="field w-40 py-1.5 text-xs" placeholder={t("timers.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
+            <button className="btn" onClick={() => void refresh()} title={t("common.syncHint")}>
+              ⟳ <span className="hidden sm:inline">{t("common.sync")}</span>
             </button>
             {canWrite && (
               <button className="btn btn-primary" onClick={() => setAdding(true)}>
-                ➕ <span className="hidden sm:inline">Регистрация склада</span>
-                <span className="sm:hidden">Склад</span>
+                ➕ <span className="hidden sm:inline">{t("timers.register")}</span>
+                <span className="sm:hidden">{t("timers.registerShort")}</span>
               </button>
             )}
           </div>
@@ -56,11 +57,11 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
 
       <section className="pr-0.5">
         {loading ? (
-          <div className="panel rounded-md"><Loading label="📡 ЗАГРУЗКА МАТРИЦЫ СЕКТОРОВ..." /></div>
+          <div className="panel rounded-md"><Loading label={t("timers.loading")} /></div>
         ) : visible.length === 0 ? (
           <div className="panel panel-corners rounded-md">
-            <EmptyState icon={uiIcon("barracks")} title={timers.length ? "По запросу ничего не найдено" : "Ни один склад не поставлен на мониторинг"} hint={canWrite ? undefined : "Регистрировать склады могут офицеры клана"}>
-              {connection === "offline" && <div className="hud-label text-danger">Нет связи с базой данных</div>}
+            <EmptyState icon={uiIcon("barracks")} title={timers.length ? t("common.nothingFound") : t("timers.empty")} hint={canWrite ? undefined : t("timers.officersOnly")}>
+              {connection === "offline" && <div className="hud-label text-danger">{t("common.noDb")}</div>}
             </EmptyState>
           </div>
         ) : (
@@ -78,16 +79,20 @@ export const TimersWorkspace: React.FC<{ canWrite: boolean }> = ({ canWrite }) =
   );
 };
 
-const Stat: React.FC<{ label: string; value: number; color: string }> = ({ label, value, color }) => (
+const Stat: React.FC<{ label: string; value: number; color: string }> = ({ label, value, color }) => {
+  const t = useT();
+  return (
   <div className="flex items-center gap-2 font-mono text-[0.72rem] font-bold tracking-wide" style={{ color }}>
     <span>{label}:</span>
     <span className="rounded border px-1.5 py-0.5 tabular-nums" style={{ borderColor: color, background: "rgba(0,0,0,0.3)" }}>
-      {value} БАЗ
+      {t("timers.bases", { n: value })}
     </span>
   </div>
-);
+  );
+};
 
 const TimerCard: React.FC<{ timer: MonitoredTimer; now: number; onManage: () => void }> = ({ timer, now, onManage }) => {
+  const t = useT();
   const { media } = useContent();
   const ts = secondsLeft(timer.ends_at, now || Date.now());
   const done = Boolean(timer.completed_at);
@@ -116,15 +121,15 @@ const TimerCard: React.FC<{ timer: MonitoredTimer; now: number; onManage: () => 
             <div className="progress-bar" style={{ width: `${done ? 100 : pct}%`, background: BAR[sev], boxShadow: `0 0 10px ${BAR[sev]}` }} />
           </div>
           <div className="hud-label mt-1.5 truncate text-white/60">
-            {timer.note ? timer.note : `Окончание: ${formatDateTime(timer.ends_at)}`}
+            {timer.note ? timer.note : t("timers.endsAt", { at: formatDateTime(timer.ends_at) })}
           </div>
         </div>
         <div className="flex items-center justify-between gap-4 sm:justify-end">
           <div className="text-right">
-            <div className="hud-label text-white/60">{done ? "ЗАВЕРШЁН" : ts > 0 ? (sev === "critical" ? "КРИТИЧЕСКИ" : sev === "warning" ? "ВНИМАНИЕ" : "СТАБИЛЬНО") : "ТАЙМЕР ИСТЁК"}</div>
-            <div className={`timer-value ${sev === "critical" && ts > 0 && !done ? "pulse" : ""}`}>{done ? "—" : ts > 0 ? formatCountdown(ts) : "00:00:00"}</div>
+            <div className="hud-label text-white/60">{done ? t("timers.completed") : ts > 0 ? t(sev === "critical" ? "timers.sevCritical" : sev === "warning" ? "timers.sevWarning" : "timers.sevSafe") : t("timers.timerExpired")}</div>
+            <div className={`timer-value ${sev === "critical" && ts > 0 && !done ? "pulse" : ""}`}>{done ? "—" : ts > 0 ? formatCountdown(ts, timeUnits(t)) : "00:00:00"}</div>
           </div>
-          <button className="btn h-[34px] min-w-[110px]" onClick={onManage}>Управление</button>
+          <button className="btn h-[34px] min-w-[110px]" onClick={onManage}>{t("timers.manage")}</button>
         </div>
       </div>
     </li>

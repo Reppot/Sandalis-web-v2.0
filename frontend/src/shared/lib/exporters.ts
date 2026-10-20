@@ -20,6 +20,27 @@ export interface ExportSection {
   rows: ExportRow[];
 }
 
+/** Подписи файлов экспорта на языке интерфейса (useDocExport подставляет их сам). */
+export interface ExportLabels {
+  generated: string;
+  page: string;
+  sheet: string;
+  name: string;
+  quantity: string;
+  unit: string;
+  footer: string;
+}
+
+const RU_LABELS: ExportLabels = {
+  generated: "Сформировано",
+  page: "Стр.",
+  sheet: "Лист",
+  name: "Название",
+  quantity: "Количество",
+  unit: "Ед. изм.",
+  footer: "SINDARIS LOGISTICS OVERWATCH • ТАКТИЧЕСКИЙ РАПОРТ",
+};
+
 export interface ExportDoc {
   /** Заголовок страницы: «SINDARIS • Заказ снабжения». */
   title: string;
@@ -31,6 +52,7 @@ export interface ExportDoc {
   footer?: string;
   /** Имя листа XLSX для первой секции (лист совместим с импортом конструктора). */
   sheetName?: string;
+  labels?: ExportLabels;
 }
 
 const PAGE_W = 650;
@@ -63,7 +85,8 @@ function rowLine(row: ExportRow): string {
 export function buildTxt(doc: ExportDoc, date: Date = new Date()): string {
   const plain = doc.sections.length === 1 && !doc.sections[0].label;
   if (plain) return doc.sections[0].rows.map(rowLine).join("\n") + "\n";
-  const lines = [doc.title, ...doc.header, `Сформировано: ${formatDateTime(date)}`, ""];
+  const L = doc.labels ?? RU_LABELS;
+  const lines = [doc.title, ...doc.header, `${L.generated}: ${formatDateTime(date)}`, ""];
   for (const section of doc.sections) {
     if (section.label) lines.push(`${section.label}:`);
     lines.push(...(section.rows.length ? section.rows.map(rowLine) : ["—"]), "");
@@ -78,13 +101,14 @@ export function exportTxt(doc: ExportDoc): void {
 export async function exportXlsx(doc: ExportDoc): Promise<void> {
   const { Workbook } = await import("exceljs");
   const wb = new Workbook();
+  const L = doc.labels ?? RU_LABELS;
   doc.sections.forEach((section, index) => {
-    const name = (index === 0 ? doc.sheetName : section.label) ?? section.label ?? `Лист ${index + 1}`;
+    const name = (index === 0 ? doc.sheetName : section.label) ?? section.label ?? `${L.sheet} ${index + 1}`;
     const ws = wb.addWorksheet(name.replace(/[\\/?*[\]:]/g, " ").slice(0, 30));
     ws.columns = [
-      { header: "Название", key: "name", width: 44 },
-      { header: "Количество", key: "quantity", width: 14 },
-      { header: "Ед. изм.", key: "unit", width: 10 },
+      { header: L.name, key: "name", width: 44 },
+      { header: L.quantity, key: "quantity", width: 14 },
+      { header: L.unit, key: "unit", width: 10 },
     ];
     ws.getRow(1).font = { bold: true };
     for (const row of section.rows) ws.addRow({ name: row.name, quantity: row.quantity, unit: row.unit });
@@ -195,7 +219,7 @@ function drawPage(ctx: CanvasRenderingContext2D, texture: HTMLImageElement | nul
   ctx.fillStyle = "#60a5fa";
   ctx.font = "16px Arial";
   ctx.textAlign = "right";
-  ctx.fillText(`Стр. ${page}/${total}`, PAGE_W - 40, 62);
+  ctx.fillText(`${(doc.labels ?? RU_LABELS).page} ${page}/${total}`, PAGE_W - 40, 62);
   ctx.fillStyle = "#9ca3af";
   ctx.font = "13px Arial";
   ctx.fillText(formatDateTime(new Date()), PAGE_W - 40, 86);
@@ -242,7 +266,7 @@ function drawPage(ctx: CanvasRenderingContext2D, texture: HTMLImageElement | nul
 
   ctx.fillStyle = "rgba(163,230,53,0.7)";
   ctx.font = "bold 12px Arial";
-  ctx.fillText(doc.footer ?? "SINDARIS LOGISTICS OVERWATCH • ТАКТИЧЕСКИЙ РАПОРТ", 40, PAGE_H - 40);
+  ctx.fillText(doc.footer ?? (doc.labels ?? RU_LABELS).footer, 40, PAGE_H - 40);
 }
 
 /** Страницы 650×1000, до 14 строк на лист; textureUrl — фон рапорта из реестра медиа. */

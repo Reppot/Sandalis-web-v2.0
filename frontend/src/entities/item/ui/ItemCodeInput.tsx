@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Field } from "@/shared";
+import { Field, useT } from "@/shared";
 import { catalogApi } from "@/entities/item/api/catalogApi";
 import type { FoxholeItem } from "@/entities/item/model/types";
 
@@ -14,7 +14,8 @@ interface ItemCodeInputProps {
 }
 
 /** Поле кода предмета с подсказками из каталога (код, рус./англ. название). */
-export const ItemCodeInput: React.FC<ItemCodeInputProps> = ({ value, onChange, label, placeholder = "Код или название: SS, Rmats, бинты…", required }) => {
+export const ItemCodeInput: React.FC<ItemCodeInputProps> = ({ value, onChange, label, placeholder, required }) => {
+  const t = useT();
   const listId = React.useId();
   const [options, setOptions] = React.useState<FoxholeItem[]>([]);
 
@@ -36,7 +37,7 @@ export const ItemCodeInput: React.FC<ItemCodeInputProps> = ({ value, onChange, l
 
   return (
     <div className="space-y-1">
-      <Field label={label} list={listId} placeholder={placeholder} value={value} onChange={(e) => onChange(e.target.value)} required={required} autoComplete="off" />
+      <Field label={label} list={listId} placeholder={placeholder ?? t("item.codePlaceholder")} value={value} onChange={(e) => onChange(e.target.value)} required={required} autoComplete="off" />
       <datalist id={listId}>
         {options.map((o) => (
           <option key={o.code} value={o.code}>

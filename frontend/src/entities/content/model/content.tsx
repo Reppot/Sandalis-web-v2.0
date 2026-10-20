@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { apiClient, assetUrl } from "@/shared";
+import { apiClient, assetUrl, localized, useI18n } from "@/shared";
 
 /** Запись реестра контента (GET /api/v1/content). payload — по виду записи. */
 export interface ContentEntry<P = Record<string, unknown>> {
@@ -56,20 +56,24 @@ const ContentContext = React.createContext<ContentState | null>(null);
  * до авторизации) и меняется редко. Всё, что раньше было статикой фронта, — отсюда.
  */
 export const ContentProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [entries, setEntries] = React.useState<ContentEntry[]>([]);
+  const { locale } = useI18n();
+  const [raw, setRaw] = React.useState<ContentEntry[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     let cancelled = false;
     apiClient
       .get<ContentEntry[]>("/api/v1/content")
-      .then((rows) => !cancelled && setEntries(rows))
-      .catch(() => !cancelled && setEntries([]))
+      .then((rows) => !cancelled && setRaw(rows))
+      .catch(() => !cancelled && setRaw([]))
       .finally(() => !cancelled && setLoading(false));
     return () => {
       cancelled = true;
     };
   }, []);
+
+  // переводы из payload.i18n применяются здесь — компоненты видят уже нужный язык
+  const entries = React.useMemo(() => raw.map((e) => ({ ...e, payload: localized(e.payload, locale) })), [raw, locale]);
 
   const value = React.useMemo<ContentState>(() => {
     const index = new Map(entries.map((e) => [`${e.kind}:${e.key}`, e]));
