@@ -13,6 +13,8 @@ export interface ExportRow {
   quantity: number | string;
   unit: string;
   note?: string;
+  /** Иконка предмета (URL) — рисуется в PNG слева от названия. */
+  icon?: string | null;
 }
 
 export interface ExportSection {
@@ -147,7 +149,8 @@ export async function xlsxToText(file: File): Promise<string> {
 }
 
 // ─────────────────────────────── PNG ───────────────────────────────
-type PageEntry = { kind: "section"; label: string } | { kind: "row"; name: string; value: string };
+type PageEntry = { kind: "section"; label: string } | { kind: "row"; name: string; value: string; icon?: string | null };
+const ICON = 34;
 
 const textureCache = new Map<string, Promise<HTMLImageElement | null>>();
 function loadTexture(url: string | null | undefined): Promise<HTMLImageElement | null> {
@@ -178,7 +181,7 @@ function paginate(doc: ExportDoc): PageEntry[][] {
   for (const section of doc.sections) {
     if (section.label) entries.push({ kind: "section", label: section.label });
     for (const row of section.rows) {
-      entries.push({ kind: "row", name: row.note ? `${row.name} (${row.note})` : row.name, value: `x ${formatQuantity(row)}` });
+      entries.push({ kind: "row", name: row.note ? `${row.name} (${row.note})` : row.name, value: `x ${formatQuantity(row)}`, icon: row.icon });
     }
   }
   const pages: PageEntry[][] = [[]];
@@ -192,7 +195,15 @@ function paginate(doc: ExportDoc): PageEntry[][] {
   return pages;
 }
 
-function drawPage(ctx: CanvasRenderingContext2D, texture: HTMLImageElement | null, entries: PageEntry[], page: number, total: number, doc: ExportDoc) {
+function drawPage(
+  ctx: CanvasRenderingContext2D,
+  texture: HTMLImageElement | null,
+  entries: PageEntry[],
+  page: number,
+  total: number,
+  doc: ExportDoc,
+  icons: Map<string, HTMLImageElement | null>,
+) {
   ctx.fillStyle = "#1f2321";
   ctx.fillRect(0, 0, PAGE_W, PAGE_H);
   if (texture) {
@@ -251,9 +262,19 @@ function drawPage(ctx: CanvasRenderingContext2D, texture: HTMLImageElement | nul
         ctx.fillStyle = "rgba(255,255,255,0.045)";
         ctx.fillRect(34, y - 26, PAGE_W - 68, 46);
       }
+      const icon = entry.icon ? icons.get(entry.icon) : null;
+      let x = 44;
+      if (icon) {
+        // иконка вписывается в квадрат ICON×ICON по центру строки
+        const k = Math.min(ICON / icon.width, ICON / icon.height);
+        const w = icon.width * k;
+        const h = icon.height * k;
+        ctx.drawImage(icon, x + (ICON - w) / 2, y - 3 - ICON / 2 + (ICON - h) / 2, w, h);
+        x += ICON + 10;
+      }
       ctx.fillStyle = "#e5e7eb";
       ctx.font = "18px Arial";
-      ctx.fillText(fitText(ctx, `•  ${entry.name}`, 400), 44, y + 4);
+      ctx.fillText(fitText(ctx, icon ? entry.name : `•  ${entry.name}`, 400 - (x - 44)), x, y + 4);
       ctx.fillStyle = "#a3e635";
       ctx.font = "bold 18px Arial";
       ctx.textAlign = "right";
@@ -273,12 +294,14 @@ function drawPage(ctx: CanvasRenderingContext2D, texture: HTMLImageElement | nul
 export async function renderPages(doc: ExportDoc, textureUrl?: string | null): Promise<HTMLCanvasElement[]> {
   const texture = await loadTexture(textureUrl);
   const pages = paginate(doc);
+  const urls = new Set(doc.sections.flatMap((s) => s.rows.flatMap((r) => (r.icon ? [r.icon] : []))));
+  const icons = new Map(await Promise.all([...urls].map(async (url) => [url, await loadTexture(url)] as const)));
   return pages.map((entries, index) => {
     const canvas = document.createElement("canvas");
     canvas.width = PAGE_W;
     canvas.height = PAGE_H;
     const ctx = canvas.getContext("2d");
-    if (ctx) drawPage(ctx, texture, entries, index + 1, pages.length, doc);
+    if (ctx) drawPage(ctx, texture, entries, index + 1, pages.length, doc, icons);
     return canvas;
   });
 }

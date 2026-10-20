@@ -22,7 +22,7 @@ export interface ToolReport {
 }
 
 export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
-  const strip = ({ name, quantity, unit, note }: SummaryLine) => ({ name, quantity, unit, note });
+  const strip = ({ name, quantity, unit, note, icon }: SummaryLine) => ({ name, quantity, unit, note, icon });
   return {
     title: `SINDARIS • ${report.toolName}`,
     header: [`${t("tools.doc.tool")}: ${report.toolName}`, `${t("tools.doc.mode")}: ${report.subtitle}`, `${t("doc.lines")}: ${report.items.length} • ${t("tools.doc.resources")}: ${report.resources.length}`],

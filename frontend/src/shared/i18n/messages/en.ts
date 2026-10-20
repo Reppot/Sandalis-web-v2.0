@@ -458,6 +458,7 @@ export const en: Record<MessageKey, string> = {
   "facility.queue": "Production",
   "facility.queueHint": "Click a card to add an item, then pick a recipe.",
   "facility.recipe": "Recipe",
+  "facility.change": "change",
   "facility.chain": "Production chain",
   "facility.raw": "Raw — don't break down",
   "facility.cycle": "recipe needs itself — not broken down further",

@@ -457,6 +457,7 @@ export const ru = {
   "facility.queue": "Производство",
   "facility.queueHint": "Нажмите на карточку, чтобы добавить предмет, затем выберите рецепт.",
   "facility.recipe": "Рецепт",
+  "facility.change": "сменить",
   "facility.chain": "Цепочка производства",
   "facility.raw": "Сырьё — не разбирать",
   "facility.cycle": "рецепт требует сам себя — дальше не разбирается",

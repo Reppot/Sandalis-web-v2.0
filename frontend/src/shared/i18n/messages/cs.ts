@@ -458,6 +458,7 @@ export const cs: Record<MessageKey, string> = {
   "facility.queue": "Výroba",
   "facility.queueHint": "Klikněte na kartu pro přidání předmětu, pak vyberte recept.",
   "facility.recipe": "Recept",
+  "facility.change": "změnit",
   "facility.chain": "Výrobní řetězec",
   "facility.raw": "Surovina — nerozkládat",
   "facility.cycle": "recept potřebuje sám sebe — dál se nerozkládá",

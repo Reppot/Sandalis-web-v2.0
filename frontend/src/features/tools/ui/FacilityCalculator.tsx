@@ -22,14 +22,6 @@ interface PlanRow {
 const withUnit = (n: number, unit: string | null) => (unit ? `${fmt(n)} ${unit}` : n);
 const fmt = (n: number) => (Number.isInteger(n) ? n.toLocaleString("ru-RU") : n.toLocaleString("ru-RU", { maximumFractionDigits: 2 }));
 
-/** «Постройка • модификация — входы → выход»: подпись рецепта в выборе. */
-function recipeLabel(recipe: Recipe): string {
-  const d = facilityData(recipe);
-  if (!d) return recipe.name;
-  const inputs = d.inputs.map((p) => `${p.name} ${fmt(p.amount)}${p.unit ? ` ${p.unit}` : ""}`).join(" + ");
-  return `${d.source}${d.module ? ` • ${d.module}` : ""} — ${inputs}${d.vehicle ? ` + ${d.vehicle}` : ""} → ${fmt(recipe.output_quantity)}`;
-}
-
 /**
  * «Калькулятор завода»: любой предмет, который производят постройки (Materials Factory,
  * Metalworks, Ammunition, Assembly Stations...), со всеми рецептами и модификациями.
@@ -98,14 +90,14 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
       toolName: t("tools.facility"),
       subtitle: "Facilities • foxhole.wiki.gg",
       fileBase: "SINDARIS_facility",
-      items: roots.map((n) => ({ name: n.name, quantity: fmt(n.amount), unit: unitOf(n.unit), icon: assetUrl(n.icon_url), note: n.recipe ? recipeLabel(n.recipe) : undefined })),
-      resources: [...totals.raw].map(([name, v]) => ({ name, quantity: withUnit(Math.ceil(v.amount * 10) / 10, v.unit), unit: unitOf(v.unit), icon: assetUrl(v.icon_url) })),
+      items: roots.map((n) => ({ name: n.name, quantity: withUnit(n.amount, n.unit), unit: n.unit ? "" : unitOf(null), icon: assetUrl(n.icon_url), note: n.recipe ? facilityData(n.recipe)?.source : undefined })),
+      resources: [...totals.raw].map(([name, v]) => ({ name, quantity: withUnit(Math.ceil(v.amount * 10) / 10, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       stats: [
         { name: t("facility.runs"), quantity: totals.runs, unit: "" },
         { name: t("tools.time"), quantity: formatDuration(longest, timeUnits(t)), unit: "" },
         ...[...totals.seconds].map(([src, sec]) => ({ name: `⏱ ${src}`, quantity: formatDuration(sec, timeUnits(t)), unit: "" })),
-        ...(totals.peakMw ? [{ name: t("facility.peakPower"), quantity: withUnit(totals.peakMw, "MW"), unit: "MW" }, { name: t("facility.energy"), quantity: withUnit(Math.round(totals.energyMwh * 100) / 100, "MWh"), unit: "MWh" }] : []),
-        ...[...totals.byproducts].map(([name, v]) => ({ name: t("facility.byproduct", { name }), quantity: withUnit(v.amount, v.unit), unit: unitOf(v.unit) })),
+        ...(totals.peakMw ? [{ name: t("facility.peakPower"), quantity: withUnit(totals.peakMw, "MW"), unit: "" }, { name: t("facility.energy"), quantity: withUnit(Math.round(totals.energyMwh * 100) / 100, "MWh"), unit: "" }] : []),
+        ...[...totals.byproducts].map(([name, v]) => ({ name: t("facility.byproduct", { name }), quantity: withUnit(v.amount, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       ],
     };
   }, [roots, totals, t, unitOf]);
@@ -128,7 +120,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
         </div>
       </section>
 
-      <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(360px,440px)]">
+      <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <section className="panel panel-corners factory-catalog">
           <div className="factory-filters">
             <input className="field h-11 flex-1" data-guide="facility-search" placeholder={t("facility.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
@@ -146,7 +138,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
           </div>
           <div className="factory-count hud-label">{t("codes.shown")}: {cards.length} / {byName.size}</div>
 
-          <div className="mt-3 grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-2.5">
+          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
             {page.items.map((card) => {
               const queued = plan.find((p) => byId.get(p.recipeId)?.name === card.name);
               const first = card.recipes[0];
@@ -184,14 +176,10 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
                   <QuantityStepper value={row.amount} unit={unitOf(facilityData(recipe)?.output_unit ?? null)} label={recipe.name} onChange={(n) => update(row.key, { amount: Math.max(0, n) })} />
                   <button type="button" className="btn btn-danger px-2 py-1" onClick={() => update(row.key, { amount: 0 })} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
                 </div>
-                <label className="facility-recipe">
-                  <span className="hud-label text-muted">{t("facility.recipe")}</span>
-                  <select data-guide="facility-recipe" className="field w-full py-1 text-xs" value={recipe.id} onChange={(e) => update(row.key, { recipeId: e.target.value })}>
-                    {options.map((r) => (
-                      <option key={r.id} value={r.id}>{recipeLabel(r)}</option>
-                    ))}
-                  </select>
-                </label>
+                <div className="facility-recipe" data-guide="facility-recipe">
+                  <span className="hud-label text-muted">{t("facility.recipe")}{options.length > 1 ? ` • ${t("facility.recipes", { n: options.length })}` : ""}</span>
+                  <RecipePicker options={options} value={recipe.id} onChange={(id) => update(row.key, { recipeId: id })} />
+                </div>
                 {root ? (
                   <details className="facility-chain" open>
                     <summary className="hud-label text-accent">{t("facility.chain")}</summary>
@@ -232,12 +220,9 @@ const ChainItem: React.FC<{
       </div>
       {node.cycle ? <span className="hud-label pl-8 text-warn">↻ {t("facility.cycle")}</span> : null}
       {options.length > 0 && !node.cycle ? (
-        <select className="field facility-node-select" value={value} onChange={(e) => setChoice((prev) => ({ ...prev, [node.name]: e.target.value }))}>
-          <option value={RAW}>{t("facility.raw")}</option>
-          {options.map((r) => (
-            <option key={r.id} value={r.id}>{recipeLabel(r)}</option>
-          ))}
-        </select>
+        <div className="facility-node-pick">
+          <RecipePicker options={options} value={value} allowRaw onChange={(id) => setChoice((prev) => ({ ...prev, [node.name]: id }))} />
+        </div>
       ) : null}
       {node.recipe && node.children.length ? (
         <ul>
@@ -247,5 +232,76 @@ const ChainItem: React.FC<{
         </ul>
       ) : null}
     </li>
+  );
+};
+
+/** Карточка рецепта: постройка, модификация, входы с иконками → выход, время и мощность. */
+const RecipeCard: React.FC<{ recipe: Recipe | null; selected?: boolean; onClick: () => void; trailing?: React.ReactNode }> = ({ recipe, selected, onClick, trailing }) => {
+  const { t } = useI18n();
+  const d = recipe ? facilityData(recipe) : null;
+  return (
+    <button type="button" className={`recipe-card ${selected ? "is-selected" : ""}`} onClick={onClick}>
+      {!recipe || !d ? (
+        <span className="recipe-card-head">
+          <span className="recipe-card-source">{t("facility.raw")}</span>
+          {trailing}
+        </span>
+      ) : (
+        <>
+          <span className="recipe-card-head">
+            <span className="recipe-card-source">{d.source}</span>
+            {d.module ? <span className="recipe-card-module">{d.module}</span> : null}
+            {trailing}
+          </span>
+          <span className="recipe-card-flow">
+            {d.inputs.map((p) => (
+              <span key={p.name} className="recipe-part" title={p.name}>
+                <ItemIcon sources={[assetUrl(p.icon_url)]} size={22} label={p.name} />
+                <span className="truncate">{p.name}</span>
+                <b>{fmt(p.amount)}{p.unit ? ` ${p.unit}` : ""}</b>
+              </span>
+            ))}
+            {d.vehicle ? <span className="recipe-part"><span className="truncate">{d.vehicle}</span><b>1</b></span> : null}
+            <span className="recipe-arrow" aria-hidden>→</span>
+            <span className="recipe-part is-out"><b>×{fmt(recipe.output_quantity)}</b></span>
+          </span>
+          {d.seconds || d.power_mw ? (
+            <span className="recipe-card-meta">
+              {d.seconds ? `⏱ ${formatDuration(d.seconds, timeUnits(t))}` : ""}{d.seconds && d.power_mw ? "  •  " : ""}{d.power_mw ? `⚡ ${fmt(d.power_mw)} MW` : ""}
+            </span>
+          ) : null}
+        </>
+      )}
+    </button>
+  );
+};
+
+/** Выбор рецепта: выбранный — крупной карточкой; по клику раскрываются альтернативы. */
+const RecipePicker: React.FC<{ options: Recipe[]; value: string; onChange: (id: string) => void; allowRaw?: boolean }> = ({ options, value, onChange, allowRaw }) => {
+  const { t } = useI18n();
+  const [open, setOpen] = React.useState(false);
+  const current = options.find((r) => r.id === value) ?? null;
+  const count = options.length + (allowRaw ? 1 : 0);
+  const pick = (id: string) => {
+    onChange(id);
+    setOpen(false);
+  };
+  if (!open) {
+    return (
+      <RecipeCard
+        recipe={value === RAW ? null : current}
+        selected
+        onClick={() => count > 1 && setOpen(true)}
+        trailing={count > 1 ? <span className="recipe-card-change">▾ {t("facility.change")}</span> : null}
+      />
+    );
+  }
+  return (
+    <div className="recipe-options">
+      {allowRaw ? <RecipeCard recipe={null} selected={value === RAW} onClick={() => pick(RAW)} /> : null}
+      {options.map((r) => (
+        <RecipeCard key={r.id} recipe={r} selected={r.id === value} onClick={() => pick(r.id)} />
+      ))}
+    </div>
   );
 };
