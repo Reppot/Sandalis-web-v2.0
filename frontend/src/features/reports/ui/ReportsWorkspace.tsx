@@ -200,12 +200,17 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
           <EmptyState icon="orders" title={reports.length ? t("common.nothingFound") : t("reports.empty")} />
         </div>
       ) : (
-        <ul className="grid gap-3 xl:grid-cols-2">
+        <ul className="grid gap-3">
           {page.items.map((report) => {
             const open = expanded === report.id;
             const busy = busyId === report.id;
             return (
-              <li data-guide="report-card" key={report.id} className="panel panel-corners flex flex-col rounded-md p-3">
+              <li data-guide="report-card" key={report.id} className="panel panel-corners report-card rounded-md p-3">
+                {/* слева — страница заказа целиком (как PNG-экспорт), справа — данные и действия */}
+                <div className="report-card-page">
+                  <DocReader doc={toDoc(report, t)} textureUrl={texture} expanded={open} onExpand={() => setExpanded(report.id)} />
+                </div>
+                <div className="report-card-body">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <button className="flex min-w-0 flex-1 items-start gap-2 text-left" onClick={() => setExpanded(open ? null : report.id)}>
                     <span className="mt-0.5 shrink-0 text-white/50">{open ? "▾" : "▸"}</span>
@@ -228,7 +233,6 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
                   {report.discord_sent_at && <span className="hud-label text-accent" title={formatDateTime(report.discord_sent_at)}>✓ DISCORD</span>}
                 </div>
 
-                <DocReader doc={toDoc(report, t)} textureUrl={texture} expanded={open} onExpand={() => setExpanded(report.id)} />
                 {report.note && <p className="mt-2 pl-5 text-[0.75rem] text-white/70">📝 {report.note}</p>}
 
                 <div data-guide="report-actions" className="mt-3 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
@@ -257,6 +261,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
                   )}
                 </div>
                 <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t), fmt)} busy={busy} />
+                </div>
               </li>
             );
           })}
