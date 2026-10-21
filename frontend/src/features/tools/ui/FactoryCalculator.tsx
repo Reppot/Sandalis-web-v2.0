@@ -5,6 +5,7 @@ import { useContent } from "@/entities/content";
 import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
 import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
+import { truckLines } from "@/features/tools/ui/trucks";
 import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
 type Facility = "factory" | "mpf";
@@ -74,12 +75,15 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
   const report = React.useMemo<ToolReport>(() => {
     const materials: Record<string, number> = {};
     let crates = 0;
+    // в грузовики грузятся ящики предметов; техника и сооружения (shippables) едут отдельно
+    let haulCrates = 0;
     let fullPrice = 0;
     let paid = 0;
     // MPF: в каждой категории заказы идут друг за другом, категории — параллельно
     const categorySeconds: Record<string, number> = {};
     for (const { recipe, crates: qty } of rows) {
       crates += qty;
+      if (!isShippable(recipe)) haulCrates += qty;
       for (const [key, value] of Object.entries(crateCost(recipe, facility))) {
         const base = Number(value) || 0;
         const cost = resourceCost(base, qty, recipe, facility, planning);
@@ -102,6 +106,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
         { name: t("tools.crates"), quantity: crates, unit: t("unit.crate") },
         { name: t("tools.time"), quantity: formatDuration(seconds, timeUnits(t)), unit: "" },
         ...(isFactory || !fullPrice ? [] : [{ name: t("tools.mpfDiscount"), quantity: `${(((fullPrice - paid) / fullPrice) * 100).toFixed(1)}%`, unit: "" }]),
+        ...(isFactory ? [] : truckLines(haulCrates, t)),
       ],
     };
   }, [rows, facility, planning, label, labelIcon, t, rname]);

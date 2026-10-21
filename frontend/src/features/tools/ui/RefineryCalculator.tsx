@@ -5,6 +5,7 @@ import { useContent } from "@/entities/content";
 import type { RefineryData, Recipe } from "@/entities/recipe";
 import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, useI18n, useNotify } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
+import { truckLines } from "@/features/tools/ui/trucks";
 import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
 type InputUnit = "crate" | "unit";
@@ -69,6 +70,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
       stats: [
         { name: t("tools.time"), quantity: formatDuration(seconds, timeUnits(t)), unit: "" },
         { name: t("tools.outputCrates"), quantity: outputCrates, unit: t("unit.crate") },
+        ...truckLines(outputCrates, t),
       ],
     };
   }, [rows, label, labelIcon, list, t, rname]);
