@@ -11,7 +11,7 @@ from app.api.deps import PermissionChecker
 from app.api.v1.reports import SettingsServiceDep
 from app.core.errors import AppError
 from app.core.permissions import Scopes
-from app.domain.pyramid import default_pyramid
+from app.domain.pyramid import default_pyramid, presets
 from app.models.catalog import CatalogItem
 from app.models.clan_settings import ClanSettings
 from app.schemas.clan_settings import PyramidRead, PyramidUpdate
@@ -23,8 +23,8 @@ CanEdit = [Depends(PermissionChecker([Scopes.STOCKPILES_PYRAMID]))]
 
 def _read(row: ClanSettings | None) -> PyramidRead:
     if row is None or not row.supply_pyramid:
-        return PyramidRead(**default_pyramid(), is_default=True, updated_at=None)
-    return PyramidRead(**row.supply_pyramid, is_default=False, updated_at=row.supply_pyramid_updated_at)
+        return PyramidRead(**default_pyramid(), is_default=True, updated_at=None, presets=presets())
+    return PyramidRead(**row.supply_pyramid, is_default=False, updated_at=row.supply_pyramid_updated_at, presets=presets())
 
 
 @router.get("/pyramid", response_model=PyramidRead, summary="Пирамида снабжения клана (или шаблон)", dependencies=CanRead)

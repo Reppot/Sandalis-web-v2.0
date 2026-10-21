@@ -130,6 +130,12 @@ class PyramidUpdate(BaseModel):
     tiers: Annotated[list[PyramidTier], Field(min_length=1, max_length=12)]
 
 
+class PyramidPresetRead(BaseModel):
+    key: str                        # normal | basic | tank | artillery | builder | frontline
+    tiers: list[PyramidTier]
+
+
 class PyramidRead(PyramidUpdate):
     is_default: bool
     updated_at: datetime | None
+    presets: list[PyramidPresetRead] = []

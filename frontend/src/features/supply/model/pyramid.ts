@@ -15,6 +15,8 @@ export interface Pyramid {
   tiers: PyramidTier[];
   is_default: boolean;
   updated_at: string | null;
+  /** Готовые конфигурации (normal, basic, tank, artillery, builder, frontline). */
+  presets: { key: string; tiers: PyramidTier[] }[];
 }
 
 export const pyramidApi = {

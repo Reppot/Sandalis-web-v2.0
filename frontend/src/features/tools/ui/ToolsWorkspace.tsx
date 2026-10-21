@@ -7,16 +7,14 @@ import { Loading, errorText, UiGlyph, useNotify, useT, type MessageKey, type UiI
 import { FactoryCalculator } from "@/features/tools/ui/FactoryCalculator";
 import { RefineryCalculator } from "@/features/tools/ui/RefineryCalculator";
 import { FacilityCalculator } from "@/features/tools/ui/FacilityCalculator";
-import { RegionsTool } from "@/features/tools/ui/RegionsTool";
 
-type ClanToolId = "factory" | "mpf" | "refinery" | "facility" | "regions";
+type ClanToolId = "factory" | "mpf" | "refinery" | "facility";
 
 const CLAN_TOOLS: { id: ClanToolId; label: MessageKey; hint: MessageKey; icon: UiIcon }[] = [
   { id: "factory", label: "tools.factory", hint: "tools.factoryTab", icon: "factory" },
   { id: "mpf", label: "tools.mpf", hint: "tools.mpfTab", icon: "mpf" },
   { id: "refinery", label: "tools.refinery", hint: "tools.refineryTab", icon: "refinery" },
   { id: "facility", label: "tools.facility", hint: "tools.facilityTab", icon: "facility" },
-  { id: "regions", label: "tools.regions", hint: "tools.regionsTab", icon: "map" },
 ];
 
 /** «Инструменты»: калькуляторы клана на рецептах сервера + проверенные внешние сервисы. */
@@ -39,7 +37,7 @@ export const ToolsWorkspace: React.FC = () => {
   }, [active, facility, notify, t]);
 
   React.useEffect(() => {
-    if (!active || active === "facility" || active === "regions" || recipes) return;
+    if (!active || active === "facility" || recipes) return;
     Promise.all([recipeApi.list("factory"), recipeApi.list("refinery")])
       .then(([factory, refinery]) => setRecipes({ factory, refinery }))
       .catch((err) => notify({ title: t("tools.recipes"), message: errorText(err, t("tools.recipesFailed")), tone: "danger" }));
@@ -97,9 +95,7 @@ export const ToolsWorkspace: React.FC = () => {
 
       {active ? (
         <div role="tabpanel" className="min-w-0">
-          {active === "regions" ? (
-            <RegionsTool />
-          ) : active === "facility" ? (
+          {active === "facility" ? (
             facility ? <FacilityCalculator recipes={facility} /> : <div className="panel rounded-md"><Loading label={t("tools.loading")} /></div>
           ) : !recipes ? (
             <div className="panel rounded-md"><Loading label={t("tools.loading")} /></div>

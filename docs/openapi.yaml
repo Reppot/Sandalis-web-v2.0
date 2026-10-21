@@ -4755,6 +4755,21 @@ components:
       - code
       - crates
       title: PyramidItem
+    PyramidPresetRead:
+      properties:
+        key:
+          type: string
+          title: Key
+        tiers:
+          items:
+            $ref: '#/components/schemas/PyramidTier'
+          type: array
+          title: Tiers
+      type: object
+      required:
+      - key
+      - tiers
+      title: PyramidPresetRead
     PyramidRead:
       properties:
         faction:
@@ -4779,6 +4794,12 @@ components:
             format: date-time
           - type: 'null'
           title: Updated At
+        presets:
+          items:
+            $ref: '#/components/schemas/PyramidPresetRead'
+          type: array
+          title: Presets
+          default: []
       type: object
       required:
       - faction
