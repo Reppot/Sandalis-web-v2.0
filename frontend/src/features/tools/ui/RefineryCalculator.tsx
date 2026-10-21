@@ -5,6 +5,7 @@ import { useContent } from "@/entities/content";
 import type { RefineryData, Recipe } from "@/entities/recipe";
 import { ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, useI18n, useNotify } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
+import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
 type InputUnit = "crate" | "unit";
 interface PlanEntry {
@@ -27,6 +28,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
   const [group, setGroup] = React.useState("all");
   const [query, setQuery] = React.useState("");
   const [plan, setPlan] = React.useState<Record<string, PlanEntry>>({});
+  const panes = usePanes();
 
   const visible = React.useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -108,8 +110,10 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
         </div>
       </section>
 
-      <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-        <section className="panel panel-corners factory-catalog">
+      <PaneToggles panes={panes} catalogLabel={t("tools.catalogPane")} planLabel={t("tools.refineryQueue")} />
+
+      <div className={paneGridClass(panes)} data-wide={panes.wide}>
+        <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
           <div className="factory-filters">
             <input className="field h-11 flex-1" placeholder={t("tools.refinerySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
           </div>
@@ -121,7 +125,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
           </div>
           <div className="factory-count hud-label">{t("codes.shown")}: {visible.length} / {recipes.length} • {t("tools.dataSource")}: foxhole.wiki.gg</div>
 
-          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+          <div className={paneCardsClass(panes)}>
             {visible.map((recipe) => {
               const d = data(recipe);
               const queued = plan[recipe.id];
@@ -145,7 +149,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
           </div>
         </section>
 
-        <ResourceSummaryPanel report={report} title={t("tools.refineryQueue")} emptyHint={t("tools.refineryQueueHint")} onClear={() => setPlan({})}>
+        <ResourceSummaryPanel report={report} title={t("tools.refineryQueue")} emptyHint={t("tools.refineryQueueHint")} onClear={() => setPlan({})} hidden={!panes.plan} inline={panes.wide === "plan"}>
           {rows.map(({ recipe, entry, units }) => {
             const d = data(recipe);
             return (

@@ -5,6 +5,7 @@ import { useContent } from "@/entities/content";
 import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
 import { ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, type MessageKey } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
+import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
 type Facility = "factory" | "mpf";
 const FACTIONS: { key: string; label: MessageKey }[] = [
@@ -42,6 +43,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
   const [category, setCategory] = React.useState("all");
   const [query, setQuery] = React.useState("");
   const [plan, setPlan] = React.useState<Record<string, number>>({});
+  const panes = usePanes();
 
   const categories = React.useMemo(() => Array.from(new Set(recipes.map((r) => r.category))), [recipes]);
   const byId = React.useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
@@ -139,8 +141,10 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
         </div>
       </section>
 
-      <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-        <section className="panel panel-corners factory-catalog">
+      <PaneToggles panes={panes} catalogLabel={t("tools.catalogPane")} planLabel={t("tools.productionQueue")} />
+
+      <div className={paneGridClass(panes)} data-wide={panes.wide}>
+        <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
           <div className="factory-filters">
             <input className="field h-11 flex-1" data-guide="tool-search" placeholder={t("tools.factorySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
             <select className="field h-11 w-full md:w-44" value={faction} onChange={(e) => setFaction(e.target.value)}>
@@ -157,7 +161,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
           </div>
           <div className="factory-count hud-label">{t("codes.shown")}: {visible.length} / {recipes.length}</div>
 
-          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+          <div className={paneCardsClass(panes)}>
             {visible.map((recipe) => {
               const queued = plan[recipe.id] ?? 0;
               return (
@@ -178,7 +182,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
           </div>
         </section>
 
-        <ResourceSummaryPanel report={report} title={t("tools.productionQueue")} emptyHint={t("tools.queueHint")} onClear={() => setPlan({})}>
+        <ResourceSummaryPanel report={report} title={t("tools.productionQueue")} emptyHint={t("tools.queueHint")} onClear={() => setPlan({})} hidden={!panes.plan} inline={panes.wide === "plan"}>
           {rows.map(({ recipe, crates }) => (
             <div className="factory-plan-row" key={recipe.id}>
               <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={56} label={rname(recipe)} />

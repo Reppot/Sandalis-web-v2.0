@@ -991,6 +991,29 @@ body[data-theme="light"] {
 .auth-hint { margin-top: 0.55rem; color: rgba(229, 231, 235, 0.6); font-family: var(--font-mono); font-size: 0.66rem; line-height: 1.45; text-align: center; }
 .auth-invite { display: flex; align-items: center; gap: 0.75rem; margin-top: 1.1rem; border: 1px solid rgba(163, 230, 53, 0.45); border-radius: 4px; background: rgba(32, 52, 22, 0.55); padding: 0.65rem 0.8rem; }
 .auth-role-chip { display: inline-block; border: 1px solid; border-radius: 4px; background: rgba(0, 0, 0, 0.45); padding: 0.15rem 0.55rem; font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; line-height: 1.35; }
+/* Сворачивание окон калькуляторов: крупные кнопки над рабочей зоной */
+.pane-toggles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+.pane-toggle { display: flex; min-height: 3.4rem; align-items: center; gap: 0.75rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.45); padding: 0.55rem 0.9rem; text-align: left; transition: border-color 0.15s ease, background 0.15s ease, opacity 0.15s ease; }
+.pane-toggle:hover, .pane-toggle:focus-visible { border-color: var(--accent); outline: none; }
+.pane-toggle.is-on { border-color: rgba(163, 230, 53, 0.6); background: rgba(40, 64, 24, 0.5); box-shadow: inset 0 0 0 1px rgba(163, 230, 53, 0.2); }
+.pane-toggle.is-off { opacity: 0.7; }
+.pane-toggle-icon { font-size: 1.35rem; line-height: 1; }
+.pane-toggle-label { min-width: 0; flex: 1; overflow: hidden; color: #fff; font-family: var(--font-display); font-size: 0.95rem; letter-spacing: 0.04em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+.pane-toggle-state { flex-shrink: 0; border: 1px solid currentColor; border-radius: 4px; padding: 0.15rem 0.5rem; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.pane-toggle.is-on .pane-toggle-state { color: var(--accent); }
+.pane-toggle.is-off .pane-toggle-state { color: rgba(229, 231, 235, 0.6); }
+@media (max-width: 520px) { .pane-toggle-state { display: none; } .pane-toggle-label { font-size: 0.8rem; } }
+[data-theme="light"] .pane-toggle { background: var(--surface-2); border-color: var(--line); }
+[data-theme="light"] .pane-toggle-label { color: inherit; }
+/* Окно одно на всю ширину — крупнее и текст, и иконки (zoom масштабирует всё вместе) */
+@media (min-width: 1024px) {
+  .tool-panes[data-wide="catalog"] .factory-item-card { zoom: 1.22; }
+  .tool-panes[data-wide="catalog"] .facility-source { zoom: 1.15; }
+  .tool-panes[data-wide="catalog"] .factory-filters, .tool-panes[data-wide="catalog"] .factory-categories { zoom: 1.1; }
+  .tool-panes[data-wide="plan"] .factory-plan-list, .tool-panes[data-wide="plan"] .factory-totals { zoom: 1.25; }
+  .tool-panes[data-wide="plan"] .factory-total-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .tool-panes[data-wide="plan"] .factory-totals-scroll { max-height: none; }
+}
 .facility-sources { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 0.45rem; margin-top: 0.5rem; }
 .facility-source { display: flex; min-height: 3.6rem; align-items: center; gap: 0.6rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.35); padding: 0.4rem 0.6rem; text-align: left; transition: border-color 0.15s ease, background 0.15s ease; }
 .facility-source:hover { border-color: rgba(163, 230, 53, 0.55); background: rgba(40, 64, 24, 0.4); }

@@ -4,6 +4,7 @@ import * as React from "react";
 import { RAW, buildChain, chainTotals, facilityData, type ChainChoice, type ChainNode, type Recipe } from "@/entities/recipe";
 import { ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, usePaged, type MessageKey } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
+import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
 const FACTIONS: { key: string; label: MessageKey }[] = [
   { key: "all", label: "codes.allFactions" },
@@ -37,11 +38,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
   const [query, setQuery] = React.useState("");
   const [plan, setPlan] = React.useState<PlanRow[]>([]);
   const [choice, setChoice] = React.useState<ChainChoice>({});
-  // сворачивание окон как во вкладке «Заказы»: одно окно всегда остаётся, второе — на всю ширину
-  const [showCatalog, setShowCatalog] = React.useState(true);
-  const [showPlan, setShowPlan] = React.useState(true);
-  const catalogFull = showCatalog && !showPlan;
-  const planFull = showPlan && !showCatalog;
+  const panes = usePanes();
 
   const byId = React.useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
   const allowed = React.useCallback((r: Recipe) => faction === "all" || r.factions.includes(faction) || r.factions.includes("neutral"), [faction]);
@@ -138,17 +135,10 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
         </div>
       </section>
 
-      <div className="flex flex-wrap gap-2">
-        <button type="button" data-guide="facility-panes" className={`sidebar-subitem w-auto ${showCatalog ? "is-visible" : "is-hidden"}`} onClick={() => setShowCatalog((v) => !v || !showPlan)} aria-pressed={showCatalog}>
-          {showCatalog && <span className="sidebar-subitem-marker mr-1">[•]</span>}├─ 🏭 {t("facility.catalogPane")}
-        </button>
-        <button type="button" className={`sidebar-subitem w-auto ${showPlan ? "is-visible" : "is-hidden"}`} onClick={() => setShowPlan((v) => !v || !showCatalog)} aria-pressed={showPlan}>
-          {showPlan && <span className="sidebar-subitem-marker mr-1">[•]</span>}└─ 📋 {t("facility.queue")}
-        </button>
-      </div>
+      <PaneToggles panes={panes} catalogLabel={t("facility.catalogPane")} planLabel={t("facility.queue")} />
 
-      <div className={`grid min-h-0 flex-1 items-start gap-4 ${showCatalog && showPlan ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]" : ""}`}>
-        <section className={`panel panel-corners factory-catalog ${showCatalog ? "" : "hidden"}`}>
+      <div className={paneGridClass(panes)} data-wide={panes.wide}>
+        <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
           <div className="flex items-center justify-between gap-2">
             <span className="hud-label text-accent">{t("facility.sources")}</span>
             <select className="field h-9 w-44 py-1 text-xs" value={faction} onChange={(e) => setFaction(e.target.value)}>
@@ -184,7 +174,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
             {source && source !== "all" ? `${source} • ` : ""}{t("codes.shown")}: {cards.length} / {totalItems}
           </div>
 
-          <div className={`mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 ${catalogFull ? "lg:grid-cols-5 2xl:grid-cols-6" : ""}`}>
+          <div className={paneCardsClass(panes)}>
             {page.items.map((card) => {
               const queued = plan.find((p) => byId.get(p.recipeId)?.name === card.name);
               const first = card.recipes[0];
@@ -207,7 +197,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
           )}
         </section>
 
-        <ResourceSummaryPanel report={report} title={t("facility.queue")} emptyHint={t("facility.queueHint")} onClear={() => setPlan([])} hidden={!showPlan} inline={planFull}>
+        <ResourceSummaryPanel report={report} title={t("facility.queue")} emptyHint={t("facility.queueHint")} onClear={() => setPlan([])} hidden={!panes.plan} inline={panes.wide === "plan"}>
           {plan.map((row) => {
             const recipe = byId.get(row.recipeId);
             if (!recipe) return null;
