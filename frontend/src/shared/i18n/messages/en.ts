@@ -450,6 +450,8 @@ export const en: Record<MessageKey, string> = {
   "tools.refinery": "Refinery calculator",
   "tools.refineryTab": "Raw → materials • refining time",
   "tools.catalogPane": "Item catalog",
+  "tools.categories": "Categories",
+  "tools.faction": "Faction",
   "tools.paneOn": "Open",
   "tools.paneOff": "Collapsed",
   "tools.paneHint": "Collapse or expand the window — the other one takes the full width",

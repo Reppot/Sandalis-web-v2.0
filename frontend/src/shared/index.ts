@@ -13,4 +13,5 @@ export * from "./ui/modal";
 export * from "./ui/notify";
 export * from "./ui/theme";
 export * from "./ui/export";
+export * from "./ui/panes";
 export * from "./i18n";

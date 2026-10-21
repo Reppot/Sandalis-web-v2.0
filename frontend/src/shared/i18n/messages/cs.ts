@@ -450,6 +450,8 @@ export const cs: Record<MessageKey, string> = {
   "tools.refinery": "Kalkulačka rafinerie (Refinery)",
   "tools.refineryTab": "Surovina → materiály • doba zpracování",
   "tools.catalogPane": "Katalog předmětů",
+  "tools.categories": "Kategorie",
+  "tools.faction": "Frakce",
   "tools.paneOn": "Otevřeno",
   "tools.paneOff": "Sbaleno",
   "tools.paneHint": "Sbalit nebo rozbalit okno — druhé zabere celou šířku",

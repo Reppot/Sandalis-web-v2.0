@@ -1008,20 +1008,25 @@ body[data-theme="light"] {
 /* Окно одно на всю ширину — крупнее и текст, и иконки (zoom масштабирует всё вместе) */
 @media (min-width: 1024px) {
   .tool-panes[data-wide="catalog"] .factory-item-card { zoom: 1.22; }
-  .tool-panes[data-wide="catalog"] .facility-source { zoom: 1.15; }
+  .tool-panes[data-wide="catalog"] .filter-card { zoom: 1.12; }
   .tool-panes[data-wide="catalog"] .factory-filters, .tool-panes[data-wide="catalog"] .factory-categories { zoom: 1.1; }
   .tool-panes[data-wide="plan"] .factory-plan-list, .tool-panes[data-wide="plan"] .factory-totals { zoom: 1.25; }
   .tool-panes[data-wide="plan"] .factory-total-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .tool-panes[data-wide="plan"] .factory-totals-scroll { max-height: none; }
 }
-.facility-sources { display: grid; grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr)); gap: 0.45rem; margin-top: 0.5rem; }
-.facility-source { display: flex; min-height: 3.6rem; align-items: center; gap: 0.6rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.35); padding: 0.4rem 0.6rem; text-align: left; transition: border-color 0.15s ease, background 0.15s ease; }
-.facility-source:hover { border-color: rgba(163, 230, 53, 0.55); background: rgba(40, 64, 24, 0.4); }
-.facility-source.is-active { border-color: var(--accent); background: rgba(163, 230, 53, 0.12); box-shadow: inset 0 0 0 1px rgba(163, 230, 53, 0.35); }
-.facility-source-name { display: block; overflow: hidden; color: #fff; font-size: 0.82rem; font-weight: 600; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
-.facility-source-count { display: block; margin-top: 0.15rem; color: rgba(229, 231, 235, 0.6); font-size: 0.72rem; }
-[data-theme="light"] .facility-source { background: var(--surface-2); border-color: var(--line); }
-[data-theme="light"] .facility-source-name { color: inherit; }
+.filter-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.filter-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: 0.45rem; margin-top: 0.5rem; }
+.filter-cards.is-compact { display: flex; flex-wrap: wrap; margin-top: 0; }
+.filter-card { display: flex; min-height: 3.5rem; align-items: center; gap: 0.6rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.35); padding: 0.4rem 0.6rem; text-align: left; transition: border-color 0.15s ease, background 0.15s ease; }
+.filter-cards.is-compact .filter-card { min-height: 2.1rem; padding: 0.25rem 0.7rem; }
+.filter-card:hover, .filter-card:focus-visible { border-color: rgba(163, 230, 53, 0.55); background: rgba(40, 64, 24, 0.4); outline: none; }
+.filter-card.is-active { border-color: var(--accent); background: rgba(163, 230, 53, 0.12); box-shadow: inset 0 0 0 1px rgba(163, 230, 53, 0.35); }
+.filter-card-name { display: block; overflow: hidden; color: #fff; font-size: 0.82rem; font-weight: 600; line-height: 1.2; text-overflow: ellipsis; white-space: nowrap; }
+.filter-cards.is-compact .filter-card-name { font-size: 0.75rem; }
+.filter-card.is-active .filter-card-name { color: var(--accent); }
+.filter-card-hint { display: block; margin-top: 0.15rem; color: rgba(229, 231, 235, 0.6); font-size: 0.72rem; }
+[data-theme="light"] .filter-card { background: var(--surface-2); border-color: var(--line); }
+[data-theme="light"] .filter-card-name { color: inherit; }
 .facility-plan { border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 0.6rem; }
 .facility-recipe { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.4rem; }
 .facility-chain { margin-top: 0.5rem; }

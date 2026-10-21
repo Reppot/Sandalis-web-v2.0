@@ -3,17 +3,11 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
-import { ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, type MessageKey } from "@/shared";
+import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
-import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
+import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
 type Facility = "factory" | "mpf";
-const FACTIONS: { key: string; label: MessageKey }[] = [
-  { key: "all", label: "codes.allFactions" },
-  { key: "neutral", label: "codes.faction.neutral" },
-  { key: "colonial", label: "codes.faction.colonial" },
-  { key: "warden", label: "codes.faction.warden" },
-];
 
 const isShippable = (recipe: Recipe) => recipe.category === "vehicles" || recipe.category === "shipables";
 
@@ -45,7 +39,20 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
   const [plan, setPlan] = React.useState<Record<string, number>>({});
   const panes = usePanes();
 
-  const categories = React.useMemo(() => Array.from(new Set(recipes.map((r) => r.category))), [recipes]);
+  // рецепты под фракцией и режимом — от них считаются карточки категорий
+  const base = React.useMemo(
+    () => recipes.filter((r) => (faction === "all" || r.factions.includes(faction)) && (facility === "mpf" ? r.facilities.includes("mpf") : planning || r.facilities.includes(facility))),
+    [recipes, faction, facility, planning],
+  );
+  const categories = React.useMemo(() => {
+    const map = new Map<string, { icon: string | null; count: number }>();
+    for (const r of base) {
+      const entry = map.get(r.category) ?? { icon: assetUrl(r.icon_url), count: 0 };
+      entry.count += 1;
+      map.set(r.category, entry);
+    }
+    return [...map];
+  }, [base]);
   const byId = React.useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
 
   const visible = React.useMemo(() => {
@@ -145,19 +152,29 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
 
       <div className={paneGridClass(panes)} data-wide={panes.wide}>
         <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
-          <div className="factory-filters">
-            <input className="field h-11 flex-1" data-guide="tool-search" placeholder={t("tools.factorySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
-            <select className="field h-11 w-full md:w-44" value={faction} onChange={(e) => setFaction(e.target.value)}>
-              {FACTIONS.map((f) => (
-                <option key={f.key} value={f.key}>{t(f.label)}</option>
-              ))}
-            </select>
+          <div className="filter-head">
+            <span className="hud-label text-accent">{t("tools.categories")}</span>
+            <FilterCards
+            compact
+            guide="tool-factions"
+            label={t("tools.faction")}
+            items={FACTION_FILTERS.map((f) => ({ key: f.key, label: t(f.label) }))}
+            value={faction}
+            onChange={(k) => setFaction(k ?? "all")}
+          />
           </div>
-          <div data-guide="tool-cats" className="factory-categories scroll-area">
-            <button className={`chip ${category === "all" ? "is-active" : ""}`} onClick={() => setCategory("all")}>{t("common.all")}</button>
-            {categories.map((c) => (
-              <button key={c} className={`chip ${category === c ? "is-active" : ""}`} onClick={() => setCategory(c)}>{label("factory_category", c)}</button>
-            ))}
+          <FilterCards
+            guide="tool-cats"
+            label={t("tools.categories")}
+            items={[
+              { key: "all", label: t("common.all"), glyph: facility === "mpf" ? "mpf" : "factory", hint: t("facility.items", { n: base.length }) },
+              ...categories.map(([key, v]) => ({ key, label: label("factory_category", key), icon: v.icon, hint: t("facility.items", { n: v.count }) })),
+            ]}
+            value={category}
+            onChange={(k) => setCategory(k ?? "all")}
+          />
+          <div className="factory-filters mt-3">
+            <input className="field h-11 flex-1" data-guide="tool-search" placeholder={t("tools.factorySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
           </div>
           <div className="factory-count hud-label">{t("codes.shown")}: {visible.length} / {recipes.length}</div>
 

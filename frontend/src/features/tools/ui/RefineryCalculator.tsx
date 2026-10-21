@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { RefineryData, Recipe } from "@/entities/recipe";
-import { ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, useI18n, useNotify } from "@/shared";
+import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, useI18n, useNotify } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
@@ -114,14 +114,24 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
 
       <div className={paneGridClass(panes)} data-wide={panes.wide}>
         <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
-          <div className="factory-filters">
-            <input className="field h-11 flex-1" placeholder={t("tools.refinerySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
+          <div className="filter-head">
+            <span className="hud-label text-accent">{t("tools.categories")}</span>
           </div>
-          <div className="factory-categories scroll-area">
-            <button className={`chip ${group === "all" ? "is-active" : ""}`} onClick={() => setGroup("all")}>{t("common.all")}</button>
-            {groups.map((g) => (
-              <button key={g.key} className={`chip ${group === g.key ? "is-active" : ""}`} onClick={() => setGroup(g.key)}>{g.payload.label}</button>
-            ))}
+          <FilterCards
+            guide="tool-cats"
+            label={t("tools.categories")}
+            items={[
+              { key: "all", label: t("common.all"), glyph: "refinery", hint: t("facility.items", { n: recipes.length }) },
+              ...groups.flatMap((g) => {
+                const inGroup = recipes.filter((r) => r.category === g.key);
+                return inGroup.length ? [{ key: g.key, label: g.payload.label, icon: assetUrl(inGroup[0].icon_url), hint: t("facility.items", { n: inGroup.length }) }] : [];
+              }),
+            ]}
+            value={group}
+            onChange={(k) => setGroup(k ?? "all")}
+          />
+          <div className="factory-filters mt-3">
+            <input className="field h-11 flex-1" placeholder={t("tools.refinerySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
           </div>
           <div className="factory-count hud-label">{t("codes.shown")}: {visible.length} / {recipes.length} • {t("tools.dataSource")}: foxhole.wiki.gg</div>
 

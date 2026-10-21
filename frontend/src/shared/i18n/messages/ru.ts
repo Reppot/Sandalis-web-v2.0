@@ -449,6 +449,8 @@ export const ru = {
   "tools.refinery": "Калькулятор молотка (Refinery)",
   "tools.refineryTab": "Сырьё → материалы • время переработки",
   "tools.catalogPane": "Каталог предметов",
+  "tools.categories": "Категории",
+  "tools.faction": "Фракция",
   "tools.paneOn": "Открыто",
   "tools.paneOff": "Свёрнуто",
   "tools.paneHint": "Свернуть или развернуть окно — второе займёт всю ширину",

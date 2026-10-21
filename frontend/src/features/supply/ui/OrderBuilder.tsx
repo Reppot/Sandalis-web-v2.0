@@ -7,6 +7,7 @@ import { orderDraft, reportApi, type DraftLine } from "@/entities/report";
 import type { Stockpile } from "@/entities/stockpile";
 import {
   ExportBar,
+  FilterCards,
   ItemIcon,
   Loading,
   Modal,
@@ -70,10 +71,19 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
     if (hydrated) orderDraft.write(order);
   }, [order, hydrated]);
 
+  // карточки категорий: иконка первого предмета категории и число предметов
   const categories = React.useMemo(() => {
-    const present = new Set(catalog.map((i) => i.category));
-    return list<{ label: string }>("catalog_category").filter((c) => present.has(c.key));
-  }, [catalog, list]);
+    const stats = new Map<string, { icon: string | null; count: number }>();
+    for (const i of catalog) {
+      const s = stats.get(i.category) ?? { icon: assetUrl(i.iconUrl), count: 0 };
+      s.count += 1;
+      stats.set(i.category, s);
+    }
+    return list<{ label: string }>("catalog_category").flatMap((c) => {
+      const s = stats.get(c.key);
+      return s ? [{ key: c.key, label: c.payload.label, icon: s.icon, hint: t("facility.items", { n: s.count }) }] : [];
+    });
+  }, [catalog, list, t]);
 
   const matrix = React.useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -165,7 +175,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
       {
         title: `SINDARIS • ${t("builder.docTitle")}`,
         header: [`${t("doc.hex")}: ${pinned?.region ?? "—"}`, `${t("doc.stockpile")}: ${pinned?.name ?? "—"}`, `${t("doc.lines")}: ${order.length} • Σ ${totalUnits}`],
-        sections: [{ rows: order.map((l) => ({ name: l.name, quantity: l.quantity, unit: t(l.unit === "crate" ? "unit.crate" : "unit.unit") })) }],
+        sections: [{ rows: order.map((l) => ({ name: l.name, quantity: l.quantity, unit: t(l.unit === "crate" ? "unit.crate" : "unit.unit"), icon: assetUrl(l.icon_url) })) }],
         fileBase: "SINDARIS_order",
         sheetName: t("builder.sheet"),
       },
@@ -207,17 +217,19 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
           </button>
         </div>
 
-        <div className="mt-5 flex items-center gap-3">
+        <div className="filter-head mt-5">
+          <span className="hud-label text-accent">{t("tools.categories")}</span>
+        </div>
+        <FilterCards
+          guide="builder-cats"
+          label={t("tools.categories")}
+          items={[{ key: "all", label: t("common.all"), glyph: "crates", hint: t("facility.items", { n: catalog.length }) }, ...categories]}
+          value={category}
+          onChange={(k) => setCategory(k ?? "all")}
+        />
+        <div className="mt-3 flex items-center gap-3">
           <input className="field h-12 flex-1 text-base" data-guide="builder-filter" placeholder={t("builder.filter")} value={filter} onChange={(e) => setFilter(e.target.value)} />
           <UiGlyph icon="search" size={40} className="hidden sm:block" />
-        </div>
-        <div className="scroll-area mt-4 flex gap-2 overflow-x-auto pb-2">
-          <button className={`chip h-10 shrink-0 px-4 text-sm ${category === "all" ? "is-active" : ""}`} onClick={() => setCategory("all")}>{t("common.all")}</button>
-          {categories.map((c) => (
-            <button key={c.key} className={`chip h-10 shrink-0 px-4 text-sm ${category === c.key ? "is-active" : ""}`} onClick={() => setCategory(c.key)}>
-              {c.payload.label}
-            </button>
-          ))}
         </div>
 
         <div className="mt-5 flex gap-3">

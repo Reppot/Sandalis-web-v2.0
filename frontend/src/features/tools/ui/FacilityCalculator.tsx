@@ -2,16 +2,10 @@
 
 import * as React from "react";
 import { RAW, buildChain, chainTotals, facilityData, type ChainChoice, type ChainNode, type Recipe } from "@/entities/recipe";
-import { ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, usePaged, type MessageKey } from "@/shared";
+import { FilterCards, ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, usePaged } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
-import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
+import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
-const FACTIONS: { key: string; label: MessageKey }[] = [
-  { key: "all", label: "codes.allFactions" },
-  { key: "neutral", label: "codes.faction.neutral" },
-  { key: "colonial", label: "codes.faction.colonial" },
-  { key: "warden", label: "codes.faction.warden" },
-];
 
 interface PlanRow {
   key: string;
@@ -139,29 +133,27 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
 
       <div className={paneGridClass(panes)} data-wide={panes.wide}>
         <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
-          <div className="flex items-center justify-between gap-2">
+          <div className="filter-head">
             <span className="hud-label text-accent">{t("facility.sources")}</span>
-            <select className="field h-9 w-44 py-1 text-xs" value={faction} onChange={(e) => setFaction(e.target.value)}>
-              {FACTIONS.map((f) => (
-                <option key={f.key} value={f.key}>{t(f.label)}</option>
-              ))}
-            </select>
+            <FilterCards
+            compact
+            guide="tool-factions"
+            label={t("tools.faction")}
+            items={FACTION_FILTERS.map((f) => ({ key: f.key, label: t(f.label) }))}
+            value={faction}
+            onChange={(k) => setFaction(k ?? "all")}
+          />
           </div>
-          <div data-guide="facility-sources" className="facility-sources">
-            {[{ name: "all", icon: null as string | null, count: totalItems }, ...sources].map((s) => {
-              const on = source === s.name;
-              const label = s.name === "all" ? t("facility.allSources") : s.name;
-              return (
-                <button key={s.name} type="button" className={`facility-source ${on ? "is-active" : ""}`} aria-pressed={on} onClick={() => setSource(on ? null : s.name)}>
-                  {s.icon ? <ItemIcon sources={[assetUrl(s.icon)]} size={44} label={label} /> : <UiGlyph icon="facility" size={44} />}
-                  <span className="min-w-0 flex-1">
-                    <span className="facility-source-name">{label}</span>
-                    <span className="facility-source-count">{t("facility.items", { n: s.count })}</span>
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+          <FilterCards
+            guide="facility-sources"
+            label={t("facility.sources")}
+            items={[
+              { key: "all", label: t("facility.allSources"), glyph: "facility", hint: t("facility.items", { n: totalItems }) },
+              ...sources.map((s) => ({ key: s.name, label: s.name, icon: s.icon ? assetUrl(s.icon) : null, glyph: "facility" as const, hint: t("facility.items", { n: s.count }) })),
+            ]}
+            value={source}
+            onChange={setSource}
+          />
 
           <div className="factory-filters mt-3">
             <input className="field h-11 flex-1" data-guide="facility-search" placeholder={t("facility.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
