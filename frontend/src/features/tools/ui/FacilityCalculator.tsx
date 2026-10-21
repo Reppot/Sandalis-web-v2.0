@@ -217,11 +217,11 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
                 {root ? (
                   <details className="facility-chain" open>
                     <summary className="hud-label text-accent">{t("facility.chain")}</summary>
-                    <ul>
+                    <ChainTier depth={1} parent={root.name}>
                       {root.children.map((child, i) => (
-                        <ChainItem key={`${child.name}-${i}`} node={child} byName={byName} allowed={allowed} choice={choice} setChoice={setChoice} unitOf={unitOf} />
+                        <ChainItem key={`${child.name}-${i}`} depth={1} node={child} byName={byName} allowed={allowed} choice={choice} setChoice={setChoice} unitOf={unitOf} />
                       ))}
-                    </ul>
+                    </ChainTier>
                   </details>
                 ) : null}
               </div>
@@ -233,20 +233,32 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
   );
 };
 
+/** Ярус цепочки: рамка цвета глубины и подпись «Ярус N • для предмета». */
+const ChainTier: React.FC<React.PropsWithChildren<{ depth: number; parent: string }>> = ({ depth, parent, children }) => {
+  const { t } = useI18n();
+  return (
+    <div className="chain-tier" data-depth={((depth - 1) % 4) + 1}>
+      <div className="chain-tier-label">{t("facility.tier", { n: depth, name: parent })}</div>
+      <ul>{children}</ul>
+    </div>
+  );
+};
+
 /** Узел цепочки: количество и выбор — сырьё или один из рецептов (выбор общий для предмета). */
 const ChainItem: React.FC<{
+  depth: number;
   node: ChainNode;
   byName: Map<string, Recipe[]>;
   allowed: (r: Recipe) => boolean;
   choice: ChainChoice;
   setChoice: React.Dispatch<React.SetStateAction<ChainChoice>>;
   unitOf: (unit: string | null) => string;
-}> = ({ node, byName, allowed, choice, setChoice, unitOf }) => {
+}> = ({ depth, node, byName, allowed, choice, setChoice, unitOf }) => {
   const { t } = useI18n();
   const options = (byName.get(node.name) ?? []).filter(allowed);
   const value = node.recipe?.id ?? choice[node.name] ?? RAW;
   return (
-    <li>
+    <li className="chain-node">
       <div className="facility-node">
         <ItemIcon sources={[assetUrl(node.icon_url)]} size={24} label={node.name} />
         <span className="min-w-0 flex-1 truncate text-[0.8rem] text-white">{node.name}</span>
@@ -259,11 +271,11 @@ const ChainItem: React.FC<{
         </div>
       ) : null}
       {node.recipe && node.children.length ? (
-        <ul>
+        <ChainTier depth={depth + 1} parent={node.name}>
           {node.children.map((child, i) => (
-            <ChainItem key={`${child.name}-${i}`} node={child} byName={byName} allowed={allowed} choice={choice} setChoice={setChoice} unitOf={unitOf} />
+            <ChainItem key={`${child.name}-${i}`} depth={depth + 1} node={child} byName={byName} allowed={allowed} choice={choice} setChoice={setChoice} unitOf={unitOf} />
           ))}
-        </ul>
+        </ChainTier>
       ) : null}
     </li>
   );

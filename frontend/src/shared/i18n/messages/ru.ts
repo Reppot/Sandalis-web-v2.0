@@ -462,6 +462,7 @@ export const ru = {
   "facility.recipe": "Рецепт",
   "facility.change": "сменить",
   "facility.chain": "Цепочка производства",
+  "facility.tier": "Ярус {n} • для {name}",
   "facility.raw": "Сырьё — не разбирать",
   "facility.cycle": "рецепт требует сам себя — дальше не разбирается",
   "facility.perRun": "за цикл: {n}",

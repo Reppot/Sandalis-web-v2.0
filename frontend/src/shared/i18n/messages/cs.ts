@@ -463,6 +463,7 @@ export const cs: Record<MessageKey, string> = {
   "facility.recipe": "Recept",
   "facility.change": "změnit",
   "facility.chain": "Výrobní řetězec",
+  "facility.tier": "Úroveň {n} • pro {name}",
   "facility.raw": "Surovina — nerozkládat",
   "facility.cycle": "recept potřebuje sám sebe — dál se nerozkládá",
   "facility.perRun": "za cyklus: {n}",

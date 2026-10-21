@@ -463,6 +463,7 @@ export const en: Record<MessageKey, string> = {
   "facility.recipe": "Recipe",
   "facility.change": "change",
   "facility.chain": "Production chain",
+  "facility.tier": "Tier {n} • for {name}",
   "facility.raw": "Raw — don't break down",
   "facility.cycle": "recipe needs itself — not broken down further",
   "facility.perRun": "per run: {n}",

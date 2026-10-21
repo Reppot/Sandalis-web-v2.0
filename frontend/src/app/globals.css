@@ -1003,8 +1003,14 @@ body[data-theme="light"] {
 .facility-recipe { display: flex; flex-direction: column; gap: 0.25rem; margin-top: 0.4rem; }
 .facility-chain { margin-top: 0.5rem; }
 .facility-chain summary { cursor: pointer; }
-.facility-chain ul { display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.35rem; }
-.facility-chain ul ul { margin-left: 0.85rem; border-left: 1px dashed rgba(163, 230, 53, 0.3); padding-left: 0.6rem; }
+.chain-tier { --tier: #a3e635; margin: 0.5rem 0 0.15rem 0.35rem; border-left: 3px solid var(--tier); border-radius: 0 6px 6px 0; background: rgba(0, 0, 0, 0.3); padding: 0.45rem 0.55rem 0.55rem 0.7rem; }
+.chain-tier[data-depth="2"] { --tier: #60a5fa; background: rgba(30, 58, 138, 0.14); }
+.chain-tier[data-depth="3"] { --tier: #fbbf24; background: rgba(120, 83, 9, 0.14); }
+.chain-tier[data-depth="4"] { --tier: #f472b6; background: rgba(131, 24, 67, 0.14); }
+.chain-tier-label { margin-bottom: 0.35rem; color: var(--tier); font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.chain-tier > ul { display: flex; flex-direction: column; gap: 0.4rem; }
+.chain-node + .chain-node { border-top: 1px solid rgba(255, 255, 255, 0.07); padding-top: 0.45rem; }
+.factory-totals-scroll { max-height: min(38vh, 22rem); overflow-y: auto; padding-right: 0.15rem; }
 .facility-node { display: flex; align-items: center; gap: 0.5rem; }
 .facility-node-pick { margin: 0.3rem 0 0 2rem; }
 .recipe-options { display: flex; flex-direction: column; gap: 0.35rem; }

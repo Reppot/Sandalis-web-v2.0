@@ -85,16 +85,25 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
         </div>
         <div className="factory-totals shrink-0">
           <div data-guide="tool-totals" className="hud-label mb-2 text-accent">{t("tools.totals")}</div>
-          <div className="factory-total-grid">
-            {[...report.resources, ...report.stats].map((line) => (
-              <div key={`${line.name}-${line.unit}`} className="min-w-0">
-                <span className="flex min-w-0 items-center gap-1.5">
-                  {line.icon ? <ItemIcon sources={[line.icon]} size={28} label={line.name} /> : null}
-                  <span className="hud-label truncate text-muted">{line.name}</span>
-                </span>
-                <strong className="truncate">{fmt(line.quantity)}</strong>
-              </div>
-            ))}
+          <div className="factory-totals-scroll scroll-area">
+            {[report.resources, report.stats].map((group, gi) =>
+              group.length ? (
+                <React.Fragment key={gi}>
+                  {gi === 1 && report.resources.length ? <div className="hud-label mt-3 mb-2 text-muted">{t("tools.doc.summary")}</div> : null}
+                  <div className="factory-total-grid">
+                    {group.map((line) => (
+                      <div key={`${line.name}-${line.unit}`} className="min-w-0" title={line.name}>
+                        <span className="flex min-w-0 items-center gap-1.5">
+                          {line.icon ? <ItemIcon sources={[line.icon]} size={28} label={line.name} /> : null}
+                          <span className="hud-label truncate text-muted">{line.name}</span>
+                        </span>
+                        <strong className="truncate">{fmt(line.quantity)}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </React.Fragment>
+              ) : null,
+            )}
           </div>
           <ExportBar title={t("tools.exportTitle")} onAction={(f) => void run(toolDoc(report, t), f)} />
         </div>

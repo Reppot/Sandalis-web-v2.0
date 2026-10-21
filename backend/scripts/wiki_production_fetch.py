@@ -44,6 +44,8 @@ FACTIONS = {"Col": ["colonial"], "War": ["warden"], "Both": ["neutral"]}
 SKIP_SOURCES = {
     "Salvage Mine", "Component Mine", "Sulfur Mine", "Oil Well", "Water Pump",
     "Engine Room", "Field Hospital", "Hospital", "Medical Room", "BMS Bloodtender",
+    # у Factory и Refinery свои калькуляторы — в калькуляторе завода только постройки
+    "Factory", "Refinery",
 }
 
 

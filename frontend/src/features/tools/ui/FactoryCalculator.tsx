@@ -139,7 +139,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
         </div>
       </section>
 
-      <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(340px,400px)]">
+      <div className="grid min-h-0 flex-1 items-start gap-4 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <section className="panel panel-corners factory-catalog">
           <div className="factory-filters">
             <input className="field h-11 flex-1" data-guide="tool-search" placeholder={t("tools.factorySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
@@ -157,7 +157,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
           </div>
           <div className="factory-count hud-label">{t("codes.shown")}: {visible.length} / {recipes.length}</div>
 
-          <div className="mt-3 grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-2.5">
+          <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
             {visible.map((recipe) => {
               const queued = plan[recipe.id] ?? 0;
               return (
