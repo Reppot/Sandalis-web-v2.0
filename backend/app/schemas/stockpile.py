@@ -7,11 +7,18 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
+# тип постройки склада: порт, депо (Storage Depot) или другое
+StockpileKind = Literal["seaport", "depot", "other"]
+
+
 class StockpileCreate(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     name: Annotated[str, Field(min_length=1, max_length=80)]
     region: Annotated[str, Field(min_length=1, max_length=64)]
+    town: Annotated[str | None, Field(default=None, max_length=80)]
+    kind: Annotated[StockpileKind | None, Field(default=None)]
+    access_code: Annotated[str | None, Field(default=None, max_length=32)]
 
 
 class StockpileUpdate(BaseModel):
@@ -19,6 +26,9 @@ class StockpileUpdate(BaseModel):
 
     name: Annotated[str | None, Field(default=None, min_length=1, max_length=80)]
     region: Annotated[str | None, Field(default=None, min_length=1, max_length=64)]
+    town: Annotated[str | None, Field(default=None, max_length=80)]
+    kind: Annotated[StockpileKind | None, Field(default=None)]
+    access_code: Annotated[str | None, Field(default=None, max_length=32)]
 
 
 class StockpileRead(BaseModel):
@@ -28,6 +38,9 @@ class StockpileRead(BaseModel):
     id: uuid.UUID
     name: str
     region: str
+    town: str | None = None
+    kind: str | None = None
+    access_code: str | None = None   # пароль склада виден только участникам клана
     created_at: datetime
     updated_at: datetime
     items_count: int = 0        # заполняет сервис агрегатом

@@ -10,6 +10,7 @@
     "clan_scope_violation": "Operace zamítnuta: {entity} patří jinému klanu.",
     "db_unavailable": "Databáze se probouzí, opakujte za pár sekund.",
     "war_api_unavailable": "Foxhole War API je nedostupné — zkuste to později.",
-    "pyramid_unknown_items": "Neznámé předměty v pyramidě: {codes}"
+    "pyramid_unknown_items": "Neznámé předměty v pyramidě: {codes}",
+    "guest_no_clan": "Přístup hosta nemá klan"
   }
 }

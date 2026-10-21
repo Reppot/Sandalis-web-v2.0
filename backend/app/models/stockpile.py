@@ -17,6 +17,10 @@ class Stockpile(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
 
     name: Mapped[str] = mapped_column(String(80), nullable=False)
     region: Mapped[str] = mapped_column(String(64), nullable=False)
+    # 0013: описание склада для клана — город (гекс = region), тип постройки и пароль склада
+    town: Mapped[str | None] = mapped_column(String(80), nullable=True)
+    kind: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    access_code: Mapped[str | None] = mapped_column(String(32), nullable=True)
     # 0005: источник и время последней полной выгрузки содержимого (монитор склада)
     last_sync_source: Mapped[str | None] = mapped_column(String(16), nullable=True)
     last_sync_at: Mapped[datetime | None] = mapped_column(

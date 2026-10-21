@@ -1,8 +1,15 @@
 import { apiClient } from "@/shared";
 import type { CreatedStockpileEnvelope, Page } from "@/shared";
-import { toStockpile, type Stockpile, type StockpileReadDto } from "@/entities/stockpile/model/types";
+import { toStockpile, type Stockpile, type StockpileKind, type StockpileReadDto } from "@/entities/stockpile/model/types";
 
 export type SyncSource = "json" | "txt" | "clipboard" | "xlsx" | "scan" | "manual";
+
+/** Описание склада для клана (snake_case — как ждёт API). */
+export interface StockpileDetails {
+  town?: string | null;
+  kind?: StockpileKind | null;
+  access_code?: string | null;
+}
 
 export interface StockpileResult {
   stockpile: Stockpile;
@@ -20,12 +27,12 @@ export const stockpileApi = {
     return toStockpile(await apiClient.get<StockpileReadDto>(`/api/v1/stockpiles/${id}`));
   },
 
-  async create(name: string, region: string): Promise<StockpileResult> {
-    const r = await apiClient.post<CreatedStockpileEnvelope<StockpileReadDto>>("/api/v1/stockpiles", { name, region });
+  async create(name: string, region: string, details: StockpileDetails = {}): Promise<StockpileResult> {
+    const r = await apiClient.post<CreatedStockpileEnvelope<StockpileReadDto>>("/api/v1/stockpiles", { name, region, ...details });
     return { stockpile: toStockpile(r.stockpile), message: r.message };
   },
 
-  async update(id: string, data: { name?: string; region?: string }): Promise<StockpileResult> {
+  async update(id: string, data: { name?: string; region?: string } & StockpileDetails): Promise<StockpileResult> {
     const r = await apiClient.patch<CreatedStockpileEnvelope<StockpileReadDto>>(`/api/v1/stockpiles/${id}`, data);
     return { stockpile: toStockpile(r.stockpile), message: r.message };
   },

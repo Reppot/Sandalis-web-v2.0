@@ -7,10 +7,17 @@ export interface StockpileItem {
   iconUrl: string | null;
 }
 
+/** Тип постройки склада. */
+export type StockpileKind = "seaport" | "depot" | "other";
+
 export interface Stockpile {
   id: string;
   name: string;
   region: string;
+  /** Описание для клана: город, тип постройки и пароль склада. */
+  town: string | null;
+  kind: StockpileKind | null;
+  accessCode: string | null;
   itemsCount: number;
   totalQuantity: number;
   lastSyncSource: string | null;
@@ -31,6 +38,9 @@ export interface StockpileReadDto {
   id: string;
   name: string;
   region: string;
+  town?: string | null;
+  kind?: StockpileKind | null;
+  access_code?: string | null;
   items_count?: number;
   total_quantity?: number;
   last_sync_source?: string | null;
@@ -48,6 +58,9 @@ export function toStockpile(dto: StockpileReadDto): Stockpile {
     id: dto.id,
     name: dto.name,
     region: dto.region,
+    town: dto.town ?? null,
+    kind: dto.kind ?? null,
+    accessCode: dto.access_code ?? null,
     itemsCount: dto.items_count ?? items.length,
     totalQuantity: dto.total_quantity ?? items.reduce((sum, item) => sum + item.quantity, 0),
     lastSyncSource: dto.last_sync_source ?? null,

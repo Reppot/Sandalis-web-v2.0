@@ -63,7 +63,7 @@ class StockpileService(ClanScopedService):
         }
 
     async def create_stockpile(self, payload: StockpileCreate) -> tuple[Stockpile, str]:
-        stockpile = Stockpile(name=payload.name, region=payload.region)
+        stockpile = Stockpile(**payload.model_dump())
         self.session.add(stockpile)
         try:
             await self.session.commit()

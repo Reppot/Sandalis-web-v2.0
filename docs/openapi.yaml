@@ -3510,6 +3510,44 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/clan/profile:
+    get:
+      tags:
+      - clan
+      summary: 'Профиль клана: название, аватар сервера, участники'
+      operationId: clan_profile_api_v1_clan_profile_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClanProfileRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/clan/pyramid:
     get:
       tags:
@@ -3874,6 +3912,37 @@ components:
       - raw_token
       - message
       title: ClanApiTokenCreated
+    ClanProfileRead:
+      properties:
+        id:
+          type: string
+          title: Id
+        name:
+          type: string
+          title: Name
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        has_discord:
+          type: boolean
+          title: Has Discord
+        members:
+          type: integer
+          title: Members
+        stockpiles:
+          type: integer
+          title: Stockpiles
+      type: object
+      required:
+      - id
+      - name
+      - icon_url
+      - has_discord
+      - members
+      - stockpiles
+      title: ClanProfileRead
     ClanRole:
       type: string
       enum:
@@ -5418,6 +5487,27 @@ components:
           maxLength: 64
           minLength: 1
           title: Region
+        town:
+          anyOf:
+          - type: string
+            maxLength: 80
+          - type: 'null'
+          title: Town
+        kind:
+          anyOf:
+          - type: string
+            enum:
+            - seaport
+            - depot
+            - other
+          - type: 'null'
+          title: Kind
+        access_code:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Access Code
       additionalProperties: false
       type: object
       required:
@@ -5448,6 +5538,21 @@ components:
         region:
           type: string
           title: Region
+        town:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Town
+        kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+        access_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Code
         created_at:
           type: string
           format: date-time
@@ -5587,6 +5692,21 @@ components:
         region:
           type: string
           title: Region
+        town:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Town
+        kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Kind
+        access_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Code
         created_at:
           type: string
           format: date-time
@@ -5638,6 +5758,27 @@ components:
             minLength: 1
           - type: 'null'
           title: Region
+        town:
+          anyOf:
+          - type: string
+            maxLength: 80
+          - type: 'null'
+          title: Town
+        kind:
+          anyOf:
+          - type: string
+            enum:
+            - seaport
+            - depot
+            - other
+          - type: 'null'
+          title: Kind
+        access_code:
+          anyOf:
+          - type: string
+            maxLength: 32
+          - type: 'null'
+          title: Access Code
       additionalProperties: false
       type: object
       title: StockpileUpdate

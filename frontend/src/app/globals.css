@@ -1014,6 +1014,19 @@ body[data-theme="light"] {
   .tool-panes[data-wide="plan"] .factory-total-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .tool-panes[data-wide="plan"] .factory-totals-scroll { max-height: none; }
 }
+/* «Ваш клан»: аватар сервера в меню */
+.nav-clan-avatar { display: inline-grid; flex-shrink: 0; place-items: center; border: 1px solid rgba(163, 230, 53, 0.55); border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(163, 230, 53, 0.35); }
+.nav-clan-letter { background: rgba(88, 101, 242, 0.3); color: #fff; font-family: var(--font-display); }
+/* «Склады клана» */
+.clan-stockpiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 0.6rem; margin-top: 0.75rem; }
+.clan-stockpile { display: flex; flex-direction: column; gap: 0.5rem; border: 1px solid var(--line-2); border-radius: 8px; background: rgba(0, 0, 0, 0.35); padding: 0.75rem 0.85rem; }
+.clan-stockpile-kind { display: grid; width: 2.6rem; height: 2.6rem; flex-shrink: 0; place-items: center; border: 1px solid rgba(163, 230, 53, 0.35); border-radius: 8px; background: rgba(0, 0, 0, 0.35); font-size: 1.3rem; }
+.clan-stockpile-name { overflow: hidden; color: #fff; font-family: var(--font-display); font-size: 1rem; letter-spacing: 0.03em; text-overflow: ellipsis; white-space: nowrap; }
+.clan-stockpile-meta { margin-top: 0.15rem; color: rgba(229, 231, 235, 0.7); font-size: 0.78rem; }
+.clan-stockpile-row { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; border-top: 1px solid rgba(255, 255, 255, 0.07); padding-top: 0.45rem; }
+.clan-stockpile-code { border: 1px solid rgba(163, 230, 53, 0.35); border-radius: 4px; background: rgba(0, 0, 0, 0.4); padding: 0.1rem 0.45rem; color: var(--accent); font-family: var(--font-mono); font-size: 0.85rem; letter-spacing: 0.12em; }
+[data-theme="light"] .clan-stockpile { background: var(--surface-2); border-color: var(--line); }
+[data-theme="light"] .clan-stockpile-name { color: inherit; }
 /* Бургер-меню: все разделы сайта */
 .burger-layer { position: fixed; inset: 0; z-index: 90; background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(2px); }
 .burger-menu { position: fixed; left: 0.75rem; bottom: 0.75rem; display: flex; width: min(26rem, calc(100vw - 1.5rem)); max-height: calc(100dvh - 1.5rem); flex-direction: column; gap: 0.75rem; overflow: hidden; border-radius: 8px; padding: 0.9rem; box-shadow: 0 18px 60px rgba(0, 0, 0, 0.6); }

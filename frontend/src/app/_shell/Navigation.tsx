@@ -2,14 +2,31 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { STORAGE_KEYS, readStorage, UiGlyph, useT, writeStorage } from "@/shared";
+import type { ClanProfile } from "@/entities/clan";
+import { STORAGE_KEYS, assetUrl, readStorage, UiGlyph, useT, writeStorage } from "@/shared";
 import { SIDEBAR_KEYS, tabKeys, type NavTab, type TabKey } from "@/app/_shell/tabs";
 
 interface NavProps {
   tabs: NavTab[];
   active: TabKey;
   onSelect: (key: TabKey) => void;
+  /** Клан сессии: аватар и название сервера для раздела «Ваш клан». */
+  clan?: ClanProfile | null;
 }
+
+/** Значок раздела: у «Вашего клана» — аватар Discord-сервера, иначе glyph. */
+const TabIcon: React.FC<{ tab: NavTab; size: number; clan?: ClanProfile | null }> = ({ tab, size, clan }) => {
+  const icon = tab.key === "clan" ? assetUrl(clan?.icon_url ?? null) : null;
+  if (tab.key === "clan" && (icon || clan)) {
+    return icon ? (
+      // eslint-disable-next-line @next/next/no-img-element -- аватар Discord-сервера (CDN)
+      <img src={icon} alt="" width={size} height={size} className="nav-clan-avatar" style={{ width: size, height: size }} />
+    ) : (
+      <span className="nav-clan-avatar nav-clan-letter" style={{ width: size, height: size, fontSize: size * 0.45 }}>{clan!.name.charAt(0).toUpperCase()}</span>
+    );
+  }
+  return <UiGlyph icon={tab.icon} size={size} />;
+};
 
 /** Иконка «бургер» — три полосы в цвете акцента. */
 const BurgerIcon: React.FC<{ size?: number; open?: boolean }> = ({ size = 30, open }) => (
@@ -33,7 +50,7 @@ const BurgerIcon: React.FC<{ size?: number; open?: boolean }> = ({ size = 30, op
  * Меню всех разделов сайта. Рендерится порталом в body: у боковой панели есть
  * backdrop-filter, который ломает position: fixed у потомков.
  */
-const BurgerMenu: React.FC<NavProps & { open: boolean; onClose: () => void }> = ({ tabs, active, onSelect, open, onClose }) => {
+const BurgerMenu: React.FC<NavProps & { open: boolean; onClose: () => void }> = ({ tabs, active, onSelect, open, onClose, clan }) => {
   const t = useT();
   React.useEffect(() => {
     if (!open) return;
@@ -68,10 +85,10 @@ const BurgerMenu: React.FC<NavProps & { open: boolean; onClose: () => void }> = 
                   onClose();
                 }}
               >
-                <UiGlyph icon={tab.icon} size={34} />
+                <TabIcon tab={tab} size={34} clan={clan} />
                 <span className="min-w-0 flex-1">
                   <span className="burger-item-label">{t(tabKeys(tab.key).label)}</span>
-                  <span className="burger-item-hint">{t(tabKeys(tab.key).hint)}</span>
+                  <span className="burger-item-hint">{tab.key === "clan" && clan ? `${clan.name} • ${t(tabKeys(tab.key).hint)}` : t(tabKeys(tab.key).hint)}</span>
                 </span>
               </button>
             );
@@ -84,7 +101,7 @@ const BurgerMenu: React.FC<NavProps & { open: boolean; onClose: () => void }> = 
 };
 
 /** Сворачиваемое боковое меню: Инструменты, Обучение, Навигация + бургер со всеми разделами. */
-export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
+export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect, clan }) => {
   const t = useT();
   const [expanded, setExpanded] = React.useState(false);
   const [menu, setMenu] = React.useState(false);
@@ -122,11 +139,11 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
               key={tab.key}
               type="button"
               className={`nav-btn shrink-0 ${on ? "is-active" : ""} ${expanded ? "" : "justify-center px-0"}`}
-              title={t(tabKeys(tab.key).hint)}
+              title={tab.key === "clan" && clan ? clan.name : t(tabKeys(tab.key).hint)}
               aria-current={on ? "page" : undefined}
               onClick={() => onSelect(tab.key)}
             >
-              <UiGlyph icon={tab.icon} size={36} />
+              <TabIcon tab={tab} size={36} clan={clan} />
               {expanded && <span className="nav-label truncate">{t(tabKeys(tab.key).label)}</span>}
             </button>
           );
@@ -152,12 +169,12 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
           </span>
         )}
       </button>
-      <BurgerMenu tabs={tabs} active={active} onSelect={onSelect} open={menu} onClose={closeMenu} />
+      <BurgerMenu tabs={tabs} active={active} onSelect={onSelect} open={menu} onClose={closeMenu} clan={clan} />
     </aside>
   );
 };
 
-export const MobileNav: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
+export const MobileNav: React.FC<NavProps> = ({ tabs, active, onSelect, clan }) => {
   const t = useT();
   const [menu, setMenu] = React.useState(false);
   const closeMenu = React.useCallback(() => setMenu(false), []);
@@ -167,7 +184,7 @@ export const MobileNav: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
     <nav className="chrome fixed inset-x-2 bottom-2 z-[60] grid auto-cols-fr grid-flow-col gap-1 rounded-md p-1.5 md:hidden" aria-label={t("nav.aria")}>
       {pinned.map((tab) => (
         <button key={tab.key} type="button" onClick={() => onSelect(tab.key)} className={`nav-btn h-14 flex-col justify-center gap-1 px-0 ${tab.key === active ? "is-active" : ""}`}>
-          <UiGlyph icon={tab.icon} size={24} />
+          <TabIcon tab={tab} size={24} clan={clan} />
           <span className="hud-label max-w-full truncate text-[0.46rem] tracking-normal">{t(tabKeys(tab.key).short)}</span>
         </button>
       ))}
@@ -177,7 +194,7 @@ export const MobileNav: React.FC<NavProps> = ({ tabs, active, onSelect }) => {
         </span>
         <span className="hud-label text-[0.46rem] tracking-normal">{t("nav.menuShort")}</span>
       </button>
-      <BurgerMenu tabs={tabs} active={active} onSelect={onSelect} open={menu} onClose={closeMenu} />
+      <BurgerMenu tabs={tabs} active={active} onSelect={onSelect} open={menu} onClose={closeMenu} clan={clan} />
     </nav>
   );
 };
