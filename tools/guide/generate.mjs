@@ -1,7 +1,6 @@
 // Генератор руководства «Навигация»: демо-клан -> скриншоты интерфейса на ru/en/cs ->
 // координаты меток из DOM -> backend/static/guide/<locale>/*.webp + seed/data/guide.json.
 // Запуск и подготовка окружения — README.md рядом.
-import { createHmac } from "node:crypto";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
@@ -10,7 +9,6 @@ import { COMMANDER, seedDemo } from "./demo.mjs";
 
 const FRONTEND = process.env.GUIDE_FRONTEND ?? "http://127.0.0.1:3300";
 const BACKEND = process.env.GUIDE_BACKEND ?? "http://127.0.0.1:8020";
-const SECRET = process.env.GUIDE_JWT_SECRET ?? "local-dev-secret";
 const BROWSER = process.env.GUIDE_BROWSER ?? "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
 const LOCALES = ["ru", "en", "cs"];
 const VIEWPORT = { width: 1440, height: 960 };
@@ -18,38 +16,28 @@ const STATIC = new URL("../../backend/static/guide/", import.meta.url);
 const SEED = new URL("../../backend/app/seed/data/guide.json", import.meta.url);
 const LINKED_GUILD = "900000000000000001";
 
-// --- подписанная кука выбора сервера (тот же формат, что seal() в discord_oauth.py) ---
-const sortKeys = (v) =>
-  Array.isArray(v) ? v.map(sortKeys) : v && typeof v === "object" ? Object.fromEntries(Object.keys(v).sort().map((k) => [k, sortKeys(v[k])])) : v;
-function seal(body, ttlSec) {
-  const raw = Buffer.from(JSON.stringify(sortKeys({ ...body, exp: Math.floor(Date.now() / 1000) + ttlSec }))).toString("base64url");
-  return `${raw}.${createHmac("sha256", SECRET).update(raw).digest("hex")}`;
-}
-const setupCookie = () =>
-  seal(
+// --- незавершённый вход через Discord: состояние хранит сервер (POST /auth/discord/dev-setup) ---
+const SETUP_STATE = {
+  uid: COMMANDER.user_id,
+  name: COMMANDER.display_name,
+  avatar: null,
+  guilds: [
+    { id: LINKED_GUILD, name: "SINDARIS", icon_url: null },
+    { id: "900000000000000002", name: "Foxhole Logistics Hub", icon_url: null },
+  ],
+  joins: [
     {
-      uid: COMMANDER.user_id,
-      name: COMMANDER.display_name,
-      avatar: null,
-      guilds: [
-        { id: LINKED_GUILD, name: "SINDARIS", icon_url: null },
-        { id: "900000000000000002", name: "Foxhole Logistics Hub", icon_url: null },
-      ],
-      joins: [
-        {
-          clan_id: "ALLIED",
-          name: "11th Logistics Regiment",
-          icon_url: null,
-          level: "medium",
-          roles: [
-            { name: "Officer", color: 15158332, level: "medium" },
-            { name: "Logistics", color: 3447003, level: "basic" },
-          ],
-        },
+      clan_id: "ALLIED",
+      name: "11th Logistics Regiment",
+      icon_url: null,
+      level: "medium",
+      roles: [
+        { name: "Officer", color: 15158332, level: "medium" },
+        { name: "Logistics", color: 3447003, level: "basic" },
       ],
     },
-    3600,
-  );
+  ],
+};
 
 // --- действия перед снимком ---
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -84,6 +72,29 @@ const PREPARE = {
     const tabs = await page.$$("main [role=tab]");
     await tabs[1].click();
     await page.waitForSelector('[data-guide="mgmt-level"]', { timeout: 30000 });
+  },
+  async openIntegrationsTab(page) {
+    await page.waitForSelector("[role=tab]", { timeout: 30000 });
+    const tabs = await page.$$("main [role=tab]");
+    await tabs[2].click();
+    await page.waitForSelector('[data-guide="cab-token"]', { timeout: 30000 });
+  },
+  async openSettingsLanguage(page) {
+    await page.waitForSelector('[data-guide="settings-sections"] .filter-card', { timeout: 30000 });
+    const cards = await page.$$('[data-guide="settings-sections"] .filter-card');
+    await cards[1].click();
+    await page.waitForSelector('[data-guide="cab-lang"]', { timeout: 30000 });
+  },
+  async openSettingsAppearance(page) {
+    await page.waitForSelector('[data-guide="settings-sections"] .filter-card', { timeout: 30000 });
+    const cards = await page.$$('[data-guide="settings-sections"] .filter-card');
+    await cards[2].click();
+    await page.waitForSelector('[data-guide="settings-appearance"]', { timeout: 30000 });
+  },
+  async openBurger(page) {
+    await page.waitForSelector('[data-guide="shell-burger"]', { timeout: 30000 });
+    await page.click('[data-guide="shell-burger"]');
+    await page.waitForSelector('[data-guide="shell-menu"]', { timeout: 30000 });
   },
   async openRoleModal(page) {
     await PREPARE.openRolesTab(page);
@@ -185,7 +196,12 @@ async function main() {
           }, demo);
           loggedIn = true;
         }
-        if (shot.setupCookie) await page.setCookie({ name: "sindaris_discord_setup", value: setupCookie(), url: FRONTEND });
+        if (shot.setupCookie) {
+          await page.evaluate(async (state) => {
+            const r = await fetch("/api/v1/auth/discord/dev-setup", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(state) });
+            if (!r.ok) throw new Error(`dev-setup ${r.status}`);
+          }, SETUP_STATE);
+        }
         try {
           (results[shot.id] ??= {})[locale] = await shoot(page, locale, shot);
         } catch (err) {

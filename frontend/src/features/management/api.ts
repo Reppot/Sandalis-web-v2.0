@@ -111,3 +111,38 @@ export const managementApi = {
     return apiClient.get<PermissionCatalog>("/api/v1/clan/permissions");
   },
 };
+
+// --------------------------------------------------------------------------- //
+// Интеграции клана: канал Discord для рапортов и API-токены для ботов
+// --------------------------------------------------------------------------- //
+export interface ClanApiTokenCreated {
+  id: string;
+  label: string;
+  role: ClanRole;
+  expires_at: string | null;
+  raw_token: string;
+  message: string;
+}
+
+export interface ClanWebhook {
+  discord_webhook_configured: boolean;
+  discord_webhook_hint: string | null;
+}
+
+export const integrationsApi = {
+  /** Клановый токен для ботов (X-Clan-Token). raw_token показывается один раз. */
+  createClanToken(input: { label: string; role: ClanRole; expiresInHours: number | null }): Promise<ClanApiTokenCreated> {
+    return apiClient.post<ClanApiTokenCreated>("/api/v1/auth/clan-token", {
+      label: input.label,
+      role: input.role,
+      expires_in_hours: input.expiresInHours,
+    });
+  },
+  getWebhook(): Promise<ClanWebhook> {
+    return apiClient.get<ClanWebhook>("/api/v1/clan/settings");
+  },
+  /** null или "" — отключить отправку рапортов в Discord. */
+  setWebhook(url: string | null): Promise<{ settings: ClanWebhook; message: string }> {
+    return apiClient.put("/api/v1/clan/settings", { discord_webhook_url: url || null });
+  },
+};

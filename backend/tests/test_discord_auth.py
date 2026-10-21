@@ -915,3 +915,19 @@ def test_member_search_by_role_scans_whole_server_with_cursor(db, monkeypatch):
                 assert {m["id"] for m in p1["members"]}.isdisjoint(m["id"] for m in p2["members"])
 
     run(main())
+
+
+def test_dev_setup_creates_server_side_setup_state(db, monkeypatch):
+    """DEV-ручка для скриншотов руководства: то же состояние, что после настоящего входа."""
+    async def main() -> None:
+        async with client() as c:
+            body = {"uid": DISCORD_ID, "name": "Pilot", "guilds": [{"id": "900000000000000001", "name": "HQ", "icon_url": None}], "joins": []}
+            r = await c.post(f"{API}/auth/discord/dev-setup", json=body)
+            assert r.status_code == 204, r.text
+            setup = (await c.get(f"{API}/auth/discord/setup")).json()
+            assert [g["id"] for g in setup["guilds"]] == ["900000000000000001"]
+
+            monkeypatch.setattr(settings, "ENV", "prod", raising=True)
+            assert (await c.post(f"{API}/auth/discord/dev-setup", json=body)).status_code == 403
+
+    run(main())

@@ -65,9 +65,20 @@ export const CHAPTERS = [
           { sel: g("shell-brand"), note: L("Герб и название терминала.", "Crest and terminal name.", "Erb a název terminálu.") },
           { sel: g("shell-ticker"), note: L("Бегущая строка: склады, которые скоро исчезнут (красный — меньше часа, оранжевый — меньше суток). Наведите курсор, чтобы остановить.", "Ticker: stockpiles about to expire (red — under an hour, orange — under a day). Hover to pause it.", "Běžící řádek: sklady, které brzy zmizí (červená — méně než hodina, oranžová — méně než den). Najetím ho zastavíte.") },
           { sel: g("shell-status"), note: L("Состояние связи с сервером, общий статус складов и время последней синхронизации.", "Server link status, overall stockpile status and the time of the last sync.", "Stav spojení se serverem, celkový stav skladů a čas poslední synchronizace.") },
-          { sel: g("shell-nav"), note: L("Разделы терминала. Набор вкладок зависит от вашей роли в клане.", "Terminal sections. Which tabs you see depends on your clan role.", "Sekce terminálu. Které záložky vidíte, závisí na vaší roli v klanu.") },
+          { sel: g("shell-nav"), note: L("Быстрый доступ: Инструменты, Обучение и Навигация.", "Quick access: Tools, Training and Navigation.", "Rychlý přístup: Nástroje, Výcvik a Navigace.") },
           { sel: g("shell-collapse"), note: L("Свернуть или развернуть меню — останутся только иконки.", "Collapse or expand the menu — only icons stay visible.", "Sbalit nebo rozbalit menu — zůstanou jen ikony.") },
-          { sel: g("shell-theme"), note: L("Ночная или упрощённая (светлая) тема.", "Night or simplified (light) theme.", "Noční nebo zjednodušený (světlý) motiv.") },
+          { sel: g("shell-burger"), note: L("Меню: все разделы сайта и настройки.", "Menu: every site section and settings.", "Menu: všechny sekce webu a nastavení.") },
+        ],
+      },
+      {
+        id: "menu",
+        path: "/?tab=orders",
+        mode: "viewport",
+        prepare: "openBurger",
+        caption: L("Меню разделов", "Section menu", "Menu sekcí"),
+        markers: [
+          { sel: `${g("shell-menu")} .burger-item`, at: "start", note: L("Все разделы: заказы, рапорты, таймеры, коды, инструменты, обучение, навигация, управление (командир) и настройки. Набор зависит от вашей роли.", "All sections: orders, reports, timers, codes, tools, training, navigation, management (commander) and settings. Which you see depends on your role.", "Všechny sekce: objednávky, hlášení, časovače, kódy, nástroje, výcvik, navigace, správa (velitel) a nastavení. Výběr závisí na vaší roli.") },
+          { sel: `${g("shell-menu")} .burger-item.is-active`, note: L("Раздел, открытый сейчас.", "The section open now.", "Právě otevřená sekce.") },
         ],
       },
     ],
@@ -265,9 +276,9 @@ export const CHAPTERS = [
     icon: "training",
     title: L("Обучение", "Training", "Výcvik"),
     summary: L(
-      "Учебные модули штаба: работа с терминалом, форматы отчётов сканера, правила таймеров. Новые модули появляются по мере готовности.",
-      "HQ training modules: using the terminal, scanner report formats, timer rules. New modules appear as they are ready.",
-      "Výcvikové moduly štábu: práce s terminálem, formáty výstupů skeneru, pravidla časovačů. Nové moduly přibývají postupně.",
+      "Учебный центр штаба готовится — раздел скоро откроется.",
+      "The HQ training centre is being prepared — the section opens soon.",
+      "Výcvikové centrum štábu se připravuje — sekce se brzy otevře.",
     ),
     shots: [
       {
@@ -276,9 +287,7 @@ export const CHAPTERS = [
         mode: "viewport",
         caption: L("Учебный центр", "Training center", "Výcvikové centrum"),
         markers: [
-          { sel: ".progress-track", note: L("Сколько модулей уже доступно.", "How many modules are available.", "Kolik modulů je k dispozici.") },
-          { sel: "article.panel-inner", at: "start", note: L("Доступный модуль — нажмите, чтобы раскрыть текст.", "An available module — click to open it.", "Dostupný modul — kliknutím ho otevřete.") },
-          { sel: "article.opacity-80", at: "start", note: L("Модуль в разработке.", "A module in development.", "Modul ve vývoji.") },
+          { sel: ".coming-soon-title", note: L("Coming soon: курсы по логистике, производству и терминалу.", "Coming soon: courses on logistics, production and the terminal.", "Coming soon: kurzy logistiky, výroby a terminálu.") },
         ],
       },
     ],
@@ -288,9 +297,9 @@ export const CHAPTERS = [
     icon: "map",
     title: L("Управление (командир)", "Management (commander)", "Správa (velitel)"),
     summary: L(
-      "Вкладка видна только командиру клана — владельцу Discord-сервера. Здесь список всех участников с ролями сервера и правами, а также уровни доступа ролей: пресеты базовый, средний, высокий или кастомный набор действий.",
-      "Only the clan commander — the Discord server owner — sees this tab. It lists every member with their server roles and rights, and sets each role's access: basic, medium, high presets or a custom set of actions.",
-      "Záložku vidí jen velitel klanu — vlastník Discord serveru. Je zde seznam všech členů s rolemi serveru a právy a úrovně přístupu rolí: předvolby základní, střední, vysoký nebo vlastní sada akcí.",
+      "Вкладка видна только командиру клана — владельцу Discord-сервера. Здесь список всех участников с ролями сервера и правами, уровни доступа ролей (пресеты базовый, средний, высокий или кастомный набор действий) и интеграции: канал Discord для рапортов и API-токены для ботов.",
+      "Only the clan commander — the Discord server owner — sees this tab. It lists every member with their server roles and rights, sets each role's access (basic, medium, high presets or a custom set of actions) and holds integrations: the Discord channel for reports and API tokens for bots.",
+      "Záložku vidí jen velitel klanu — vlastník Discord serveru. Je zde seznam všech členů s rolemi serveru a právy, úrovně přístupu rolí (předvolby základní, střední, vysoký nebo vlastní sada akcí) a integrace: kanál Discord pro hlášení a API tokeny pro boty.",
     ),
     shots: [
       {
@@ -340,16 +349,40 @@ export const CHAPTERS = [
           { sel: g("mgmt-apply"), note: L("Применить и закрыть окно; затем сохраните роли.", "Apply and close; then save the roles.", "Použít a zavřít; potom role uložte.") },
         ],
       },
+      {
+        id: "webhook",
+        path: "/?tab=management",
+        mode: { clip: g("cab-webhook") },
+        prepare: "openIntegrationsTab",
+        caption: L("Интеграции: канал Discord для рапортов", "Integrations: Discord channel for reports", "Integrace: kanál Discord pro hlášení"),
+        markers: [
+          { sel: `${g("cab-webhook")} input`, note: L("URL вебхука канала: Discord → Настройки канала → Интеграции → Вебхуки → «Скопировать URL».", "Channel webhook URL: Discord → Channel settings → Integrations → Webhooks → “Copy Webhook URL”.", "URL webhooku kanálu: Discord → Nastavení kanálu → Integrace → Webhooky → „Kopírovat URL“.") },
+          { sel: `${g("cab-webhook")} .btn-primary`, note: L("Сохранить. После этого в рапортах работает кнопка «В Discord».", "Save. After that the “To Discord” button works in reports.", "Uložit. Potom v hlášeních funguje tlačítko „Do Discordu“.") },
+        ],
+      },
+      {
+        id: "token",
+        path: "/?tab=management",
+        mode: { clip: g("cab-token") },
+        prepare: "openIntegrationsTab",
+        caption: L("Интеграции: API-токен для бота", "Integrations: API token for a bot", "Integrace: API token pro bota"),
+        markers: [
+          { sel: `${g("cab-token")} p`, at: "start", note: L("Зачем он нужен: только внешним программам клана (бот, скрипты, десктоп-клиент).", "What it is for: only the clan's external programs (bot, scripts, desktop client).", "K čemu je: jen pro externí programy klanu (bot, skripty, desktopový klient).") },
+          { sel: `${g("cab-token")} input`, note: L("Название токена, например «discord-bot».", "Token name, e.g. “discord-bot”.", "Název tokenu, např. „discord-bot“.") },
+          { sel: `${g("cab-token")} select`, note: L("Роль бота — чаще всего «Гость (только чтение)».", "The bot's role — usually “Guest (read only)”.", "Role bota — nejčastěji „Host (jen čtení)“.") },
+          { sel: `${g("cab-token")} .btn-primary`, note: L("Выпустить токен. Он показывается один раз — сохраните его.", "Issue the token. It is shown only once — save it.", "Vydat token. Zobrazí se jen jednou — uložte si ho.") },
+        ],
+      },
     ],
   },
   {
     key: "cabinet",
     icon: "cabinet",
-    title: L("Личный кабинет и управление кланом", "Profile and clan management", "Profil a správa klanu"),
+    title: L("Настройки", "Settings", "Nastavení"),
     summary: L(
-      "Профиль, уровень доступа и права, язык интерфейса. С высоким доступом здесь же подключается канал Discord и выпускаются токены для ботов.",
-      "Profile, access level and rights, interface language. High access also connects the Discord channel and issues bot tokens here.",
-      "Profil, úroveň přístupu a práva, jazyk rozhraní. Vysoký přístup tu také připojuje kanál Discord a vydává tokeny pro boty.",
+      "Открываются из меню. Три раздела: профиль (уровень доступа и права), язык интерфейса и внешний вид (тема сайта).",
+      "Opened from the menu. Three sections: profile (access level and rights), interface language and appearance (site theme).",
+      "Otevírá se z menu. Tři sekce: profil (úroveň přístupu a práva), jazyk rozhraní a vzhled (motiv webu).",
     ),
     shots: [
       {
@@ -358,6 +391,7 @@ export const CHAPTERS = [
         mode: "viewport",
         caption: L("Профиль участника", "Member profile", "Profil člena"),
         markers: [
+          { sel: `${g("settings-sections")} .filter-card`, at: "start", note: L("Разделы настроек: профиль, язык интерфейса, внешний вид.", "Settings sections: profile, interface language, appearance.", "Sekce nastavení: profil, jazyk rozhraní, vzhled.") },
           { sel: ".cabinet-hero .cabinet-pill >>1", note: L("Ваш уровень в клане: командир, высокий, средний доступ или рядовой.", "Your clan level: commander, high, medium access or private.", "Vaše úroveň v klanu: velitel, vysoký, střední přístup nebo řadový.") },
           { sel: ".cabinet-logout", note: L("Выйти из терминала на этом устройстве.", "Sign out of the terminal on this device.", "Odhlásit se z terminálu na tomto zařízení.") },
           { sel: ".cabinet-grid .cabinet-card", at: "start", note: L("Данные участника: ID, позывной, клан и способ входа.", "Member details: ID, callsign, clan and sign-in method.", "Údaje člena: ID, volací znak, klan a způsob přihlášení.") },
@@ -368,30 +402,20 @@ export const CHAPTERS = [
         id: "language",
         path: "/?tab=cabinet",
         mode: { clip: g("cab-lang") },
+        prepare: "openSettingsLanguage",
         caption: L("Язык интерфейса", "Interface language", "Jazyk rozhraní"),
         markers: [
           { sel: `${g("cab-lang")} [role=radiogroup]`, note: L("Русский, English или Čeština. Выбор сохраняется в профиле, на этом языке приходят и сообщения сервера.", "Русский, English or Čeština. The choice is saved to your profile; server messages use it too.", "Русский, English nebo Čeština. Volba se uloží do profilu, v tomto jazyce chodí i zprávy serveru.") },
         ],
       },
       {
-        id: "webhook",
+        id: "appearance",
         path: "/?tab=cabinet",
-        mode: { clip: g("cab-webhook") },
-        caption: L("Канал Discord для рапортов (высокий доступ)", "Discord channel for reports (high access)", "Kanál Discord pro hlášení (vysoký přístup)"),
+        mode: { clip: g("settings-appearance") },
+        prepare: "openSettingsAppearance",
+        caption: L("Внешний вид", "Appearance", "Vzhled"),
         markers: [
-          { sel: `${g("cab-webhook")} input`, note: L("URL вебхука канала: Discord → Настройки канала → Интеграции → Вебхуки → «Скопировать URL».", "Channel webhook URL: Discord → Channel settings → Integrations → Webhooks → “Copy Webhook URL”.", "URL webhooku kanálu: Discord → Nastavení kanálu → Integrace → Webhooky → „Kopírovat URL“.") },
-          { sel: `${g("cab-webhook")} .btn-primary`, note: L("Сохранить. После этого в рапортах работает кнопка «В Discord».", "Save. After that the “To Discord” button works in reports.", "Uložit. Potom v hlášeních funguje tlačítko „Do Discordu“.") },
-        ],
-      },
-      {
-        id: "token",
-        path: "/?tab=cabinet",
-        mode: { clip: g("cab-token") },
-        caption: L("API-токен для бота (высокий доступ)", "API token for a bot (high access)", "API token pro bota (vysoký přístup)"),
-        markers: [
-          { sel: `${g("cab-token")} input`, note: L("Название токена, например «discord-bot».", "Token name, e.g. “discord-bot”.", "Název tokenu, např. „discord-bot“.") },
-          { sel: `${g("cab-token")} select`, note: L("Роль бота — чаще всего «Гость (только чтение)».", "The bot's role — usually “Guest (read only)”.", "Role bota — nejčastěji „Host (jen čtení)“.") },
-          { sel: `${g("cab-token")} .btn-primary`, note: L("Выпустить токен. Он показывается один раз — сохраните его.", "Issue the token. It is shown only once — save it.", "Vydat token. Zobrazí se jen jednou — uložte si ho.") },
+          { sel: ".theme-choice", at: "start", note: L("Ночной режим или упрощённая светлая тема. Раньше переключатель был внизу бокового меню.", "Night mode or the simplified light theme. The switch used to be at the bottom of the side menu.", "Noční režim nebo zjednodušený světlý motiv. Přepínač býval dole v bočním menu.") },
         ],
       },
     ],

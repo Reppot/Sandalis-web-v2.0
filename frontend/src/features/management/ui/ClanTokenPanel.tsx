@@ -3,7 +3,7 @@
 import * as React from "react";
 import type { ClanRole } from "@/entities/session";
 import { Field, Select, copyText, errorText, useNotify, useT, type MessageKey } from "@/shared";
-import { clanApi, type ClanApiTokenCreated } from "@/features/cabinet/api/clanApi";
+import { integrationsApi, type ClanApiTokenCreated } from "@/features/management/api";
 
 const ROLES: { value: ClanRole; label: MessageKey }[] = [
   { value: "guest", label: "role.guestReadOnly" },
@@ -25,7 +25,7 @@ export const ClanTokenPanel: React.FC = () => {
     if (!label.trim()) return;
     setBusy(true);
     try {
-      const created = await clanApi.createClanToken({ label: label.trim(), role, expiresInHours: hours > 0 ? hours : null });
+      const created = await integrationsApi.createClanToken({ label: label.trim(), role, expiresInHours: hours > 0 ? hours : null });
       setIssued(created);
       setLabel("");
       notify({ title: t("token.title"), message: created.message, tone: "success" });
@@ -40,6 +40,7 @@ export const ClanTokenPanel: React.FC = () => {
     <section data-guide="cab-token" className="panel panel-corners rounded-md p-4">
       <div className="panel-title">🤖 {t("token.heading")}</div>
       <div className="cabinet-rule" />
+      <p className="mb-3 text-[0.78rem] leading-relaxed text-white/70">{t("token.why")}</p>
       <div className="grid grid-cols-2 items-end gap-3 md:grid-cols-4">
         <Field label={t("token.name")} placeholder="discord-bot" value={label} onChange={(e) => setLabel(e.target.value)} />
         <Select label={t("cabinet.role")} value={role} onChange={(e) => setRole(e.target.value as ClanRole)}>

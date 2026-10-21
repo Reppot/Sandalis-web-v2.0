@@ -23,8 +23,11 @@ export const TABS: NavTab[] = [
   { key: "training", icon: "training", background: "training" },
   { key: "guide", icon: "guide", background: "training" },
   { key: "management", icon: "map", background: "cabinet", ownerOnly: true },
-  { key: "cabinet", icon: "cabinet", background: "cabinet" },
+  { key: "cabinet", icon: "cabinet", background: "cabinet" },   // «Настройки»
 ];
+
+/** Разделы на боковой панели; все разделы (и они тоже) — в бургер-меню. */
+export const SIDEBAR_KEYS: TabKey[] = ["tools", "training", "guide"];
 
 /** Подписи вкладки в словаре: nav.<key>.label / .short / .hint. */
 export const tabKeys = (key: TabKey) => ({

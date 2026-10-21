@@ -502,6 +502,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/discord/dev-setup:
+    post:
+      tags:
+      - auth
+      summary: 'DEV: незавершённый Discord-вход без Discord (скриншоты руководства, тесты)'
+      operationId: discord_dev_setup_api_v1_auth_discord_dev_setup_post
+      parameters:
+      - name: X-Dev-Auth-Key
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Dev-Auth-Key
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: true
+              title: Payload
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/auth/discord/setup:
     get:
       tags:

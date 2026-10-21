@@ -172,6 +172,15 @@ async def update_locale(
     return _me(principal, avatar, locale)
 
 
+def _require_dev(dev_auth_key: str | None) -> None:
+    """DEV-ручки: ENV != prod или верный X-Dev-Auth-Key."""
+    if settings.DEV_AUTH_SECRET:
+        if not secrets.compare_digest(dev_auth_key or "", settings.DEV_AUTH_SECRET):
+            raise PermissionDeniedError(message_key="dev.forbidden", domain="auth", params={})
+    elif settings.ENV == "prod":
+        raise PermissionDeniedError(message_key="dev.disabled", domain="auth", params={})
+
+
 # ---------------- token issuance -------------------------------------------- #
 @router.post(
     "/dev-token",
@@ -185,11 +194,7 @@ async def issue_dev_token(
     translator: AuthTranslator,
     dev_auth_key: Annotated[str | None, Header(alias=settings.DEV_AUTH_HEADER)] = None,
 ) -> TokenResponse:
-    if settings.DEV_AUTH_SECRET:
-        if not secrets.compare_digest(dev_auth_key or "", settings.DEV_AUTH_SECRET):
-            raise PermissionDeniedError(message_key="dev.forbidden", domain="auth", params={})
-    elif settings.ENV == "prod":
-        raise PermissionDeniedError(message_key="dev.disabled", domain="auth", params={})
+    _require_dev(dev_auth_key)
     token = await service.issue_dev_token(payload, translator.locale)
     _set_session_cookie(response, token.access_token)
     return token
@@ -350,6 +355,28 @@ async def discord_callback(
     )
     _set_session_cookie(redirect, token_response.access_token)
     return redirect
+
+
+@router.post(
+    "/discord/dev-setup",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="DEV: незавершённый Discord-вход без Discord (скриншоты руководства, тесты)",
+)
+async def discord_dev_setup(
+    payload: dict,
+    response: Response,
+    service: AuthServiceDep,
+    dev_auth_key: Annotated[str | None, Header(alias=settings.DEV_AUTH_HEADER)] = None,
+) -> Response:
+    _require_dev(dev_auth_key)
+    if not isinstance(payload.get("uid"), str) or not isinstance(payload.get("guilds"), list):
+        raise AppError(message_key="setup.nothing_selected", domain="auth", code="validation_error",
+                       status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, params={})
+    setup = await _store_setup(service.session, payload)
+    await service.commit()
+    response.status_code = status.HTTP_204_NO_CONTENT
+    _set_setup_cookie(response, setup)
+    return response
 
 
 @router.get(

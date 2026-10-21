@@ -2,11 +2,8 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { Scopes } from "@/entities/session";
-import { assetUrl, useT, type MessageKey } from "@/shared";
+import { FilterCards, ThemeIcon, UiGlyph, assetUrl, useT, useTheme, type MessageKey, type Theme } from "@/shared";
 import { useSession } from "@/features/cabinet/model/session-context";
-import { ClanTokenPanel } from "@/features/cabinet/ui/ClanTokenPanel";
-import { DiscordWebhookPanel } from "@/features/cabinet/ui/DiscordWebhookPanel";
 import { LanguagePanel } from "@/features/cabinet/ui/LanguageSwitch";
 
 const ROLE_LABEL: Record<string, MessageKey> = {
@@ -17,11 +14,14 @@ const ROLE_LABEL: Record<string, MessageKey> = {
   guest: "role.guest",
 };
 
-/** Личный кабинет: профиль Discord, роль и права, управление кланом для офицеров. */
+type Section = "profile" | "language" | "appearance";
+
+/** «Настройки»: профиль участника, язык интерфейса и внешний вид. */
 export const CabinetWorkspace: React.FC = () => {
   const t = useT();
-  const { session, logout, can } = useSession();
+  const { session, logout } = useSession();
   const { media } = useContent();
+  const [section, setSection] = React.useState<Section>("profile");
   if (!session) return null;
   const guest = session.subjectType === "guest";
   const role = ROLE_LABEL[session.role] ? t(ROLE_LABEL[session.role]) : session.role;
@@ -31,6 +31,31 @@ export const CabinetWorkspace: React.FC = () => {
 
   return (
     <div className="tab-fade cabinet-page">
+      <section className="panel panel-corners rounded-md p-4">
+        <div className="flex items-center gap-3">
+          <UiGlyph icon="cabinet" size={40} />
+          <div className="min-w-0">
+            <div className="hud-label text-muted">{t("settings.kicker")}</div>
+            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">⚙ {t("nav.cabinet.label")}</h1>
+          </div>
+        </div>
+        <FilterCards
+          guide="settings-sections"
+          label={t("nav.cabinet.label")}
+          items={[
+            { key: "profile", label: t("settings.profile"), glyph: "cabinet", hint: t("settings.profileHint") },
+            { key: "language", label: t("settings.language"), glyph: "map", hint: t("settings.languageHint") },
+            { key: "appearance", label: t("settings.appearance"), glyph: "terminal", hint: t("settings.appearanceHint") },
+          ]}
+          value={section}
+          onChange={(k) => k && setSection(k as Section)}
+        />
+      </section>
+
+      {section === "language" ? <LanguagePanel persist={session.subjectType === "user"} /> : null}
+      {section === "appearance" ? <AppearancePanel /> : null}
+      {section === "profile" ? (
+      <>
       <section className="cabinet-hero panel panel-corners">
         <div className="cabinet-cover" style={cover ? { backgroundImage: `linear-gradient(120deg, rgba(45,75,45,0.86), rgba(18,35,23,0.38)), url(${cover})` } : undefined} aria-hidden />
         <div className="cabinet-hero-content">
@@ -82,23 +107,44 @@ export const CabinetWorkspace: React.FC = () => {
             ))}
           </div>
         </section>
-
-        <section className="panel panel-corners cabinet-card cabinet-security-card">
-          <div className="panel-title">◈ {t("cabinet.session")}</div>
-          <div className="cabinet-rule" />
-          <div className="cabinet-session-grid">
-            <div><span className="hud-label text-muted">{t("cabinet.state")}</span><strong className="text-safe">{t("cabinet.active")}</strong></div>
-            <div><span className="hud-label text-muted">{t("common.access")}</span><strong className="text-accent">{role.toUpperCase()}</strong></div>
-            <div><span className="hud-label text-muted">{t("cabinet.storage")}</span><strong>SANDALIS API</strong></div>
-          </div>
-          <p className="mt-4 text-[0.78rem] leading-relaxed text-white/65">{t("cabinet.sessionHint")}</p>
-        </section>
       </div>
-
-      <LanguagePanel persist={session.subjectType === "user"} />
-      {can(Scopes.CLAN_WEBHOOK) && <DiscordWebhookPanel />}
-      {can(Scopes.CLAN_TOKENS) && <ClanTokenPanel />}
+      </>
+      ) : null}
     </div>
+  );
+};
+
+const THEMES: { key: Theme; label: MessageKey; hint: MessageKey }[] = [
+  { key: "dark", label: "nav.themeNight", hint: "settings.themeDarkHint" },
+  { key: "light", label: "nav.themeSimple", hint: "settings.themeLightHint" },
+];
+
+/** Внешний вид: тема сайта (раньше — кнопка внизу бокового меню). */
+const AppearancePanel: React.FC = () => {
+  const t = useT();
+  const { theme, toggleTheme } = useTheme();
+  return (
+    <section data-guide="settings-appearance" className="panel panel-corners rounded-md p-4">
+      <div className="panel-title">🎨 {t("settings.appearance")}</div>
+      <div className="cabinet-rule" />
+      <div className="theme-choices">
+        {THEMES.map((item) => {
+          const on = theme === item.key;
+          return (
+            <button key={item.key} type="button" className={`theme-choice ${on ? "is-active" : ""}`} aria-pressed={on} onClick={() => !on && toggleTheme()}>
+              <span className={`theme-preview theme-preview-${item.key}`} aria-hidden>
+                <ThemeIcon theme={item.key} size={34} />
+              </span>
+              <span className="min-w-0 flex-1 text-left">
+                <span className="theme-choice-label">{t(item.label)}</span>
+                <span className="theme-choice-hint">{t(item.hint)}</span>
+              </span>
+              <span className="theme-choice-state">{on ? `▣ ${t("settings.active")}` : "▢"}</span>
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 };
 

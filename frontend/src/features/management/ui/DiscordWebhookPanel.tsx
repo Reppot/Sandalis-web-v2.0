@@ -2,24 +2,24 @@
 
 import * as React from "react";
 import { Field, errorText, useNotify, useT } from "@/shared";
-import { clanSettingsApi, type ClanSettings } from "@/features/cabinet/api/clanApi";
+import { integrationsApi, type ClanWebhook } from "@/features/management/api";
 
 /** Вебхук текстового канала Discord для рапортов. URL — секрет: сервер отдаёт только хвост. */
 export const DiscordWebhookPanel: React.FC = () => {
   const notify = useNotify();
   const t = useT();
-  const [settings, setSettings] = React.useState<ClanSettings | null>(null);
+  const [settings, setSettings] = React.useState<ClanWebhook | null>(null);
   const [url, setUrl] = React.useState("");
   const [busy, setBusy] = React.useState(false);
 
   React.useEffect(() => {
-    clanSettingsApi.get().then(setSettings).catch(() => setSettings(null));
+    integrationsApi.getWebhook().then(setSettings).catch(() => setSettings(null));
   }, []);
 
   const save = async (value: string | null) => {
     setBusy(true);
     try {
-      const r = await clanSettingsApi.setWebhook(value);
+      const r = await integrationsApi.setWebhook(value);
       setSettings(r.settings);
       setUrl("");
       notify({ title: "DISCORD", message: r.message, tone: "success" });

@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import { EmptyState, LoadMore, Loading, Modal, PagedMore, UiGlyph, cn, errorText, formatDateTime, roleColor, useNotify, usePaged, useT, type MessageKey } from "@/shared";
+import { ClanTokenPanel } from "@/features/management/ui/ClanTokenPanel";
+import { DiscordWebhookPanel } from "@/features/management/ui/DiscordWebhookPanel";
 import { MEMBERS_PAGE, managementApi, type AccessLevel, type ClanMember, type DiscordRole, type DiscordRoles, type MembersPage, type PermissionCatalog } from "@/features/management/api";
 
 const LEVELS: { value: AccessLevel; label: MessageKey }[] = [
@@ -19,7 +21,12 @@ const LEVEL_COLOR: Record<string, string> = {
 const hex = roleColor;
 const permKey = (p: string) => `perm.${p}` as MessageKey;
 
-type View = "members" | "roles";
+type View = "members" | "roles" | "integrations";
+const VIEWS: { key: View; label: MessageKey }[] = [
+  { key: "members", label: "mgmt.members" },
+  { key: "roles", label: "mgmt.roles" },
+  { key: "integrations", label: "mgmt.integrations" },
+];
 
 /** «Управление» (только командир): участники клана и роли Discord с уровнями и правами. */
 export const ManagementWorkspace: React.FC = () => {
@@ -46,9 +53,9 @@ export const ManagementWorkspace: React.FC = () => {
         </div>
         <div className="stencil-line mt-3" />
         <div className="mt-3 flex gap-1.5" role="tablist">
-          {(["members", "roles"] as View[]).map((v) => (
-            <button key={v} type="button" role="tab" aria-selected={view === v} className={cn("chip h-9 px-4", view === v && "is-active")} onClick={() => setView(v)}>
-              {t(v === "members" ? "mgmt.members" : "mgmt.roles")}
+          {VIEWS.map((v) => (
+            <button key={v.key} type="button" role="tab" aria-selected={view === v.key} className={cn("chip h-9 px-4", view === v.key && "is-active")} onClick={() => setView(v.key)}>
+              {t(v.label)}
             </button>
           ))}
         </div>
@@ -56,7 +63,16 @@ export const ManagementWorkspace: React.FC = () => {
 
       <BotPanel onChanged={() => setRevision((r) => r + 1)} />
 
-      {view === "members" ? <MembersView key={revision} catalog={catalog} /> : <RolesView key={revision} catalog={catalog} />}
+      {view === "members" ? (
+        <MembersView key={revision} catalog={catalog} />
+      ) : view === "roles" ? (
+        <RolesView key={revision} catalog={catalog} />
+      ) : (
+        <div data-guide="mgmt-integrations" className="flex flex-col gap-3">
+          <DiscordWebhookPanel />
+          <ClanTokenPanel />
+        </div>
+      )}
     </div>
   );
 };
