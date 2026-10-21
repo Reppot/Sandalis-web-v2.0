@@ -9,6 +9,7 @@
     "clan_context_missing": "Nepodařilo se určit klan požadavku.",
     "clan_scope_violation": "Operace zamítnuta: {entity} patří jinému klanu.",
     "db_unavailable": "Databáze se probouzí, opakujte za pár sekund.",
-    "war_api_unavailable": "Foxhole War API je nedostupné — zkuste to později."
+    "war_api_unavailable": "Foxhole War API je nedostupné — zkuste to později.",
+    "pyramid_unknown_items": "Neznámé předměty v pyramidě: {codes}"
   }
 }

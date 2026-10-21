@@ -53,6 +53,7 @@ export const Scopes = {
   STOCKPILES_EDIT: "stockpiles:edit",
   STOCKPILES_DELETE: "stockpiles:delete",
   STOCKPILES_ITEMS: "stockpiles:items",
+  STOCKPILES_PYRAMID: "stockpiles:pyramid",
   REPORTS_READ: "reports:read",
   REPORTS_CREATE: "reports:create",
   REPORTS_STATUS: "reports:status",

@@ -109,3 +109,27 @@ class PermissionCatalogRead(BaseModel):
 class ClanSettingsSaved(BaseModel):
     settings: ClanSettingsRead
     message: str
+
+
+# --------------------------------------------------------------------------- #
+# Пирамида снабжения
+# --------------------------------------------------------------------------- #
+class PyramidItem(BaseModel):
+    code: Annotated[str, Field(min_length=1, max_length=64)]
+    crates: Annotated[int, Field(ge=1, le=999)]
+
+
+class PyramidTier(BaseModel):
+    title: Annotated[str, Field(max_length=60)] = ""
+    items: Annotated[list[PyramidItem], Field(max_length=40)]
+
+
+class PyramidUpdate(BaseModel):
+    """Уровни снизу вверх: tiers[0] — основа (привозить первым)."""
+    faction: Literal["warden", "colonial"]
+    tiers: Annotated[list[PyramidTier], Field(min_length=1, max_length=12)]
+
+
+class PyramidRead(PyramidUpdate):
+    is_default: bool
+    updated_at: datetime | None

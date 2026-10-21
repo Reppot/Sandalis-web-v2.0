@@ -15,7 +15,7 @@ export function assetUrl(path: string | null | undefined): string | null {
 export type UiIcon =
   | "orders" | "reports" | "timers" | "codes" | "tools" | "training" | "cabinet" | "guide"
   | "file-txt" | "file-xlsx" | "file-png" | "file-json" | "clipboard" | "document"
-  | "search" | "stockpile" | "crates" | "factory" | "mpf" | "refinery" | "facility"
+  | "search" | "stockpile" | "crates" | "factory" | "mpf" | "refinery" | "facility" | "pyramid"
   | "alarm" | "truck" | "map" | "terminal";
 
 export function uiIcon(name: UiIcon): string {

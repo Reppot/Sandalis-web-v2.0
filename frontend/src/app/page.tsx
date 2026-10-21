@@ -6,7 +6,7 @@ import { Scopes } from "@/entities/session";
 import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
 import { CodeBaseWorkspace } from "@/features/codes";
 import { ReportsWorkspace } from "@/features/reports";
-import { SupplyWorkspace } from "@/features/supply";
+import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
 import { TerminalProvider, TimersWorkspace } from "@/features/timers";
 import { ToolsWorkspace } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
@@ -77,6 +77,8 @@ export default function TerminalPage() {
     switch (current) {
       case "orders":
         return <SupplyWorkspace can={can} onReportSubmitted={() => select("reports")} />;
+      case "pyramid":
+        return <PyramidWorkspace can={can} onOpenConstructor={() => select("orders")} />;
       case "reports":
         return <ReportsWorkspace can={can} onOpenConstructor={() => select("orders")} />;
       case "timers":

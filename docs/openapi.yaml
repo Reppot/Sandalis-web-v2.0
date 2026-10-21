@@ -3510,6 +3510,172 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/clan/pyramid:
+    get:
+      tags:
+      - clan
+      summary: Пирамида снабжения клана (или шаблон)
+      operationId: read_pyramid_api_v1_clan_pyramid_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PyramidRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - clan
+      summary: Сохранить пирамиду снабжения
+      operationId: save_pyramid_api_v1_clan_pyramid_put
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PyramidUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PyramidRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - clan
+      summary: Вернуть шаблон пирамиды
+      operationId: reset_pyramid_api_v1_clan_pyramid_delete
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PyramidRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/world/regions:
     get:
       tags:
@@ -4572,6 +4738,92 @@ components:
       - latency_ms
       - env
       title: PingOut
+    PyramidItem:
+      properties:
+        code:
+          type: string
+          maxLength: 64
+          minLength: 1
+          title: Code
+        crates:
+          type: integer
+          maximum: 999.0
+          minimum: 1.0
+          title: Crates
+      type: object
+      required:
+      - code
+      - crates
+      title: PyramidItem
+    PyramidRead:
+      properties:
+        faction:
+          type: string
+          enum:
+          - warden
+          - colonial
+          title: Faction
+        tiers:
+          items:
+            $ref: '#/components/schemas/PyramidTier'
+          type: array
+          maxItems: 12
+          minItems: 1
+          title: Tiers
+        is_default:
+          type: boolean
+          title: Is Default
+        updated_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Updated At
+      type: object
+      required:
+      - faction
+      - tiers
+      - is_default
+      - updated_at
+      title: PyramidRead
+    PyramidTier:
+      properties:
+        title:
+          type: string
+          maxLength: 60
+          title: Title
+          default: ''
+        items:
+          items:
+            $ref: '#/components/schemas/PyramidItem'
+          type: array
+          maxItems: 40
+          title: Items
+      type: object
+      required:
+      - items
+      title: PyramidTier
+    PyramidUpdate:
+      properties:
+        faction:
+          type: string
+          enum:
+          - warden
+          - colonial
+          title: Faction
+        tiers:
+          items:
+            $ref: '#/components/schemas/PyramidTier'
+          type: array
+          maxItems: 12
+          minItems: 1
+          title: Tiers
+      type: object
+      required:
+      - faction
+      - tiers
+      title: PyramidUpdate
+      description: 'Уровни снизу вверх: tiers[0] — основа (привозить первым).'
     RecipeRead:
       properties:
         id:

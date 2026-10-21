@@ -9,6 +9,7 @@
     "clan_context_missing": "Не удалось определить клан для запроса.",
     "clan_scope_violation": "Операция запрещена: объект {entity} принадлежит другому клану.",
     "db_unavailable": "База данных просыпается, повторите запрос через пару секунд.",
-    "war_api_unavailable": "Сервер Foxhole War API недоступен — попробуйте позже."
+    "war_api_unavailable": "Сервер Foxhole War API недоступен — попробуйте позже.",
+    "pyramid_unknown_items": "В пирамиде неизвестные предметы: {codes}"
   }
 }

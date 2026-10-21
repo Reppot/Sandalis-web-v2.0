@@ -23,3 +23,6 @@ class ClanSettings(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     discord_role_map: Mapped[dict[str, str]] = mapped_column(JSONB, default=dict, server_default="{}", nullable=False)
     # права ролей с уровнем custom: {id роли: [scope, ...]}
     discord_role_perms: Mapped[dict[str, list[str]]] = mapped_column(JSONB, default=dict, server_default="{}", nullable=False)
+    # пирамида снабжения {faction, tiers: [{title, items: [{code, crates}]}]}; None — шаблон
+    supply_pyramid: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    supply_pyramid_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

@@ -23,6 +23,7 @@ class Scopes:
     STOCKPILES_EDIT: Final = "stockpiles:edit"        # переименовать / сменить гекс
     STOCKPILES_DELETE: Final = "stockpiles:delete"    # удалить склад
     STOCKPILES_ITEMS: Final = "stockpiles:items"      # загрузить / изменить / очистить содержимое
+    STOCKPILES_PYRAMID: Final = "stockpiles:pyramid"  # настроить пирамиду снабжения клана
     # рапорты и заказы
     REPORTS_READ: Final = "reports:read"              # текущие заказы клана
     REPORTS_CREATE: Final = "reports:create"          # отправить рапорт из конструктора
@@ -48,7 +49,7 @@ class Scopes:
 # Каталог для вкладки «Управление»: группы и порядок действий.
 PERMISSION_GROUPS: Final[tuple[tuple[str, tuple[str, ...]], ...]] = (
     ("stockpiles", (Scopes.STOCKPILES_READ, Scopes.STOCKPILES_CREATE, Scopes.STOCKPILES_EDIT,
-                    Scopes.STOCKPILES_DELETE, Scopes.STOCKPILES_ITEMS)),
+                    Scopes.STOCKPILES_DELETE, Scopes.STOCKPILES_ITEMS, Scopes.STOCKPILES_PYRAMID)),
     ("reports", (Scopes.REPORTS_READ, Scopes.REPORTS_CREATE, Scopes.REPORTS_STATUS, Scopes.REPORTS_EDIT,
                  Scopes.REPORTS_DELETE, Scopes.REPORTS_DISCORD)),
     ("timers", (Scopes.TIMERS_READ, Scopes.TIMERS_CREATE, Scopes.TIMERS_UPDATE, Scopes.TIMERS_LOG,
@@ -69,7 +70,7 @@ _MEMBER: FrozenSet[str] = _GUEST | frozenset({
 
 _OFFICER: FrozenSet[str] = _MEMBER | frozenset({
     Scopes.REPORTS_DELETE, Scopes.TIMERS_CREATE, Scopes.TIMERS_UPDATE, Scopes.TIMERS_LOG,
-    Scopes.TIMERS_DELETE, Scopes.CLAN_MEMBERS_READ,
+    Scopes.TIMERS_DELETE, Scopes.CLAN_MEMBERS_READ, Scopes.STOCKPILES_PYRAMID,
 })
 
 ROLE_SCOPES: Final[dict[ClanRole, FrozenSet[str]]] = {

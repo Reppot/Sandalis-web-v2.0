@@ -1043,6 +1043,38 @@ body[data-theme="light"] {
 .theme-choice-state { color: var(--accent); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; }
 [data-theme="light"] .theme-choice { background: var(--surface-2); border-color: var(--line); }
 [data-theme="light"] .theme-choice-label { color: inherit; }
+/* Пирамида снабжения */
+.pyramid { display: flex; flex-direction: column; align-items: center; gap: 0.55rem; }
+.pyramid-tier { min-width: min(100%, 22rem); border: 1px solid var(--line-2); border-radius: 8px; background: rgba(0, 0, 0, 0.32); padding: 0.55rem 0.7rem 0.7rem; transition: border-color 0.2s ease; }
+.pyramid-tier.is-done { border-color: rgba(74, 222, 128, 0.45); background: rgba(22, 101, 52, 0.12); }
+.pyramid-tier.is-current { border-color: #f59e0b; box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.35), 0 0 22px rgba(245, 158, 11, 0.15); }
+.pyramid-tier-head { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+.pyramid-tier-n { flex-shrink: 0; color: var(--accent); font-family: var(--font-display); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.pyramid-tier-state { flex-shrink: 0; font-family: var(--font-mono); font-size: 0.75rem; }
+.pyramid-cells { display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: 0.4rem; }
+.pyramid-cell { display: flex; align-items: center; gap: 0.55rem; border: 1px solid; border-radius: 6px; background: rgba(0, 0, 0, 0.35); padding: 0.35rem 0.5rem; }
+.pyramid-cell.state-ok { border-color: rgba(74, 222, 128, 0.45); }
+.pyramid-cell.state-low { border-color: rgba(245, 158, 11, 0.6); }
+.pyramid-cell.state-none { border-color: rgba(239, 68, 68, 0.65); }
+.pyramid-cell-name { display: block; overflow: hidden; color: #fff; font-size: 0.78rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.pyramid-cell-qty { display: block; font-family: var(--font-mono); font-size: 0.72rem; }
+.state-ok .pyramid-cell-qty { color: #4ade80; }
+.state-low .pyramid-cell-qty { color: #fbbf24; }
+.state-none .pyramid-cell-qty { color: #f87171; }
+.pyramid-bar { display: block; height: 0.25rem; margin-top: 0.2rem; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, 0.08); }
+.pyramid-bar > span { display: block; height: 100%; border-radius: 999px; background: currentColor; }
+.state-ok .pyramid-bar { color: #4ade80; }
+.state-low .pyramid-bar { color: #fbbf24; }
+.state-none .pyramid-bar { color: #f87171; }
+.pyramid-add { display: flex; grid-column: 1 / -1; gap: 0.4rem; }
+.pyramid-now { border-color: rgba(245, 158, 11, 0.55); }
+.pyramid-now.is-done { border-color: rgba(74, 222, 128, 0.5); }
+.pyramid-now-list { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.7rem; }
+.pyramid-chip { display: inline-flex; max-width: 100%; align-items: center; gap: 0.4rem; border: 1px solid rgba(245, 158, 11, 0.45); border-radius: 6px; background: rgba(0, 0, 0, 0.35); padding: 0.2rem 0.55rem 0.2rem 0.25rem; font-size: 0.78rem; }
+.pyramid-chip b { color: #fbbf24; font-family: var(--font-mono); }
+@media (max-width: 767px) { .pyramid-tier { width: 100% !important; } }
+[data-theme="light"] .pyramid-tier, [data-theme="light"] .pyramid-cell { background: var(--surface-2); }
+[data-theme="light"] .pyramid-cell-name { color: inherit; }
 /* Регионы и города (War API) */
 .world-victory { display: grid; min-width: min(100%, 22rem); gap: 0.4rem; }
 .victory-bar { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; }
