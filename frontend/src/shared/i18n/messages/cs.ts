@@ -503,6 +503,8 @@ export const cs: Record<MessageKey, string> = {
   "reports.toBuilderHint": "Načíst řádky do konstruktoru objednávky",
   "reports.loadedToBuilder": "Hlášení „{title}“ načteno do konstruktoru.",
   "reports.toBuilder": "Do konstruktoru",
+  "reports.readerOpen": "Otevřít objednávku: všechny stránky",
+  "reports.readerMore": "další str.: {n}",
   "reports.toDiscord": "Do Discordu",
   "reports.exportTitle": "EXPORT HLÁŠENÍ",
 

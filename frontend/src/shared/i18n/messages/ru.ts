@@ -502,6 +502,8 @@ export const ru = {
   "reports.toBuilderHint": "Загрузить строки в конструктор заказа",
   "reports.loadedToBuilder": "Рапорт «{title}» загружен в конструктор.",
   "reports.toBuilder": "В конструктор",
+  "reports.readerOpen": "Открыть заказ: все страницы",
+  "reports.readerMore": "ещё стр.: {n}",
   "reports.toDiscord": "В Discord",
   "reports.exportTitle": "ВЫГРУЗКА РАПОРТА",
 

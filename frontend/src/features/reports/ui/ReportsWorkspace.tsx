@@ -6,9 +6,9 @@ import { Scopes, type Can } from "@/entities/session";
 import { REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
+  DocReader,
   EmptyState,
   ExportBar,
-  ItemIcon,
   Loading,
   assetUrl,
   canvasToBlob,
@@ -61,7 +61,7 @@ function toDoc(report: Report, t: Translate): ExportDoc {
   return {
     title: `SINDARIS • ${report.title}`,
     header: [...meta, `${t("doc.author")}: ${report.created_by_name ?? report.created_by} • ${formatDateTime(report.created_at)}`, `${t("doc.status")}: ${t(REPORT_STATUS_LABEL[report.status])}`],
-    sections: [{ rows: report.lines.map((l) => ({ name: l.name, quantity: l.quantity, unit: unitLabel(l.unit, t) })) }],
+    sections: [{ rows: report.lines.map((l) => ({ name: l.name, quantity: l.quantity, unit: unitLabel(l.unit, t), icon: assetUrl(l.icon_url) })) }],
     fileBase: `SINDARIS_report_${report.title}`.slice(0, 60),
     sheetName: t("reports.report"),
   };
@@ -228,19 +228,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
                   {report.discord_sent_at && <span className="hud-label text-accent" title={formatDateTime(report.discord_sent_at)}>✓ DISCORD</span>}
                 </div>
 
-                {open ? (
-                  <ul className="mt-2 grid gap-1 border-t border-white/10 pt-2 pl-5 sm:grid-cols-2">
-                    {report.lines.map((line) => (
-                      <li key={line.id} className="flex items-center gap-2 text-[0.78rem] text-white/85">
-                        <ItemIcon sources={[assetUrl(line.icon_url)]} size={28} label={line.name} />
-                        <span className="min-w-0 truncate">{line.name}</span>
-                        <span className="badge-count ml-auto min-w-0 shrink-0 px-2">{line.quantity} {unitLabel(line.unit, t)}</span>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className="mt-2 truncate pl-5 text-[0.75rem] text-white/60">{report.lines.slice(0, 4).map((l) => `${l.name} ×${l.quantity}`).join(" • ")}{report.lines.length > 4 ? " …" : ""}</p>
-                )}
+                <DocReader doc={toDoc(report, t)} textureUrl={texture} expanded={open} onExpand={() => setExpanded(report.id)} />
                 {report.note && <p className="mt-2 pl-5 text-[0.75rem] text-white/70">📝 {report.note}</p>}
 
                 <div data-guide="report-actions" className="mt-3 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">

@@ -227,3 +227,117 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
     </Modal>
   );
 };
+
+// --------------------------------------------------------------------------- //
+// «Читалка» документа: те же PNG-страницы, что и в экспорте, прямо на странице
+// --------------------------------------------------------------------------- //
+const pagesCache = new Map<string, Promise<string[]>>();
+
+/** Страницы документа как картинки (кеш по содержимому: повторная отрисовка не нужна). */
+function useDocPages(doc: ExportDoc, textureUrl: string | null | undefined, enabled: boolean): string[] | null {
+  const t = useT();
+  const full = React.useMemo<ExportDoc>(() => ({ ...doc, labels: doc.labels ?? exportLabels(t) }), [doc, t]);
+  const key = React.useMemo(() => `${textureUrl ?? ""}|${JSON.stringify(full)}`, [full, textureUrl]);
+  const [pages, setPages] = React.useState<{ key: string; urls: string[] } | null>(null);
+
+  React.useEffect(() => {
+    if (!enabled) return;
+    let cancelled = false;
+    if (!pagesCache.has(key)) {
+      if (pagesCache.size > 60) pagesCache.clear();
+      pagesCache.set(key, renderPages(full, textureUrl).then((canvases) => canvases.map((c) => c.toDataURL("image/png"))));
+    }
+    void pagesCache.get(key)!.then((urls) => !cancelled && setPages({ key, urls }));
+    return () => {
+      cancelled = true;
+    };
+    // full меняется вместе с key (содержимое документа) — по нему и перезапускаем
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, enabled]);
+
+  return pages && pages.key === key ? pages.urls : null;
+}
+
+/** Рисуем, только когда блок появился на экране (длинные списки рапортов). */
+function useInView<T extends Element>(): [React.RefObject<T | null>, boolean] {
+  const ref = React.useRef<T>(null);
+  const [seen, setSeen] = React.useState(false);
+  React.useEffect(() => {
+    if (seen) return;
+    // положение блока, а не IntersectionObserver: тот молчит, пока вкладка не отрисовывает кадры
+    const check = () => {
+      const rect = ref.current?.getBoundingClientRect();
+      if (rect && rect.top < window.innerHeight + 400 && rect.bottom > -400) setSeen(true);
+    };
+    check();
+    window.addEventListener("scroll", check, { passive: true, capture: true });
+    window.addEventListener("resize", check);
+    return () => {
+      window.removeEventListener("scroll", check, { capture: true });
+      window.removeEventListener("resize", check);
+    };
+  }, [seen]);
+  return [ref, seen];
+}
+
+/**
+ * Документ в виде страниц PNG (как при экспорте, с иконками предметов). Свёрнуто — превью
+ * первой страницы; развёрнуто — все страницы по очереди: стрелки, счётчик, миниатюры.
+ */
+export const DocReader: React.FC<{ doc: ExportDoc; textureUrl: string | null | undefined; expanded: boolean; onExpand?: () => void }> = ({ doc, textureUrl, expanded, onExpand }) => {
+  const t = useT();
+  const [ref, inView] = useInView<HTMLDivElement>();
+  const urls = useDocPages(doc, textureUrl, inView);
+  const [index, setIndex] = React.useState(0);
+  const total = urls?.length ?? 0;
+  const current = Math.min(index, Math.max(0, total - 1));
+  const go = (delta: number) => setIndex((i) => Math.max(0, Math.min(total - 1, i + delta)));
+  const pageLabel = t("export.file.page");
+
+  React.useEffect(() => {
+    if (!expanded) setIndex(0);
+  }, [expanded]);
+
+  return (
+    <div ref={ref} className={`doc-reader ${expanded ? "is-open" : ""}`}>
+      {!urls ? (
+        <div className="doc-reader-loading hud-label pulse">{t("export.rendering")}</div>
+      ) : !expanded ? (
+        <button type="button" className="doc-reader-preview" onClick={onExpand} title={t("reports.readerOpen")}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- страница отрисована в canvas */}
+          <img src={urls[0]} alt={`${pageLabel} 1`} />
+          <span className="doc-reader-badge">📄 {pageLabel} 1/{total}{total > 1 ? ` • ${t("reports.readerMore", { n: total - 1 })}` : ""}</span>
+        </button>
+      ) : (
+        <div
+          className="doc-reader-view"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowRight") go(1);
+            if (e.key === "ArrowLeft") go(-1);
+          }}
+        >
+          <div className="doc-reader-stage">
+            <button type="button" className="doc-reader-nav" disabled={current === 0} onClick={() => go(-1)} aria-label="‹">‹</button>
+            {/* eslint-disable-next-line @next/next/no-img-element -- страница отрисована в canvas */}
+            <img src={urls[current]} alt={`${pageLabel} ${current + 1}`} className="doc-reader-page" />
+            <button type="button" className="doc-reader-nav" disabled={current >= total - 1} onClick={() => go(1)} aria-label="›">›</button>
+          </div>
+          <div className="doc-reader-bar">
+            <span className="hud-label text-muted">{pageLabel} {current + 1} / {total}</span>
+            {total > 1 ? (
+              <span className="doc-reader-thumbs">
+                {urls.map((url, i) => (
+                  <button key={i} type="button" className={`doc-reader-thumb ${i === current ? "is-active" : ""}`} onClick={() => setIndex(i)} aria-label={`${pageLabel} ${i + 1}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt="" />
+                  </button>
+                ))}
+              </span>
+            ) : null}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};

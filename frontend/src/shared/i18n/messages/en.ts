@@ -503,6 +503,8 @@ export const en: Record<MessageKey, string> = {
   "reports.toBuilderHint": "Load the lines into the order builder",
   "reports.loadedToBuilder": "Report “{title}” loaded into the builder.",
   "reports.toBuilder": "To builder",
+  "reports.readerOpen": "Open the order: every page",
+  "reports.readerMore": "{n} more page(s)",
   "reports.toDiscord": "To Discord",
   "reports.exportTitle": "REPORT EXPORT",
 
