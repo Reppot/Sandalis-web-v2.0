@@ -8,21 +8,23 @@ import { CodeBaseWorkspace } from "@/features/codes";
 import { ReportsWorkspace } from "@/features/reports";
 import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
 import { TerminalProvider, TimersWorkspace } from "@/features/timers";
-import { ToolsWorkspace } from "@/features/tools";
+import { ToolsWorkspace, type ToolModule } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
 import { GuideWorkspace } from "@/features/guide";
 import { ManagementWorkspace } from "@/features/management";
 import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
-import { TABS, isTabKey, visibleTabs, type TabKey } from "@/app/_shell/tabs";
+import { TABS, isTabKey, isToolModule, visibleTabs, type TabKey } from "@/app/_shell/tabs";
 import { useT } from "@/shared";
 
 export default function TerminalPage() {
   const t = useT();
   const { session, loading, setSession, can } = useSession();
   const { media } = useContent();
-  const [tab, setTab] = React.useState<TabKey>("orders");
+  const [tab, setTab] = React.useState<TabKey>("tools");
+  // открытый модуль «Инструментов» (?tab=tools&tool=...): заказы, пирамида, коды, калькуляторы
+  const [tool, setTool] = React.useState<string | null>(null);
   const chromeRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -42,23 +44,47 @@ export default function TerminalPage() {
   });
 
   React.useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get("tab");
-    if (isTabKey(requested)) setTab(requested);
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get("tab");
+    if (isToolModule(requested)) {
+      // старые ссылки ?tab=orders / pyramid / codes — теперь модули инструментов
+      setTab("tools");
+      setTool(requested);
+    } else if (isTabKey(requested)) {
+      setTab(requested);
+      setTool(requested === "tools" ? params.get("tool") : null);
+    }
   }, []);
 
-  const select = React.useCallback((key: TabKey) => {
+  const select = React.useCallback((key: TabKey, nextTool: string | null = null) => {
     setTab(key);
+    setTool(key === "tools" ? nextTool : null);
     const url = new URL(window.location.href);
-    url.search = key === "orders" ? "" : `?tab=${key}`;
+    url.search = key === "tools" ? (nextTool ? `?tab=tools&tool=${nextTool}` : "") : `?tab=${key}`;
     window.history.replaceState(null, "", url);
     window.scrollTo({ top: 0 });
   }, []);
+  const openTool = React.useCallback((id: string | null) => select("tools", id), [select]);
 
   const isOwner = session?.role === "owner" && session.subjectType === "user";
   const tabs = React.useMemo(() => visibleTabs(can, isOwner), [can, isOwner]);
   const current: TabKey = tabs.some((x) => x.key === tab) ? tab : tabs[0]?.key ?? "tools";
 
-  const background = session ? media(`bg_${TABS.find((t) => t.key === current)?.background ?? "orders"}`) : media("bg_home");
+  const toolModules = React.useMemo<ToolModule[]>(
+    () => [
+      ...(can(Scopes.STOCKPILES_READ) || can(Scopes.REPORTS_CREATE)
+        ? [{ id: "orders", icon: "orders" as const, label: "nav.orders.label" as const, clanData: true, render: () => <SupplyWorkspace can={can} onReportSubmitted={() => select("reports")} /> }]
+        : []),
+      ...(can(Scopes.STOCKPILES_READ)
+        ? [{ id: "pyramid", icon: "pyramid" as const, label: "nav.pyramid.label" as const, clanData: true, isNew: true, render: () => <PyramidWorkspace can={can} onOpenConstructor={() => openTool("orders")} /> }]
+        : []),
+      { id: "codes", icon: "codes" as const, label: "nav.codes.label" as const, render: () => <CodeBaseWorkspace /> },
+    ],
+    [can, select, openTool],
+  );
+
+  const toolBg = tool === "orders" || tool === "pyramid" ? "orders" : tool === "codes" ? "codes" : null;
+  const background = session ? media(`bg_${toolBg && current === "tools" ? toolBg : TABS.find((t) => t.key === current)?.background ?? "tools"}`) : media("bg_home");
 
   if (loading) {
     return (
@@ -75,18 +101,12 @@ export default function TerminalPage() {
 
   const workspace = (() => {
     switch (current) {
-      case "orders":
-        return <SupplyWorkspace can={can} onReportSubmitted={() => select("reports")} />;
-      case "pyramid":
-        return <PyramidWorkspace can={can} onOpenConstructor={() => select("orders")} />;
       case "reports":
-        return <ReportsWorkspace can={can} onOpenConstructor={() => select("orders")} />;
+        return <ReportsWorkspace can={can} onOpenConstructor={() => openTool("orders")} />;
       case "timers":
         return <TimersWorkspace can={can} />;
-      case "codes":
-        return <CodeBaseWorkspace />;
       case "tools":
-        return <ToolsWorkspace />;
+        return <ToolsWorkspace modules={toolModules} active={tool} onOpen={openTool} />;
       case "training":
         return <TrainingWorkspace />;
       case "guide":

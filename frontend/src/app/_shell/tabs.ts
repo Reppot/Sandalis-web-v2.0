@@ -1,7 +1,7 @@
 import { Scopes, type Scope } from "@/entities/session";
 import type { MessageKey, UiIcon } from "@/shared";
 
-export type TabKey = "orders" | "pyramid" | "reports" | "timers" | "codes" | "tools" | "training" | "guide" | "management" | "cabinet";
+export type TabKey = "reports" | "timers" | "tools" | "training" | "guide" | "management" | "cabinet";
 
 export interface NavTab {
   key: TabKey;
@@ -15,11 +15,8 @@ export interface NavTab {
 }
 
 export const TABS: NavTab[] = [
-  { key: "orders", icon: "orders", background: "orders", anyOf: [Scopes.STOCKPILES_READ, Scopes.REPORTS_CREATE] },
-  { key: "pyramid", icon: "pyramid", background: "orders", anyOf: [Scopes.STOCKPILES_READ] },
   { key: "reports", icon: "reports", background: "reports", anyOf: [Scopes.REPORTS_READ] },
   { key: "timers", icon: "timers", background: "timers", anyOf: [Scopes.TIMERS_READ] },
-  { key: "codes", icon: "codes", background: "codes" },
   { key: "tools", icon: "tools", background: "tools" },
   { key: "training", icon: "training", background: "training" },
   { key: "guide", icon: "guide", background: "training" },
@@ -45,3 +42,8 @@ export function visibleTabs(can: (...scopes: Scope[]) => boolean, isOwner = fals
 export function isTabKey(value: string | null): value is TabKey {
   return TABS.some((t) => t.key === value);
 }
+
+/** Модули «Инструментов», которые раньше были отдельными вкладками (старые ссылки ?tab=orders). */
+export const TOOL_MODULES = ["orders", "pyramid", "codes"] as const;
+export type ToolModuleKey = (typeof TOOL_MODULES)[number];
+export const isToolModule = (value: string | null): value is ToolModuleKey => TOOL_MODULES.includes(value as ToolModuleKey);

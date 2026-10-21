@@ -139,8 +139,8 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
       .map((c) => ({ name: label(c.code), item_code: c.code, quantity: c.missing, unit: "crate", icon_url: catalog.get(c.code)?.iconUrl ?? null }));
     if (!indices.length) return notify({ title: t("pyramid.title"), message: t("pyramid.selectedNone"), tone: "warning" });
     if (!lines.length) return notify({ title: t("pyramid.title"), message: t("pyramid.nothingToBring"), tone: "success" });
-    const merged = [...orderDraft.read().filter((d) => !lines.some((l) => l.item_code && l.item_code === d.item_code)), ...lines];
-    orderDraft.write(merged);
+    // прошлый состав конструктора (например, самолёты) не смешивается с заказом пирамиды
+    orderDraft.write(lines);
     notify({ title: t("pyramid.title"), message: t("pyramid.sentToBuilder", { n: lines.length }), tone: "success" });
     onOpenConstructor();
   };
