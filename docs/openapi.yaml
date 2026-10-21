@@ -3510,6 +3510,60 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/world/regions:
+    get:
+      tags:
+      - world
+      summary: 'Регионы и города текущей войны: владельцы, города победы, депо и порты (Foxhole War API)'
+      operationId: read_regions_api_v1_world_regions_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorldRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
     Body_scan_save_api_v1_items_scan_post:
@@ -4598,6 +4652,37 @@ components:
       description: 'Рецепт Factory/MPF/Refinery или постройки (kind="facility", wiki Production).
 
         cost — {"bmat": 100} / {"salvage": 2} / {"Coal": 300}; data — поля вида.'
+    RegionRead:
+      properties:
+        key:
+          type: string
+          title: Key
+        name:
+          type: string
+          title: Name
+        towns:
+          items:
+            $ref: '#/components/schemas/TownRead'
+          type: array
+          title: Towns
+        colonials:
+          type: integer
+          title: Colonials
+        wardens:
+          type: integer
+          title: Wardens
+        victory:
+          type: integer
+          title: Victory
+      type: object
+      required:
+      - key
+      - name
+      - towns
+      - colonials
+      - wardens
+      - victory
+      title: RegionRead
     ReportCreate:
       properties:
         title:
@@ -5576,6 +5661,51 @@ components:
       - me
       - message
       title: TokenResponse
+    TownRead:
+      properties:
+        name:
+          type: string
+          title: Name
+        major:
+          type: boolean
+          title: Major
+        x:
+          type: number
+          title: X
+        y:
+          type: number
+          title: Y
+        owner:
+          anyOf:
+          - type: string
+            enum:
+            - colonials
+            - wardens
+            - neutral
+          - type: 'null'
+          title: Owner
+        victory:
+          type: boolean
+          title: Victory
+        scorched:
+          type: boolean
+          title: Scorched
+        facilities:
+          items:
+            type: string
+          type: array
+          title: Facilities
+      type: object
+      required:
+      - name
+      - major
+      - x
+      - y
+      - owner
+      - victory
+      - scorched
+      - facilities
+      title: TownRead
     ValidationError:
       properties:
         loc:
@@ -5602,6 +5732,60 @@ components:
       - msg
       - type
       title: ValidationError
+    WarRead:
+      properties:
+        number:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Number
+        winner:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Winner
+        required_victory_towns:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Required Victory Towns
+        started_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Started At
+        victory_towns:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Victory Towns
+      type: object
+      required:
+      - number
+      - winner
+      - required_victory_towns
+      - started_at
+      - victory_towns
+      title: WarRead
+    WorldRead:
+      properties:
+        war:
+          $ref: '#/components/schemas/WarRead'
+        regions:
+          items:
+            $ref: '#/components/schemas/RegionRead'
+          type: array
+          title: Regions
+        source:
+          type: string
+          title: Source
+      type: object
+      required:
+      - war
+      - regions
+      - source
+      title: WorldRead
+      description: Регионы и города текущей войны (официальный Foxhole War API, кеш сервера).
   securitySchemes:
     ClanJWT:
       type: http

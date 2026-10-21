@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
+import { RegionTownFields } from "@/entities/world";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi } from "@/entities/stockpile";
 import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
@@ -204,7 +205,6 @@ export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }
   const [location, setLocation] = React.useState("");
   const [time, setTime] = React.useState<TimeValue>({ days: "2", hours: "0", minutes: "0" });
   const [busy, setBusy] = React.useState(false);
-  const listId = React.useId();
   const regions = list<{ name: string }>("region");
 
   React.useEffect(() => {
@@ -237,13 +237,17 @@ export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }
   return (
     <Modal open={open} onClose={onClose} title={t("timers.registerTitle")} icon="stockpile" widthClass="max-w-lg" backdropImage={media("bg_storage")}>
       <div className="grid gap-3">
-        <Field label={t("timers.regionHex")} list={listId} placeholder="Clanshead Valley" value={region} onChange={(e) => setRegion(e.target.value)} autoFocus />
-        <datalist id={listId}>
-          {regions.map((r) => (
-            <option key={r.key} value={r.payload.name} />
-          ))}
-        </datalist>
-        <Field label={t("timers.locationType")} placeholder={t("timers.locationPlaceholder")} value={location} onChange={(e) => setLocation(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void submit()} />
+        <RegionTownFields
+          region={region}
+          onRegion={setRegion}
+          town={location}
+          onTown={setLocation}
+          regionLabel={t("timers.regionHex")}
+          townLabel={t("timers.locationType")}
+          townPlaceholder={t("timers.locationPlaceholder")}
+          fallbackRegions={regions.map((r) => r.payload.name)}
+          onEnter={() => void submit()}
+        />
         <div>
           <div className="hud-label mb-1 text-muted">{t("timers.startHold")}</div>
           <TimeInputs value={time} onChange={setTime} />

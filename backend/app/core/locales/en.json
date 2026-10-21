@@ -8,6 +8,7 @@
     "validation": "Invalid request payload.",
     "clan_context_missing": "Unable to resolve clan context for this request.",
     "clan_scope_violation": "Operation rejected: {entity} belongs to another clan.",
-    "db_unavailable": "Database is waking up, please retry in a few seconds."
+    "db_unavailable": "Database is waking up, please retry in a few seconds.",
+    "war_api_unavailable": "Foxhole War API is unavailable — try again later."
   }
 }

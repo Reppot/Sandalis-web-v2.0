@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
+import { RegionTownFields } from "@/entities/world";
 import { Scopes, type Can } from "@/entities/session";
 import { catalogApi, type ParseResult } from "@/entities/item";
 import { stockpileApi, type Stockpile, type SyncSource } from "@/entities/stockpile";
@@ -393,7 +394,6 @@ const StockpileFormModal: React.FC<{
   const [name, setName] = React.useState("");
   const [region, setRegion] = React.useState("");
   const [busy, setBusy] = React.useState(false);
-  const listId = React.useId();
 
   React.useEffect(() => {
     if (!mode) return;
@@ -419,13 +419,16 @@ const StockpileFormModal: React.FC<{
   return (
     <Modal open={Boolean(mode)} onClose={onClose} title={mode === "rename" ? t("stock.rename") : t("stock.newClan")} icon="stockpile" widthClass="max-w-md">
       <div className="grid gap-3">
-        <Field label={t("timers.regionHex")} list={listId} value={region} onChange={(e) => setRegion(e.target.value)} placeholder="The Moors" autoFocus />
-        <datalist id={listId}>
-          {list<{ name: string }>("region").map((r) => (
-            <option key={r.key} value={r.payload.name} />
-          ))}
-        </datalist>
-        <Field label={t("stock.name")} value={name} onChange={(e) => setName(e.target.value)} placeholder="Port Kirknell" onKeyDown={(e) => e.key === "Enter" && void submit()} />
+        <RegionTownFields
+          region={region}
+          onRegion={setRegion}
+          town={name}
+          onTown={setName}
+          regionLabel={t("timers.regionHex")}
+          townLabel={t("stock.name")}
+          fallbackRegions={list<{ name: string }>("region").map((r) => r.payload.name)}
+          onEnter={() => void submit()}
+        />
         <div className="flex justify-end gap-2">
           <button className="btn" onClick={onClose}>{t("common.cancel")}</button>
           <button className="btn btn-primary" disabled={busy || !name.trim() || !region.trim()} onClick={() => void submit()}>

@@ -1043,6 +1043,35 @@ body[data-theme="light"] {
 .theme-choice-state { color: var(--accent); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; }
 [data-theme="light"] .theme-choice { background: var(--surface-2); border-color: var(--line); }
 [data-theme="light"] .theme-choice-label { color: inherit; }
+/* Регионы и города (War API) */
+.world-victory { display: grid; min-width: min(100%, 22rem); gap: 0.4rem; }
+.victory-bar { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; }
+.victory-bar strong { font-family: var(--font-mono); font-size: 0.85rem; }
+.victory-track { position: relative; height: 0.55rem; overflow: hidden; border: 1px solid var(--line-2); border-radius: 999px; background: rgba(0, 0, 0, 0.4); }
+.victory-track > span { position: absolute; inset: 0 auto 0 0; border-radius: 999px; background: currentColor; }
+.side-colonials { color: #8fbf5a; }
+.side-wardens { color: #5b9be0; }
+.world-map { margin-top: 0.75rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.35); padding: 0.5rem; }
+.world-map svg { display: block; width: 100%; height: auto; max-height: 26rem; }
+.world-hex { fill: rgba(40, 64, 24, 0.25); stroke: rgba(163, 230, 53, 0.45); stroke-width: 0.4; }
+.world-pin { fill: #9ca3af; transition: opacity 0.15s ease; }
+.world-pin text { fill: rgba(229, 231, 235, 0.85); font-family: var(--font-mono); font-size: 2.1px; text-anchor: middle; paint-order: stroke; stroke: rgba(0, 0, 0, 0.75); stroke-width: 0.5px; }
+.world-pin.owner-colonials { fill: #8fbf5a; }
+.world-pin.owner-wardens { fill: #5b9be0; }
+.world-pin.is-dim { opacity: 0.18; }
+.world-towns { display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem; }
+.world-town { display: flex; align-items: center; gap: 0.6rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); padding: 0.45rem 0.6rem; }
+.world-town-dot { width: 0.7rem; height: 0.7rem; flex-shrink: 0; border-radius: 50%; background: #6b7280; }
+.world-town.owner-colonials .world-town-dot { background: #8fbf5a; box-shadow: 0 0 8px rgba(143, 191, 90, 0.6); }
+.world-town.owner-wardens .world-town-dot { background: #5b9be0; box-shadow: 0 0 8px rgba(91, 155, 224, 0.6); }
+.world-town-name { display: block; overflow: hidden; color: #fff; font-size: 0.85rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.world-town-meta { display: block; color: rgba(229, 231, 235, 0.6); font-size: 0.72rem; }
+.world-facilities { display: flex; max-width: 55%; flex-wrap: wrap; justify-content: flex-end; gap: 0.25rem; }
+.world-fac { border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 4px; background: rgba(255, 255, 255, 0.05); padding: 0.05rem 0.35rem; font-size: 0.7rem; white-space: nowrap; }
+.world-fac.is-key { border-color: rgba(163, 230, 53, 0.55); color: var(--accent); }
+@media (max-width: 640px) { .world-fac-label { display: none; } }
+[data-theme="light"] .world-town { background: var(--surface-2); border-color: var(--line); }
+[data-theme="light"] .world-town-name { color: inherit; }
 .filter-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
 .filter-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: 0.45rem; margin-top: 0.5rem; }
 .filter-cards.is-compact { display: flex; flex-wrap: wrap; margin-top: 0; }
