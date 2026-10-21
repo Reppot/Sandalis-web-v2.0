@@ -43,7 +43,9 @@ export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
  * на планшете — карточка в углу, на ПК — липкая правая колонка (как в старом сайте).
  * Не вкладывать внутрь .panel: backdrop-filter ломает position: fixed.
  */
-export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: ToolReport; title: string; emptyHint: string; onClear: () => void }>> = ({ report, title, emptyHint, onClear, children }) => {
+/** hidden — окно свёрнуто; inline — единственное окно на странице: обычный блок на всю ширину
+ *  (без плавающей карточки на телефоне/планшете). */
+export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: ToolReport; title: string; emptyHint: string; onClear: () => void; hidden?: boolean; inline?: boolean }>> = ({ report, title, emptyHint, onClear, hidden, inline, children }) => {
   const { t, dateLocale } = useI18n();
   const fmt = (v: number | string) => (typeof v === "number" ? v.toLocaleString(dateLocale) : v);
   const { media } = useContent();
@@ -55,14 +57,18 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
   return (
     <aside
       aria-label={`${title}: ${t("tools.totals")}`}
-      className={[
-        "panel panel-corners z-[55] flex flex-col rounded-md",
-        "fixed inset-x-2 bottom-[5.25rem] max-h-[calc(100dvh-7rem)]",
-        "md:right-3 md:bottom-3 md:left-auto md:w-[26rem]",
-        "lg:sticky lg:top-[calc(var(--chrome-h,72px)+0.75rem)] lg:right-auto lg:bottom-auto lg:left-auto lg:z-auto lg:max-h-[calc(100dvh-var(--chrome-h,72px)-2.25rem)] lg:w-auto lg:self-start",
-      ].join(" ")}
+      hidden={hidden}
+      className={(inline
+        ? ["panel panel-corners flex w-full flex-col rounded-md"]
+        : [
+            "panel panel-corners z-[55] flex flex-col rounded-md",
+            "fixed inset-x-2 bottom-[5.25rem] max-h-[calc(100dvh-7rem)]",
+            "md:right-3 md:bottom-3 md:left-auto md:w-[26rem]",
+            "lg:sticky lg:top-[calc(var(--chrome-h,72px)+0.75rem)] lg:right-auto lg:bottom-auto lg:left-auto lg:z-auto lg:max-h-[calc(100dvh-var(--chrome-h,72px)-2.25rem)] lg:w-auto lg:self-start",
+          ]
+      ).join(" ")}
     >
-      <button type="button" className="flex w-full items-center gap-3 px-3 py-2.5 text-left lg:hidden" onClick={() => setMobileOpen((o) => !o)} aria-expanded={mobileOpen}>
+      <button type="button" className={`flex w-full items-center gap-3 px-3 py-2.5 text-left lg:hidden ${inline ? "hidden" : ""}`} onClick={() => setMobileOpen((o) => !o)} aria-expanded={mobileOpen}>
         <span className="status-dot shrink-0" style={{ color: "var(--accent)", background: "var(--accent)" }} />
         <span className="min-w-0 flex-1">
           <span className="panel-title block truncate">{report.toolName}</span>
@@ -71,7 +77,7 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
         <span className="hud-label shrink-0 text-accent">{mobileOpen ? `▼ ${t("tools.collapse")}` : `▲ ${t("tools.results")}`}</span>
       </button>
 
-      <div className={`${mobileOpen ? "flex" : "hidden"} min-h-0 flex-1 flex-col overflow-y-auto border-t border-white/10 p-3 lg:flex lg:overflow-hidden lg:border-t-0 lg:p-4`}>
+      <div className={`${mobileOpen || inline ? "flex" : "hidden"} min-h-0 flex-1 flex-col overflow-y-auto border-t border-white/10 p-3 lg:flex lg:overflow-hidden lg:border-t-0 lg:p-4`}>
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <div className="panel-title">{title}</div>

@@ -455,6 +455,7 @@ export const en: Record<MessageKey, string> = {
   "facility.search": "Search item or facility...",
   "facility.allSources": "All facilities",
   "facility.sources": "Facilities",
+  "facility.catalogPane": "Facilities and items",
   "facility.items": "items: {n}",
   "facility.pickSource": "Pick a facility above or search for an item",
   "facility.recipes": "recipes: {n}",

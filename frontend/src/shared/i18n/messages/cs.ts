@@ -455,6 +455,7 @@ export const cs: Record<MessageKey, string> = {
   "facility.search": "Hledat předmět nebo budovu...",
   "facility.allSources": "Všechny budovy",
   "facility.sources": "Budovy",
+  "facility.catalogPane": "Budovy a předměty",
   "facility.items": "předmětů: {n}",
   "facility.pickSource": "Vyberte budovu výše nebo vyhledejte předmět",
   "facility.recipes": "receptů: {n}",

@@ -454,6 +454,7 @@ export const ru = {
   "facility.search": "Поиск предмета или постройки...",
   "facility.allSources": "Все постройки",
   "facility.sources": "Постройки",
+  "facility.catalogPane": "Постройки и предметы",
   "facility.items": "предметов: {n}",
   "facility.pickSource": "Выберите постройку выше или найдите предмет поиском",
   "facility.recipes": "рецептов: {n}",
