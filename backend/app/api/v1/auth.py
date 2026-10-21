@@ -298,6 +298,7 @@ async def discord_callback(
         # серверы пользователя: свои (создать клан), кланы с ботом (вступить),
         # и пересчёт уровня доступа там, где он уже состоит
         guilds = await fetch_user_guilds(token.access_token)
+        await service.refresh_clan_identity(guilds)
         await service.sync_discord_roles(
             user_id=profile.id, access_token=token.access_token, guild_ids=[g.id for g in guilds],
         )

@@ -306,6 +306,8 @@ export const cs: Record<MessageKey, string> = {
   "clan.members": "členů: {n}",
   "clan.stockpilesCount": "skladů: {n}",
   "clan.stockpilesTitle": "Sklady klanu",
+  "clan.noTimer": "Nesledováno",
+  "clan.startTimer": "Sledovat",
   "clan.stockpilesNav": "Popis skladů a časovače",
   "clan.stockpilesHint": "Hex, město, typ budovy a heslo každého skladu klanu. Heslo vidí jen členové klanu.",
   "clan.noStockpiles": "Klan zatím nemá sklady",

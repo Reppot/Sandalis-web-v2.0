@@ -7,8 +7,8 @@ import { Scopes } from "@/entities/session";
 import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
 import { CodeBaseWorkspace } from "@/features/codes";
 import { ReportsWorkspace } from "@/features/reports";
-import { ClanStockpiles, PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
-import { TerminalProvider, TimersWorkspace } from "@/features/timers";
+import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
+import { StockpilesWorkspace, TerminalProvider } from "@/features/timers";
 import { ToolsWorkspace, type ToolModule } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
 import { GuideWorkspace } from "@/features/guide";
@@ -113,12 +113,7 @@ export default function TerminalPage() {
       ...(can(Scopes.STOCKPILES_READ) || can(Scopes.TIMERS_READ)
         ? [{
             view: "stockpiles" as const, icon: "stockpile" as const, label: "clan.stockpilesTitle" as const, hint: "clan.stockpilesNav" as const,
-            render: () => (
-              <div className="flex flex-col gap-3">
-                {can(Scopes.STOCKPILES_READ) ? <ClanStockpiles can={can} /> : null}
-                {can(Scopes.TIMERS_READ) ? <TimersWorkspace can={can} /> : null}
-              </div>
-            ),
+            render: () => <StockpilesWorkspace can={can} />,
           }]
         : []),
       { view: "training" as const, icon: "training" as const, label: "nav.training.label" as const, hint: "nav.training.hint" as const, render: () => <TrainingWorkspace /> },

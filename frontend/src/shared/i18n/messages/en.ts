@@ -306,6 +306,8 @@ export const en: Record<MessageKey, string> = {
   "clan.members": "members: {n}",
   "clan.stockpilesCount": "stockpiles: {n}",
   "clan.stockpilesTitle": "Clan stockpiles",
+  "clan.noTimer": "Not monitored",
+  "clan.startTimer": "Monitor",
   "clan.stockpilesNav": "Stockpile details and timers",
   "clan.stockpilesHint": "Hex, town, building type and password of every clan stockpile. Only clan members see the password.",
   "clan.noStockpiles": "The clan has no stockpiles yet",

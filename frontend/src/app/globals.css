@@ -1017,6 +1017,14 @@ body[data-theme="light"] {
 /* «Ваш клан»: аватар сервера в меню */
 .nav-clan-avatar { display: inline-grid; flex-shrink: 0; place-items: center; border: 1px solid rgba(163, 230, 53, 0.55); border-radius: 50%; object-fit: cover; box-shadow: 0 0 10px rgba(163, 230, 53, 0.35); }
 .nav-clan-letter { background: rgba(88, 101, 242, 0.3); color: #fff; font-family: var(--font-display); }
+/* «Склады клана»: склад + таймер в одной карточке */
+.stockpile-card-grid { display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(11rem, 15rem) auto; align-items: center; gap: 0.9rem; padding: 0.8rem 1rem; }
+@media (max-width: 860px) { .stockpile-card-grid { grid-template-columns: auto minmax(0, 1fr); } .stockpile-card-timer, .stockpile-card-actions { grid-column: 1 / -1; } }
+.stockpile-card-info { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; margin-top: 0.4rem; }
+.stockpile-card-timer { text-align: right; }
+@media (max-width: 860px) { .stockpile-card-timer { text-align: left; } }
+.stockpile-card-actions { display: flex; align-items: center; gap: 0.4rem; }
+.timer-card.sev-none { border-color: var(--line-2); }
 /* «Склады клана» */
 .clan-stockpiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 0.6rem; margin-top: 0.75rem; }
 .clan-stockpile { display: flex; flex-direction: column; gap: 0.5rem; border: 1px solid var(--line-2); border-radius: 8px; background: rgba(0, 0, 0, 0.35); padding: 0.75rem 0.85rem; }

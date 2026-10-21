@@ -41,3 +41,31 @@ def test_clan_profile_and_stockpile_details(db):
             assert guest.status_code in (401, 403)
 
     run(main())
+
+
+def test_clan_identity_follows_discord(db, monkeypatch):
+    """Новое название и значок сервера в Discord подтягиваются в профиль клана."""
+    import respx
+    from sqlalchemy import update
+
+    from app.api.v1 import clan as clan_api
+    from app.core.config import settings
+    from app.core.db import AsyncSessionLocal
+    from app.models.rbac import Clan
+
+    async def main() -> None:
+        await seed_clan("CLAN_D", name="Старое имя")
+        async with AsyncSessionLocal() as s:
+            await s.execute(update(Clan).where(Clan.id == "CLAN_D").values(discord_guild_id="900000000000000077"))
+            await s.commit()
+        monkeypatch.setattr(settings, "DISCORD_BOT_TOKEN", "bot-token", raising=True)
+        clan_api._identity_checked.clear()
+        base = settings.DISCORD_API_BASE_URL.rstrip("/")
+        with respx.mock(assert_all_called=False) as mock:
+            mock.get(f"{base}/guilds/900000000000000077").respond(json={"id": "900000000000000077", "name": "Сервер Reppot (test)", "icon": "abc123"})
+            async with client() as c:
+                r = (await c.get(f"{API}/clan/profile", headers=bearer(clan_id="CLAN_D", role=ClanRole.MEMBER))).json()
+        assert r["name"] == "Сервер Reppot (test)"
+        assert r["icon_url"] == "https://cdn.discordapp.com/icons/900000000000000077/abc123.png"
+
+    run(main())

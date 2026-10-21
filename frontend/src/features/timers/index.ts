@@ -1,4 +1,4 @@
 export * from "./api";
 export * from "./model";
 export * from "./ui/Ticker";
-export * from "./ui/TimersWorkspace";
+export * from "./ui/StockpilesWorkspace";

@@ -196,7 +196,7 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; can: Ca
  * Регистрация склада в матрице: создаёт склад клана (регион + локация) и таймер,
  * привязанный к нему. Если склад с таким именем уже есть — используется он.
  */
-export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
+export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void; preset?: { region: string; location: string } | null }> = ({ open, onClose, preset }) => {
   const t = useT();
   const { stockpiles, upsertTimer, refresh } = useTerminal();
   const { list, media } = useContent();
@@ -209,10 +209,11 @@ export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void }
 
   React.useEffect(() => {
     if (!open) return;
-    setRegion("");
-    setLocation("");
+    // «Поставить на мониторинг» из карточки склада — гекс и склад уже известны
+    setRegion(preset?.region ?? "");
+    setLocation(preset?.location ?? "");
     setTime({ days: "2", hours: "0", minutes: "0" });
-  }, [open]);
+  }, [open, preset]);
 
   const submit = async () => {
     const seconds = toSeconds(time);

@@ -305,6 +305,8 @@ export const ru = {
   "clan.members": "участников: {n}",
   "clan.stockpilesCount": "складов: {n}",
   "clan.stockpilesTitle": "Склады клана",
+  "clan.noTimer": "Не на мониторинге",
+  "clan.startTimer": "На мониторинг",
   "clan.stockpilesNav": "Описание складов и таймеры",
   "clan.stockpilesHint": "Гекс, город, тип постройки и пароль каждого склада клана. Пароль видят только участники клана.",
   "clan.noStockpiles": "У клана пока нет складов",

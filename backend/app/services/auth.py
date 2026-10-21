@@ -179,6 +179,24 @@ class AuthService:
         with bypass_clan_filter():
             return (await self.session.execute(stmt.limit(1))).scalars().first()
 
+    async def refresh_clan_identity(self, guilds: list) -> int:  # noqa: ANN001
+        """Название и аватар Discord-сервера меняются в Discord — клан их подхватывает при
+        каждом входе участника (GET /users/@me/guilds отдаёт name и icon всех его серверов)."""
+        by_id = {g.id: g for g in guilds}
+        if not by_id:
+            return 0
+        clans = (await self.session.execute(select(Clan).where(Clan.discord_guild_id.in_(list(by_id))))).scalars().all()
+        changed = 0
+        for clan in clans:
+            g = by_id[clan.discord_guild_id]
+            if (g.name and g.name != clan.name) or g.icon_url != clan.icon_url:
+                clan.name = g.name or clan.name
+                clan.icon_url = g.icon_url
+                changed += 1
+        if changed:
+            await self.session.flush()
+        return changed
+
     async def sync_discord_roles(self, *, user_id: str, access_token: str, guild_ids: list[str]) -> int:
         from app.services.discord_roles import sync_existing_members
 

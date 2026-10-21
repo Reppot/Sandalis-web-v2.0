@@ -141,6 +141,22 @@ async def fetch_members_page(
     return "ok", rows, cursor
 
 
+async def fetch_guild_identity(guild_id: str) -> tuple[str, str | None] | None:
+    """Название и значок сервера глазами бота. None — бот не настроен или его нет на сервере."""
+    if not settings.DISCORD_BOT_TOKEN:
+        return None
+    try:
+        async with get_http_client() as client:
+            r = await client.get(_api(f"/guilds/{guild_id}"), headers=_bot_headers())
+        if r.status_code // 100 != 2:
+            return None
+        data = r.json()
+    except (httpx.HTTPError, ValueError):
+        return None
+    icon = data.get("icon")
+    return str(data.get("name") or ""), (f"https://cdn.discordapp.com/icons/{guild_id}/{icon}.png" if icon else None)
+
+
 async def fetch_member_count(guild_id: str) -> int | None:
     """Примерное число участников сервера (бот, with_counts)."""
     if not settings.DISCORD_BOT_TOKEN:
