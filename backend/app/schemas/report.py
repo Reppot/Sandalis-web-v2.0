@@ -92,3 +92,60 @@ class ReportSaved(BaseModel):
 class DiscordSent(BaseModel):
     report: ReportRead
     message: str
+
+
+# --------------------------------------------------------------------------- #
+# Журнал выполнения заказа
+# --------------------------------------------------------------------------- #
+class ContributionLineIn(BaseModel):
+    line_id: uuid.UUID
+    quantity: Annotated[int, Field(gt=0, le=100_000)]
+
+
+class ContributionCreate(BaseModel):
+    """«Сообщить о выполнении»: сколько каких строк привезено и на какой склад."""
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    lines: Annotated[list[ContributionLineIn], Field(min_length=1, max_length=200)]
+    stockpile_id: uuid.UUID | None = None
+    # склад не из списка клана (бункерная база, чужой склад) — подписью
+    stockpile_label: Annotated[str | None, Field(default=None, max_length=160)]
+    note: Annotated[str | None, Field(default=None, max_length=500)]
+
+
+class ProgressLineRead(BaseModel):
+    line_id: uuid.UUID
+    name: str
+    item_code: str | None
+    icon_url: str | None
+    unit: Unit
+    ordered: int
+    delivered: int
+
+
+class ContributionLineRead(BaseModel):
+    line_id: uuid.UUID
+    name: str
+    icon_url: str | None
+    unit: Unit
+    quantity: int
+
+
+class ContributionRead(BaseModel):
+    id: uuid.UUID
+    user_id: str
+    user_name: str | None
+    stockpile_id: uuid.UUID | None
+    stockpile_label: str | None
+    note: str | None
+    created_at: datetime
+    lines: list[ContributionLineRead]
+
+
+class ReportProgressRead(BaseModel):
+    report_id: uuid.UUID
+    lines: list[ProgressLineRead]
+    contributions: list[ContributionRead]      # новые сверху
+    ordered_total: int
+    delivered_total: int
+    message: str | None = None

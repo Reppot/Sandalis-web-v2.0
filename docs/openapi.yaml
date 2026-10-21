@@ -1507,6 +1507,201 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reports/{report_id}/progress:
+    get:
+      tags:
+      - reports
+      summary: 'Выполнение заказа: выполнено по строкам и журнал вкладов'
+      operationId: report_progress_api_v1_reports__report_id__progress_get
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportProgressRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - reports
+      summary: Сообщить о выполнении части заказа (сколько и на какой склад)
+      operationId: add_progress_api_v1_reports__report_id__progress_post
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContributionCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportProgressRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reports/{report_id}/progress/{contribution_id}:
+    delete:
+      tags:
+      - reports
+      summary: Удалить запись журнала (свою; чужую — с правом reports:delete)
+      operationId: remove_progress_api_v1_reports__report_id__progress__contribution_id__delete
+      security:
+      - ClanJWT: []
+      parameters:
+      - name: report_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Report Id
+      - name: contribution_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Contribution Id
+      - name: X-Clan-Token
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Clan-Token
+      - name: Accept-Language
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Accept-Language
+      - name: X-Locale
+        in: header
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: X-Locale
+      - name: sindaris_session
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sindaris Session
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportProgressRead'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/clan/settings:
     get:
       tags:
@@ -4039,6 +4234,136 @@ components:
       - payload
       title: ContentUpsert
       description: Правка записи реестра контента (например, новый URL видео экрана входа).
+    ContributionCreate:
+      properties:
+        lines:
+          items:
+            $ref: '#/components/schemas/ContributionLineIn'
+          type: array
+          maxItems: 200
+          minItems: 1
+          title: Lines
+        stockpile_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Stockpile Id
+        stockpile_label:
+          anyOf:
+          - type: string
+            maxLength: 160
+          - type: 'null'
+          title: Stockpile Label
+        note:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Note
+      additionalProperties: false
+      type: object
+      required:
+      - lines
+      title: ContributionCreate
+      description: '«Сообщить о выполнении»: сколько каких строк привезено и на какой склад.'
+    ContributionLineIn:
+      properties:
+        line_id:
+          type: string
+          format: uuid
+          title: Line Id
+        quantity:
+          type: integer
+          maximum: 100000.0
+          exclusiveMinimum: 0.0
+          title: Quantity
+      type: object
+      required:
+      - line_id
+      - quantity
+      title: ContributionLineIn
+    ContributionLineRead:
+      properties:
+        line_id:
+          type: string
+          format: uuid
+          title: Line Id
+        name:
+          type: string
+          title: Name
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        unit:
+          type: string
+          enum:
+          - crate
+          - unit
+          title: Unit
+        quantity:
+          type: integer
+          title: Quantity
+      type: object
+      required:
+      - line_id
+      - name
+      - icon_url
+      - unit
+      - quantity
+      title: ContributionLineRead
+    ContributionRead:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        user_id:
+          type: string
+          title: User Id
+        user_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Name
+        stockpile_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Stockpile Id
+        stockpile_label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stockpile Label
+        note:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Note
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        lines:
+          items:
+            $ref: '#/components/schemas/ContributionLineRead'
+          type: array
+          title: Lines
+      type: object
+      required:
+      - id
+      - user_id
+      - user_name
+      - stockpile_id
+      - stockpile_label
+      - note
+      - created_at
+      - lines
+      title: ContributionRead
     DevTokenRequest:
       properties:
         user_id:
@@ -4807,6 +5132,47 @@ components:
       - latency_ms
       - env
       title: PingOut
+    ProgressLineRead:
+      properties:
+        line_id:
+          type: string
+          format: uuid
+          title: Line Id
+        name:
+          type: string
+          title: Name
+        item_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Item Code
+        icon_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Icon Url
+        unit:
+          type: string
+          enum:
+          - crate
+          - unit
+          title: Unit
+        ordered:
+          type: integer
+          title: Ordered
+        delivered:
+          type: integer
+          title: Delivered
+      type: object
+      required:
+      - line_id
+      - name
+      - item_code
+      - icon_url
+      - unit
+      - ordered
+      - delivered
+      title: ProgressLineRead
     PyramidItem:
       properties:
         code:
@@ -5149,6 +5515,41 @@ components:
       type: object
       title: ReportMeta
       description: Шапка графического рапорта (как поля «Гекс / Тип / Склад» старого сайта).
+    ReportProgressRead:
+      properties:
+        report_id:
+          type: string
+          format: uuid
+          title: Report Id
+        lines:
+          items:
+            $ref: '#/components/schemas/ProgressLineRead'
+          type: array
+          title: Lines
+        contributions:
+          items:
+            $ref: '#/components/schemas/ContributionRead'
+          type: array
+          title: Contributions
+        ordered_total:
+          type: integer
+          title: Ordered Total
+        delivered_total:
+          type: integer
+          title: Delivered Total
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - report_id
+      - lines
+      - contributions
+      - ordered_total
+      - delivered_total
+      title: ReportProgressRead
     ReportRead:
       properties:
         id:

@@ -27,7 +27,13 @@
       "author": "Autor",
       "place": "Sklad",
       "note": "Poznámka"
-    }
+    },
+    "progress_saved": "Plnění objednávky zapsáno: {n} ks/beden.",
+    "progress_cancelled": "Objednávka je zrušena — plnění se nepřijímá.",
+    "progress_bad_line": "Hlášení obsahuje řádek, který není v této objednávce.",
+    "progress_no_stockpile": "Sklad ve vašem klanu nenalezen.",
+    "progress_not_found": "Záznam deníku nenalezen.",
+    "progress_not_yours": "Smazat lze jen vlastní záznam deníku."
   },
   "settings": {
     "saved": "Nastavení klanu uloženo.",

@@ -108,7 +108,7 @@ export default function TerminalPage() {
   const clanSections = React.useMemo<ClanSection[]>(
     () => [
       ...(can(Scopes.REPORTS_READ)
-        ? [{ view: "reports" as const, icon: "reports" as const, label: "nav.reports.label" as const, hint: "nav.reports.hint" as const, render: () => <ReportsWorkspace can={can} onOpenConstructor={() => openTool("orders")} /> }]
+        ? [{ view: "reports" as const, icon: "reports" as const, label: "nav.reports.label" as const, hint: "nav.reports.hint" as const, render: () => <ReportsWorkspace can={can} userId={session?.userId ?? ""} onOpenConstructor={() => openTool("orders")} /> }]
         : []),
       ...(can(Scopes.STOCKPILES_READ) || can(Scopes.TIMERS_READ)
         ? [{

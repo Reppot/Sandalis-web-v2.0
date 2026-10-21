@@ -27,7 +27,13 @@
       "author": "Author",
       "place": "Stockpile",
       "note": "Note"
-    }
+    },
+    "progress_saved": "Order progress recorded: {n} units/crates.",
+    "progress_cancelled": "The order is cancelled — progress is not accepted.",
+    "progress_bad_line": "The report contains a line that is not in this order.",
+    "progress_no_stockpile": "Stockpile not found in your clan.",
+    "progress_not_found": "Log entry not found.",
+    "progress_not_yours": "You can only delete your own log entry."
   },
   "settings": {
     "saved": "Clan settings saved.",

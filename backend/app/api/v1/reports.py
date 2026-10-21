@@ -18,15 +18,18 @@ from app.models.report import OrderReport, ReportStatus
 from app.schemas.clan_settings import ClanSettingsRead, ClanSettingsSaved, ClanSettingsUpdate
 from app.schemas.common import Page
 from app.schemas.report import (
+    ContributionCreate,
     DiscordSent,
     ReportCreate,
     ReportLineRead,
+    ReportProgressRead,
     ReportRead,
     ReportSaved,
     ReportStatusUpdate,
     ReportUpdate,
 )
 from app.services.clan_settings import ClanSettingsService, to_read
+from app.services.report_progress import ReportProgressService
 from app.services.reports import ReportService
 
 router = APIRouter(prefix="/reports", tags=["reports"])
@@ -179,6 +182,47 @@ async def send_to_discord(
 
 
 # ---------------- настройки клана --------------------------------------------- #
+# ---------------- журнал выполнения заказа ----------------------------------- #
+async def get_progress_service(
+    session: ClanSession, principal: CurrentPrincipal, translator: ReportsTranslator
+) -> ReportProgressService:
+    return ReportProgressService(session, principal, translator)
+
+
+ProgressDep = Annotated[ReportProgressService, Depends(get_progress_service)]
+
+
+@router.get(
+    "/{report_id}/progress",
+    response_model=ReportProgressRead,
+    summary="Выполнение заказа: выполнено по строкам и журнал вкладов",
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
+)
+async def report_progress(report_id: uuid.UUID, service: ProgressDep) -> ReportProgressRead:
+    return await service.progress(report_id)
+
+
+@router.post(
+    "/{report_id}/progress",
+    response_model=ReportProgressRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Сообщить о выполнении части заказа (сколько и на какой склад)",
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_PROGRESS]))],
+)
+async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, service: ProgressDep) -> ReportProgressRead:
+    return await service.contribute(report_id, payload)
+
+
+@router.delete(
+    "/{report_id}/progress/{contribution_id}",
+    response_model=ReportProgressRead,
+    summary="Удалить запись журнала (свою; чужую — с правом reports:delete)",
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
+)
+async def remove_progress(report_id: uuid.UUID, contribution_id: uuid.UUID, service: ProgressDep) -> ReportProgressRead:
+    return await service.remove_contribution(report_id, contribution_id)
+
+
 @settings_router.get(
     "/settings",
     response_model=ClanSettingsRead,

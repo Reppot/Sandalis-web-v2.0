@@ -31,6 +31,7 @@ class Scopes:
     REPORTS_EDIT: Final = "reports:edit"              # править рапорт
     REPORTS_DELETE: Final = "reports:delete"          # удалить рапорт
     REPORTS_DISCORD: Final = "reports:discord"        # отправить рапорт в канал Discord
+    REPORTS_PROGRESS: Final = "reports:progress"      # сообщить о выполнении части заказа
     # таймеры
     TIMERS_READ: Final = "timers:read"                # матрица таймеров, бегущая строка
     TIMERS_CREATE: Final = "timers:create"            # поставить склад на мониторинг
@@ -51,7 +52,7 @@ PERMISSION_GROUPS: Final[tuple[tuple[str, tuple[str, ...]], ...]] = (
     ("stockpiles", (Scopes.STOCKPILES_READ, Scopes.STOCKPILES_CREATE, Scopes.STOCKPILES_EDIT,
                     Scopes.STOCKPILES_DELETE, Scopes.STOCKPILES_ITEMS, Scopes.STOCKPILES_PYRAMID)),
     ("reports", (Scopes.REPORTS_READ, Scopes.REPORTS_CREATE, Scopes.REPORTS_STATUS, Scopes.REPORTS_EDIT,
-                 Scopes.REPORTS_DELETE, Scopes.REPORTS_DISCORD)),
+                 Scopes.REPORTS_DELETE, Scopes.REPORTS_DISCORD, Scopes.REPORTS_PROGRESS)),
     ("timers", (Scopes.TIMERS_READ, Scopes.TIMERS_CREATE, Scopes.TIMERS_UPDATE, Scopes.TIMERS_LOG,
                 Scopes.TIMERS_DELETE)),
     ("catalog", (Scopes.CATALOG_READ,)),
@@ -66,6 +67,7 @@ _GUEST: FrozenSet[str] = frozenset({
 _MEMBER: FrozenSet[str] = _GUEST | frozenset({
     Scopes.STOCKPILES_CREATE, Scopes.STOCKPILES_EDIT, Scopes.STOCKPILES_DELETE, Scopes.STOCKPILES_ITEMS,
     Scopes.REPORTS_CREATE, Scopes.REPORTS_STATUS, Scopes.REPORTS_EDIT, Scopes.REPORTS_DISCORD,
+    Scopes.REPORTS_PROGRESS,
 })
 
 _OFFICER: FrozenSet[str] = _MEMBER | frozenset({

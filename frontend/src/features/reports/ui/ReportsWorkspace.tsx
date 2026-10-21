@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { Scopes, type Can } from "@/entities/session";
+import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
 import { REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
@@ -52,6 +53,8 @@ const ACTION_LABEL: Record<ReportStatus, MessageKey> = {
 
 interface ReportsWorkspaceProps {
   can: Can;
+  /** Текущий пользователь: свои записи журнала выполнения он может удалить. */
+  userId: string;
   /** Строки рапорта загружены в черновик — открыть вкладку «Заказы». */
   onOpenConstructor: () => void;
 }
@@ -70,7 +73,7 @@ function toDoc(report: Report, t: Translate): ExportDoc {
 const unitLabel = (unit: string, t: Translate) => t(unit === "crate" ? "unit.crate" : "unit.unit");
 
 /** «Текущие заказы клана» — рапорты снабжения штаба: статусы, экспорт, отправка в Discord. */
-export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenConstructor }) => {
+export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId, onOpenConstructor }) => {
   const notify = useNotify();
   const { t } = useI18n();
   const { media } = useContent();
@@ -261,6 +264,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, onOpenC
                   )}
                 </div>
                 <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t), fmt)} busy={busy} />
+                <ReportProgressPanel report={report} can={can} userId={userId} onStatusMaybeChanged={() => void load()} />
                 </div>
               </li>
             );

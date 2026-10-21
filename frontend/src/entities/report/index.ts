@@ -66,6 +66,41 @@ interface ReportSaved {
   message: string;
 }
 
+/** Журнал выполнения заказа (GET/POST/DELETE /reports/{id}/progress). */
+export interface ProgressLine {
+  line_id: string;
+  name: string;
+  item_code: string | null;
+  icon_url: string | null;
+  unit: "crate" | "unit";
+  ordered: number;
+  delivered: number;
+}
+export interface Contribution {
+  id: string;
+  user_id: string;
+  user_name: string | null;
+  stockpile_id: string | null;
+  stockpile_label: string | null;
+  note: string | null;
+  created_at: string;
+  lines: { line_id: string; name: string; icon_url: string | null; unit: "crate" | "unit"; quantity: number }[];
+}
+export interface ReportProgress {
+  report_id: string;
+  lines: ProgressLine[];
+  contributions: Contribution[];
+  ordered_total: number;
+  delivered_total: number;
+  message: string | null;
+}
+export interface ContributionInput {
+  lines: { line_id: string; quantity: number }[];
+  stockpile_id?: string | null;
+  stockpile_label?: string | null;
+  note?: string | null;
+}
+
 export const reportApi = {
   async list(status?: ReportStatus[]): Promise<Report[]> {
     const page = await apiClient.get<Page<Report>>("/api/v1/reports", { params: { status, limit: 200 } });
@@ -82,6 +117,16 @@ export const reportApi = {
 
   async delete(id: string): Promise<void> {
     await apiClient.delete<void>(`/api/v1/reports/${id}`);
+  },
+
+  progress(id: string): Promise<ReportProgress> {
+    return apiClient.get<ReportProgress>(`/api/v1/reports/${id}/progress`);
+  },
+  contribute(id: string, input: ContributionInput): Promise<ReportProgress> {
+    return apiClient.post<ReportProgress>(`/api/v1/reports/${id}/progress`, input);
+  },
+  removeContribution(id: string, contributionId: string): Promise<ReportProgress> {
+    return apiClient.delete<ReportProgress>(`/api/v1/reports/${id}/progress/${contributionId}`);
   },
 
   /** Эмбед в канал клана; image — PNG первой страницы графического рапорта. */

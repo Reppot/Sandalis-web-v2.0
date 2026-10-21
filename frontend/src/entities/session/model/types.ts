@@ -60,6 +60,7 @@ export const Scopes = {
   REPORTS_EDIT: "reports:edit",
   REPORTS_DELETE: "reports:delete",
   REPORTS_DISCORD: "reports:discord",
+  REPORTS_PROGRESS: "reports:progress",
   TIMERS_READ: "timers:read",
   TIMERS_CREATE: "timers:create",
   TIMERS_UPDATE: "timers:update",

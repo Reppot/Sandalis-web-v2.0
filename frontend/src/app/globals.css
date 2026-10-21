@@ -1014,6 +1014,30 @@ body[data-theme="light"] {
   .tool-panes[data-wide="plan"] .factory-total-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .tool-panes[data-wide="plan"] .factory-totals-scroll { max-height: none; }
 }
+/* Выполнение заказа: прогресс, кто что привёз, журнал */
+.report-progress { margin-top: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 0.8rem; }
+.report-progress-total { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-top: 0.35rem; }
+.report-progress-total b { color: var(--accent); font-family: var(--font-display); font-size: 1.1rem; }
+.report-progress-track, .report-progress-bar { position: relative; display: block; overflow: hidden; border-radius: 999px; background: rgba(255, 255, 255, 0.08); }
+.report-progress-track { width: min(100%, 22rem); height: 0.6rem; flex: 1; }
+.report-progress-bar { height: 0.3rem; margin-top: 0.25rem; }
+.report-progress-track > span, .report-progress-bar > span { position: absolute; inset: 0 auto 0 0; border-radius: 999px; background: linear-gradient(90deg, #65a30d, var(--accent)); box-shadow: 0 0 10px rgba(163, 230, 53, 0.5); }
+.report-progress-lines { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: 0.4rem; margin-top: 0.7rem; }
+.report-progress-line { display: flex; align-items: center; gap: 0.55rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); padding: 0.4rem 0.55rem; }
+.report-progress-line.is-done { border-color: rgba(74, 222, 128, 0.5); }
+.report-progress-name { display: block; overflow: hidden; color: #fff; font-size: 0.8rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.report-progress-who { display: block; margin-top: 0.2rem; overflow: hidden; color: rgba(229, 231, 235, 0.6); font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
+.report-progress-qty { flex-shrink: 0; color: var(--accent); font-family: var(--font-mono); font-size: 0.78rem; }
+.report-log { margin-top: 0.8rem; }
+.report-log-entry { border-left: 2px solid rgba(163, 230, 53, 0.5); border-radius: 0 6px 6px 0; background: rgba(0, 0, 0, 0.28); padding: 0.45rem 0.6rem; font-size: 0.8rem; }
+.report-log-items { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.35rem; }
+.report-log-item { display: inline-flex; max-width: 100%; align-items: center; gap: 0.3rem; border-radius: 4px; background: rgba(255, 255, 255, 0.06); padding: 0.1rem 0.45rem 0.1rem 0.15rem; font-size: 0.75rem; }
+.report-log-item b { color: var(--accent); font-family: var(--font-mono); }
+.contribute-list { display: flex; max-height: min(55vh, 30rem); flex-direction: column; gap: 0.35rem; overflow-y: auto; padding-right: 0.2rem; }
+.contribute-row { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); padding: 0.35rem 0.5rem; }
+.contribute-row.is-done { opacity: 0.55; }
+[data-theme="light"] .report-progress-line, [data-theme="light"] .contribute-row, [data-theme="light"] .report-log-entry { background: var(--surface-2); }
+[data-theme="light"] .report-progress-name { color: inherit; }
 /* «Читалка» рапорта: страницы PNG как при экспорте */
 /* карточка заказа: страница целиком слева, данные и действия справа */
 .report-card { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.9rem; }

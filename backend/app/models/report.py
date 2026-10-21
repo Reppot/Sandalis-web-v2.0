@@ -95,3 +95,44 @@ class OrderReportLine(Base, UUIDPkMixin, ClanScopedMixin):
     unit: Mapped[str] = mapped_column(String(8), default="crate", nullable=False)
 
     report: Mapped[OrderReport] = relationship(back_populates="lines")
+
+
+class ReportContribution(Base, UUIDPkMixin, ClanScopedMixin):
+    """Вклад в заказ: участник сообщил, что привёз часть строк заказа на склад.
+    Журнал заказа — список вкладов; выполнено по строке — сумма вкладов."""
+    __tablename__ = "report_contributions"
+    __table_args__ = (Index("ix_report_contributions_clan_report", "clan_id", "report_id"),)
+
+    report_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("order_reports.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    user_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    stockpile_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("stockpiles.id", ondelete="SET NULL"), nullable=True
+    )
+    # «Гекс ▶ склад» на момент вклада (склад могут переименовать или удалить)
+    stockpile_label: Mapped[str | None] = mapped_column(String(160), nullable=True)
+    note: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=text("now()"), nullable=False
+    )
+
+    lines: Mapped[list[ReportContributionLine]] = relationship(
+        back_populates="contribution", cascade="all, delete-orphan", lazy="selectin",
+    )
+
+
+class ReportContributionLine(Base, UUIDPkMixin, ClanScopedMixin):
+    __tablename__ = "report_contribution_lines"
+    __table_args__ = (CheckConstraint("quantity > 0", name="quantity_positive"),)
+
+    contribution_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("report_contributions.id", ondelete="CASCADE"), nullable=False
+    )
+    line_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("order_report_lines.id", ondelete="CASCADE"), nullable=False
+    )
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    contribution: Mapped[ReportContribution] = relationship(back_populates="lines")

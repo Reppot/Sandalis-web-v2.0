@@ -8,7 +8,7 @@ from app.models.order import Order, OrderStatus
 from app.models.rbac import Clan, ClanApiToken, ClanMembership, User
 from app.models.recipe import ProductionRecipe
 from app.models.setup import DiscordSetup
-from app.models.report import OrderReport, OrderReportLine, ReportStatus
+from app.models.report import OrderReport, OrderReportLine, ReportContribution, ReportContributionLine, ReportStatus
 from app.models.stockpile import Stockpile, StockpileItem
 from app.models.timer import Timer, TimerEvent
 
@@ -16,6 +16,6 @@ __all__ = [
     "Base", "ClanScopedMixin", "TimestampMixin", "UUIDPkMixin",
     "AppContent", "CatalogItem", "Order", "OrderStatus",
     "Clan", "ClanApiToken", "DiscordSetup", "ClanInviteCode", "ClanMembership", "ClanSettings", "User",
-    "OrderReport", "OrderReportLine", "ProductionRecipe", "ReportStatus",
+    "OrderReport", "OrderReportLine", "ReportContribution", "ReportContributionLine", "ProductionRecipe", "ReportStatus",
     "Stockpile", "StockpileItem", "Timer", "TimerEvent",
 ]
