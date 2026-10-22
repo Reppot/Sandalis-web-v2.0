@@ -33,7 +33,14 @@ const card = (id: string, key: "tagline" | "f1" | "f2" | "f3") => `tools.card.${
  * база кодов, калькуляторы), под ними — компактные ссылки на сторонние сервисы.
  * Открытый модуль управляется снаружи (active/onOpen) — он живёт в адресе страницы.
  */
-export const ToolsWorkspace: React.FC<{ modules: ToolModule[]; active: string | null; onOpen: (id: string | null) => void }> = ({ modules, active, onOpen }) => {
+export const ToolsWorkspace: React.FC<{
+  modules: ToolModule[];
+  active: string | null;
+  onOpen: (id: string | null) => void;
+  /** Можно отправлять заказы клана (reports:create) — кнопка в калькуляторе завода. */
+  canSendOrders?: boolean;
+  onOrderSent?: () => void;
+}> = ({ modules, active, onOpen, canSendOrders, onOrderSent }) => {
   const notify = useNotify();
   const t = useT();
   const { list } = useContent();
@@ -63,7 +70,7 @@ export const ToolsWorkspace: React.FC<{ modules: ToolModule[]; active: string | 
   const body = (() => {
     if (!current) return null;
     if (current.render) return current.render();
-    if (current.id === "facility") return facility ? <FacilityCalculator recipes={facility} /> : loading;
+    if (current.id === "facility") return facility ? <FacilityCalculator recipes={facility} canSend={canSendOrders} onSent={onOrderSent} /> : loading;
     if (!recipes) return loading;
     if (current.id === "refinery") return <RefineryCalculator recipes={recipes.refinery} />;
     return <FactoryCalculator facility={current.id as "factory" | "mpf"} recipes={recipes.factory} />;

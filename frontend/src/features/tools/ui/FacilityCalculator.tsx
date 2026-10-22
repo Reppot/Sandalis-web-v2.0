@@ -3,6 +3,7 @@
 import * as React from "react";
 import { RAW, buildChain, chainTotals, facilityData, type ChainChoice, type ChainNode, type Recipe } from "@/entities/recipe";
 import { FilterCards, ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, usePaged } from "@/shared";
+import { SendOrderDialog } from "@/entities/report/ui/SendOrderDialog";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
@@ -23,7 +24,7 @@ const fmt = (n: number) => (Number.isInteger(n) ? n.toLocaleString("ru-RU") : n.
  * Цепочку можно разложить до сырья: для каждого промежуточного предмета выбирается
  * рецепт или «сырьё». Данные — Cargo-таблица Production на foxhole.wiki.gg.
  */
-export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes }) => {
+export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean; onSent?: () => void }> = ({ recipes, canSend, onSent }) => {
   const notify = useNotify();
   const { t } = useI18n();
   const [faction, setFaction] = React.useState("all");
@@ -33,6 +34,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
   const [plan, setPlan] = React.useState<PlanRow[]>([]);
   const [choice, setChoice] = React.useState<ChainChoice>({});
   const panes = usePanes();
+  const [sendOpen, setSendOpen] = React.useState(false);
 
   const byId = React.useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
   const allowed = React.useCallback((r: Recipe) => faction === "all" || r.factions.includes(faction) || r.factions.includes("neutral"), [faction]);
@@ -123,7 +125,10 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
           </div>
         </div>
         <div className="factory-controls">
-          <button className="btn btn-primary" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: "FACILITY PLAN", message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
+          {canSend ? (
+            <button className="btn btn-primary" data-guide="facility-send" disabled={!roots.length} onClick={() => setSendOpen(true)}>📨 {t("orderSend.button")}</button>
+          ) : null}
+          <button className="btn" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: "FACILITY PLAN", message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
             ⧉ {t("tools.sharePlan")}
           </button>
         </div>
@@ -225,6 +230,18 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
           })}
         </ResourceSummaryPanel>
       </div>
+      {canSend ? (
+        <SendOrderDialog
+          open={sendOpen}
+          lines={roots.map((n) => ({ name: n.name, item_code: n.recipe?.item_code ?? null, quantity: Math.max(1, Math.ceil(n.amount)), unit: "unit" as const, icon_url: n.icon_url }))}
+          defaultKind="factory"
+          onClose={() => setSendOpen(false)}
+          onSent={() => {
+            setSendOpen(false);
+            onSent?.();
+          }}
+        />
+      ) : null}
     </div>
   );
 };

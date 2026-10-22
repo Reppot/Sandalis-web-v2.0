@@ -28,7 +28,7 @@ import { currentLevel, evaluatePyramid, pyramidApi, type Pyramid, type PyramidFa
 type Source = "stockpile" | "bunker";
 type StockUnit = "crate" | "unit";
 
-/** Бункерная база: содержимое загружается файлом/буфером и хранится в этом браузере. */
+/** Бункерная база: содержимое загружается файлом/буфером и живёт только на этой странице (нигде не хранится). */
 interface BunkerBase {
   id: string;
   name: string;
@@ -36,7 +36,8 @@ interface BunkerBase {
   updatedAt: string;
 }
 
-const BUNKERS_KEY = "sindaris-bunker-bases";
+// раньше базы сохранялись в браузере — эти данные больше не храним и стираем
+const LEGACY_BUNKERS_KEY = "sindaris-bunker-bases";
 const UNIT_KEY = (source: Source) => `sindaris-pyramid-unit-${source}`;
 // склады зданий (депо, порт) считают ящиками, бункерная база — штуками
 const DEFAULT_UNIT: Record<Source, StockUnit> = { stockpile: "crate", bunker: "unit" };
@@ -65,8 +66,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   const [stockpiles, setStockpiles] = React.useState<Stockpile[] | null>(null);
   const [stockpileId, setStockpileId] = React.useState<string | null>(null);
   const [stockpile, setStockpile] = React.useState<Stockpile | null>(null);
-  const [bunkers, setBunkers] = React.useState<BunkerBase[]>([]);
-  const [bunkerId, setBunkerId] = React.useState<string | null>(null);
+  const [bunker, setBunker] = React.useState<BunkerBase | null>(null);
   const [units, setUnits] = React.useState<Record<Source, StockUnit>>(DEFAULT_UNIT);
   const [selected, setSelected] = React.useState<Set<number>>(new Set());
   const [busy, setBusy] = React.useState(false);
@@ -85,9 +85,11 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
         setStockpileId(list.some((s) => s.id === pinned) ? pinned : list[0]?.id ?? null);
       })
       .catch(fail);
-    const saved = readStorage<BunkerBase[]>(BUNKERS_KEY, []);
-    setBunkers(saved);
-    setBunkerId(saved[0]?.id ?? null);
+    try {
+      localStorage.removeItem(LEGACY_BUNKERS_KEY);
+    } catch {
+      // хранилище недоступно — и так ничего не сохранено
+    }
     setUnits({ stockpile: readStorage(UNIT_KEY("stockpile"), DEFAULT_UNIT.stockpile), bunker: readStorage(UNIT_KEY("bunker"), DEFAULT_UNIT.bunker) });
   }, [fail]);
 
@@ -96,10 +98,6 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
     stockpileApi.get(stockpileId).then(setStockpile).catch(fail);
   }, [stockpileId, fail]);
 
-  const saveBunkers = (next: BunkerBase[]) => {
-    setBunkers(next);
-    writeStorage(BUNKERS_KEY, next);
-  };
 
   // конфигурация на экране: черновик правки, пирамида клана или готовая
   const preset = pyramid?.presets.find((p) => p.key === config) ?? null;
@@ -109,7 +107,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   const raw: { code: string; count: number }[] =
     source === "stockpile"
       ? (stockpile?.items ?? []).map((i) => ({ code: i.itemCode, count: i.quantity }))
-      : bunkers.find((b) => b.id === bunkerId)?.lines ?? [];
+      : bunker?.lines ?? [];
   const stock = React.useMemo(() => {
     const map = new Map<string, number>();
     for (const { code, count } of raw) {
@@ -119,12 +117,12 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
     return map;
     // raw пересобирается на каждый рендер — зависим от его источников
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [source, stockpile, bunkers, bunkerId, unit, catalog]);
+  }, [source, stockpile, bunker, unit, catalog]);
 
   const levels = React.useMemo(() => (shown ? evaluatePyramid(shown, stock, (code) => catalog.get(code)?.faction) : []), [shown, stock, catalog]);
   const now = currentLevel(levels);
   // в заказ по умолчанию — текущий уровень; при смене пирамиды или источника выбор сбрасывается
-  React.useEffect(() => setSelected(new Set(now >= 0 ? [now] : [])), [now, config, source, stockpileId, bunkerId, levels.length]);
+  React.useEffect(() => setSelected(new Set(now >= 0 ? [now] : [])), [now, config, source, stockpileId, levels.length, bunker]);
 
   const label = (code: string) => {
     const item = catalog.get(code);
@@ -273,7 +271,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
             </select>
           </label>
         ) : (
-          <BunkerPanel bunkers={bunkers} bunkerId={bunkerId} onPick={setBunkerId} onSave={saveBunkers} />
+          <BunkerPanel bunker={bunker} onLoad={setBunker} />
         )}
         {preset && !draft ? <p className="hud-label mt-3 text-muted">{t("pyramid.presetHint")}</p> : null}
       </section>
@@ -353,21 +351,17 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
 };
 
 /** Бункерные базы: выбор, загрузка содержимого (JSON / TXT / XLSX / буфер), удаление. */
-const BunkerPanel: React.FC<{ bunkers: BunkerBase[]; bunkerId: string | null; onPick: (id: string | null) => void; onSave: (next: BunkerBase[]) => void }> = ({ bunkers, bunkerId, onPick, onSave }) => {
+/** Бункерная база: загрузка содержимого (JSON / TXT / XLSX / буфер) — только для этой страницы, без сохранения. */
+const BunkerPanel: React.FC<{ bunker: BunkerBase | null; onLoad: (b: BunkerBase | null) => void }> = ({ bunker, onLoad }) => {
   const { t } = useI18n();
   const notify = useNotify();
   const [name, setName] = React.useState("");
   const [pasteOpen, setPasteOpen] = React.useState(false);
   const [pasteText, setPasteText] = React.useState("");
   const [busy, setBusy] = React.useState(false);
-  const [armed, confirm] = useConfirm();
   const textInput = React.useRef<HTMLInputElement>(null);
   const xlsxInput = React.useRef<HTMLInputElement>(null);
-  const current = bunkers.find((b) => b.id === bunkerId) ?? null;
 
-  React.useEffect(() => setName(current?.name ?? ""), [current]);
-
-  /** Разобрать текст сервером и записать в выбранную (или новую) базу. */
   const importText = async (text: string) => {
     if (!text.trim()) return notify({ title: t("pyramid.sourceBunker"), message: t("import.clipboardEmpty"), tone: "warning" });
     setBusy(true);
@@ -375,9 +369,8 @@ const BunkerPanel: React.FC<{ bunkers: BunkerBase[]; bunkerId: string | null; on
       const parsed = await catalogApi.parse(text);
       const lines = parsed.lines.filter((l) => l.item && l.count > 0).map((l) => ({ code: l.item!.code, count: l.count }));
       if (!lines.length) return notify({ title: t("import.formatError"), message: t("import.formatHelp"), tone: "danger" });
-      const base: BunkerBase = { id: current?.id ?? `bunker-${Date.now()}`, name: name.trim() || current?.name || t("pyramid.bunkerDefaultName", { n: bunkers.length + 1 }), lines, updatedAt: new Date().toISOString() };
-      onSave(current ? bunkers.map((b) => (b.id === base.id ? base : b)) : [...bunkers, base]);
-      onPick(base.id);
+      const base: BunkerBase = { id: "session", name: name.trim() || t("pyramid.sourceBunker"), lines, updatedAt: new Date().toISOString() };
+      onLoad(base);
       notify({ title: t("pyramid.sourceBunker"), message: t("pyramid.bunkerLoaded", { n: lines.length, name: base.name }), tone: "success" });
       if (parsed.unknown.length) notify({ title: t("import.notInCatalog"), message: parsed.unknown.slice(0, 6).join(" • "), tone: "warning" });
     } catch (err) {
@@ -395,43 +388,12 @@ const BunkerPanel: React.FC<{ bunkers: BunkerBase[]; bunkerId: string | null; on
 
   return (
     <div data-guide="pyramid-bunker" className="pyramid-bunker">
-      <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
-        <label className="flex flex-col gap-1">
-          <span className="hud-label text-muted">{t("pyramid.bunkerPick")}</span>
-          <select className="field h-11" value={bunkerId ?? ""} onChange={(e) => onPick(e.target.value || null)}>
-            <option value="">＋ {t("pyramid.bunkerNew")}</option>
-            {bunkers.map((b) => (
-              <option key={b.id} value={b.id}>{b.name} • {t("pyramid.bunkerLines", { n: b.lines.length })}</option>
-            ))}
-          </select>
-        </label>
-        <label className="flex flex-col gap-1">
-          <span className="hud-label text-muted">{t("pyramid.bunkerName")}</span>
-          <input
-            className="field h-11"
-            value={name}
-            placeholder={t("pyramid.bunkerNamePlaceholder")}
-            onChange={(e) => setName(e.target.value)}
-            onBlur={() => current && name.trim() && name.trim() !== current.name && onSave(bunkers.map((b) => (b.id === current.id ? { ...b, name: name.trim() } : b)))}
-          />
-        </label>
-        {current ? (
-          <button
-            type="button"
-            className={cn("btn btn-danger self-end", armed === "del" && "btn-active")}
-            onClick={() =>
-              confirm("del", () => {
-                onSave(bunkers.filter((b) => b.id !== current.id));
-                onPick(null);
-              })
-            }
-          >
-            {armed === "del" ? t("common.confirmQ") : `✕ ${t("pyramid.bunkerDelete")}`}
-          </button>
-        ) : null}
-      </div>
+      <label className="flex flex-col gap-1">
+        <span className="hud-label text-muted">{t("pyramid.bunkerName")}</span>
+        <input className="field h-11" value={name} placeholder={t("pyramid.bunkerNamePlaceholder")} onChange={(e) => setName(e.target.value)} />
+      </label>
       <div className="mt-2 flex flex-wrap items-center gap-2">
-        <span className="hud-label text-muted">{current ? t("pyramid.bunkerReload") : t("pyramid.bunkerLoad")}:</span>
+        <span className="hud-label text-muted">{bunker ? t("pyramid.bunkerReload") : t("pyramid.bunkerLoad")}:</span>
         <button type="button" className="btn" disabled={busy} onClick={() => pick(textInput)}>JSON / TXT</button>
         <button type="button" className="btn" disabled={busy} onClick={() => pick(xlsxInput)}>XLSX</button>
         <button
@@ -450,7 +412,9 @@ const BunkerPanel: React.FC<{ bunkers: BunkerBase[]; bunkerId: string | null; on
         >
           {t("export.fmt.clipboard")}
         </button>
-        {current ? <span className="hud-label text-muted">{t("pyramid.bunkerUpdated", { at: new Date(current.updatedAt).toLocaleString() })}</span> : null}
+        {bunker ? (
+          <span className="hud-label text-accent">✔ {bunker.name} • {t("pyramid.bunkerLines", { n: bunker.lines.length })}</span>
+        ) : null}
       </div>
       <p className="hud-label mt-2 text-muted">{t("pyramid.bunkerHint")}</p>
 

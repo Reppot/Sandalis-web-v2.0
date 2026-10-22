@@ -147,7 +147,7 @@ export default function TerminalPage() {
       case "clan":
         return <ClanWorkspace profile={clan} role={session.role} sections={clanSections} view={clanView} onView={openClan} />;
       case "tools":
-        return <ToolsWorkspace modules={toolModules} active={tool} onOpen={openTool} />;
+        return <ToolsWorkspace modules={toolModules} active={tool} onOpen={openTool} canSendOrders={can(Scopes.REPORTS_CREATE)} onOrderSent={() => openClan("reports")} />;
       case "guide":
         return <GuideWorkspace />;
       case "cabinet":

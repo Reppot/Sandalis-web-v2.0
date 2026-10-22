@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { catalogApi, itemName, type FoxholeItem, type ItemUnit } from "@/entities/item";
-import { orderDraft, reportApi, type DraftLine } from "@/entities/report";
+import { orderDraft, type DraftLine } from "@/entities/report";
+import { SendOrderDialog } from "@/entities/report/ui/SendOrderDialog";
 import type { Stockpile } from "@/entities/stockpile";
 import {
   ExportBar,
@@ -45,8 +46,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
   const [unit, setUnit] = React.useState<ItemUnit>("crate");
   const [filter, setFilter] = React.useState("");
   const [category, setCategory] = React.useState("all");
-  const [title, setTitle] = React.useState("");
-  const [saving, setSaving] = React.useState(false);
+  const [sendOpen, setSendOpen] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
   const [mode, setMode] = React.useState<PanelMode>("export");
   const [pasteOpen, setPasteOpen] = React.useState(false);
@@ -114,24 +114,6 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
   const adjust = (name: string, delta: number) => setOrder((prev) => prev.map((l) => (l.name === name ? { ...l, quantity: Math.max(1, l.quantity + delta) } : l)));
   const remove = (name: string) => setOrder((prev) => prev.filter((l) => l.name !== name));
 
-  const sendReport = async () => {
-    setSaving(true);
-    try {
-      const r = await reportApi.create({
-        title: title.trim(),
-        meta: { region: pinned?.region ?? null, stockpile: pinned?.name ?? null },
-        lines: order.map(({ name, item_code, quantity, unit: u }) => ({ name, item_code, quantity, unit: u })),
-      });
-      notify({ title: t("builder.accepted"), message: r.message, tone: "success" });
-      setTitle("");
-      setOrder([]);
-      onSubmitted();
-    } catch (err) {
-      notify({ title: t("reports.report"), message: errorText(err, t("builder.rejected")), tone: "danger" });
-    } finally {
-      setSaving(false);
-    }
-  };
 
   const importText = async (text: string) => {
     setBusy(true);
@@ -296,10 +278,9 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
       </div>
 
       {canWrite ? (
-        <div className="mt-2 flex flex-col gap-2 sm:flex-row">
-          <input className="field field-mono flex-1 text-xs" placeholder={t("builder.reportName")} value={title} onChange={(e) => setTitle(e.target.value)} />
-          <button className="btn btn-primary" data-guide="builder-send" onClick={() => void sendReport()} disabled={saving || !order.length}>
-            {saving ? t("common.sending") : `📨 ${t("builder.send")}`}
+        <div className="mt-2 flex">
+          <button className="btn btn-primary w-full" data-guide="builder-send" onClick={() => setSendOpen(true)} disabled={!order.length}>
+            📨 {t("orderSend.button")}
           </button>
         </div>
       ) : (
@@ -330,6 +311,18 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
           </button>
         </div>
       </Modal>
+      <SendOrderDialog
+        open={sendOpen}
+        lines={order.map(({ name, item_code, quantity, unit: u, icon_url }) => ({ name, item_code, quantity, unit: u, icon_url }))}
+        defaultKind="stockpile"
+        meta={{ region: pinned?.region ?? null, stockpile: pinned?.name ?? null }}
+        onClose={() => setSendOpen(false)}
+        onSent={() => {
+          setSendOpen(false);
+          setOrder([]);
+          onSubmitted();
+        }}
+      />
       {previewModal}
     </section>
   );

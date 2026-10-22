@@ -10,6 +10,15 @@ export interface ReportMeta {
   stockpile?: string | null;
 }
 
+/** Вид заказа (meta.type): на склад, на бункерную базу или на завод. */
+export type OrderKind = "stockpile" | "bunker" | "factory";
+export const ORDER_KINDS: { key: OrderKind; icon: string; label: MessageKey; hint: MessageKey }[] = [
+  { key: "stockpile", icon: "🏬", label: "orderKind.stockpile", hint: "orderKind.stockpileHint" },
+  { key: "bunker", icon: "🛡", label: "orderKind.bunker", hint: "orderKind.bunkerHint" },
+  { key: "factory", icon: "🏭", label: "orderKind.factory", hint: "orderKind.factoryHint" },
+];
+export const orderKindOf = (type: string | null | undefined) => ORDER_KINDS.find((k) => k.key === type);
+
 export interface ReportLine {
   id: string;
   position: number;

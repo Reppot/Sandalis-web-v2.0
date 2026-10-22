@@ -4,7 +4,7 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import { Scopes, type Can } from "@/entities/session";
 import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
-import { REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
+import { orderKindOf, REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
   DocReader,
@@ -60,7 +60,12 @@ interface ReportsWorkspaceProps {
 }
 
 function toDoc(report: Report, t: Translate): ExportDoc {
-  const meta = [report.meta.region && `${t("doc.hex")}: ${report.meta.region}`, report.meta.stockpile && `${t("doc.stockpile")}: ${report.meta.stockpile}`].filter(Boolean) as string[];
+  const kind = orderKindOf(report.meta.type);
+  const meta = [
+    kind && `${t("orderSend.kind")}: ${t(kind.label)}`,
+    report.meta.region && `${t("doc.hex")}: ${report.meta.region}`,
+    report.meta.stockpile && `${t("doc.stockpile")}: ${report.meta.stockpile}`,
+  ].filter(Boolean) as string[];
   return {
     title: `SINDARIS • ${report.title}`,
     header: [...meta, `${t("doc.author")}: ${report.created_by_name ?? report.created_by} • ${formatDateTime(report.created_at)}`, `${t("doc.status")}: ${t(REPORT_STATUS_LABEL[report.status])}`],
@@ -233,6 +238,9 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                 <div className="mt-2 flex flex-wrap items-center gap-2 pl-5">
                   <span className="badge-count">{t("common.pos", { n: report.lines_count })}</span>
                   <span className="badge-count">Σ {report.total_quantity}</span>
+                  {orderKindOf(report.meta.type) ? (
+                    <span className="order-kind-badge">{orderKindOf(report.meta.type)!.icon} {t(orderKindOf(report.meta.type)!.label)}</span>
+                  ) : null}
                   {report.discord_sent_at && <span className="hud-label text-accent" title={formatDateTime(report.discord_sent_at)}>✓ DISCORD</span>}
                 </div>
 
