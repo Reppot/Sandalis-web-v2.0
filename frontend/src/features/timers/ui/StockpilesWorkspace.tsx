@@ -60,13 +60,13 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
   const [monitor, setMonitor] = React.useState<{ region: string; location: string } | null>(null);
   const [shown, setShown] = React.useState<Set<string>>(new Set());
   const [contents, setContents] = React.useState<Stockpile | null>(null);
-  // склады с раскрытым содержимым
-  const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
+  // содержимое складов видно всегда; здесь — склады, где его свернули вручную
+  const [collapsed, setCollapsed] = React.useState<Set<string>>(new Set());
   const toggle = (id: string, open?: boolean) =>
-    setExpanded((prev) => {
+    setCollapsed((prev) => {
       const next = new Set(prev);
-      if (open ?? !next.has(id)) next.add(id);
-      else next.delete(id);
+      if (open ?? next.has(id)) next.delete(id);
+      else next.add(id);
       return next;
     });
 
@@ -144,7 +144,7 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
               onManage={() => row.timer && setManagedId(row.timer.id)}
               onEdit={() => row.stockpile && setEditing(row.stockpile)}
               onContents={() => row.stockpile && setContents(row.stockpile)}
-              expanded={Boolean(row.stockpile && expanded.has(row.stockpile.id))}
+              expanded={Boolean(row.stockpile && !collapsed.has(row.stockpile.id))}
               onToggleItems={() => row.stockpile && toggle(row.stockpile.id)}
               onMonitor={() => row.stockpile && setMonitor({ region: row.stockpile.region, location: row.stockpile.name })}
             />
@@ -272,7 +272,7 @@ const StockpileCard: React.FC<{
           ) : null}
         </div>
       </div>
-      {s && expanded ? <StockpileItems stockpile={s} /> : null}
+      {s && expanded && s.itemsCount ? <StockpileItems stockpile={s} /> : null}
     </li>
   );
 };
