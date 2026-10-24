@@ -110,7 +110,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
   const submitLine = () => {
     const n = parseInt(count, 10);
     if (!selected || !Number.isFinite(n) || n <= 0) return countRef.current?.focus();
-    addLine({ name: selected.name, item_code: selected.code, quantity: n, unit, icon_url: selected.iconUrl });
+    addLine({ name: itemName(selected, locale), item_code: selected.code, quantity: n, unit, icon_url: selected.iconUrl });
     setCount("");
   };
 
@@ -126,7 +126,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
         notify({ title: t("import.formatError"), message: t("builder.parseFailed"), tone: "danger" });
         return;
       }
-      setOrder(result.lines.map((l) => ({ name: l.item?.name ?? l.name, item_code: l.item?.code ?? null, quantity: l.count, unit: l.unit, icon_url: l.item?.iconUrl ?? null })));
+      setOrder(result.lines.map((l) => ({ name: l.item ? itemName(l.item, locale) : l.name, item_code: l.item?.code ?? null, quantity: l.count, unit: l.unit, icon_url: l.item?.iconUrl ?? null })));
       notify({ title: t("builder.importTitle"), message: t("builder.imported", { n: result.lines.length }), tone: "success" });
     } catch (err) {
       notify({ title: t("import.title"), message: errorText(err, t("builder.serverParseFailed")), tone: "danger" });

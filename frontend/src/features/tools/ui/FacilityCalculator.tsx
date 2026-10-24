@@ -8,6 +8,10 @@ import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools
 import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
 
 
+/** Название предмета на языке интерфейса: цепочка хранит английские имена, показываем русские. */
+const DisplayName = React.createContext<(name: string) => string>((name) => name);
+const useDisplayName = () => React.useContext(DisplayName);
+
 interface PlanRow {
   key: string;
   recipeId: string;
@@ -26,7 +30,7 @@ const fmt = (n: number) => (Number.isInteger(n) ? n.toLocaleString("ru-RU") : n.
  */
 export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean; onSent?: () => void }> = ({ recipes, canSend, onSent }) => {
   const notify = useNotify();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [faction, setFaction] = React.useState("all");
   // выбранная постройка: null — ничего не выбрано (предметы видны только при поиске)
   const [source, setSource] = React.useState<string | null>(null);
@@ -39,6 +43,18 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
   const [counts, setCounts] = React.useState<Record<string, number>>({});
 
   const byId = React.useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
+  // английское имя -> русское (выход рецепта и все входы/побочные продукты)
+  const dn = React.useMemo(() => {
+    if (locale !== "ru") return (name: string) => name;
+    const ru = new Map<string, string>();
+    for (const r of recipes) {
+      const d = facilityData(r);
+      if (!d) continue;
+      if (d.name_ru) ru.set(r.name, d.name_ru);
+      for (const p of [...d.inputs, ...d.byproducts]) if (p.name_ru) ru.set(p.name, p.name_ru);
+    }
+    return (name: string) => ru.get(name) ?? name;
+  }, [recipes, locale]);
   const allowed = React.useCallback((r: Recipe) => faction === "all" || r.factions.includes(faction) || r.factions.includes("neutral"), [faction]);
   /** Рецепты по выходному предмету (альтернативы). */
   const byName = React.useMemo(() => {
@@ -67,11 +83,11 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
     for (const [name, list] of byName) {
       const fit = list.filter((r) => allowed(r) && (!source || source === "all" || facilityData(r)?.source === source));
       if (!fit.length) continue;
-      if (needle && !`${name} ${fit.map((r) => `${facilityData(r)?.source} ${r.item_class ?? ""}`).join(" ")}`.toLowerCase().includes(needle)) continue;
+      if (needle && !`${name} ${dn(name)} ${fit.map((r) => `${facilityData(r)?.source} ${r.item_class ?? ""}`).join(" ")}`.toLowerCase().includes(needle)) continue;
       out.push({ name, recipes: fit });
     }
     return out.sort((a, b) => a.name.localeCompare(b.name));
-  }, [byName, allowed, source, query]);
+  }, [byName, allowed, source, query, dn]);
   const page = usePaged(cards, 60, `${query}|${source}|${faction}`);
 
   const add = (card: { name: string; recipes: Recipe[] }) => {
@@ -130,13 +146,13 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
       toolName: t("tools.facility"),
       subtitle: "Facilities • foxhole.wiki.gg",
       fileBase: "SINDARIS_facility",
-      items: roots.map((n) => ({ name: n.name, quantity: withUnit(n.amount, n.unit), unit: n.unit ? "" : unitOf(null), icon: assetUrl(n.icon_url), note: n.recipe ? facilityData(n.recipe)?.source : undefined })),
-      resources: [...totals.raw].map(([name, v]) => ({ name, quantity: withUnit(Math.ceil(v.amount * 10) / 10, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
+      items: roots.map((n) => ({ name: dn(n.name), quantity: withUnit(n.amount, n.unit), unit: n.unit ? "" : unitOf(null), icon: assetUrl(n.icon_url), note: n.recipe ? facilityData(n.recipe)?.source : undefined })),
+      resources: [...totals.raw].map(([name, v]) => ({ name: dn(name), quantity: withUnit(Math.ceil(v.amount * 10) / 10, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       stats: [
         { name: t("facility.runs"), quantity: totals.runs, unit: "" },
         { name: t("tools.time"), quantity: formatDuration(power.seconds, timeUnits(t)), unit: "" },
         ...power.sources.map((src) => ({ name: `⏱ ${src.source} ×${src.buildings}`, quantity: formatDuration(src.seconds, timeUnits(t)), unit: "" })),
-        ...[...totals.byproducts].map(([name, v]) => ({ name: t("facility.byproduct", { name }), quantity: withUnit(v.amount, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
+        ...[...totals.byproducts].map(([name, v]) => ({ name: t("facility.byproduct", { name: dn(name) }), quantity: withUnit(v.amount, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       ],
       sections: power.peakMw
         ? [
@@ -160,9 +176,10 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
           ]
         : [],
     };
-  }, [roots, totals, power, t, unitOf]);
+  }, [roots, totals, power, t, unitOf, dn]);
 
   return (
+    <DisplayName.Provider value={dn}>
     <div className="tab-fade factory-page pb-24 lg:pb-0">
       <section className="panel panel-corners factory-topbar">
         <div className="flex min-w-0 items-center gap-3">
@@ -228,8 +245,8 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
                 <button key={card.name} type="button" className={`factory-item-card relative min-h-[13rem] flex-col justify-start gap-2 p-3 text-center ${queued ? "border-accent" : ""}`} onClick={() => add(card)}>
                   <span className="factory-add absolute top-2 right-2">＋</span>
                   {queued ? <span className="absolute top-2 left-2 rounded-sm border border-[#16a34a] bg-[#1e291b] px-1.5 py-0.5 font-mono text-[0.65rem] text-accent">{fmt(queued.amount)}</span> : null}
-                  <ItemIcon sources={[assetUrl(first.icon_url)]} size={72} label={card.name} className="mt-3" />
-                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{card.name}</strong>
+                  <ItemIcon sources={[assetUrl(first.icon_url)]} size={72} label={dn(card.name)} className="mt-3" />
+                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{dn(card.name)}</strong>
                   <small className="block w-full truncate text-[0.7rem] text-muted">{facilityData(first)?.source}</small>
                   {card.recipes.length > 1 ? (
                     <span className="mt-auto rounded-sm border border-amber-300/40 bg-black/30 px-1.5 py-0.5 font-mono text-[0.62rem] text-amber-200">{t("facility.recipes", { n: card.recipes.length })}</span>
@@ -254,8 +271,8 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
                     <ItemIcon sources={[assetUrl(b.icon)]} size={40} label={b.source} />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-[0.85rem] font-semibold text-white">{b.source}</span>
-                      <span className="hud-label block truncate text-muted" title={b.items.join(", ")}>
-                        {b.used ? `✔ ${t("power.used")}` : t("power.alternative")} • {b.items.join(", ")}
+                      <span className="hud-label block truncate text-muted" title={b.items.map(dn).join(", ")}>
+                        {b.used ? `✔ ${t("power.used")}` : t("power.alternative")} • {b.items.map(dn).join(", ")}
                       </span>
                     </span>
                     <QuantityStepper
@@ -277,12 +294,12 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
             return (
               <div key={row.key} className="facility-plan">
                 <div className="factory-plan-row">
-                  <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={48} label={recipe.name} />
+                  <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={48} label={dn(recipe.name)} />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm text-white">{recipe.name}</span>
+                    <span className="block truncate text-sm text-white">{dn(recipe.name)}</span>
                     <span className="hud-label mt-0.5 block truncate text-muted">{t("facility.perRun", { n: fmt(recipe.output_quantity) })}</span>
                   </span>
-                  <QuantityStepper value={row.amount} unit={unitOf(facilityData(recipe)?.output_unit ?? null)} label={recipe.name} onChange={(n) => update(row.key, { amount: Math.max(0, n) })} />
+                  <QuantityStepper value={row.amount} unit={unitOf(facilityData(recipe)?.output_unit ?? null)} label={dn(recipe.name)} onChange={(n) => update(row.key, { amount: Math.max(0, n) })} />
                   <button type="button" className="btn btn-danger px-2 py-1" onClick={() => update(row.key, { amount: 0 })} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
                 </div>
                 <div className="facility-recipe" data-guide="facility-recipe">
@@ -292,7 +309,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
                 {root ? (
                   <details className="facility-chain" open>
                     <summary className="hud-label text-accent">{t("facility.chain")}</summary>
-                    <ChainTier depth={1} parent={root.name}>
+                    <ChainTier depth={1} parent={dn(root.name)}>
                       {root.children.map((child, i) => (
                         <ChainItem key={`${child.name}-${i}`} depth={1} node={child} byName={byName} allowed={allowed} choice={choice} setChoice={setChoice} unitOf={unitOf} />
                       ))}
@@ -307,7 +324,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
       {canSend ? (
         <SendOrderDialog
           open={sendOpen}
-          lines={roots.map((n) => ({ name: n.name, item_code: n.recipe?.item_code ?? null, quantity: Math.max(1, Math.ceil(n.amount)), unit: "unit" as const, icon_url: n.icon_url }))}
+          lines={roots.map((n) => ({ name: dn(n.name), item_code: n.recipe?.item_code ?? null, quantity: Math.max(1, Math.ceil(n.amount)), unit: "unit" as const, icon_url: n.icon_url }))}
           defaultKind="factory"
           onClose={() => setSendOpen(false)}
           onSent={() => {
@@ -317,6 +334,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
         />
       ) : null}
     </div>
+    </DisplayName.Provider>
   );
 };
 
@@ -342,13 +360,14 @@ const ChainItem: React.FC<{
   unitOf: (unit: string | null) => string;
 }> = ({ depth, node, byName, allowed, choice, setChoice, unitOf }) => {
   const { t } = useI18n();
+  const dn = useDisplayName();
   const options = (byName.get(node.name) ?? []).filter(allowed);
   const value = node.recipe?.id ?? choice[node.name] ?? RAW;
   return (
     <li className="chain-node">
       <div className="facility-node">
-        <ItemIcon sources={[assetUrl(node.icon_url)]} size={24} label={node.name} />
-        <span className="min-w-0 flex-1 truncate text-[0.8rem] text-white">{node.name}</span>
+        <ItemIcon sources={[assetUrl(node.icon_url)]} size={24} label={dn(node.name)} />
+        <span className="min-w-0 flex-1 truncate text-[0.8rem] text-white">{dn(node.name)}</span>
         <span className="badge-count shrink-0">{fmt(Math.ceil(node.amount * 10) / 10)} {unitOf(node.unit)}</span>
       </div>
       {node.cycle ? <span className="hud-label pl-8 text-warn">↻ {t("facility.cycle")}</span> : null}
@@ -358,7 +377,7 @@ const ChainItem: React.FC<{
         </div>
       ) : null}
       {node.recipe && node.children.length ? (
-        <ChainTier depth={depth + 1} parent={node.name}>
+        <ChainTier depth={depth + 1} parent={dn(node.name)}>
           {node.children.map((child, i) => (
             <ChainItem key={`${child.name}-${i}`} depth={depth + 1} node={child} byName={byName} allowed={allowed} choice={choice} setChoice={setChoice} unitOf={unitOf} />
           ))}
@@ -371,6 +390,7 @@ const ChainItem: React.FC<{
 /** Карточка рецепта: постройка, модификация, входы с иконками → выход, время и мощность. */
 const RecipeCard: React.FC<{ recipe: Recipe | null; selected?: boolean; onClick: () => void; trailing?: React.ReactNode }> = ({ recipe, selected, onClick, trailing }) => {
   const { t } = useI18n();
+  const dn = useDisplayName();
   const d = recipe ? facilityData(recipe) : null;
   return (
     <button type="button" className={`recipe-card ${selected ? "is-selected" : ""}`} onClick={onClick}>
@@ -388,9 +408,9 @@ const RecipeCard: React.FC<{ recipe: Recipe | null; selected?: boolean; onClick:
           </span>
           <span className="recipe-card-flow">
             {d.inputs.map((p) => (
-              <span key={p.name} className="recipe-part" title={p.name}>
-                <ItemIcon sources={[assetUrl(p.icon_url)]} size={22} label={p.name} />
-                <span className="truncate">{p.name}</span>
+              <span key={p.name} className="recipe-part" title={dn(p.name)}>
+                <ItemIcon sources={[assetUrl(p.icon_url)]} size={22} label={dn(p.name)} />
+                <span className="truncate">{dn(p.name)}</span>
                 <b>{fmt(p.amount)}{p.unit ? ` ${p.unit}` : ""}</b>
               </span>
             ))}

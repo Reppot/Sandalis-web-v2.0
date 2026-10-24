@@ -27,6 +27,14 @@ export interface ReportLine {
   quantity: number;
   unit: ItemUnit;
   icon_url: string | null;
+  /** Названия из каталога по коду: русское (как в русском клиенте игры) и английское. */
+  name_ru?: string | null;
+  name_en?: string | null;
+}
+
+/** Название строки заказа на языке интерфейса: из каталога, иначе — как ввели. */
+export function lineName(line: { name: string; name_ru?: string | null; name_en?: string | null }, locale: string): string {
+  return (locale === "ru" ? line.name_ru : line.name_en) || line.name;
 }
 
 /** Рапорт снабжения (GET /api/v1/reports) — DTO сервера используется как есть. */
@@ -79,6 +87,8 @@ interface ReportSaved {
 export interface ProgressLine {
   line_id: string;
   name: string;
+  name_ru?: string | null;
+  name_en?: string | null;
   item_code: string | null;
   icon_url: string | null;
   unit: "crate" | "unit";
@@ -93,7 +103,16 @@ export interface Contribution {
   stockpile_label: string | null;
   note: string | null;
   created_at: string;
-  lines: { line_id: string; name: string; icon_url: string | null; unit: "crate" | "unit"; quantity: number }[];
+  lines: { line_id: string; name: string; name_ru?: string | null; name_en?: string | null; icon_url: string | null; unit: "crate" | "unit"; quantity: number }[];
+}
+
+/** Журнал выполнения с названиями на языке интерфейса. */
+export function localizeProgress(p: ReportProgress, locale: string): ReportProgress {
+  return {
+    ...p,
+    lines: p.lines.map((l) => ({ ...l, name: lineName(l, locale) })),
+    contributions: p.contributions.map((c) => ({ ...c, lines: c.lines.map((l) => ({ ...l, name: lineName(l, locale) })) })),
+  };
 }
 export interface ReportProgress {
   report_id: string;

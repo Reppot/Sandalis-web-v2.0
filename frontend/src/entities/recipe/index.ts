@@ -74,6 +74,8 @@ export interface FacilityPart {
   unit: string | null;
   code: string | null;
   icon_url: string | null;
+  /** Название в русском клиенте игры (если известно). */
+  name_ru?: string;
 }
 
 export interface FacilityData {
@@ -91,6 +93,8 @@ export interface FacilityData {
   byproducts: FacilityPart[];
   /** Иконка постройки с вики (static/items/facilities). */
   source_icon?: string | null;
+  /** Русское название выпускаемого предмета (цепочка связывает предметы по английскому name). */
+  name_ru?: string;
 }
 
 export function facilityData(recipe: Recipe): FacilityData | null {

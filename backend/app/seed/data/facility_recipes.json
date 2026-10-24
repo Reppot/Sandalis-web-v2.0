@@ -216,7 +216,8 @@
      "amount": 85,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -259,7 +260,8 @@
      "amount": 50,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -310,7 +312,8 @@
      "amount": 2,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -320,7 +323,8 @@
    "byproducts": [],
    "crate": false,
    "page": "120mm",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "120-мм"
   },
   "sort": 6
  },
@@ -404,7 +408,8 @@
      "amount": 12,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -414,7 +419,8 @@
    "byproducts": [],
    "crate": false,
    "page": "150mm",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "150-мм"
   },
   "sort": 8
  },
@@ -457,7 +463,8 @@
    "byproducts": [],
    "crate": false,
    "page": "20mm",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "20мм"
   },
   "sort": 9
  },
@@ -550,7 +557,8 @@
      "amount": 24,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     },
     {
      "name": "250mm “Purity” Shell",
@@ -608,7 +616,8 @@
      "amount": 24,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -651,7 +660,8 @@
      "amount": 35,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -753,7 +763,8 @@
      "amount": 220,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -763,7 +774,8 @@
    "byproducts": [],
    "crate": true,
    "page": "30mm",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "30мм"
   },
   "sort": 15
  },
@@ -804,7 +816,8 @@
      "amount": 4,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -814,7 +827,8 @@
    "byproducts": [],
    "crate": false,
    "page": "3C-High Explosive Rocket",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "3C-Фугасная ракета"
   },
   "sort": 16
  },
@@ -965,7 +979,8 @@
      "amount": 1320,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -975,7 +990,8 @@
    "byproducts": [],
    "crate": true,
    "page": "40mm",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "40-мм"
   },
   "sort": 19
  },
@@ -1016,7 +1032,8 @@
      "amount": 4,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -1059,7 +1076,8 @@
      "amount": 195,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -1102,7 +1120,8 @@
      "amount": 250,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -1153,7 +1172,8 @@
      "amount": 1320,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -1163,7 +1183,8 @@
    "byproducts": [],
    "crate": true,
    "page": "68mm",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "68мм"
   },
   "sort": 23
  },
@@ -1196,7 +1217,8 @@
      "amount": 140,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -1247,7 +1269,8 @@
      "amount": 8,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -1290,7 +1313,8 @@
      "amount": 100,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -1392,7 +1416,8 @@
      "amount": 135,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -1502,7 +1527,8 @@
      "amount": 165,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -1604,7 +1630,8 @@
      "amount": 150,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -1648,7 +1675,8 @@
      "amount": 12,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     },
     {
      "name": "Processed Construction Materials",
@@ -1706,7 +1734,8 @@
      "amount": 8,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -1809,7 +1838,8 @@
      "amount": 3,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     },
     {
      "name": "Construction Materials",
@@ -1826,7 +1856,8 @@
    "byproducts": [],
    "crate": false,
    "page": "950-70b Anti-Aircraft Shell",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "950-70b Зенитный снаряд"
   },
   "sort": 36
  },
@@ -2127,7 +2158,8 @@
      "amount": 100,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -2170,7 +2202,8 @@
      "amount": 100,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -2213,7 +2246,8 @@
      "amount": 20,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -2307,7 +2341,8 @@
      "amount": 20,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -2351,7 +2386,8 @@
      "amount": 2,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     },
     {
      "name": "Construction Materials",
@@ -2409,7 +2445,8 @@
      "amount": 15,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -2512,7 +2549,8 @@
      "amount": 550,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     },
     {
      "name": "Construction Materials",
@@ -2529,7 +2567,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Anti-Tank Sticky Bomb",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Противотанковая липкая бомба"
   },
   "sort": 49
  },
@@ -2570,7 +2609,8 @@
      "amount": 825,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -2580,7 +2620,8 @@
    "byproducts": [],
    "crate": true,
    "page": "AP⧸RPG",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Бронебойный/РПГ"
   },
   "sort": 50
  },
@@ -2621,7 +2662,8 @@
      "amount": 825,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -2631,7 +2673,8 @@
    "byproducts": [],
    "crate": true,
    "page": "ARC⧸RPG",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Бронебойный навесной/РПГ"
   },
   "sort": 51
  },
@@ -2766,7 +2809,8 @@
      "amount": 50,
      "unit": "L",
      "code": "Petrol",
-     "icon_url": "/api/v1/assets/items/Petrol.png"
+     "icon_url": "/api/v1/assets/items/Petrol.png",
+     "name_ru": "Бензин"
     }
    ],
    "vehicle": null,
@@ -2868,7 +2912,8 @@
      "amount": 66,
      "unit": "L",
      "code": "FacilityOil1",
-     "icon_url": "/api/v1/assets/items/FacilityOil1.png"
+     "icon_url": "/api/v1/assets/items/FacilityOil1.png",
+     "name_ru": "Тяжелое топливо"
     }
    ],
    "vehicle": null,
@@ -3115,7 +3160,8 @@
      "amount": 685,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -3158,7 +3204,8 @@
      "amount": 35,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -3168,7 +3215,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Balfour Falconer 250mm",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "name_ru": "Balfour Falconer 250-мм"
   },
   "sort": 62
  },
@@ -3219,7 +3267,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Balfour Rampart 68mm",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "name_ru": "Balfour Rampart 68-мм"
   },
   "sort": 63
  },
@@ -3311,7 +3360,8 @@
      "amount": 20,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -3372,7 +3422,8 @@
    ],
    "crate": false,
    "page": "Barbed Wire (Material)",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "name_ru": "Колючая проволока"
   },
   "sort": 66
  },
@@ -3405,7 +3456,8 @@
      "amount": 150,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -3449,7 +3501,8 @@
      "amount": 440,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     },
     {
      "name": "Construction Materials",
@@ -3466,7 +3519,8 @@
    "byproducts": [],
    "crate": true,
    "page": "BF5 White Ash Flask Grenade",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Граната BF5 White Ash Flask"
   },
   "sort": 68
  },
@@ -3507,7 +3561,8 @@
      "amount": 12,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -3550,7 +3605,8 @@
      "amount": 150,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -3601,7 +3657,8 @@
      "amount": 25,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -3652,7 +3709,8 @@
      "amount": 15,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -3695,7 +3753,8 @@
      "amount": 125,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -3705,7 +3764,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Class 2 Mobile Auto-Crane",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "name_ru": "Мобильный автокран БМС 2 класса"
   },
   "sort": 73
  },
@@ -3738,7 +3798,8 @@
      "amount": 125,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -3748,7 +3809,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Class 2 Mobile Auto-Crane",
-   "source_icon": null
+   "source_icon": null,
+   "name_ru": "Мобильный автокран БМС 2 класса"
   },
   "sort": 74
  },
@@ -3824,7 +3886,8 @@
      "amount": 60,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -3867,7 +3930,8 @@
      "amount": 500,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -3918,7 +3982,8 @@
      "amount": 15,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -4004,7 +4069,8 @@
      "amount": 30,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -4014,7 +4080,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Packmule Flatbed",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "name_ru": "Бортовой грузовик BMS - Packmule"
   },
   "sort": 80
  },
@@ -4098,7 +4165,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -4141,7 +4209,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -4909,7 +4978,8 @@
      "amount": 20,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     },
     {
      "name": "Naval Turbine Components",
@@ -4969,7 +5039,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Caoivish Parka",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Парка Caoivish"
   },
   "sort": 97
  },
@@ -5147,7 +5218,8 @@
      "amount": 100,
      "unit": "L",
      "code": "Water",
-     "icon_url": "/api/v1/assets/items/Water.png"
+     "icon_url": "/api/v1/assets/items/Water.png",
+     "name_ru": "Вода"
     }
    ],
    "vehicle": null,
@@ -5160,7 +5232,8 @@
      "amount": 60,
      "unit": "L",
      "code": "FacilityOil1",
-     "icon_url": "/api/v1/assets/items/FacilityOil1.png"
+     "icon_url": "/api/v1/assets/items/FacilityOil1.png",
+     "name_ru": "Тяжелое топливо"
     }
    ],
    "crate": false,
@@ -5292,7 +5365,8 @@
      "amount": 20,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -5302,7 +5376,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Collins Cannon 68mm",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "name_ru": "Collins орудие 68-мм"
   },
   "sort": 104
  },
@@ -5794,7 +5869,8 @@
      "amount": 100,
      "unit": "L",
      "code": "Water",
-     "icon_url": "/api/v1/assets/items/Water.png"
+     "icon_url": "/api/v1/assets/items/Water.png",
+     "name_ru": "Вода"
     }
    ],
    "vehicle": null,
@@ -5860,7 +5936,8 @@
      "amount": 50,
      "unit": "L",
      "code": "Water",
-     "icon_url": "/api/v1/assets/items/Water.png"
+     "icon_url": "/api/v1/assets/items/Water.png",
+     "name_ru": "Вода"
     }
    ],
    "vehicle": null,
@@ -5961,7 +6038,8 @@
      "amount": 75,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -6012,7 +6090,8 @@
      "amount": 12,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -6055,7 +6134,8 @@
      "amount": 50,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -6065,7 +6145,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Construction Equipment",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "name_ru": "Строительное оборудование"
   },
   "sort": 119
  },
@@ -6106,7 +6187,8 @@
      "amount": 25,
      "unit": "L",
      "code": "Petrol",
-     "icon_url": "/api/v1/assets/items/Petrol.png"
+     "icon_url": "/api/v1/assets/items/Petrol.png",
+     "name_ru": "Бензин"
     }
    ],
    "vehicle": null,
@@ -6303,7 +6385,8 @@
      "amount": 2,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     },
     {
      "name": "Construction Materials",
@@ -6471,7 +6554,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -6514,7 +6598,8 @@
      "amount": 125,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -6675,7 +6760,8 @@
      "amount": 175,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -6844,7 +6930,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -6989,7 +7076,8 @@
      "amount": 120,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -7244,7 +7332,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -7338,7 +7427,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -7467,7 +7557,8 @@
      "amount": 120,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -7477,7 +7568,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Loadlugger 3c",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "name_ru": "Самосвал Dunne Loadlugger 3c"
   },
   "sort": 147
  },
@@ -7510,7 +7602,8 @@
      "amount": 150,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -7553,7 +7646,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -7604,7 +7698,8 @@
      "amount": 8,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -7741,7 +7836,8 @@
      "amount": 30,
      "unit": "L",
      "code": "FacilityOil1",
-     "icon_url": "/api/v1/assets/items/FacilityOil1.png"
+     "icon_url": "/api/v1/assets/items/FacilityOil1.png",
+     "name_ru": "Тяжелое топливо"
     }
    ],
    "vehicle": null,
@@ -7835,7 +7931,8 @@
      "amount": 4,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -7845,7 +7942,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Flame Ammo",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "Огнемётное топливо"
   },
   "sort": 155
  },
@@ -7879,7 +7977,8 @@
      "amount": 80,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     },
     {
      "name": "Construction Materials",
@@ -7896,7 +7995,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Flare Mortar Shell",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Осветительный Минометный Снаряд"
   },
   "sort": 156
  },
@@ -8130,7 +8230,8 @@
      "amount": 20,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -8224,7 +8325,8 @@
      "amount": 150,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -8505,7 +8607,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Gravel",
-   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png"
+   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png",
+   "name_ru": "Гравий"
   },
   "sort": 167
  },
@@ -8548,7 +8651,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Gravel",
-   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png"
+   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png",
+   "name_ru": "Гравий"
   },
   "sort": 168
  },
@@ -8634,7 +8738,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Gunner's Breastplate",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Стальная кираса"
   },
   "sort": 170
  },
@@ -8785,7 +8890,8 @@
      "amount": 115,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -8887,7 +8993,8 @@
      "amount": 125,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -8930,7 +9037,8 @@
      "amount": 100,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -9034,7 +9142,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Heavy Oil",
-   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png",
+   "name_ru": "Тяжелое топливо"
   },
   "sort": 178
  },
@@ -9110,7 +9219,8 @@
      "amount": 55,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -9263,7 +9373,8 @@
      "amount": 175,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -9306,7 +9417,8 @@
      "amount": 35,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -9316,7 +9428,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Huber Lariat 120mm",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "name_ru": "Huber Lariat 120мм"
   },
   "sort": 184
  },
@@ -9409,7 +9522,8 @@
      "amount": 385,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     },
     {
      "name": "Construction Materials",
@@ -9467,7 +9581,8 @@
      "amount": 1,
      "unit": null,
      "code": "FlameAmmo",
-     "icon_url": "/api/v1/assets/items/FlameAmmo.png"
+     "icon_url": "/api/v1/assets/items/FlameAmmo.png",
+     "name_ru": "Огнемётное топливо"
     }
    ],
    "vehicle": null,
@@ -9477,7 +9592,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Incendiary Mortar Shell",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Зажигательный минометный снаряд"
   },
   "sort": 187
  },
@@ -9628,7 +9744,8 @@
      "amount": 10,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -9671,7 +9788,8 @@
      "amount": 200,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -9824,7 +9942,8 @@
      "amount": 70,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -9867,7 +9986,8 @@
      "amount": 85,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -10205,7 +10325,8 @@
      "amount": 175,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -10307,7 +10428,8 @@
      "amount": 150,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -10317,7 +10439,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Leary Shellbore 68mm",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "name_ru": "Leary Shellbore 68-мм"
   },
   "sort": 203
  },
@@ -10350,7 +10473,8 @@
      "amount": 75,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -10487,7 +10611,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -10497,7 +10622,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Liquid Container",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "name_ru": "Жидкостный контейнер"
   },
   "sort": 207
  },
@@ -10640,7 +10766,8 @@
      "amount": 100,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -10683,7 +10810,8 @@
      "amount": 100,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -10801,7 +10929,8 @@
      "amount": 10,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -10854,7 +10983,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Maintenance Supplies",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "name_ru": "Припасы Обслуживания"
   },
   "sort": 214
  },
@@ -10931,7 +11061,8 @@
      "amount": 16,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     },
     {
      "name": "Processed Construction Materials",
@@ -10981,7 +11112,8 @@
      "amount": 25,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -10991,7 +11123,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Material Pallet",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "name_ru": "Поддон для материалов"
   },
   "sort": 217
  },
@@ -11024,7 +11157,8 @@
      "amount": 25,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -11034,7 +11168,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Material Pallet",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "name_ru": "Поддон для материалов"
   },
   "sort": 218
  },
@@ -11118,7 +11253,8 @@
      "amount": 20,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -11254,7 +11390,8 @@
    ],
    "crate": false,
    "page": "Metal Beam",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "name_ru": "Металлическая балка"
   },
   "sort": 222
  },
@@ -11295,7 +11432,8 @@
      "amount": 8,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -11346,7 +11484,8 @@
      "amount": 16,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -11390,7 +11529,8 @@
      "amount": 385,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     },
     {
      "name": "Construction Materials",
@@ -11407,7 +11547,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Mortar Shell",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Минометный Снаряд"
   },
   "sort": 225
  },
@@ -11450,7 +11591,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Mounted Bonesaw MK.3",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "Станковый Bonesaw MK.3"
   },
   "sort": 226
  },
@@ -11493,7 +11635,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Mounted Fissura gd.I",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "Станковый Fissura gd.I"
   },
   "sort": 227
  },
@@ -11526,7 +11669,8 @@
      "amount": 20,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -11577,7 +11721,8 @@
      "amount": 15,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -11764,7 +11909,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Naval Shell Plating",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "name_ru": "Корабельная обшивка корпуса"
   },
   "sort": 232
  },
@@ -11848,7 +11994,8 @@
      "amount": 60,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -11858,7 +12005,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Niska Mk. I Gun Motor Carriage",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "name_ru": "Полугусеничный Бронетранспортер Niska Mk. I"
   },
   "sort": 234
  },
@@ -12119,7 +12267,8 @@
      "amount": 160,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -12288,7 +12437,8 @@
      "amount": 25,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -12484,7 +12634,8 @@
      "amount": 40,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -12741,7 +12892,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Outrider's Mantle",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Дозорная мантия"
   },
   "sort": 251
  },
@@ -12784,7 +12936,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Padded Boiler Suit",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Стеганный Комбинезон"
   },
   "sort": 252
  },
@@ -12827,7 +12980,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Paratrooper's Ruck",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Рюкзак Десантника"
   },
   "sort": 253
  },
@@ -12870,7 +13024,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Petrol",
-   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png",
+   "name_ru": "Бензин"
   },
   "sort": 254
  },
@@ -12911,7 +13066,8 @@
      "amount": 10,
      "unit": "L",
      "code": "Water",
-     "icon_url": "/api/v1/assets/items/Water.png"
+     "icon_url": "/api/v1/assets/items/Water.png",
+     "name_ru": "Вода"
     }
    ],
    "vehicle": null,
@@ -12921,7 +13077,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Petrol",
-   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png",
+   "name_ru": "Бензин"
   },
   "sort": 255
  },
@@ -12964,7 +13121,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Physician's Jacket",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Куртка врача"
   },
   "sort": 256
  },
@@ -13091,7 +13249,8 @@
      "amount": 20,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -13150,7 +13309,8 @@
      "amount": 6,
      "unit": "L",
      "code": "FacilityOil1",
-     "icon_url": "/api/v1/assets/items/FacilityOil1.png"
+     "icon_url": "/api/v1/assets/items/FacilityOil1.png",
+     "name_ru": "Тяжелое топливо"
     }
    ],
    "vehicle": null,
@@ -13253,14 +13413,16 @@
      "amount": 1,
      "unit": null,
      "code": "MetalBeamMaterials",
-     "icon_url": "/api/v1/assets/items/MetalBeamMaterials.png"
+     "icon_url": "/api/v1/assets/items/MetalBeamMaterials.png",
+     "name_ru": "Металлическая балка"
     },
     {
      "name": "Heavy Oil",
      "amount": 10,
      "unit": "L",
      "code": "FacilityOil1",
-     "icon_url": "/api/v1/assets/items/FacilityOil1.png"
+     "icon_url": "/api/v1/assets/items/FacilityOil1.png",
+     "name_ru": "Тяжелое топливо"
     }
    ],
    "vehicle": null,
@@ -13313,7 +13475,8 @@
    "byproducts": [],
    "crate": true,
    "page": "PT-815 Smoke Grenade",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Дымовая граната PT-815"
   },
   "sort": 263
  },
@@ -13356,7 +13519,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Quillback Torpedo",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "Торпеда \"Quillback\""
   },
   "sort": 264
  },
@@ -13389,7 +13553,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -13432,7 +13597,8 @@
      "amount": 150,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -13526,7 +13692,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -13628,7 +13795,8 @@
      "amount": 120,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -13996,7 +14164,8 @@
      "amount": 50,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -14006,7 +14175,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Resource Container",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "name_ru": "Контейнер для ресурсов"
   },
   "sort": 278
  },
@@ -14114,7 +14284,8 @@
      "amount": 450,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -14157,7 +14328,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -14200,7 +14372,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -14243,7 +14416,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -14294,7 +14468,8 @@
      "amount": 495,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -14304,7 +14479,8 @@
    "byproducts": [],
    "crate": true,
    "page": "RPG",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "РПГ"
   },
   "sort": 284
  },
@@ -14337,7 +14513,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -14457,7 +14634,8 @@
    ],
    "crate": false,
    "page": "Sandbag",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "name_ru": "Мешок с песком"
   },
   "sort": 287
  },
@@ -14500,7 +14678,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Sapper Gear",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Сапёрное снаряжение"
   },
   "sort": 288
  },
@@ -14651,7 +14830,8 @@
      "amount": 125,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -14702,7 +14882,8 @@
      "amount": 28,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -14712,7 +14893,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Shatter Missile",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "Разрушающая ракета"
   },
   "sort": 292
  },
@@ -14745,7 +14927,8 @@
      "amount": 100,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -14755,7 +14938,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Shipping Container",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "name_ru": "Грузовой контейнер"
   },
   "sort": 293
  },
@@ -14789,7 +14973,8 @@
      "amount": 110,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     },
     {
      "name": "Construction Materials",
@@ -14806,7 +14991,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Shrapnel Mortar Shell",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Осколочный минометный снаряд"
   },
   "sort": 294
  },
@@ -14839,7 +15025,8 @@
      "amount": 160,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -15010,7 +15197,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Specialist's Overcoat",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "name_ru": "Шинель специалиста"
   },
   "sort": 298
  },
@@ -15110,7 +15298,8 @@
      "amount": 35,
      "unit": "L",
      "code": "FacilityOil1",
-     "icon_url": "/api/v1/assets/items/FacilityOil1.png"
+     "icon_url": "/api/v1/assets/items/FacilityOil1.png",
+     "name_ru": "Тяжелое топливо"
     }
    ],
    "vehicle": null,
@@ -15177,7 +15366,8 @@
      "amount": 100,
      "unit": "L",
      "code": "Water",
-     "icon_url": "/api/v1/assets/items/Water.png"
+     "icon_url": "/api/v1/assets/items/Water.png",
+     "name_ru": "Вода"
     }
    ],
    "vehicle": null,
@@ -15381,7 +15571,8 @@
      "amount": 500,
      "unit": null,
      "code": "Cloth",
-     "icon_url": "/api/v1/assets/items/Cloth.png"
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
     }
    ],
    "vehicle": null,
@@ -15483,7 +15674,8 @@
      "amount": 20,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -15526,7 +15718,8 @@
      "amount": 35,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -15595,7 +15788,8 @@
    "byproducts": [],
    "crate": false,
    "page": "T13 “Deioneus” Rocket Battery",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "name_ru": "Реактивный миномет T13 “Deioneus”"
   },
   "sort": 309
  },
@@ -15730,7 +15924,8 @@
      "amount": 25,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -16002,7 +16197,8 @@
      "amount": 14,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     },
     {
      "name": "Processed Construction Materials",
@@ -16112,7 +16308,8 @@
      "amount": 20,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     },
     {
      "name": "Naval Turbine Components",
@@ -16237,7 +16434,8 @@
      "amount": 550,
      "unit": null,
      "code": "Explosive",
-     "icon_url": "/api/v1/assets/items/Explosive.png"
+     "icon_url": "/api/v1/assets/items/Explosive.png",
+     "name_ru": "Порох"
     }
    ],
    "vehicle": null,
@@ -16290,7 +16488,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Tripod",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "name_ru": "Тренога"
   },
   "sort": 322
  },
@@ -16481,7 +16680,8 @@
      "amount": 15,
      "unit": null,
      "code": "ShipPart2",
-     "icon_url": "/api/v1/assets/items/ShipPart2.png"
+     "icon_url": "/api/v1/assets/items/ShipPart2.png",
+     "name_ru": "Корабельная обшивка корпуса"
     }
    ],
    "vehicle": null,
@@ -16524,7 +16724,8 @@
      "amount": 100,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -16567,7 +16768,8 @@
      "amount": 140,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,
@@ -16729,14 +16931,16 @@
      "amount": 3,
      "unit": null,
      "code": "FlameAmmo",
-     "icon_url": "/api/v1/assets/items/FlameAmmo.png"
+     "icon_url": "/api/v1/assets/items/FlameAmmo.png",
+     "name_ru": "Огнемётное топливо"
     },
     {
      "name": "Heavy Explosive Powder",
      "amount": 8,
      "unit": null,
      "code": "HeavyExplosive",
-     "icon_url": "/api/v1/assets/items/HeavyExplosive.png"
+     "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
+     "name_ru": "Тяжёлый порох"
     }
    ],
    "vehicle": null,
@@ -16779,7 +16983,8 @@
      "amount": 10,
      "unit": null,
      "code": "Wood",
-     "icon_url": "/api/v1/assets/items/Wood.png"
+     "icon_url": "/api/v1/assets/items/Wood.png",
+     "name_ru": "Рафинированные материалы"
     }
    ],
    "vehicle": null,

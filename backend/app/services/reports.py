@@ -25,6 +25,15 @@ STATUS_COLORS = {
 }
 
 
+CatalogNames = dict[str, tuple[str, str]]     # код -> (русское, английское)
+
+
+def line_names(names: CatalogNames, code: str | None) -> dict[str, str | None]:
+    """Поля name_ru / name_en строки заказа из словаря ReportService.names_for."""
+    ru, en = names.get(code or "", (None, None))
+    return {"name_ru": ru, "name_en": en}
+
+
 def line_icon(icons: dict[str, str | None], code: str | None, name: str) -> str | None:
     """Иконка строки заказа из словаря ReportService.icons_for."""
     return icons.get(code or "") or icons.get(f"name:{name}")
@@ -58,6 +67,16 @@ class ReportService(ClanScopedService):
             OrderReport, report_id, not_found_key="report.not_found", domain=DOMAIN,
             for_update=for_update,
         )
+
+    async def names_for(self, reports: Sequence[OrderReport]) -> CatalogNames:
+        codes = {line.item_code for r in reports for line in r.lines if line.item_code}
+        if not codes:
+            return {}
+        rows = await self.session.execute(
+            select(CatalogItem.code, CatalogItem.name, CatalogItem.english_name)
+            .where(CatalogItem.code.in_(codes))
+        )
+        return {code: (name, en) for code, name, en in rows.all()}
 
     async def icons_for(self, reports: Sequence[OrderReport]) -> dict[str, str | None]:
         """Иконки строк: по коду каталога, а для строк без кода (постройки, часть рецептов

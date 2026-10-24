@@ -63,6 +63,10 @@ class ReportLineRead(BaseModel):
     quantity: int
     unit: Unit
     icon_url: str | None = None      # витрина из каталога
+    # названия из каталога по коду (русское — как в русском клиенте игры): экспорт и
+    # «читалка» показывают их на языке интерфейса; name — как ввели при создании заказа
+    name_ru: str | None = None
+    name_en: str | None = None
 
 
 class ReportRead(BaseModel):
@@ -118,6 +122,10 @@ class ProgressLineRead(BaseModel):
     name: str
     item_code: str | None
     icon_url: str | None
+    # названия из каталога по коду (русское — как в русском клиенте игры): экспорт и
+    # «читалка» показывают их на языке интерфейса; name — как ввели при создании заказа
+    name_ru: str | None = None
+    name_en: str | None = None
     unit: Unit
     ordered: int
     delivered: int
@@ -127,6 +135,10 @@ class ContributionLineRead(BaseModel):
     line_id: uuid.UUID
     name: str
     icon_url: str | None
+    # названия из каталога по коду (русское — как в русском клиенте игры): экспорт и
+    # «читалка» показывают их на языке интерфейса; name — как ввели при создании заказа
+    name_ru: str | None = None
+    name_en: str | None = None
     unit: Unit
     quantity: int
 

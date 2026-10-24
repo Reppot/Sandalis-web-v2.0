@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { reportApi, type Report, type ReportProgress } from "@/entities/report";
+import { localizeProgress, reportApi, type Report, type ReportProgress } from "@/entities/report";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi, type Stockpile } from "@/entities/stockpile";
 import { ItemIcon, Loading, Modal, assetUrl, errorText, formatDateTime, useConfirm, useI18n, useNotify, type Translate } from "@/shared";
@@ -14,9 +14,10 @@ const pct = (part: number, whole: number) => (whole ? Math.min(100, Math.round((
  * и журнал вкладов. Кнопка «Сообщить о выполнении» — состав заказа с количествами и склад.
  */
 export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: string; onStatusMaybeChanged: () => void }> = ({ report, can, userId, onStatusMaybeChanged }) => {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const notify = useNotify();
-  const [progress, setProgress] = React.useState<ReportProgress | null>(null);
+  const [raw, setProgress] = React.useState<ReportProgress | null>(null);
+  const progress = React.useMemo(() => (raw ? localizeProgress(raw, locale) : null), [raw, locale]);
   const [open, setOpen] = React.useState(false);
   const [armed, confirm] = useConfirm();
 

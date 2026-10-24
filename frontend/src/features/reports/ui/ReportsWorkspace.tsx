@@ -4,7 +4,7 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import { Scopes, type Can } from "@/entities/session";
 import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
-import { orderKindOf, REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
+import { lineName, orderKindOf, REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
   DocReader,
@@ -59,7 +59,7 @@ interface ReportsWorkspaceProps {
   onOpenConstructor: () => void;
 }
 
-function toDoc(report: Report, t: Translate): ExportDoc {
+function toDoc(report: Report, t: Translate, locale: string): ExportDoc {
   const kind = orderKindOf(report.meta.type);
   const meta = [
     kind && `${t("orderSend.kind")}: ${t(kind.label)}`,
@@ -69,7 +69,7 @@ function toDoc(report: Report, t: Translate): ExportDoc {
   return {
     title: `SINDARIS • ${report.title}`,
     header: [...meta, `${t("doc.author")}: ${report.created_by_name ?? report.created_by} • ${formatDateTime(report.created_at)}`, `${t("doc.status")}: ${t(REPORT_STATUS_LABEL[report.status])}`],
-    sections: [{ rows: report.lines.map((l) => ({ name: l.name, quantity: l.quantity, unit: unitLabel(l.unit, t), icon: assetUrl(l.icon_url) })) }],
+    sections: [{ rows: report.lines.map((l) => ({ name: lineName(l, locale), quantity: l.quantity, unit: unitLabel(l.unit, t), icon: assetUrl(l.icon_url) })) }],
     fileBase: `SINDARIS_report_${report.title}`.slice(0, 60),
     sheetName: t("reports.report"),
   };
@@ -80,7 +80,7 @@ const unitLabel = (unit: string, t: Translate) => t(unit === "crate" ? "unit.cra
 /** «Текущие заказы клана» — рапорты снабжения штаба: статусы, экспорт, отправка в Discord. */
 export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId, onOpenConstructor }) => {
   const notify = useNotify();
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const { media } = useContent();
   const texture = media("bg_report_texture");
   const { run: exportDoc, previewModal } = useDocExport(texture);
@@ -111,7 +111,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
   const visible = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return reports;
-    return reports.filter((r) => r.title.toLowerCase().includes(q) || r.lines.some((l) => l.name.toLowerCase().includes(q)));
+    return reports.filter((r) => r.title.toLowerCase().includes(q) || r.lines.some((l) => [l.name, l.name_ru, l.name_en].some((n) => n?.toLowerCase().includes(q))));
   }, [reports, query]);
   const page = usePaged(visible, 20, query);
 
@@ -142,7 +142,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
   const sendToDiscord = (report: Report) =>
     act(report.id, async () => {
       try {
-        const [first] = await renderPages(toDoc(report, t), texture);
+        const [first] = await renderPages(toDoc(report, t, locale), texture);
         const image = first ? await canvasToBlob(first) : null;
         const r = await reportApi.sendToDiscord(report.id, image);
         replace(r.report);
@@ -216,7 +216,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
               <li data-guide="report-card" key={report.id} className="panel panel-corners report-card rounded-md p-3">
                 {/* слева — страница заказа целиком (как PNG-экспорт), справа — данные и действия */}
                 <div className="report-card-page">
-                  <DocReader doc={toDoc(report, t)} textureUrl={texture} expanded={open} onExpand={() => setExpanded(report.id)} />
+                  <DocReader doc={toDoc(report, t, locale)} textureUrl={texture} expanded={open} onExpand={() => setExpanded(report.id)} />
                 </div>
                 <div className="report-card-body">
                 <div className="flex flex-wrap items-start justify-between gap-2">
@@ -273,7 +273,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                     </button>
                   )}
                 </div>
-                <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t), fmt)} busy={busy} />
+                <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t, locale), fmt)} busy={busy} />
                 <ReportProgressPanel report={report} can={can} userId={userId} onStatusMaybeChanged={() => void load()} />
                 </div>
               </li>

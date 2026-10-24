@@ -16,7 +16,7 @@ from app.schemas.report import (
     ProgressLineRead,
     ReportProgressRead,
 )
-from app.services.reports import DOMAIN, ReportService, line_icon
+from app.services.reports import DOMAIN, ReportService, line_icon, line_names
 
 
 class ReportProgressService(ReportService):
@@ -31,6 +31,7 @@ class ReportProgressService(ReportService):
     async def progress(self, report_id: uuid.UUID, message: str | None = None) -> ReportProgressRead:
         report = await self.get_report(report_id)
         icons = await self.icons_for([report])
+        names = await self.names_for([report])
         contributions = await self._contributions(report.id)
         by_line = {line.id: line for line in report.lines}
         delivered: dict[uuid.UUID, int] = {}
@@ -40,6 +41,7 @@ class ReportProgressService(ReportService):
         lines = [
             ProgressLineRead(
                 line_id=line.id, name=line.name, item_code=line.item_code, icon_url=line_icon(icons, line.item_code, line.name),
+                **line_names(names, line.item_code),
                 unit=line.unit, ordered=line.quantity, delivered=delivered.get(line.id, 0),
             )
             for line in report.lines
@@ -55,6 +57,7 @@ class ReportProgressService(ReportService):
                         ContributionLineRead(
                             line_id=cl.line_id, name=by_line[cl.line_id].name,
                             icon_url=line_icon(icons, by_line[cl.line_id].item_code, by_line[cl.line_id].name),
+                            **line_names(names, by_line[cl.line_id].item_code),
                             unit=by_line[cl.line_id].unit, quantity=cl.quantity,
                         )
                         for cl in c.lines if cl.line_id in by_line

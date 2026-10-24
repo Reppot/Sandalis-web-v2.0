@@ -232,7 +232,8 @@ def test_havoc_alligator_fissura_are_not_swapped():
 def test_type_prefix_rule_without_aliases():
     """«Граната X» / «Винтовка X» находят предмет по началу английского названия;
     неоднозначное и «Станковый …» — нет (станковая версия — другой предмет)."""
-    rows = [{**r, "aliases": []} for r in load("catalog.json")]
+    # только английские названия: проверяем само правило, без алиасов и русских имён
+    rows = [{**r, "name": r["english_name"], "aliases": []} for r in load("catalog.json")]
     index = CatalogIndex.build(_Item(r) for r in rows)
     assert index.resolve("Граната Bomastone") == "GrenadeC"
     assert index.resolve("Автоматическая винтовка Catena rt.IV") == "RifleAutomaticC"

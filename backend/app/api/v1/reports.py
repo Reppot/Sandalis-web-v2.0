@@ -30,7 +30,7 @@ from app.schemas.report import (
 )
 from app.services.clan_settings import ClanSettingsService, to_read
 from app.services.report_progress import ReportProgressService
-from app.services.reports import ReportService, line_icon
+from app.services.reports import CatalogNames, ReportService, line_icon, line_names
 
 router = APIRouter(prefix="/reports", tags=["reports"])
 settings_router = APIRouter(prefix="/clan", tags=["clan"])
@@ -55,10 +55,10 @@ ServiceDep = Annotated[ReportService, Depends(get_report_service)]
 SettingsServiceDep = Annotated[ClanSettingsService, Depends(get_settings_service)]
 
 
-def _read(report: OrderReport, icons: dict[str, str | None]) -> ReportRead:
+def _read(report: OrderReport, icons: dict[str, str | None], names: CatalogNames) -> ReportRead:
     lines = [
         ReportLineRead.model_validate(line).model_copy(
-            update={"icon_url": line_icon(icons, line.item_code, line.name)}
+            update={"icon_url": line_icon(icons, line.item_code, line.name), **line_names(names, line.item_code)}
         )
         for line in report.lines
     ]
@@ -71,12 +71,12 @@ def _read(report: OrderReport, icons: dict[str, str | None]) -> ReportRead:
 
 
 async def _one(service: ReportService, report: OrderReport) -> ReportRead:
-    return _read(report, await service.icons_for([report]))
+    return _read(report, await service.icons_for([report]), await service.names_for([report]))
 
 
 async def _many(service: ReportService, reports: Sequence[OrderReport]) -> list[ReportRead]:
-    icons = await service.icons_for(reports)
-    return [_read(r, icons) for r in reports]
+    icons, names = await service.icons_for(reports), await service.names_for(reports)
+    return [_read(r, icons, names) for r in reports]
 
 
 @router.get(
