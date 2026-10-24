@@ -37,8 +37,8 @@ export const stockpileApi = {
     return { stockpile: toStockpile(r.stockpile), message: r.message };
   },
 
-  /** Полная замена содержимого выгрузкой сканера (дубли кодов суммирует сервер). */
-  async replaceContents(id: string, items: { item_code: string; quantity: number }[], source: SyncSource): Promise<StockpileResult> {
+  /** Полная замена содержимого выгрузкой сканера (дубли кодов суммирует сервер; ящики и россыпь — раздельно). */
+  async replaceContents(id: string, items: { item_code: string; quantity: number; unit?: "crate" | "unit" }[], source: SyncSource): Promise<StockpileResult> {
     const r = await apiClient.put<CreatedStockpileEnvelope<StockpileReadDto>>(`/api/v1/stockpiles/${id}/items`, { items, source });
     return { stockpile: toStockpile(r.stockpile), message: r.message };
   },

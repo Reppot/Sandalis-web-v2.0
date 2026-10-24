@@ -103,3 +103,25 @@ def test_stockpile_crud_items_tenancy_rbac(db):
                                 headers=admin_a)).status_code == 404
 
     run(main())
+
+
+def test_replace_contents_keeps_crates_and_loose_apart(db):
+    """Сканер: «Dunne Transport (Ящик),17» и «Dunne Transport,1» — разные строки склада."""
+    async def main() -> None:
+        await seed_clan("CLAN_A")
+        await seed_catalog_item("TruckW", category="vehicles", english_name="Dunne Transport")
+        admin = bearer(clan_id="CLAN_A")
+        async with client() as c:
+            sid = (await c.post(f"{API}/stockpiles", json={"name": "Port", "region": "Tine"},
+                                headers=admin)).json()["stockpile"]["id"]
+            r = await c.put(f"{API}/stockpiles/{sid}/items", headers=admin, json={"source": "txt", "items": [
+                {"item_code": "TruckW", "quantity": 17, "unit": "crate"},
+                {"item_code": "TruckW", "quantity": 1, "unit": "unit"},
+                {"item_code": "TruckW", "quantity": 7, "unit": "unit"},
+            ]})
+            assert r.status_code == 200, r.text
+            [item] = r.json()["stockpile"]["items"]
+            assert (item["quantity"], item["loose_quantity"]) == (17, 8)
+
+    run(main())
+

@@ -74,6 +74,7 @@ class StockpileItemRead(BaseModel):
     id: uuid.UUID
     item_code: str
     quantity: int
+    loose_quantity: int = 0
     created_at: datetime
     updated_at: datetime
     # витрина из каталога — клиенту не нужно отдельно резолвить коды
@@ -85,13 +86,22 @@ class StockpileItemRead(BaseModel):
 SyncSource = Literal["json", "txt", "clipboard", "xlsx", "scan", "manual"]
 
 
+class StockpileContentsLine(BaseModel):
+    """Строка выгрузки сканера: ящики (crate) или предметы не в ящиках (unit)."""
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+
+    item_code: Annotated[str, Field(min_length=1, max_length=64)]
+    quantity: Annotated[int, Field(gt=0, le=1_000_000)]
+    unit: Literal["crate", "unit"] = "crate"
+
+
 class StockpileContentsReplace(BaseModel):
     """Полная замена содержимого склада выгрузкой сканера (монитор склада).
     Позиции с одинаковым кодом суммируются; пустой список очищает склад."""
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
     source: SyncSource = "manual"
-    items: Annotated[list[StockpileItemUpsert], Field(max_length=2000)]
+    items: Annotated[list[StockpileContentsLine], Field(max_length=2000)]
 
 
 class StockpileDetailRead(StockpileRead):

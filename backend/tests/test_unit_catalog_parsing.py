@@ -67,6 +67,8 @@ class TestResolve:
         Item("RifleW", "Винтовка", "Rifle"),
         Item("ATLaunchedGrenadeW", "Гранатомёт", "B2 Varsi Anti-Tank Grenade"),
         Item("FortWeatherStationPart", "Детали метеостанции", "Weather Station Parts"),
+        Item("ATAmmo", "68мм", "68mm"),
+        Item("FieldATDamageW", "Balfour Rampart 68mm", "Balfour Rampart 68mm"),
     ])
 
     def test_lookup_key_normalizes(self):
@@ -85,6 +87,12 @@ class TestResolve:
         # «Titan» (линкор) не должен находиться внутри «An[ti-Tan]k Grenade»
         assert self.index.resolve("Titan") is None
         assert self.index.resolve("Weather Station") == "FortWeatherStationPart"
+
+    def test_game_client_calibers_and_coverage(self):
+        # «-мм» русского клиента = «mm»; полевое орудие не превращается в снаряды
+        assert self.index.resolve("Balfour Rampart 68-мм") == "FieldATDamageW"
+        assert self.index.resolve("68-мм (Ящик)") == "ATAmmo"
+        assert self.index.resolve("Unknown Rampart 68-мм") is None
 
 
 class TestMapData:

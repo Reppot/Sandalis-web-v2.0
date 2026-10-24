@@ -1,7 +1,10 @@
 export interface StockpileItem {
   id: string;
   itemCode: string;
+  /** В ящиках. */
   quantity: number;
+  /** Не в ящиках (россыпью / техника своим ходом). */
+  looseQuantity: number;
   name: string | null;
   nameEn: string | null;
   iconUrl: string | null;
@@ -29,6 +32,7 @@ export interface StockpileItemReadDto {
   id: string;
   item_code: string;
   quantity: number;
+  loose_quantity?: number;
   name?: string | null;
   name_en?: string | null;
   icon_url?: string | null;
@@ -49,7 +53,7 @@ export interface StockpileReadDto {
 }
 
 export function toStockpileItem(dto: StockpileItemReadDto): StockpileItem {
-  return { id: dto.id, itemCode: dto.item_code, quantity: dto.quantity, name: dto.name ?? null, nameEn: dto.name_en ?? null, iconUrl: dto.icon_url ?? null };
+  return { id: dto.id, itemCode: dto.item_code, quantity: dto.quantity, looseQuantity: dto.loose_quantity ?? 0, name: dto.name ?? null, nameEn: dto.name_en ?? null, iconUrl: dto.icon_url ?? null };
 }
 
 export function toStockpile(dto: StockpileReadDto): Stockpile {

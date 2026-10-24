@@ -299,7 +299,7 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
   const needle = query.trim().toLowerCase();
   const shown = [...items]
     .filter((i) => !needle || `${name(i)} ${i.itemCode}`.toLowerCase().includes(needle))
-    .sort((a, b) => b.quantity - a.quantity);
+    .sort((a, b) => b.quantity + b.looseQuantity - (a.quantity + a.looseQuantity));
   return (
     <div className="stockpile-items" data-guide="stockpile-items">
       {items.length > 12 ? (
@@ -311,7 +311,10 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
             <li key={i.id} className="stockpile-item" title={name(i)}>
               <ItemIcon sources={[assetUrl(i.iconUrl)]} size={34} label={name(i)} />
               <span className="min-w-0 flex-1 truncate">{name(i)}</span>
-              <b>{i.quantity.toLocaleString()}</b>
+              <span className="stockpile-item-qty">
+                {i.quantity ? <b title={t("unit.crate")}>{i.quantity.toLocaleString()} {t("unit.crate")}</b> : null}
+                {i.looseQuantity ? <em title={t("stock.loose")}>{i.looseQuantity.toLocaleString()} {t("unit.unit")}</em> : null}
+              </span>
             </li>
           ))}
         </ul>
@@ -338,7 +341,7 @@ const StockpileContentsModal: React.FC<{ target: Stockpile | null; onClose: () =
     setBusy(true);
     try {
       const parsed = await catalogApi.parse(text);
-      const items = parsed.lines.filter((l) => l.item && l.count > 0).map((l) => ({ item_code: l.item!.code, quantity: l.count }));
+      const items = parsed.lines.filter((l) => l.item && l.count > 0).map((l) => ({ item_code: l.item!.code, quantity: l.count, unit: l.unit }));
       if (!items.length) {
         notify({ title: t("import.formatError"), message: t("import.formatHelp"), tone: "danger", ttl: 8000 });
         return;

@@ -9,7 +9,8 @@
   "icon_url": "/api/v1/assets/items/AAAmmo.png",
   "crate_size": 1,
   "aliases": [
-   "Зенитный снаряд 950-70b"
+   "Зенитный снаряд 950-70b",
+   "950-70b Зенитный снаряд"
   ],
   "needs_review": false
  },
@@ -881,7 +882,8 @@
   "icon_url": "/api/v1/assets/items/ATRifleW.png",
   "crate_size": 1,
   "aliases": [
-   "противотанковое ружье 20мм"
+   "противотанковое ружье 20мм",
+   "Противотанковое ружье Neville"
   ],
   "needs_review": false
  },
@@ -1886,7 +1888,8 @@
   "icon_url": "/api/v1/assets/items/FacilityOil1.png",
   "crate_size": 1,
   "aliases": [
-   "Нефть для объекта I"
+   "Нефть для объекта I",
+   "Тяжелое топливо"
   ],
   "needs_review": false
  },
@@ -1977,7 +1980,9 @@
   "origin": "vehicle",
   "icon_url": "/api/v1/assets/items/FieldATDamageW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Balfour Rampart 68-мм"
+  ],
   "needs_review": false
  },
  {
@@ -1990,7 +1995,8 @@
   "icon_url": "/api/v1/assets/items/FieldATW.png",
   "crate_size": 3,
   "aliases": [
-   "Полевая противотанковая пушка"
+   "Полевая противотанковая пушка",
+   "Collins орудие 68-мм"
   ],
   "needs_review": false
  },
@@ -2118,7 +2124,8 @@
   "icon_url": "/api/v1/assets/items/FlameAmmo.png",
   "crate_size": 1,
   "aliases": [
-   "Огненные патроны"
+   "Огненные патроны",
+   "Огнемётное топливо"
   ],
   "needs_review": false
  },
@@ -2182,7 +2189,8 @@
   "icon_url": "/api/v1/assets/items/FlatbedTruck.png",
   "crate_size": 3,
   "aliases": [
-   "Флэтбед (пакмул)"
+   "Флэтбед (пакмул)",
+   "Бортовой грузовик BMS - Packmule"
   ],
   "needs_review": false
  },
@@ -2668,7 +2676,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/HERocketAmmo.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "3C-Фугасная ракета"
+  ],
   "needs_review": false
  },
  {
@@ -4359,7 +4369,8 @@
   "icon_url": "/api/v1/assets/items/RpgAmmo.png",
   "crate_size": 1,
   "aliases": [
-   "снаряд РПГ"
+   "снаряд РПГ",
+   "РПГ"
   ],
   "needs_review": false
  },
@@ -4399,7 +4410,8 @@
   "icon_url": "/api/v1/assets/items/SandbagMaterials.png",
   "crate_size": 5,
   "aliases": [
-   "Мешки с песком (материалы)"
+   "Мешки с песком (материалы)",
+   "Мешок с песком"
   ],
   "needs_review": false
  },
@@ -4838,7 +4850,8 @@
   "icon_url": "/api/v1/assets/items/SoldierSupplies.png",
   "crate_size": 10,
   "aliases": [
-   "рубашки"
+   "рубашки",
+   "Солдатское снаряжение"
   ],
   "needs_review": false
  },
@@ -5038,7 +5051,9 @@
   "icon_url": "/api/v1/assets/items/TankUniformW.png",
   "crate_size": 15,
   "aliases": [
-   "форма танкиста"
+   "форма танкиста",
+   "Стеганный Комбинезон",
+   "Стеганый комбинезон"
   ],
   "needs_review": false
  },
@@ -5118,7 +5133,8 @@
   "icon_url": "/api/v1/assets/items/TraumaKit.png",
   "crate_size": 10,
   "aliases": [
-   "Травма-аптечка"
+   "Травма-аптечка",
+   "Реанимационный набор"
   ],
   "needs_review": false
  },

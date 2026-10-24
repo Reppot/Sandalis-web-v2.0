@@ -216,6 +216,7 @@ export const en: Record<MessageKey, string> = {
   "perm.stockpiles:items": "Update stockpile contents (paste JSON, scanner, clipboard, MapData.sav)",
   "reports.noteLabel": "Order comment",
   "stock.updateContents": "Update contents",
+  "stock.loose": "not crated",
   "legal.rights": "All rights reserved.",
   "legal.terms": "Copying or reusing the site's code, design or materials without permission is prohibited.",
   "stock.showItems": "show",

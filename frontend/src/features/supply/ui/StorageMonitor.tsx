@@ -118,7 +118,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
         ttl: 8000,
       });
     }
-    const items = result.lines.filter((l) => l.item && l.count > 0).map((l) => ({ item_code: l.item!.code, quantity: l.count }));
+    const items = result.lines.filter((l) => l.item && l.count > 0).map((l) => ({ item_code: l.item!.code, quantity: l.count, unit: l.unit }));
     try {
       const saved = await stockpileApi.replaceContents(pinned.id, items, source);
       setPinned(saved.stockpile);
@@ -333,7 +333,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
                   <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 64 : 32} label={itemLabel(item)} />
                   <span className={`truncate text-white ${isFullWidth ? "text-base font-semibold" : "text-[0.82rem]"}`}>• {itemLabel(item)}</span>
                 </span>
-                <span className="badge-count">{item.quantity}</span>
+                <span className="badge-count">{item.quantity}{item.looseQuantity ? ` + ${item.looseQuantity} ${t("unit.unit")}` : ""}</span>
               </li>
             ))}
           </ul>

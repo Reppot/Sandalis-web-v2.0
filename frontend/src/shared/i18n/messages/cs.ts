@@ -216,6 +216,7 @@ export const cs: Record<MessageKey, string> = {
   "perm.stockpiles:items": "Aktualizovat obsah skladů (vložení JSON, skener, schránka, MapData.sav)",
   "reports.noteLabel": "Komentář k objednávce",
   "stock.updateContents": "Aktualizovat obsah",
+  "stock.loose": "mimo bedny",
   "legal.rights": "Všechna práva vyhrazena.",
   "legal.terms": "Kopírování a používání kódu, designu a materiálů webu bez svolení je zakázáno.",
   "stock.showItems": "zobrazit",

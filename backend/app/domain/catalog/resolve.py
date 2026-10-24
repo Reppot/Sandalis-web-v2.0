@@ -15,18 +15,26 @@ from typing import Iterable, Protocol
 
 SERVICE_SUFFIX = re.compile(r"\s*\((?:ящик|ящ|штука|шт|crate|crates?)\)\s*$", re.I)
 NON_WORD = re.compile(r"[^a-z0-9а-я]+")
+# калибр в русском клиенте игры: «68-мм», «120мм» — то же, что «68mm»
+CYRILLIC_MM = re.compile(r"(?<=\d)[\s-]*мм(?![а-я])")
+# мягкое совпадение: короткое название должно покрывать ≥ 60 % длинного, иначе
+# «68мм» находилось бы внутри «Balfour Rampart 68-мм» (полевое орудие ≠ снаряды)
+MIN_COVERAGE = 0.6
+
+
+def _normalize(value: str | None) -> str:
+    stripped = SERVICE_SUFFIX.sub("", value or "").lower().replace("ё", "е")
+    return CYRILLIC_MM.sub("mm", stripped)
 
 
 def lookup_key(value: str | None) -> str:
-    stripped = SERVICE_SUFFIX.sub("", value or "")
-    return NON_WORD.sub("", stripped.lower().replace("ё", "е"))
+    return NON_WORD.sub("", _normalize(value))
 
 
 def word_bounds(value: str | None) -> tuple[str, frozenset[int]]:
     """Ключ и позиции границ слов в нём («Anti-Tank» → "antitank", {0, 4, 8})."""
-    stripped = SERVICE_SUFFIX.sub("", value or "").lower().replace("ё", "е")
     key, bounds = "", {0}
-    for word in NON_WORD.split(stripped):
+    for word in NON_WORD.split(_normalize(value)):
         if word:
             key += word
             bounds.add(len(key))
@@ -79,7 +87,7 @@ class CatalogIndex:
         query = word_bounds(raw_name)
         best: tuple[int, str] | None = None
         for candidate, code in self.exact.items():
-            if len(candidate) < 4:
+            if len(candidate) < 4 or min(len(candidate), len(key)) < MIN_COVERAGE * max(len(candidate), len(key)):
                 continue
             outer = (candidate, self.words.get(candidate, frozenset({0, len(candidate)})))
             if _contains(query, candidate) or _contains(outer, key):

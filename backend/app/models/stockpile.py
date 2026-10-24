@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, UniqueConstraint
+from sqlalchemy import DateTime, ForeignKey, Index, Integer, String, UniqueConstraint, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, ClanScopedMixin, TimestampMixin, UUIDPkMixin
@@ -45,3 +45,7 @@ class StockpileItem(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
         ForeignKey("catalog_items.code"), nullable=False
     )
     quantity: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    # не в ящиках (россыпью / техника своим ходом) — сканер показывает отдельной строкой
+    loose_quantity: Mapped[int] = mapped_column(
+        Integer, default=0, server_default=text("0"), nullable=False
+    )

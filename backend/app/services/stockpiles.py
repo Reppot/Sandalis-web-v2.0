@@ -202,14 +202,17 @@ class StockpileService(ClanScopedService):
         self, stockpile_id: uuid.UUID, payload: StockpileContentsReplace
     ) -> tuple[Stockpile, Sequence[StockpileItem], str]:
         """Монитор склада: выгрузка сканера целиком заменяет содержимое (как PUT /api/storage
-        старого сайта). Дубли кодов суммируются, неизвестные коды — 404 до любых изменений."""
+        старого сайта). Дубли кодов суммируются (ящики и россыпь — раздельно),
+        неизвестные коды — 404 до любых изменений."""
         stockpile = await self._get_scoped(
             Stockpile, stockpile_id,
             not_found_key="stockpile.not_found", domain=DOMAIN, for_update=True,
         )
-        merged: dict[str, int] = {}
+        merged: dict[str, list[int]] = {}       # код -> [ящики, россыпь]
         for entry in payload.items:
-            merged[entry.item_code] = min(merged.get(entry.item_code, 0) + entry.quantity, 1_000_000)
+            slot = merged.setdefault(entry.item_code, [0, 0])
+            i = 0 if entry.unit == "crate" else 1
+            slot[i] = min(slot[i] + entry.quantity, 1_000_000)
 
         if merged:
             known = set(
@@ -234,9 +237,11 @@ class StockpileService(ClanScopedService):
                 StockpileItem.stockpile_id == stockpile.id,
             )
         )
-        for code, quantity in merged.items():
+        for code, (crates, loose) in merged.items():
             self.session.add(
-                StockpileItem(stockpile_id=stockpile.id, item_code=code, quantity=quantity)
+                StockpileItem(
+                    stockpile_id=stockpile.id, item_code=code, quantity=crates, loose_quantity=loose
+                )
             )
         stockpile.last_sync_source = payload.source
         stockpile.last_sync_at = datetime.now(UTC)
