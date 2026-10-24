@@ -5,6 +5,7 @@ import { useContent } from "@/entities/content";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi, type Stockpile, type StockpileKind } from "@/entities/stockpile";
 import { RegionTownFields } from "@/entities/world";
+import { catalogApi } from "@/entities/item";
 import {
   EmptyState,
   Field,
@@ -56,6 +57,7 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
   const [editing, setEditing] = React.useState<Stockpile | "new" | null>(null);
   const [monitor, setMonitor] = React.useState<{ region: string; location: string } | null>(null);
   const [shown, setShown] = React.useState<Set<string>>(new Set());
+  const [contents, setContents] = React.useState<Stockpile | null>(null);
 
   const rows = React.useMemo<Row[]>(() => {
     // у склада — самый актуальный таймер: сначала незавершённый с ближайшим сроком
@@ -130,6 +132,7 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
               onReveal={() => setShown((prev) => { const next = new Set(prev); if (next.has(row.key)) next.delete(row.key); else next.add(row.key); return next; })}
               onManage={() => row.timer && setManagedId(row.timer.id)}
               onEdit={() => row.stockpile && setEditing(row.stockpile)}
+              onContents={() => row.stockpile && setContents(row.stockpile)}
               onMonitor={() => row.stockpile && setMonitor({ region: row.stockpile.region, location: row.stockpile.name })}
             />
           ))}
@@ -139,6 +142,7 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
 
       {managed && <TimerManagerModal timer={managed} can={can} onClose={() => setManagedId(null)} />}
       <RegisterTimerModal open={Boolean(monitor)} preset={monitor} onClose={() => setMonitor(null)} />
+      <StockpileContentsModal target={contents} onClose={() => setContents(null)} onSaved={() => void refresh()} />
       <StockpileDetailsModal target={editing} onClose={() => setEditing(null)} onSaved={() => void refresh()} />
     </div>
   );
@@ -162,8 +166,9 @@ const StockpileCard: React.FC<{
   onReveal: () => void;
   onManage: () => void;
   onEdit: () => void;
+  onContents: () => void;
   onMonitor: () => void;
-}> = ({ row, now, can, revealed, onReveal, onManage, onEdit, onMonitor }) => {
+}> = ({ row, now, can, revealed, onReveal, onManage, onEdit, onContents, onMonitor }) => {
   const { t } = useI18n();
   const notify = useNotify();
   const { media } = useContent();
@@ -234,12 +239,66 @@ const StockpileCard: React.FC<{
           ) : s && can(Scopes.TIMERS_CREATE) ? (
             <button className="btn btn-primary h-[34px]" onClick={onMonitor}>⏱ {t("clan.startTimer")}</button>
           ) : null}
+          {s && can(Scopes.STOCKPILES_ITEMS) ? (
+            <button className="btn h-[34px]" data-guide="stockpile-contents" onClick={onContents}>📥 {t("stock.updateContents")}</button>
+          ) : null}
           {s && can(Scopes.STOCKPILES_EDIT) ? (
             <button className="btn h-[34px] px-2.5" title={t("clan.editStockpile")} onClick={onEdit}>✎</button>
           ) : null}
         </div>
       </div>
     </li>
+  );
+};
+
+/** «Обновить содержимое»: вставленный JSON (или текст) сканера заменяет содержимое склада. */
+const StockpileContentsModal: React.FC<{ target: Stockpile | null; onClose: () => void; onSaved: () => void }> = ({ target, onClose, onSaved }) => {
+  const { t } = useI18n();
+  const notify = useNotify();
+  const [text, setText] = React.useState("");
+  const [busy, setBusy] = React.useState(false);
+
+  React.useEffect(() => {
+    if (target) setText("");
+  }, [target]);
+
+  const submit = async () => {
+    if (!target || !text.trim()) return;
+    setBusy(true);
+    try {
+      const parsed = await catalogApi.parse(text);
+      const items = parsed.lines.filter((l) => l.item && l.count > 0).map((l) => ({ item_code: l.item!.code, quantity: l.count }));
+      if (!items.length) {
+        notify({ title: t("import.formatError"), message: t("import.formatHelp"), tone: "danger", ttl: 8000 });
+        return;
+      }
+      const source = text.trim().startsWith("{") || text.trim().startsWith("[") ? "json" : "txt";
+      const saved = await stockpileApi.replaceContents(target.id, items, source);
+      notify({ title: t("stock.synced"), message: saved.message, tone: "success" });
+      if (parsed.unknown.length) {
+        notify({ title: t("import.notInCatalog"), message: parsed.unknown.slice(0, 6).join(" • "), tone: "warning", ttl: 9000 });
+      }
+      onSaved();
+      onClose();
+    } catch (err) {
+      notify({ title: t("stock.updateContents"), message: errorText(err, t("stock.notSaved")), tone: "danger" });
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <Modal open={Boolean(target)} onClose={onClose} title={`${t("stock.updateContents")} • ${target?.name ?? ""}`} icon="stockpile" widthClass="max-w-2xl">
+      <div className="grid gap-3">
+        <p className="text-[0.85rem] text-white/75">{t("stock.updateContentsHint")}</p>
+        <textarea className="field field-mono min-h-[16rem] text-[0.75rem]" autoFocus spellCheck={false} value={text} placeholder='{ "items": [ ... ] }' onChange={(e) => setText(e.target.value)} />
+        <p className="hud-label" style={{ color: "var(--warn)" }}>⚠ {t("stock.updateContentsWarn")}</p>
+        <div className="flex justify-end gap-2">
+          <button className="btn" onClick={onClose}>{t("common.cancel")}</button>
+          <button className="btn btn-primary" disabled={busy || !text.trim()} onClick={() => void submit()}>{busy ? t("common.sending") : `📥 ${t("stock.updateContents")}`}</button>
+        </div>
+      </div>
+    </Modal>
   );
 };
 

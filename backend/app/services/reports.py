@@ -4,12 +4,13 @@ import uuid
 from datetime import UTC, datetime
 from typing import Sequence
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 
 from app.core.errors import ConflictError
 from app.domain.catalog.resolve import CatalogIndex
 from app.models.catalog import CatalogItem
 from app.models.clan_settings import ClanSettings
+from app.models.recipe import ProductionRecipe
 from app.models.report import REPORT_TRANSITIONS, OrderReport, OrderReportLine, ReportStatus
 from app.schemas.report import ReportCreate, ReportLineIn, ReportStatusUpdate, ReportUpdate
 from app.services.base import ClanScopedService
@@ -22,6 +23,11 @@ STATUS_COLORS = {
     ReportStatus.DONE: 0x4ADE80,
     ReportStatus.CANCELLED: 0xEF4444,
 }
+
+
+def line_icon(icons: dict[str, str | None], code: str | None, name: str) -> str | None:
+    """Иконка строки заказа из словаря ReportService.icons_for."""
+    return icons.get(code or "") or icons.get(f"name:{name}")
 
 
 class ReportService(ClanScopedService):
@@ -54,13 +60,30 @@ class ReportService(ClanScopedService):
         )
 
     async def icons_for(self, reports: Sequence[OrderReport]) -> dict[str, str | None]:
-        codes = {line.item_code for r in reports for line in r.lines if line.item_code}
-        if not codes:
-            return {}
-        rows = await self.session.execute(
-            select(CatalogItem.code, CatalogItem.icon_url).where(CatalogItem.code.in_(codes))
-        )
-        return dict(rows.all())
+        """Иконки строк: по коду каталога, а для строк без кода (постройки, часть рецептов
+        Factory) — по названию рецепта. Ключи: код и "name:<название>", см. line_icon."""
+        lines = [line for r in reports for line in r.lines]
+        codes = {line.item_code for line in lines if line.item_code}
+        icons: dict[str, str | None] = {}
+        if codes:
+            rows = await self.session.execute(
+                select(CatalogItem.code, CatalogItem.icon_url).where(CatalogItem.code.in_(codes))
+            )
+            icons.update({code: url for code, url in rows.all() if url})
+        names = {line.name for line in lines if not icons.get(line.item_code or "")}
+        if names:
+            rows = await self.session.execute(
+                select(ProductionRecipe.name, ProductionRecipe.name_en, ProductionRecipe.icon_url)
+                .where(
+                    ProductionRecipe.icon_url.is_not(None),
+                    or_(ProductionRecipe.name.in_(names), ProductionRecipe.name_en.in_(names)),
+                )
+            )
+            for name, name_en, url in rows.all():
+                for key in (name, name_en):
+                    if key in names:
+                        icons.setdefault(f"name:{key}", url)
+        return icons
 
     # ---------------- write ------------------------------------------------ #
     async def _build_lines(self, lines: Sequence[ReportLineIn]) -> list[OrderReportLine]:

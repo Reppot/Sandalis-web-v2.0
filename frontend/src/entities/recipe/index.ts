@@ -124,6 +124,20 @@ export interface ChainTotals {
   peakMw: number;
   /** МВт·ч за всю цепочку. */
   energyMwh: number;
+  /** Нагрузка по постройкам: циклы, секунды, самая «тяжёлая» мощность рецепта. */
+  bySource: Map<string, SourceUsage>;
+}
+
+export interface SourceUsage {
+  runs: number;
+  /** Сумма секунд всех циклов этой постройки (на одном здании). */
+  seconds: number;
+  /** Самый долгий цикл — меньше него время не сократить никаким числом зданий. */
+  longestCycle: number;
+  /** Самая большая потребляемая мощность среди рецептов постройки, МВт. */
+  maxMw: number;
+  energyMwh: number;
+  icon: string | null;
 }
 
 /**
@@ -156,7 +170,7 @@ export function buildChain(
 }
 
 export function chainTotals(roots: ChainNode[]): ChainTotals {
-  const totals: ChainTotals = { raw: new Map(), byproducts: new Map(), seconds: new Map(), runs: 0, peakMw: 0, energyMwh: 0 };
+  const totals: ChainTotals = { raw: new Map(), byproducts: new Map(), seconds: new Map(), runs: 0, peakMw: 0, energyMwh: 0, bySource: new Map() };
   const add = (map: ChainTotals["raw"], p: { name: string; unit: string | null; icon_url: string | null }, amount: number) => {
     const prev = map.get(p.name);
     map.set(p.name, { amount: (prev?.amount ?? 0) + amount, unit: p.unit, icon_url: prev?.icon_url ?? p.icon_url });
@@ -167,7 +181,15 @@ export function chainTotals(roots: ChainNode[]): ChainTotals {
     totals.runs += node.runs;
     totals.seconds.set(data.source, (totals.seconds.get(data.source) ?? 0) + data.seconds * node.runs);
     totals.peakMw = Math.max(totals.peakMw, data.power_mw);
-    totals.energyMwh += (data.power_mw * data.seconds * node.runs) / 3600;
+    const energy = (data.power_mw * data.seconds * node.runs) / 3600;
+    totals.energyMwh += energy;
+    const use = totals.bySource.get(data.source) ?? { runs: 0, seconds: 0, longestCycle: 0, maxMw: 0, energyMwh: 0, icon: data.source_icon ?? null };
+    use.runs += node.runs;
+    use.seconds += data.seconds * node.runs;
+    use.longestCycle = Math.max(use.longestCycle, data.seconds);
+    use.maxMw = Math.max(use.maxMw, data.power_mw);
+    use.energyMwh += energy;
+    totals.bySource.set(data.source, use);
     for (const b of data.byproducts) add(totals.byproducts, b, b.amount * node.runs);
     // излишек основного продукта (последний цикл делает больше, чем нужно)
     const surplus = node.runs * node.recipe.output_quantity - node.amount;
@@ -183,3 +205,71 @@ export const recipeApi = {
     return apiClient.get<Recipe[]>("/api/v1/recipes", { params: { kind } });
   },
 };
+
+// --------------------------------------------------------------------------- //
+// Электроэнергия: здания игрока, пиковая мощность, топливо в канистрах
+// --------------------------------------------------------------------------- //
+/**
+ * Электростанции Foxhole (foxhole.wiki.gg): расход за цикл, длительность и мощность;
+ * канистра — объём предмета-топлива. Диз. электростанция 25 L / 45 с → 5 МВт,
+ * бензиновая (улучшение) 50 L / 90 с → 12 МВт, Sulfuric Reactor 50 L тяж. топлива / 120 с → 16 МВт.
+ */
+export const POWER_FUELS = [
+  { key: "diesel", litersPerCycle: 25, cycleSeconds: 45, mw: 5, canLiters: 100, icon: "/api/v1/assets/items/Diesel.png", plant: "Diesel Power Plant" },
+  { key: "petrol", litersPerCycle: 50, cycleSeconds: 90, mw: 12, canLiters: 50, icon: "/api/v1/assets/items/Petrol.png", plant: "Petrol Power Plant" },
+  { key: "heavyOil", litersPerCycle: 50, cycleSeconds: 120, mw: 16, canLiters: 30, icon: "/api/v1/assets/items/HeavyOil.webp", plant: "Sulfuric Reactor" },
+] as const;
+export type PowerFuel = (typeof POWER_FUELS)[number];
+
+export interface SourcePower {
+  source: string;
+  icon: string | null;
+  /** Зданий у игрока. */
+  buildings: number;
+  /** Сколько из них реально работает одновременно (не больше числа циклов). */
+  active: number;
+  /** Пиковая нагрузка постройки: работающие здания × мощность самого тяжёлого рецепта. */
+  peakMw: number;
+  energyMwh: number;
+  /** Время работы постройки с учётом зданий, сек. */
+  seconds: number;
+}
+
+export interface PowerPlan {
+  sources: SourcePower[];
+  /** Все здания работают одновременно — столько должна выдавать сеть. */
+  peakMw: number;
+  energyMwh: number;
+  /** Время всей цепочки — самая долгая постройка. */
+  seconds: number;
+  fuels: { fuel: PowerFuel; liters: number; cans: number; plants: number }[];
+}
+
+/**
+ * Расчёт по зданиям игрока: циклы постройки делятся между её зданиями (параллельно),
+ * пиковая мощность — сумма по всем одновременно работающим зданиям; энергия от числа
+ * зданий не зависит (те же циклы). Топливо — литры на МВт·ч генератора, в канистрах.
+ */
+export function powerPlan(totals: ChainTotals, counts: Record<string, number>): PowerPlan {
+  const sources = [...totals.bySource].map(([source, use]): SourcePower => {
+    const buildings = Math.max(1, Math.floor(counts[source] ?? 1));
+    const active = Math.min(buildings, use.runs);
+    return {
+      source,
+      icon: use.icon,
+      buildings,
+      active,
+      peakMw: active * use.maxMw,
+      energyMwh: use.energyMwh,
+      seconds: Math.max(use.longestCycle, Math.ceil(use.seconds / buildings)),
+    };
+  });
+  const peakMw = sources.reduce((n, s) => n + s.peakMw, 0);
+  const energyMwh = totals.energyMwh;
+  const fuels = POWER_FUELS.map((fuel) => {
+    const litersPerMwh = fuel.litersPerCycle / ((fuel.mw * fuel.cycleSeconds) / 3600);
+    const liters = energyMwh * litersPerMwh;
+    return { fuel, liters, cans: Math.ceil(liters / fuel.canLiters - 1e-9), plants: Math.ceil(peakMw / fuel.mw - 1e-9) };
+  });
+  return { sources, peakMw, energyMwh, seconds: Math.max(0, ...sources.map((s) => s.seconds)), fuels };
+}

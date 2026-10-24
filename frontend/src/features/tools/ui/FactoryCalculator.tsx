@@ -75,15 +75,20 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
   const report = React.useMemo<ToolReport>(() => {
     const materials: Record<string, number> = {};
     let crates = 0;
-    // в грузовики грузятся ящики предметов; техника и сооружения (shippables) едут отдельно
+    // в грузовики грузятся ящики предметов; техника и сооружения (shippables) — только Flatbed, по одному
     let haulCrates = 0;
+    let shippableCrates = 0;
+    // цикл — один заказ в очереди: MPF до 9 ящиков (5 техники), Factory до 4 (5)
+    let cycles = 0;
     let fullPrice = 0;
     let paid = 0;
     // MPF: в каждой категории заказы идут друг за другом, категории — параллельно
     const categorySeconds: Record<string, number> = {};
     for (const { recipe, crates: qty } of rows) {
       crates += qty;
-      if (!isShippable(recipe)) haulCrates += qty;
+      if (isShippable(recipe)) shippableCrates += qty;
+      else haulCrates += qty;
+      cycles += facility === "mpf" ? mpfOrders(qty, queueLimit(recipe, facility)).length : Math.ceil(qty / queueLimit(recipe, facility));
       for (const [key, value] of Object.entries(crateCost(recipe, facility))) {
         const base = Number(value) || 0;
         const cost = resourceCost(base, qty, recipe, facility, planning);
@@ -104,9 +109,10 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
       resources: Object.entries(materials).map(([key, value]) => ({ name: label("material", key), quantity: Math.round(value), unit: t("unit.unit"), icon: labelIcon("material", key) })),
       stats: [
         { name: t("tools.crates"), quantity: crates, unit: t("unit.crate") },
+        { name: t("tools.cycles"), quantity: cycles, unit: "" },
         { name: t("tools.time"), quantity: formatDuration(seconds, timeUnits(t)), unit: "" },
         ...(isFactory || !fullPrice ? [] : [{ name: t("tools.mpfDiscount"), quantity: `${(((fullPrice - paid) / fullPrice) * 100).toFixed(1)}%`, unit: "" }]),
-        ...(isFactory ? [] : truckLines(haulCrates, t)),
+        ...truckLines(haulCrates, t, { shippables: shippableCrates, dunneOnly: isFactory }),
       ],
     };
   }, [rows, facility, planning, label, labelIcon, t, rname]);

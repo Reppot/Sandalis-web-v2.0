@@ -16,7 +16,7 @@ from app.schemas.report import (
     ProgressLineRead,
     ReportProgressRead,
 )
-from app.services.reports import DOMAIN, ReportService
+from app.services.reports import DOMAIN, ReportService, line_icon
 
 
 class ReportProgressService(ReportService):
@@ -39,7 +39,7 @@ class ReportProgressService(ReportService):
                 delivered[cl.line_id] = delivered.get(cl.line_id, 0) + cl.quantity
         lines = [
             ProgressLineRead(
-                line_id=line.id, name=line.name, item_code=line.item_code, icon_url=icons.get(line.item_code or ""),
+                line_id=line.id, name=line.name, item_code=line.item_code, icon_url=line_icon(icons, line.item_code, line.name),
                 unit=line.unit, ordered=line.quantity, delivered=delivered.get(line.id, 0),
             )
             for line in report.lines
@@ -54,7 +54,7 @@ class ReportProgressService(ReportService):
                     lines=[
                         ContributionLineRead(
                             line_id=cl.line_id, name=by_line[cl.line_id].name,
-                            icon_url=icons.get(by_line[cl.line_id].item_code or ""),
+                            icon_url=line_icon(icons, by_line[cl.line_id].item_code, by_line[cl.line_id].name),
                             unit=by_line[cl.line_id].unit, quantity=cl.quantity,
                         )
                         for cl in c.lines if cl.line_id in by_line

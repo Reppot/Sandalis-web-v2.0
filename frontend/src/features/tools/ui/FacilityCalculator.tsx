@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { RAW, buildChain, chainTotals, facilityData, type ChainChoice, type ChainNode, type Recipe } from "@/entities/recipe";
+import { RAW, buildChain, chainTotals, facilityData, powerPlan, type ChainChoice, type ChainNode, type Recipe } from "@/entities/recipe";
 import { FilterCards, ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, usePaged } from "@/shared";
 import { SendOrderDialog } from "@/entities/report/ui/SendOrderDialog";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
@@ -35,6 +35,8 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
   const [choice, setChoice] = React.useState<ChainChoice>({});
   const panes = usePanes();
   const [sendOpen, setSendOpen] = React.useState(false);
+  // сколько зданий каждой постройки есть у игрока (по умолчанию 1)
+  const [counts, setCounts] = React.useState<Record<string, number>>({});
 
   const byId = React.useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
   const allowed = React.useCallback((r: Recipe) => faction === "all" || r.factions.includes(faction) || r.factions.includes("neutral"), [faction]);
@@ -93,10 +95,37 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
   }, [plan, byId, choice]);
   const roots = React.useMemo(() => [...chains.values()], [chains]);
   const totals = React.useMemo(() => chainTotals(roots), [roots]);
+  const power = React.useMemo(() => powerPlan(totals, counts), [totals, counts]);
+  /** Постройки, где делаются выбранные предметы (все рецепты), и постройки звеньев цепочки. */
+  const buildings = React.useMemo(() => {
+    const map = new Map<string, { icon: string | null; items: Set<string>; used: boolean }>();
+    const note = (source: string, icon: string | null | undefined, item: string, used: boolean) => {
+      const entry = map.get(source) ?? { icon: icon ?? null, items: new Set<string>(), used: false };
+      entry.items.add(item);
+      entry.used ||= used;
+      entry.icon ??= icon ?? null;
+      map.set(source, entry);
+    };
+    const walk = (node: ChainNode) => {
+      const d = node.recipe ? facilityData(node.recipe) : null;
+      if (d) note(d.source, d.source_icon, node.name, true);
+      node.children.forEach(walk);
+    };
+    for (const root of roots) {
+      for (const r of (byName.get(root.name) ?? []).filter(allowed)) {
+        const d = facilityData(r);
+        if (d) note(d.source, d.source_icon, root.name, false);
+      }
+      walk(root);
+    }
+    return [...map]
+      .map(([source, v]) => ({ source, icon: v.icon, items: [...v.items], used: v.used }))
+      .sort((a, b) => Number(b.used) - Number(a.used) || a.source.localeCompare(b.source));
+  }, [roots, byName, allowed]);
 
   const unitOf = React.useCallback((unit: string | null) => unit ?? t("unit.unit"), [t]);
   const report = React.useMemo<ToolReport>(() => {
-    const longest = Math.max(0, ...totals.seconds.values());
+    const mw = (n: number) => `${fmt(Math.round(n * 10) / 10)} MW`;
     return {
       toolName: t("tools.facility"),
       subtitle: "Facilities • foxhole.wiki.gg",
@@ -105,13 +134,33 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
       resources: [...totals.raw].map(([name, v]) => ({ name, quantity: withUnit(Math.ceil(v.amount * 10) / 10, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       stats: [
         { name: t("facility.runs"), quantity: totals.runs, unit: "" },
-        { name: t("tools.time"), quantity: formatDuration(longest, timeUnits(t)), unit: "" },
-        ...[...totals.seconds].map(([src, sec]) => ({ name: `⏱ ${src}`, quantity: formatDuration(sec, timeUnits(t)), unit: "" })),
-        ...(totals.peakMw ? [{ name: t("facility.peakPower"), quantity: withUnit(totals.peakMw, "MW"), unit: "" }, { name: t("facility.energy"), quantity: withUnit(Math.round(totals.energyMwh * 100) / 100, "MWh"), unit: "" }] : []),
+        { name: t("tools.time"), quantity: formatDuration(power.seconds, timeUnits(t)), unit: "" },
+        ...power.sources.map((src) => ({ name: `⏱ ${src.source} ×${src.buildings}`, quantity: formatDuration(src.seconds, timeUnits(t)), unit: "" })),
         ...[...totals.byproducts].map(([name, v]) => ({ name: t("facility.byproduct", { name }), quantity: withUnit(v.amount, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       ],
+      sections: power.peakMw
+        ? [
+            {
+              title: `⚡ ${t("power.title")}`,
+              lines: [
+                { name: t("power.peak"), quantity: mw(power.peakMw), unit: "", note: t("power.peakNote") },
+                { name: t("power.energy"), quantity: `${fmt(Math.round(power.energyMwh * 100) / 100)} MWh`, unit: "" },
+                ...power.sources
+                  .filter((src) => src.peakMw)
+                  .map((src) => ({ name: `${src.source} ×${src.buildings}`, quantity: mw(src.peakMw), unit: "", icon: assetUrl(src.icon), note: t("power.active", { n: src.active, total: src.buildings }) })),
+                ...power.fuels.map((f) => ({
+                  name: t(`power.fuel.${f.fuel.key}`),
+                  quantity: f.cans,
+                  unit: t("power.cans"),
+                  icon: assetUrl(f.fuel.icon),
+                  note: t("power.fuelNote", { liters: fmt(Math.ceil(f.liters)), can: f.fuel.canLiters, plants: f.plants, plant: f.fuel.plant, mw: f.fuel.mw }),
+                })),
+              ],
+            },
+          ]
+        : [],
     };
-  }, [roots, totals, t, unitOf]);
+  }, [roots, totals, power, t, unitOf]);
 
   return (
     <div className="tab-fade factory-page pb-24 lg:pb-0">
@@ -195,6 +244,31 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
         </section>
 
         <ResourceSummaryPanel report={report} title={t("facility.queue")} emptyHint={t("facility.queueHint")} onClear={() => setPlan([])} hidden={!panes.plan} inline={panes.wide === "plan"}>
+          {buildings.length ? (
+            <div className="facility-buildings" data-guide="facility-buildings">
+              <div className="hud-label text-accent">🏭 {t("power.buildingsTitle")}</div>
+              <p className="hud-label mt-1 text-muted">{t("power.buildingsHint")}</p>
+              <div className="facility-buildings-list">
+                {buildings.map((b) => (
+                  <div key={b.source} className={`facility-building ${b.used ? "is-used" : ""}`}>
+                    <ItemIcon sources={[assetUrl(b.icon)]} size={40} label={b.source} />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-[0.85rem] font-semibold text-white">{b.source}</span>
+                      <span className="hud-label block truncate text-muted" title={b.items.join(", ")}>
+                        {b.used ? `✔ ${t("power.used")}` : t("power.alternative")} • {b.items.join(", ")}
+                      </span>
+                    </span>
+                    <QuantityStepper
+                      value={Math.max(1, counts[b.source] ?? 1)}
+                      unit={t("power.pcs")}
+                      label={b.source}
+                      onChange={(n) => setCounts((prev) => ({ ...prev, [b.source]: Math.max(1, n) }))}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : null}
           {plan.map((row) => {
             const recipe = byId.get(row.recipeId);
             if (!recipe) return null;

@@ -110,7 +110,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
                     </span>
                   ))}
                 </div>
-                {c.note ? <div className="mt-1 text-[0.75rem] text-white/70">📝 {c.note}</div> : null}
+                {c.note ? <div className="order-note is-small"><p>📝 {c.note}</p></div> : null}
               </li>
             ))}
           </ul>

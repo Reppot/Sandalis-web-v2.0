@@ -244,7 +244,9 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                   {report.discord_sent_at && <span className="hud-label text-accent" title={formatDateTime(report.discord_sent_at)}>✓ DISCORD</span>}
                 </div>
 
-                {report.note && <p className="mt-2 pl-5 text-[0.75rem] text-white/70">📝 {report.note}</p>}
+                {report.note && (
+                  <div className="order-note"><span className="order-note-label">📝 {t("reports.noteLabel")}</span><p>{report.note}</p></div>
+                )}
 
                 <div data-guide="report-actions" className="mt-3 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
                   {can(Scopes.REPORTS_STATUS) &&

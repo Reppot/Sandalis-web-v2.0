@@ -30,7 +30,7 @@ from app.schemas.report import (
 )
 from app.services.clan_settings import ClanSettingsService, to_read
 from app.services.report_progress import ReportProgressService
-from app.services.reports import ReportService
+from app.services.reports import ReportService, line_icon
 
 router = APIRouter(prefix="/reports", tags=["reports"])
 settings_router = APIRouter(prefix="/clan", tags=["clan"])
@@ -58,7 +58,7 @@ SettingsServiceDep = Annotated[ClanSettingsService, Depends(get_settings_service
 def _read(report: OrderReport, icons: dict[str, str | None]) -> ReportRead:
     lines = [
         ReportLineRead.model_validate(line).model_copy(
-            update={"icon_url": icons.get(line.item_code or "")}
+            update={"icon_url": line_icon(icons, line.item_code, line.name)}
         )
         for line in report.lines
     ]

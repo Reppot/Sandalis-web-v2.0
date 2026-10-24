@@ -19,6 +19,8 @@ export interface ToolReport {
   items: SummaryLine[];
   resources: SummaryLine[];
   stats: SummaryLine[];
+  /** Отдельные блоки под итогами (например, электроэнергия калькулятора завода). */
+  sections?: { title: string; lines: SummaryLine[] }[];
 }
 
 export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
@@ -30,6 +32,7 @@ export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
       { label: `${t("tools.doc.selected")} • ${report.items.length}`, rows: report.items.map(strip) },
       { label: `${t("tools.doc.totals")} • ${report.resources.length}`, rows: report.resources.map(strip) },
       ...(report.stats.length ? [{ label: t("tools.doc.summary"), rows: report.stats.map(strip) }] : []),
+      ...(report.sections ?? []).filter((x) => x.lines.length).map((x) => ({ label: x.title, rows: x.lines.map(strip) })),
     ],
     fileBase: report.fileBase,
     sheetName: t("tools.doc.sheet"),
@@ -92,18 +95,23 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
         <div className="factory-totals shrink-0">
           <div data-guide="tool-totals" className="hud-label mb-2 text-accent">{t("tools.totals")}</div>
           <div className="factory-totals-scroll scroll-area">
-            {[report.resources, report.stats].map((group, gi) =>
-              group.length ? (
+            {[
+              { title: null, lines: report.resources },
+              { title: report.resources.length ? t("tools.doc.summary") : null, lines: report.stats },
+              ...(report.sections ?? []).map((x) => ({ title: x.title, lines: x.lines, own: true })),
+            ].map((group, gi) =>
+              group.lines.length ? (
                 <React.Fragment key={gi}>
-                  {gi === 1 && report.resources.length ? <div className="hud-label mt-3 mb-2 text-muted">{t("tools.doc.summary")}</div> : null}
+                  {group.title ? <div className={`hud-label mt-3 mb-2 ${"own" in group ? "summary-section-title" : "text-muted"}`}>{group.title}</div> : null}
                   <div className="factory-total-grid">
-                    {group.map((line) => (
+                    {group.lines.map((line) => (
                       <div key={`${line.name}-${line.unit}`} className="min-w-0" title={line.name}>
                         <span className="flex min-w-0 items-center gap-1.5">
                           {line.icon ? <ItemIcon sources={[line.icon]} size={28} label={line.name} /> : null}
                           <span className="hud-label truncate text-muted">{line.name}</span>
                         </span>
-                        <strong className="truncate">{fmt(line.quantity)}</strong>
+                        <strong className="truncate">{fmt(line.quantity)}{line.unit && typeof line.quantity === "number" && "own" in group ? ` ${line.unit}` : ""}</strong>
+                        {line.note ? <span className="summary-note">{line.note}</span> : null}
                       </div>
                     ))}
                   </div>

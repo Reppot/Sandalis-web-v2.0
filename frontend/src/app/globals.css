@@ -1048,6 +1048,14 @@ body[data-theme="light"] {
 .report-log-items { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.35rem; }
 .report-log-item { display: inline-flex; max-width: 100%; align-items: center; gap: 0.3rem; border-radius: 4px; background: rgba(255, 255, 255, 0.06); padding: 0.1rem 0.45rem 0.1rem 0.15rem; font-size: 0.75rem; }
 .report-log-item b { color: var(--accent); font-family: var(--font-mono); }
+/* Комментарий к заказу — заметная плашка, а не мелкая подпись */
+.order-note { margin-top: 0.7rem; border: 1px solid rgba(251, 191, 36, 0.55); border-left-width: 4px; border-radius: 6px; background: rgba(251, 191, 36, 0.1); padding: 0.55rem 0.8rem; }
+.order-note-label { display: block; margin-bottom: 0.2rem; color: #fbbf24; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.order-note p { color: #fff; font-size: 1rem; font-weight: 600; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; }
+.order-note.is-small { margin-top: 0.4rem; padding: 0.35rem 0.6rem; }
+.order-note.is-small p { font-size: 0.85rem; }
+[data-theme="light"] .order-note p { color: inherit; }
+[data-theme="light"] .order-note-label { color: #b45309; }
 .contribute-list { display: flex; max-height: min(55vh, 30rem); flex-direction: column; gap: 0.35rem; overflow-y: auto; padding-right: 0.2rem; }
 .contribute-row { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); padding: 0.35rem 0.5rem; }
 .contribute-row.is-done { opacity: 0.55; }
@@ -1288,3 +1296,13 @@ body[data-theme="light"] {
 .external-tool-name { display: block; margin-top: 0.2rem; font-family: var(--font-display); font-size: 0.92rem; color: #fff; }
 .external-tool-desc { display: block; margin-top: 0.3rem; font-size: 0.74rem; line-height: 1.4; color: rgba(255, 255, 255, 0.65); }
 .external-tool-arrow { flex-shrink: 0; color: var(--accent); font-size: 1rem; }
+
+/* Калькулятор завода: здания игрока и блок электроэнергии в итогах */
+.facility-buildings { margin-bottom: 0.75rem; border: 1px solid rgba(250, 204, 21, 0.35); border-radius: 6px; background: rgba(250, 204, 21, 0.05); padding: 0.6rem; }
+.facility-buildings-list { display: flex; flex-direction: column; gap: 0.35rem; margin-top: 0.5rem; }
+.facility-building { display: flex; align-items: center; gap: 0.55rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); padding: 0.35rem 0.5rem; opacity: 0.72; }
+.facility-building.is-used { border-color: rgba(163, 230, 53, 0.45); opacity: 1; }
+.summary-section-title { border-top: 1px solid rgba(250, 204, 21, 0.35); padding-top: 0.6rem; color: #facc15; }
+.summary-note { color: rgba(229, 231, 235, 0.6); font-size: 0.68rem; line-height: 1.25; }
+[data-theme="light"] .facility-building { background: var(--surface-2); }
+[data-theme="light"] .summary-section-title { color: #a16207; }

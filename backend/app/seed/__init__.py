@@ -83,6 +83,26 @@ async def seed_content(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int
     return inserted
 
 
+async def seed_content_icons(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int:
+    """Иконки справочников (материалы и т. п.): заполняются, только если в БД иконки нет —
+    правки админа не перезаписываются."""
+    updated = 0
+    for row in rows:
+        icon = (row.get("payload") or {}).get("icon")
+        if not isinstance(icon, str) or not icon.startswith("/api/"):
+            continue
+        result = await conn.execute(
+            update(AppContent)
+            .where(
+                AppContent.kind == row["kind"], AppContent.key == row["key"],
+                func.coalesce(AppContent.payload["icon"].astext, "") == "",
+            )
+            .values(payload=AppContent.payload.op("||")(func.jsonb_build_object("icon", icon)))
+        )
+        updated += result.rowcount or 0
+    return updated
+
+
 async def seed_content_i18n(conn: AsyncConnection, i18n: dict[str, dict[str, Any]]) -> int:
     """Переводы en/cs — системные данные: payload.i18n перезаписывается всегда,
     остальные поля payload (возможно, правленые админом) не трогаются."""
@@ -121,6 +141,7 @@ async def run(conn: AsyncConnection) -> dict[str, int]:
         "facility_recipes": await seed_facility_recipes(conn, load("facility_recipes.json"))
         if (DATA_DIR / "facility_recipes.json").exists() else 0,
         "content_inserted": await seed_content(conn, load("content.json")),
+        "content_icons": await seed_content_icons(conn, load("content.json")),
         "content_translated": await seed_content_i18n(
             conn, json.loads((DATA_DIR / "content_i18n.json").read_text(encoding="utf-8"))
         ),

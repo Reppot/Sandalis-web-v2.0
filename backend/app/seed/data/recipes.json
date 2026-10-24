@@ -505,7 +505,7 @@
    "factory",
    "mpf"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RevolverAmmo.png",
   "output_quantity": 40,
   "cost": {
    "bmat": 40
@@ -3759,7 +3759,7 @@
   "facilities": [
    "factory"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RadioAircraft.png",
   "output_quantity": 5,
   "cost": {
    "bmat": 75

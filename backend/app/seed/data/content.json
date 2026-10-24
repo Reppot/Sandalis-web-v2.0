@@ -686,7 +686,7 @@
   "payload": {
    "label": "Медь",
    "name_en": "Copper",
-   "icon": null
+   "icon": "/api/v1/assets/items/Copper.png"
   }
  },
  {

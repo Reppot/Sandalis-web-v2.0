@@ -2387,7 +2387,7 @@
   "facilities": [
    "dry-dock"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LargeShipSubmarineC.png",
   "output_quantity": 1,
   "cost": {
    "Naval Hull Segments": 15,
@@ -2438,7 +2438,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainCombatCarC.png",
   "output_quantity": 1,
   "cost": {
    "Steel Construction Materials": 30,
@@ -2650,7 +2650,7 @@
   "facilities": [
    "garage"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RelicArmouredCar.png",
   "output_quantity": 1,
   "cost": {
    "Relic Materials": 80
@@ -4170,7 +4170,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainEngine.png",
   "output_quantity": 1,
   "cost": {
    "Processed Construction Materials": 200,
@@ -4229,7 +4229,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainHospital.png",
   "output_quantity": 1,
   "cost": {
    "Steel Construction Materials": 60,
@@ -4304,7 +4304,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainInfantry.png",
   "output_quantity": 1,
   "cost": {
    "Processed Construction Materials": 20,
@@ -4363,7 +4363,7 @@
   "facilities": [
    "small-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SmallTrainMaterial.png",
   "output_quantity": 1,
   "cost": {
    "Construction Materials": 35,
@@ -4422,7 +4422,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainFlatbed.png",
   "output_quantity": 1,
   "cost": {
    "Processed Construction Materials": 20,
@@ -4481,7 +4481,7 @@
   "facilities": [
    "small-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SmallTrainEngine.png",
   "output_quantity": 1,
   "cost": {
    "Construction Materials": 125,
@@ -4540,7 +4540,7 @@
   "facilities": [
    "small-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SmallTrainResource.png",
   "output_quantity": 1,
   "cost": {
    "Construction Materials": 35,
@@ -4599,7 +4599,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainCaboose.png",
   "output_quantity": 1,
   "cost": {
    "Processed Construction Materials": 20,
@@ -4658,7 +4658,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainCoal.png",
   "output_quantity": 1,
   "cost": {
    "Processed Construction Materials": 20,
@@ -4717,7 +4717,7 @@
   "facilities": [
    "small-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SmallTrainShipping.png",
   "output_quantity": 1,
   "cost": {
    "Construction Materials": 35,
@@ -4776,7 +4776,7 @@
   "facilities": [
    "small-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/SmallTrainLiquid.png",
   "output_quantity": 1,
   "cost": {
    "Construction Materials": 35,
@@ -4886,7 +4886,7 @@
   "facilities": [
    "dry-dock"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LargeShipBattleshipW.png",
   "output_quantity": 1,
   "cost": {
    "Naval Hull Segments": 20,
@@ -5990,7 +5990,7 @@
   "facilities": [
    "dry-dock"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LargeShipDestroyerC.png",
   "output_quantity": 1,
   "cost": {
    "Naval Hull Segments": 12,
@@ -6763,7 +6763,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/AircraftFighter2C.png",
   "output_quantity": 1,
   "cost": {
    "Processed Construction Materials": 40,
@@ -9496,7 +9496,7 @@
   "facilities": [
    "large-structure-foundation"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/IntelCenter.png",
   "output_quantity": 1,
   "cost": {
    "Construction Parts": 1,
@@ -9519,7 +9519,7 @@
      "amount": 1,
      "unit": null,
      "code": null,
-     "icon_url": null
+     "icon_url": "/api/v1/assets/items/FortStructurePart.png"
     },
     {
      "name": "Intelligence Center Parts",
@@ -11555,7 +11555,7 @@
   "facilities": [
    "dry-dock"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LargeShipSubmarineW.png",
   "output_quantity": 1,
   "cost": {
    "Naval Hull Segments": 15,
@@ -12572,7 +12572,7 @@
   "facilities": [
    "large-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/TrainCombatCarW.png",
   "output_quantity": 1,
   "cost": {
    "Steel Construction Materials": 30,
@@ -13026,7 +13026,7 @@
   "facilities": [
    "garage"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RelicMediumTank.png",
   "output_quantity": 1,
   "cost": {
    "Relic Materials": 600
@@ -13939,7 +13939,7 @@
   "facilities": [
    "garage"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RelicTruck.png",
   "output_quantity": 1,
   "cost": {
    "Relic Materials": 60
@@ -14519,7 +14519,7 @@
   "facilities": [
    "large-structure-foundation"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/FortLargeRadar.png",
   "output_quantity": 1,
   "cost": {
    "Construction Parts": 1,
@@ -14542,7 +14542,7 @@
      "amount": 1,
      "unit": null,
      "code": null,
-     "icon_url": null
+     "icon_url": "/api/v1/assets/items/FortStructurePart.png"
     },
     {
      "name": "SC-3 Aerial Interceptor Array Parts",
@@ -15029,7 +15029,7 @@
   "facilities": [
    "garage"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RelicScoutVehicle.png",
   "output_quantity": 1,
   "cost": {
    "Relic Materials": 60
@@ -15229,7 +15229,7 @@
      "amount": 1,
      "unit": null,
      "code": null,
-     "icon_url": null
+     "icon_url": "/api/v1/assets/items/FortStructurePart.png"
     },
     {
      "name": "Storm Cannon Parts",
@@ -15324,7 +15324,7 @@
   "facilities": [
    "garage"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/RelicLightTank.png",
   "output_quantity": 1,
   "cost": {
    "Relic Materials": 120
@@ -15410,7 +15410,7 @@
   "facilities": [
    "small-assembly-station"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/FortStructurePart.png",
   "output_quantity": 1,
   "cost": {
    "Processed Construction Materials": 50,
@@ -16089,7 +16089,7 @@
   "facilities": [
    "dry-dock"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LargeShipBattleshipC.png",
   "output_quantity": 1,
   "cost": {
    "Naval Hull Segments": 20,
@@ -16459,7 +16459,7 @@
   "facilities": [
    "dry-dock"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/LargeShipLiquidShip.png",
   "output_quantity": 1,
   "cost": {
    "Naval Hull Segments": 8,
@@ -16596,7 +16596,7 @@
   "facilities": [
    "large-structure-foundation"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/FortGarrisonStation.webp",
   "output_quantity": 1,
   "cost": {
    "Construction Parts": 1,
@@ -16619,7 +16619,7 @@
      "amount": 1,
      "unit": null,
      "code": null,
-     "icon_url": null
+     "icon_url": "/api/v1/assets/items/FortStructurePart.png"
     },
     {
      "name": "Underground Fortress Parts",
@@ -17562,7 +17562,7 @@
   "facilities": [
    "large-structure-foundation"
   ],
-  "icon_url": null,
+  "icon_url": "/api/v1/assets/items/WeatherStation.png",
   "output_quantity": 1,
   "cost": {
    "Construction Parts": 1,
@@ -17585,7 +17585,7 @@
      "amount": 1,
      "unit": null,
      "code": null,
-     "icon_url": null
+     "icon_url": "/api/v1/assets/items/FortStructurePart.png"
     },
     {
      "name": "Weather Station Parts",
