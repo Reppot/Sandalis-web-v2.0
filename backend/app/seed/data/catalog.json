@@ -1917,7 +1917,8 @@
   "aliases": [
    "Нефть для объекта III"
   ],
-  "needs_review": true
+  "needs_review": true,
+  "is_active": false
  },
  {
   "code": "FacilityPower",
@@ -5287,7 +5288,8 @@
   "aliases": [
    "Неизвестно"
   ],
-  "needs_review": true
+  "needs_review": true,
+  "is_active": false
  },
  {
   "code": "Water",

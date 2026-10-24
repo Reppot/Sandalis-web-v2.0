@@ -38,13 +38,14 @@ def _chunks(rows: list[dict[str, Any]]) -> list[list[dict[str, Any]]]:
 
 async def seed_catalog(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int:
     for chunk in _chunks(rows):
-        stmt = insert(CatalogItem).values([{**row, "is_active": True} for row in chunk])
+        # is_active: false в catalog.json — служебные записи (Unknown, legacy), скрытые из выбора
+        stmt = insert(CatalogItem).values([{**row, "is_active": row.get("is_active", True)} for row in chunk])
         await conn.execute(stmt.on_conflict_do_update(
             index_elements=[CatalogItem.code],
             set_={
                 col: stmt.excluded[col]
                 for col in ("name", "english_name", "category", "faction", "origin",
-                            "icon_url", "crate_size", "aliases", "needs_review")
+                            "icon_url", "crate_size", "aliases", "needs_review", "is_active")
             },
         ))
     return len(rows)

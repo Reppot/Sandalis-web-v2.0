@@ -42,6 +42,7 @@ export const TerminalProvider: React.FC<React.PropsWithChildren<{ enabled: boole
   const [lastSync, setLastSync] = React.useState<Date | null>(null);
   const [now, setNow] = React.useState(0);
   const inflight = React.useRef(false);
+  const syncedAt = React.useRef(0);
 
   const refresh = React.useCallback(async () => {
     if (!enabled || inflight.current) return;
@@ -51,6 +52,7 @@ export const TerminalProvider: React.FC<React.PropsWithChildren<{ enabled: boole
       setTimers(t);
       setStockpiles(s);
       setLastSync(new Date());
+      syncedAt.current = Date.now();
       setConnection("online");
     } catch {
       setConnection("offline");
@@ -71,7 +73,8 @@ export const TerminalProvider: React.FC<React.PropsWithChildren<{ enabled: boole
     }
     void refresh();
     const poll = window.setInterval(() => void refresh(), POLL_MS);
-    const onFocus = () => void refresh();
+    // фокус сразу после загрузки не должен дублировать только что выполненный запрос
+    const onFocus = () => Date.now() - syncedAt.current > 5_000 && void refresh();
     window.addEventListener("focus", onFocus);
     return () => {
       window.clearInterval(poll);

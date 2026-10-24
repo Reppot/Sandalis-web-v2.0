@@ -43,8 +43,10 @@ def test_report_progress_log(db):
             await c.post(f"{API}/reports/{report['id']}/progress", headers=alice, json={"stockpile_label": "BB Callahan", "lines": [{"line_id": rifle, "quantity": 6}]})
             progress = (await c.get(f"{API}/reports/{report['id']}/progress", headers=alice)).json()
             assert [(l["name"], l["delivered"]) for l in progress["lines"]] == [("Rifle", 10), ("7.62mm", 5)]
-            newest, oldest = progress["contributions"]
-            assert newest["stockpile_label"] == "BB Callahan" and oldest["user_id"] == "bob"
+            # по автору, а не по позиции: часы Docker/WSL могут дать одинаковый created_at
+            by_user = {c["user_id"]: c for c in progress["contributions"]}
+            newest, oldest = by_user["alice"], by_user["bob"]
+            assert newest["stockpile_label"] == "BB Callahan" and len(by_user) == 2
 
             # чужую запись участник не удалит, офицер (reports:delete) — да; свою — может
             assert (await c.delete(f"{API}/reports/{report['id']}/progress/{oldest['id']}", headers=alice)).status_code == 403

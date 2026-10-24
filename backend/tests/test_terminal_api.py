@@ -10,9 +10,10 @@ import respx
 from httpx import ASGITransport, AsyncClient
 
 from app.core.config import settings
-from app.core.db import engine
+from app.core.db import AsyncSessionLocal, engine
 from app.core.permissions import ClanRole
 from app.main import app
+from app.models.recipe import ProductionRecipe
 from app.seed import load, run as run_seed
 from tests.conftest import bearer, run, seed_catalog_item, seed_clan
 
@@ -184,6 +185,32 @@ def test_timer_restart_and_events(db):
             guest = await c.post(f"{API}/timers/{timer['id']}/events",
                                  headers=bearer(role=ClanRole.GUEST), json={"message": "x"})
             assert guest.status_code == 403
+
+    run(main())
+
+
+def test_report_line_icon_falls_back_to_recipe_by_name(db):
+    """Строка без кода каталога (постройка из калькулятора завода) берёт иконку рецепта,
+    а мягкий поиск не подменяет её чужим предметом («Titan» ≠ «Anti-Tank Grenade»)."""
+    async def main() -> None:
+        await seed_clan()
+        await seed_catalog_item("ATLaunchedGrenadeW", category="weapons", english_name="B2 Varsi Anti-Tank Grenade")
+        async with AsyncSessionLocal() as s:
+            s.add(ProductionRecipe(
+                id="facility-titan", kind="facility", name="Titan", name_en="Titan", item_code=None,
+                category="shipyard", factions=["colonial"], facilities=["shipyard"],
+                icon_url="/api/v1/assets/items/LargeShipBattleshipC.png", cost={}, data={},
+            ))
+            await s.commit()
+        async with client() as c:
+            created = await c.post(f"{API}/reports", headers=bearer(role=ClanRole.MEMBER), json={
+                "title": "Флот", "meta": {"type": "factory"},
+                "lines": [{"name": "Titan", "quantity": 1, "unit": "unit"}],
+            })
+            assert created.status_code == 201, created.text
+            line = created.json()["report"]["lines"][0]
+            assert line["item_code"] is None
+            assert line["icon_url"] == "/api/v1/assets/items/LargeShipBattleshipC.png"
 
     run(main())
 

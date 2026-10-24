@@ -128,7 +128,7 @@ class ReportContributionLine(Base, UUIDPkMixin, ClanScopedMixin):
     __table_args__ = (CheckConstraint("quantity > 0", name="quantity_positive"),)
 
     contribution_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("report_contributions.id", ondelete="CASCADE"), nullable=False
+        ForeignKey("report_contributions.id", ondelete="CASCADE"), nullable=False, index=True
     )
     line_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("order_report_lines.id", ondelete="CASCADE"), nullable=False

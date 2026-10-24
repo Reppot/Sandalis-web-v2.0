@@ -61,6 +61,9 @@ async def locale_middleware(request: Request, call_next) -> Response:
     request.state.translator = Translator(locale=locale)
     response: Response = await call_next(request)
     response.headers.setdefault("Content-Language", locale)
+    # API и /assets отдаются через прокси Next без его заголовков — базовые ставим здесь
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     return response
 
 

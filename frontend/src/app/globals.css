@@ -571,7 +571,7 @@ body {
 .tools-signal::after { content: ""; position: absolute; top: 50%; left: 50%; width: 32px; height: 1px; transform: rotate(-45deg); transform-origin: left center; background: var(--accent); opacity: 0.7; }
 .tools-header-status { display: inline-flex; align-items: center; gap: 0.45rem; color: var(--accent-soft); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.08em; white-space: nowrap; }
 .tools-card { overflow: hidden; }
-.tools-preview { position: relative; min-height: 390px; overflow: hidden; background: linear-gradient(180deg, rgba(7, 14, 9, 0.25), rgba(4, 8, 5, 0.78)), url("/bg/page_bg_raw.jpg") center/cover; }
+.tools-preview { position: relative; min-height: 390px; overflow: hidden; background: linear-gradient(180deg, rgba(7, 14, 9, 0.25), rgba(4, 8, 5, 0.78)), url("/api/v1/assets/bg/page_bg_raw.jpg") center/cover; }
 .tools-preview-grid { position: absolute; inset: -20%; background-image: linear-gradient(rgba(163,230,53,0.16) 1px, transparent 1px), linear-gradient(90deg, rgba(163,230,53,0.16) 1px, transparent 1px); background-size: 54px 54px; transform: perspective(420px) rotateX(54deg) scale(1.25); opacity: 0.7; }
 .tools-preview-route { position: absolute; height: 3px; border-radius: 999px; background: linear-gradient(90deg, transparent, var(--accent), #60a5fa, transparent); box-shadow: 0 0 12px rgba(163, 230, 53, 0.7); transform-origin: left center; }
 .tools-preview-route-a { top: 44%; left: 15%; width: 72%; transform: rotate(-13deg); }
@@ -627,7 +627,7 @@ body {
 /* ───────────────────────── ЛИЧНЫЙ КАБИНЕТ ───────────────────────── */
 .cabinet-page { display: flex; min-height: 100%; flex-direction: column; gap: 1rem; }
 .cabinet-hero { position: relative; overflow: hidden; min-height: 220px; }
-.cabinet-cover { position: absolute; inset: 0 0 auto; height: 96px; background: linear-gradient(120deg, rgba(45, 75, 45, 0.86), rgba(18, 35, 23, 0.38)), url("/bg/page_bg_raw.jpg") center/cover; opacity: 0.75; }
+.cabinet-cover { position: absolute; inset: 0 0 auto; height: 96px; background: linear-gradient(120deg, rgba(45, 75, 45, 0.86), rgba(18, 35, 23, 0.38)), url("/api/v1/assets/bg/page_bg_raw.jpg") center/cover; opacity: 0.75; }
 .cabinet-hero-content { position: relative; display: flex; align-items: flex-end; gap: 1.25rem; min-height: 220px; padding: 7.5rem 1.25rem 1.25rem; }
 .cabinet-avatar-wrap { position: relative; flex-shrink: 0; width: 132px; height: 132px; border: 5px solid var(--panel-bg); border-radius: 999px; background: #111812; box-shadow: 0 0 0 1px var(--accent), 0 0 28px rgba(163, 230, 53, 0.28); }
 .cabinet-avatar { height: 100%; width: 100%; border-radius: 999px; object-fit: cover; }
@@ -883,7 +883,7 @@ body[data-theme="light"] {
   background-color: #090d0b;
   background-image:
     radial-gradient(ellipse at center, rgba(16, 28, 18, 0.65) 0%, rgba(6, 10, 7, 0.9) 100%),
-    url("/bg/page_bg_raw.jpg");
+    url("/api/v1/assets/bg/page_bg_raw.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1098,7 +1098,8 @@ body[data-theme="light"] {
 .stockpile-card-info { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; margin-top: 0.4rem; }
 .stockpile-card-timer { text-align: right; }
 @media (max-width: 860px) { .stockpile-card-timer { text-align: left; } }
-.stockpile-card-actions { display: flex; align-items: center; gap: 0.4rem; }
+.stockpile-card-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.4rem; }
+@media (max-width: 860px) { .stockpile-card-actions { justify-content: flex-start; } }
 .timer-card.sev-none { border-color: var(--line-2); }
 /* «Склады клана» */
 .clan-stockpiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 0.6rem; margin-top: 0.75rem; }

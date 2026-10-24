@@ -37,6 +37,17 @@ class TestParsers:
             ParsedLine(name="Бинты", count=4, unit="crate"),
         ]
 
+    def test_stockpiler_json_keys(self):
+        payload = '{"items": [{"CodeName": "Bandages", "Quantity": 12, "Crated?": true},' \
+                  ' {"CodeName": "RifleAmmo", "Quantity": 40, "Crated?": false}]}'
+        assert parse_inventory_payload(payload) == [
+            ParsedLine(name="Bandages", count=12, unit="crate"),
+            ParsedLine(name="RifleAmmo", count=40, unit="unit"),
+        ]
+
+    def test_unknown_json_shape_is_empty_not_garbage(self):
+        assert parse_inventory_payload('[{"foo": "bar", "baz": 3}]') == []
+
     def test_garbage_is_ignored(self):
         assert parse_inventory_payload("просто текст без чисел\n\n") == []
 
@@ -54,6 +65,8 @@ class TestResolve:
         Item("LightArtilleryAmmo", "120мм снаряды", "120mm", ["120-мм"]),
         Item("Bandages", "Бинты", "Bandages"),
         Item("RifleW", "Винтовка", "Rifle"),
+        Item("ATLaunchedGrenadeW", "Гранатомёт", "B2 Varsi Anti-Tank Grenade"),
+        Item("FortWeatherStationPart", "Детали метеостанции", "Weather Station Parts"),
     ])
 
     def test_lookup_key_normalizes(self):
@@ -67,6 +80,11 @@ class TestResolve:
     def test_fuzzy_and_unknown(self):
         assert self.index.resolve("120мм снаряды HE") == "LightArtilleryAmmo"
         assert self.index.resolve("Кот") is None
+
+    def test_fuzzy_respects_word_boundaries(self):
+        # «Titan» (линкор) не должен находиться внутри «An[ti-Tan]k Grenade»
+        assert self.index.resolve("Titan") is None
+        assert self.index.resolve("Weather Station") == "FortWeatherStationPart"
 
 
 class TestMapData:

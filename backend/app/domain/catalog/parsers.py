@@ -102,25 +102,35 @@ def _pick(record: dict[str, Any], keys: list[str]) -> Any:
     return None
 
 
+# Ключи записей JSON: свои выгрузки, сканер склада, FIR / stockpiler (CodeName, Quantity, Crated?)
+NAME_KEYS = ["name", "item", "title", "название", "nameRu", "nameEn", "code", "codeName", "itemCode",
+             "item_code", "itemName", "displayName"]
+COUNT_KEYS = ["count", "quantity", "qty", "amount", "количество", "crates", "total"]
+
+
 def _from_json(value: Any) -> list[ParsedLine] | None:
     if isinstance(value, list):
         out: list[ParsedLine] = []
         for entry in value:
             if isinstance(entry, dict):
-                name = _pick(entry, ["name", "item", "title", "название", "nameRu", "nameEn", "code"])
-                count = _pick(entry, ["count", "quantity", "qty", "amount", "количество"])
+                name = _pick(entry, NAME_KEYS)
+                count = _pick(entry, COUNT_KEYS)
                 unit = _pick(entry, ["unit", "ед", "ед. изм."])
+                crated = _pick(entry, ["crated?", "crated", "isCrated", "в ящиках"])
                 n = count if isinstance(count, int) else parse_count(str(count or ""))
                 if isinstance(name, str) and n is not None and n > 0:
-                    out.append(ParsedLine(
-                        name=clean_name(name), count=n,
-                        unit=detect_unit(unit) if isinstance(unit, str) else "crate",
-                    ))
+                    if isinstance(unit, str):
+                        kind = detect_unit(unit)
+                    elif crated is not None:
+                        kind = "crate" if str(crated).strip().lower() in ("true", "1", "yes", "да") else "unit"
+                    else:
+                        kind = "crate"
+                    out.append(ParsedLine(name=clean_name(name), count=n, unit=kind))
             elif isinstance(entry, str):
                 out.extend(parse_inventory_text(entry))
         return out
     if isinstance(value, dict):
-        nested = _pick(value, ["items", "data", "stockpile", "inventory"])
+        nested = _pick(value, ["items", "data", "stockpile", "inventory", "contents"])
         if nested is not None:
             return _from_json(nested)
         out = []
@@ -140,6 +150,7 @@ def parse_inventory_payload(text: str) -> list[ParsedLine]:
             parsed = _from_json(json.loads(trimmed))
         except json.JSONDecodeError:
             parsed = None
-        if parsed:
+        # корректный JSON без распознанных строк — пусто, а не построчный разбор скобок
+        if parsed is not None:
             return parsed
     return parse_inventory_text(trimmed)

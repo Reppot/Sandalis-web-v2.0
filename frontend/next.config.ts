@@ -32,6 +32,22 @@ const nextConfig: NextConfig = {
     // Render free-tier просыпается до ~60 с — дефолтных 30 с прокси не хватает
     proxyTimeout: 120_000,
   },
+  // базовые заголовки безопасности для страниц и проксируемого API (CSP пока нет:
+  // нужен отдельный проход по inline-стилям и внешним картинкам)
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Strict-Transport-Security", value: "max-age=31536000" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [
       {
