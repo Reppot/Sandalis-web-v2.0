@@ -459,7 +459,8 @@
   "icon_url": "/api/v1/assets/items/AluminumA.png",
   "crate_size": 1,
   "aliases": [
-   "Алюминий"
+   "Алюминий",
+   "Алюминиевый сплав"
   ],
   "needs_review": false
  },
@@ -729,7 +730,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/AssaultRifleHeavyW.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Штурмовая винтовка Booker Model 838"
+  ],
   "needs_review": false
  },
  {
@@ -741,7 +744,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/AssaultRifleW.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Штурмовая винтовка Aalto 24"
+  ],
   "needs_review": false
  },
  {
@@ -897,7 +902,8 @@
   "icon_url": "/api/v1/assets/items/ATRPGAmmo.png",
   "crate_size": 15,
   "aliases": [
-   "АРПГ Снаряды"
+   "АРПГ Снаряды",
+   "Бронебойный/РПГ"
   ],
   "needs_review": false
  },
@@ -934,7 +940,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/ATRPGHeavyW.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "РПГ \"Carnyx\""
+  ],
   "needs_review": false
  },
  {
@@ -946,7 +954,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/ATRPGIndirectAmmo.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "Бронебойный навесной/РПГ"
+  ],
   "needs_review": false
  },
  {
@@ -997,7 +1007,8 @@
   "icon_url": "/api/v1/assets/items/Bandages.png",
   "crate_size": 50,
   "aliases": [
-   "бинт"
+   "бинт",
+   "Бинты"
   ],
   "needs_review": false
  },
@@ -2568,7 +2579,8 @@
   "icon_url": "/api/v1/assets/items/HalfTrackW.png",
   "crate_size": 3,
   "aliases": [
-   "Полугусеничный бронеавтомобиль"
+   "Полугусеничный бронеавтомобиль",
+   "Полугусеничный Бронетранспортер Niska Mk. I"
   ],
   "needs_review": false
  },
@@ -2609,7 +2621,8 @@
   "icon_url": "/api/v1/assets/items/HeavyExplosive.png",
   "crate_size": 1,
   "aliases": [
-   "Тяжёлая взрывчатка"
+   "Тяжёлая взрывчатка",
+   "Тяжёлый порох"
   ],
   "needs_review": false
  },
@@ -3600,7 +3613,8 @@
   "icon_url": "/api/v1/assets/items/MiniTorpedoAmmo.png",
   "crate_size": 5,
   "aliases": [
-   "торпеда"
+   "торпеда",
+   "Торпеда \"Quillback\""
   ],
   "needs_review": false
  },
@@ -3614,7 +3628,8 @@
   "icon_url": "/api/v1/assets/items/Mortar.png",
   "crate_size": 5,
   "aliases": [
-   "миномёт"
+   "миномёт",
+   "Миномёт Cremari"
   ],
   "needs_review": false
  },
@@ -3839,7 +3854,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/ParatrooperBackpack.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Рюкзак Десантника"
+  ],
   "needs_review": false
  },
  {
@@ -4889,7 +4906,8 @@
   "icon_url": "/api/v1/assets/items/StickyBomb.png",
   "crate_size": 10,
   "aliases": [
-   "липкая бомба (стика)"
+   "липкая бомба (стика)",
+   "Противотанковая липкая бомба"
   ],
   "needs_review": false
  },
@@ -5380,7 +5398,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/Wood.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Рафинированные материалы"
+  ],
   "needs_review": false
  },
  {
