@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from typing import Any, Literal, Sequence
 
-from sqlalchemy import ColumnElement, desc, or_
+from sqlalchemy import ColumnElement, String, cast, desc, or_
 
 from app.domain.catalog.types import DomainItem
 
@@ -67,7 +67,7 @@ def build_conditions(
     category: str | None = None,
     active_only: bool = False,
 ) -> list[ColumnElement[bool]]:
-    """WHERE-клаузы повторяют чистую функцию: category + substring по code/name/english_name."""
+    """WHERE-клаузы: category + substring по code/name/english_name и алиасам."""
     conditions: list[ColumnElement[bool]] = []
     if active_only:
         conditions.append(model.is_active.is_(True))
@@ -82,6 +82,8 @@ def build_conditions(
                 model.code.ilike(pattern, escape="\\"),
                 model.name.ilike(pattern, escape="\\"),
                 model.english_name.ilike(pattern, escape="\\"),
+                # названия русского клиента игры и прочие алиасы (JSONB-массив как текст)
+                cast(model.aliases, String).ilike(pattern, escape="\\"),
             )
         )
     return conditions

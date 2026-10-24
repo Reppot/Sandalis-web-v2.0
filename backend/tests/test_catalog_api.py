@@ -5,6 +5,8 @@ from httpx import ASGITransport, AsyncClient
 
 from app.core.permissions import ClanRole
 from app.main import app
+from app.core.db import AsyncSessionLocal
+from app.models.catalog import CatalogItem
 from tests.conftest import bearer, run, seed_catalog_item, seed_clan
 
 API = "/api/v1"
@@ -62,3 +64,21 @@ def test_catalog_is_global_and_searchable(db):
                 "Položka s kódem nope nebyla v katalogu nalezena."
 
     run(main())
+
+
+def test_catalog_search_finds_game_client_aliases(db):
+    """Поиск по алиасам: «Граната Bomastone» (русский клиент) находит Bomastone Grenade."""
+    async def main() -> None:
+        async with AsyncSessionLocal() as s:
+            s.add(CatalogItem(code="GrenadeC", category="weapons", name="Bomastone Grenade",
+                              english_name="Bomastone Grenade", aliases=["Граната Bomastone"]))
+            await s.commit()
+        await seed_clan("CLAN_A")
+        async with client() as c:
+            r = await c.get(f"{API}/items", params={"query": "граната bomastone"},
+                            headers=bearer(clan_id="CLAN_A", role=ClanRole.GUEST))
+            assert r.status_code == 200, r.text
+            assert [i["code"] for i in r.json()["items"]] == ["GrenadeC"]
+
+    run(main())
+

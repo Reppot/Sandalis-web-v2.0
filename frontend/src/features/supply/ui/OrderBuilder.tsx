@@ -14,6 +14,8 @@ import {
   Modal,
   assetUrl,
   errorText,
+  matchesWords,
+  searchText,
   useConfirm,
   useDocExport,
   useI18n,
@@ -86,12 +88,13 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
   }, [catalog, list, t]);
 
   const matrix = React.useMemo(() => {
-    const q = filter.trim().toLowerCase();
+    const q = searchText(filter.trim());
     const pool = category === "all" ? catalog : catalog.filter((i) => i.category === category);
     if (!q) return pool;
-    const hay = (i: FoxholeItem) => [i.name, i.englishName, i.code, ...i.aliases].join(" ").toLowerCase();
-    const starts = pool.filter((i) => i.name.toLowerCase().startsWith(q));
-    const includes = pool.filter((i) => !i.name.toLowerCase().startsWith(q) && hay(i).includes(q));
+    // по словам и с алиасами: «граната bomastone», «collins 68-мм» находят предмет
+    const hay = (i: FoxholeItem) => [i.name, i.englishName, i.code, ...i.aliases].join(" ");
+    const starts = pool.filter((i) => searchText(i.name).startsWith(q));
+    const includes = pool.filter((i) => !searchText(i.name).startsWith(q) && matchesWords(hay(i), q));
     return [...starts, ...includes];
   }, [filter, category, catalog]);
 

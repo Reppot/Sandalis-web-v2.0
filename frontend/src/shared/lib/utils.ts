@@ -19,3 +19,13 @@ export function roleColor(color: number): string {
   }
   return `rgb(${r}, ${g}, ${b})`;
 }
+/** Нормализация для поиска предметов: регистр, ё→е, «68-мм» → «68mm» (как резолвер на сервере). */
+export function searchText(value: string): string {
+  return value.toLocaleLowerCase("ru-RU").replace(/ё/g, "е").replace(/(\d)[\s-]*мм(?![а-я])/g, "$1mm");
+}
+
+/** Все слова запроса встречаются в тексте — «граната bomastone» находит «Bomastone Grenade · Граната Bomastone». */
+export function matchesWords(hay: string, query: string): boolean {
+  const text = searchText(hay);
+  return searchText(query).split(/\s+/).filter(Boolean).every((word) => text.includes(word));
+}

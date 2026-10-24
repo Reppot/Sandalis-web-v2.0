@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { catalogApi, type FoxholeItem, type ParseResult } from "@/entities/item";
-import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged } from "@/shared";
+import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, matchesWords, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged } from "@/shared";
 
 const FACTIONS: Record<string, MessageKey> = { colonial: "codes.faction.colonial", warden: "codes.faction.warden", neutral: "codes.faction.neutral" };
 
@@ -44,10 +44,10 @@ export const CodeBaseWorkspace: React.FC = () => {
   }, [notify, t]);
 
   const filtered = React.useMemo(() => {
-    const needle = query.trim().toLocaleLowerCase("ru-RU");
+    const needle = query.trim();
     return entries.filter((e) => {
-      const hay = `${e.code} ${e.englishName} ${e.name} ${e.aliases.join(" ")}`.toLocaleLowerCase("ru-RU");
-      return (!needle || hay.includes(needle)) && (category === "all" || e.category === category) && (faction === "all" || e.faction === faction) && (!reviewOnly || e.needsReview);
+      const hay = `${e.code} ${e.englishName} ${e.name} ${e.aliases.join(" ")}`;
+      return (!needle || matchesWords(hay, needle)) && (category === "all" || e.category === category) && (faction === "all" || e.faction === faction) && (!reviewOnly || e.needsReview);
     });
   }, [entries, query, category, faction, reviewOnly]);
   const page = usePaged(filtered, 100, [query, category, faction, reviewOnly].join("|"));
