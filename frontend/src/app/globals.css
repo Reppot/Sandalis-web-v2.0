@@ -1318,3 +1318,10 @@ body[data-theme="light"] {
 .stockpile-item b { color: var(--accent); font-family: var(--font-mono); }
 [data-theme="light"] .stockpile-item { background: var(--surface-2); }
 [data-theme="light"] .stockpile-items-toggle { color: inherit; }
+
+/* Уведомление об авторских правах (LICENSE) */
+.copyright-notice { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.15rem 0.8rem; padding: 0.4rem 0.75rem 0.2rem; color: rgba(229, 231, 235, 0.45); font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.04em; text-align: center; }
+.copyright-notice-terms { color: rgba(229, 231, 235, 0.35); }
+.auth-copyright { position: relative; z-index: 10; width: 100%; align-self: end; }
+.auth-screen:has(> .auth-copyright) { grid-template-rows: 1fr auto; }
+[data-theme="light"] .copyright-notice, [data-theme="light"] .copyright-notice-terms { color: rgba(30, 41, 30, 0.55); }

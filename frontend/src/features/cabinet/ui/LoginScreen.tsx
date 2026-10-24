@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { UserSession } from "@/entities/session";
-import { env, errorText, roleColor, useT, type MessageKey } from "@/shared";
+import { CopyrightNotice, env, errorText, roleColor, useT, type MessageKey } from "@/shared";
 import { authApi, type AccessLevel, type DiscordSetup, type SetupChoice } from "@/features/cabinet/api/authApi";
 import { LanguageSwitch } from "@/features/cabinet/ui/LanguageSwitch";
 
@@ -151,6 +151,7 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
           </>
         )}
       </section>
+      <CopyrightNotice className="auth-copyright" />
     </main>
   );
 };

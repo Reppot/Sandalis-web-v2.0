@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "SINDARIS Терминал — Logistics Overwatch",
   description: "Тактический логистический терминал клана SINDARIS для Foxhole: заказы, склады, таймеры деспавна.",
   icons: { icon: "/api/v1/assets/brand/clan-logo.png" },
+  authors: [{ name: "Reppot / SINDARIS" }],
+  creator: "Reppot / SINDARIS",
+  other: { copyright: "© 2026 Reppot / SINDARIS. All rights reserved." },
 };
 
 export const viewport: Viewport = {

@@ -1,0 +1,62 @@
+SINDARIS Terminal (Sandalis Web) — Proprietary License
+Copyright (c) 2026 Reppot / SINDARIS. All rights reserved.
+
+-------------------------------------------------------------------------------
+РУССКИЙ
+-------------------------------------------------------------------------------
+
+Настоящее программное обеспечение, включая исходный код, сборки, дизайн
+интерфейса, тексты, графику, иконки интерфейса, структуру базы данных и
+документацию (далее — «Программа»), является собственностью правообладателя
+(Reppot / SINDARIS) и охраняется законодательством об авторском праве.
+
+Без предварительного письменного разрешения правообладателя ЗАПРЕЩАЕТСЯ:
+  1. копировать, воспроизводить или распространять Программу полностью или
+     частично;
+  2. изменять Программу, создавать производные работы и форки;
+  3. размещать Программу или её копии на собственных серверах и сайтах,
+     в том числе под другим названием;
+  4. продавать, сдавать в аренду, сублицензировать Программу или использовать
+     её в коммерческих целях;
+  5. удалять или изменять уведомления об авторских правах.
+
+Открытый доступ к репозиторию или к сайту не означает предоставления лицензии.
+Просмотр исходного кода разрешён только в ознакомительных целях.
+
+Материалы третьих лиц (игровые иконки и данные Foxhole — собственность
+Siege Camp; данные foxhole.wiki.gg — по лицензии вики; шрифты и иконки
+Tabler Icons — по их лицензиям) принадлежат их правообладателям и на них
+настоящая лицензия не распространяется.
+
+ПРОГРАММА ПРЕДОСТАВЛЯЕТСЯ «КАК ЕСТЬ», БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ.
+
+По вопросам разрешений обращайтесь к правообладателю.
+
+-------------------------------------------------------------------------------
+ENGLISH
+-------------------------------------------------------------------------------
+
+This software, including its source code, builds, user interface design, texts,
+graphics, interface icons, database schema and documentation (the "Software"),
+is the property of the copyright holder (Reppot / SINDARIS) and is protected by
+copyright law.
+
+Without the prior written permission of the copyright holder, you may NOT:
+  1. copy, reproduce or distribute the Software in whole or in part;
+  2. modify the Software or create derivative works or forks;
+  3. host the Software or copies of it on your own servers or websites,
+     including under a different name;
+  4. sell, rent, sublicense or otherwise use the Software commercially;
+  5. remove or alter copyright notices.
+
+Public access to the repository or the website does not grant any license.
+Viewing the source code is permitted for reference only.
+
+Third-party materials (Foxhole game icons and data are the property of
+Siege Camp; foxhole.wiki.gg data is under the wiki's license; fonts and
+Tabler Icons are under their own licenses) belong to their respective owners
+and are not covered by this license.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
+For permission requests, contact the copyright holder.

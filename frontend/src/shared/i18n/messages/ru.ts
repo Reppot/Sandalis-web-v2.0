@@ -215,6 +215,8 @@ export const ru = {
   "perm.stockpiles:items": "Обновлять содержимое складов (вставка JSON, сканер, буфер, MapData.sav)",
   "reports.noteLabel": "Комментарий к заказу",
   "stock.updateContents": "Обновить содержимое",
+  "legal.rights": "Все права защищены.",
+  "legal.terms": "Копирование и использование кода, дизайна и материалов сайта без разрешения запрещено.",
   "stock.showItems": "показать",
   "stock.hideItems": "скрыть",
   "stock.searchItems": "Поиск по содержимому...",

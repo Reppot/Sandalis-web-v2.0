@@ -18,7 +18,7 @@ import { ClanWorkspace, type ClanSection } from "@/app/_shell/ClanWorkspace";
 import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
 import { TABS, isClanView, isTabKey, isToolModule, legacyClanView, visibleTabs, type ClanView, type TabKey } from "@/app/_shell/tabs";
-import { useT } from "@/shared";
+import { CopyrightNotice, useT } from "@/shared";
 
 export default function TerminalPage() {
   const t = useT();
@@ -166,6 +166,7 @@ export default function TerminalPage() {
           <Sidebar tabs={tabs} active={current} onSelect={select} clan={clan} />
           <main key={current} className="min-w-0 flex-1 pb-20 md:pb-0">{workspace}</main>
         </div>
+        <CopyrightNotice className="mb-20 md:mb-0" />
         <MobileNav tabs={tabs} active={current} onSelect={select} clan={clan} />
       </div>
     </TerminalProvider>

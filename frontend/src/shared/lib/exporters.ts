@@ -6,6 +6,7 @@
  * рапорт склада/заказа — одна секция строк, расчёт калькулятора — несколько секций.
  */
 import { fileStamp, formatDateTime } from "@/shared/lib/time";
+import { COPYRIGHT_HOLDER, copyrightYears } from "@/shared/lib/copyright";
 
 export interface ExportRow {
   name: string;
@@ -288,6 +289,11 @@ function drawPage(
   ctx.fillStyle = "rgba(163,230,53,0.7)";
   ctx.font = "bold 12px Arial";
   ctx.fillText(doc.footer ?? (doc.labels ?? RU_LABELS).footer, 40, PAGE_H - 40);
+  ctx.textAlign = "right";
+  ctx.fillStyle = "rgba(229,231,235,0.45)";
+  ctx.font = "11px Arial";
+  ctx.fillText(`© ${copyrightYears()} ${COPYRIGHT_HOLDER}`, PAGE_W - 40, PAGE_H - 40);
+  ctx.textAlign = "left";
 }
 
 /** Страницы 650×1000, до 14 строк на лист; textureUrl — фон рапорта из реестра медиа. */
