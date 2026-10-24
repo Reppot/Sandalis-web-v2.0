@@ -158,6 +158,28 @@ GAME_CLIENT_NAMES = [
     "Leary AA-70 Bolas",
     "Leary Shellbore 68-мм",
     "Корабельная обшивка корпуса",
+    "Cascadier 873",
+    "8-мм",
+    "Хангман 757",
+    ".44 Магнум",
+    "Blakerow 871",
+    "No.4 The Pillory Scattergun",
+    "228 Satterley Heavy Storm Rifle",
+    "Станковый Bonesaw MK.3",
+    "Станковый Fissura gd.I",
+    "Зажигательный минометный снаряд",
+    "Граната BF5 White Ash Flask",
+    "Сирена воздушной тревоги",
+    "Топливо для Willow's Bane",
+    "Crow’s Foot Mine",
+    "Falias Raiding Club",
+    "Детонатор Хавок Заряда",
+    "Alligator Charge",
+    "Eleos Infantry Dagger",
+    "Ветроуказатель",
+    "Плазма",
+    "Реактивный миномет T13 “Deioneus”",
+    "DAE 3b-2 “Hades’ Net”",
 ]
 
 
@@ -181,3 +203,13 @@ def test_field_guns_are_not_shells():
     assert index.resolve("Collins орудие 68-мм") == "FieldATW"
     assert index.resolve("68мм") == "ATAmmo"
     assert index.resolve("Бортовой грузовик BMS - Packmule") == "FlatbedTruck"
+
+
+def test_havoc_alligator_fissura_are_not_swapped():
+    index = CatalogIndex.build(_Item(r) for r in load("catalog.json"))
+    assert index.resolve("Хавок Заряд") == "ExplosiveTripod"
+    assert index.resolve("Детонатор Хавок Заряда") == "SatchelChargeT"
+    assert index.resolve("Alligator Charge") == "SatchelChargeW"
+    assert index.resolve("Станковый Fissura gd.I") == "GrenadeLauncherTC"
+    assert index.resolve("Bonesaw MK.3") == "ATRPGW"
+    assert index.resolve("Станковый Bonesaw MK.3") == "ATRPGTW"

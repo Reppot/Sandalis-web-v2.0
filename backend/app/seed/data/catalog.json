@@ -434,7 +434,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/AirSirenT.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Сирена воздушной тревоги"
+  ],
   "needs_review": false
  },
  {
@@ -980,7 +982,10 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/ATRPGTW.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Станковый Bonesaw MK.3",
+   "Противотанковый РПГ (станковый)"
+  ],
   "needs_review": false
  },
  {
@@ -992,9 +997,7 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/ATRPGW.png",
   "crate_size": 5,
-  "aliases": [
-   "Противотанковый РПГ (станковый)"
-  ],
+  "aliases": [],
   "needs_review": false
  },
  {
@@ -1713,7 +1716,7 @@
   "icon_url": "/api/v1/assets/items/ExplosiveTripod.png",
   "crate_size": 1,
   "aliases": [
-   "Станковый Fissura gd.I"
+   "Хавок Заряд"
   ],
   "needs_review": false
  },
@@ -2404,7 +2407,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/GrenadeLauncherTC.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Станковый Fissura gd.I"
+  ],
   "needs_review": false
  },
  {
@@ -4442,7 +4447,7 @@
   "icon_url": "/api/v1/assets/items/SatchelChargeT.png",
   "crate_size": 1,
   "aliases": [
-   "Заряд Аллигатор"
+   "Детонатор Хавок Заряда"
   ],
   "needs_review": false
  },
@@ -4456,7 +4461,7 @@
   "icon_url": "/api/v1/assets/items/SatchelChargeW.png",
   "crate_size": 10,
   "aliases": [
-   "Хавок Заряд"
+   "Заряд Аллигатор"
   ],
   "needs_review": false
  },
@@ -5020,7 +5025,9 @@
   "origin": "vehicle",
   "icon_url": "/api/v1/assets/items/TanketteMultiC.png",
   "crate_size": 1,
-  "aliases": [],
+  "aliases": [
+   "Реактивный миномет T13 “Deioneus”"
+  ],
   "needs_review": false
  },
  {
@@ -5386,7 +5393,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/WindsockT.png",
   "crate_size": 5,
-  "aliases": [],
+  "aliases": [
+   "Ветроуказатель"
+  ],
   "needs_review": false
  },
  {
