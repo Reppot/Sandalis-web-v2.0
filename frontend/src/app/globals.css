@@ -1307,3 +1307,14 @@ body[data-theme="light"] {
 .summary-note { color: rgba(229, 231, 235, 0.6); font-size: 0.68rem; line-height: 1.25; }
 [data-theme="light"] .facility-building { background: var(--surface-2); }
 [data-theme="light"] .summary-section-title { color: #a16207; }
+
+/* Склад клана: раскрываемое содержимое */
+.stockpile-items-toggle { display: inline-flex; align-items: center; gap: 0.5rem; border: 1px solid transparent; border-radius: 4px; padding: 0.1rem 0.4rem; color: rgba(229, 231, 235, 0.7); font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; }
+.stockpile-items-toggle:not(:disabled):hover, .stockpile-items-toggle.is-open { border-color: rgba(163, 230, 53, 0.45); color: #fff; }
+.stockpile-items-toggle b { color: var(--accent); }
+.stockpile-items { border-top: 1px solid rgba(255, 255, 255, 0.08); padding: 0.7rem 1rem 0.9rem; }
+.stockpile-items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: 0.35rem; }
+.stockpile-item { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); padding: 0.3rem 0.5rem; font-size: 0.8rem; }
+.stockpile-item b { color: var(--accent); font-family: var(--font-mono); }
+[data-theme="light"] .stockpile-item { background: var(--surface-2); }
+[data-theme="light"] .stockpile-items-toggle { color: inherit; }

@@ -9,6 +9,8 @@ import { catalogApi } from "@/entities/item";
 import {
   EmptyState,
   Field,
+  ItemIcon,
+  assetUrl,
   Loading,
   Modal,
   PagedMore,
@@ -58,6 +60,15 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
   const [monitor, setMonitor] = React.useState<{ region: string; location: string } | null>(null);
   const [shown, setShown] = React.useState<Set<string>>(new Set());
   const [contents, setContents] = React.useState<Stockpile | null>(null);
+  // склады с раскрытым содержимым
+  const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
+  const toggle = (id: string, open?: boolean) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (open ?? !next.has(id)) next.add(id);
+      else next.delete(id);
+      return next;
+    });
 
   const rows = React.useMemo<Row[]>(() => {
     // у склада — самый актуальный таймер: сначала незавершённый с ближайшим сроком
@@ -133,6 +144,8 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
               onManage={() => row.timer && setManagedId(row.timer.id)}
               onEdit={() => row.stockpile && setEditing(row.stockpile)}
               onContents={() => row.stockpile && setContents(row.stockpile)}
+              expanded={Boolean(row.stockpile && expanded.has(row.stockpile.id))}
+              onToggleItems={() => row.stockpile && toggle(row.stockpile.id)}
               onMonitor={() => row.stockpile && setMonitor({ region: row.stockpile.region, location: row.stockpile.name })}
             />
           ))}
@@ -142,7 +155,14 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
 
       {managed && <TimerManagerModal timer={managed} can={can} onClose={() => setManagedId(null)} />}
       <RegisterTimerModal open={Boolean(monitor)} preset={monitor} onClose={() => setMonitor(null)} />
-      <StockpileContentsModal target={contents} onClose={() => setContents(null)} onSaved={() => void refresh()} />
+      <StockpileContentsModal
+        target={contents}
+        onClose={() => setContents(null)}
+        onSaved={(id) => {
+          toggle(id, true);
+          void refresh();
+        }}
+      />
       <StockpileDetailsModal target={editing} onClose={() => setEditing(null)} onSaved={() => void refresh()} />
     </div>
   );
@@ -167,8 +187,10 @@ const StockpileCard: React.FC<{
   onManage: () => void;
   onEdit: () => void;
   onContents: () => void;
+  expanded: boolean;
+  onToggleItems: () => void;
   onMonitor: () => void;
-}> = ({ row, now, can, revealed, onReveal, onManage, onEdit, onContents, onMonitor }) => {
+}> = ({ row, now, can, revealed, onReveal, onManage, onEdit, onContents, expanded, onToggleItems, onMonitor }) => {
   const { t } = useI18n();
   const notify = useNotify();
   const { media } = useContent();
@@ -210,7 +232,10 @@ const StockpileCard: React.FC<{
               )}
             </span>
             {s ? (
-              <span className="hud-label text-muted">📦 {t("clan.stockpileLines", { n: s.itemsCount })}{s.lastSyncAt ? ` • ${formatDateTime(new Date(s.lastSyncAt))}` : ""}</span>
+              <button type="button" className={`stockpile-items-toggle ${expanded ? "is-open" : ""}`} aria-expanded={expanded} disabled={!s.itemsCount} onClick={onToggleItems}>
+                📦 {t("clan.stockpileLines", { n: s.itemsCount })}{s.lastSyncAt ? ` • ${formatDateTime(new Date(s.lastSyncAt))}` : ""}
+                {s.itemsCount ? <b>{expanded ? `▲ ${t("stock.hideItems")}` : `▼ ${t("stock.showItems")}`}</b> : null}
+              </button>
             ) : null}
           </div>
         </div>
@@ -247,12 +272,58 @@ const StockpileCard: React.FC<{
           ) : null}
         </div>
       </div>
+      {s && expanded ? <StockpileItems stockpile={s} /> : null}
     </li>
   );
 };
 
+/** Содержимое склада: грузится при раскрытии и после каждой синхронизации (lastSyncAt). */
+const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
+  const { t, locale } = useI18n();
+  const [items, setItems] = React.useState<Stockpile["items"] | null>(null);
+  const [query, setQuery] = React.useState("");
+
+  React.useEffect(() => {
+    let cancelled = false;
+    stockpileApi
+      .get(stockpile.id)
+      .then((full) => !cancelled && setItems(full.items))
+      .catch(() => !cancelled && setItems([]));
+    return () => {
+      cancelled = true;
+    };
+  }, [stockpile.id, stockpile.lastSyncAt]);
+
+  if (!items) return <div className="stockpile-items"><Loading /></div>;
+  const name = (i: Stockpile["items"][number]) => (locale === "ru" ? i.name ?? i.nameEn : i.nameEn ?? i.name) ?? i.itemCode;
+  const needle = query.trim().toLowerCase();
+  const shown = [...items]
+    .filter((i) => !needle || `${name(i)} ${i.itemCode}`.toLowerCase().includes(needle))
+    .sort((a, b) => b.quantity - a.quantity);
+  return (
+    <div className="stockpile-items" data-guide="stockpile-items">
+      {items.length > 12 ? (
+        <input className="field mb-2 w-full max-w-xs py-1.5 text-xs" placeholder={t("stock.searchItems")} value={query} onChange={(e) => setQuery(e.target.value)} />
+      ) : null}
+      {shown.length ? (
+        <ul className="stockpile-items-grid">
+          {shown.map((i) => (
+            <li key={i.id} className="stockpile-item" title={name(i)}>
+              <ItemIcon sources={[assetUrl(i.iconUrl)]} size={34} label={name(i)} />
+              <span className="min-w-0 flex-1 truncate">{name(i)}</span>
+              <b>{i.quantity.toLocaleString()}</b>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="hud-label text-muted">{t("common.nothingFound")}</p>
+      )}
+    </div>
+  );
+};
+
 /** «Обновить содержимое»: вставленный JSON (или текст) сканера заменяет содержимое склада. */
-const StockpileContentsModal: React.FC<{ target: Stockpile | null; onClose: () => void; onSaved: () => void }> = ({ target, onClose, onSaved }) => {
+const StockpileContentsModal: React.FC<{ target: Stockpile | null; onClose: () => void; onSaved: (id: string) => void }> = ({ target, onClose, onSaved }) => {
   const { t } = useI18n();
   const notify = useNotify();
   const [text, setText] = React.useState("");
@@ -278,7 +349,7 @@ const StockpileContentsModal: React.FC<{ target: Stockpile | null; onClose: () =
       if (parsed.unknown.length) {
         notify({ title: t("import.notInCatalog"), message: parsed.unknown.slice(0, 6).join(" • "), tone: "warning", ttl: 9000 });
       }
-      onSaved();
+      onSaved(target.id);
       onClose();
     } catch (err) {
       notify({ title: t("stock.updateContents"), message: errorText(err, t("stock.notSaved")), tone: "danger" });
