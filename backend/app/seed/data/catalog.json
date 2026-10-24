@@ -2152,7 +2152,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/FlameBackpackC.png",
   "crate_size": 10,
-  "aliases": [],
+  "aliases": [
+   "Топливо “Molten Wind” v.II"
+  ],
   "needs_review": false
  },
  {
@@ -2383,7 +2385,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/GrenadeC.png",
   "crate_size": 25,
-  "aliases": [],
+  "aliases": [
+   "Граната Bomastone"
+  ],
   "needs_review": false
  },
  {
@@ -4183,7 +4187,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/RifleAutomaticC.png",
   "crate_size": 15,
-  "aliases": [],
+  "aliases": [
+   "Автоматическая винтовка Catena rt.IV"
+  ],
   "needs_review": false
  },
  {
@@ -4210,7 +4216,9 @@
   "origin": "item",
   "icon_url": "/api/v1/assets/items/RifleC.png",
   "crate_size": 20,
-  "aliases": [],
+  "aliases": [
+   "Винтовка Argenti r.II"
+  ],
   "needs_review": false
  },
  {

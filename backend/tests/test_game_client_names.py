@@ -180,6 +180,20 @@ GAME_CLIENT_NAMES = [
     "Плазма",
     "Реактивный миномет T13 “Deioneus”",
     "DAE 3b-2 “Hades’ Net”",
+    "Разрушающая ракета",
+    "BMS - Aquatipper",
+    "Cnute Cliffwrest",
+    "Граната Bomastone",
+    "Автоматическая винтовка Catena rt.IV",
+    "Винтовка Argenti r.II",
+    "Fuscina pi.I",
+    "“The Pitch Gun” mc.V",
+    "“Lionclaw” mc.VIII",
+    "“Typhon” ra.XII",
+    "Lamentum mm.IV",
+    "Daucus isg.III",
+    "Ignifist 30",
+    "Топливо “Molten Wind” v.II",
 ]
 
 
@@ -213,3 +227,15 @@ def test_havoc_alligator_fissura_are_not_swapped():
     assert index.resolve("Станковый Fissura gd.I") == "GrenadeLauncherTC"
     assert index.resolve("Bonesaw MK.3") == "ATRPGW"
     assert index.resolve("Станковый Bonesaw MK.3") == "ATRPGTW"
+
+
+def test_type_prefix_rule_without_aliases():
+    """«Граната X» / «Винтовка X» находят предмет по началу английского названия;
+    неоднозначное и «Станковый …» — нет (станковая версия — другой предмет)."""
+    rows = [{**r, "aliases": []} for r in load("catalog.json")]
+    index = CatalogIndex.build(_Item(r) for r in rows)
+    assert index.resolve("Граната Bomastone") == "GrenadeC"
+    assert index.resolve("Автоматическая винтовка Catena rt.IV") == "RifleAutomaticC"
+    assert index.resolve("Винтовка Argenti r.II") == "RifleC"
+    assert index.resolve("Топливо “Molten Wind” v.II") is None
+    assert index.resolve("Станковый Bonesaw MK.3") is None

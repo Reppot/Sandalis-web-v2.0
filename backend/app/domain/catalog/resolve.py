@@ -20,6 +20,15 @@ CYRILLIC_MM = re.compile(r"(?<=\d)[\s-]*мм(?![а-я])")
 # мягкое совпадение: короткое название должно покрывать ≥ 60 % длинного, иначе
 # «68мм» находилось бы внутри «Balfour Rampart 68-мм» (полевое орудие ≠ снаряды)
 MIN_COVERAGE = 0.6
+# Русский клиент пишет «тип + название»: «Граната Bomastone», «Винтовка Argenti r.II».
+# Без префикса название — начало английского («Bomastone Grenade»). «Станковый» не снимаем:
+# станковая версия — отдельный предмет.
+TYPE_PREFIX = re.compile(
+    r"^(?:автоматическая винтовка|штурмовая винтовка|снайперская винтовка|винтовка|"
+    r"пистолет-пулем[её]т|пулем[её]т|пистолет|револьвер|дробовик|"
+    r"граната|гранатом[её]т|торпеда|мином[её]т|противотанковое ружье|"
+    r"топливо для|топливо)\s+",
+)
 
 
 def _normalize(value: str | None) -> str:
@@ -93,4 +102,21 @@ class CatalogIndex:
             if _contains(query, candidate) or _contains(outer, key):
                 if best is None or len(candidate) > best[0]:
                     best = (len(candidate), code)
-        return best[1] if best else None
+        if best:
+            return best[1]
+        return self._by_type_prefix(raw_name)
+
+    def _by_type_prefix(self, raw_name: str) -> str | None:
+        """«Винтовка Argenti r.II» → единственный предмет, чьё название начинается с
+        «Argenti r.II» по границе слова; при неоднозначности — None."""
+        stripped = TYPE_PREFIX.sub("", _normalize(raw_name).strip(), count=1)
+        if stripped == _normalize(raw_name).strip():
+            return None
+        key = lookup_key(stripped)
+        if len(key) < 4:
+            return None
+        found = {
+            code for candidate, code in self.exact.items()
+            if candidate.startswith(key) and len(key) in self.words.get(candidate, frozenset())
+        }
+        return found.pop() if len(found) == 1 else None
