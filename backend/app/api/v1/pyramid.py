@@ -27,6 +27,9 @@ def _read(row: ClanSettings | None) -> PyramidRead:
     return PyramidRead(**row.supply_pyramid, is_default=False, updated_at=row.supply_pyramid_updated_at, presets=presets())
 
 
+NOT_IN_PYRAMID = frozenset({"vehicles", "structures"})
+
+
 @router.get("/pyramid", response_model=PyramidRead, summary="Пирамида снабжения клана (или шаблон)", dependencies=CanRead)
 async def read_pyramid(service: SettingsServiceDep) -> PyramidRead:
     return _read(await service.get())
@@ -35,11 +38,18 @@ async def read_pyramid(service: SettingsServiceDep) -> PyramidRead:
 @router.put("/pyramid", response_model=PyramidRead, summary="Сохранить пирамиду снабжения", dependencies=CanEdit)
 async def save_pyramid(payload: PyramidUpdate, service: SettingsServiceDep) -> PyramidRead:
     codes = {i.code for t in payload.tiers for i in t.items}
-    known = set((await service.session.execute(select(CatalogItem.code).where(CatalogItem.code.in_(codes)))).scalars())
-    unknown = sorted(codes - known)
+    rows = (await service.session.execute(
+        select(CatalogItem.code, CatalogItem.category).where(CatalogItem.code.in_(codes))
+    )).all()
+    unknown = sorted(codes - {code for code, _ in rows})
     if unknown:
         raise AppError(message_key="errors.pyramid_unknown_items", code="validation_error", status_code=422,
                        params={"codes": ", ".join(unknown[:5])})
+    # техника и сооружения в пирамиду не входят: она про ящики снабжения
+    banned = sorted(code for code, category in rows if category in NOT_IN_PYRAMID)
+    if banned:
+        raise AppError(message_key="errors.pyramid_no_vehicles", code="validation_error", status_code=422,
+                       params={"codes": ", ".join(banned[:5])})
     row = await service.get()
     if row is None:
         row = ClanSettings()

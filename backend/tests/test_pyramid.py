@@ -39,6 +39,12 @@ def test_pyramid_default_save_and_reset(db):
             r = await c.put(f"{API}/clan/pyramid", json=bad, headers=officer)
             assert r.status_code == 422 and "NoSuchItem" in r.json()["error"]["message"]
 
+            # техника и сооружения в кастомную пирамиду не добавляются
+            await seed_catalog_item("TruckW", category="vehicles")
+            vehicle = {"faction": "warden", "tiers": [{"items": [{"code": "TruckW", "crates": 2}]}]}
+            r = await c.put(f"{API}/clan/pyramid", json=vehicle, headers=officer)
+            assert r.status_code == 422 and "TruckW" in r.json()["error"]["message"]
+
             reset = await c.delete(f"{API}/clan/pyramid", headers=officer)
             assert reset.status_code == 200 and reset.json()["is_default"]
 

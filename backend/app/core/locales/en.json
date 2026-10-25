@@ -11,6 +11,7 @@
     "db_unavailable": "Database is waking up, please retry in a few seconds.",
     "war_api_unavailable": "Foxhole War API is unavailable — try again later.",
     "pyramid_unknown_items": "Unknown items in the pyramid: {codes}",
+    "pyramid_no_vehicles": "Vehicles and structures can't be added to the pyramid: {codes}",
     "guest_no_clan": "Guest access has no clan"
   }
 }

@@ -41,7 +41,11 @@ const LEGACY_BUNKERS_KEY = "sindaris-bunker-bases";
 const UNIT_KEY = (source: Source) => `sindaris-pyramid-unit-${source}`;
 // склады зданий (депо, порт) считают ящиками, бункерная база — штуками
 const DEFAULT_UNIT: Record<Source, StockUnit> = { stockpile: "crate", bunker: "unit" };
-const CLAN = "clan";
+// «Кастомная» — своя пирамида клана (сохраняется на сервере); при входе всегда «Обычная»
+const CUSTOM = "clan";
+const DEFAULT_CONFIG = "normal";
+// техника и сооружения в пирамиду не входят (сервер это тоже проверяет)
+const NOT_IN_PYRAMID = new Set(["vehicles", "structures"]);
 
 const FACTIONS: { key: PyramidFaction; label: MessageKey }[] = [
   { key: "warden", label: "world.wardens" },
@@ -59,7 +63,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   const notify = useNotify();
   const canEdit = can(Scopes.STOCKPILES_PYRAMID);
   const [pyramid, setPyramid] = React.useState<Pyramid | null>(null);
-  const [config, setConfig] = React.useState<string>(CLAN);
+  const [config, setConfig] = React.useState<string>(DEFAULT_CONFIG);
   const [draft, setDraft] = React.useState<{ faction: PyramidFaction; tiers: PyramidTier[] } | null>(null);
   const [catalog, setCatalog] = React.useState<Map<string, FoxholeItem>>(new Map());
   const [source, setSource] = React.useState<Source>("stockpile");
@@ -75,7 +79,13 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   const fail = React.useCallback((err: unknown) => notify({ title: t("pyramid.title"), message: errorText(err, t("pyramid.loadFailed")), tone: "danger" }), [notify, t]);
 
   React.useEffect(() => {
-    pyramidApi.get().then(setPyramid).catch(fail);
+    pyramidApi
+      .get()
+      .then((p) => {
+        setPyramid(p);
+        if (!p.presets.some((x) => x.key === DEFAULT_CONFIG)) setConfig(CUSTOM);
+      })
+      .catch(fail);
     catalogApi.all().then((items) => setCatalog(new Map(items.map((i) => [i.code, i])))).catch(fail);
     stockpileApi
       .list()
@@ -149,7 +159,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
     try {
       setPyramid(await pyramidApi.save({ faction: draft.faction, tiers: draft.tiers.filter((tier) => tier.items.length) }));
       setDraft(null);
-      setConfig(CLAN);
+      setConfig(CUSTOM);
       notify({ title: t("pyramid.title"), message: t("pyramid.saved"), tone: "success" });
     } catch (err) {
       notify({ title: t("pyramid.title"), message: errorText(err, t("pyramid.saveFailed")), tone: "danger" });
@@ -161,9 +171,10 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   const resetTemplate = async () => {
     setBusy(true);
     try {
-      setPyramid(await pyramidApi.reset());
-      setDraft(null);
-      setConfig(CLAN);
+      const fresh = await pyramidApi.reset();
+      setPyramid(fresh);
+      setDraft({ faction: fresh.faction, tiers: fresh.tiers });
+      setConfig(CUSTOM);
       notify({ title: t("pyramid.title"), message: t("pyramid.resetDone"), tone: "warning" });
     } catch (err) {
       fail(err);
@@ -173,7 +184,20 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   };
 
   const editTiers = (fn: (tiers: PyramidTier[]) => PyramidTier[]) => setDraft((d) => (d ? { ...d, tiers: fn(d.tiers.map((tier) => ({ ...tier, items: [...tier.items] }))) } : d));
-  const startEdit = () => pyramid && setDraft({ faction: pyramid.faction, tiers: preset ? preset.tiers : pyramid.tiers });
+  /** Карточка конфигурации: готовые — просмотр; «Кастомная» — своя пирамида, у кого есть право — сразу правка. */
+  const pickConfig = (key: string) => {
+    if (key === CUSTOM) {
+      setConfig(CUSTOM);
+      if (canEdit && pyramid && !draft) setDraft({ faction: pyramid.faction, tiers: pyramid.tiers });
+      return;
+    }
+    setDraft(null);
+    setConfig(key);
+  };
+  const fillFrom = (key: string) => {
+    const from = pyramid?.presets.find((p) => p.key === key);
+    if (from && draft) setDraft({ ...draft, tiers: from.tiers.map((tier) => ({ ...tier, items: [...tier.items] })) });
+  };
 
   if (!pyramid) return <div className="panel rounded-md"><Loading label={t("pyramid.loading")} /></div>;
 
@@ -193,11 +217,6 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
             <p className="mt-1 max-w-3xl text-[0.8rem] text-white/70">{t("pyramid.hint")}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            {canEdit && !draft ? (
-              <button type="button" data-guide="pyramid-edit" className="btn" onClick={startEdit}>
-                ✎ {preset ? t("pyramid.useAsBase") : t("pyramid.edit")}
-              </button>
-            ) : null}
             {draft ? (
               <>
                 <button type="button" className="btn" onClick={() => setDraft(null)} disabled={busy}>{t("common.cancel")}</button>
@@ -211,17 +230,22 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
         </div>
         <div className="stencil-line mt-3" />
 
-        <div className="pyramid-controls">
-          <label className="flex flex-col gap-1">
-            <span className="hud-label text-muted">{t("pyramid.config")}</span>
-            <select data-guide="pyramid-config" className="field h-11" value={draft ? CLAN : config} disabled={Boolean(draft)} onChange={(e) => setConfig(e.target.value)}>
-              <option value={CLAN}>{t("pyramid.clanConfig")}{pyramid.is_default ? ` (${t("pyramid.template")})` : ""}</option>
-              {pyramid.presets.map((p) => (
-                <option key={p.key} value={p.key}>{t(presetLabel(p.key))}</option>
-              ))}
-            </select>
-          </label>
+        <div className="mt-3 flex flex-col gap-1.5">
+          <span className="hud-label text-muted">{t("pyramid.config")}</span>
+          <div data-guide="pyramid-config" className="pyramid-configs" role="radiogroup" aria-label={t("pyramid.config")}>
+            {pyramid.presets.map((p) => (
+              <button key={p.key} type="button" role="radio" aria-checked={config === p.key} className={cn("pyramid-config", config === p.key && "is-active")} onClick={() => pickConfig(p.key)}>
+                {t(presetLabel(p.key))}
+              </button>
+            ))}
+            <button type="button" role="radio" aria-checked={config === CUSTOM} data-guide="pyramid-custom" className={cn("pyramid-config is-custom", config === CUSTOM && "is-active")} onClick={() => pickConfig(CUSTOM)}
+              title={canEdit ? t("pyramid.customEditHint") : undefined}>
+              ✎ {t("pyramid.custom")}
+            </button>
+          </div>
+        </div>
 
+        <div className="pyramid-controls">
           <div className="flex flex-col gap-1">
             <span className="hud-label text-muted">{t("pyramid.source")}</span>
             <FilterCards
@@ -274,6 +298,17 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
           <BunkerPanel bunker={bunker} onLoad={setBunker} />
         )}
         {preset && !draft ? <p className="hud-label mt-3 text-muted">{t("pyramid.presetHint")}</p> : null}
+        {draft ? (
+          <div className="pyramid-custom-bar">
+            <span className="text-[0.82rem] text-white/80">✎ {t("pyramid.customHint")}</span>
+            <select className="field h-9 py-1 text-xs" value="" onChange={(e) => e.target.value && fillFrom(e.target.value)} aria-label={t("pyramid.fillFrom")}>
+              <option value="">{t("pyramid.fillFrom")}</option>
+              {pyramid.presets.map((p) => (
+                <option key={p.key} value={p.key}>{t(presetLabel(p.key))}</option>
+              ))}
+            </select>
+          </div>
+        ) : null}
       </section>
 
       {!draft ? (
@@ -392,13 +427,24 @@ const BunkerPanel: React.FC<{ bunker: BunkerBase | null; onLoad: (b: BunkerBase 
         <span className="hud-label text-muted">{t("pyramid.bunkerName")}</span>
         <input className="field h-11" value={name} placeholder={t("pyramid.bunkerNamePlaceholder")} onChange={(e) => setName(e.target.value)} />
       </label>
-      <div className="mt-2 flex flex-wrap items-center gap-2">
-        <span className="hud-label text-muted">{bunker ? t("pyramid.bunkerReload") : t("pyramid.bunkerLoad")}:</span>
-        <button type="button" className="btn" disabled={busy} onClick={() => pick(textInput)}>JSON / TXT</button>
-        <button type="button" className="btn" disabled={busy} onClick={() => pick(xlsxInput)}>XLSX</button>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+        <span className="hud-label text-accent">{bunker ? t("pyramid.bunkerReload") : t("pyramid.bunkerLoad")}</span>
+        {bunker ? (
+          <span className="hud-label text-accent">✔ {bunker.name} • {t("pyramid.bunkerLines", { n: bunker.lines.length })}</span>
+        ) : null}
+      </div>
+      <div className="pyramid-import">
+        <button type="button" className="pyramid-import-btn" disabled={busy} onClick={() => pick(textInput)}>
+          <UiGlyph icon="file-json" size={34} />
+          <span><b>JSON / TXT</b><small>{t("pyramid.importFile")}</small></span>
+        </button>
+        <button type="button" className="pyramid-import-btn" disabled={busy} onClick={() => pick(xlsxInput)}>
+          <UiGlyph icon="file-xlsx" size={34} />
+          <span><b>XLSX</b><small>{t("pyramid.importXlsx")}</small></span>
+        </button>
         <button
           type="button"
-          className="btn"
+          className="pyramid-import-btn"
           disabled={busy}
           onClick={() =>
             navigator.clipboard
@@ -410,13 +456,10 @@ const BunkerPanel: React.FC<{ bunker: BunkerBase | null; onLoad: (b: BunkerBase 
               })
           }
         >
-          {t("export.fmt.clipboard")}
+          <UiGlyph icon="clipboard" size={34} />
+          <span><b>{t("export.fmt.clipboard")}</b><small>{t("pyramid.importClipboard")}</small></span>
         </button>
-        {bunker ? (
-          <span className="hud-label text-accent">✔ {bunker.name} • {t("pyramid.bunkerLines", { n: bunker.lines.length })}</span>
-        ) : null}
       </div>
-      <p className="hud-label mt-2 text-muted">{t("pyramid.bunkerHint")}</p>
 
       <input ref={textInput} type="file" accept=".json,.txt,application/json,text/plain" className="hidden" onChange={(e) => {
         const file = e.target.files?.[0];
@@ -457,7 +500,10 @@ const TierRow: React.FC<{
   // основа — во всю ширину, каждый уровень выше — уже
   const width = count > 1 ? 100 - (i / (count - 1)) * 40 : 100;
   const options = React.useMemo(
-    () => [...catalog.values()].filter((it) => it.faction === "neutral" || it.faction === faction).map((it) => ({ code: it.code, name: itemName(it, locale) })),
+    () =>
+      [...catalog.values()]
+        .filter((it) => (it.faction === "neutral" || it.faction === faction) && !NOT_IN_PYRAMID.has(it.category))
+        .map((it) => ({ code: it.code, name: itemName(it, locale) })),
     [catalog, faction, locale],
   );
   const add = () => {

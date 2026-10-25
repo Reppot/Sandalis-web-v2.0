@@ -1163,7 +1163,7 @@ body[data-theme="light"] {
 .state-ok .pyramid-bar { color: #4ade80; }
 .state-low .pyramid-bar { color: #fbbf24; }
 .state-none .pyramid-bar { color: #f87171; }
-.pyramid-controls { display: grid; grid-template-columns: minmax(12rem, 1.2fr) repeat(3, auto); align-items: end; gap: 0.75rem; margin-top: 0.75rem; }
+.pyramid-controls { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0.75rem 1.5rem; margin-top: 0.75rem; }
 @media (max-width: 900px) { .pyramid-controls { grid-template-columns: 1fr; } }
 .pyramid-tier.is-selected { outline: 2px dashed rgba(163, 230, 53, 0.55); outline-offset: 2px; }
 .pyramid-pick { display: inline-flex; flex-shrink: 0; align-items: center; gap: 0.3rem; border: 1px solid var(--line-2); border-radius: 4px; background: rgba(0, 0, 0, 0.35); padding: 0.15rem 0.5rem; color: rgba(229, 231, 235, 0.75); font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; }
@@ -1327,3 +1327,21 @@ body[data-theme="light"] {
 .auth-copyright { position: relative; z-index: 10; width: 100%; align-self: end; }
 .auth-screen:has(> .auth-copyright) { grid-template-rows: 1fr auto; }
 [data-theme="light"] .copyright-notice, [data-theme="light"] .copyright-notice-terms { color: rgba(30, 41, 30, 0.55); }
+
+/* Пирамида: конфигурации карточками, панель кастомной правки, крупные кнопки импорта */
+.pyramid-configs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.pyramid-config { min-height: 2.6rem; border: 1px solid var(--line-2); border-radius: 6px; background: rgba(0, 0, 0, 0.3); padding: 0.45rem 0.9rem; color: rgba(229, 231, 235, 0.85); font-size: 0.85rem; font-weight: 600; transition: border-color 0.15s, background 0.15s; }
+.pyramid-config:hover { border-color: rgba(163, 230, 53, 0.5); color: #fff; }
+.pyramid-config.is-active { border-color: var(--accent); background: rgba(163, 230, 53, 0.14); color: #fff; box-shadow: 0 0 12px rgba(163, 230, 53, 0.25); }
+.pyramid-config.is-custom { border-style: dashed; border-color: rgba(250, 204, 21, 0.55); color: #fde68a; }
+.pyramid-config.is-custom.is-active { border-style: solid; border-color: #facc15; background: rgba(250, 204, 21, 0.14); color: #fff; box-shadow: 0 0 12px rgba(250, 204, 21, 0.25); }
+.pyramid-custom-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; margin-top: 0.75rem; border: 1px solid rgba(250, 204, 21, 0.4); border-radius: 6px; background: rgba(250, 204, 21, 0.07); padding: 0.55rem 0.75rem; }
+.pyramid-import { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.5rem; margin-top: 0.5rem; }
+@media (max-width: 640px) { .pyramid-import { grid-template-columns: 1fr; } }
+.pyramid-import-btn { display: flex; min-height: 4.75rem; align-items: center; gap: 0.75rem; border: 1px solid rgba(163, 230, 53, 0.45); border-radius: 8px; background: linear-gradient(180deg, rgba(163, 230, 53, 0.12), rgba(0, 0, 0, 0.35)); padding: 0.75rem 1rem; text-align: left; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+.pyramid-import-btn:hover:not(:disabled) { border-color: var(--accent); box-shadow: 0 0 14px rgba(163, 230, 53, 0.3); transform: translateY(-1px); }
+.pyramid-import-btn:disabled { opacity: 0.5; }
+.pyramid-import-btn b { display: block; color: #fff; font-family: var(--font-display); font-size: 1.05rem; letter-spacing: 0.04em; }
+.pyramid-import-btn small { display: block; margin-top: 0.15rem; color: rgba(229, 231, 235, 0.7); font-size: 0.75rem; }
+[data-theme="light"] .pyramid-config, [data-theme="light"] .pyramid-import-btn { background: var(--surface-2); color: inherit; }
+[data-theme="light"] .pyramid-import-btn b, [data-theme="light"] .pyramid-config.is-active { color: inherit; }

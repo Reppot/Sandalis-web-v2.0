@@ -11,6 +11,7 @@
     "db_unavailable": "Databáze se probouzí, opakujte za pár sekund.",
     "war_api_unavailable": "Foxhole War API je nedostupné — zkuste to později.",
     "pyramid_unknown_items": "Neznámé předměty v pyramidě: {codes}",
+    "pyramid_no_vehicles": "Technika a stavby nepatří do pyramidy: {codes}",
     "guest_no_clan": "Přístup hosta nemá klan"
   }
 }
