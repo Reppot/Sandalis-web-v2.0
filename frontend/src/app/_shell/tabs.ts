@@ -1,7 +1,7 @@
 import type { Scope } from "@/entities/session";
 import type { MessageKey, UiIcon } from "@/shared";
 
-export type TabKey = "tools" | "clan" | "guide" | "feedback" | "cabinet";
+export type TabKey = "tools" | "clan" | "guide" | "feedback" | "support" | "cabinet";
 
 export interface NavTab {
   key: TabKey;
@@ -19,11 +19,14 @@ export const TABS: NavTab[] = [
   { key: "clan", icon: "cabinet", background: "reports", membersOnly: true },   // «Ваш клан»
   { key: "guide", icon: "guide", background: "training" },
   { key: "feedback", icon: "feedback", background: "cabinet" },   // «Обратная связь»
+  { key: "support", icon: "support", background: "cabinet" },     // «Поддержать разработчика»
   { key: "cabinet", icon: "cabinet", background: "cabinet" },   // «Настройки»
 ];
 
 /** Разделы на боковой панели; все разделы (и они тоже) — в бургер-меню. */
-export const SIDEBAR_KEYS: TabKey[] = ["tools", "clan", "guide", "feedback"];
+export const SIDEBAR_KEYS: TabKey[] = ["tools", "clan", "guide", "feedback", "support"];
+/** Нижняя панель телефона: пять кнопок с «Меню» — «Поддержать» там только в бургер-меню. */
+export const MOBILE_KEYS: TabKey[] = ["tools", "clan", "guide", "feedback"];
 
 /** Подписи вкладки в словаре: nav.<key>.label / .short / .hint. */
 export const tabKeys = (key: TabKey) => ({

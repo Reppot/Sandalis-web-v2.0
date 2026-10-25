@@ -12,7 +12,7 @@ import { StockpilesWorkspace, TerminalProvider } from "@/features/timers";
 import { ToolsWorkspace, type ToolModule } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
 import { GuideWorkspace } from "@/features/guide";
-import { FeedbackWorkspace } from "@/features/feedback";
+import { FeedbackWorkspace, SupportWorkspace } from "@/features/feedback";
 import { ManagementWorkspace } from "@/features/management";
 import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { ClanWorkspace, type ClanSection } from "@/app/_shell/ClanWorkspace";
@@ -153,6 +153,8 @@ export default function TerminalPage() {
         return <GuideWorkspace />;
       case "feedback":
         return <FeedbackWorkspace displayName={session.displayName} />;
+      case "support":
+        return <SupportWorkspace />;
       case "cabinet":
         return <CabinetWorkspace />;
     }

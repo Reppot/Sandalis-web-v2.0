@@ -4,7 +4,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import type { ClanProfile } from "@/entities/clan";
 import { STORAGE_KEYS, assetUrl, readStorage, UiGlyph, useT, writeStorage } from "@/shared";
-import { SIDEBAR_KEYS, tabKeys, type NavTab, type TabKey } from "@/app/_shell/tabs";
+import { MOBILE_KEYS, SIDEBAR_KEYS, tabKeys, type NavTab, type TabKey } from "@/app/_shell/tabs";
 
 interface NavProps {
   tabs: NavTab[];
@@ -178,7 +178,7 @@ export const MobileNav: React.FC<NavProps> = ({ tabs, active, onSelect, clan }) 
   const t = useT();
   const [menu, setMenu] = React.useState(false);
   const closeMenu = React.useCallback(() => setMenu(false), []);
-  const pinned = tabs.filter((tab) => SIDEBAR_KEYS.includes(tab.key));
+  const pinned = tabs.filter((tab) => MOBILE_KEYS.includes(tab.key));
   const inMenu = !pinned.some((tab) => tab.key === active);
   return (
     <nav className="chrome fixed inset-x-2 bottom-2 z-[60] grid auto-cols-fr grid-flow-col gap-1 rounded-md p-1.5 md:hidden" aria-label={t("nav.aria")}>
