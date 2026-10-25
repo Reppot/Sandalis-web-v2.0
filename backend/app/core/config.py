@@ -71,6 +71,8 @@ class Settings(BaseSettings):
     # Гостевой доступ (POST /auth/guest): только инструменты и каталог. Гость живёт
     # в пустом изолированном арендаторе GUEST_CLAN_SENTINEL и не видит данных кланов.
     GUEST_ACCESS_ENABLED: bool = True
+    # Discord ID владельцев сайта через запятую: они читают всю обратную связь
+    FEEDBACK_ADMIN_IDS: str = ""
     GUEST_TOKEN_TTL_MIN: int = 720
     # Сколько живёт выбор сервера после Discord-входа (подписанная кука).
     DISCORD_SETUP_TTL_SEC: int = 900

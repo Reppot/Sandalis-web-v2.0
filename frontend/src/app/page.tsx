@@ -12,6 +12,7 @@ import { StockpilesWorkspace, TerminalProvider } from "@/features/timers";
 import { ToolsWorkspace, type ToolModule } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
 import { GuideWorkspace } from "@/features/guide";
+import { FeedbackWorkspace } from "@/features/feedback";
 import { ManagementWorkspace } from "@/features/management";
 import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { ClanWorkspace, type ClanSection } from "@/app/_shell/ClanWorkspace";
@@ -150,6 +151,8 @@ export default function TerminalPage() {
         return <ToolsWorkspace modules={toolModules} active={tool} onOpen={openTool} canSendOrders={can(Scopes.REPORTS_CREATE)} onOrderSent={() => openClan("reports")} />;
       case "guide":
         return <GuideWorkspace />;
+      case "feedback":
+        return <FeedbackWorkspace displayName={session.displayName} />;
       case "cabinet":
         return <CabinetWorkspace />;
     }

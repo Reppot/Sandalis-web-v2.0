@@ -15,6 +15,9 @@
     "pyramid_too_many": "The clan already has {n} custom configurations — delete one to save a new one.",
     "pyramid_name_taken": "A configuration named “{name}” already exists — pick another name.",
     "pyramid_config_not_found": "Configuration not found — it may have been deleted.",
+    "feedback_admin_only": "Only the site owner can read all feedback.",
+    "feedback_login_required": "Sign in with Discord to write — your nickname will be shown.",
+    "feedback_rate_limited": "Up to {n} messages per hour — please try again later.",
     "guest_no_clan": "Guest access has no clan"
   }
 }
