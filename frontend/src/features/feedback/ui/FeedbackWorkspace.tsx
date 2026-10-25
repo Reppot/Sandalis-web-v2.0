@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { EmptyState, Loading, UiGlyph, cn, errorText, formatDateTime, matchesWords, useConfirm, useI18n, useNotify, type MessageKey } from "@/shared";
+import { DonateBlock } from "@/features/feedback/ui/DonateBlock";
 import { feedbackApi, type Feedback, type FeedbackCategory, type FeedbackOverview, type FeedbackStatus } from "@/features/feedback/model/api";
 
 const CATEGORIES: { key: FeedbackCategory; icon: string; label: MessageKey; hint: MessageKey }[] = [
@@ -104,6 +105,8 @@ export const FeedbackWorkspace: React.FC<{ displayName: string | null }> = ({ di
           <p className="text-[0.9rem] text-white/80">🔒 {t("feedback.loginRequired")}</p>
         )}
       </section>
+
+      <DonateBlock />
 
       {data.mine.length ? (
         <section className="panel panel-corners rounded-md p-4">

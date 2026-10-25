@@ -1716,3 +1716,42 @@ html[data-skin="soft"] .auth-server:hover:not(:disabled), html[data-skin="soft"]
 
 /* количество в очереди на карточке калькулятора — цвет темы */
 .queued-badge { border: 1px solid rgb(var(--accent-rgb) / 0.65); border-radius: 3px; background: rgb(var(--accent-rgb) / 0.14); color: var(--accent); font-family: var(--font-mono); font-size: 0.65rem; padding: 0.125rem 0.375rem; }
+
+/* Поддержать разработчика (донат): вкладки СБП / Boosty / Bybit Pay */
+.donate-head { display: flex; align-items: flex-start; gap: 0.8rem; }
+.donate-cup { display: grid; width: 2.6rem; height: 2.6rem; flex-shrink: 0; place-items: center; border: 1px solid rgb(var(--accent-rgb) / 0.4); border-radius: 10px; background: rgb(var(--accent-rgb) / 0.1); font-size: 1.35rem; }
+.donate-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.4rem; margin-top: 1rem; border: 1px solid var(--line-2); border-radius: 10px; background: rgba(0, 0, 0, 0.25); padding: 0.3rem; }
+@media (max-width: 640px) { .donate-tabs { grid-template-columns: 1fr; } }
+.donate-tab { display: flex; min-height: 2.75rem; align-items: center; justify-content: center; gap: 0.5rem; border: 1px solid transparent; border-radius: 8px; color: rgba(229, 231, 235, 0.75); font-size: 0.88rem; font-weight: 600; transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease; }
+.donate-tab:hover { color: #fff; background: rgb(var(--accent-rgb) / 0.1); transform: translateY(-1px); }
+.donate-tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.donate-tab.is-active { border-color: rgb(var(--accent-rgb) / 0.6); background: rgb(var(--accent-rgb) / 0.16); color: #fff; box-shadow: 0 0 14px rgb(var(--accent-rgb) / 0.18); }
+.donate-panel { display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; gap: 1.25rem; margin-top: 1rem; animation: donateIn 0.32s ease; }
+@keyframes donateIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.donate-panel-title { color: #fff; font-size: 1.05rem; font-weight: 700; }
+.donate-text { margin-top: 0.35rem; max-width: 34rem; color: rgba(229, 231, 235, 0.78); font-size: 0.88rem; line-height: 1.5; }
+.donate-action { display: inline-flex; min-height: 2.9rem; align-items: center; gap: 0.5rem; margin-top: 0.9rem; border: 1px solid var(--accent); border-radius: 10px; background: var(--accent); padding: 0.6rem 1.3rem; color: var(--accent-ink); font-weight: 700; text-decoration: none; transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease; }
+.donate-action:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgb(var(--accent-rgb) / 0.35); filter: brightness(1.06); }
+.donate-action:active { transform: translateY(0); }
+.donate-action:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.donate-qr { display: none; margin: 0; text-align: center; }
+.donate-qr img { display: block; width: 200px; height: 200px; border-radius: 10px; background: #fff; padding: 10px; object-fit: contain; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); transition: transform 0.2s ease; }
+.donate-qr img:hover { transform: scale(1.04); }
+.donate-qr figcaption { margin-top: 0.45rem; color: rgba(229, 231, 235, 0.65); font-size: 0.72rem; }
+/* QR — только на ПК (мышь, широкий экран); на телефоне — кнопка, она откроет банк */
+@media (hover: hover) and (pointer: fine) and (min-width: 768px) {
+  .donate-panel.has-qr { grid-template-columns: minmax(0, 1fr) auto; }
+  .donate-panel.has-qr .donate-qr { display: block; animation: donateIn 0.4s ease; }
+}
+@media (max-width: 640px) { .donate-action { width: 100%; justify-content: center; } }
+[data-theme="light"] .donate-tab, [data-theme="light"] .donate-text, [data-theme="light"] .donate-panel-title { color: inherit; }
+html[data-skin="noir"] .donate-tabs { background: #f3f0f5; border-color: #e4dfe8; border-radius: 999px; }
+html[data-skin="noir"] .donate-tab { color: #4a4f57; border-radius: 999px; }
+html[data-skin="noir"] .donate-tab:hover { color: #101214; background: #ffffff; }
+html[data-skin="noir"] .donate-tab.is-active { background: #101214; border-color: #101214; color: #ffffff; box-shadow: none; }
+html[data-skin="noir"] .donate-panel-title { color: #101214; }
+html[data-skin="noir"] .donate-text, html[data-skin="noir"] .donate-qr figcaption { color: #5c5466; }
+html[data-skin="noir"] .donate-action { border-radius: 999px; background: #101214; border-color: #101214; color: #fff; }
+html[data-skin="noir"] .donate-action:hover { box-shadow: 0 10px 24px rgba(16, 18, 20, 0.25); }
+html[data-skin="noir"] .donate-cup { background: #f4ff1e; border-color: #101214; }
+html[data-skin="noir"] .donate-qr img { box-shadow: 0 0 0 1px #e4dfe8; }
