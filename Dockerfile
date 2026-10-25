@@ -13,6 +13,12 @@ RUN npm ci
 COPY frontend/ ./
 # адрес бэкенда «зашивается» в rewrites при сборке — внутри контейнера это localhost
 ENV BACKEND_URL=http://127.0.0.1:8000
+# SEO: адрес сайта и коды подтверждения Google / Яндекса (Render передаёт переменные
+# окружения сервиса как build args — после их изменения нужен новый деплой)
+ARG SITE_URL=https://sandalis-web-v2-0.onrender.com
+ARG GOOGLE_SITE_VERIFICATION=""
+ARG YANDEX_VERIFICATION=""
+ENV SITE_URL=$SITE_URL GOOGLE_SITE_VERIFICATION=$GOOGLE_SITE_VERIFICATION YANDEX_VERIFICATION=$YANDEX_VERIFICATION
 RUN npm run build
 
 # ---------- 2. рантайм: Python + node ----------------------------------------------
