@@ -1640,6 +1640,17 @@ html[data-skin="noir"] .feedback-text { color: #101214; }
 html[data-skin="noir"] .chrome .title-brand, html[data-skin="noir"] .chrome .text-accent { color: #f4f1f6; text-shadow: none; }
 html[data-skin="noir"] .filter-card.is-active .filter-card-name, html[data-skin="noir"] .filter-card.is-active .filter-card-hint { color: #ffffff; }
 
+/* «Бруталист»: графитовые панели (шапка, меню, бургер) — светлый текст поверх автоматических правил */
+html[data-skin="noir"] .burger-menu .burger-item { background: #1b1d20; border-color: #2a2c31; }
+html[data-skin="noir"] .burger-menu .burger-item:hover, html[data-skin="noir"] .burger-menu .burger-item:focus-visible { background: #24262b; border-color: #c8c2cf; }
+html[data-skin="noir"] .burger-menu .burger-item.is-active { background: #c8c2cf; border-color: #c8c2cf; }
+html[data-skin="noir"] .burger-menu .burger-item-label { color: #f4f1f6; font-family: var(--font-sans); font-weight: 500; letter-spacing: 0; text-transform: none; }
+html[data-skin="noir"] .burger-menu .burger-item-hint { color: #a399a8; }
+html[data-skin="noir"] .burger-menu .burger-item.is-active .burger-item-label, html[data-skin="noir"] .burger-menu .burger-item.is-active .burger-item-hint { color: #101214; }
+html[data-skin="noir"] .burger-menu .burger-item.is-active .ui-glyph { color: #101214; }
+html[data-skin="noir"] .chrome .hud-label, html[data-skin="noir"] .chrome .panel-title { color: #f4f1f6; }
+html[data-skin="noir"] .chrome .chrome-muted, html[data-skin="noir"] .chrome .text-muted { color: #a399a8; }
+
 /* Нежная — светлая пастель: лаванда, розовый, персик и мята; мягкие градиенты и свечения */
 html[data-skin="soft"] {
   --bg: #3b3150; --surface: #4a3f63; --surface-2: #54486e; --line: #6a5c86; --line-2: #8b7cab;
