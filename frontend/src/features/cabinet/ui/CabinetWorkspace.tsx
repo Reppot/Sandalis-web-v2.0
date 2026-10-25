@@ -114,24 +114,27 @@ export const CabinetWorkspace: React.FC = () => {
   );
 };
 
-const THEMES: { key: Theme; label: MessageKey; hint: MessageKey }[] = [
+const THEME_CHOICES: { key: Theme; label: MessageKey; hint: MessageKey }[] = [
   { key: "dark", label: "nav.themeNight", hint: "settings.themeDarkHint" },
   { key: "light", label: "nav.themeSimple", hint: "settings.themeLightHint" },
+  { key: "contrast", label: "settings.themeContrast", hint: "settings.themeContrastHint" },
+  { key: "noir", label: "settings.themeNoir", hint: "settings.themeNoirHint" },
+  { key: "soft", label: "settings.themeSoft", hint: "settings.themeSoftHint" },
 ];
 
 /** Внешний вид: тема сайта (раньше — кнопка внизу бокового меню). */
 const AppearancePanel: React.FC = () => {
   const t = useT();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   return (
     <section data-guide="settings-appearance" className="panel panel-corners rounded-md p-4">
       <div className="panel-title">🎨 {t("settings.appearance")}</div>
       <div className="cabinet-rule" />
       <div className="theme-choices">
-        {THEMES.map((item) => {
+        {THEME_CHOICES.map((item) => {
           const on = theme === item.key;
           return (
-            <button key={item.key} type="button" className={`theme-choice ${on ? "is-active" : ""}`} aria-pressed={on} onClick={() => !on && toggleTheme()}>
+            <button key={item.key} type="button" className={`theme-choice ${on ? "is-active" : ""}`} aria-pressed={on} onClick={() => !on && setTheme(item.key)}>
               <span className={`theme-preview theme-preview-${item.key}`} aria-hidden>
                 <ThemeIcon theme={item.key} size={34} />
               </span>

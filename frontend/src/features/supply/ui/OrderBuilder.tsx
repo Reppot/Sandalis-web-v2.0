@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { catalogApi, itemName, type FoxholeItem, type ItemUnit } from "@/entities/item";
+import { catalogApi, itemName, itemSearchHay, type FoxholeItem, type ItemUnit } from "@/entities/item";
 import { orderDraft, type DraftLine } from "@/entities/report";
 import { SendOrderDialog } from "@/entities/report/ui/SendOrderDialog";
 import type { Stockpile } from "@/entities/stockpile";
@@ -92,7 +92,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
     const pool = category === "all" ? catalog : catalog.filter((i) => i.category === category);
     if (!q) return pool;
     // по словам и с алиасами: «граната bomastone», «collins 68-мм» находят предмет
-    const hay = (i: FoxholeItem) => [i.name, i.englishName, i.code, ...i.aliases].join(" ");
+    const hay = (i: FoxholeItem) => itemSearchHay(i);
     const starts = pool.filter((i) => searchText(i.name).startsWith(q));
     const includes = pool.filter((i) => !searchText(i.name).startsWith(q) && matchesWords(hay(i), q));
     return [...starts, ...includes];

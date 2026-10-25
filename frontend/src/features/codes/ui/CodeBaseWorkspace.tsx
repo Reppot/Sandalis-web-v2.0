@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { catalogApi, type FoxholeItem, type ParseResult } from "@/entities/item";
+import { catalogApi, itemSearchHay, type FoxholeItem, type ParseResult } from "@/entities/item";
 import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, matchesWords, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged } from "@/shared";
 
 const FACTIONS: Record<string, MessageKey> = { colonial: "codes.faction.colonial", warden: "codes.faction.warden", neutral: "codes.faction.neutral" };
@@ -46,7 +46,7 @@ export const CodeBaseWorkspace: React.FC = () => {
   const filtered = React.useMemo(() => {
     const needle = query.trim();
     return entries.filter((e) => {
-      const hay = `${e.code} ${e.englishName} ${e.name} ${e.aliases.join(" ")}`;
+      const hay = itemSearchHay(e);
       return (!needle || matchesWords(hay, needle)) && (category === "all" || e.category === category) && (faction === "all" || e.faction === faction) && (!reviewOnly || e.needsReview);
     });
   }, [entries, query, category, faction, reviewOnly]);

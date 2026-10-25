@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
-import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
+import { codeSynonyms } from "@/entities/item";
+import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { truckLines } from "@/features/tools/ui/trucks";
 import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
@@ -57,13 +58,13 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
   const byId = React.useMemo(() => new Map(recipes.map((r) => [r.id, r])), [recipes]);
 
   const visible = React.useMemo(() => {
-    const needle = query.trim().toLowerCase();
+    const needle = query.trim();
     return recipes.filter(
       (r) =>
         (faction === "all" || r.factions.includes(faction)) &&
         (facility === "mpf" ? r.facilities.includes("mpf") : planning || r.facilities.includes(facility)) &&
         (category === "all" || r.category === category) &&
-        (!needle || `${r.name} ${r.name_en ?? ""} ${r.item_class ?? ""} ${r.description ?? ""}`.toLowerCase().includes(needle)),
+        (!needle || matchesWords(`${r.name} ${r.name_en ?? ""} ${r.item_code ?? ""} ${codeSynonyms(r.item_code).join(" ")} ${r.item_class ?? ""} ${r.description ?? ""}`, needle)),
     );
   }, [recipes, faction, planning, facility, category, query]);
 

@@ -1,3 +1,5 @@
+import { codeSynonyms } from "./synonyms";
+
 export type ItemUnit = "crate" | "unit";
 
 export interface FoxholeItem {
@@ -71,4 +73,9 @@ export interface ScanResult extends ParseResult {
 /** Название предмета на языке интерфейса: в игре есть русское и английское, чешского нет. */
 export function itemName(item: Pick<FoxholeItem, "name" | "englishName">, locale: string): string {
   return locale === "ru" ? item.name : item.englishName || item.name;
+}
+
+/** Всё, по чему ищется предмет: оба языка, код, алиасы каталога (названия клиента игры) и сокращения. */
+export function itemSearchHay(item: Pick<FoxholeItem, "code" | "name" | "englishName" | "aliases">): string {
+  return [item.name, item.englishName, item.code, ...item.aliases, ...codeSynonyms(item.code)].join(" · ");
 }

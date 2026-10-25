@@ -4,10 +4,11 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import { RegionTownFields } from "@/entities/world";
 import { Scopes, type Can } from "@/entities/session";
-import { catalogApi, type ParseResult } from "@/entities/item";
+import { catalogApi, codeSynonyms, type ParseResult } from "@/entities/item";
 import { stockpileApi, type Stockpile, type SyncSource } from "@/entities/stockpile";
 import {
   EmptyState,
+  matchesWords,
   ExportBar,
   Field,
   ItemIcon,
@@ -189,7 +190,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
   const total = items.reduce((acc, i) => acc + i.quantity, 0);
   const visible = React.useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? items.filter((i) => `${i.name ?? ""} ${i.nameEn ?? ""} ${i.itemCode}`.toLowerCase().includes(q)) : items;
+    return q ? items.filter((i) => matchesWords(`${i.name ?? ""} ${i.nameEn ?? ""} ${i.itemCode} ${codeSynonyms(i.itemCode).join(" ")}`, q)) : items;
   }, [items, query]);
   const page = usePaged(visible, 100, query);
 

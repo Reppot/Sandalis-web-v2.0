@@ -12,6 +12,9 @@
     "war_api_unavailable": "Foxhole War API je nedostupné — zkuste to později.",
     "pyramid_unknown_items": "Neznámé předměty v pyramidě: {codes}",
     "pyramid_no_vehicles": "Technika a stavby nepatří do pyramidy: {codes}",
+    "pyramid_too_many": "Klan už má {n} vlastních konfigurací — jednu smažte, abyste uložili novou.",
+    "pyramid_name_taken": "Konfigurace „{name}“ už existuje — zvolte jiný název.",
+    "pyramid_config_not_found": "Konfigurace nenalezena — možná už byla smazána.",
     "guest_no_clan": "Přístup hosta nemá klan"
   }
 }

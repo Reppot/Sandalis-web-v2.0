@@ -15,6 +15,7 @@ import {
   assetUrl,
   cn,
   errorText,
+  matchesWords,
   readStorage,
   useConfirm,
   useI18n,
@@ -24,6 +25,7 @@ import {
   type MessageKey,
 } from "@/shared";
 import { currentLevel, evaluatePyramid, pyramidApi, type Pyramid, type PyramidFaction, type PyramidLevel, type PyramidTier } from "@/features/supply/model/pyramid";
+import { itemSearchHay } from "@/entities/item";
 
 type Source = "stockpile" | "bunker";
 type StockUnit = "crate" | "unit";
@@ -41,9 +43,19 @@ const LEGACY_BUNKERS_KEY = "sindaris-bunker-bases";
 const UNIT_KEY = (source: Source) => `sindaris-pyramid-unit-${source}`;
 // склады зданий (депо, порт) считают ящиками, бункерная база — штуками
 const DEFAULT_UNIT: Record<Source, StockUnit> = { stockpile: "crate", bunker: "unit" };
-// «Кастомная» — своя пирамида клана (сохраняется на сервере); при входе всегда «Обычная»
-const CUSTOM = "clan";
+// конфигурация на экране: ключ готовой («normal», «tank»…) или «custom:<id>» — своя пирамида клана;
+// при входе всегда «Обычная»
+const CUSTOM_PREFIX = "custom:";
 const DEFAULT_CONFIG = "normal";
+
+/** Черновик правки: id — изменяем сохранённую конфигурацию, null — новая «Кастомная». */
+interface Draft {
+  id: string | null;
+  name: string;
+  faction: PyramidFaction;
+  tiers: PyramidTier[];
+}
+const cloneTiers = (tiers: PyramidTier[]) => tiers.map((tier) => ({ ...tier, items: tier.items.map((it) => ({ ...it })) }));
 // техника и сооружения в пирамиду не входят (сервер это тоже проверяет)
 const NOT_IN_PYRAMID = new Set(["vehicles", "structures"]);
 
@@ -64,7 +76,10 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   const canEdit = can(Scopes.STOCKPILES_PYRAMID);
   const [pyramid, setPyramid] = React.useState<Pyramid | null>(null);
   const [config, setConfig] = React.useState<string>(DEFAULT_CONFIG);
-  const [draft, setDraft] = React.useState<{ faction: PyramidFaction; tiers: PyramidTier[] } | null>(null);
+  const [draft, setDraft] = React.useState<Draft | null>(null);
+  // фракция просмотра — меняется без правки конфигурации
+  const [viewFaction, setViewFaction] = React.useState<PyramidFaction>("warden");
+  const [naming, setNaming] = React.useState(false);
   const [catalog, setCatalog] = React.useState<Map<string, FoxholeItem>>(new Map());
   const [source, setSource] = React.useState<Source>("stockpile");
   const [stockpiles, setStockpiles] = React.useState<Stockpile[] | null>(null);
@@ -83,7 +98,8 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
       .get()
       .then((p) => {
         setPyramid(p);
-        if (!p.presets.some((x) => x.key === DEFAULT_CONFIG)) setConfig(CUSTOM);
+        setViewFaction(p.faction);
+        if (!p.presets.some((x) => x.key === DEFAULT_CONFIG)) setConfig(p.presets[0]?.key ?? DEFAULT_CONFIG);
       })
       .catch(fail);
     catalogApi.all().then((items) => setCatalog(new Map(items.map((i) => [i.code, i])))).catch(fail);
@@ -109,9 +125,10 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   }, [stockpileId, fail]);
 
 
-  // конфигурация на экране: черновик правки, пирамида клана или готовая
+  // конфигурация на экране: черновик правки, своя пирамида клана или готовая
   const preset = pyramid?.presets.find((p) => p.key === config) ?? null;
-  const shown = draft ?? (pyramid ? { faction: pyramid.faction, tiers: preset ? preset.tiers : pyramid.tiers } : null);
+  const custom = config.startsWith(CUSTOM_PREFIX) ? pyramid?.configs.find((c) => CUSTOM_PREFIX + c.id === config) ?? null : null;
+  const shown = draft ?? (pyramid ? { faction: viewFaction, tiers: custom?.tiers ?? preset?.tiers ?? pyramid.tiers } : null);
 
   const unit = units[source];
   const raw: { code: string; count: number }[] =
@@ -153,14 +170,22 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
     onOpenConstructor();
   };
 
-  const save = async () => {
+  /** Сохранение — после окна «Назовите конфигурацию». */
+  const save = async (name: string) => {
     if (!draft) return;
     setBusy(true);
+    const body = { name, faction: draft.faction, tiers: draft.tiers.filter((tier) => tier.items.length) };
     try {
-      setPyramid(await pyramidApi.save({ faction: draft.faction, tiers: draft.tiers.filter((tier) => tier.items.length) }));
+      const next = draft.id ? await pyramidApi.update(draft.id, body) : await pyramidApi.create(body);
+      setPyramid(next);
+      const saved = draft.id ? next.configs.find((c) => c.id === draft.id) : next.configs.find((c) => c.name.toLowerCase() === name.trim().replace(/\s+/g, " ").toLowerCase());
+      if (saved) {
+        setConfig(CUSTOM_PREFIX + saved.id);
+        setViewFaction(saved.faction);
+      }
       setDraft(null);
-      setConfig(CUSTOM);
-      notify({ title: t("pyramid.title"), message: t("pyramid.saved"), tone: "success" });
+      setNaming(false);
+      notify({ title: t("pyramid.title"), message: t("pyramid.savedNamed", { name: saved?.name ?? name }), tone: "success" });
     } catch (err) {
       notify({ title: t("pyramid.title"), message: errorText(err, t("pyramid.saveFailed")), tone: "danger" });
     } finally {
@@ -168,14 +193,12 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
     }
   };
 
-  const resetTemplate = async () => {
+  const removeConfig = async (id: string) => {
     setBusy(true);
     try {
-      const fresh = await pyramidApi.reset();
-      setPyramid(fresh);
-      setDraft({ faction: fresh.faction, tiers: fresh.tiers });
-      setConfig(CUSTOM);
-      notify({ title: t("pyramid.title"), message: t("pyramid.resetDone"), tone: "warning" });
+      setPyramid(await pyramidApi.remove(id));
+      setConfig(DEFAULT_CONFIG);
+      notify({ title: t("pyramid.title"), message: t("pyramid.configDeleted"), tone: "warning" });
     } catch (err) {
       fail(err);
     } finally {
@@ -184,20 +207,21 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   };
 
   const editTiers = (fn: (tiers: PyramidTier[]) => PyramidTier[]) => setDraft((d) => (d ? { ...d, tiers: fn(d.tiers.map((tier) => ({ ...tier, items: [...tier.items] }))) } : d));
-  /** Карточка конфигурации: готовые — просмотр; «Кастомная» — своя пирамида, у кого есть право — сразу правка. */
+  /** Карточка конфигурации: готовые и свои пирамиды клана — просмотр. */
   const pickConfig = (key: string) => {
-    if (key === CUSTOM) {
-      setConfig(CUSTOM);
-      if (canEdit && pyramid && !draft) setDraft({ faction: pyramid.faction, tiers: pyramid.tiers });
-      return;
-    }
     setDraft(null);
     setConfig(key);
+    const own = pyramid?.configs.find((c) => CUSTOM_PREFIX + c.id === key);
+    if (own) setViewFaction(own.faction);
   };
+  /** «Кастомная»: новая своя пирамида на основе того, что на экране. */
+  const startCustom = () => shown && setDraft({ id: null, name: "", faction: viewFaction, tiers: cloneTiers(shown.tiers) });
+  const startEditOwn = () => custom && setDraft({ id: custom.id, name: custom.name, faction: custom.faction, tiers: cloneTiers(custom.tiers) });
   const fillFrom = (key: string) => {
-    const from = pyramid?.presets.find((p) => p.key === key);
-    if (from && draft) setDraft({ ...draft, tiers: from.tiers.map((tier) => ({ ...tier, items: [...tier.items] })) });
+    const from = pyramid?.presets.find((p) => p.key === key) ?? pyramid?.configs.find((c) => c.id === key);
+    if (from && draft) setDraft({ ...draft, tiers: cloneTiers(from.tiers) });
   };
+  const full = pyramid ? pyramid.configs.length >= pyramid.max_configs : false;
 
   if (!pyramid) return <div className="panel rounded-md"><Loading label={t("pyramid.loading")} /></div>;
 
@@ -220,10 +244,9 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
             {draft ? (
               <>
                 <button type="button" className="btn" onClick={() => setDraft(null)} disabled={busy}>{t("common.cancel")}</button>
-                <button type="button" className={cn("btn btn-danger", armed === "reset" && "btn-active")} disabled={busy} onClick={() => confirm("reset", () => void resetTemplate())}>
-                  {armed === "reset" ? t("common.confirmQ") : `↺ ${t("pyramid.reset")}`}
+                <button type="button" className="btn btn-primary" disabled={busy || !draft.tiers.some((tier) => tier.items.length)} onClick={() => setNaming(true)}>
+                  💾 {t("common.save")}
                 </button>
-                <button type="button" className="btn btn-primary" disabled={busy} onClick={() => void save()}>{busy ? t("common.sending") : t("common.save")}</button>
               </>
             ) : null}
           </div>
@@ -238,11 +261,30 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
                 {t(presetLabel(p.key))}
               </button>
             ))}
-            <button type="button" role="radio" aria-checked={config === CUSTOM} data-guide="pyramid-custom" className={cn("pyramid-config is-custom", config === CUSTOM && "is-active")} onClick={() => pickConfig(CUSTOM)}
-              title={canEdit ? t("pyramid.customEditHint") : undefined}>
-              ✎ {t("pyramid.custom")}
-            </button>
+            {pyramid.configs.map((c) => (
+              <button key={c.id} type="button" role="radio" aria-checked={config === CUSTOM_PREFIX + c.id} className={cn("pyramid-config is-own", config === CUSTOM_PREFIX + c.id && !draft && "is-active")} onClick={() => pickConfig(CUSTOM_PREFIX + c.id)}
+                title={c.updated_by ? t("pyramid.ownBy", { name: c.updated_by }) : undefined}>
+                ★ {c.name}
+              </button>
+            ))}
+            {canEdit ? (
+              <button type="button" data-guide="pyramid-custom" className={cn("pyramid-config is-custom", draft && !draft.id && "is-active")} disabled={full || Boolean(draft)} onClick={startCustom}
+                title={full ? t("pyramid.limitReached", { n: pyramid.max_configs }) : t("pyramid.customEditHint")}>
+                ＋ {t("pyramid.custom")}
+              </button>
+            ) : null}
           </div>
+          {custom && !draft && canEdit ? (
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="hud-label text-muted">★ {custom.name}{custom.updated_by ? ` • ${t("pyramid.ownBy", { name: custom.updated_by })}` : ""}</span>
+              <button type="button" className="btn px-2.5 py-1 text-[0.7rem]" onClick={startEditOwn}>✎ {t("pyramid.editConfig")}</button>
+              <button type="button" className={cn("btn btn-danger px-2.5 py-1 text-[0.7rem]", armed === `del-${custom.id}` && "btn-active")} disabled={busy}
+                onClick={() => confirm(`del-${custom.id}`, () => void removeConfig(custom.id))}>
+                {armed === `del-${custom.id}` ? t("common.confirmQ") : `🗑 ${t("pyramid.deleteConfig")}`}
+              </button>
+            </div>
+          ) : null}
+          {full && canEdit && !draft ? <span className="hud-label text-muted">{t("pyramid.limitReached", { n: pyramid.max_configs })}</span> : null}
         </div>
 
         <div className="pyramid-controls">
@@ -276,11 +318,14 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
 
           <div className="flex flex-col gap-1">
             <span className="hud-label text-muted">{t("tools.faction")}</span>
-            {draft ? (
-              <FilterCards compact label={t("tools.faction")} items={FACTIONS.map((f) => ({ key: f.key, label: t(f.label) }))} value={draft.faction} onChange={(k) => k && setDraft({ ...draft, faction: k as PyramidFaction })} />
-            ) : (
-              <span className="cabinet-pill">{t(FACTIONS.find((f) => f.key === pyramid.faction)?.label ?? "world.wardens")}</span>
-            )}
+            <FilterCards
+              compact
+              guide="pyramid-faction"
+              label={t("tools.faction")}
+              items={FACTIONS.map((f) => ({ key: f.key, label: t(f.label) }))}
+              value={draft ? draft.faction : viewFaction}
+              onChange={(k) => k && (draft ? setDraft({ ...draft, faction: k as PyramidFaction }) : setViewFaction(k as PyramidFaction))}
+            />
           </div>
         </div>
 
@@ -306,10 +351,20 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
               {pyramid.presets.map((p) => (
                 <option key={p.key} value={p.key}>{t(presetLabel(p.key))}</option>
               ))}
+              {pyramid.configs.filter((c) => c.id !== draft.id).map((c) => (
+                <option key={c.id} value={c.id}>★ {c.name}</option>
+              ))}
             </select>
           </div>
         ) : null}
       </section>
+      <NameConfigModal
+        open={naming}
+        initial={draft?.name ?? ""}
+        busy={busy}
+        onClose={() => setNaming(false)}
+        onSave={(name) => void save(name)}
+      />
 
       {!draft ? (
         <section data-guide="pyramid-now" className={cn("panel panel-corners pyramid-now rounded-md p-4", now < 0 && "is-done")}>
@@ -375,13 +430,36 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
               catalog={catalog}
               label={label}
               onEdit={editTiers}
-              faction={(draft ?? pyramid).faction}
+              faction={draft ? draft.faction : viewFaction}
             />
           ))}
         </div>
         <p className="hud-label mt-3 text-center text-muted">{t("pyramid.legend")}</p>
       </section>
     </div>
+  );
+};
+
+/** «Назовите конфигурацию»: название увидят все участники клана в списке конфигураций. */
+const NameConfigModal: React.FC<{ open: boolean; initial: string; busy: boolean; onClose: () => void; onSave: (name: string) => void }> = ({ open, initial, busy, onClose, onSave }) => {
+  const { t } = useI18n();
+  const [name, setName] = React.useState(initial);
+  React.useEffect(() => {
+    if (open) setName(initial);
+  }, [open, initial]);
+  const ok = name.trim().length > 0;
+  return (
+    <Modal open={open} onClose={onClose} title={t("pyramid.nameTitle")} icon="pyramid" widthClass="max-w-md">
+      <div className="grid gap-3">
+        <p className="text-[0.85rem] text-white/75">{t("pyramid.nameHint")}</p>
+        <input className="field h-11" autoFocus maxLength={40} value={name} placeholder={t("pyramid.namePlaceholder")}
+          onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && ok && onSave(name)} />
+        <div className="flex justify-end gap-2">
+          <button type="button" className="btn" onClick={onClose}>{t("common.cancel")}</button>
+          <button type="button" className="btn btn-primary" disabled={!ok || busy} onClick={() => onSave(name)}>{busy ? t("common.sending") : `💾 ${t("common.save")}`}</button>
+        </div>
+      </div>
+    </Modal>
   );
 };
 
@@ -495,7 +573,6 @@ const TierRow: React.FC<{
 }> = ({ level, count, current, editing, selected, onToggle, catalog, label, onEdit, faction }) => {
   const { t, locale } = useI18n();
   const [adding, setAdding] = React.useState("");
-  const listId = React.useId();
   const i = level.index;
   // основа — во всю ширину, каждый уровень выше — уже
   const width = count > 1 ? 100 - (i / (count - 1)) * 40 : 100;
@@ -503,14 +580,18 @@ const TierRow: React.FC<{
     () =>
       [...catalog.values()]
         .filter((it) => (it.faction === "neutral" || it.faction === faction) && !NOT_IN_PYRAMID.has(it.category))
-        .map((it) => ({ code: it.code, name: itemName(it, locale) })),
+        .map((it) => ({ code: it.code, name: itemName(it, locale), icon: it.iconUrl, hay: itemSearchHay(it) })),
     [catalog, faction, locale],
   );
-  const add = () => {
-    const found = options.find((o) => o.name.toLowerCase() === adding.trim().toLowerCase());
-    if (!found) return;
+  // поиск по всем языкам, коду и сокращениям: «basic material», «бмат», «bmat»
+  const matches = React.useMemo(
+    () => (adding.trim() ? options.filter((o) => matchesWords(o.hay, adding)).slice(0, 8) : []),
+    [options, adding],
+  );
+  const add = (code: string | undefined) => {
+    if (!code) return;
     onEdit((tiers) => {
-      if (!tiers[i].items.some((it) => it.code === found.code)) tiers[i].items.push({ code: found.code, crates: 1 });
+      if (!tiers[i].items.some((it) => it.code === code)) tiers[i].items.push({ code, crates: 1 });
       return tiers;
     });
     setAdding("");
@@ -533,6 +614,8 @@ const TierRow: React.FC<{
         )}
         {editing ? (
           <span className="flex gap-1">
+            <button type="button" className="btn btn-danger px-2 py-0.5" disabled={count <= 1} title={t("pyramid.removeTier")} aria-label={t("pyramid.removeTier")}
+              onClick={() => onEdit((tiers) => tiers.filter((_, n) => n !== i))}>✕</button>
             <button type="button" className="btn px-2 py-0.5" disabled={i === count - 1} title={t("pyramid.up")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i + 1]] = [tiers[i + 1], tiers[i]]; return tiers; })}>▲</button>
             <button type="button" className="btn px-2 py-0.5" disabled={i === 0} title={t("pyramid.down")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i - 1]] = [tiers[i - 1], tiers[i]]; return tiers; })}>▼</button>
           </span>
@@ -575,13 +658,19 @@ const TierRow: React.FC<{
         })}
         {editing ? (
           <div className="pyramid-add">
-            <input className="field h-9 flex-1 py-1 text-xs" list={listId} placeholder={t("pyramid.addItem")} value={adding} onChange={(e) => setAdding(e.target.value)} onKeyDown={(e) => e.key === "Enter" && add()} />
-            <datalist id={listId}>
-              {options.map((o) => (
-                <option key={o.code} value={o.name} />
-              ))}
-            </datalist>
-            <button type="button" className="btn btn-primary px-3" onClick={add}>＋</button>
+            <input className="field h-9 flex-1 py-1 text-xs" placeholder={t("pyramid.addItem")} value={adding} onChange={(e) => setAdding(e.target.value)} onKeyDown={(e) => e.key === "Enter" && add(matches[0]?.code)} />
+            {matches.length ? (
+              <ul className="pyramid-add-list" role="listbox">
+                {matches.map((o) => (
+                  <li key={o.code}>
+                    <button type="button" role="option" aria-selected={false} onClick={() => add(o.code)}>
+                      <ItemIcon sources={[assetUrl(o.icon)]} size={24} label={o.name} />
+                      <span className="truncate">{o.name}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
         ) : null}
       </div>

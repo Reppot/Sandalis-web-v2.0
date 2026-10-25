@@ -5,7 +5,7 @@ import { useContent } from "@/entities/content";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi, type Stockpile, type StockpileKind } from "@/entities/stockpile";
 import { RegionTownFields } from "@/entities/world";
-import { catalogApi } from "@/entities/item";
+import { catalogApi, codeSynonyms } from "@/entities/item";
 import {
   EmptyState,
   Field,
@@ -17,6 +17,7 @@ import {
   UiGlyph,
   copyText,
   errorText,
+  matchesWords,
   formatCountdown,
   formatDateTime,
   secondsLeft,
@@ -96,7 +97,7 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
   const visible = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return rows;
-    return rows.filter((r) => `${r.stockpile?.name ?? r.timer?.title ?? ""} ${r.stockpile?.region ?? ""} ${r.stockpile?.town ?? ""}`.toLowerCase().includes(q));
+    return rows.filter((r) => matchesWords(`${r.stockpile?.name ?? r.timer?.title ?? ""} ${r.stockpile?.region ?? ""} ${r.stockpile?.town ?? ""}`, q));
   }, [rows, query]);
   const page = usePaged(visible, 30, query);
   const managed = managedId ? timers.find((tm) => tm.id === managedId) ?? null : null;
@@ -296,9 +297,10 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
 
   if (!items) return <div className="stockpile-items"><Loading /></div>;
   const name = (i: Stockpile["items"][number]) => (locale === "ru" ? i.name ?? i.nameEn : i.nameEn ?? i.name) ?? i.itemCode;
-  const needle = query.trim().toLowerCase();
+  const needle = query.trim();
   const shown = [...items]
-    .filter((i) => !needle || `${name(i)} ${i.itemCode}`.toLowerCase().includes(needle))
+    // оба языка, код и сокращения: «basic material», «бмат»
+    .filter((i) => !needle || matchesWords(`${i.name ?? ""} ${i.nameEn ?? ""} ${i.itemCode} ${codeSynonyms(i.itemCode).join(" ")}`, needle))
     .sort((a, b) => b.quantity + b.looseQuantity - (a.quantity + a.looseQuantity));
   return (
     <div className="stockpile-items" data-guide="stockpile-items">

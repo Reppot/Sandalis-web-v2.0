@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { EmptyState, LoadMore, Loading, Modal, PagedMore, UiGlyph, cn, errorText, formatDateTime, roleColor, useNotify, usePaged, useT, type MessageKey } from "@/shared";
+import { EmptyState, LoadMore, Loading, Modal, PagedMore, UiGlyph, cn, errorText, formatDateTime, matchesWords, roleColor, useNotify, usePaged, useT, type MessageKey } from "@/shared";
 import { ClanTokenPanel } from "@/features/management/ui/ClanTokenPanel";
 import { DiscordWebhookPanel } from "@/features/management/ui/DiscordWebhookPanel";
 import { MEMBERS_PAGE, managementApi, type AccessLevel, type ClanMember, type DiscordRole, type DiscordRoles, type MembersPage, type PermissionCatalog } from "@/features/management/api";
@@ -236,8 +236,7 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
   const filtered = React.useMemo(() => {
     const list = current?.members ?? [];
     if (!q || searching) return list;
-    const needle = q.toLowerCase();
-    return list.filter((m) => `${m.name} ${m.roles.map((r) => r.name).join(" ")}`.toLowerCase().includes(needle));
+    return list.filter((m) => matchesWords(`${m.name} ${m.roles.map((r) => r.name).join(" ")}`, q));
   }, [current, q, searching]);
   const total = catalog ? catalog.groups.reduce((n, g) => n + g.permissions.length, 0) : 0;
 

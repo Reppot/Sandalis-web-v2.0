@@ -3,7 +3,8 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { RefineryData, Recipe } from "@/entities/recipe";
-import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, useI18n, useNotify } from "@/shared";
+import { MATERIAL_CODES, codeSynonyms } from "@/entities/item";
+import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, useI18n, useNotify } from "@/shared";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { truckLines } from "@/features/tools/ui/trucks";
 import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
@@ -32,10 +33,10 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
   const panes = usePanes();
 
   const visible = React.useMemo(() => {
-    const needle = query.trim().toLowerCase();
+    const needle = query.trim();
     return recipes.filter((r) => {
-      const text = `${r.name} ${r.name_en ?? ""} ${r.item_class ?? ""} ${label("material", data(r).input)}`.toLowerCase();
-      return (group === "all" || r.category === group) && (!needle || text.includes(needle));
+      const text = `${r.name} ${r.name_en ?? ""} ${r.item_code ?? ""} ${codeSynonyms(r.item_code).join(" ")} ${r.item_class ?? ""} ${label("material", data(r).input)} ${data(r).input} ${codeSynonyms(MATERIAL_CODES[data(r).input]).join(" ")}`;
+      return (group === "all" || r.category === group) && (!needle || matchesWords(text, needle));
     });
   }, [recipes, group, query, label]);
 

@@ -2,7 +2,8 @@
 
 import * as React from "react";
 import { RAW, buildChain, chainTotals, facilityData, powerPlan, type ChainChoice, type ChainNode, type Recipe } from "@/entities/recipe";
-import { FilterCards, ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, timeUnits, UiGlyph, useI18n, useNotify, usePaged } from "@/shared";
+import { codeSynonyms } from "@/entities/item";
+import { FilterCards, ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify, usePaged } from "@/shared";
 import { SendOrderDialog } from "@/entities/report/ui/SendOrderDialog";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
@@ -78,12 +79,13 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
 
   // карточка — предмет; рецепты под фильтром постройки и фракции
   const cards = React.useMemo(() => {
-    const needle = query.trim().toLowerCase();
+    const needle = query.trim();
     const out: { name: string; recipes: Recipe[] }[] = [];
     for (const [name, list] of byName) {
       const fit = list.filter((r) => allowed(r) && (!source || source === "all" || facilityData(r)?.source === source));
       if (!fit.length) continue;
-      if (needle && !`${name} ${dn(name)} ${fit.map((r) => `${facilityData(r)?.source} ${r.item_class ?? ""}`).join(" ")}`.toLowerCase().includes(needle)) continue;
+      const hay = `${name} ${dn(name)} ${fit.map((r) => `${facilityData(r)?.source} ${r.item_class ?? ""} ${r.item_code ?? ""} ${codeSynonyms(r.item_code).join(" ")}`).join(" ")}`;
+      if (needle && !matchesWords(hay, needle)) continue;
       out.push({ name, recipes: fit });
     }
     return out.sort((a, b) => a.name.localeCompare(b.name));

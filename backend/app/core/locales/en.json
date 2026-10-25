@@ -12,6 +12,9 @@
     "war_api_unavailable": "Foxhole War API is unavailable — try again later.",
     "pyramid_unknown_items": "Unknown items in the pyramid: {codes}",
     "pyramid_no_vehicles": "Vehicles and structures can't be added to the pyramid: {codes}",
+    "pyramid_too_many": "The clan already has {n} custom configurations — delete one to save a new one.",
+    "pyramid_name_taken": "A configuration named “{name}” already exists — pick another name.",
+    "pyramid_config_not_found": "Configuration not found — it may have been deleted.",
     "guest_no_clan": "Guest access has no clan"
   }
 }

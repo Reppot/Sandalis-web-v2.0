@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
+import { codeSynonyms } from "@/entities/item";
 import { Scopes, type Can } from "@/entities/session";
 import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
 import { lineName, orderKindOf, REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
@@ -9,6 +10,7 @@ import {
   ApiError,
   DocReader,
   EmptyState,
+  matchesWords,
   ExportBar,
   Loading,
   assetUrl,
@@ -111,7 +113,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
   const visible = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return reports;
-    return reports.filter((r) => r.title.toLowerCase().includes(q) || r.lines.some((l) => [l.name, l.name_ru, l.name_en].some((n) => n?.toLowerCase().includes(q))));
+    return reports.filter((r) => matchesWords(`${r.title} ${r.lines.map((l) => `${l.name} ${l.name_ru ?? ""} ${l.name_en ?? ""} ${codeSynonyms(l.item_code).join(" ")}`).join(" ")}`, q));
   }, [reports, query]);
   const page = usePaged(visible, 20, query);
 

@@ -10,6 +10,20 @@ export interface PyramidTier {
   items: PyramidItem[];
 }
 export type PyramidFaction = "warden" | "colonial";
+/** Кастомная конфигурация клана (до max_configs): видна всем участникам в списке конфигураций. */
+export interface PyramidConfig {
+  id: string;
+  name: string;
+  faction: PyramidFaction;
+  tiers: PyramidTier[];
+  updated_at: string | null;
+  updated_by: string | null;
+}
+export interface PyramidConfigInput {
+  name: string;
+  faction: PyramidFaction;
+  tiers: PyramidTier[];
+}
 export interface Pyramid {
   faction: PyramidFaction;
   tiers: PyramidTier[];
@@ -17,12 +31,15 @@ export interface Pyramid {
   updated_at: string | null;
   /** Готовые конфигурации (normal, basic, tank, artillery, builder, frontline). */
   presets: { key: string; tiers: PyramidTier[] }[];
+  configs: PyramidConfig[];
+  max_configs: number;
 }
 
 export const pyramidApi = {
   get: () => apiClient.get<Pyramid>("/api/v1/clan/pyramid"),
-  save: (data: { faction: PyramidFaction; tiers: PyramidTier[] }) => apiClient.put<Pyramid>("/api/v1/clan/pyramid", data),
-  reset: () => apiClient.delete<Pyramid>("/api/v1/clan/pyramid"),
+  create: (data: PyramidConfigInput) => apiClient.post<Pyramid>("/api/v1/clan/pyramid/configs", data),
+  update: (id: string, data: PyramidConfigInput) => apiClient.put<Pyramid>(`/api/v1/clan/pyramid/configs/${id}`, data),
+  remove: (id: string) => apiClient.delete<Pyramid>(`/api/v1/clan/pyramid/configs/${id}`),
 };
 
 export interface PyramidCell {

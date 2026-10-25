@@ -135,7 +135,29 @@ class PyramidPresetRead(BaseModel):
     tiers: list[PyramidTier]
 
 
+class PyramidConfigWrite(PyramidUpdate):
+    """Кастомная конфигурация клана: название видят все участники в списке конфигураций."""
+    name: Annotated[str, Field(min_length=1, max_length=40)]
+
+    @field_validator("name")
+    @classmethod
+    def _strip(cls, value: str) -> str:
+        value = " ".join(value.split())
+        if not value:
+            raise ValueError("empty name")
+        return value
+
+
+class PyramidConfigRead(PyramidConfigWrite):
+    id: str
+    updated_at: datetime | None = None
+    updated_by: str | None = None
+
+
 class PyramidRead(PyramidUpdate):
+    """faction/tiers — шаблон («Обычная пирамида»); свои пирамиды клана — в configs."""
     is_default: bool
     updated_at: datetime | None
     presets: list[PyramidPresetRead] = []
+    configs: list[PyramidConfigRead] = []
+    max_configs: int = 10
