@@ -211,6 +211,7 @@ export const en: Record<MessageKey, string> = {
   "donate.title": "Support the developer",
   "donate.hint": "The site is free and ad-free. If the terminal helps your clan, you can support its development in any convenient way.",
   "donate.scan": "Point your phone camera here",
+  "donate.zoom": "click to enlarge",
   "donate.sbp.tab": "Russian cards / SBP",
   "donate.sbp.title": "SBP transfer",
   "donate.sbp.text": "On a phone the button opens your bank app for an SBP transfer. On a computer, scan the QR code with your phone camera.",

@@ -211,6 +211,7 @@ export const cs: Record<MessageKey, string> = {
   "donate.title": "Podpořit vývojáře",
   "donate.hint": "Web je zdarma a bez reklam. Pokud terminál pomáhá vašemu klanu, můžete jeho vývoj podpořit libovolným způsobem.",
   "donate.scan": "Namiřte kameru telefonu",
+  "donate.zoom": "klepněte pro zvětšení",
   "donate.sbp.tab": "Ruské karty / SBP",
   "donate.sbp.title": "Převod přes SBP",
   "donate.sbp.text": "Na telefonu tlačítko otevře bankovní aplikaci pro převod přes SBP. Na počítači naskenujte QR kód kamerou telefonu.",

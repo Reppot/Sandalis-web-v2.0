@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { cn, useI18n, type MessageKey } from "@/shared";
 
 type Method = "sbp" | "boosty" | "crypto";
@@ -37,6 +38,7 @@ const METHODS: MethodInfo[] = [
     text: "donate.boosty.text",
     action: "donate.boosty.action",
     href: "https://boosty.to/reppot/donate",
+    qr: { src: "/api/v1/assets/brand/donate/boosty-qr.png", alt: "Boosty QR" },
   },
   {
     key: "crypto",
@@ -58,6 +60,7 @@ const METHODS: MethodInfo[] = [
 export const DonateBlock: React.FC = () => {
   const { t } = useI18n();
   const [active, setActive] = React.useState<Method>("sbp");
+  const [zoomed, setZoomed] = React.useState<MethodInfo["qr"] | null>(null);
   const tabs = React.useRef<Record<Method, HTMLButtonElement | null>>({ sbp: null, boosty: null, crypto: null });
   const current = METHODS.find((m) => m.key === active) ?? METHODS[0];
 
@@ -113,12 +116,42 @@ export const DonateBlock: React.FC = () => {
         </div>
         {current.qr ? (
           <figure className="donate-qr">
-            {/* eslint-disable-next-line @next/next/no-img-element -- статичная картинка из /api/v1/assets */}
-            <img src={current.qr.src} alt={current.qr.alt} width={200} height={200} loading="lazy" />
-            <figcaption>{t("donate.scan")}</figcaption>
+            <button type="button" className="donate-qr-open" title={t("donate.zoom")} aria-label={`${current.qr.alt}: ${t("donate.zoom")}`} onClick={() => setZoomed(current.qr)}>
+              {/* eslint-disable-next-line @next/next/no-img-element -- статичная картинка из /api/v1/assets */}
+              <img src={current.qr.src} alt={current.qr.alt} width={200} height={200} loading="lazy" />
+            </button>
+            <figcaption>{t("donate.scan")} · {t("donate.zoom")}</figcaption>
           </figure>
         ) : null}
       </div>
+      {zoomed ? <QrLightbox qr={zoomed} onClose={() => setZoomed(null)} /> : null}
     </section>
+  );
+};
+
+/** QR на весь экран: клик по фону, крестик или Esc закрывают. */
+const QrLightbox: React.FC<{ qr: NonNullable<MethodInfo["qr"]>; onClose: () => void }> = ({ qr, onClose }) => {
+  const { t } = useI18n();
+  React.useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [onClose]);
+
+  return createPortal(
+    <div className="qr-lightbox" role="dialog" aria-modal="true" aria-label={qr.alt} onClick={onClose}>
+      <button type="button" className="qr-lightbox-close" aria-label={t("common.close")} onClick={onClose} autoFocus>
+        ✕
+      </button>
+      {/* eslint-disable-next-line @next/next/no-img-element -- статичная картинка из /api/v1/assets */}
+      <img src={qr.src} alt={qr.alt} onClick={(e) => e.stopPropagation()} />
+      <p>{t("donate.scan")}</p>
+    </div>,
+    document.body,
   );
 };
