@@ -1387,62 +1387,258 @@ html[data-skin="contrast"] a { text-decoration: underline; }
 /* без движения: бесконечные анимации (плавающие иконки, пульс) мешают читать */
 html[data-skin="contrast"] *, html[data-skin="contrast"] *::before, html[data-skin="contrast"] *::after { text-shadow: none !important; animation: none !important; transition: none !important; }
 
-/* Нуар — брутализм по мотивам fiddle.digital: графит #101214, лавандово-серый #C8C2CF,
-   приглушённый мов #A399A8, сигнальные красно-оранжевый #FF4F36 и кислотно-жёлтый #F4FF1E.
-   Меняется только интерфейс: фото, иконки предметов и фон остаются цветными. */
+/* =========================================================================
+   «Бруталист» (ключ noir) — по мотивам fiddle.digital: лавандово-серый холст #C8C2CF,
+   белые карточки со скруглением, графитовые #101214 шапка и меню, графитовый текст,
+   гротеск без капса, серые моно-подписи; сигнальные #FF4F36 и #F4FF1E — точечно.
+   Фото, иконки предметов и фон остаются цветными.
+   ========================================================================= */
 html[data-skin="noir"] {
-  --bg: #101214; --surface: #17181b; --surface-2: #1e1f23; --line: #2b2b31; --line-2: #4a4650;
-  --accent: #c8c2cf; --accent-rgb: 200 194 207; --accent-soft: #e6dfe4; --accent-ink: #101214;
-  --warn: #f4ff1e; --danger: #ff4f36; --safe: #e6dfe4; --text: #f4f1f6; --muted: #a399a8;
-  --chrome-bg: linear-gradient(180deg, rgba(30, 30, 35, 0.96) 0%, rgba(16, 18, 20, 0.96) 100%);
-  --chrome-border: #4a4650; --chrome-text: #f4f1f6; --chrome-muted: #a399a8;
-  --panel-bg: linear-gradient(160deg, rgba(38, 37, 43, 0.93) 0%, rgba(22, 23, 26, 0.94) 55%, rgba(16, 18, 20, 0.96) 100%);
-  --panel-border: #4a4650; --panel-inner: linear-gradient(180deg, rgba(16, 18, 20, 0.55), rgba(30, 30, 35, 0.55));
-  --field-bg: #101214; --field-border: #59536a;
-  --ticker-bg: #101214; --ticker-border: #2b2b31; --ticker-text: #e6dfe4;
+  color-scheme: light;
+  --font-display: var(--font-grotesk), "Inter", "Segoe UI", Arial, sans-serif;
+  --font-sans: var(--font-grotesk), "Inter", "Segoe UI", Arial, sans-serif;
+  --bg: #c8c2cf; --surface: #ffffff; --surface-2: #f3f0f5; --line: #e4dfe8; --line-2: #d4ced9;
+  --accent: #101214; --accent-rgb: 16 18 20; --accent-soft: #596375; --accent-ink: #ffffff;
+  --warn: #b7a300; --danger: #e5432d; --safe: #2f8a5b; --text: #101214; --muted: #7b7283;
+  --chrome-bg: #101214; --chrome-border: #101214; --chrome-text: #f4f1f6; --chrome-muted: #a399a8;
+  --panel-bg: #ffffff; --panel-border: transparent; --panel-inner: #f3f0f5;
+  --field-bg: #ffffff; --field-border: #d4ced9;
+  --ticker-bg: #1b1d20; --ticker-border: #2a2c31; --ticker-text: #f4f1f6;
   --tk-critical: #ff4f36; --tk-warning: #f4ff1e; --tk-safe: #c8c2cf;
-  --overlay: linear-gradient(180deg, rgba(16, 18, 20, 0.86) 0%, rgba(16, 18, 20, 0.7) 40%, rgba(16, 18, 20, 0.9) 100%);
-  --glow: radial-gradient(60% 50% at 50% 0%, rgba(200, 194, 207, 0.1), transparent 70%);
-  --scan-alpha: 0; --grid-alpha: 0.04; --grain-alpha: 0.08;
-  --vignette: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.6) 100%);
+  --overlay: linear-gradient(180deg, rgba(200, 194, 207, 0.93) 0%, rgba(200, 194, 207, 0.9) 50%, rgba(200, 194, 207, 0.95) 100%);
+  --glow: none; --scan-alpha: 0; --grid-alpha: 0; --grain-alpha: 0; --vignette: none;
 }
-/* жёсткие прямые формы — только у интерфейса; фото и иконки не трогаем */
-html[data-skin="noir"] .panel, html[data-skin="noir"] .panel-inner, html[data-skin="noir"] .btn, html[data-skin="noir"] .field,
-html[data-skin="noir"] .chip, html[data-skin="noir"] .badge-count, html[data-skin="noir"] .filter-card, html[data-skin="noir"] .tool-card,
-html[data-skin="noir"] .pyramid-config, html[data-skin="noir"] .theme-choice, html[data-skin="noir"] .chrome { border-radius: 2px; }
-html[data-skin="noir"] .chrome { background: var(--chrome-bg); }
-html[data-skin="noir"] .panel { border-width: 1px; border-top: 2px solid #c8c2cf; box-shadow: 6px 6px 0 rgba(200, 194, 207, 0.12), 0 22px 60px rgba(0, 0, 0, 0.5); }
-html[data-skin="noir"] .panel-title { color: #e6dfe4; letter-spacing: 0.12em; text-shadow: none; }
-html[data-skin="noir"] .btn { border-color: #59536a; background: linear-gradient(180deg, #24242a 0%, #17181b 100%); color: #f4f1f6; text-transform: uppercase; letter-spacing: 0.09em; box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8); }
-html[data-skin="noir"] .btn:hover { border-color: #c8c2cf; background: linear-gradient(180deg, #33313a 0%, #1e1f23 100%); box-shadow: 4px 4px 0 rgba(200, 194, 207, 0.25); }
-html[data-skin="noir"] .btn-primary, html[data-skin="noir"] .btn-active { border-color: #c8c2cf; background: linear-gradient(180deg, #e6dfe4 0%, #c8c2cf 100%); color: #101214; box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8); }
-html[data-skin="noir"] .btn-primary:hover { background: #f4ff1e; border-color: #f4ff1e; color: #101214; }
-html[data-skin="noir"] .btn-danger { border-color: #ff4f36; color: #ff8a77; }
-html[data-skin="noir"] .btn-danger:hover { background: rgba(255, 79, 54, 0.18); }
-html[data-skin="noir"] .field { background: var(--field-bg); }
-html[data-skin="noir"] .field:focus { border-color: #c8c2cf; box-shadow: 0 0 0 2px rgba(200, 194, 207, 0.25); }
-html[data-skin="noir"] .chip, html[data-skin="noir"] .badge-count, html[data-skin="noir"] .filter-card { border-color: #59536a; background: linear-gradient(180deg, #24242a, #17181b); color: #f4f1f6; }
-html[data-skin="noir"] .chip.is-active, html[data-skin="noir"] .filter-card.is-active { border-color: #c8c2cf; background: #c8c2cf; color: #101214; }
-html[data-skin="noir"] .panel-corners::before, html[data-skin="noir"] .panel-corners::after { border-color: #ff4f36; opacity: 1; }
-html[data-skin="noir"] [class*="text-white/"] { color: #d9d3dd; }
-html[data-skin="noir"] .tool-card { border: 1px solid #4a4650; border-top: 2px solid #c8c2cf; background: linear-gradient(160deg, #26252b 0%, #17181b 55%, #101214 100%); box-shadow: 6px 6px 0 rgba(200, 194, 207, 0.1); }
-html[data-skin="noir"] .tool-card:hover { border-color: #c8c2cf; box-shadow: 8px 8px 0 rgba(255, 79, 54, 0.45); }
+html[data-skin="noir"] body { background: var(--bg); color: var(--text); font-family: var(--font-sans); }
+
+/* графитовые шапка, боковое меню, нижнее меню — как тёмные секции референса */
+html[data-skin="noir"] .chrome { background: #101214; border-color: #101214; color: #f4f1f6; border-radius: 10px; }
+html[data-skin="noir"] .chrome .ui-glyph { color: #c8c2cf; }
+html[data-skin="noir"] .nav-btn { border-radius: 8px; border-color: transparent; color: #f4f1f6; }
+html[data-skin="noir"] .nav-btn:hover { background: rgba(200, 194, 207, 0.12); border-color: rgba(200, 194, 207, 0.35); }
+html[data-skin="noir"] .nav-btn.is-active { background: #c8c2cf; border-color: #c8c2cf; color: #101214; box-shadow: none; }
+html[data-skin="noir"] .nav-btn.is-active .ui-glyph { color: #101214; }
+
+/* белые карточки: мягкое скругление, без рамок и теней-свечений */
+html[data-skin="noir"] .panel { background: #ffffff; border: 0; border-radius: 12px; color: #101214; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+html[data-skin="noir"] .panel-corners::before, html[data-skin="noir"] .panel-corners::after { display: none; }
+html[data-skin="noir"] .panel-inner { background: #f3f0f5; border-color: #e4dfe8; border-radius: 8px; }
+html[data-skin="noir"] .panel-title { color: #101214; font-family: var(--font-sans); font-size: 1.05rem; font-weight: 500; letter-spacing: -0.01em; text-transform: none; text-shadow: none; }
+html[data-skin="noir"] .hud-label { letter-spacing: 0.06em; }
+html[data-skin="noir"] main .text-muted, html[data-skin="noir"] .modal-panel .text-muted { color: #7b7283; }
+html[data-skin="noir"] .text-accent { color: #101214; }
+html[data-skin="noir"] main [class*="text-white"], html[data-skin="noir"] .modal-panel [class*="text-white"] { color: #101214; }
+html[data-skin="noir"] main [class*="text-white/"], html[data-skin="noir"] .modal-panel [class*="text-white/"] { color: #4a4f57; }
+html[data-skin="noir"] main strong, html[data-skin="noir"] main b { color: inherit; }
+html[data-skin="noir"] .text-safe { color: #2f8a5b; }
+html[data-skin="noir"] .text-warn { color: #8a7a00; }
+
+/* вложенные плитки: светло-лавандовые на белом */
+html[data-skin="noir"] .factory-item-card,
+html[data-skin="noir"] .factory-item-icon,
+html[data-skin="noir"] .factory-totals,
+html[data-skin="noir"] .factory-plan-row,
+html[data-skin="noir"] .matrix-item,
+html[data-skin="noir"] .row-item,
+html[data-skin="noir"] .tools-factory-icon,
+html[data-skin="noir"] .cabinet-pill,
+html[data-skin="noir"] .cabinet-role,
+html[data-skin="noir"] .cabinet-session-grid > div,
+html[data-skin="noir"] .console-log,
+html[data-skin="noir"] .order-kind,
+html[data-skin="noir"] .order-send-summary,
+html[data-skin="noir"] .report-progress-line,
+html[data-skin="noir"] .report-log-entry,
+html[data-skin="noir"] .report-log-item,
+html[data-skin="noir"] .contribute-row,
+html[data-skin="noir"] .clan-stockpile,
+html[data-skin="noir"] .clan-stockpile-kind,
+html[data-skin="noir"] .clan-stockpile-code,
+html[data-skin="noir"] .theme-choice,
+html[data-skin="noir"] .pyramid-tier,
+html[data-skin="noir"] .pyramid-cell,
+html[data-skin="noir"] .pyramid-pick,
+html[data-skin="noir"] .pyramid-chip,
+html[data-skin="noir"] .filter-card,
+html[data-skin="noir"] .chain-tier,
+html[data-skin="noir"] .facility-node,
+html[data-skin="noir"] .recipe-card,
+html[data-skin="noir"] .recipe-part,
+html[data-skin="noir"] .tools-hero-stats > span,
+html[data-skin="noir"] .tool-card-icon,
+html[data-skin="noir"] .tools-switch,
+html[data-skin="noir"] .facility-building,
+html[data-skin="noir"] .stockpile-item,
+html[data-skin="noir"] .pyramid-config,
+html[data-skin="noir"] .pyramid-import-btn,
+html[data-skin="noir"] .feedback-cat,
+html[data-skin="noir"] .feedback-item,
+html[data-skin="noir"] .chip,
+html[data-skin="noir"] .badge-count,
+html[data-skin="noir"] .pane-toggle,
+html[data-skin="noir"] .btn-icon,
+html[data-skin="noir"] .guide-toc-item,
+html[data-skin="noir"] .auth-role-chip,
+html[data-skin="noir"] .auth-server,
+html[data-skin="noir"] .auth-input-wrap,
+html[data-skin="noir"] .auth-invite,
+html[data-skin="noir"] .pyramid-add-list,
+html[data-skin="noir"] .pyramid-custom-bar,
+html[data-skin="noir"] .facility-buildings,
+html[data-skin="noir"] .order-note,
+html[data-skin="noir"] .doc-reader-nav,
+html[data-skin="noir"] .doc-reader-badge {
+  background: #f3f0f5; border-color: #e4dfe8; color: #101214; box-shadow: none;
+}
+html[data-skin="noir"] .factory-item-card, html[data-skin="noir"] .tool-card, html[data-skin="noir"] .feedback-item, html[data-skin="noir"] .pyramid-tier, html[data-skin="noir"] .recipe-card, html[data-skin="noir"] .theme-choice,
+html[data-skin="noir"] .filter-card, html[data-skin="noir"] .feedback-cat, html[data-skin="noir"] .pyramid-import-btn, html[data-skin="noir"] .order-kind { border-radius: 10px; }
+html[data-skin="noir"] .chip, html[data-skin="noir"] .badge-count, html[data-skin="noir"] .pyramid-config, html[data-skin="noir"] .cabinet-pill, html[data-skin="noir"] .tools-switch, html[data-skin="noir"] .pane-toggle { border-radius: 999px; }
+
+/* активные и выбранные — графит, как тёмные блоки референса */
+html[data-skin="noir"] .filter-card.is-active, html[data-skin="noir"] .chip.is-active, html[data-skin="noir"] .pyramid-config.is-active, html[data-skin="noir"] .order-kind.is-active, html[data-skin="noir"] .feedback-cat.is-active,
+html[data-skin="noir"] .theme-choice.is-active, html[data-skin="noir"] .tools-switch.is-active, html[data-skin="noir"] .pane-toggle.is-on, html[data-skin="noir"] .clan-section.is-active {
+  background: #101214; border-color: #101214; color: #ffffff;
+}
+html[data-skin="noir"] .filter-card.is-active *, html[data-skin="noir"] .chip.is-active *, html[data-skin="noir"] .pyramid-config.is-active *, html[data-skin="noir"] .order-kind.is-active *, html[data-skin="noir"] .feedback-cat.is-active *,
+html[data-skin="noir"] .theme-choice.is-active *, html[data-skin="noir"] .tools-switch.is-active *, html[data-skin="noir"] .pane-toggle.is-on *, html[data-skin="noir"] .clan-section.is-active * { color: #ffffff; }
+html[data-skin="noir"] .filter-card.is-active .ui-glyph, html[data-skin="noir"] .tools-switch.is-active .ui-glyph, html[data-skin="noir"] .clan-section.is-active .ui-glyph { color: #c8c2cf; }
+html[data-skin="noir"] .filter-card:hover, html[data-skin="noir"] .pyramid-config:hover, html[data-skin="noir"] .recipe-card:hover, html[data-skin="noir"] .feedback-cat:hover, html[data-skin="noir"] .order-kind:hover, html[data-skin="noir"] .theme-choice:hover { border-color: #101214; }
+
+/* кнопки — белые пилюли, гротеск без капса; основная — графит */
+html[data-skin="noir"] .btn {
+  border: 1px solid #d4ced9; border-radius: 999px; background: #ffffff; color: #101214;
+  font-family: var(--font-sans); font-size: 0.85rem; font-weight: 500; letter-spacing: 0; text-transform: none; box-shadow: none;
+}
+html[data-skin="noir"] .btn:hover { border-color: #101214; background: #ffffff; box-shadow: none; }
+html[data-skin="noir"] .btn:disabled:hover { background: #ffffff; border-color: #d4ced9; }
+html[data-skin="noir"] .btn-primary, html[data-skin="noir"] .btn-active { border-color: #101214; background: #101214; color: #ffffff; }
+html[data-skin="noir"] .btn-primary:hover { border-color: #101214; background: #2a2c31; color: #ffffff; box-shadow: none; }
+html[data-skin="noir"] .btn-danger { border-color: rgba(229, 67, 45, 0.45); color: #e5432d; }
+html[data-skin="noir"] .btn-danger:hover { background: rgba(255, 79, 54, 0.08); border-color: #e5432d; }
+html[data-skin="noir"] .btn-warn { border-color: #d6c400; color: #6b6000; }
+html[data-skin="noir"] .chrome .btn { background: transparent; border-color: rgba(200, 194, 207, 0.35); color: #f4f1f6; }
+
+/* поля */
+html[data-skin="noir"] .field { border-radius: 8px; background: #ffffff; border-color: #d4ced9; color: #101214; font-family: var(--font-sans); }
+html[data-skin="noir"] .field::placeholder { color: #a399a8; }
+html[data-skin="noir"] .field:hover, html[data-skin="noir"] .field:focus { border-color: #101214; box-shadow: none; }
+
+/* блоки инструментов */
+html[data-skin="noir"] .tools-hero { background: #101214; color: #f4f1f6; border-radius: 12px; }
+html[data-skin="noir"] .tools-hero .tools-hero-title { color: #ffffff; font-weight: 500; letter-spacing: -0.02em; text-transform: none; text-shadow: none; }
+html[data-skin="noir"] .tools-hero .tools-hero-sub { color: #c8c2cf; }
+html[data-skin="noir"] .tools-hero .hud-label { color: #a399a8; }
+html[data-skin="noir"] .tools-hero-stats > span { background: #1e2024; border-color: #2a2c31; color: #a399a8; }
+html[data-skin="noir"] .tools-hero-stats b { color: #ffffff; }
+html[data-skin="noir"] .tool-card { background: #ffffff; border: 0; box-shadow: none; }
+html[data-skin="noir"] .tool-card::after { display: none; }
+html[data-skin="noir"] .tool-card:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(16, 18, 20, 0.12); }
+html[data-skin="noir"] .tool-card-title { color: #101214; font-weight: 500; letter-spacing: -0.01em; text-transform: none; }
+html[data-skin="noir"] .tool-card-cta { border-radius: 999px; }
 html[data-skin="noir"] .tool-badge.is-new, html[data-skin="noir"] .feedback-status.is-new { background: #f4ff1e; color: #101214; }
-html[data-skin="noir"] .tools-hero { background: linear-gradient(115deg, #c8c2cf 0%, #b8b0c0 45%, #a399a8 100%); color: #101214; }
-html[data-skin="noir"] .tools-hero .tools-hero-title, html[data-skin="noir"] .tools-hero .tools-hero-sub, html[data-skin="noir"] .tools-hero .hud-label { color: #101214; text-shadow: none; }
-html[data-skin="noir"] .tools-hero-stats span { border-color: #101214; background: #101214; color: #a399a8; }
-html[data-skin="noir"] .tools-hero-stats b { color: #f4f1f6; }
-html[data-skin="noir"] .tools-preview, html[data-skin="noir"] .tools-preview-marker { background-color: rgba(16, 18, 20, 0.85); }
-html[data-skin="noir"] .cabinet-cover { background: linear-gradient(120deg, rgba(16, 18, 20, 0.5), rgba(200, 194, 207, 0.25)), url("/api/v1/assets/bg/page_bg_raw.jpg") center/cover; opacity: 0.9; }
-html[data-skin="noir"] .cabinet-avatar-wrap { box-shadow: 0 0 0 2px #c8c2cf, 6px 6px 0 rgba(255, 79, 54, 0.6); }
-html[data-skin="noir"] .auth-panel { background: linear-gradient(150deg, rgba(38, 37, 43, 0.95), rgba(16, 18, 20, 0.96)); }
-html[data-skin="noir"] .auth-invite { background: rgba(200, 194, 207, 0.1); }
-html[data-skin="noir"] .pane-toggle.is-on, html[data-skin="noir"] .burger-item:hover, html[data-skin="noir"] .burger-item:focus-visible,
-html[data-skin="noir"] .filter-card:hover, html[data-skin="noir"] .filter-card:focus-visible, html[data-skin="noir"] .recipe-card:hover,
-html[data-skin="noir"] .auth-server:hover:not(:disabled), html[data-skin="noir"] .auth-server:focus-visible { background: rgba(200, 194, 207, 0.14); }
-html[data-skin="noir"] .pyramid-tier.is-current { border-color: #f4ff1e; box-shadow: 0 0 0 1px #f4ff1e; }
-html[data-skin="noir"] .order-note { border-color: #f4ff1e; background: rgba(244, 255, 30, 0.08); }
-html[data-skin="noir"] .order-note-label { color: #f4ff1e; }
+html[data-skin="noir"] .tool-badge.is-clan { background: #101214; color: #ffffff; border-color: #101214; }
+html[data-skin="noir"] .external-tool-card { background: #ffffff; border-color: transparent; color: #101214; border-radius: 10px; }
+
+/* клан */
+html[data-skin="noir"] .cabinet-cover { background: linear-gradient(120deg, rgba(16, 18, 20, 0.25), rgba(16, 18, 20, 0.05)), url("/api/v1/assets/bg/page_bg_raw.jpg") center/cover; opacity: 1; border-radius: 12px 12px 0 0; }
+html[data-skin="noir"] .cabinet-cover { background-image: linear-gradient(120deg, rgba(16, 18, 20, 0.3), rgba(16, 18, 20, 0.05)), url("/api/v1/assets/bg/page_bg_raw.jpg") !important; }
+html[data-skin="noir"] .cabinet-name { color: #101214; font-family: var(--font-sans); font-weight: 500; letter-spacing: -0.02em; text-transform: none; text-shadow: none; }
+html[data-skin="noir"] .cabinet-username { color: #7b7283; }
+html[data-skin="noir"] .cabinet-pill-online { border-color: #101214; color: #101214; }
+html[data-skin="noir"] .cabinet-avatar-wrap { border-color: #ffffff; background: #f3f0f5; box-shadow: 0 0 0 1px #d4ced9; }
+html[data-skin="noir"] .cabinet-online-dot { border-color: #ffffff; }
+html[data-skin="noir"] .clan-section { background: #f3f0f5; border-color: #e4dfe8; border-radius: 10px; color: #101214; }
+
+/* склады и таймеры */
+html[data-skin="noir"] .timer-card { border-radius: 10px; color: #101214; }
+html[data-skin="noir"] .timer-card.sev-none { --card-bg: #ffffff; --card-border: #e4dfe8; --card-accent: #101214; }
+html[data-skin="noir"] .timer-card.sev-safe { --card-bg: #f3f0f5; --card-border: #e4dfe8; --card-accent: #101214; }
+html[data-skin="noir"] .timer-card.sev-warning { --card-bg: #fbfde0; --card-border: #d6c400; --card-accent: #6b6000; }
+html[data-skin="noir"] .timer-card.sev-critical { --card-bg: #fff0ed; --card-border: #ff4f36; --card-accent: #e5432d; }
+html[data-skin="noir"] .timer-card .timer-value { text-shadow: none; }
+html[data-skin="noir"] .timer-card.sev-safe .timer-value { color: #101214; }
+html[data-skin="noir"] .stockpile-item-qty b { color: #101214; }
+html[data-skin="noir"] .stockpile-item-qty em { color: #8a5a00; }
+html[data-skin="noir"] .stockpile-items-toggle { color: #4a4f57; }
+html[data-skin="noir"] .stockpile-items-toggle b { color: #101214; }
+
+/* заказы и прочее */
+html[data-skin="noir"] .order-note { background: #fbfde0; border-color: #d6c400; }
+html[data-skin="noir"] .order-note-label { color: #6b6000; }
+html[data-skin="noir"] .order-note p { color: #101214; }
+html[data-skin="noir"] .feedback-unread, html[data-skin="noir"] .queued-badge { background: #f4ff1e; border-color: #101214; color: #101214; }
+html[data-skin="noir"] .feedback-text, html[data-skin="noir"] .feedback-author, html[data-skin="noir"] .feedback-cat b, html[data-skin="noir"] .report-progress-name { color: #101214; }
+html[data-skin="noir"] .feedback-cat small, html[data-skin="noir"] .report-progress-who { color: #7b7283; }
+html[data-skin="noir"] .report-progress-track, html[data-skin="noir"] .report-progress-bar, html[data-skin="noir"] .progress-track { background: #e4dfe8; }
+html[data-skin="noir"] .report-progress-track > span, html[data-skin="noir"] .report-progress-bar > span { background: #101214; box-shadow: none; }
+html[data-skin="noir"] .report-progress-total b, html[data-skin="noir"] .report-progress-qty, html[data-skin="noir"] .report-log-item b, html[data-skin="noir"] .stockpile-item b { color: #101214; }
+html[data-skin="noir"] .pyramid-tier.is-current { border-color: #101214; box-shadow: 0 0 0 1px #101214; }
+html[data-skin="noir"] .pyramid-tier.is-done { border-color: #2f8a5b; }
+html[data-skin="noir"] .pyramid-bar { background: #e4dfe8; }
+html[data-skin="noir"] .summary-section-title { color: #101214; border-top-color: #d4ced9; }
+html[data-skin="noir"] .summary-note { color: #7b7283; }
+html[data-skin="noir"] .factory-total-grid > div { border-color: #e4dfe8; background: #ffffff; border-radius: 8px; }
+html[data-skin="noir"] .factory-total-grid strong { color: #101214; }
+html[data-skin="noir"] .copyright-notice, html[data-skin="noir"] .copyright-notice-terms { color: #6e6577; }
+html[data-skin="noir"] .modal-backdrop { background: rgba(16, 18, 20, 0.55); }
+html[data-skin="noir"] .modal-panel { color: #101214; }
+html[data-skin="noir"] .toast { background: #ffffff; color: #101214; border-radius: 10px; }
+html[data-skin="noir"] .theme-choice-label { color: inherit; }
+html[data-skin="noir"] .theme-choice-hint { color: #7b7283; }
+html[data-skin="noir"] .theme-choice.is-active .theme-choice-hint { color: #c8c2cf; }
+html[data-skin="noir"] .theme-choice-state { color: inherit; }
+html[data-skin="noir"] .tool-card-features, html[data-skin="noir"] .tool-card-tagline { color: #4a4f57; }
+html[data-skin="noir"] *::-webkit-scrollbar-thumb { background: #a399a8; }
+
+/* «Бруталист»: светлый нейтральный текст базовых правил -> графит/серый (сгенерировано по globals.css) */
+html[data-skin="noir"] .chip:hover { color: #101214; }
+html[data-skin="noir"] .guide-toc-item { color: #101214; }
+html[data-skin="noir"] .guide-notes li { color: #101214; }
+html[data-skin="noir"] .tools-preview-coordinates { color: #5c5466; }
+html[data-skin="noir"] .cabinet-name { color: #101214; }
+html[data-skin="noir"] .cabinet-pill { color: #5c5466; }
+html[data-skin="noir"] .cabinet-role { color: #101214; }
+html[data-skin="noir"] .pane-toggle-label { color: #101214; }
+html[data-skin="noir"] .pane-toggle.is-off .pane-toggle-state { color: #5c5466; }
+html[data-skin="noir"] .order-kind-label { color: #101214; }
+html[data-skin="noir"] .order-kind-hint { color: #5c5466; }
+html[data-skin="noir"] .report-progress-name { color: #101214; }
+html[data-skin="noir"] .report-progress-who { color: #5c5466; }
+html[data-skin="noir"] .order-note p { color: #101214; }
+html[data-skin="noir"] .clan-stockpile-name { color: #101214; }
+html[data-skin="noir"] .clan-stockpile-meta { color: #5c5466; }
+html[data-skin="noir"] .burger-item-label { color: #101214; }
+html[data-skin="noir"] .burger-item-hint { color: #5c5466; }
+html[data-skin="noir"] .theme-choice-label { color: #101214; }
+html[data-skin="noir"] .theme-choice-hint { color: #5c5466; }
+html[data-skin="noir"] .pyramid-cell-name { color: #101214; }
+html[data-skin="noir"] .pyramid-pick { color: #5c5466; }
+html[data-skin="noir"] .filter-card-name { color: #101214; }
+html[data-skin="noir"] .filter-card-hint { color: #5c5466; }
+html[data-skin="noir"] .recipe-card { color: #101214; }
+html[data-skin="noir"] .recipe-card-source { color: #101214; }
+html[data-skin="noir"] .recipe-arrow { color: #5c5466; }
+html[data-skin="noir"] .recipe-card-meta { color: #5c5466; }
+html[data-skin="noir"] .tool-card-title { color: #101214; }
+html[data-skin="noir"] .tool-card-features { color: #5c5466; }
+html[data-skin="noir"] .tools-switch { color: #5c5466; }
+html[data-skin="noir"] .external-tool-name { color: #101214; }
+html[data-skin="noir"] .external-tool-desc { color: #5c5466; }
+html[data-skin="noir"] .summary-note { color: #5c5466; }
+html[data-skin="noir"] .stockpile-items-toggle { color: #5c5466; }
+html[data-skin="noir"] .stockpile-items-toggle:not(:disabled):hover, html[data-skin="noir"] .stockpile-items-toggle.is-open { color: #101214; }
+html[data-skin="noir"] .copyright-notice { color: #5c5466; }
+html[data-skin="noir"] .copyright-notice-terms { color: #5c5466; }
+html[data-skin="noir"] .pyramid-config { color: #101214; }
+html[data-skin="noir"] .pyramid-config:hover { color: #101214; }
+html[data-skin="noir"] .pyramid-import-btn b { color: #101214; }
+html[data-skin="noir"] .pyramid-import-btn small { color: #5c5466; }
+html[data-skin="noir"] .theme-preview-soft { color: #101214; }
+html[data-skin="noir"] .feedback-cat b { color: #101214; }
+html[data-skin="noir"] .feedback-cat small { color: #5c5466; }
+html[data-skin="noir"] .feedback-author { color: #101214; }
+html[data-skin="noir"] .feedback-text { color: #101214; }
+html[data-skin="noir"] .chrome .title-brand, html[data-skin="noir"] .chrome .text-accent { color: #f4f1f6; text-shadow: none; }
+html[data-skin="noir"] .filter-card.is-active .filter-card-name, html[data-skin="noir"] .filter-card.is-active .filter-card-hint { color: #ffffff; }
 
 /* Нежная — светлая пастель: лаванда, розовый, персик и мята; мягкие градиенты и свечения */
 html[data-skin="soft"] {
@@ -1480,6 +1676,7 @@ html[data-skin="soft"] [class*="text-white/"] { color: #f3e9f7; }
 html[data-skin="soft"] .tool-card { background: linear-gradient(160deg, rgba(126, 98, 168, 0.92) 0%, rgba(92, 72, 128, 0.92) 55%, rgba(118, 78, 118, 0.94) 100%); border-color: rgba(255, 184, 210, 0.45); }
 html[data-skin="soft"] .tools-hero { background: linear-gradient(120deg, rgba(120, 94, 170, 0.92) 0%, rgba(150, 96, 148, 0.9) 60%, rgba(176, 112, 128, 0.9) 100%); }
 html[data-skin="soft"] .tools-preview, html[data-skin="soft"] .tools-preview-marker { background-color: rgba(80, 60, 110, 0.8); }
+html[data-skin="soft"] .cabinet-cover { background-image: linear-gradient(120deg, rgba(210, 192, 255, 0.75), rgba(255, 184, 210, 0.55)), url("/api/v1/assets/bg/page_bg_raw.jpg") !important; }
 html[data-skin="soft"] .cabinet-cover { background: linear-gradient(120deg, rgba(210, 192, 255, 0.75), rgba(255, 184, 210, 0.55)), url("/api/v1/assets/bg/page_bg_raw.jpg") center/cover; opacity: 0.85; }
 html[data-skin="soft"] .auth-panel { background: linear-gradient(145deg, rgba(104, 86, 142, 0.94), rgba(76, 58, 104, 0.92)); }
 html[data-skin="soft"] .auth-invite { background: rgba(255, 184, 210, 0.16); }
@@ -1491,7 +1688,7 @@ html[data-skin="soft"] .auth-server:hover:not(:disabled), html[data-skin="soft"]
 
 /* превью тем в настройках */
 .theme-preview-contrast { background: #000; color: #ffd400; border: 2px solid #fff; }
-.theme-preview-noir { background: linear-gradient(135deg, #000 50%, #fff 50%); color: #888; }
+.theme-preview-noir { background: linear-gradient(135deg, #c8c2cf 55%, #101214 55%); color: #101214; border-radius: 10px; }
 .theme-preview-soft { background: linear-gradient(135deg, #2a2433, #f4b6c8); color: #fff; }
 
 /* Обратная связь */

@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { JetBrains_Mono, Russo_One } from "next/font/google";
+import { Inter_Tight, JetBrains_Mono, Russo_One } from "next/font/google";
 import "@/app/globals.css";
 import { AppProviders } from "@/app/providers";
 import { THEME_INIT_SCRIPT } from "@/shared";
 
 const display = Russo_One({ variable: "--font-russo", subsets: ["cyrillic", "latin"], display: "swap", weight: "400" });
+// гротеск темы «Бруталист» (по мотивам fiddle.digital); не предзагружается — нужен только этой теме
+const grotesk = Inter_Tight({ variable: "--font-grotesk", subsets: ["cyrillic", "latin"], display: "swap", weight: ["400", "500", "600"], preload: false });
 const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["cyrillic", "latin"], display: "swap", weight: ["400", "700"] });
 
 export const metadata: Metadata = {
@@ -24,7 +26,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru" data-theme="dark" suppressHydrationWarning className={`${display.variable} ${mono.variable}`}>
+    <html lang="ru" data-theme="dark" suppressHydrationWarning className={`${display.variable} ${mono.variable} ${grotesk.variable}`}>
       <head>
         {/* тема до первой отрисовки — без мерцания */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
