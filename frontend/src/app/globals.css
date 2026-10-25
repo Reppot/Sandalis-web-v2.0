@@ -1387,47 +1387,62 @@ html[data-skin="contrast"] a { text-decoration: underline; }
 /* без движения: бесконечные анимации (плавающие иконки, пульс) мешают читать */
 html[data-skin="contrast"] *, html[data-skin="contrast"] *::before, html[data-skin="contrast"] *::after { text-shadow: none !important; animation: none !important; transition: none !important; }
 
-/* Нуар — брутализм в оттенках серого: графит, сталь, бетон; градиенты и жёсткие тени.
-   Цвет снимаем только с картинок (фон, иконки), интерфейс собран из своих серых оттенков. */
+/* Нуар — брутализм по мотивам fiddle.digital: графит #101214, лавандово-серый #C8C2CF,
+   приглушённый мов #A399A8, сигнальные красно-оранжевый #FF4F36 и кислотно-жёлтый #F4FF1E.
+   Меняется только интерфейс: фото, иконки предметов и фон остаются цветными. */
 html[data-skin="noir"] {
-  --bg: #0c0c0d; --surface: #161618; --surface-2: #1f1f22; --line: #2c2c30; --line-2: #6b6b72;
-  --accent: #f4f4f5; --accent-rgb: 244 244 245; --accent-soft: #c4c4c8; --accent-ink: #0c0c0d;
-  --warn: #d4d4d8; --danger: #f87171; --safe: #e4e4e7; --text: #fafafa; --muted: #a1a1aa;
-  --chrome-bg: linear-gradient(180deg, #232326 0%, #0f0f11 100%); --chrome-border: #52525b; --chrome-text: #fafafa; --chrome-muted: #a1a1aa;
-  --panel-bg: linear-gradient(155deg, rgba(46, 46, 50, 0.94) 0%, rgba(24, 24, 27, 0.95) 45%, rgba(10, 10, 11, 0.97) 100%);
-  --panel-border: #71717a; --panel-inner: linear-gradient(180deg, rgba(0, 0, 0, 0.45), rgba(24, 24, 27, 0.6));
-  --field-bg: linear-gradient(180deg, #0a0a0b, #18181b); --field-border: #71717a;
-  --ticker-bg: #0a0a0b; --ticker-border: #3f3f46; --ticker-text: #e4e4e7;
-  --tk-critical: #f87171; --tk-warning: #d4d4d8; --tk-safe: #e4e4e7;
-  --overlay: linear-gradient(180deg, rgba(12, 12, 13, 0.78) 0%, rgba(12, 12, 13, 0.62) 40%, rgba(12, 12, 13, 0.88) 100%);
-  --glow: radial-gradient(70% 55% at 50% 0%, rgba(255, 255, 255, 0.07), transparent 70%);
-  --scan-alpha: 0.05; --grid-alpha: 0.05; --grain-alpha: 0.14;
-  --vignette: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+  --bg: #101214; --surface: #17181b; --surface-2: #1e1f23; --line: #2b2b31; --line-2: #4a4650;
+  --accent: #c8c2cf; --accent-rgb: 200 194 207; --accent-soft: #e6dfe4; --accent-ink: #101214;
+  --warn: #f4ff1e; --danger: #ff4f36; --safe: #e6dfe4; --text: #f4f1f6; --muted: #a399a8;
+  --chrome-bg: linear-gradient(180deg, rgba(30, 30, 35, 0.96) 0%, rgba(16, 18, 20, 0.96) 100%);
+  --chrome-border: #4a4650; --chrome-text: #f4f1f6; --chrome-muted: #a399a8;
+  --panel-bg: linear-gradient(160deg, rgba(38, 37, 43, 0.93) 0%, rgba(22, 23, 26, 0.94) 55%, rgba(16, 18, 20, 0.96) 100%);
+  --panel-border: #4a4650; --panel-inner: linear-gradient(180deg, rgba(16, 18, 20, 0.55), rgba(30, 30, 35, 0.55));
+  --field-bg: #101214; --field-border: #59536a;
+  --ticker-bg: #101214; --ticker-border: #2b2b31; --ticker-text: #e6dfe4;
+  --tk-critical: #ff4f36; --tk-warning: #f4ff1e; --tk-safe: #c8c2cf;
+  --overlay: linear-gradient(180deg, rgba(16, 18, 20, 0.86) 0%, rgba(16, 18, 20, 0.7) 40%, rgba(16, 18, 20, 0.9) 100%);
+  --glow: radial-gradient(60% 50% at 50% 0%, rgba(200, 194, 207, 0.1), transparent 70%);
+  --scan-alpha: 0; --grid-alpha: 0.04; --grain-alpha: 0.08;
+  --vignette: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.6) 100%);
 }
-/* весь сайт — в оттенках серого (корень документа: фиксированные элементы не ломаются);
-   глубину дают серые градиенты и жёсткие тени ниже */
-html[data-skin="noir"] { filter: grayscale(1); }
-html[data-skin="noir"] *, html[data-skin="noir"] *::before, html[data-skin="noir"] *::after { border-radius: 0 !important; }
+/* жёсткие прямые формы — только у интерфейса; фото и иконки не трогаем */
+html[data-skin="noir"] .panel, html[data-skin="noir"] .panel-inner, html[data-skin="noir"] .btn, html[data-skin="noir"] .field,
+html[data-skin="noir"] .chip, html[data-skin="noir"] .badge-count, html[data-skin="noir"] .filter-card, html[data-skin="noir"] .tool-card,
+html[data-skin="noir"] .pyramid-config, html[data-skin="noir"] .theme-choice, html[data-skin="noir"] .chrome { border-radius: 2px; }
 html[data-skin="noir"] .chrome { background: var(--chrome-bg); }
-html[data-skin="noir"] .panel { border-width: 2px; border-top-color: #d4d4d8; box-shadow: 8px 8px 0 #3f3f46, 0 22px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08); }
-html[data-skin="noir"] .panel-inner { border-color: #52525b; }
-html[data-skin="noir"] .panel-title {
-  background: linear-gradient(180deg, #ffffff 0%, #d4d4d8 55%, #8e8e96 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
-  letter-spacing: 0.14em; text-shadow: none;
-}
-html[data-skin="noir"] .btn { border-width: 2px; border-color: #71717a; background: linear-gradient(180deg, #2e2e33 0%, #17171a 100%); text-transform: uppercase; letter-spacing: 0.09em; box-shadow: 3px 3px 0 #000; }
-html[data-skin="noir"] .btn:hover { border-color: #f4f4f5; background: linear-gradient(180deg, #3f3f46 0%, #1f1f22 100%); box-shadow: 4px 4px 0 #52525b; }
-html[data-skin="noir"] .btn-primary, html[data-skin="noir"] .btn-active { border-color: #f4f4f5; background: linear-gradient(180deg, #ffffff 0%, #c4c4c8 100%); color: #0c0c0d; box-shadow: 4px 4px 0 #52525b; }
-html[data-skin="noir"] .btn-primary:hover { background: linear-gradient(180deg, #e4e4e7 0%, #a1a1aa 100%); color: #000; }
-html[data-skin="noir"] .btn-danger { border-color: #f87171; color: #fecaca; }
-html[data-skin="noir"] .field { border-width: 2px; background: var(--field-bg); }
-html[data-skin="noir"] .chip, html[data-skin="noir"] .badge-count, html[data-skin="noir"] .filter-card { border-color: #71717a; background: linear-gradient(180deg, #27272a, #131315); color: #f4f4f5; }
-html[data-skin="noir"] .panel-corners::before, html[data-skin="noir"] .panel-corners::after { border-color: #fafafa; opacity: 1; width: 22px; height: 22px; }
-html[data-skin="noir"] .text-accent { color: #fafafa; }
-html[data-skin="noir"] [class*="text-white/"] { color: #d4d4d8; }
-html[data-skin="noir"] .tool-card { border: 2px solid #8e8e96; background: linear-gradient(160deg, #3a3a3f 0%, #1c1c1f 50%, #0c0c0d 100%); box-shadow: 8px 8px 0 #2a2a2e; }
-html[data-skin="noir"] .tool-card:hover { border-color: #fafafa; box-shadow: 10px 10px 0 #52525b; }
-html[data-skin="noir"] .tools-hero { background: linear-gradient(110deg, #4a4a50 0%, #2a2a2e 35%, #141416 70%, #2e2e33 100%); }
+html[data-skin="noir"] .panel { border-width: 1px; border-top: 2px solid #c8c2cf; box-shadow: 6px 6px 0 rgba(200, 194, 207, 0.12), 0 22px 60px rgba(0, 0, 0, 0.5); }
+html[data-skin="noir"] .panel-title { color: #e6dfe4; letter-spacing: 0.12em; text-shadow: none; }
+html[data-skin="noir"] .btn { border-color: #59536a; background: linear-gradient(180deg, #24242a 0%, #17181b 100%); color: #f4f1f6; text-transform: uppercase; letter-spacing: 0.09em; box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8); }
+html[data-skin="noir"] .btn:hover { border-color: #c8c2cf; background: linear-gradient(180deg, #33313a 0%, #1e1f23 100%); box-shadow: 4px 4px 0 rgba(200, 194, 207, 0.25); }
+html[data-skin="noir"] .btn-primary, html[data-skin="noir"] .btn-active { border-color: #c8c2cf; background: linear-gradient(180deg, #e6dfe4 0%, #c8c2cf 100%); color: #101214; box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.8); }
+html[data-skin="noir"] .btn-primary:hover { background: #f4ff1e; border-color: #f4ff1e; color: #101214; }
+html[data-skin="noir"] .btn-danger { border-color: #ff4f36; color: #ff8a77; }
+html[data-skin="noir"] .btn-danger:hover { background: rgba(255, 79, 54, 0.18); }
+html[data-skin="noir"] .field { background: var(--field-bg); }
+html[data-skin="noir"] .field:focus { border-color: #c8c2cf; box-shadow: 0 0 0 2px rgba(200, 194, 207, 0.25); }
+html[data-skin="noir"] .chip, html[data-skin="noir"] .badge-count, html[data-skin="noir"] .filter-card { border-color: #59536a; background: linear-gradient(180deg, #24242a, #17181b); color: #f4f1f6; }
+html[data-skin="noir"] .chip.is-active, html[data-skin="noir"] .filter-card.is-active { border-color: #c8c2cf; background: #c8c2cf; color: #101214; }
+html[data-skin="noir"] .panel-corners::before, html[data-skin="noir"] .panel-corners::after { border-color: #ff4f36; opacity: 1; }
+html[data-skin="noir"] [class*="text-white/"] { color: #d9d3dd; }
+html[data-skin="noir"] .tool-card { border: 1px solid #4a4650; border-top: 2px solid #c8c2cf; background: linear-gradient(160deg, #26252b 0%, #17181b 55%, #101214 100%); box-shadow: 6px 6px 0 rgba(200, 194, 207, 0.1); }
+html[data-skin="noir"] .tool-card:hover { border-color: #c8c2cf; box-shadow: 8px 8px 0 rgba(255, 79, 54, 0.45); }
+html[data-skin="noir"] .tool-badge.is-new, html[data-skin="noir"] .feedback-status.is-new { background: #f4ff1e; color: #101214; }
+html[data-skin="noir"] .tools-hero { background: linear-gradient(115deg, #c8c2cf 0%, #b8b0c0 45%, #a399a8 100%); color: #101214; }
+html[data-skin="noir"] .tools-hero .tools-hero-title, html[data-skin="noir"] .tools-hero .tools-hero-sub, html[data-skin="noir"] .tools-hero .hud-label { color: #101214; text-shadow: none; }
+html[data-skin="noir"] .tools-hero-stats span { border-color: #101214; background: #101214; color: #a399a8; }
+html[data-skin="noir"] .tools-hero-stats b { color: #f4f1f6; }
+html[data-skin="noir"] .tools-preview, html[data-skin="noir"] .tools-preview-marker { background-color: rgba(16, 18, 20, 0.85); }
+html[data-skin="noir"] .cabinet-cover { background: linear-gradient(120deg, rgba(16, 18, 20, 0.5), rgba(200, 194, 207, 0.25)), url("/api/v1/assets/bg/page_bg_raw.jpg") center/cover; opacity: 0.9; }
+html[data-skin="noir"] .cabinet-avatar-wrap { box-shadow: 0 0 0 2px #c8c2cf, 6px 6px 0 rgba(255, 79, 54, 0.6); }
+html[data-skin="noir"] .auth-panel { background: linear-gradient(150deg, rgba(38, 37, 43, 0.95), rgba(16, 18, 20, 0.96)); }
+html[data-skin="noir"] .auth-invite { background: rgba(200, 194, 207, 0.1); }
+html[data-skin="noir"] .pane-toggle.is-on, html[data-skin="noir"] .burger-item:hover, html[data-skin="noir"] .burger-item:focus-visible,
+html[data-skin="noir"] .filter-card:hover, html[data-skin="noir"] .filter-card:focus-visible, html[data-skin="noir"] .recipe-card:hover,
+html[data-skin="noir"] .auth-server:hover:not(:disabled), html[data-skin="noir"] .auth-server:focus-visible { background: rgba(200, 194, 207, 0.14); }
+html[data-skin="noir"] .pyramid-tier.is-current { border-color: #f4ff1e; box-shadow: 0 0 0 1px #f4ff1e; }
+html[data-skin="noir"] .order-note { border-color: #f4ff1e; background: rgba(244, 255, 30, 0.08); }
+html[data-skin="noir"] .order-note-label { color: #f4ff1e; }
 
 /* Нежная — светлая пастель: лаванда, розовый, персик и мята; мягкие градиенты и свечения */
 html[data-skin="soft"] {
@@ -1501,3 +1516,6 @@ html[data-skin="soft"] .auth-server:hover:not(:disabled), html[data-skin="soft"]
 .feedback-unread { border: 1px solid var(--accent); border-radius: 999px; background: rgb(var(--accent-rgb) / 0.14); padding: 0.3rem 0.8rem; color: var(--accent); font-family: var(--font-mono); font-size: 0.75rem; }
 [data-theme="light"] .feedback-cat, [data-theme="light"] .feedback-item { background: var(--surface-2); }
 [data-theme="light"] .feedback-cat b, [data-theme="light"] .feedback-author, [data-theme="light"] .feedback-text { color: inherit; }
+
+/* количество в очереди на карточке калькулятора — цвет темы */
+.queued-badge { border: 1px solid rgb(var(--accent-rgb) / 0.65); border-radius: 3px; background: rgb(var(--accent-rgb) / 0.14); color: var(--accent); font-family: var(--font-mono); font-size: 0.65rem; padding: 0.125rem 0.375rem; }

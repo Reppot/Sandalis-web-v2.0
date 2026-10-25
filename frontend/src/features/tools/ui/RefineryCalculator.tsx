@@ -145,7 +145,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
               return (
                 <button key={recipe.id} type="button" className={`factory-item-card relative min-h-[14.5rem] flex-col justify-start gap-2 p-3 text-center ${queued ? "border-accent" : ""}`} onClick={() => add(recipe)} title={`${locale === "ru" ? recipe.name_en : recipe.name}: ${d.input_per_unit} × ${label("material", d.input)} → 1`}>
                   <span className="factory-add absolute top-2 right-2">＋</span>
-                  {queued ? <span className="absolute top-2 left-2 rounded-sm border border-[#16a34a] bg-[#1e291b] px-1.5 py-0.5 font-mono text-[0.65rem] text-accent">{queued.quantity} {queued.unit === "crate" ? t("unit.crate") : d.unit_label}</span> : null}
+                  {queued ? <span className="queued-badge absolute top-2 left-2">{queued.quantity} {queued.unit === "crate" ? t("unit.crate") : d.unit_label}</span> : null}
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={88} label={rname(recipe)} className="mt-3" />
                   <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{rname(recipe)}</strong>
                   <small className="hud-label text-accent">{recipe.item_class} • {label("refinery_group", recipe.category)}</small>

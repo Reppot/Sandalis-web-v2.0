@@ -246,7 +246,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
               return (
                 <button key={card.name} type="button" className={`factory-item-card relative min-h-[13rem] flex-col justify-start gap-2 p-3 text-center ${queued ? "border-accent" : ""}`} onClick={() => add(card)}>
                   <span className="factory-add absolute top-2 right-2">＋</span>
-                  {queued ? <span className="absolute top-2 left-2 rounded-sm border border-[#16a34a] bg-[#1e291b] px-1.5 py-0.5 font-mono text-[0.65rem] text-accent">{fmt(queued.amount)}</span> : null}
+                  {queued ? <span className="queued-badge absolute top-2 left-2">{fmt(queued.amount)}</span> : null}
                   <ItemIcon sources={[assetUrl(first.icon_url)]} size={72} label={dn(card.name)} className="mt-3" />
                   <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{dn(card.name)}</strong>
                   <small className="block w-full truncate text-[0.7rem] text-muted">{facilityData(first)?.source}</small>

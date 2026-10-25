@@ -196,7 +196,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
               return (
                 <button key={recipe.id} type="button" className={`factory-item-card relative min-h-[14rem] flex-col justify-start gap-2 p-3 text-center ${queued ? "border-accent" : ""}`} onClick={() => setQuantity(recipe, (n) => n + 1)} title={recipe.description ?? undefined}>
                   <span className="factory-add absolute top-2 right-2">＋</span>
-                  {queued ? <span className="absolute top-2 left-2 rounded-sm border border-[#16a34a] bg-[#1e291b] px-1.5 py-0.5 font-mono text-[0.65rem] text-accent">{queued} {t("unit.crate")}</span> : null}
+                  {queued ? <span className="queued-badge absolute top-2 left-2">{queued} {t("unit.crate")}</span> : null}
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={88} label={rname(recipe)} className="mt-3" />
                   <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{rname(recipe)}</strong>
                   <small className="block w-full truncate text-[0.7rem] text-muted">{recipe.item_class ?? label("factory_category", recipe.category)} • x{(facility === "mpf" ? mpfData(recipe)?.amount : undefined) ?? recipe.output_quantity}</small>
