@@ -68,7 +68,8 @@ function toDoc(report: Report, t: Translate, locale: string): ExportDoc {
   const meta = [
     kind && `${t("orderSend.kind")}: ${t(kind.label)}`,
     report.meta.region && `${t("doc.hex")}: ${report.meta.region}`,
-    report.meta.stockpile && `${t("doc.stockpile")}: ${report.meta.stockpile}`,
+    // бункер и завод: в поле склада лежит город (+ уточнение)
+    report.meta.stockpile && `${t(report.meta.type === "bunker" || report.meta.type === "factory" ? "doc.town" : "doc.stockpile")}: ${report.meta.stockpile}`,
   ].filter(Boolean) as string[];
   return {
     title: `SINDARIS • ${report.title}`,
