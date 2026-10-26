@@ -1,14 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Inter_Tight, JetBrains_Mono, Russo_One } from "next/font/google";
 import "@/app/globals.css";
 import { AppProviders } from "@/app/providers";
 import { THEME_INIT_SCRIPT } from "@/shared";
 
-// Inter — текст интерфейса, Inter Tight — заголовки, Russo One — только логотип SINDARIS
-const inter = Inter({ variable: "--font-inter", subsets: ["cyrillic", "latin"], display: "swap" });
-const grotesk = Inter_Tight({ variable: "--font-grotesk", subsets: ["cyrillic", "latin"], display: "swap", weight: ["500", "600", "700"] });
-const display = Russo_One({ variable: "--font-russo", subsets: ["cyrillic", "latin"], display: "swap", weight: "400", preload: false });
-const mono = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["cyrillic", "latin"], display: "swap", weight: ["400", "600"], preload: false });
+// Шрифты лежат в npm-пакетах и попадают в сборку: без запросов к Google Fonts при сборке на Render.
+// Inter — текст интерфейса, Inter Tight — заголовки, JetBrains Mono — коды и числа, Russo One — логотип.
+import "@fontsource-variable/inter";
+import "@fontsource-variable/inter-tight";
+import "@fontsource-variable/jetbrains-mono";
+import "@fontsource/russo-one/cyrillic-400.css";
+import "@fontsource/russo-one/latin-400.css";
 
 // адрес сайта для canonical / sitemap / Open Graph (переопределяется SITE_URL при сборке)
 const SITE_URL = (process.env.SITE_URL || "https://sandalis-web-v2-0.onrender.com").replace(/\/$/, "");
@@ -70,7 +71,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru" data-theme="dark" suppressHydrationWarning className={`${inter.variable} ${grotesk.variable} ${display.variable} ${mono.variable}`}>
+    <html lang="ru" data-theme="dark" suppressHydrationWarning>
       <head>
         {/* тема до первой отрисовки — без мерцания */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />

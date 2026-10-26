@@ -5,6 +5,10 @@
    ============================================================================= */
 
 :root {
+  --font-inter: "Inter Variable";
+  --font-grotesk: "Inter Tight Variable";
+  --font-jetbrains: "JetBrains Mono Variable";
+  --font-russo: "Russo One";
   /* шрифты: Inter — текст интерфейса, Inter Tight — заголовки, Russo One — только логотип */
   --font-sans: var(--font-inter), "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
   --font-heading: var(--font-grotesk), var(--font-inter), "Segoe UI", system-ui, sans-serif;
