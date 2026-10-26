@@ -36,8 +36,8 @@ def client() -> AsyncClient:
     return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")
 
 
-def _mock(mock: respx.MockRouter, maps: list[str]) -> respx.Route:
-    mock.get(f"{ROOT}/war").respond(json={"warNumber": 141})
+def _mock(mock: respx.MockRouter, maps: list[str], war: dict | None = None) -> respx.Route:
+    mock.get(f"{ROOT}/war").respond(json=war or {"warNumber": 141, "winner": "NONE"})
     mock.get(f"{ROOT}/maps").respond(json=maps)
     route = mock.get(f"{ROOT}/maps/DeadLandsHex/dynamic/public").respond(json=DYNAMIC)
     mock.get(f"{ROOT}/maps/DeadLandsHex/static").respond(json=STATIC)
@@ -57,7 +57,7 @@ def test_map_snapshot_keeps_only_planning_buildings(db):
                 assert r.status_code == 200, r.text
                 body = r.json()
                 assert body["war_number"] == 141
-                assert body["unavailable"] == ["lighthouse", "aa_gun"]
+                assert body["phase"] == "conquest" and body["winner"] is None
                 [region] = body["regions"]                     # регион вне раскладки пропущен
                 assert (region["slug"], region["name"], region["col"], region["row"]) == ("deadlands", "Deadlands", 6, 6)
                 kinds = {(i["kind"], i["tier"], i["team"]) for i in region["items"]}
@@ -66,7 +66,10 @@ def test_map_snapshot_keeps_only_planning_buildings(db):
                     ("seaport", None, "wardens"), ("coastal_gun", None, "colonials"), ("runway", 2, "wardens"),
                 }
                 assert next(i for i in region["items"] if i["kind"] == "town_hall")["victory"] is True
-                assert region["labels"] == [{"text": "Abandoned Ward", "x": 0.4, "y": 0.5}]
+                assert region["labels"] == [
+                    {"text": "Abandoned Ward", "x": 0.4, "y": 0.5, "major": True},
+                    {"text": "Biting Tarn", "x": 0.82, "y": 0.7, "major": False},
+                ]
 
                 # снимок суточный: повторный запрос War API не трогает
                 war_api.reset_cache()
@@ -96,5 +99,22 @@ def test_map_keeps_last_snapshot_when_war_api_fails(db):
                 mock.get(f"{ROOT}/war").mock(side_effect=httpx.ConnectError("down"))
                 r = await c.get(f"{API}/world/map", headers=bearer(role=ClanRole.GUEST))
                 assert r.status_code == 502 and r.json()["error"]["code"] == "war_api_unavailable"
+
+    run(main())
+
+
+def test_resistance_shows_only_hexes_and_towns(db):
+    async def main() -> None:
+        war_api.reset_cache()
+        war_map.reset_snapshot()
+        with respx.mock(assert_all_called=False) as mock:
+            _mock(mock, ["DeadLandsHex"], war={"warNumber": 141, "winner": "WARDENS", "resistanceStartTime": 1})
+            async with client() as c:
+                r = await c.get(f"{API}/world/map", headers=bearer(role=ClanRole.GUEST))
+                assert r.status_code == 200, r.text
+                body = r.json()
+                assert (body["phase"], body["winner"]) == ("resistance", "wardens")
+                [region] = body["regions"]
+                assert region["items"] == [] and len(region["labels"]) == 2
 
     run(main())

@@ -54,6 +54,7 @@ class MapLabelRead(BaseModel):
     text: str
     x: float
     y: float
+    major: bool                     # крупный город (Major) или малая отметка
 
 
 class MapRegionRead(BaseModel):
@@ -63,14 +64,15 @@ class MapRegionRead(BaseModel):
     col: int                        # колонка сетки шестиугольников
     row: int                        # полу-ряд
     items: list[MapItemRead]
-    labels: list[MapLabelRead]      # крупные города
+    labels: list[MapLabelRead]      # города и отметки карты
 
 
 class WorldMapRead(BaseModel):
     """Суточный снимок карты войны для «Планирования» (кеш сервера)."""
     war_number: int | None
+    phase: Literal["conquest", "resistance"]   # resistance — между войнами, построек нет
+    winner: Literal["colonials", "wardens"] | None
     updated_at: str
     next_update_at: str
-    unavailable: list[str]          # виды построек, которых нет в War API (маяк, зенитка)
     regions: list[MapRegionRead]
     source: str

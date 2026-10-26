@@ -1,12 +1,12 @@
 import { apiClient } from "@/shared";
 
 /** Виды построек на карте «Планирования»; порядок — порядок фильтров. */
-export const MAP_KINDS = ["town_hall", "relic", "storage", "seaport", "coastal_gun", "lighthouse", "runway", "aa_gun"] as const;
+export const MAP_KINDS = ["town_hall", "relic", "storage", "seaport", "coastal_gun", "runway"] as const;
 export type MapKind = (typeof MAP_KINDS)[number];
 export type Team = "colonials" | "wardens" | "neutral";
 
 export interface MapItem {
-  kind: Exclude<MapKind, "lighthouse" | "aa_gun">;
+  kind: MapKind;
   tier: number | null;
   team: Team;
   /** Доли картинки гекса 0..1. */
@@ -24,15 +24,17 @@ export interface MapRegion {
   col: number;
   row: number;
   items: MapItem[];
-  labels: { text: string; x: number; y: number }[];
+  /** Города (major) и малые отметки карты. */
+  labels: { text: string; x: number; y: number; major: boolean }[];
 }
 
 export interface WorldMap {
   war_number: number | null;
+  /** resistance — между войнами: War API отдаёт другую карту, построек не показываем. */
+  phase: "conquest" | "resistance";
+  winner: "colonials" | "wardens" | null;
   updated_at: string;
   next_update_at: string;
-  /** Виды, которых нет в War API (маяк, зенитка). */
-  unavailable: MapKind[];
   regions: MapRegion[];
   source: string;
 }
@@ -61,8 +63,8 @@ export function iconOf(item: Pick<MapItem, "kind" | "tier">): string {
   return `/api/v1/assets/maps/icons/${name}.webp`;
 }
 
-/** Иконка фильтра (у маяка и зенитки своей нет — берётся значок интерфейса). */
-export const FILTER_ICON: Partial<Record<MapKind, string>> = {
+/** Иконка фильтра. */
+export const FILTER_ICON: Record<MapKind, string> = {
   town_hall: iconOf({ kind: "town_hall", tier: 3 }),
   relic: iconOf({ kind: "relic", tier: 1 }),
   storage: iconOf({ kind: "storage", tier: null }),
