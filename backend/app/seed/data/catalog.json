@@ -1,7 +1,7 @@
 [
  {
   "code": "AAAmmo",
-  "name": "950-70b Anti-Aircraft Shell",
+  "name": "950-70b Зенитный снаряд",
   "english_name": "950-70b Anti-Aircraft Shell",
   "category": "ammo",
   "faction": "neutral",
@@ -28,7 +28,7 @@
  },
  {
   "code": "AircraftAmmo",
-  "name": "20mm",
+  "name": "20мм",
   "english_name": "20mm",
   "category": "ammo",
   "faction": "neutral",
@@ -427,7 +427,7 @@
  },
  {
   "code": "AirSirenT",
-  "name": "Air Raid Siren",
+  "name": "Сирена воздушной тревоги",
   "english_name": "Air Raid Siren",
   "category": "equipment",
   "faction": "neutral",
@@ -453,7 +453,7 @@
  },
  {
   "code": "AluminumA",
-  "name": "Aluminum Alloy",
+  "name": "Алюминиевый сплав",
   "english_name": "Aluminum Alloy",
   "category": "materials",
   "faction": "neutral",
@@ -520,7 +520,7 @@
  },
  {
   "code": "AmmoUniformW",
-  "name": "Specialist's Overcoat",
+  "name": "Шинель специалиста",
   "english_name": "Specialist's Overcoat",
   "category": "uniforms",
   "faction": "warden",
@@ -673,7 +673,7 @@
  },
  {
   "code": "ArmourUniformW",
-  "name": "Gunner's Breastplate",
+  "name": "Стальная кираса",
   "english_name": "Gunner's Breastplate",
   "category": "uniforms",
   "faction": "warden",
@@ -687,7 +687,7 @@
  },
  {
   "code": "AssaultRifleAmmo",
-  "name": "7.92mm",
+  "name": "7.92-мм",
   "english_name": "7.92mm",
   "category": "ammo",
   "faction": "neutral",
@@ -726,7 +726,7 @@
  },
  {
   "code": "AssaultRifleHeavyW",
-  "name": "Booker Storm Rifle Model 838",
+  "name": "Штурмовая винтовка Booker Model 838",
   "english_name": "Booker Storm Rifle Model 838",
   "category": "weapons",
   "faction": "warden",
@@ -740,7 +740,7 @@
  },
  {
   "code": "AssaultRifleW",
-  "name": "Aalto Storm Rifle 24",
+  "name": "Штурмовая винтовка Aalto 24",
   "english_name": "Aalto Storm Rifle 24",
   "category": "weapons",
   "faction": "warden",
@@ -754,7 +754,7 @@
  },
  {
   "code": "ATAmmo",
-  "name": "68mm",
+  "name": "68мм",
   "english_name": "68mm",
   "category": "ammo",
   "faction": "neutral",
@@ -769,7 +769,7 @@
  },
  {
   "code": "ATGrenadeW",
-  "name": "BF5 White Ash Flask Grenade",
+  "name": "Граната BF5 White Ash Flask",
   "english_name": "BF5 White Ash Flask Grenade",
   "category": "ammo",
   "faction": "warden",
@@ -883,7 +883,7 @@
  },
  {
   "code": "ATRifleW",
-  "name": "Neville Anti-Tank Rifle",
+  "name": "Противотанковое ружье Neville",
   "english_name": "Neville Anti-Tank Rifle",
   "category": "weapons",
   "faction": "warden",
@@ -898,7 +898,7 @@
  },
  {
   "code": "ATRPGAmmo",
-  "name": "AP⧸RPG",
+  "name": "Бронебойный/РПГ",
   "english_name": "AP⧸RPG",
   "category": "ammo",
   "faction": "neutral",
@@ -937,7 +937,7 @@
  },
  {
   "code": "ATRPGHeavyW",
-  "name": "Carnyx Anti-Tank Rocket Launcher",
+  "name": "РПГ \"Carnyx\"",
   "english_name": "Carnyx Anti-Tank Rocket Launcher",
   "category": "weapons",
   "faction": "warden",
@@ -951,7 +951,7 @@
  },
  {
   "code": "ATRPGIndirectAmmo",
-  "name": "ARC⧸RPG",
+  "name": "Бронебойный навесной/РПГ",
   "english_name": "ARC⧸RPG",
   "category": "ammo",
   "faction": "neutral",
@@ -977,7 +977,7 @@
  },
  {
   "code": "ATRPGTW",
-  "name": "Mounted Bonesaw MK.3",
+  "name": "Станковый Bonesaw MK.3",
   "english_name": "Mounted Bonesaw MK.3",
   "category": "weapons",
   "faction": "warden",
@@ -1004,7 +1004,7 @@
  },
  {
   "code": "Bandages",
-  "name": "Bandages",
+  "name": "Бинты",
   "english_name": "Bandages",
   "category": "medical",
   "faction": "neutral",
@@ -1043,7 +1043,7 @@
  },
  {
   "code": "BarbedWireMaterials",
-  "name": "Barbed Wire",
+  "name": "Колючая проволока",
   "english_name": "Barbed Wire",
   "category": "materials",
   "faction": "neutral",
@@ -1182,7 +1182,7 @@
  },
  {
   "code": "Binoculars",
-  "name": "Binoculars",
+  "name": "Бинокль",
   "english_name": "Binoculars",
   "category": "equipment",
   "faction": "neutral",
@@ -1197,7 +1197,7 @@
  },
  {
   "code": "BloodPlasma",
-  "name": "Blood Plasma",
+  "name": "Плазма",
   "english_name": "Blood Plasma",
   "category": "medical",
   "faction": "neutral",
@@ -1249,7 +1249,7 @@
  },
  {
   "code": "Cloth",
-  "name": "Basic Materials",
+  "name": "Базовые материалы",
   "english_name": "Basic Materials",
   "category": "materials",
   "faction": "neutral",
@@ -1330,7 +1330,7 @@
  },
  {
   "code": "ConstructionEquipment",
-  "name": "Construction Equipment",
+  "name": "Строительное оборудование",
   "english_name": "Construction Equipment",
   "category": "other",
   "faction": "neutral",
@@ -1384,7 +1384,7 @@
  },
  {
   "code": "Crane",
-  "name": "BMS - Class 2 Mobile Auto-Crane",
+  "name": "Мобильный автокран БМС 2 класса",
   "english_name": "BMS - Class 2 Mobile Auto-Crane",
   "category": "vehicles",
   "faction": "neutral",
@@ -1423,7 +1423,7 @@
  },
  {
   "code": "DemolitionRocketAmmo",
-  "name": "Shatter Missile",
+  "name": "Разрушающая ракета",
   "english_name": "Shatter Missile",
   "category": "ammo",
   "faction": "neutral",
@@ -1485,7 +1485,7 @@
  },
  {
   "code": "Diesel",
-  "name": "Diesel",
+  "name": "Дизель",
   "english_name": "Diesel",
   "category": "other",
   "faction": "neutral",
@@ -1547,7 +1547,7 @@
  },
  {
   "code": "EmplacedATW",
-  "name": "Leary Shellbore 68mm",
+  "name": "Leary Shellbore 68-мм",
   "english_name": "Leary Shellbore 68mm",
   "category": "structures",
   "faction": "warden",
@@ -1633,7 +1633,7 @@
  },
  {
   "code": "EmplacedLightArtilleryW",
-  "name": "Huber Lariat 120mm",
+  "name": "Huber Lariat 120мм",
   "english_name": "Huber Lariat 120mm",
   "category": "structures",
   "faction": "warden",
@@ -1671,7 +1671,7 @@
  },
  {
   "code": "EngineerUniformW",
-  "name": "Sapper Gear",
+  "name": "Сапёрное снаряжение",
   "english_name": "Sapper Gear",
   "category": "uniforms",
   "faction": "warden",
@@ -1686,7 +1686,7 @@
  },
  {
   "code": "Explosive",
-  "name": "Explosive Powder",
+  "name": "Порох",
   "english_name": "Explosive Powder",
   "category": "materials",
   "faction": "neutral",
@@ -1713,7 +1713,7 @@
  },
  {
   "code": "ExplosiveTripod",
-  "name": "Havoc Charge",
+  "name": "Хавок Заряд",
   "english_name": "Havoc Charge",
   "category": "weapons",
   "faction": "neutral",
@@ -1899,7 +1899,7 @@
  },
  {
   "code": "FacilityOil1",
-  "name": "Heavy Oil",
+  "name": "Тяжелое топливо",
   "english_name": "Heavy Oil",
   "category": "materials",
   "faction": "neutral",
@@ -1992,7 +1992,7 @@
  },
  {
   "code": "FieldATDamageW",
-  "name": "Balfour Rampart 68mm",
+  "name": "Balfour Rampart 68-мм",
   "english_name": "Balfour Rampart 68mm",
   "category": "vehicles",
   "faction": "warden",
@@ -2006,7 +2006,7 @@
  },
  {
   "code": "FieldATW",
-  "name": "Collins Cannon 68mm",
+  "name": "Collins орудие 68-мм",
   "english_name": "Collins Cannon 68mm",
   "category": "vehicles",
   "faction": "warden",
@@ -2085,7 +2085,7 @@
  },
  {
   "code": "FieldMortarW",
-  "name": "Balfour Falconer 250mm",
+  "name": "Balfour Falconer 250-мм",
   "english_name": "Balfour Falconer 250mm",
   "category": "vehicles",
   "faction": "warden",
@@ -2123,7 +2123,7 @@
  },
  {
   "code": "FirstAidKit",
-  "name": "First Aid Kit",
+  "name": "Набор Первой Помощи",
   "english_name": "First Aid Kit",
   "category": "medical",
   "faction": "neutral",
@@ -2137,7 +2137,7 @@
  },
  {
   "code": "FlameAmmo",
-  "name": "Flame Ammo",
+  "name": "Огнемётное топливо",
   "english_name": "Flame Ammo",
   "category": "ammo",
   "faction": "neutral",
@@ -2152,7 +2152,7 @@
  },
  {
   "code": "FlameBackpackC",
-  "name": "“Molten Wind” v.II Ammo",
+  "name": "Топливо “Molten Wind” v.II",
   "english_name": "“Molten Wind” v.II Ammo",
   "category": "ammo",
   "faction": "colonial",
@@ -2166,7 +2166,7 @@
  },
  {
   "code": "FlameBackpackW",
-  "name": "Willow's Bane Ammo",
+  "name": "Топливо для Willow's Bane",
   "english_name": "Willow's Bane Ammo",
   "category": "ammo",
   "faction": "warden",
@@ -2205,7 +2205,7 @@
  },
  {
   "code": "FlatbedTruck",
-  "name": "BMS - Packmule Flatbed",
+  "name": "Бортовой грузовик BMS - Packmule",
   "english_name": "BMS - Packmule Flatbed",
   "category": "vehicles",
   "faction": "neutral",
@@ -2330,7 +2330,7 @@
  },
  {
   "code": "GasMask",
-  "name": "Gas Mask",
+  "name": "Противогаз",
   "english_name": "Gas Mask",
   "category": "equipment",
   "faction": "neutral",
@@ -2345,7 +2345,7 @@
  },
  {
   "code": "GasMaskFilter",
-  "name": "Gas Mask Filter",
+  "name": "Фильтр для противогаза",
   "english_name": "Gas Mask Filter",
   "category": "equipment",
   "faction": "neutral",
@@ -2359,7 +2359,7 @@
  },
  {
   "code": "GreenAsh",
-  "name": "Green Ash Grenade",
+  "name": "Газовая граната",
   "english_name": "Green Ash Grenade",
   "category": "ammo",
   "faction": "neutral",
@@ -2374,7 +2374,7 @@
  },
  {
   "code": "GrenadeAdapter",
-  "name": "The Ospreay",
+  "name": "Подствольный гранатомёт",
   "english_name": "The Ospreay",
   "category": "ammo",
   "faction": "neutral",
@@ -2388,7 +2388,7 @@
  },
  {
   "code": "GrenadeC",
-  "name": "Bomastone Grenade",
+  "name": "Граната Bomastone",
   "english_name": "Bomastone Grenade",
   "category": "ammo",
   "faction": "colonial",
@@ -2414,7 +2414,7 @@
  },
  {
   "code": "GrenadeLauncherTC",
-  "name": "Mounted Fissura gd.I",
+  "name": "Станковый Fissura gd.I",
   "english_name": "Mounted Fissura gd.I",
   "category": "ammo",
   "faction": "colonial",
@@ -2440,7 +2440,7 @@
  },
  {
   "code": "GrenadeW",
-  "name": "A3 Harpa Fragmentation Grenade",
+  "name": "Осколочная граната A3 Harpa",
   "english_name": "A3 Harpa Fragmentation Grenade",
   "category": "ammo",
   "faction": "warden",
@@ -2455,7 +2455,7 @@
  },
  {
   "code": "GroundMaterials",
-  "name": "Gravel",
+  "name": "Гравий",
   "english_name": "Gravel",
   "category": "ammo",
   "faction": "neutral",
@@ -2592,7 +2592,7 @@
  },
  {
   "code": "HalfTrackW",
-  "name": "Niska Mk. I Gun Motor Carriage",
+  "name": "Полугусеничный Бронетранспортер Niska Mk. I",
   "english_name": "Niska Mk. I Gun Motor Carriage",
   "category": "vehicles",
   "faction": "warden",
@@ -2619,7 +2619,7 @@
  },
  {
   "code": "HeavyArtilleryAmmo",
-  "name": "150mm",
+  "name": "150-мм",
   "english_name": "150mm",
   "category": "ammo",
   "faction": "neutral",
@@ -2634,7 +2634,7 @@
  },
  {
   "code": "HeavyExplosive",
-  "name": "Heavy Explosive Powder",
+  "name": "Тяжёлый порох",
   "english_name": "Heavy Explosive Powder",
   "category": "materials",
   "faction": "neutral",
@@ -2703,7 +2703,7 @@
  },
  {
   "code": "HERocketAmmo",
-  "name": "3C-High Explosive Rocket",
+  "name": "3C-Фугасная ракета",
   "english_name": "3C-High Explosive Rocket",
   "category": "ammo",
   "faction": "neutral",
@@ -2987,7 +2987,7 @@
  },
  {
   "code": "LightAAAmmo",
-  "name": "Absol Anti-Aircraft Rounds",
+  "name": "Зенитный снаряд “Absol”",
   "english_name": "Absol Anti-Aircraft Rounds",
   "category": "ammo",
   "faction": "neutral",
@@ -3001,7 +3001,7 @@
  },
  {
   "code": "LightArtilleryAmmo",
-  "name": "120mm",
+  "name": "120-мм",
   "english_name": "120mm",
   "category": "ammo",
   "faction": "neutral",
@@ -3078,7 +3078,7 @@
  },
  {
   "code": "LightTankAmmo",
-  "name": "40mm",
+  "name": "40-мм",
   "english_name": "40mm",
   "category": "ammo",
   "faction": "neutral",
@@ -3180,7 +3180,7 @@
  },
  {
   "code": "LiquidContainer",
-  "name": "Liquid Container",
+  "name": "Жидкостный контейнер",
   "english_name": "Liquid Container",
   "category": "structures",
   "faction": "neutral",
@@ -3194,7 +3194,7 @@
  },
  {
   "code": "ListeningKit",
-  "name": "Listening Kit",
+  "name": "Набор для прослушивания",
   "english_name": "Listening Kit",
   "category": "equipment",
   "faction": "neutral",
@@ -3244,7 +3244,7 @@
  },
  {
   "code": "MaintenanceSupplies",
-  "name": "Maintenance Supplies",
+  "name": "Припасы Обслуживания",
   "english_name": "Maintenance Supplies",
   "category": "materials",
   "faction": "neutral",
@@ -3259,7 +3259,7 @@
  },
  {
   "code": "MaterialPlatform",
-  "name": "Material Pallet",
+  "name": "Поддон для материалов",
   "english_name": "Material Pallet",
   "category": "structures",
   "faction": "neutral",
@@ -3309,7 +3309,7 @@
  },
  {
   "code": "MedicUniformW",
-  "name": "Physician's Jacket",
+  "name": "Куртка врача",
   "english_name": "Physician's Jacket",
   "category": "uniforms",
   "faction": "warden",
@@ -3522,7 +3522,7 @@
  },
  {
   "code": "MetalBeamMaterials",
-  "name": "Metal Beam",
+  "name": "Металлическая балка",
   "english_name": "Metal Beam",
   "category": "materials",
   "faction": "neutral",
@@ -3537,7 +3537,7 @@
  },
  {
   "code": "MGAmmo",
-  "name": "12.7mm",
+  "name": "12.7-мм",
   "english_name": "12.7mm",
   "category": "ammo",
   "faction": "neutral",
@@ -3614,7 +3614,7 @@
  },
  {
   "code": "MiniTankAmmo",
-  "name": "30mm",
+  "name": "30мм",
   "english_name": "30mm",
   "category": "ammo",
   "faction": "neutral",
@@ -3629,7 +3629,7 @@
  },
  {
   "code": "MiniTorpedoAmmo",
-  "name": "Quillback Torpedo",
+  "name": "Торпеда \"Quillback\"",
   "english_name": "Quillback Torpedo",
   "category": "ammo",
   "faction": "neutral",
@@ -3644,7 +3644,7 @@
  },
  {
   "code": "Mortar",
-  "name": "Cremari Mortar",
+  "name": "Миномёт Cremari",
   "english_name": "Cremari Mortar",
   "category": "weapons",
   "faction": "neutral",
@@ -3659,7 +3659,7 @@
  },
  {
   "code": "MortarAmmo",
-  "name": "Mortar Shell",
+  "name": "Минометный Снаряд",
   "english_name": "Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
@@ -3674,7 +3674,7 @@
  },
  {
   "code": "MortarAmmoFL",
-  "name": "Flare Mortar Shell",
+  "name": "Осветительный Минометный Снаряд",
   "english_name": "Flare Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
@@ -3689,7 +3689,7 @@
  },
  {
   "code": "MortarAmmoFlame",
-  "name": "Incendiary Mortar Shell",
+  "name": "Зажигательный минометный снаряд",
   "english_name": "Incendiary Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
@@ -3704,7 +3704,7 @@
  },
  {
   "code": "MortarAmmoSH",
-  "name": "Shrapnel Mortar Shell",
+  "name": "Осколочный минометный снаряд",
   "english_name": "Shrapnel Mortar Shell",
   "category": "ammo",
   "faction": "neutral",
@@ -3875,7 +3875,7 @@
  },
  {
   "code": "ParatrooperBackpack",
-  "name": "Paratrooper's Ruck",
+  "name": "Рюкзак Десантника",
   "english_name": "Paratrooper's Ruck",
   "category": "equipment",
   "faction": "neutral",
@@ -3913,7 +3913,7 @@
  },
  {
   "code": "Petrol",
-  "name": "Petrol",
+  "name": "Бензин",
   "english_name": "Petrol",
   "category": "other",
   "faction": "neutral",
@@ -3927,7 +3927,7 @@
  },
  {
   "code": "PilotMask",
-  "name": "Flight Mask",
+  "name": "Маска пилота",
   "english_name": "Flight Mask",
   "category": "equipment",
   "faction": "neutral",
@@ -3977,7 +3977,7 @@
  },
  {
   "code": "PistolAmmo",
-  "name": "8mm",
+  "name": "8-мм",
   "english_name": "8mm",
   "category": "ammo",
   "faction": "neutral",
@@ -4040,7 +4040,7 @@
  },
  {
   "code": "Radio",
-  "name": "Radio",
+  "name": "Рация",
   "english_name": "Radio",
   "category": "equipment",
   "faction": "neutral",
@@ -4067,7 +4067,7 @@
  },
  {
   "code": "RadioBackpack",
-  "name": "Radio Backpack",
+  "name": "Радиорюкзак",
   "english_name": "Radio Backpack",
   "category": "equipment",
   "faction": "neutral",
@@ -4145,7 +4145,7 @@
  },
  {
   "code": "ResourceContainer",
-  "name": "Resource Container",
+  "name": "Контейнер для ресурсов",
   "english_name": "Resource Container",
   "category": "structures",
   "faction": "neutral",
@@ -4174,7 +4174,7 @@
  },
  {
   "code": "RevolverAmmo",
-  "name": ".44 Mag",
+  "name": ".44 Магнум",
   "english_name": ".44 Mag",
   "category": "ammo",
   "faction": "neutral",
@@ -4188,7 +4188,7 @@
  },
  {
   "code": "RifleAmmo",
-  "name": "7.62mm",
+  "name": "7.62-мм",
   "english_name": "7.62mm",
   "category": "ammo",
   "faction": "neutral",
@@ -4202,7 +4202,7 @@
  },
  {
   "code": "RifleAutomaticC",
-  "name": "Catena rt.IV Auto-Rifle",
+  "name": "Автоматическая винтовка Catena rt.IV",
   "english_name": "Catena rt.IV Auto-Rifle",
   "category": "weapons",
   "faction": "colonial",
@@ -4216,7 +4216,7 @@
  },
  {
   "code": "RifleAutomaticW",
-  "name": "Sampo Auto-Rifle 77",
+  "name": "Автоматическая винтовка Sampo 77",
   "english_name": "Sampo Auto-Rifle 77",
   "category": "weapons",
   "faction": "warden",
@@ -4231,7 +4231,7 @@
  },
  {
   "code": "RifleC",
-  "name": "Argenti r.II Rifle",
+  "name": "Винтовка Argenti r.II",
   "english_name": "Argenti r.II Rifle",
   "category": "weapons",
   "faction": "colonial",
@@ -4257,7 +4257,7 @@
  },
  {
   "code": "RifleHeavyW",
-  "name": "The Hangman 757",
+  "name": "Хангман 757",
   "english_name": "The Hangman 757",
   "category": "weapons",
   "faction": "warden",
@@ -4413,7 +4413,7 @@
  },
  {
   "code": "RpgAmmo",
-  "name": "RPG",
+  "name": "РПГ",
   "english_name": "RPG",
   "category": "ammo",
   "faction": "neutral",
@@ -4454,7 +4454,7 @@
  },
  {
   "code": "SandbagMaterials",
-  "name": "Sandbag",
+  "name": "Мешок с песком",
   "english_name": "Sandbag",
   "category": "materials",
   "faction": "neutral",
@@ -4469,7 +4469,7 @@
  },
  {
   "code": "SatchelChargeT",
-  "name": "Havoc Charge Detonator",
+  "name": "Детонатор Хавок Заряда",
   "english_name": "Havoc Charge Detonator",
   "category": "other",
   "faction": "neutral",
@@ -4547,7 +4547,7 @@
  },
  {
   "code": "ScoutUniformW",
-  "name": "Outrider's Mantle",
+  "name": "Дозорная мантия",
   "english_name": "Outrider's Mantle",
   "category": "uniforms",
   "faction": "warden",
@@ -4652,7 +4652,7 @@
  },
  {
   "code": "ShipPart2",
-  "name": "Naval Shell Plating",
+  "name": "Корабельная обшивка корпуса",
   "english_name": "Naval Shell Plating",
   "category": "structures",
   "faction": "neutral",
@@ -4680,7 +4680,7 @@
  },
  {
   "code": "ShippingContainer",
-  "name": "Shipping Container",
+  "name": "Грузовой контейнер",
   "english_name": "Shipping Container",
   "category": "structures",
   "faction": "neutral",
@@ -4694,7 +4694,7 @@
  },
  {
   "code": "ShotgunAmmo",
-  "name": "Buckshot",
+  "name": "Дробь",
   "english_name": "Buckshot",
   "category": "ammo",
   "faction": "neutral",
@@ -4735,7 +4735,7 @@
  },
  {
   "code": "Shovel",
-  "name": "Shovel",
+  "name": "Лопата",
   "english_name": "Shovel",
   "category": "equipment",
   "faction": "neutral",
@@ -4750,7 +4750,7 @@
  },
  {
   "code": "SledgeHammer",
-  "name": "Sledge Hammer",
+  "name": "Кувалда",
   "english_name": "Sledge Hammer",
   "category": "equipment",
   "faction": "neutral",
@@ -4765,7 +4765,7 @@
  },
  {
   "code": "SMGAmmo",
-  "name": "9mm",
+  "name": "9-мм",
   "english_name": "9mm",
   "category": "ammo",
   "faction": "neutral",
@@ -4804,7 +4804,7 @@
  },
  {
   "code": "SMGHeavyW",
-  "name": "No.1 “The Liar” Submachine Gun",
+  "name": "Пистолет-пулемет No.1 “The Liar”",
   "english_name": "No.1 “The Liar” Submachine Gun",
   "category": "weapons",
   "faction": "warden",
@@ -4820,7 +4820,7 @@
  },
  {
   "code": "SMGW",
-  "name": "Fiddler Submachine Gun Model 868",
+  "name": "Пистолет-пулемет Fiddler Model 868",
   "english_name": "Fiddler Submachine Gun Model 868",
   "category": "weapons",
   "faction": "warden",
@@ -4835,7 +4835,7 @@
  },
  {
   "code": "SmokeGrenade",
-  "name": "PT-815 Smoke Grenade",
+  "name": "Дымовая граната PT-815",
   "english_name": "PT-815 Smoke Grenade",
   "category": "ammo",
   "faction": "neutral",
@@ -4886,7 +4886,7 @@
  },
  {
   "code": "SnowUniformW",
-  "name": "Caoivish Parka",
+  "name": "Парка Caoivish",
   "english_name": "Caoivish Parka",
   "category": "uniforms",
   "faction": "warden",
@@ -4901,7 +4901,7 @@
  },
  {
   "code": "SoldierSupplies",
-  "name": "Soldier Supplies",
+  "name": "Солдатское снаряжение",
   "english_name": "Soldier Supplies",
   "category": "medical",
   "faction": "neutral",
@@ -4940,7 +4940,7 @@
  },
  {
   "code": "StickyBomb",
-  "name": "Anti-Tank Sticky Bomb",
+  "name": "Противотанковая липкая бомба",
   "english_name": "Anti-Tank Sticky Bomb",
   "category": "weapons",
   "faction": "neutral",
@@ -5055,7 +5055,7 @@
  },
  {
   "code": "TanketteMultiC",
-  "name": "T13 “Deioneus” Rocket Battery",
+  "name": "Реактивный миномет T13 “Deioneus”",
   "english_name": "T13 “Deioneus” Rocket Battery",
   "category": "vehicles",
   "faction": "colonial",
@@ -5105,7 +5105,7 @@
  },
  {
   "code": "TankUniformW",
-  "name": "Padded Boiler Suit",
+  "name": "Стеганный Комбинезон",
   "english_name": "Padded Boiler Suit",
   "category": "uniforms",
   "faction": "warden",
@@ -5187,7 +5187,7 @@
  },
  {
   "code": "TraumaKit",
-  "name": "Trauma Kit",
+  "name": "Реанимационный набор",
   "english_name": "Trauma Kit",
   "category": "medical",
   "faction": "neutral",
@@ -5202,7 +5202,7 @@
  },
  {
   "code": "Tripod",
-  "name": "Tripod",
+  "name": "Тренога",
   "english_name": "Tripod",
   "category": "equipment",
   "faction": "neutral",
@@ -5328,7 +5328,7 @@
  },
  {
   "code": "TruckResourceW",
-  "name": "Dunne Loadlugger 3c",
+  "name": "Самосвал Dunne Loadlugger 3c",
   "english_name": "Dunne Loadlugger 3c",
   "category": "vehicles",
   "faction": "warden",
@@ -5372,7 +5372,7 @@
  },
  {
   "code": "Water",
-  "name": "Water",
+  "name": "Вода",
   "english_name": "Water",
   "category": "materials",
   "faction": "neutral",
@@ -5387,7 +5387,7 @@
  },
  {
   "code": "WaterBucket",
-  "name": "Water Bucket",
+  "name": "Ведро для воды",
   "english_name": "Water Bucket",
   "category": "materials",
   "faction": "neutral",
@@ -5425,7 +5425,7 @@
  },
  {
   "code": "WindsockT",
-  "name": "Wind Sock",
+  "name": "Ветроуказатель",
   "english_name": "Wind Sock",
   "category": "other",
   "faction": "neutral",
@@ -5439,7 +5439,7 @@
  },
  {
   "code": "Wood",
-  "name": "Refined Materials",
+  "name": "Рафинированные материалы",
   "english_name": "Refined Materials",
   "category": "materials",
   "faction": "neutral",
@@ -5465,7 +5465,7 @@
  },
  {
   "code": "WorkWrench",
-  "name": "Wrench",
+  "name": "Гаечный ключ",
   "english_name": "Wrench",
   "category": "equipment",
   "faction": "neutral",

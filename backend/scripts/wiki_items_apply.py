@@ -5,8 +5,8 @@
 
 Правила:
 * ключ — игровой codename (= catalog_items.code);
-* name и english_name = название с вики (интерфейс показывает английские названия);
-  прежнее русское название уходит в aliases — поиск и распознавание отчётов его понимают;
+* english_name = название с вики; name — русское название из русского клиента игры,
+  если оно есть (синхронизация его не трогает), иначе тоже название с вики;
 * иконка = файл с вики, static/items/<code>.png (скачивается, только если изменилась);
 * новые предметы (с категорией на вики, не «Lore») и техника, которая хранится на складах
   (без поездов, кораблей класса Large и реликтовой техники), добавляются;
@@ -111,9 +111,9 @@ def main() -> None:
             manual = MANUAL.get(item["code"])
             if manual:
                 old = item.get("name") or ""
-                if CYRILLIC.search(old) and old not in item["aliases"]:
-                    item["aliases"] = [*item["aliases"], old]
-                item["name"] = item["english_name"] = manual
+                item["english_name"] = manual
+                if not CYRILLIC.search(old):
+                    item["name"] = manual
             if not item.get("needs_review"):
                 item["needs_review"] = True
                 stats["review"] += 1
@@ -122,11 +122,12 @@ def main() -> None:
         item["needs_review"] = False      # подтверждено вики
         name = row["name"].strip()
         old = item.get("name") or ""
-        if old and old != name and CYRILLIC.search(old) and old not in item["aliases"]:
-            item["aliases"] = [*item["aliases"], old]
-        if item.get("english_name") != name or item.get("name") != name:
+        if item.get("english_name") != name:
             stats["renamed"] += 1
-        item["name"] = item["english_name"] = name
+        item["english_name"] = name
+        # русское название (как в русском клиенте игры) сохраняется
+        if not CYRILLIC.search(old):
+            item["name"] = name
 
         url = image_url(row)
         if url:
@@ -144,14 +145,18 @@ def main() -> None:
     names = {c["code"]: c for c in catalog}
     by_name = {(c["english_name"] or "").lower(): c for c in catalog}
     for r in recipes:
+        # русское название рецепта (name) сохраняется; name_en — с вики
+        keep_ru = CYRILLIC.search(r.get("name") or "")
         if r["kind"] != "factory":
-            r["name"] = r.get("name_en") or r["name"]
+            if not keep_ru:
+                r["name"] = r.get("name_en") or r["name"]
             continue
         item = names.get(r.get("item_code") or "") or by_name.get((r.get("name_en") or "").lower())
         if item:
-            r["name"] = r["name_en"] = item["english_name"]
+            r["name_en"] = item["english_name"]
+            r["name"] = r["name"] if keep_ru else (item["name"] if CYRILLIC.search(item["name"] or "") else item["english_name"])
             r["icon_url"] = item["icon_url"] or r.get("icon_url")
-        else:
+        elif not keep_ru:
             r["name"] = r.get("name_en") or r["name"]
 
     dump(CATALOG, sorted(catalog, key=lambda c: c["code"].lower()))

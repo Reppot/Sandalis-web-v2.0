@@ -120,6 +120,29 @@ def ensure_icon(entry: str | None) -> str | None:
     return f"/api/v1/assets/items/facilities/{filename}"
 
 
+def keep_russian_names(out: list[dict]) -> None:
+    """Русские названия (data.name_ru у рецепта и входов) не приходят с вики — берём их
+    из прежнего файла и из каталога (name предмета на русском), чтобы синхронизация их не стирала."""
+    ru: dict[str, str] = {}
+    if OUT.exists():
+        for x in json.loads(OUT.read_text(encoding="utf-8")):
+            if x.get("data", {}).get("name_ru"):
+                ru.setdefault(x["name"], x["data"]["name_ru"])
+            for p in x.get("data", {}).get("inputs", []):
+                if p.get("name_ru"):
+                    ru.setdefault(p["name"], p["name_ru"])
+    cyr = re.compile(r"[А-Яа-яЁё]")
+    for c in json.loads(CATALOG.read_text(encoding="utf-8")):
+        if c.get("english_name") and cyr.search(c.get("name") or ""):
+            ru.setdefault(c["english_name"], c["name"])
+    for x in out:
+        if x["name"] in ru:
+            x["data"]["name_ru"] = ru[x["name"]]
+        for p in x["data"].get("inputs", []):
+            if p["name"] in ru:
+                p["name_ru"] = ru[p["name"]]
+
+
 def main() -> None:
     catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
     icon_entries = building_icons()
@@ -188,6 +211,7 @@ def main() -> None:
             "sort": len(out),
         })
 
+    keep_russian_names(out)
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     sources = sorted({x["data"]["source"] for x in out})
     print(f"facility recipes: {len(out)}, outputs: {len({x['name'] for x in out})}, sources: {len(sources)}", file=sys.stderr)

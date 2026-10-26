@@ -39,7 +39,7 @@
  {
   "id": "factory-booker-storm-rifle-model-838",
   "kind": "factory",
-  "name": "Booker Storm Rifle Model 838",
+  "name": "Штурмовая винтовка Booker Model 838",
   "name_en": "Booker Storm Rifle Model 838",
   "item_code": "AssaultRifleHeavyW",
   "category": "small_arms",
@@ -76,7 +76,7 @@
  {
   "id": "factory-aalto-storm-rifle-24",
   "kind": "factory",
-  "name": "Aalto Storm Rifle 24",
+  "name": "Штурмовая винтовка Aalto 24",
   "name_en": "Aalto Storm Rifle 24",
   "item_code": "AssaultRifleW",
   "category": "small_arms",
@@ -113,7 +113,7 @@
  {
   "id": "factory-7-92mm",
   "kind": "factory",
-  "name": "7.92mm",
+  "name": "7.92-мм",
   "name_en": "7.92mm",
   "item_code": "AssaultRifleAmmo",
   "category": "small_arms",
@@ -262,7 +262,7 @@
  {
   "id": "factory-a3-harpa-fragmentation-grenade",
   "kind": "factory",
-  "name": "A3 Harpa Fragmentation Grenade",
+  "name": "Осколочная граната A3 Harpa",
   "name_en": "A3 Harpa Fragmentation Grenade",
   "item_code": "GrenadeW",
   "category": "small_arms",
@@ -338,7 +338,7 @@
  {
   "id": "factory-bomastone-grenade",
   "kind": "factory",
-  "name": "Bomastone Grenade",
+  "name": "Граната Bomastone",
   "name_en": "Bomastone Grenade",
   "item_code": "GrenadeC",
   "category": "small_arms",
@@ -377,7 +377,7 @@
  {
   "id": "factory-8mm",
   "kind": "factory",
-  "name": "8mm",
+  "name": "8-мм",
   "name_en": "8mm",
   "item_code": "PistolAmmo",
   "category": "small_arms",
@@ -453,7 +453,7 @@
  {
   "id": "factory-the-hangman-757",
   "kind": "factory",
-  "name": "The Hangman 757",
+  "name": "Хангман 757",
   "name_en": "The Hangman 757",
   "item_code": "RifleHeavyW",
   "category": "small_arms",
@@ -490,7 +490,7 @@
  {
   "id": "factory-44",
   "kind": "factory",
-  "name": ".44 Mag",
+  "name": ".44 Магнум",
   "name_en": ".44 Mag",
   "item_code": "RevolverAmmo",
   "category": "small_arms",
@@ -528,7 +528,7 @@
  {
   "id": "factory-catena-rt-iv-auto-rifle",
   "kind": "factory",
-  "name": "Catena rt.IV Auto-Rifle",
+  "name": "Автоматическая винтовка Catena rt.IV",
   "name_en": "Catena rt.IV Auto-Rifle",
   "item_code": "RifleAutomaticC",
   "category": "small_arms",
@@ -565,7 +565,7 @@
  {
   "id": "factory-argenti-r-ii-rifle",
   "kind": "factory",
-  "name": "Argenti r.II Rifle",
+  "name": "Винтовка Argenti r.II",
   "name_en": "Argenti r.II Rifle",
   "item_code": "RifleC",
   "category": "small_arms",
@@ -742,7 +742,7 @@
  {
   "id": "factory-sampo-auto-rifle-77",
   "kind": "factory",
-  "name": "Sampo Auto-Rifle 77",
+  "name": "Автоматическая винтовка Sampo 77",
   "name_en": "Sampo Auto-Rifle 77",
   "item_code": "RifleAutomaticW",
   "category": "small_arms",
@@ -956,7 +956,7 @@
  {
   "id": "factory-7-62mm",
   "kind": "factory",
-  "name": "7.62mm",
+  "name": "7.62-мм",
   "name_en": "7.62mm",
   "item_code": "RifleAmmo",
   "category": "small_arms",
@@ -1068,7 +1068,7 @@
  {
   "id": "factory-buckshot",
   "kind": "factory",
-  "name": "Buckshot",
+  "name": "Дробь",
   "name_en": "Buckshot",
   "item_code": "ShotgunAmmo",
   "category": "small_arms",
@@ -1106,7 +1106,7 @@
  {
   "id": "factory-no-1-the-liar-submachinegun",
   "kind": "factory",
-  "name": "No.1 “The Liar” Submachine Gun",
+  "name": "Пистолет-пулемет No.1 “The Liar”",
   "name_en": "No.1 “The Liar” Submachine Gun",
   "item_code": "SMGHeavyW",
   "category": "small_arms",
@@ -1143,7 +1143,7 @@
  {
   "id": "factory-fiddler-submachine-gun-model-868",
   "kind": "factory",
-  "name": "Fiddler Submachine Gun Model 868",
+  "name": "Пистолет-пулемет Fiddler Model 868",
   "name_en": "Fiddler Submachine Gun Model 868",
   "item_code": "SMGW",
   "category": "small_arms",
@@ -1254,7 +1254,7 @@
  {
   "id": "factory-9mm-smg",
   "kind": "factory",
-  "name": "9mm",
+  "name": "9-мм",
   "name_en": "9mm",
   "item_code": "SMGAmmo",
   "category": "small_arms",
@@ -1292,7 +1292,7 @@
  {
   "id": "factory-pt-815-smoke-grenade",
   "kind": "factory",
-  "name": "PT-815 Smoke Grenade",
+  "name": "Дымовая граната PT-815",
   "name_en": "PT-815 Smoke Grenade",
   "item_code": "SmokeGrenade",
   "category": "small_arms",
@@ -1330,7 +1330,7 @@
  {
   "id": "factory-green-ash-grenade",
   "kind": "factory",
-  "name": "Green Ash Grenade",
+  "name": "Газовая граната",
   "name_en": "Green Ash Grenade",
   "item_code": "GreenAsh",
   "category": "small_arms",
@@ -1368,7 +1368,7 @@
  {
   "id": "factory-12-7mm",
   "kind": "factory",
-  "name": "12.7mm",
+  "name": "12.7-мм",
   "name_en": "12.7mm",
   "item_code": "MGAmmo",
   "category": "small_arms",
@@ -1445,7 +1445,7 @@
  {
   "id": "factory-135-neville-anti-tank-rifle",
   "kind": "factory",
-  "name": "Neville Anti-Tank Rifle",
+  "name": "Противотанковое ружье Neville",
   "name_en": "Neville Anti-Tank Rifle",
   "item_code": "ATRifleW",
   "category": "heavy_arms",
@@ -1559,7 +1559,7 @@
  {
   "id": "factory-carnyx-anti-tank-rocket-launcher",
   "kind": "factory",
-  "name": "Carnyx Anti-Tank Rocket Launcher",
+  "name": "РПГ \"Carnyx\"",
   "name_en": "Carnyx Anti-Tank Rocket Launcher",
   "item_code": "ATRPGHeavyW",
   "category": "heavy_arms",
@@ -1637,7 +1637,7 @@
  {
   "id": "factory-ap-rpg",
   "kind": "factory",
-  "name": "AP⧸RPG",
+  "name": "Бронебойный/РПГ",
   "name_en": "AP⧸RPG",
   "item_code": "ATRPGAmmo",
   "category": "heavy_arms",
@@ -1677,7 +1677,7 @@
  {
   "id": "factory-mounted-bonesaw-mk-3",
   "kind": "factory",
-  "name": "Mounted Bonesaw MK.3",
+  "name": "Станковый Bonesaw MK.3",
   "name_en": "Mounted Bonesaw MK.3",
   "item_code": "ATRPGTW",
   "category": "heavy_arms",
@@ -1755,7 +1755,7 @@
  {
   "id": "factory-arc-rpg",
   "kind": "factory",
-  "name": "ARC⧸RPG",
+  "name": "Бронебойный навесной/РПГ",
   "name_en": "ARC⧸RPG",
   "item_code": "ATRPGIndirectAmmo",
   "category": "heavy_arms",
@@ -1873,7 +1873,7 @@
  {
   "id": "factory-mounted-fissura-gd-i",
   "kind": "factory",
-  "name": "Mounted Fissura gd.I",
+  "name": "Станковый Fissura gd.I",
   "name_en": "Mounted Fissura gd.I",
   "item_code": "GrenadeLauncherTC",
   "category": "heavy_arms",
@@ -2108,7 +2108,7 @@
  {
   "id": "factory-30mm",
   "kind": "factory",
-  "name": "30mm",
+  "name": "30мм",
   "name_en": "30mm",
   "item_code": "MiniTankAmmo",
   "category": "heavy_arms",
@@ -2148,7 +2148,7 @@
  {
   "id": "factory-cremari-mortar",
   "kind": "factory",
-  "name": "Cremari Mortar",
+  "name": "Миномёт Cremari",
   "name_en": "Cremari Mortar",
   "item_code": "Mortar",
   "category": "heavy_arms",
@@ -2188,7 +2188,7 @@
  {
   "id": "factory-mortar-flare-shell",
   "kind": "factory",
-  "name": "Flare Mortar Shell",
+  "name": "Осветительный Минометный Снаряд",
   "name_en": "Flare Mortar Shell",
   "item_code": "MortarAmmoFL",
   "category": "heavy_arms",
@@ -2228,7 +2228,7 @@
  {
   "id": "factory-mortar-shrapnel-shell",
   "kind": "factory",
-  "name": "Shrapnel Mortar Shell",
+  "name": "Осколочный минометный снаряд",
   "name_en": "Shrapnel Mortar Shell",
   "item_code": "MortarAmmoSH",
   "category": "heavy_arms",
@@ -2268,7 +2268,7 @@
  {
   "id": "factory-mortar-shell",
   "kind": "factory",
-  "name": "Mortar Shell",
+  "name": "Минометный Снаряд",
   "name_en": "Mortar Shell",
   "item_code": "MortarAmmo",
   "category": "heavy_arms",
@@ -2347,7 +2347,7 @@
  {
   "id": "factory-bf5-white-ash-flask-grenade",
   "kind": "factory",
-  "name": "BF5 White Ash Flask Grenade",
+  "name": "Граната BF5 White Ash Flask",
   "name_en": "BF5 White Ash Flask Grenade",
   "item_code": "ATGrenadeW",
   "category": "heavy_arms",
@@ -2465,7 +2465,7 @@
  {
   "id": "factory-anti-tank-sticky-bomb",
   "kind": "factory",
-  "name": "Anti-Tank Sticky Bomb",
+  "name": "Противотанковая липкая бомба",
   "name_en": "Anti-Tank Sticky Bomb",
   "item_code": "StickyBomb",
   "category": "heavy_arms",
@@ -2583,7 +2583,7 @@
  {
   "id": "factory-r-p-g-shell",
   "kind": "factory",
-  "name": "RPG",
+  "name": "РПГ",
   "name_en": "RPG",
   "item_code": "RpgAmmo",
   "category": "heavy_arms",
@@ -2623,7 +2623,7 @@
  {
   "id": "factory-20mm",
   "kind": "factory",
-  "name": "20mm",
+  "name": "20мм",
   "name_en": "20mm",
   "item_code": "AircraftAmmo",
   "category": "heavy_ammunition",
@@ -2661,7 +2661,7 @@
  {
   "id": "factory-shatter-missle",
   "kind": "factory",
-  "name": "Shatter Missile",
+  "name": "Разрушающая ракета",
   "name_en": "Shatter Missile",
   "item_code": "DemolitionRocketAmmo",
   "category": "heavy_ammunition",
@@ -2701,7 +2701,7 @@
  {
   "id": "factory-150mm",
   "kind": "factory",
-  "name": "150mm",
+  "name": "150-мм",
   "name_en": "150mm",
   "item_code": "HeavyArtilleryAmmo",
   "category": "heavy_ammunition",
@@ -2741,7 +2741,7 @@
  {
   "id": "factory-120mm",
   "kind": "factory",
-  "name": "120mm",
+  "name": "120-мм",
   "name_en": "120mm",
   "item_code": "LightArtilleryAmmo",
   "category": "heavy_ammunition",
@@ -2861,7 +2861,7 @@
  {
   "id": "factory-68mm",
   "kind": "factory",
-  "name": "68mm",
+  "name": "68мм",
   "name_en": "68mm",
   "item_code": "ATAmmo",
   "category": "heavy_ammunition",
@@ -2901,7 +2901,7 @@
  {
   "id": "factory-40mm",
   "kind": "factory",
-  "name": "40mm",
+  "name": "40-мм",
   "name_en": "40mm",
   "item_code": "LightTankAmmo",
   "category": "heavy_ammunition",
@@ -2981,7 +2981,7 @@
  {
   "id": "factory-quillback-torpedo",
   "kind": "factory",
-  "name": "Quillback Torpedo",
+  "name": "Торпеда \"Quillback\"",
   "name_en": "Quillback Torpedo",
   "item_code": "MiniTorpedoAmmo",
   "category": "heavy_ammunition",
@@ -3020,7 +3020,7 @@
  {
   "id": "factory-barbed-wire",
   "kind": "factory",
-  "name": "Barbed Wire",
+  "name": "Колючая проволока",
   "name_en": "Barbed Wire",
   "item_code": "BarbedWireMaterials",
   "category": "utilities",
@@ -3078,7 +3078,7 @@
  {
   "id": "factory-binoculars",
   "kind": "factory",
-  "name": "Binoculars",
+  "name": "Бинокль",
   "name_en": "Binoculars",
   "item_code": "Binoculars",
   "category": "utilities",
@@ -3136,7 +3136,7 @@
  {
   "id": "factory-havoc-charge",
   "kind": "factory",
-  "name": "Havoc Charge",
+  "name": "Хавок Заряд",
   "name_en": "Havoc Charge",
   "item_code": "ExplosiveTripod",
   "category": "utilities",
@@ -3166,7 +3166,7 @@
  {
   "id": "factory-willows-bane-ammo",
   "kind": "factory",
-  "name": "Willow's Bane Ammo",
+  "name": "Топливо для Willow's Bane",
   "name_en": "Willow's Bane Ammo",
   "item_code": "FlameBackpackW",
   "category": "utilities",
@@ -3195,7 +3195,7 @@
  {
   "id": "factory-molten-wind-v-ii-ammo",
   "kind": "factory",
-  "name": "“Molten Wind” v.II Ammo",
+  "name": "Топливо “Molten Wind” v.II",
   "name_en": "“Molten Wind” v.II Ammo",
   "item_code": "FlameBackpackC",
   "category": "utilities",
@@ -3224,7 +3224,7 @@
  {
   "id": "factory-listening-kit",
   "kind": "factory",
-  "name": "Listening Kit",
+  "name": "Набор для прослушивания",
   "name_en": "Listening Kit",
   "item_code": "ListeningKit",
   "category": "utilities",
@@ -3281,7 +3281,7 @@
  {
   "id": "factory-metal-beam",
   "kind": "factory",
-  "name": "Metal Beam",
+  "name": "Металлическая балка",
   "name_en": "Metal Beam",
   "item_code": "MetalBeamMaterials",
   "category": "utilities",
@@ -3310,7 +3310,7 @@
  {
   "id": "factory-radio-backpack",
   "kind": "factory",
-  "name": "Radio Backpack",
+  "name": "Радиорюкзак",
   "name_en": "Radio Backpack",
   "item_code": "RadioBackpack",
   "category": "utilities",
@@ -3339,7 +3339,7 @@
  {
   "id": "factory-sandbag",
   "kind": "factory",
-  "name": "Sandbag",
+  "name": "Мешок с песком",
   "name_en": "Sandbag",
   "item_code": "SandbagMaterials",
   "category": "utilities",
@@ -3368,7 +3368,7 @@
  {
   "id": "factory-havoc-charge-detonator",
   "kind": "factory",
-  "name": "Havoc Charge Detonator",
+  "name": "Детонатор Хавок Заряда",
   "name_en": "Havoc Charge Detonator",
   "item_code": "SatchelChargeT",
   "category": "utilities",
@@ -3427,7 +3427,7 @@
  {
   "id": "factory-shovel",
   "kind": "factory",
-  "name": "Shovel",
+  "name": "Лопата",
   "name_en": "Shovel",
   "item_code": "Shovel",
   "category": "utilities",
@@ -3456,7 +3456,7 @@
  {
   "id": "factory-sledge-hammer",
   "kind": "factory",
-  "name": "Sledge Hammer",
+  "name": "Кувалда",
   "name_en": "Sledge Hammer",
   "item_code": "SledgeHammer",
   "category": "utilities",
@@ -3513,7 +3513,7 @@
  {
   "id": "factory-tripod",
   "kind": "factory",
-  "name": "Tripod",
+  "name": "Тренога",
   "name_en": "Tripod",
   "item_code": "Tripod",
   "category": "utilities",
@@ -3542,7 +3542,7 @@
  {
   "id": "factory-wind-sock",
   "kind": "factory",
-  "name": "Wind Sock",
+  "name": "Ветроуказатель",
   "name_en": "Wind Sock",
   "item_code": "WindsockT",
   "category": "utilities",
@@ -3571,7 +3571,7 @@
  {
   "id": "factory-wrench",
   "kind": "factory",
-  "name": "Wrench",
+  "name": "Гаечный ключ",
   "name_en": "Wrench",
   "item_code": "WorkWrench",
   "category": "utilities",
@@ -3600,7 +3600,7 @@
  {
   "id": "factory-water-bucket",
   "kind": "factory",
-  "name": "Water Bucket",
+  "name": "Ведро для воды",
   "name_en": "Water Bucket",
   "item_code": "WaterBucket",
   "category": "utilities",
@@ -3629,7 +3629,7 @@
  {
   "id": "factory-gas-mask",
   "kind": "factory",
-  "name": "Gas Mask",
+  "name": "Противогаз",
   "name_en": "Gas Mask",
   "item_code": "GasMask",
   "category": "utilities",
@@ -3658,7 +3658,7 @@
  {
   "id": "factory-gas-mask-filter",
   "kind": "factory",
-  "name": "Gas Mask Filter",
+  "name": "Фильтр для противогаза",
   "name_en": "Gas Mask Filter",
   "item_code": "GasMaskFilter",
   "category": "utilities",
@@ -3687,7 +3687,7 @@
  {
   "id": "factory-the-ospreay",
   "kind": "factory",
-  "name": "The Ospreay",
+  "name": "Подствольный гранатомёт",
   "name_en": "The Ospreay",
   "item_code": "GrenadeAdapter",
   "category": "utilities",
@@ -3716,7 +3716,7 @@
  {
   "id": "factory-radio",
   "kind": "factory",
-  "name": "Radio",
+  "name": "Рация",
   "name_en": "Radio",
   "item_code": "Radio",
   "category": "utilities",
@@ -3774,7 +3774,7 @@
  {
   "id": "factory-bandages",
   "kind": "factory",
-  "name": "Bandages",
+  "name": "Бинты",
   "name_en": "Bandages",
   "item_code": "Bandages",
   "category": "medical",
@@ -3803,7 +3803,7 @@
  {
   "id": "factory-first-aid-kit",
   "kind": "factory",
-  "name": "First Aid Kit",
+  "name": "Набор Первой Помощи",
   "name_en": "First Aid Kit",
   "item_code": "FirstAidKit",
   "category": "medical",
@@ -3832,7 +3832,7 @@
  {
   "id": "factory-trauma-kit",
   "kind": "factory",
-  "name": "Trauma Kit",
+  "name": "Реанимационный набор",
   "name_en": "Trauma Kit",
   "item_code": "TraumaKit",
   "category": "medical",
@@ -3861,7 +3861,7 @@
  {
   "id": "factory-blood-plasma",
   "kind": "factory",
-  "name": "Blood Plasma",
+  "name": "Плазма",
   "name_en": "Blood Plasma",
   "item_code": "BloodPlasma",
   "category": "medical",
@@ -3890,7 +3890,7 @@
  {
   "id": "factory-soldier-supplies",
   "kind": "factory",
-  "name": "Soldier Supplies",
+  "name": "Солдатское снаряжение",
   "name_en": "Soldier Supplies",
   "item_code": "SoldierSupplies",
   "category": "medical",
@@ -3919,7 +3919,7 @@
  {
   "id": "factory-maintenance-supplies",
   "kind": "factory",
-  "name": "Maintenance Supplies",
+  "name": "Припасы Обслуживания",
   "name_en": "Maintenance Supplies",
   "item_code": "MaintenanceSupplies",
   "category": "supplies",
@@ -3957,7 +3957,7 @@
  {
   "id": "factory-material-pallet",
   "kind": "factory",
-  "name": "Material Pallet",
+  "name": "Поддон для материалов",
   "name_en": "Material Pallet",
   "item_code": "MaterialPlatform",
   "category": "shipables",
@@ -3994,7 +3994,7 @@
  {
   "id": "factory-resource-container",
   "kind": "factory",
-  "name": "Resource Container",
+  "name": "Контейнер для ресурсов",
   "name_en": "Resource Container",
   "item_code": "ResourceContainer",
   "category": "shipables",
@@ -4031,7 +4031,7 @@
  {
   "id": "factory-shipping-container",
   "kind": "factory",
-  "name": "Shipping Container",
+  "name": "Грузовой контейнер",
   "name_en": "Shipping Container",
   "item_code": "ShippingContainer",
   "category": "shipables",
@@ -4104,7 +4104,7 @@
  {
   "id": "factory-leary-shellbore-68mm",
   "kind": "factory",
-  "name": "Leary Shellbore 68mm",
+  "name": "Leary Shellbore 68-мм",
   "name_en": "Leary Shellbore 68mm",
   "item_code": "EmplacedATW",
   "category": "shipables",
@@ -4284,7 +4284,7 @@
  {
   "id": "factory-huber-lariat-120mm",
   "kind": "factory",
-  "name": "Huber Lariat 120mm",
+  "name": "Huber Lariat 120мм",
   "name_en": "Huber Lariat 120mm",
   "item_code": "EmplacedLightArtilleryW",
   "category": "shipables",
@@ -4429,7 +4429,7 @@
  {
   "id": "factory-construction-equipment",
   "kind": "factory",
-  "name": "Construction Equipment",
+  "name": "Строительное оборудование",
   "name_en": "Construction Equipment",
   "item_code": "ConstructionEquipment",
   "category": "shipables",
@@ -4466,7 +4466,7 @@
  {
   "id": "factory-liquid-container",
   "kind": "factory",
-  "name": "Liquid Container",
+  "name": "Жидкостный контейнер",
   "name_en": "Liquid Container",
   "item_code": "LiquidContainer",
   "category": "shipables",
@@ -4647,7 +4647,7 @@
  {
   "id": "factory-collins-cannon-68mm",
   "kind": "factory",
-  "name": "Collins Cannon 68mm",
+  "name": "Collins орудие 68-мм",
   "name_en": "Collins Cannon 68mm",
   "item_code": "FieldATW",
   "category": "vehicles",
@@ -4755,7 +4755,7 @@
  {
   "id": "factory-balfour-falconer-250mm",
   "kind": "factory",
-  "name": "Balfour Falconer 250mm",
+  "name": "Balfour Falconer 250-мм",
   "name_en": "Balfour Falconer 250mm",
   "item_code": "FieldMortarW",
   "category": "vehicles",
@@ -4791,7 +4791,7 @@
  {
   "id": "factory-niska-mk-i-gun-motor-carriage",
   "kind": "factory",
-  "name": "Niska Mk. I Gun Motor Carriage",
+  "name": "Полугусеничный Бронетранспортер Niska Mk. I",
   "name_en": "Niska Mk. I Gun Motor Carriage",
   "item_code": "HalfTrackW",
   "category": "vehicles",
@@ -5332,7 +5332,7 @@
  {
   "id": "factory-bms-class-2-mobile-auto-crane",
   "kind": "factory",
-  "name": "BMS - Class 2 Mobile Auto-Crane",
+  "name": "Мобильный автокран БМС 2 класса",
   "name_en": "BMS - Class 2 Mobile Auto-Crane",
   "item_code": "Crane",
   "category": "vehicles",
@@ -5369,7 +5369,7 @@
  {
   "id": "factory-bms-packmule-flatbed",
   "kind": "factory",
-  "name": "BMS - Packmule Flatbed",
+  "name": "Бортовой грузовик BMS - Packmule",
   "name_en": "BMS - Packmule Flatbed",
   "item_code": "FlatbedTruck",
   "category": "vehicles",
@@ -5947,7 +5947,7 @@
  {
   "id": "factory-dunne-loadlugger-3c",
   "kind": "factory",
-  "name": "Dunne Loadlugger 3c",
+  "name": "Самосвал Dunne Loadlugger 3c",
   "name_en": "Dunne Loadlugger 3c",
   "item_code": "TruckResourceW",
   "category": "vehicles",
@@ -6897,7 +6897,7 @@
  {
   "id": "factory-specialists-overcoat",
   "kind": "factory",
-  "name": "Specialist's Overcoat",
+  "name": "Шинель специалиста",
   "name_en": "Specialist's Overcoat",
   "item_code": "AmmoUniformW",
   "category": "uniforms",
@@ -6934,7 +6934,7 @@
  {
   "id": "factory-gunners-breastplate",
   "kind": "factory",
-  "name": "Gunner's Breastplate",
+  "name": "Стальная кираса",
   "name_en": "Gunner's Breastplate",
   "item_code": "ArmourUniformW",
   "category": "uniforms",
@@ -6971,7 +6971,7 @@
  {
   "id": "factory-sapper-gear",
   "kind": "factory",
-  "name": "Sapper Gear",
+  "name": "Сапёрное снаряжение",
   "name_en": "Sapper Gear",
   "item_code": "EngineerUniformW",
   "category": "uniforms",
@@ -7008,7 +7008,7 @@
  {
   "id": "factory-physicians-jacket",
   "kind": "factory",
-  "name": "Physician's Jacket",
+  "name": "Куртка врача",
   "name_en": "Physician's Jacket",
   "item_code": "MedicUniformW",
   "category": "uniforms",
@@ -7119,7 +7119,7 @@
  {
   "id": "factory-outriders-mantle",
   "kind": "factory",
-  "name": "Outrider's Mantle",
+  "name": "Дозорная мантия",
   "name_en": "Outrider's Mantle",
   "item_code": "ScoutUniformW",
   "category": "uniforms",
@@ -7156,7 +7156,7 @@
  {
   "id": "factory-caoivish-parka",
   "kind": "factory",
-  "name": "Caoivish Parka",
+  "name": "Парка Caoivish",
   "name_en": "Caoivish Parka",
   "item_code": "SnowUniformW",
   "category": "uniforms",
@@ -7193,7 +7193,7 @@
  {
   "id": "factory-padded-boiler-suit",
   "kind": "factory",
-  "name": "Padded Boiler Suit",
+  "name": "Стеганный Комбинезон",
   "name_en": "Padded Boiler Suit",
   "item_code": "TankUniformW",
   "category": "uniforms",
@@ -7230,7 +7230,7 @@
  {
   "id": "refinery-bmat",
   "kind": "refinery",
-  "name": "Basic Materials",
+  "name": "Базовые материалы",
   "name_en": "Basic Materials",
   "item_code": "Cloth",
   "category": "materials",
@@ -7260,7 +7260,7 @@
  {
   "id": "refinery-emat",
   "kind": "refinery",
-  "name": "Explosive Powder",
+  "name": "Порох",
   "name_en": "Explosive Powder",
   "item_code": "Explosive",
   "category": "materials",
@@ -7290,7 +7290,7 @@
  {
   "id": "refinery-rmat",
   "kind": "refinery",
-  "name": "Refined Materials",
+  "name": "Рафинированные материалы",
   "name_en": "Refined Materials",
   "item_code": "Wood",
   "category": "materials",
@@ -7320,7 +7320,7 @@
  {
   "id": "refinery-hemat",
   "kind": "refinery",
-  "name": "Heavy Explosive Powder",
+  "name": "Тяжёлый порох",
   "name_en": "Heavy Explosive Powder",
   "item_code": "HeavyExplosive",
   "category": "materials",
@@ -7350,7 +7350,7 @@
  {
   "id": "refinery-diesel",
   "kind": "refinery",
-  "name": "Diesel",
+  "name": "Дизель",
   "name_en": "Diesel",
   "item_code": "Diesel",
   "category": "fuel",
@@ -7380,7 +7380,7 @@
  {
   "id": "refinery-gravel-coal",
   "kind": "refinery",
-  "name": "Gravel",
+  "name": "Гравий",
   "name_en": "Gravel",
   "item_code": "GroundMaterials",
   "category": "construction",
@@ -7410,7 +7410,7 @@
  {
   "id": "refinery-gravel-salvage",
   "kind": "refinery",
-  "name": "Gravel",
+  "name": "Гравий",
   "name_en": "Gravel",
   "item_code": "GroundMaterials",
   "category": "construction",
@@ -7440,7 +7440,7 @@
  {
   "id": "refinery-alloy-aluminum",
   "kind": "refinery",
-  "name": "Aluminum Alloy",
+  "name": "Алюминиевый сплав",
   "name_en": "Aluminum Alloy",
   "item_code": "AluminumA",
   "category": "alloys",
@@ -7530,7 +7530,7 @@
  {
   "id": "factory-950-70b-anti-aircraft-shell",
   "kind": "factory",
-  "name": "950-70b Anti-Aircraft Shell",
+  "name": "950-70b Зенитный снаряд",
   "name_en": "950-70b Anti-Aircraft Shell",
   "item_code": "AAAmmo",
   "category": "heavy_ammunition",
@@ -7570,7 +7570,7 @@
  {
   "id": "factory-absol-anti-aircraft-rounds",
   "kind": "factory",
-  "name": "Absol Anti-Aircraft Rounds",
+  "name": "Зенитный снаряд “Absol”",
   "name_en": "Absol Anti-Aircraft Rounds",
   "item_code": "LightAAAmmo",
   "category": "heavy_ammunition",
