@@ -72,3 +72,30 @@ export const FILTER_ICON: Record<MapKind, string> = {
   coastal_gun: iconOf({ kind: "coastal_gun", tier: null }),
   runway: iconOf({ kind: "runway", tier: 1 }),
 };
+
+/** Маркеры держат экранный размер; на общем плане чуть мельче, чтобы не слипались. */
+export const markerFactor = (scale: number) => Math.min(1, Math.max(0.4, scale * 5));
+
+/**
+ * Подписи без каши: крупные города — с середины масштаба, малые отметки — только вблизи;
+ * подпись, которая налезла бы на уже показанную (в экранных пикселях), пропускаем.
+ */
+export function visibleLabels(all: MapRegion["labels"], scale: number) {
+  if (scale <= 0.3) return [];
+  const shown: { l: MapRegion["labels"][number]; x0: number; x1: number; y0: number; y1: number }[] = [];
+  const pool = [...all].filter((l) => l.major || scale > 1.2).sort((a, b) => Number(b.major) - Number(a.major));
+  for (const l of pool) {
+    const cx = l.x * HEX_W * scale, cy = l.y * HEX_H * scale;
+    const w = l.text.length * (l.major ? 7 : 6) + 14, h = l.major ? 20 : 17;
+    // крупный город подписан под точкой (над ней — значок ратуши), малая отметка — по центру
+    const top = l.major ? cy + 2 : cy - h / 2;
+    const box = { l, x0: cx - w / 2, x1: cx + w / 2, y0: top, y1: top + h };
+    if (shown.some((b) => box.x0 < b.x1 + 4 && box.x1 + 4 > b.x0 && box.y0 < b.y1 + 2 && box.y1 + 2 > b.y0)) continue;
+    shown.push(box);
+  }
+  return shown.map((b) => b.l);
+}
+
+/** Гексы, которые задевает прямоугольник (для снимков). */
+export const regionsIn = (regions: MapRegion[], r: { x: number; y: number; w: number; h: number }) =>
+  regions.filter((g) => hexLeft(g.col) < r.x + r.w && hexLeft(g.col) + HEX_W > r.x && hexTop(g.row) < r.y + r.h && hexTop(g.row) + HEX_H > r.y);

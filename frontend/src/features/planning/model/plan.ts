@@ -1,5 +1,5 @@
 import { readStorage, writeStorage } from "@/shared";
-import { HEX_H, HEX_W } from "@/features/planning/model/map";
+import { HEX_H, HEX_W, type MapRegion } from "@/features/planning/model/map";
 
 /* План на карте: линии, линейки, стрелки, радиусы и постройки. Координаты — «мировые»
  * пиксели карты (гекс 1024×888), размеры — в метрах игры, углы — азимут (0° — север, по часовой). */
@@ -8,7 +8,7 @@ import { HEX_H, HEX_W } from "@/features/planning/model/map";
 export const M_PER_PX_X = 2184 / HEX_W;
 export const M_PER_PX_Y = 1890 / HEX_H;
 
-export const TOOLS = ["select", "line", "ruler", "arrow", "radius", "structure", "order", "eraser"] as const;
+export const TOOLS = ["select", "line", "ruler", "arrow", "radius", "structure", "order", "frame", "eraser"] as const;
 export type Tool = (typeof TOOLS)[number];
 export const UNITS = ["infantry", "tanks", "artillery", "ships"] as const;
 export type Unit = (typeof UNITS)[number];
@@ -93,3 +93,40 @@ export interface StructureCatalog {
 }
 export const structureIcon = (icon: string) => `/api/v1/assets/maps/structures/${icon}.webp`;
 export const STRUCTURES_URL = "/api/v1/assets/maps/structures.json?v=2026-10-27";
+
+/* ───────────── снимки операций ───────────── */
+
+/** Прямоугольник в «мировых» пикселях карты. */
+export interface Rect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * Снимок операции: вырезанный кусок карты с планом на момент снимка. Гексы, постройки войны
+ * и объекты плана копируются — снимок не меняется, даже когда план или война идут дальше.
+ */
+export interface Snapshot {
+  id: string;
+  name: string;
+  rect: Rect;
+  created: string;
+  war: number | null;
+  phase: "conquest" | "resistance";
+  regions: MapRegion[];
+  shapes: Shape[];
+}
+
+const SNAPSHOTS_KEY = "sindaris-planning-snapshots";
+export const loadSnapshots = () => readStorage<Snapshot[]>(SNAPSHOTS_KEY, []);
+export const saveSnapshots = (list: Snapshot[]) => writeStorage(SNAPSHOTS_KEY, list);
+
+/** Рамка из двух углов, нормализованная. */
+export const rectFrom = (a: { x: number; y: number }, b: { x: number; y: number }): Rect => ({
+  x: Math.min(a.x, b.x),
+  y: Math.min(a.y, b.y),
+  w: Math.abs(b.x - a.x),
+  h: Math.abs(b.y - a.y),
+});

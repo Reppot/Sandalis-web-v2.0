@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { COLORS, FACTIONS, FACTION_COLOR, TOOLS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type Shape, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
+import { COLORS, FACTIONS, FACTION_COLOR, TOOLS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, formatDateTime, useConfirm, useT, type IconName, type MessageKey } from "@/shared";
 
-const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", eraser: "eraser" };
+const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", frame: "crop", eraser: "eraser" };
 
 /**
  * Правая панель «Планирования»: инструменты, настройки новых объектов, свойства выбранного
@@ -26,7 +26,11 @@ export const ToolsPanel: React.FC<{
   /** Активные заказы клана; null — ещё грузятся. */
   orders: Report[] | null;
   member: boolean;
-}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member }) => {
+  snapshots: Snapshot[];
+  onOpenSnapshot: (s: Snapshot) => void;
+  onRenameSnapshot: (id: string, name: string) => void;
+  onDeleteSnapshot: (id: string) => void;
+}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
   const set = <K extends keyof Defaults>(key: K, value: Defaults[K]) => onDefaults({ ...defaults, [key]: value });
@@ -70,6 +74,7 @@ export const ToolsPanel: React.FC<{
           <StructurePicker catalog={catalog} value={defaults.structure} onChange={(id) => set("structure", id)} />
         </>
       ) : null}
+      {tool === "frame" || snapshots.length ? <SnapshotList list={snapshots} onOpen={onOpenSnapshot} onRename={onRenameSnapshot} onDelete={onDeleteSnapshot} /> : null}
       {tool === "order" && !selected ? <OrderPicker orders={orders} member={member} value={defaults.order} onChange={(id) => set("order", id)} /> : null}
 
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-[var(--border)] pt-3 text-xs text-fg-3">
@@ -277,6 +282,35 @@ const OrderPicker: React.FC<{ orders: Report[] | null; member: boolean; value: s
         </div>
       ) : (
         <p className="text-sm text-fg-3">{t("planning.ordersEmpty")}</p>
+      )}
+    </section>
+  );
+};
+
+/* ───────────── снимки операций ───────────── */
+
+const SnapshotList: React.FC<{ list: Snapshot[]; onOpen: (s: Snapshot) => void; onRename: (id: string, name: string) => void; onDelete: (id: string) => void }> = ({ list, onOpen, onRename, onDelete }) => {
+  const t = useT();
+  const [armed, confirm] = useConfirm();
+  return (
+    <section className="planning-props">
+      <h3 className="planning-props-title">{t("planning.snapshots")}</h3>
+      {list.length ? (
+        <div className="planning-snaps">
+          {list.map((s) => (
+            <div key={s.id} className="planning-snap">
+              <Icon name="crop" size={15} className="text-fg-3" />
+              <span className="min-w-0 flex-1">
+                <input className="field h-7 w-full px-1.5 py-0 text-sm" value={s.name} maxLength={60} onChange={(e) => onRename(s.id, e.target.value)} aria-label={t("planning.snapshotRename")} />
+                <span className="mt-0.5 block truncate text-xs text-fg-3">{formatDateTime(s.created)}{s.war ? ` · ${t("planning.snapshotWar", { war: s.war })}` : ""}</span>
+              </span>
+              <button type="button" className="icon-btn" onClick={() => onOpen(s)} aria-label={t("planning.snapshotOpen")} title={t("planning.snapshotOpen")}><Icon name="eye" size={15} /></button>
+              <button type="button" className={cn("icon-btn", armed === s.id && "text-danger")} onClick={() => confirm(s.id, () => onDelete(s.id))} aria-label={t("common.delete")} title={armed === s.id ? t("common.confirmQ") : t("common.delete")}><Icon name="trash" size={15} /></button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-fg-3">{t("planning.snapshotsEmpty")}</p>
       )}
     </section>
   );

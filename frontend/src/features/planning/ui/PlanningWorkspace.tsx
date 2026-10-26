@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { FILTER_ICON, MAP_KINDS, planningApi, type MapKind, type WorldMap } from "@/features/planning/model/map";
-import { DEFAULTS, STRUCTURES_URL, loadDefaults, loadPlan, saveDefaults, savePlan, type Defaults, type Shape, type StructureCatalog, type StructureDef, type Tool } from "@/features/planning/model/plan";
+import { FILTER_ICON, MAP_KINDS, planningApi, regionsIn, type MapKind, type WorldMap } from "@/features/planning/model/map";
+import { DEFAULTS, STRUCTURES_URL, loadDefaults, loadPlan, loadSnapshots, newId, saveDefaults, savePlan, saveSnapshots, type Defaults, type Rect, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool } from "@/features/planning/model/plan";
+import { SnapshotViewer } from "@/features/planning/ui/SnapshotViewer";
 import { MapCanvas } from "@/features/planning/ui/MapCanvas";
 import { ToolsPanel } from "@/features/planning/ui/ToolsPanel";
 import { useSession } from "@/features/cabinet";
@@ -30,6 +31,16 @@ export const PlanningWorkspace: React.FC = () => {
   const [selected, setSelected] = React.useState<string | null>(null);
   const [defaults, setDefaults] = React.useState<Defaults>(DEFAULTS);
   const [catalog, setCatalog] = React.useState<StructureCatalog | null>(null);
+  const [snapshots, setSnapshots] = React.useState<Snapshot[]>([]);
+  const [viewing, setViewing] = React.useState<Snapshot | null>(null);
+  React.useEffect(() => setSnapshots(loadSnapshots()), []);
+  const changeSnapshots = React.useCallback((fn: (prev: Snapshot[]) => Snapshot[]) => {
+    setSnapshots((prev) => {
+      const next = fn(prev);
+      saveSnapshots(next);
+      return next;
+    });
+  }, []);
   // активные заказы клана — для меток на карте; у гостя заказов нет
   const { session } = useSession();
   const member = Boolean(session) && session?.subjectType !== "guest";
@@ -80,8 +91,25 @@ export const PlanningWorkspace: React.FC = () => {
         commit((prev) => prev.filter((x) => x.id !== id));
         setSelected((cur) => (cur === id ? null : cur));
       },
+      // снимок: кусок карты (гексы, постройки войны) и копия плана — дальше они не меняются
+      onFrame: (rect: Rect) => {
+        if (!data) return;
+        const snap: Snapshot = {
+          id: newId(),
+          name: t("planning.snapshotName", { n: snapshots.length + 1 }),
+          rect,
+          created: new Date().toISOString(),
+          war: data.war_number,
+          phase: data.phase,
+          regions: regionsIn(data.regions, rect),
+          shapes: structuredClone(shapes),
+        };
+        changeSnapshots((prev) => [snap, ...prev]);
+        setTool("select");
+        setViewing(snap);
+      },
     }),
-    [tool, shapes, selected, defaults, structures, orders, commit],
+    [tool, shapes, selected, defaults, structures, orders, commit, data, snapshots.length, changeSnapshots, t],
   );
 
   // Delete — удалить выбранное, Esc — снять выбор и вернуться к курсору
@@ -224,10 +252,15 @@ export const PlanningWorkspace: React.FC = () => {
               structures={structures}
               orders={orders}
               member={member}
+              snapshots={snapshots}
+              onOpenSnapshot={setViewing}
+              onRenameSnapshot={(id, name) => changeSnapshots((prev) => prev.map((x) => (x.id === id ? { ...x, name } : x)))}
+              onDeleteSnapshot={(id) => changeSnapshots((prev) => prev.filter((x) => x.id !== id))}
             />
           </aside>
         ) : null}
       </div>
+      <SnapshotViewer snapshot={viewing} onClose={() => setViewing(null)} structures={structures} orders={orders ?? []} />
     </div>
   );
 };

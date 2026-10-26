@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { HEX_H, HEX_W, hexLeft, hexTop, iconOf, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
-import { M_PER_PX_X, UNIT_COLOR, measure, moveShape, newId, type Defaults, type Shape, type StructureDef, type Tool } from "@/features/planning/model/plan";
+import { HEX_H, HEX_W, hexLeft, hexTop, iconOf, markerFactor, visibleLabels, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
+import { M_PER_PX_X, UNIT_COLOR, measure, moveShape, newId, rectFrom, type Defaults, type Rect, type Shape, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { PlanLayer } from "@/features/planning/ui/PlanLayer";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, useT, type MessageKey } from "@/shared";
@@ -21,6 +21,7 @@ type Gesture =
   | { type: "draw"; start: Point }
   | { type: "move"; id: string; last: Point }
   | { type: "handle"; id: string }
+  | { type: "frame"; start: Point }
   | null;
 
 export interface Editor {
@@ -35,6 +36,8 @@ export interface Editor {
   onAdd: (shape: Shape) => void;
   onUpdate: (shape: Shape) => void;
   onDelete: (id: string) => void;
+  /** Рамка «снимка операции» нарисована. */
+  onFrame?: (rect: Rect) => void;
 }
 
 /** Черновик объекта, который тянут мышью от start до p. */
@@ -53,7 +56,13 @@ function draftShape(tool: Tool, start: Point, p: Point, d: Defaults): Shape | nu
  * Карта: гексы War API, постройки войны, план поверх. Панорама — перетаскиванием (или средней
  * кнопкой мыши при любом инструменте), масштаб — колесом, щипком, кнопками.
  */
-export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor: Editor }> = ({ data, hidden, editor }) => {
+export const MapCanvas: React.FC<{
+  data: WorldMap;
+  hidden: Set<MapKind>;
+  editor: Editor;
+  /** Просмотр снимка: только этот кусок карты, без правки — панорама, масштаб и подсказки. */
+  frame?: Rect | null;
+}> = ({ data, hidden, editor, frame }) => {
   const t = useT();
   const box = React.useRef<HTMLDivElement>(null);
   const [view, setView] = React.useState<View | null>(null);
@@ -67,6 +76,8 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
   const pointers = React.useRef(new Map<number, Point>());
   const pinch = React.useRef<number | null>(null);
   const gesture = React.useRef<Gesture>(null);
+  const [frameDraft, setFrameDraft] = React.useState<Rect | null>(null);
+  const readOnly = Boolean(frame);
   const viewRef = React.useRef<View | null>(null);
   viewRef.current = view;
   const ed = React.useRef(editor);
@@ -80,13 +91,15 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
     return { minX, minY, w: hexLeft(Math.max(...cols)) + HEX_W - minX, h: hexTop(Math.max(...rows)) + HEX_H - minY };
   }, [data]);
 
+  // во что вписываем: весь театр войны или кадр снимка
+  const target = React.useMemo(() => (frame ? { minX: frame.x, minY: frame.y, w: frame.w, h: frame.h } : bounds), [frame, bounds]);
   const fit = React.useCallback(() => {
     const el = box.current;
     if (!el) return;
     const { width, height } = el.getBoundingClientRect();
-    const scale = Math.min(width / bounds.w, height / bounds.h) * 0.94;
-    setView({ scale, x: (width - bounds.w * scale) / 2 - bounds.minX * scale, y: (height - bounds.h * scale) / 2 - bounds.minY * scale });
-  }, [bounds]);
+    const scale = Math.min(width / target.w, height / target.h) * (frame ? 0.98 : 0.94);
+    setView({ scale, x: (width - target.w * scale) / 2 - target.minX * scale, y: (height - target.h * scale) / 2 - target.minY * scale });
+  }, [target, frame]);
 
   // вписать карту при открытии; при смене размера окна (боковая панель, поворот телефона)
   // масштаб сохраняется, а центр карты остаётся в центре
@@ -155,8 +168,10 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
     const { tool, selected, defaults, onSelect, onAdd, onDelete } = ed.current;
     const shapeId = target.closest<SVGElement>("[data-shape]")?.dataset.shape ?? null;
     const p = toWorld(e.clientX, e.clientY);
-    if (e.button === 1 || e.button === 2) {
+    if (readOnly || e.button === 1 || e.button === 2) {
       gesture.current = { type: "pan" };
+    } else if (tool === "frame") {
+      gesture.current = { type: "frame", start: p };
     } else if (tool === "eraser") {
       if (shapeId) onDelete(shapeId);
       gesture.current = shapeId ? null : { type: "pan" };
@@ -210,6 +225,8 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
       setView((v) => (v ? { ...v, x: v.x + e.clientX - prev.x, y: v.y + e.clientY - prev.y } : v));
     } else if (g.type === "draw") {
       setDraft(draftShape(tool, g.start, toWorld(e.clientX, e.clientY), defaults));
+    } else if (g.type === "frame") {
+      setFrameDraft(rectFrom(g.start, toWorld(e.clientX, e.clientY)));
     } else if (g.type === "move") {
       const p = toWorld(e.clientX, e.clientY);
       const s = shapes.find((x) => x.id === g.id);
@@ -237,20 +254,27 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
       const long = (meters / M_PER_PX_X) * (viewRef.current?.scale ?? 1) > 12;
       if (draft && long) ed.current.onAdd({ ...draft, id: newId() });
     }
+    if (g?.type === "frame" && e.type === "pointerup") {
+      const rect = rectFrom(g.start, toWorld(e.clientX, e.clientY));
+      const s = viewRef.current?.scale ?? 1;
+      // кадр меньше 40×40 экранных пикселей — случайный клик
+      if (rect.w * s > 40 && rect.h * s > 40) ed.current.onFrame?.(rect);
+    }
     gesture.current = null;
     setDraft(null);
+    setFrameDraft(null);
   };
 
   const scale = view?.scale ?? 0.1;
   // маркеры держат экранный размер; на общем плане чуть мельче, чтобы не слипались
-  const marker = (1 / scale) * Math.min(1, Math.max(0.4, scale * 5));
+  const marker = (1 / scale) * markerFactor(scale);
   const resistance = data.phase === "resistance";
-  const cursor = editor.tool === "select" ? undefined : editor.tool === "eraser" ? "cell" : "crosshair";
+  const cursor = readOnly || editor.tool === "select" ? undefined : editor.tool === "eraser" ? "cell" : "crosshair";
 
   return (
     <div
       ref={box}
-      className={cn("planning-canvas", editor.tool !== "select" && "is-drawing")}
+      className={cn("planning-canvas", !readOnly && editor.tool !== "select" && "is-drawing")}
       style={{ cursor }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
@@ -259,7 +283,7 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
       onLostPointerCapture={onPointerUp}
       onContextMenu={(e) => e.preventDefault()}
       onDoubleClick={(e) => {
-        if (editor.tool !== "select") return;
+        if (!readOnly && editor.tool !== "select") return;
         const r = e.currentTarget.getBoundingClientRect();
         zoomAt(1.8, e.clientX - r.left, e.clientY - r.top);
       }}
@@ -279,6 +303,8 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
             bounds={bounds}
             labels={{ arrow: (u) => t(`planning.unit.${u}` as MessageKey), status: (st) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")) }}
           />
+          {frameDraft ? <div className="planning-frame is-draft" style={{ left: frameDraft.x, top: frameDraft.y, width: frameDraft.w, height: frameDraft.h, borderWidth: 2 / scale }} /> : null}
+          {frame ? <FrameMask frame={frame} scale={scale} /> : null}
         </div>
       ) : null}
       <div className="planning-zoom">
@@ -289,26 +315,6 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
     </div>
   );
 };
-
-/**
- * Подписи без каши: крупные города — с середины масштаба, малые отметки — только вблизи;
- * подпись, которая налезла бы на уже показанную (в экранных пикселях), пропускаем.
- */
-function visibleLabels(all: MapRegion["labels"], scale: number) {
-  if (scale <= 0.3) return [];
-  const shown: { l: MapRegion["labels"][number]; x0: number; x1: number; y0: number; y1: number }[] = [];
-  const pool = [...all].filter((l) => l.major || scale > 1.2).sort((a, b) => Number(b.major) - Number(a.major));
-  for (const l of pool) {
-    const cx = l.x * HEX_W * scale, cy = l.y * HEX_H * scale;
-    const w = l.text.length * (l.major ? 7 : 6) + 14, h = l.major ? 20 : 17;
-    // крупный город подписан под точкой (над ней — значок ратуши), малая отметка — по центру
-    const top = l.major ? cy + 2 : cy - h / 2;
-    const box = { l, x0: cx - w / 2, x1: cx + w / 2, y0: top, y1: top + h };
-    if (shown.some((b) => box.x0 < b.x1 + 4 && box.x1 + 4 > b.x0 && box.y0 < b.y1 + 2 && box.y1 + 2 > b.y0)) continue;
-    shown.push(box);
-  }
-  return shown.map((b) => b.l);
-}
 
 const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; marker: number; scale: number; showItems: boolean }> = React.memo(({ region, hidden, marker, scale, showItems }) => {
   const t = useT();
@@ -348,5 +354,20 @@ const Marker: React.FC<{ item: MapItem; region: string; scale: number; t: Return
       {/* eslint-disable-next-line @next/next/no-img-element -- иконка War API 48×48 */}
       <img src={assetUrl(iconOf(item)) ?? ""} alt="" width={20} height={20} draggable={false} />
     </span>
+  );
+};
+
+/** Всё вне кадра снимка затемнено — видно, что это вырезанный кусок карты. */
+const FrameMask: React.FC<{ frame: Rect; scale: number }> = ({ frame, scale }) => {
+  const far = 100000;
+  const r = frame;
+  return (
+    <>
+      <div className="planning-mask" style={{ left: r.x - far, top: r.y - far, width: far * 2 + r.w, height: far }} />
+      <div className="planning-mask" style={{ left: r.x - far, top: r.y + r.h, width: far * 2 + r.w, height: far }} />
+      <div className="planning-mask" style={{ left: r.x - far, top: r.y, width: far, height: r.h }} />
+      <div className="planning-mask" style={{ left: r.x + r.w, top: r.y, width: far, height: r.h }} />
+      <div className="planning-frame" style={{ left: r.x, top: r.y, width: r.w, height: r.h, borderWidth: 2 / scale }} />
+    </>
   );
 };

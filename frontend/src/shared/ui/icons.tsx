@@ -67,6 +67,7 @@ const PATHS = {
   radius: "M12 12h8M12 12a8 8 0 1 0 0.01 0M12 12a1 1 0 1 0 0.01 0",
   eraser: "M19 20H8.5l-4.21-4.3a1 1 0 0 1 0-1.41l10-10a1 1 0 0 1 1.41 0l5 5a1 1 0 0 1 0 1.41L11.5 20M18 13.3L11.7 7",
   building: "M3 21h18M5 21V7l8-4v18M19 21V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01",
+  crop: "M8 5v10a1 1 0 0 0 1 1h10M5 8h10a1 1 0 0 1 1 1v10",
 } as const;
 
 export type IconName = keyof typeof PATHS;
