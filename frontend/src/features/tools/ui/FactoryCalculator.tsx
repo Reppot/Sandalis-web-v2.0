@@ -220,7 +220,6 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
                   {queued ? <span className="queued-badge absolute top-2.5 left-2.5">{queued} {t("unit.crate")}</span> : null}
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={88} label={rname(recipe)} className="mt-3" />
                   <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.85rem] font-semibold leading-tight text-fg">{rname(recipe)}</strong>
-                  <small className="block w-full truncate text-[0.7rem] text-muted">{recipe.item_class ?? label("factory_category", recipe.category)} • x{(facility === "mpf" ? mpfData(recipe)?.amount : undefined) ?? recipe.output_quantity}</small>
                   <span className="mt-auto flex flex-wrap justify-center gap-1">
                     {Object.entries(crateCost(recipe, facility)).map(([key, value]) => (
                       // иконка ресурса из игры вместо подписи «РМАТ», название — во всплывающей подсказке

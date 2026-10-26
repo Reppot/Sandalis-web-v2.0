@@ -9,7 +9,7 @@ import { Icon, cn, formatClock, useT } from "@/shared";
  * Верхняя панель: где вы находитесь (раздел › модуль), сводка складов бегущей строкой
  * и состояние связи. На телефоне — компактная шапка с гербом.
  */
-export const Header: React.FC<{ section: string; page?: string | null; onHome: () => void; onSearch: () => void }> = ({ section, page, onHome, onSearch }) => {
+export const Header: React.FC<{ section: string; page?: string | null; onHome: () => void; onSearch: () => void; onAlerts?: () => void }> = ({ section, page, onHome, onSearch, onAlerts }) => {
   const t = useT();
   const { connection, lastSync } = useTerminal();
   const { media } = useContent();
@@ -52,7 +52,7 @@ export const Header: React.FC<{ section: string; page?: string | null; onHome: (
         </nav>
 
         <div data-guide="shell-ticker" className="topbar-ticker">
-          <Ticker />
+          <Ticker onOpen={onAlerts} />
         </div>
 
         <button type="button" className="topbar-search" onClick={onSearch} aria-label={t("palette.title")} title={t("palette.title")}>
