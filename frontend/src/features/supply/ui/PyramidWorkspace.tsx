@@ -411,14 +411,9 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
       ) : null}
 
       <section data-guide="pyramid-tiers" className="panel p-5">
-        {draft ? (
-          <button type="button" className="btn mb-4 h-11 w-full border-dashed" onClick={() => editTiers((tiers) => [...tiers, { title: "", items: [] }])}>
-            <Icon name="plus" size={16} />
-            {t("pyramid.addTier")}
-          </button>
-        ) : null}
         <div className="pyramid">
-          {[...levels].reverse().map((level) => (
+          {/* уровень 1 — самое необходимое — сверху, дальше по убыванию */}
+          {levels.map((level) => (
             <TierRow
               key={level.index}
               level={level}
@@ -441,6 +436,12 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
             />
           ))}
         </div>
+        {draft ? (
+          <button type="button" className="btn mt-4 h-11 w-full border-dashed" onClick={() => editTiers((tiers) => [...tiers, { title: "", items: [] }])}>
+            <Icon name="plus" size={16} />
+            {t("pyramid.addTier")}
+          </button>
+        ) : null}
         <p className="mt-4 text-center text-xs text-fg-3">{t("pyramid.legend")}</p>
       </section>
     </div>
@@ -622,8 +623,8 @@ const TierRow: React.FC<{
         )}
         {editing ? (
           <span className="flex gap-1">
-            <button type="button" className="btn btn-icon h-8 min-h-0 w-8" disabled={i === count - 1} title={t("pyramid.up")} aria-label={t("pyramid.up")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i + 1]] = [tiers[i + 1], tiers[i]]; return tiers; })}><Icon name="chevronDown" size={15} className="rotate-180" /></button>
-            <button type="button" className="btn btn-icon h-8 min-h-0 w-8" disabled={i === 0} title={t("pyramid.down")} aria-label={t("pyramid.down")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i - 1]] = [tiers[i - 1], tiers[i]]; return tiers; })}><Icon name="chevronDown" size={15} /></button>
+            <button type="button" className="btn btn-icon h-8 min-h-0 w-8" disabled={i === 0} title={t("pyramid.up")} aria-label={t("pyramid.up")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i - 1]] = [tiers[i - 1], tiers[i]]; return tiers; })}><Icon name="chevronDown" size={15} className="rotate-180" /></button>
+            <button type="button" className="btn btn-icon h-8 min-h-0 w-8" disabled={i === count - 1} title={t("pyramid.down")} aria-label={t("pyramid.down")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i + 1]] = [tiers[i + 1], tiers[i]]; return tiers; })}><Icon name="chevronDown" size={15} /></button>
             <button type="button" className="row-remove h-8 w-8" disabled={count <= 1} title={t("pyramid.removeTier")} aria-label={t("pyramid.removeTier")}
               onClick={() => onEdit((tiers) => tiers.filter((_, n) => n !== i))}><Icon name="trash" size={15} /></button>
           </span>
