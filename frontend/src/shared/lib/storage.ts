@@ -8,6 +8,8 @@ export const STORAGE_KEYS = {
   sidebar: "sindaris-sidebar",
   orderDraft: "sindaris-order-draft",
   pinnedStockpile: "sindaris-pinned-stockpile",
+  welcomeDone: "sindaris-welcome-done",
+  recentTools: "sindaris-recent-tools",
 } as const;
 
 export function readStorage<T>(key: string, fallback: T): T {

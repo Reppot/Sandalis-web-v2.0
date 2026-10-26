@@ -26,11 +26,13 @@
   --text-2xl: 2.125rem;  /* 34 */
   --text-3xl: clamp(2.25rem, 4.2vw, 3.25rem);
 
-  --radius-xs: 6px;
-  --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 22px;
+  --radius-xs: 8px;
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+  /* элементы управления: кнопки, поля, сегменты */
+  --radius-control: 12px;
   --radius-full: 999px;
 
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -49,19 +51,19 @@
 :root,
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #0a0c0b;
-  --bg-elev: #0e1110;
-  --surface: #131715;
-  --surface-2: #1a1e1c;
-  --surface-3: #222724;
+  --bg: #0d0f0e;
+  --bg-elev: #111312;
+  --surface: #161917;
+  --surface-2: #1d201d;
+  --surface-3: #262a26;
   --surface-hover: rgba(255, 255, 255, 0.045);
   --surface-press: rgba(255, 255, 255, 0.08);
   --border: rgba(255, 255, 255, 0.075);
   --border-strong: rgba(255, 255, 255, 0.14);
 
-  --fg: #eef1ed;
-  --fg-2: #a8b0aa;
-  --fg-3: #737b75;
+  --fg: #f0f2ee;
+  --fg-2: #b0b7b1;
+  --fg-3: #858d87;
   --fg-on-media: #ffffff;
 
   --accent: #a3e635;
@@ -85,7 +87,7 @@
   --field-bg-hover: rgba(255, 255, 255, 0.055);
   --field-border: rgba(255, 255, 255, 0.1);
 
-  --nav-bg: #0d100f;
+  --nav-bg: #101211;
   --nav-border: rgba(255, 255, 255, 0.06);
   --nav-fg: #c9d0ca;
   --nav-fg-2: #7c847e;
@@ -125,8 +127,8 @@
   --border-strong: rgba(16, 24, 16, 0.16);
 
   --fg: #121612;
-  --fg-2: #545c56;
-  --fg-3: #858c87;
+  --fg-2: #4d554f;
+  --fg-3: #6b726d;
 
   --accent: #a3e635;
   --accent-rgb: 132 204 22;
@@ -251,8 +253,8 @@ html[data-skin="noir"] {
   --nav-strong: #ffffff;
   --item-bg: #2a2d31;
   --glass: rgba(200, 194, 207, 0.85);
-  --radius: 14px;
-  --radius-lg: 20px;
+  --radius: 16px;
+  --radius-lg: 22px;
   --shadow-1: none;
   --shadow-2: 0 12px 40px -16px rgba(16, 18, 20, 0.25);
   --focus-ring: 0 0 0 3px rgba(16, 18, 20, 0.35);

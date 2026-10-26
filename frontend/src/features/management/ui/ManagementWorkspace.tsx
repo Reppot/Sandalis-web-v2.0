@@ -121,7 +121,7 @@ const BotPanel: React.FC<{ onChanged: () => void }> = ({ onChanged }) => {
       <p className="mt-1 text-sm text-fg-3">{t("droles.hint")}</p>
 
       {!data ? (
-        <Loading className="min-h-[90px]" />
+        <Loading className="min-h-[90px]" skeleton={false} />
       ) : (
         <>
           <ol className="mt-4 grid gap-2 sm:grid-cols-3">

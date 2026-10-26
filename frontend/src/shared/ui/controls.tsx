@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { useT } from "@/shared/i18n";
 import { cn } from "@/shared/lib/utils";
 import type { UiIcon } from "@/shared/config/assets";
@@ -147,28 +148,116 @@ export const Panel: React.FC<React.HTMLAttributes<HTMLElement> & { as?: "section
   <Tag className={cn("panel", className)} {...props} />
 );
 
-export const Loading: React.FC<{ label?: string; className?: string }> = ({ label, className }) => {
+/**
+ * Загрузка: мягкий скелетон строк и подпись. skeleton={false} — только спиннер
+ * (для маленьких вставок внутри карточек).
+ */
+export const Loading: React.FC<{ label?: string; className?: string; rows?: number; skeleton?: boolean }> = ({ label, className, rows = 3, skeleton = true }) => {
   const t = useT();
+  if (!skeleton) {
+    return (
+      <div className={cn("flex min-h-[160px] items-center justify-center", className)} role="status">
+        <span className="loading-label"><span className="spinner" aria-hidden />{label ?? t("common.loading")}</span>
+      </div>
+    );
+  }
   return (
-    <div className={cn("flex min-h-[160px] flex-col items-center justify-center gap-3 text-sm text-fg-3", className)} role="status">
-      <span className="spinner" aria-hidden />
-      <span>{label ?? t("common.loading")}</span>
+    <div className={cn("loading-block", className)} role="status" aria-live="polite">
+      <div className="loading-rows" aria-hidden>
+        {Array.from({ length: rows }, (_, i) => (
+          <div key={i} className="loading-row">
+            <span className="skeleton h-9 w-9 shrink-0 rounded-[10px]" />
+            <span className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="skeleton h-3" style={{ width: `${[62, 48, 74, 55][i % 4]}%` }} />
+              <span className="skeleton h-2.5" style={{ width: `${[36, 28, 42, 31][i % 4]}%` }} />
+            </span>
+          </div>
+        ))}
+      </div>
+      <span className="loading-label">{label ?? t("common.loading")}</span>
     </div>
   );
 };
 
-export const EmptyState: React.FC<{ icon?: UiIcon | null; title: string; hint?: string; children?: React.ReactNode }> = ({ icon, title, hint, children }) => (
+/** Пустое состояние: значок, понятный заголовок, подсказка, что делать дальше, и кнопки. */
+export const EmptyState: React.FC<{ icon?: UiIcon | null; title: string; hint?: string; children?: React.ReactNode; actions?: React.ReactNode }> = ({ icon, title, hint, children, actions }) => (
   <div className="empty-state">
     {icon && (
       <span className="empty-state-icon">
-        <UiGlyph icon={icon} size={28} />
+        <UiGlyph icon={icon} size={30} />
       </span>
     )}
     <div className="empty-state-title">{title}</div>
     {hint && <div className="empty-state-hint">{hint}</div>}
+    {actions ? <div className="empty-state-actions">{actions}</div> : null}
     {children}
   </div>
 );
+
+/**
+ * Подсказка «?» рядом с полем или заголовком: открывается наведением, фокусом или нажатием.
+ * Всплывашка живёт в портале с position: fixed — её не обрезают карточки с overflow: hidden;
+ * встаёт над кнопкой, а если сверху мало места — под ней.
+ */
+export const Hint: React.FC<{ children: React.ReactNode; label?: string; className?: string }> = ({ children, label, className }) => {
+  const t = useT();
+  const [pos, setPos] = React.useState<{ left: number; top: number; below: boolean } | null>(null);
+  const ref = React.useRef<HTMLSpanElement>(null);
+  const id = React.useId();
+  const show = React.useCallback(() => {
+    const r = ref.current?.getBoundingClientRect();
+    if (!r) return;
+    const half = Math.min(144, window.innerWidth / 2 - 12);
+    const left = Math.min(Math.max(r.left + r.width / 2, half + 8), window.innerWidth - half - 8);
+    const below = r.top < 160;
+    setPos({ left, top: below ? r.bottom + 8 : r.top - 8, below });
+  }, []);
+  const hide = React.useCallback(() => setPos(null), []);
+  React.useEffect(() => {
+    if (!pos) return;
+    const close = (e: Event) => {
+      if (e instanceof KeyboardEvent ? e.key === "Escape" : !ref.current?.contains(e.target as Node)) hide();
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", close);
+    window.addEventListener("scroll", hide, true);
+    window.addEventListener("resize", hide);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", close);
+      window.removeEventListener("scroll", hide, true);
+      window.removeEventListener("resize", hide);
+    };
+  }, [pos, hide]);
+  return (
+    <span ref={ref} className={cn("hint", pos && "is-open", className)} onMouseEnter={show} onMouseLeave={hide}>
+      <button
+        type="button"
+        className="hint-btn"
+        aria-label={label ?? t("common.whatIsThis")}
+        aria-expanded={Boolean(pos)}
+        aria-describedby={pos ? id : undefined}
+        // фокус уже открыл подсказку — клик её не закрывает; закрывают Escape, клик мимо и уход фокуса
+        onClick={(e) => {
+          e.stopPropagation();
+          show();
+        }}
+        onFocus={show}
+        onBlur={hide}
+      >
+        ?
+      </button>
+      {pos
+        ? createPortal(
+            <span id={id} role="tooltip" className={cn("hint-pop", pos.below && "is-below")} style={{ left: pos.left, top: pos.top }}>
+              {children}
+            </span>,
+            document.body,
+          )
+        : null}
+    </span>
+  );
+};
 
 /** Иконка из нескольких источников по приоритету; без картинки — буква-заглушка. */
 export const ItemIcon: React.FC<{ sources: ReadonlyArray<string | null | undefined>; size: number; label: string; className?: string }> = ({ sources, size, label, className }) => {

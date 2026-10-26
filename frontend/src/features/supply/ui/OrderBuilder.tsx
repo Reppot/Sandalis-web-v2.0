@@ -218,7 +218,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
 
       <div data-guide="builder-matrix" className={`scroll-area panel-inner mt-3 p-1.5 ${isFullWidth ? "grid h-[340px] grid-cols-2 content-start gap-1 xl:grid-cols-3" : "h-[240px]"}`}>
         {catalogLoading ? (
-          <Loading label={t("builder.loading")} className="col-span-full h-full min-h-0" />
+          <Loading label={t("builder.loading")} className="col-span-full h-full min-h-0" skeleton={false} />
         ) : matrix.length === 0 ? (
           <div className="col-span-full flex h-full items-center justify-center text-sm text-fg-3">{t("common.nothingFound")}</div>
         ) : (

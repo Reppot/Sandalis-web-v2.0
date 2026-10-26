@@ -20,12 +20,13 @@ import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar, type NavProps } from "@/app/_shell/Navigation";
 import { CommandPalette, usePaletteHotkey } from "@/app/_shell/CommandPalette";
 import { ClanPulse } from "@/app/_shell/ClanPulse";
+import { Welcome, type WelcomeStep } from "@/app/_shell/Welcome";
 import { isClanView, isTabKey, isToolModule, legacyClanView, tabKeys, visibleTabs, type ClanView, type TabKey } from "@/app/_shell/tabs";
 import { CopyrightNotice, assetUrl, useT, type MessageKey } from "@/shared";
 
 export default function TerminalPage() {
   const t = useT();
-  const { session, loading, setSession, can } = useSession();
+  const { session, loading, setSession, can, logout } = useSession();
   const { media } = useContent();
   const [tab, setTab] = React.useState<TabKey>("tools");
   // открытый модуль «Инструментов» (?tab=tools&tool=...): заказы, пирамида, коды, калькуляторы
@@ -135,6 +136,18 @@ export default function TerminalPage() {
 
   if (!session) return <LoginScreen onLoggedIn={setSession} />;
 
+  const welcomeSteps: WelcomeStep[] = isGuest
+    ? [
+        { title: "welcome.guest1", hint: "welcome.guest1Hint", onClick: () => openTool("factory") },
+        { title: "welcome.guest2", hint: "welcome.guest2Hint", onClick: () => openTool("codes") },
+        { title: "welcome.guest3", hint: "welcome.guest3Hint", onClick: () => void logout() },
+      ]
+    : [
+        ...(clanSections.some((s) => s.view === "stockpiles") ? [{ title: "welcome.step1" as const, hint: "welcome.step1Hint" as const, onClick: () => openClan("stockpiles") }] : []),
+        ...(toolModules.some((m) => m.id === "orders") ? [{ title: "welcome.step2" as const, hint: "welcome.step2Hint" as const, onClick: () => openTool("orders") }] : []),
+        { title: "welcome.step3", hint: "welcome.step3Hint", onClick: () => openTool("factory") },
+      ];
+
   const workspace = (() => {
     switch (current) {
       case "clan":
@@ -147,6 +160,8 @@ export default function TerminalPage() {
             onOpen={openTool}
             canSendOrders={can(Scopes.REPORTS_CREATE)}
             onOrderSent={() => openClan("reports")}
+            userName={isGuest ? null : session.displayName}
+            welcome={<Welcome steps={welcomeSteps} />}
             summary={isGuest ? null : <ClanPulse canReports={can(Scopes.REPORTS_READ)} canStockpiles={can(Scopes.STOCKPILES_READ) || can(Scopes.TIMERS_READ)} onOpen={openClan} />}
           />
         );

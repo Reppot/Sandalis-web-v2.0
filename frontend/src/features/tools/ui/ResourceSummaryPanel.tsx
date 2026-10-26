@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { ExportBar, Icon, ItemIcon, useDocExport, useI18n, type ExportDoc, type Translate } from "@/shared";
+import { ExportBar, Hint, Icon, ItemIcon, useDocExport, useI18n, type ExportDoc, type Translate } from "@/shared";
 
 export interface SummaryLine {
   name: string;
@@ -36,7 +36,7 @@ export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
     ],
     fileBase: report.fileBase,
     sheetName: t("tools.doc.sheet"),
-    footer: `SINDARIS LOGISTICS OVERWATCH • ${t("tools.doc.footer")}`,
+    footer: `SINDARIS • ${t("tools.doc.footer")}`,
   };
 }
 
@@ -48,7 +48,7 @@ export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
  */
 /** hidden — окно свёрнуто; inline — единственное окно на странице: обычный блок на всю ширину
  *  (без плавающей карточки на телефоне/планшете). */
-export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: ToolReport; title: string; emptyHint: string; onClear: () => void; hidden?: boolean; inline?: boolean }>> = ({ report, title, emptyHint, onClear, hidden, inline, children }) => {
+export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: ToolReport; title: string; emptyHint: string; onClear: () => void; hidden?: boolean; inline?: boolean; totalsHint?: string }>> = ({ report, title, emptyHint, onClear, hidden, inline, totalsHint, children }) => {
   const { t, dateLocale } = useI18n();
   const fmt = (v: number | string) => (typeof v === "number" ? v.toLocaleString(dateLocale) : v);
   const { media } = useContent();
@@ -95,10 +95,15 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
         </div>
         <div className="factory-rule" />
         <div className="factory-plan-list scroll-area min-h-[120px] max-lg:flex-none max-lg:overflow-visible lg:min-h-[140px]">
-          {count ? children : <div className="py-10 text-center text-sm text-fg-3">{emptyHint}</div>}
+          {count ? children : (
+            <div className="summary-empty">
+              <span className="summary-empty-icon" aria-hidden><Icon name="plus" size={20} /></span>
+              <span>{emptyHint}</span>
+            </div>
+          )}
         </div>
         <div className="factory-totals shrink-0">
-          <div data-guide="tool-totals" className="mb-2.5 text-sm font-semibold">{t("tools.totals")}</div>
+          <div data-guide="tool-totals" className="mb-2.5 flex items-center gap-1.5 text-sm font-semibold">{t("tools.totals")}{totalsHint ? <Hint>{totalsHint}</Hint> : null}</div>
           <div className="factory-totals-scroll scroll-area">
             {[
               { title: null, lines: report.resources },

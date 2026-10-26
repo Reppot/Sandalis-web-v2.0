@@ -212,7 +212,18 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
         <div className="panel"><Loading label={t("reports.loading")} /></div>
       ) : visible.length === 0 ? (
         <div className="panel">
-          <EmptyState icon="orders" title={reports.length ? t("common.nothingFound") : t("reports.empty")} />
+          <EmptyState
+            icon="orders"
+            title={query.trim() ? t("common.nothingFound") : t("reports.emptyTitle")}
+            hint={query.trim() ? t("reports.emptySearchHint") : t("reports.emptyHint")}
+            actions={
+              query.trim() ? (
+                <button type="button" className="btn" onClick={() => setQuery("")}>{t("common.clearSearch")}</button>
+              ) : can(Scopes.REPORTS_CREATE) ? (
+                <button type="button" className="btn btn-primary" onClick={onOpenConstructor}><Icon name="plus" size={16} />{t("reports.emptyAction")}</button>
+              ) : null
+            }
+          />
         </div>
       ) : (
         <ul className="grid gap-3">

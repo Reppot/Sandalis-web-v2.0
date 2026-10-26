@@ -64,7 +64,7 @@ export const Ticker: React.FC<{ onOpen?: () => void }> = ({ onOpen }) => {
     else if (connection === "offline") out.unshift({ key: "offline", text: t("ticker.offline"), tone: "critical" });
     if (phrase) out.push({ key: "phrase", text: phrase, tone: "info" });
     // «все склады в безопасности» — только тем, кто видит склады клана
-    if (!out.length) out.push({ key: "safe", text: enabled ? t("ticker.allSafe") : "SINDARIS Logistics Overwatch", tone: "safe" });
+    if (!out.length) out.push({ key: "safe", text: enabled ? t("ticker.allSafe") : t("ticker.guest"), tone: "safe" });
     return out;
   }, [timers, now, phrase, loading, connection, enabled, t]);
 

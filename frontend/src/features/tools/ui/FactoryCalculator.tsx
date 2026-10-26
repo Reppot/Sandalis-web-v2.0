@@ -4,7 +4,7 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
 import { codeSynonyms } from "@/entities/item";
-import { FilterCards, Icon, ItemIcon, QuantityStepper, SearchField, Segmented, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
+import { FilterCards, Hint, Icon, ItemIcon, QuantityStepper, SearchField, Segmented, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
 import { ToolHeader } from "@/features/tools/ui/ToolHeader";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { truckLines } from "@/features/tools/ui/trucks";
@@ -160,7 +160,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
     <div className="tab-fade factory-page pb-24 lg:pb-0">
       <ToolHeader
         icon={<UiGlyph icon={facility === "factory" ? "factory" : "mpf"} size={26} />}
-        eyebrow="Production planner"
+        eyebrow={facility === "factory" ? t("eyebrow.factory") : t("eyebrow.mpf")}
         title={facility === "factory" ? t("tools.factory") : "MPF — Mass Production Factory"}
         hint={facility === "factory" ? t("tools.factoryHint") : t("tools.mpfHint")}
         actions={
@@ -175,6 +175,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
               ]}
               className="h-10"
             />
+            <Hint>{facility === "mpf" ? `${t("hint.modes")} ${t("hint.mpf")}` : t("hint.modes")}</Hint>
             <button className="btn btn-primary h-10" data-guide="tool-mode" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: t("tools.factory"), message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
               <Icon name="copy" size={16} />
               {t("tools.sharePlan")}
@@ -217,7 +218,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
               return (
                 <button key={recipe.id} type="button" className={`factory-item-card tool-item min-h-[14rem] ${queued ? "is-selected" : ""}`} onClick={() => setQuantity(recipe, (n) => n + 1)} title={recipe.description ?? undefined}>
                   <span className="factory-add absolute top-2.5 right-2.5"><Icon name="plus" size={14} strokeWidth={2.5} /></span>
-                  {queued ? <span className="queued-badge absolute top-2.5 left-2.5">{queued} {t("unit.crate")}</span> : null}
+                  {queued ? <span key={queued} className="queued-badge bump absolute top-2.5 left-2.5">{queued} {t("unit.crate")}</span> : null}
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={88} label={rname(recipe)} className="mt-3" />
                   <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.85rem] font-semibold leading-tight text-fg">{rname(recipe)}</strong>
                   <span className="mt-auto flex flex-wrap justify-center gap-1">
@@ -235,7 +236,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
           </div>
         </section>
 
-        <ResourceSummaryPanel report={report} title={t("tools.productionQueue")} emptyHint={t("tools.queueHint")} onClear={() => setPlan({})} hidden={!panes.plan} inline={panes.wide === "plan"}>
+        <ResourceSummaryPanel report={report} title={t("tools.productionQueue")} emptyHint={t("tools.queueHint")} totalsHint={t("hint.crates")} onClear={() => setPlan({})} hidden={!panes.plan} inline={panes.wide === "plan"}>
           {rows.map(({ recipe, crates }) => (
             <div className="factory-plan-row" key={recipe.id}>
               <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={56} label={rname(recipe)} />

@@ -94,7 +94,7 @@ export const CodeBaseWorkspace: React.FC = () => {
     <div className="tab-fade flex min-h-full flex-col gap-4">
       <PageHeader
         icon="codes"
-        eyebrow="Foxhole item registry"
+        eyebrow={t("eyebrow.codes")}
         title={t("codes.title")}
         lead={t("codes.subtitle")}
         actions={

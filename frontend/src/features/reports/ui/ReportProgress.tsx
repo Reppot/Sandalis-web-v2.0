@@ -26,7 +26,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
   }, [report.id]);
   React.useEffect(load, [load, report.updated_at]);
 
-  if (!progress) return <div className="report-progress"><Loading className="min-h-[60px]" /></div>;
+  if (!progress) return <div className="report-progress"><Loading className="min-h-[60px]" skeleton={false} /></div>;
 
   const total = pct(progress.delivered_total, progress.ordered_total);
   // кто что привёз: строка -> {имя: количество}

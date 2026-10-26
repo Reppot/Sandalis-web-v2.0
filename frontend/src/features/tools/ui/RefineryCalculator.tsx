@@ -100,7 +100,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
     <div className="tab-fade factory-page pb-24 lg:pb-0">
       <ToolHeader
         icon={<UiGlyph icon="refinery" size={26} />}
-        eyebrow="Refinery planner"
+        eyebrow={t("eyebrow.refinery")}
         title={t("tools.refinery")}
         hint={t("tools.refineryHint")}
         actions={

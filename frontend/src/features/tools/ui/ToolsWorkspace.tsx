@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent, type ExternalToolPayload } from "@/entities/content";
 import { recipeApi, type Recipe } from "@/entities/recipe";
-import { Loading, errorText, UiGlyph, cn, useNotify, useT, type MessageKey, type UiIcon } from "@/shared";
+import { Loading, STORAGE_KEYS, errorText, readStorage, UiGlyph, cn, useNotify, useT, writeStorage, type MessageKey, type UiIcon } from "@/shared";
 import { FactoryCalculator } from "@/features/tools/ui/FactoryCalculator";
 import { RefineryCalculator } from "@/features/tools/ui/RefineryCalculator";
 import { FacilityCalculator } from "@/features/tools/ui/FacilityCalculator";
@@ -43,7 +43,11 @@ export const ToolsWorkspace: React.FC<{
   onOrderSent?: () => void;
   /** Сводка клана под шапкой витрины (собирает page.tsx). */
   summary?: React.ReactNode;
-}> = ({ modules, active, onOpen, canSendOrders, onOrderSent, summary }) => {
+  /** Карточка «С чего начать» для новичков (собирает page.tsx). */
+  welcome?: React.ReactNode;
+  /** Имя для приветствия; null — гость. */
+  userName?: string | null;
+}> = ({ modules, active, onOpen, canSendOrders, onOrderSent, summary, welcome, userName }) => {
   const notify = useNotify();
   const t = useT();
   const { list } = useContent();
@@ -53,6 +57,16 @@ export const ToolsWorkspace: React.FC<{
   const external = list<ExternalToolPayload>("external_tool");
   const all = React.useMemo(() => [...modules, ...TOOL_CALCULATORS], [modules]);
   const current = all.find((m) => m.id === active) ?? null;
+
+  // недавно открытые модули — быстрые ссылки в шапке витрины (только в этом браузере)
+  const [recent, setRecent] = React.useState<string[]>([]);
+  React.useEffect(() => {
+    const stored = readStorage<string[]>(STORAGE_KEYS.recentTools, []);
+    const next = active ? [active, ...stored.filter((id) => id !== active)].slice(0, 4) : stored;
+    if (active) writeStorage(STORAGE_KEYS.recentTools, next);
+    setRecent(next);
+  }, [active]);
+  const recentModules = recent.map((id) => all.find((m) => m.id === id)).filter((m): m is ToolModule => Boolean(m));
 
   React.useEffect(() => {
     if (active !== "facility" || facility) return;
@@ -123,17 +137,32 @@ export const ToolsWorkspace: React.FC<{
     <div className="tab-fade tools-page">
       <section className="panel tools-hero">
         <div className="min-w-0">
-          <div className="page-eyebrow">SINDARIS Field Utilities</div>
-          <h1 className="tools-hero-title">{t("tools.heroTitle")}</h1>
+          <div className="page-eyebrow">{t("home.eyebrow")}</div>
+          <h1 className="tools-hero-title">{userName ? t("home.hello", { name: userName }) : t("home.helloGuest")}</h1>
           <p className="tools-hero-sub">{t("tools.heroSubtitle")}</p>
         </div>
-        <div className="tools-hero-stats">
-          <span><b>{all.length}</b>{t("tools.statModules")}</span>
-          <span><b>3</b>{t("tools.statLanguages")}</span>
-          <span><b>Wiki</b>{t("tools.statData")}</span>
-        </div>
+        {recentModules.length ? (
+          <div className="tools-hero-recent">
+            <span className="tools-hero-recent-label">{t("home.recent")}</span>
+            <div className="flex flex-wrap gap-2">
+              {recentModules.map((m) => (
+                <button key={m.id} type="button" className="recent-chip" onClick={() => onOpen(m.id)}>
+                  <UiGlyph icon={m.icon} size={18} />
+                  {t(m.label)}
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="tools-hero-stats">
+            <span><b>{all.length}</b>{t("tools.statModules")}</span>
+            <span><b>3</b>{t("tools.statLanguages")}</span>
+            <span><b>Wiki</b>{t("tools.statData")}</span>
+          </div>
+        )}
       </section>
 
+      {welcome}
       {summary}
 
       <section data-guide="tools-modules" className="tools-group" aria-labelledby="tools-logistics">

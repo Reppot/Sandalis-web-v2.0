@@ -193,7 +193,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
     <div className="tab-fade factory-page pb-24 lg:pb-0">
       <ToolHeader
         icon={<UiGlyph icon="facility" size={26} />}
-        eyebrow="Facility planner"
+        eyebrow={t("eyebrow.facility")}
         title={t("tools.facility")}
         hint={t("facility.hint")}
         actions={

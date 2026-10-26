@@ -9,6 +9,7 @@ import { catalogApi, codeSynonyms } from "@/entities/item";
 import {
   EmptyState,
   Field,
+  Hint,
   ItemIcon,
   assetUrl,
   Loading,
@@ -130,7 +131,7 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
       <section className="panel p-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="min-w-0">
-            <h2 className="section-title">{t("clan.stockpilesTitle")}</h2>
+            <h2 className="section-title flex items-center gap-2">{t("clan.stockpilesTitle")}<Hint>{t("hint.stockpileTimer")}</Hint></h2>
             <p className="mt-0.5 text-sm text-fg-3">{t("clan.stockpilesHint")}</p>
           </div>
           {can(Scopes.STOCKPILES_CREATE) ? (
@@ -171,7 +172,18 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
         <div className="panel"><Loading label={t("timers.loading")} /></div>
       ) : visible.length === 0 ? (
         <div className="panel">
-          <EmptyState icon="stockpile" title={rows.length ? t("common.nothingFound") : t("clan.noStockpiles")}>
+          <EmptyState
+            icon="stockpile"
+            title={rows.length ? t("common.nothingFound") : t("clan.noStockpiles")}
+            hint={rows.length ? t("common.nothingFilter") : t("clan.noStockpilesHint")}
+            actions={
+              rows.length ? (
+                <button type="button" className="btn" onClick={() => { setQuery(""); setFilter("all"); }}>{t("sheet.reset")}</button>
+              ) : can(Scopes.STOCKPILES_CREATE) ? (
+                <button type="button" className="btn btn-primary" onClick={() => setEditing("new")}><Icon name="plus" size={16} />{t("stock.newClan")}</button>
+              ) : null
+            }
+          >
             {connection === "offline" && <div className="text-sm text-danger">{t("common.noDb")}</div>}
           </EmptyState>
         </div>
@@ -353,7 +365,7 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
     };
   }, [stockpile.id, stockpile.lastSyncAt]);
 
-  if (!items) return <div className="stockpile-items"><Loading /></div>;
+  if (!items) return <div className="stockpile-items"><Loading rows={2} /></div>;
   const name = (i: Stockpile["items"][number]) => (locale === "ru" ? i.name ?? i.nameEn : i.nameEn ?? i.name) ?? i.itemCode;
   const needle = query.trim();
   const shown = [...items]
