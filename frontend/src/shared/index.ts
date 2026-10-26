@@ -10,6 +10,7 @@ export * from "./api/client";
 export * from "./api/types";
 export * from "./ui/controls";
 export * from "./ui/glyph";
+export * from "./ui/icons";
 export * from "./ui/modal";
 export * from "./ui/notify";
 export * from "./ui/theme";

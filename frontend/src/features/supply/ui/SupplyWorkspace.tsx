@@ -26,9 +26,9 @@ export const SupplyWorkspace: React.FC<SupplyWorkspaceProps> = ({ can, onReportS
   const constructorFull = showConstructor && !showStockpile;
 
   return (
-    <div className="tab-fade flex min-h-full flex-col gap-2.5 md:gap-3">
-      <PaneToggles panes={panes} first={{ label: t("stock.title"), icon: "📦" }} second={{ label: t("builder.title"), icon: "🛠️" }} guide="supply-panes" />
-      <div className="grid gap-2.5 md:gap-3 lg:grid-cols-2">
+    <div className="tab-fade flex min-h-full flex-col gap-4">
+      <PaneToggles panes={panes} first={{ label: t("stock.title"), icon: "" }} second={{ label: t("builder.title"), icon: "" }} guide="supply-panes" />
+      <div className="grid items-start gap-4 lg:grid-cols-2">
         <div className={`${showStockpile ? "block" : "hidden"} min-w-0 ${stockpileFull ? "lg:col-span-2" : ""}`}>
           <StorageMonitor can={can} isFullWidth={stockpileFull} onPinned={onPinned} />
         </div>

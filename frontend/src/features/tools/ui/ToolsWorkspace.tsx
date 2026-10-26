@@ -19,7 +19,8 @@ export interface ToolModule {
   isNew?: boolean;
 }
 
-const CALCULATORS: ToolModule[] = [
+/** Калькуляторы — модули без данных клана; page.tsx показывает их и в боковом меню. */
+export const TOOL_CALCULATORS: ToolModule[] = [
   { id: "facility", icon: "facility", label: "tools.facility", isNew: true },
   { id: "mpf", icon: "mpf", label: "tools.mpf" },
   { id: "factory", icon: "factory", label: "tools.factory" },
@@ -48,7 +49,7 @@ export const ToolsWorkspace: React.FC<{
   // рецепты построек (~350) грузятся только при открытии калькулятора завода
   const [facility, setFacility] = React.useState<Recipe[] | null>(null);
   const external = list<ExternalToolPayload>("external_tool");
-  const all = React.useMemo(() => [...modules, ...CALCULATORS], [modules]);
+  const all = React.useMemo(() => [...modules, ...TOOL_CALCULATORS], [modules]);
   const current = all.find((m) => m.id === active) ?? null;
 
   React.useEffect(() => {
@@ -66,7 +67,7 @@ export const ToolsWorkspace: React.FC<{
       .catch((err) => notify({ title: t("tools.recipes"), message: errorText(err, t("tools.recipesFailed")), tone: "danger" }));
   }, [active, recipes, notify, t]);
 
-  const loading = <div className="panel rounded-md"><Loading label={t("tools.loading")} /></div>;
+  const loading = <div className="panel"><Loading label={t("tools.loading")} /></div>;
   const body = (() => {
     if (!current) return null;
     if (current.render) return current.render();
@@ -80,7 +81,7 @@ export const ToolsWorkspace: React.FC<{
   if (current) {
     return (
       <div className="tab-fade tools-page">
-        <nav data-guide="tools-tabs" className="tools-switcher panel panel-corners" aria-label={t("tools.clanTools")}>
+        <nav data-guide="tools-tabs" className="tools-switcher panel" aria-label={t("tools.clanTools")}>
           <button type="button" className="btn tools-back" onClick={() => onOpen(null)}>← {t("tools.allTools")}</button>
           <div className="tools-switcher-list scroll-area" role="tablist">
             {all.map((m) => (
@@ -96,50 +97,58 @@ export const ToolsWorkspace: React.FC<{
     );
   }
 
+  const cardOf = (m: ToolModule, featured: boolean) => (
+    <button key={m.id} type="button" className={cn("tool-card", featured && "is-featured")} onClick={() => onOpen(m.id)}>
+      <span className="tool-card-top">
+        <span className="tool-card-icon"><UiGlyph icon={m.icon} size={featured ? 30 : 26} /></span>
+        <span className="tool-card-badges">
+          {m.isNew ? <span className="tool-badge is-new">{t("tools.badgeNew")}</span> : null}
+          {m.clanData ? <span className="tool-badge is-clan">{t("tools.badgeClan")}</span> : null}
+        </span>
+      </span>
+      <span className="tool-card-title">{t(m.label)}</span>
+      <span className="tool-card-tagline">{t(card(m.id, "tagline"))}</span>
+      <span className="tool-card-features">
+        {(["f1", "f2", "f3"] as const).map((f) => (
+          <span key={f}>{t(card(m.id, f))}</span>
+        ))}
+      </span>
+      <span className="tool-card-cta">{t("tools.open")}</span>
+    </button>
+  );
+
   return (
     <div className="tab-fade tools-page">
-      <section className="panel panel-corners tools-hero">
+      <section className="panel tools-hero">
         <div className="min-w-0">
-          <div className="hud-label text-accent">SINDARIS FIELD UTILITIES</div>
+          <div className="page-eyebrow">SINDARIS Field Utilities</div>
           <h1 className="tools-hero-title">{t("tools.heroTitle")}</h1>
           <p className="tools-hero-sub">{t("tools.heroSubtitle")}</p>
         </div>
         <div className="tools-hero-stats">
           <span><b>{all.length}</b>{t("tools.statModules")}</span>
           <span><b>3</b>{t("tools.statLanguages")}</span>
-          <span><b>WIKI</b>{t("tools.statData")}</span>
+          <span><b>Wiki</b>{t("tools.statData")}</span>
         </div>
       </section>
 
-      <section data-guide="tools-modules" className="tools-showcase">
-        {all.map((m, i) => (
-          <button key={m.id} type="button" className={cn("tool-card", i < 2 && "is-featured")} onClick={() => onOpen(m.id)}>
-            <span className="tool-card-top">
-              <span className="tool-card-icon"><UiGlyph icon={m.icon} size={i < 2 ? 64 : 52} /></span>
-              <span className="tool-card-badges">
-                {m.isNew ? <span className="tool-badge is-new">{t("tools.badgeNew")}</span> : null}
-                {m.clanData ? <span className="tool-badge is-clan">{t("tools.badgeClan")}</span> : null}
-              </span>
-            </span>
-            <span className="tool-card-title">{t(m.label)}</span>
-            <span className="tool-card-tagline">{t(card(m.id, "tagline"))}</span>
-            <span className="tool-card-features">
-              {(["f1", "f2", "f3"] as const).map((f) => (
-                <span key={f}>✔ {t(card(m.id, f))}</span>
-              ))}
-            </span>
-            <span className="tool-card-cta">{t("tools.open")} →</span>
-          </button>
-        ))}
+      <section data-guide="tools-modules" className="tools-group" aria-labelledby="tools-logistics">
+        <h2 id="tools-logistics" className="tools-group-title">{t("tools.groupLogistics")}</h2>
+        <div className="tools-showcase">{modules.map((m, i) => cardOf(m, i < 2))}</div>
+      </section>
+
+      <section className="tools-group" aria-labelledby="tools-calculators">
+        <h2 id="tools-calculators" className="tools-group-title">{t("tools.groupCalculators")}</h2>
+        <div className="tools-showcase is-compact">{TOOL_CALCULATORS.map((m) => cardOf(m, false))}</div>
       </section>
 
       {external.length ? (
         <section className="tools-external">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 data-guide="tools-external" className="hud-label text-muted">🔗 {t("tools.thirdParty")} • {t("tools.links", { n: external.length })}</h2>
-            <span className="hud-label text-muted">{t("tools.externalHint")}</span>
+            <h2 data-guide="tools-external" className="tools-group-title">{t("tools.thirdParty")}</h2>
+            <span className="text-sm text-fg-3">{t("tools.externalHint")}</span>
           </div>
-          <div className="external-tools-grid is-compact mt-2">
+          <div className="external-tools-grid mt-3">
             {external.map(({ key, payload }) => (
               <a key={key} className="external-tool-card" href={payload.url} target="_blank" rel="noreferrer" title={payload.description}>
                 <span className="external-tool-icon" aria-hidden>{payload.icon}</span>

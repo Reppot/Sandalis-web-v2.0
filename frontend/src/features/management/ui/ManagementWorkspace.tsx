@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { EmptyState, LoadMore, Loading, Modal, PagedMore, UiGlyph, cn, errorText, formatDateTime, matchesWords, roleColor, useNotify, usePaged, useT, type MessageKey } from "@/shared";
+import { EmptyState, LoadMore, Loading, Modal, PagedMore, cn, errorText, formatDateTime, matchesWords, roleColor, useNotify, usePaged, useT, type MessageKey, Icon, PageHeader, SearchField, Segmented } from "@/shared";
 import { ClanTokenPanel } from "@/features/management/ui/ClanTokenPanel";
 import { DiscordWebhookPanel } from "@/features/management/ui/DiscordWebhookPanel";
 import { MEMBERS_PAGE, managementApi, type AccessLevel, type ClanMember, type DiscordRole, type DiscordRoles, type MembersPage, type PermissionCatalog } from "@/features/management/api";
@@ -15,8 +15,8 @@ const LEVELS: { value: AccessLevel; label: MessageKey }[] = [
 const LEVEL_LABEL: Record<string, MessageKey> = {
   basic: "level.basic", medium: "level.medium", high: "level.high", custom: "level.custom", owner: "role.owner", guest: "role.guest",
 };
-const LEVEL_COLOR: Record<string, string> = {
-  owner: "var(--accent)", high: "#f472b6", medium: "#60a5fa", custom: "#fbbf24", basic: "rgba(229,231,235,0.75)", guest: "var(--muted)",
+const LEVEL_BADGE: Record<string, string> = {
+  owner: "badge-accent", high: "badge-danger", medium: "badge-info", custom: "badge-warn", basic: "badge-neutral", guest: "badge-neutral",
 };
 const hex = roleColor;
 const permKey = (p: string) => `perm.${p}` as MessageKey;
@@ -41,25 +41,12 @@ export const ManagementWorkspace: React.FC = () => {
   }, []);
 
   return (
-    <div className="tab-fade flex flex-col gap-3">
-      <section className="panel panel-corners rounded-md p-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <UiGlyph icon="map" size={40} />
-          <div className="min-w-0 flex-1">
-            <div className="hud-label text-muted">{t("mgmt.kicker")}</div>
-            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">{t("nav.management.label")}</h1>
-            <p className="mt-1 text-[0.8rem] text-white/70">{t("mgmt.subtitle")}</p>
-          </div>
+    <div className="tab-fade flex flex-col gap-4">
+      <PageHeader icon="map" eyebrow={t("mgmt.kicker")} title={t("nav.management.label")} lead={t("mgmt.subtitle")}>
+        <div className="mt-5">
+          <Segmented label={t("nav.management.label")} size="lg" value={view} onChange={setView} options={VIEWS.map((v) => ({ value: v.key, label: t(v.label) }))} />
         </div>
-        <div className="stencil-line mt-3" />
-        <div className="mt-3 flex gap-1.5" role="tablist">
-          {VIEWS.map((v) => (
-            <button key={v.key} type="button" role="tab" aria-selected={view === v.key} className={cn("chip h-9 px-4", view === v.key && "is-active")} onClick={() => setView(v.key)}>
-              {t(v.label)}
-            </button>
-          ))}
-        </div>
-      </section>
+      </PageHeader>
 
       <BotPanel onChanged={() => setRevision((r) => r + 1)} />
 
@@ -68,7 +55,7 @@ export const ManagementWorkspace: React.FC = () => {
       ) : view === "roles" ? (
         <RolesView key={revision} catalog={catalog} />
       ) : (
-        <div data-guide="mgmt-integrations" className="flex flex-col gap-3">
+        <div data-guide="mgmt-integrations" className="flex flex-col gap-4">
           <DiscordWebhookPanel />
           <ClanTokenPanel />
         </div>
@@ -121,50 +108,50 @@ const BotPanel: React.FC<{ onChanged: () => void }> = ({ onChanged }) => {
     : [];
 
   return (
-    <section data-guide="mgmt-bot" className="panel panel-corners rounded-md p-4">
+    <section data-guide="mgmt-bot" className="panel p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="panel-title">🤖 {t("mgmt.botTitle")}</div>
+        <div className="panel-title">{t("mgmt.botTitle")}</div>
         {data?.guildId && (
           <span className={cn("cabinet-pill", verified && "cabinet-pill-online")}>
-            {verified ? `● ${t("mgmt.botOnline")}` : `○ ${t("mgmt.botOffline")}`}
-            {verified && synced ? ` • ${t("droles.on")} • ${data.roles.length}` : ""}
+            {verified ? t("mgmt.botOnline") : t("mgmt.botOffline")}
+            {verified && synced ? ` · ${t("droles.on")} · ${data.roles.length}` : ""}
           </span>
         )}
       </div>
-      <div className="cabinet-rule" />
-      <p className="text-[0.78rem] text-white/70">{t("droles.hint")}</p>
+      <p className="mt-1 text-sm text-fg-3">{t("droles.hint")}</p>
 
       {!data ? (
         <Loading className="min-h-[90px]" />
       ) : (
         <>
-          <ol className="mt-3 grid gap-1.5 sm:grid-cols-3">
+          <ol className="mt-4 grid gap-2 sm:grid-cols-3">
             {steps.map((step, i) => (
-              <li key={step.label} className={cn("row-item text-xs", step.done ? "text-safe" : "text-muted")}>
-                <span className="font-mono">{step.done ? "✔" : `${i + 1}.`}</span>
+              <li key={step.label} className={cn("setup-step", step.done && "is-done")}>
+                <span className="setup-step-mark">{step.done ? <Icon name="check" size={13} strokeWidth={3} /> : i + 1}</span>
                 <span className="min-w-0 flex-1">{t(step.label)}</span>
               </li>
             ))}
           </ol>
 
           {!data.guildId ? (
-            <p className="hud-label mt-3 text-warn">{t("droles.noGuild")}</p>
+            <p className="mt-4 text-sm text-warn">{t("droles.noGuild")}</p>
           ) : !data.botConfigured ? (
-            <p className="hud-label mt-3 text-warn">{t("droles.noBotToken")}</p>
+            <p className="mt-4 text-sm text-warn">{t("droles.noBotToken")}</p>
           ) : (
-            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center">
-              <p className={cn("hud-label flex-1", data.botInGuild ? "text-muted" : "text-warn")}>
+            <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+              <p className={cn("flex-1 text-sm", data.botInGuild ? "text-fg-3" : "text-warn")}>
                 {!data.botInGuild ? t("droles.addBot") : synced ? t("droles.synced", { at: formatDateTime(data.syncedAt!) }) : t("droles.notSynced")}
               </p>
               {data.botInviteUrl && (
                 <a className={cn("btn", !data.botInGuild && "btn-primary")} data-guide="mgmt-add-bot" href={data.botInviteUrl} target="_blank" rel="noreferrer">
-                  ＋ {t(data.botInGuild ? "mgmt.reinviteBot" : "droles.addBotButton")}
+                  <Icon name="plus" size={15} />
+                  {t(data.botInGuild ? "mgmt.reinviteBot" : "droles.addBotButton")}
                 </a>
               )}
               {data.botInGuild && (
-                <button type="button" className="btn btn-primary" data-guide="mgmt-pull" disabled={busy} onClick={() => void pull()}>⇩ {t("droles.pull")}</button>
+                <button type="button" className="btn btn-primary" data-guide="mgmt-pull" disabled={busy} onClick={() => void pull()}><Icon name="download" size={15} />{t("droles.pull")}</button>
               )}
-              <button type="button" className="btn" disabled={busy} onClick={load}>⟳ {t("common.sync")}</button>
+              <button type="button" className="btn" disabled={busy} onClick={load}><Icon name="refresh" size={15} />{t("common.sync")}</button>
             </div>
           )}
         </>
@@ -241,55 +228,56 @@ const MembersView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog 
   const total = catalog ? catalog.groups.reduce((n, g) => n + g.permissions.length, 0) : 0;
 
   return (
-    <section data-guide="mgmt-members" className="panel panel-corners rounded-md p-4">
+    <section data-guide="mgmt-members" className="panel p-5">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-        <h2 className="panel-title flex-1">
-          👥 {t("mgmt.members")}{data ? ` • ${data.total ?? data.members.length}` : ""}
-          {data ? <span className="hud-label ml-2 text-safe">{t("mgmt.joinedTotal", { n: data.joinedTotal })}</span> : null}
+        <h2 className="flex flex-1 flex-wrap items-baseline gap-x-2.5">
+          <span className="panel-title">{t("mgmt.members")}</span>
+          {data ? <span className="count-pill">{data.total ?? data.members.length}</span> : null}
+          {data ? <span className="text-xs text-safe">{t("mgmt.joinedTotal", { n: data.joinedTotal })}</span> : null}
         </h2>
-        <input className="field field-mono w-full py-1.5 text-xs sm:w-64" placeholder={t("mgmt.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
-        <button type="button" className="btn" onClick={load}>⟳ {t("common.sync")}</button>
+        <SearchField className="w-full sm:w-72" placeholder={t("mgmt.search")} value={query} onChange={setQuery} />
+        <button type="button" className="btn h-10" onClick={load}><Icon name="refresh" size={15} />{t("common.sync")}</button>
       </div>
-      {data?.status === "intent_required" && <p className="hud-label mt-2 text-warn">{t("droles.membersIntent")}</p>}
-      {data?.status === "no_bot" && <p className="hud-label mt-2 text-warn">{t("mgmt.noBotMembers")}</p>}
-      {data?.status === "no_guild" && <p className="hud-label mt-2 text-warn">{t("droles.noGuild")}</p>}
+      {data?.status === "intent_required" && <p className="mt-3 text-sm text-warn">{t("droles.membersIntent")}</p>}
+      {data?.status === "no_bot" && <p className="mt-3 text-sm text-warn">{t("mgmt.noBotMembers")}</p>}
+      {data?.status === "no_guild" && <p className="mt-3 text-sm text-warn">{t("droles.noGuild")}</p>}
 
       {!current ? (
         <Loading />
       ) : filtered.length === 0 ? (
         <EmptyState icon="cabinet" title={t("mgmt.noMembers")} />
       ) : (
-        <ul className="mt-3 flex flex-col gap-1.5">
+        <ul className="mt-4 flex flex-col gap-1.5">
           {filtered.map((m) => {
             const expanded = open === m.id;
             return (
-              <li key={m.id} className={cn("panel-inner rounded px-3 py-2", !m.joined && "opacity-75")}>
+              <li key={m.id} className={cn("member-row", !m.joined && "opacity-70")}>
                 <button type="button" className="flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 text-left" onClick={() => setOpen(expanded ? null : m.id)}>
-                  <span className="text-white/50" aria-hidden>{expanded ? "▾" : "▸"}</span>
-                  <span className="min-w-[10rem] flex-1 truncate text-sm text-white">{m.name}</span>
+                  <Icon name="chevronRight" size={15} className={cn("text-fg-3 transition-transform", expanded && "rotate-90")} />
+                  <span className="min-w-[10rem] flex-1 truncate text-[0.9rem] font-medium text-fg">{m.name}</span>
                   <span className="flex min-w-0 flex-[2] flex-wrap gap-1">
                     {m.roles.length ? (
                       m.roles.map((r) => (
                         <span key={r.name} className="auth-role-chip" style={{ borderColor: hex(r.color), color: hex(r.color) }}>{r.name}</span>
                       ))
                     ) : (
-                      <span className="hud-label text-muted">{t(m.inDiscord ? "setup.noRoles" : "mgmt.notOnServer")}</span>
+                      <span className="text-xs text-fg-3">{t(m.inDiscord ? "setup.noRoles" : "mgmt.notOnServer")}</span>
                     )}
                   </span>
-                  <span className="hud-label rounded border px-1.5 py-0.5" style={{ color: LEVEL_COLOR[m.level], borderColor: LEVEL_COLOR[m.level] }}>
+                  <span className={cn("badge", LEVEL_BADGE[m.level] ?? "badge-neutral")}>
                     {t(LEVEL_LABEL[m.level] ?? "level.basic")}
                   </span>
-                  <span className={cn("hud-label w-28 text-right", m.joined ? "text-safe" : "text-muted")}>{t(m.joined ? "droles.joined" : "droles.notJoined")}</span>
+                  <span className={cn("w-28 text-right text-xs", m.joined ? "text-safe" : "text-fg-3")}>{t(m.joined ? "droles.joined" : "droles.notJoined")}</span>
                 </button>
                 {expanded && (
-                  <div className="mt-2 border-t border-white/10 pt-2">
-                    <div className="hud-label mb-1.5 text-muted">
-                      {t("mgmt.effective")} • {m.permissions.includes("*") ? t("mgmt.allPermissions") : `${m.permissions.length} / ${total}`}
+                  <div className="mt-3 border-t border-line pt-3">
+                    <div className="mb-2 text-xs text-fg-3">
+                      {t("mgmt.effective")} · {m.permissions.includes("*") ? t("mgmt.allPermissions") : `${m.permissions.length} / ${total}`}
                     </div>
                     {!m.permissions.includes("*") && (
                       <div className="flex flex-wrap gap-1">
                         {m.permissions.map((p) => (
-                          <span key={p} className="badge-count min-w-0 px-2 text-[0.62rem] normal-case">{t(permKey(p))}</span>
+                          <span key={p} className="badge badge-neutral">{t(permKey(p))}</span>
                         ))}
                       </div>
                     )}
@@ -371,44 +359,45 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
   const rolesPage = usePaged(data?.roles ?? [], 60);
 
   return (
-    <section data-guide="mgmt-roles" className="panel panel-corners rounded-md p-4">
+    <section data-guide="mgmt-roles" className="panel p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="panel-title">🛡 {t("mgmt.roles")}</h2>
+        <h2 className="panel-title">{t("mgmt.roles")}</h2>
         {data?.guildId && (
           <span className={cn("cabinet-pill", synced && "cabinet-pill-online")}>
-            {synced ? `● ${t("droles.on")} • ${data.roles.length}` : `○ ${t("droles.off")}`}
+            {synced ? `${t("droles.on")} · ${data.roles.length}` : t("droles.off")}
           </span>
         )}
       </div>
-      <p className="mt-2 text-[0.78rem] text-white/70">{t("mgmt.rolesHint")}</p>
+      <p className="mt-1 text-sm text-fg-3">{t("mgmt.rolesHint")}</p>
 
       {!data ? (
         <Loading />
       ) : !synced ? (
-        <p className="hud-label mt-3 text-warn">{t("mgmt.connectFirst")}</p>
+        <p className="mt-4 text-sm text-warn">{t("mgmt.connectFirst")}</p>
       ) : (
         <>
           {synced && (
             <>
-              <p className="hud-label mt-3 text-muted">{t("droles.levelsHelp")} {t("mgmt.customHelp")}</p>
+              <p className="mt-3 text-xs leading-relaxed text-fg-3">{t("droles.levelsHelp")} {t("mgmt.customHelp")}</p>
               {data.roles.length === 0 ? (
-                <p className="hud-label mt-3 text-muted">{t("droles.empty")}</p>
+                <p className="mt-3 text-sm text-fg-3">{t("droles.empty")}</p>
               ) : (
-                <ul className="mt-2 grid gap-1.5 lg:grid-cols-2">
+                <ul className="mt-4 grid gap-1.5 lg:grid-cols-2">
                   {rolesPage.items.map((role) => {
                     const level = levels[role.id] ?? "basic";
                     return (
-                      <li key={role.id} className="row-item flex items-center gap-2 text-xs">
+                      <li key={role.id} className="member-row flex items-center gap-2.5 py-1.5 text-sm">
                         <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: hex(role.color) }} aria-hidden />
-                        <span className="min-w-0 flex-1 truncate text-white">{role.name}</span>
-                        <select className="field w-44 py-1 text-xs" data-guide="mgmt-level" value={level} onChange={(e) => setLevel(role, e.target.value as AccessLevel)}>
+                        <span className="min-w-0 flex-1 truncate text-fg">{role.name}</span>
+                        <select className="field h-9 min-h-0 w-44 py-0 text-[0.8rem]" data-guide="mgmt-level" value={level} onChange={(e) => setLevel(role, e.target.value as AccessLevel)}>
                           {LEVELS.map((o) => (
                             <option key={o.value} value={o.value}>{t(o.label)}</option>
                           ))}
                         </select>
                         {level === "custom" ? (
-                          <button type="button" className="btn px-2 py-1" data-guide="mgmt-gear" title={t("mgmt.configure")} aria-label={t("mgmt.configure")} onClick={() => setEditing(role)}>
-                            ⚙ <span className="hud-label">{perms[role.id]?.length ?? 0}</span>
+                          <button type="button" className="btn h-9 min-h-0 px-2.5" data-guide="mgmt-gear" title={t("mgmt.configure")} aria-label={t("mgmt.configure")} onClick={() => setEditing(role)}>
+                            <Icon name="key" size={14} />
+                            <span className="text-xs">{perms[role.id]?.length ?? 0}</span>
                           </button>
                         ) : (
                           <span className="w-[3.25rem]" />
@@ -420,7 +409,7 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
               )}
               <PagedMore page={rolesPage} />
               <div className="mt-3 flex items-center justify-end gap-2">
-                {dirty && <span className="hud-label text-warn">{t("mgmt.unsaved")}</span>}
+                {dirty && <span className="text-xs text-warn">{t("mgmt.unsaved")}</span>}
                 <button type="button" className="btn btn-primary" data-guide="mgmt-save" disabled={busy || !dirty} onClick={() => void act(() => managementApi.save(levels, perms))}>
                   {t("common.save")}
                 </button>
@@ -481,24 +470,24 @@ const RolePermissionsModal: React.FC<{
       }
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="hud-label text-muted">{t("mgmt.fromPreset")}:</span>
+        <span className="text-xs text-fg-3">{t("mgmt.fromPreset")}</span>
         {(["basic", "medium", "high"] as const).map((lv) => (
-          <button key={lv} type="button" className="btn px-2 py-1 text-[0.65rem]" onClick={() => setSelected(new Set(catalog.presets[lv]))}>{t(LEVEL_LABEL[lv])}</button>
+          <button key={lv} type="button" className="chip" onClick={() => setSelected(new Set(catalog.presets[lv]))}>{t(LEVEL_LABEL[lv])}</button>
         ))}
-        <button type="button" className="btn px-2 py-1 text-[0.65rem]" onClick={() => setSelected(new Set(all))}>{t("mgmt.selectAll")}</button>
-        <button type="button" className="btn btn-danger px-2 py-1 text-[0.65rem]" onClick={() => setSelected(new Set())}>{t("mgmt.selectNone")}</button>
-        <span className="hud-label ml-auto text-accent">{selected.size} / {all.length}</span>
+        <button type="button" className="chip" onClick={() => setSelected(new Set(all))}>{t("mgmt.selectAll")}</button>
+        <button type="button" className="chip text-danger" onClick={() => setSelected(new Set())}>{t("mgmt.selectNone")}</button>
+        <span className="count-pill ml-auto">{selected.size} / {all.length}</span>
       </div>
       <div className="mt-3 grid gap-3 md:grid-cols-2">
         {catalog.groups.map((group) => (
-          <fieldset key={group.key} className="panel-inner rounded p-3" data-guide="mgmt-perm-group">
-            <legend className="hud-label px-1 text-accent">{t(`permGroup.${group.key}` as MessageKey)}</legend>
+          <fieldset key={group.key} className="panel-inner p-3.5" data-guide="mgmt-perm-group">
+            <legend className="px-1 text-xs font-semibold text-fg-2">{t(`permGroup.${group.key}` as MessageKey)}</legend>
             {group.permissions.map((p) => (
-              <label key={p} className="flex cursor-pointer items-start gap-2 py-1 text-[0.8rem] text-white/90">
-                <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--accent)]" checked={selected.has(p)} onChange={() => toggle(p)} />
+              <label key={p} className="flex cursor-pointer items-start gap-2.5 rounded-lg px-1 py-1.5 text-[0.85rem] text-fg hover:bg-[var(--surface-hover)]">
+                <input type="checkbox" className="mt-0.5 h-4 w-4 shrink-0" checked={selected.has(p)} onChange={() => toggle(p)} />
                 <span>
                   {t(permKey(p))}
-                  <span className="hud-label block text-muted normal-case">{p}</span>
+                  <span className="block font-mono text-[0.7rem] text-fg-3">{p}</span>
                 </span>
               </label>
             ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { EmptyState, Loading, Modal, UiGlyph, apiClient, assetUrl, cn, useI18n, type Locale, type UiIcon } from "@/shared";
+import { EmptyState, Loading, Modal, UiGlyph, apiClient, assetUrl, cn, useI18n, type Locale, type UiIcon, Icon, PageHeader } from "@/shared";
 
 type L = Record<Locale, string>;
 
@@ -67,32 +67,23 @@ export const GuideWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="tab-fade flex flex-col gap-3">
-      <section className="panel panel-corners rounded-md p-4">
-        <div className="flex items-center gap-3">
-          <UiGlyph icon="guide" size={40} />
-          <div className="min-w-0">
-            <div className="hud-label text-muted">{t("guide.kicker")}</div>
-            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">{t("nav.guide.label")}</h1>
-            <p className="mt-1 text-[0.8rem] text-white/70">{t("guide.subtitle")}</p>
-          </div>
-        </div>
-      </section>
+    <div className="tab-fade flex flex-col gap-4">
+      <PageHeader icon="guide" eyebrow={t("guide.kicker")} title={t("nav.guide.label")} lead={t("guide.subtitle")} />
 
       {!chapters ? (
-        <div className="panel rounded-md"><Loading /></div>
+        <div className="panel"><Loading /></div>
       ) : chapters.length === 0 ? (
-        <div className="panel rounded-md"><EmptyState icon="guide" title={t("guide.empty")} /></div>
+        <div className="panel"><EmptyState icon="guide" title={t("guide.empty")} /></div>
       ) : (
-        <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-3 lg:grid-cols-[17rem_minmax(0,1fr)]">
-          <nav className="panel panel-corners guide-toc min-w-0 rounded-md p-2.5" aria-label={t("guide.toc")}>
-            <div className="hud-label px-1.5 pb-2 text-accent">{t("guide.toc")}</div>
+        <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[17rem_minmax(0,1fr)]">
+          <nav className="panel guide-toc min-w-0 p-2.5" aria-label={t("guide.toc")}>
+            <div className="px-2 pt-1 pb-2 text-xs font-semibold text-fg-3">{t("guide.toc")}</div>
             <ol className="flex gap-1.5 overflow-x-auto lg:flex-col lg:overflow-visible">
               {chapters.map((c, i) => (
                 <li key={c.key} className="shrink-0">
                   <button type="button" className={cn("guide-toc-item", c.key === active && "is-active")} onClick={() => go(c.key)} aria-current={c.key === active ? "page" : undefined}>
                     <span className="guide-toc-num">{i + 1}</span>
-                    <UiGlyph icon={c.payload.icon} size={20} />
+                    <UiGlyph icon={c.payload.icon} size={18} className="text-current" />
                     <span className="truncate">{pick(c.payload.title, locale)}</span>
                   </button>
                 </li>
@@ -101,13 +92,13 @@ export const GuideWorkspace: React.FC = () => {
           </nav>
 
           {chapter && (
-            <article className="flex min-w-0 flex-col gap-3">
-              <header className="panel panel-corners rounded-md p-4">
-                <div className="hud-label text-muted">{t("guide.chapter", { n: index + 1, total: chapters.length })}</div>
-                <h2 className="panel-title mt-1 flex items-center gap-2 text-[1.05rem]">
-                  <UiGlyph icon={chapter.icon} size={26} /> {pick(chapter.title, locale)}
+            <article className="flex min-w-0 flex-col gap-4">
+              <header className="panel p-5">
+                <div className="page-eyebrow">{t("guide.chapter", { n: index + 1, total: chapters.length })}</div>
+                <h2 className="mt-1.5 flex items-center gap-2.5 text-[1.35rem] font-semibold tracking-[-0.02em]">
+                  <UiGlyph icon={chapter.icon} size={24} /> {pick(chapter.title, locale)}
                 </h2>
-                <p className="mt-2 text-[0.85rem] leading-relaxed text-white/80">{pick(chapter.summary, locale)}</p>
+                <p className="mt-2 max-w-3xl text-[0.95rem] leading-relaxed text-fg-2">{pick(chapter.summary, locale)}</p>
               </header>
 
               {chapter.shots.map((shot) => (
@@ -115,8 +106,8 @@ export const GuideWorkspace: React.FC = () => {
               ))}
 
               <div className="flex justify-between gap-2">
-                <button type="button" className="btn" disabled={index <= 0} onClick={() => go(chapters[index - 1].key)}>← {t("guide.prev")}</button>
-                <button type="button" className="btn btn-primary" disabled={index >= chapters.length - 1} onClick={() => go(chapters[index + 1].key)}>{t("guide.next")} →</button>
+                <button type="button" className="btn btn-lg" disabled={index <= 0} onClick={() => go(chapters[index - 1].key)}><Icon name="chevronLeft" size={16} />{t("guide.prev")}</button>
+                <button type="button" className="btn btn-primary btn-lg" disabled={index >= chapters.length - 1} onClick={() => go(chapters[index + 1].key)}>{t("guide.next")}<Icon name="chevronRight" size={16} /></button>
               </div>
             </article>
           )}
@@ -163,10 +154,10 @@ const GuideFigure: React.FC<{ shot: GuideShot; locale: Locale; onZoom: () => voi
   const [active, setActive] = React.useState<number | null>(null);
   const notes = shot.notes[locale] ?? shot.notes.ru ?? [];
   return (
-    <figure className="panel panel-corners rounded-md p-3 md:p-4">
-      <figcaption className="mb-3 flex items-center justify-between gap-2">
-        <span className="panel-title text-[0.85rem]">{pick(shot.caption, locale)}</span>
-        <button type="button" className="btn px-2 py-1 text-[0.65rem]" onClick={onZoom}>⤢ {zoomLabel}</button>
+    <figure className="panel p-4 md:p-5">
+      <figcaption className="mb-4 flex items-center justify-between gap-2">
+        <span className="panel-title">{pick(shot.caption, locale)}</span>
+        <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={onZoom}><Icon name="eye" size={14} />{zoomLabel}</button>
       </figcaption>
       <ShotImage shot={shot} locale={locale} active={active} onMarker={setActive} />
       <ol className="guide-notes mt-3">

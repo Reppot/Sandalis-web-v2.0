@@ -1,0 +1,289 @@
+/* =============================================================================
+   SINDARIS Design System — токены
+   Все компоненты берут цвета, радиусы и тени только отсюда. Тема = набор токенов:
+   html[data-theme] — основа (dark / light), html[data-skin] — палитра поверх основы.
+   ============================================================================= */
+
+:root {
+  /* шрифты: Inter — текст интерфейса, Inter Tight — заголовки, Russo One — только логотип */
+  --font-sans: var(--font-inter), "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  --font-heading: var(--font-grotesk), var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  --font-brand: var(--font-russo), "Arial Black", Impact, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* шкала размеров */
+  --text-2xs: 0.6875rem; /* 11 */
+  --text-xs: 0.75rem;    /* 12 */
+  --text-sm: 0.8125rem;  /* 13 */
+  --text-base: 0.9375rem;/* 15 */
+  --text-md: 1.0625rem;  /* 17 */
+  --text-lg: 1.25rem;    /* 20 */
+  --text-xl: 1.625rem;   /* 26 */
+  --text-2xl: 2.125rem;  /* 34 */
+  --text-3xl: clamp(2.25rem, 4.2vw, 3.25rem);
+
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 22px;
+  --radius-full: 999px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --dur-fast: 120ms;
+  --dur: 180ms;
+  --dur-slow: 320ms;
+
+  --sidebar-w: 272px;
+  --sidebar-w-collapsed: 76px;
+  --topbar-h: 60px;
+  --content-max: 1480px;
+}
+
+/* ─────────────────────────── ТЁМНАЯ (по умолчанию) ─────────────────────────── */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0a0c0b;
+  --bg-elev: #0e1110;
+  --surface: #131715;
+  --surface-2: #1a1e1c;
+  --surface-3: #222724;
+  --surface-hover: rgba(255, 255, 255, 0.045);
+  --surface-press: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 255, 255, 0.075);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --fg: #eef1ed;
+  --fg-2: #a8b0aa;
+  --fg-3: #737b75;
+  --fg-on-media: #ffffff;
+
+  --accent: #a3e635;
+  --accent-rgb: 163 230 53;
+  --accent-hover: #b4ef55;
+  --accent-ink: #0b1006;
+  --accent-fg: #b9ef62;
+  --accent-soft: rgb(163 230 53 / 0.12);
+  --accent-line: rgb(163 230 53 / 0.38);
+
+  --success: #3ddc97;
+  --success-rgb: 61 220 151;
+  --warning: #fbbf24;
+  --warning-rgb: 251 191 36;
+  --danger: #ff6b6b;
+  --danger-rgb: 255 107 107;
+  --info: #6aa8ff;
+  --info-rgb: 106 168 255;
+
+  --field-bg: rgba(255, 255, 255, 0.035);
+  --field-bg-hover: rgba(255, 255, 255, 0.055);
+  --field-border: rgba(255, 255, 255, 0.1);
+
+  --nav-bg: #0d100f;
+  --nav-border: rgba(255, 255, 255, 0.06);
+  --nav-fg: #c9d0ca;
+  --nav-fg-2: #7c847e;
+  --nav-hover: rgba(255, 255, 255, 0.05);
+  --nav-active-bg: rgba(255, 255, 255, 0.08);
+  --nav-active-fg: #ffffff;
+  --nav-active-icon: var(--accent);
+  --nav-strong: var(--fg);
+
+  --scrim: rgba(3, 5, 4, 0.66);
+  --glass: rgba(14, 17, 16, 0.78);
+  --shadow-1: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-2: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 12px 32px -12px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-3: 0 30px 80px -20px rgba(0, 0, 0, 0.75), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --focus-ring: 0 0 0 3px rgb(var(--accent-rgb) / 0.32);
+
+  --media-tint: linear-gradient(180deg, rgba(10, 12, 11, 0.15) 0%, rgba(10, 12, 11, 0.55) 55%, var(--surface) 100%);
+  --hero-glow: radial-gradient(80% 120% at 0% 0%, rgb(var(--accent-rgb) / 0.12), transparent 60%);
+}
+
+/* ─────────────────────────────────── СВЕТЛАЯ ─────────────────────────────────── */
+[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f3f4f1;
+  --bg-elev: #fafaf8;
+  --surface: #ffffff;
+  --surface-2: #f3f5f1;
+  --surface-3: #e8ebe5;
+  --surface-hover: rgba(16, 24, 16, 0.04);
+  --surface-press: rgba(16, 24, 16, 0.07);
+  --border: rgba(16, 24, 16, 0.09);
+  --border-strong: rgba(16, 24, 16, 0.16);
+
+  --fg: #121612;
+  --fg-2: #545c56;
+  --fg-3: #858c87;
+
+  --accent: #a3e635;
+  --accent-rgb: 132 204 22;
+  --accent-hover: #93d82a;
+  --accent-ink: #142009;
+  --accent-fg: #3f6212;
+  --accent-soft: rgb(132 204 22 / 0.14);
+  --accent-line: rgb(101 163 13 / 0.45);
+
+  --success: #059669;
+  --success-rgb: 5 150 105;
+  --warning: #b45309;
+  --warning-rgb: 217 119 6;
+  --danger: #dc2626;
+  --danger-rgb: 220 38 38;
+  --info: #2563eb;
+  --info-rgb: 37 99 235;
+
+  --field-bg: #ffffff;
+  --field-bg-hover: #fbfcfa;
+  --field-border: rgba(16, 24, 16, 0.14);
+
+  --nav-bg: #f8f9f6;
+  --nav-border: rgba(16, 24, 16, 0.07);
+  --nav-fg: #3a413c;
+  --nav-fg-2: #8a918c;
+  --nav-hover: rgba(16, 24, 16, 0.045);
+  --nav-active-bg: #ffffff;
+  --nav-active-fg: #0e120e;
+  --nav-active-icon: #4d7c0f;
+
+  --scrim: rgba(20, 26, 20, 0.36);
+  --glass: rgba(250, 250, 248, 0.82);
+  --shadow-1: 0 1px 2px rgba(16, 24, 16, 0.06), 0 0 0 1px rgba(16, 24, 16, 0.02);
+  --shadow-2: 0 10px 30px -12px rgba(16, 24, 16, 0.16), 0 2px 6px rgba(16, 24, 16, 0.05);
+  --shadow-3: 0 30px 70px -20px rgba(16, 24, 16, 0.3), 0 8px 20px rgba(16, 24, 16, 0.08);
+  --focus-ring: 0 0 0 3px rgb(var(--accent-rgb) / 0.35);
+
+  --media-tint: linear-gradient(180deg, rgba(10, 12, 11, 0.1) 0%, rgba(10, 12, 11, 0.5) 60%, rgba(10, 12, 11, 0.72) 100%);
+  --hero-glow: radial-gradient(80% 120% at 0% 0%, rgb(var(--accent-rgb) / 0.14), transparent 60%);
+}
+
+/* ───────────────────── КОНТРАСТНАЯ: для чтения при плохом зрении ───────────────────── */
+html[data-skin="contrast"] {
+  font-size: 112.5%;
+  --bg: #000000;
+  --bg-elev: #000000;
+  --surface: #0b0b0b;
+  --surface-2: #161616;
+  --surface-3: #262626;
+  --surface-hover: rgba(255, 255, 255, 0.1);
+  --surface-press: rgba(255, 255, 255, 0.16);
+  --border: rgba(255, 255, 255, 0.45);
+  --border-strong: #ffffff;
+  --fg: #ffffff;
+  --fg-2: #f0f0f0;
+  --fg-3: #d4d4d4;
+  --accent: #ffd400;
+  --accent-rgb: 255 212 0;
+  --accent-hover: #ffe14d;
+  --accent-ink: #000000;
+  --accent-fg: #ffd400;
+  --accent-soft: rgb(255 212 0 / 0.16);
+  --accent-line: #ffd400;
+  --success: #4dff9f;
+  --warning: #ffd400;
+  --danger: #ff6b6b;
+  --info: #7cc0ff;
+  --field-bg: #000000;
+  --field-bg-hover: #0b0b0b;
+  --field-border: rgba(255, 255, 255, 0.7);
+  --nav-bg: #000000;
+  --nav-border: rgba(255, 255, 255, 0.45);
+  --nav-fg: #ffffff;
+  --nav-fg-2: #d4d4d4;
+  --nav-hover: rgba(255, 255, 255, 0.12);
+  --nav-active-bg: #ffd400;
+  --nav-active-fg: #000000;
+  --nav-active-icon: #000000;
+  --focus-ring: 0 0 0 3px #ffd400;
+  --shadow-1: none;
+  --shadow-2: none;
+}
+
+/* ───────── «Бруталист»: лавандовый холст, белые карточки, графитовые панели ───────── */
+html[data-skin="noir"] {
+  --font-sans: var(--font-grotesk), var(--font-inter), system-ui, sans-serif;
+  --bg: #c8c2cf;
+  --bg-elev: #d2cdd8;
+  --surface: #ffffff;
+  --surface-2: #f3f0f5;
+  --surface-3: #e7e2eb;
+  --surface-hover: rgba(16, 18, 20, 0.05);
+  --surface-press: rgba(16, 18, 20, 0.09);
+  --border: rgba(16, 18, 20, 0.1);
+  --border-strong: rgba(16, 18, 20, 0.22);
+  --fg: #101214;
+  --fg-2: #4a4f57;
+  --fg-3: #7b7283;
+  --accent: #101214;
+  --accent-rgb: 16 18 20;
+  --accent-hover: #2a2d31;
+  --accent-ink: #ffffff;
+  --accent-fg: #101214;
+  --accent-soft: #f4ff1e;
+  --accent-line: #101214;
+  --success: #1f8a55;
+  --warning: #8a6a00;
+  --danger: #e2381f;
+  --info: #3756d6;
+  --field-bg: #ffffff;
+  --field-bg-hover: #faf9fb;
+  --field-border: rgba(16, 18, 20, 0.18);
+  --nav-bg: #101214;
+  --nav-border: #101214;
+  --nav-fg: #e9e5ee;
+  --nav-fg-2: #8e8796;
+  --nav-hover: rgba(200, 194, 207, 0.12);
+  --nav-active-bg: #c8c2cf;
+  --nav-active-fg: #101214;
+  --nav-active-icon: #101214;
+  --nav-strong: #ffffff;
+  --glass: rgba(200, 194, 207, 0.85);
+  --radius: 14px;
+  --radius-lg: 20px;
+  --shadow-1: none;
+  --shadow-2: 0 12px 40px -16px rgba(16, 18, 20, 0.25);
+  --focus-ring: 0 0 0 3px rgba(16, 18, 20, 0.35);
+  --hero-glow: radial-gradient(70% 110% at 0% 0%, rgba(244, 255, 30, 0.35), transparent 60%);
+}
+
+/* ─────────────────────── «Нежная»: тёплые пастельные тона ─────────────────────── */
+html[data-skin="soft"] {
+  --bg: #f5efe9;
+  --bg-elev: #faf6f2;
+  --surface: #fffdfb;
+  --surface-2: #f7f0ea;
+  --surface-3: #efe5dc;
+  --surface-hover: rgba(120, 72, 50, 0.05);
+  --surface-press: rgba(120, 72, 50, 0.09);
+  --border: rgba(120, 72, 50, 0.11);
+  --border-strong: rgba(120, 72, 50, 0.2);
+  --fg: #2e2420;
+  --fg-2: #6f5e56;
+  --fg-3: #a08f86;
+  --accent: #d98c72;
+  --accent-rgb: 217 140 114;
+  --accent-hover: #cf7c61;
+  --accent-ink: #ffffff;
+  --accent-fg: #b4644a;
+  --accent-soft: rgb(217 140 114 / 0.15);
+  --accent-line: rgb(217 140 114 / 0.5);
+  --success: #3f9a78;
+  --warning: #b9822f;
+  --danger: #cf5c5c;
+  --info: #6b84c9;
+  --field-bg: #fffdfb;
+  --field-border: rgba(120, 72, 50, 0.16);
+  --nav-bg: #f9f3ee;
+  --nav-border: rgba(120, 72, 50, 0.08);
+  --nav-fg: #4f413b;
+  --nav-fg-2: #a08f86;
+  --nav-hover: rgba(217, 140, 114, 0.1);
+  --nav-active-bg: #ffffff;
+  --nav-active-fg: #2e2420;
+  --nav-active-icon: #c4705a;
+  --glass: rgba(250, 246, 242, 0.85);
+  --hero-glow: radial-gradient(70% 120% at 0% 0%, rgba(217, 140, 114, 0.22), transparent 55%), radial-gradient(60% 100% at 100% 100%, rgba(140, 170, 220, 0.18), transparent 60%);
+}

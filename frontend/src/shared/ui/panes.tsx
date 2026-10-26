@@ -6,6 +6,7 @@ import { cn } from "@/shared/lib/utils";
 import type { UiIcon } from "@/shared/config/assets";
 import { ItemIcon } from "@/shared/ui/controls";
 import { UiGlyph } from "@/shared/ui/glyph";
+import { Icon } from "@/shared/ui/icons";
 
 // --------------------------------------------------------------------------- //
 // Сворачивание двух окон (калькуляторы, «Заказы»)
@@ -39,9 +40,11 @@ export const PaneToggles: React.FC<{ panes: Panes; first: { label: string; icon:
   const t = useT();
   const item = (on: boolean, pane: { label: string; icon: string }, toggle: () => void, last: boolean) => (
     <button type="button" className={`pane-toggle ${on ? "is-on" : "is-off"}`} aria-pressed={on} onClick={toggle} title={on && last ? t("tools.paneLast") : t("tools.paneHint")}>
-      <span className="pane-toggle-icon" aria-hidden>{pane.icon}</span>
+      <span className="pane-toggle-check" aria-hidden>
+        {on ? <Icon name="check" size={12} strokeWidth={3} /> : null}
+      </span>
+      {pane.icon ? <span className="pane-toggle-icon" aria-hidden>{pane.icon}</span> : null}
       <span className="pane-toggle-label">{pane.label}</span>
-      <span className="pane-toggle-state">{on ? `▣ ${t("tools.paneOn")}` : `▢ ${t("tools.paneOff")}`}</span>
     </button>
   );
   return (

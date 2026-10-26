@@ -4,7 +4,8 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import { MPF_MIN_CRATES, mpfData, mpfOrderCost, mpfOrders, type Recipe } from "@/entities/recipe";
 import { codeSynonyms } from "@/entities/item";
-import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
+import { FilterCards, Icon, ItemIcon, QuantityStepper, SearchField, Segmented, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify } from "@/shared";
+import { ToolHeader } from "@/features/tools/ui/ToolHeader";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { truckLines } from "@/features/tools/ui/trucks";
 import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
@@ -139,33 +140,37 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
 
   return (
     <div className="tab-fade factory-page pb-24 lg:pb-0">
-      <section className="panel panel-corners factory-topbar">
-        <div className="flex min-w-0 items-center gap-3">
-          <UiGlyph icon={facility === "factory" ? "factory" : "mpf"} size={40} />
-          <div className="min-w-0">
-            <div className="hud-label text-muted">PRODUCTION PLANNER • FOXHOLE</div>
-            <h2 className="panel-title mt-1 text-[1.1rem] md:text-[1.45rem]">⚙ {facility === "factory" ? t("tools.factory") : "MPF — Mass Production Factory"}</h2>
-            <p className="mt-1 text-sm text-white/65">
-              {facility === "factory"
-                ? t("tools.factoryHint")
-                : t("tools.mpfHint")}
-            </p>
-          </div>
-        </div>
-        <div className="factory-controls">
-          <button className={`btn ${planning ? "btn-warn btn-active" : ""}`} data-guide="tool-mode" onClick={() => setPlanning((v) => !v)}>{planning ? "PLANNING" : "PRODUCTION"}</button>
-          <button className="btn btn-primary" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: "FACTORY PLAN", message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
-            ⧉ {t("tools.sharePlan")}
-          </button>
-        </div>
-      </section>
+      <ToolHeader
+        icon={<UiGlyph icon={facility === "factory" ? "factory" : "mpf"} size={26} />}
+        eyebrow="Production planner"
+        title={facility === "factory" ? t("tools.factory") : "MPF — Mass Production Factory"}
+        hint={facility === "factory" ? t("tools.factoryHint") : t("tools.mpfHint")}
+        actions={
+          <>
+            <Segmented
+              label={t("tools.mode")}
+              value={planning ? "planning" : "production"}
+              onChange={(v) => setPlanning(v === "planning")}
+              options={[
+                { value: "production", label: t("tools.modeProd"), title: t("tools.productionMode") },
+                { value: "planning", label: t("tools.modePlan"), title: t("tools.planningMode") },
+              ]}
+              className="h-10"
+            />
+            <button className="btn btn-primary h-10" data-guide="tool-mode" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: t("tools.factory"), message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
+              <Icon name="copy" size={16} />
+              {t("tools.sharePlan")}
+            </button>
+          </>
+        }
+      />
 
       <PaneToggles panes={panes} catalogLabel={t("tools.catalogPane")} planLabel={t("tools.productionQueue")} />
 
       <div className={paneGridClass(panes)} data-wide={panes.wide}>
-        <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
+        <section className={`panel factory-catalog ${panes.catalog ? "" : "hidden"}`}>
           <div className="filter-head">
-            <span className="hud-label text-accent">{t("tools.categories")}</span>
+            <span className="tool-section-label">{t("tools.categories")}</span>
             <FilterCards
             compact
             guide="tool-factions"
@@ -185,24 +190,22 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
             value={category}
             onChange={(k) => setCategory(k ?? "all")}
           />
-          <div className="factory-filters mt-3">
-            <input className="field h-11 flex-1" data-guide="tool-search" placeholder={t("tools.factorySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
-          </div>
-          <div className="factory-count hud-label">{t("codes.shown")}: {visible.length} / {recipes.length}</div>
+          <SearchField className="mt-4" data-guide="tool-search" placeholder={t("tools.factorySearch")} value={query} onChange={setQuery} />
+          <div className="factory-count text-xs">{t("codes.shown")}: {visible.length} / {recipes.length}</div>
 
           <div className={paneCardsClass(panes)}>
             {visible.map((recipe) => {
               const queued = plan[recipe.id] ?? 0;
               return (
-                <button key={recipe.id} type="button" className={`factory-item-card relative min-h-[14rem] flex-col justify-start gap-2 p-3 text-center ${queued ? "border-accent" : ""}`} onClick={() => setQuantity(recipe, (n) => n + 1)} title={recipe.description ?? undefined}>
-                  <span className="factory-add absolute top-2 right-2">＋</span>
-                  {queued ? <span className="queued-badge absolute top-2 left-2">{queued} {t("unit.crate")}</span> : null}
+                <button key={recipe.id} type="button" className={`factory-item-card tool-item min-h-[14rem] ${queued ? "is-selected" : ""}`} onClick={() => setQuantity(recipe, (n) => n + 1)} title={recipe.description ?? undefined}>
+                  <span className="factory-add absolute top-2.5 right-2.5"><Icon name="plus" size={14} strokeWidth={2.5} /></span>
+                  {queued ? <span className="queued-badge absolute top-2.5 left-2.5">{queued} {t("unit.crate")}</span> : null}
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={88} label={rname(recipe)} className="mt-3" />
-                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{rname(recipe)}</strong>
+                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.85rem] font-semibold leading-tight text-fg">{rname(recipe)}</strong>
                   <small className="block w-full truncate text-[0.7rem] text-muted">{recipe.item_class ?? label("factory_category", recipe.category)} • x{(facility === "mpf" ? mpfData(recipe)?.amount : undefined) ?? recipe.output_quantity}</small>
                   <span className="mt-auto flex flex-wrap justify-center gap-1">
                     {Object.entries(crateCost(recipe, facility)).map(([key, value]) => (
-                      <span key={key} className="rounded-sm border border-white/10 bg-black/30 px-1.5 py-0.5 font-mono text-[0.62rem] text-white/80">{label("material", key)} {value}</span>
+                      <span key={key} className="cost-chip">{label("material", key)} <b>{value}</b></span>
                     ))}
                   </span>
                 </button>
@@ -216,8 +219,8 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
             <div className="factory-plan-row" key={recipe.id}>
               <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={56} label={rname(recipe)} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-sm text-white">{rname(recipe)}</span>
-                <span className="hud-label mt-0.5 block truncate text-muted">
+                <span className="block truncate text-sm text-fg">{rname(recipe)}</span>
+                <span className="mt-0.5 block truncate text-xs text-fg-3">
                   {facility === "mpf"
                     ? planning
                       ? t("tools.mpfOrders", { orders: mpfOrders(crates, queueLimit(recipe, facility)).join(" + ") })
@@ -228,7 +231,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
                 </span>
               </span>
               <QuantityStepper value={crates} unit={t("unit.crate")} label={rname(recipe)} onChange={(n) => setQuantity(recipe, n)} />
-              <button type="button" className="btn btn-danger px-2 py-1" data-guide="tool-remove" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
+              <button type="button" className="row-remove" data-guide="tool-remove" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}><Icon name="close" size={15} /></button>
             </div>
           ))}
         </ResourceSummaryPanel>

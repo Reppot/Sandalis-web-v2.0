@@ -31,18 +31,17 @@ export const DiscordWebhookPanel: React.FC = () => {
   };
 
   return (
-    <section data-guide="cab-webhook" className="panel panel-corners rounded-md p-4">
+    <section data-guide="cab-webhook" className="panel p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="panel-title">📨 {t("webhook.title")}</div>
+        <div className="panel-title">{t("webhook.title")}</div>
         <span className={`cabinet-pill ${settings?.discord_webhook_configured ? "cabinet-pill-online" : ""}`}>
-          {settings?.discord_webhook_configured ? `● ${t("webhook.connected")} ${settings.discord_webhook_hint ?? ""}` : `○ ${t("webhook.notSet")}`}
+          {settings?.discord_webhook_configured ? `${t("webhook.connected")} ${settings.discord_webhook_hint ?? ""}` : t("webhook.notSet")}
         </span>
       </div>
-      <div className="cabinet-rule" />
-      <p className="text-[0.78rem] text-white/70">
+      <p className="mt-1 text-sm text-fg-3">
         {t("webhook.hint")}
       </p>
-      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-end">
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:items-end">
         <div className="flex-1">
           <Field label={t("webhook.url")} mono type="password" autoComplete="off" placeholder="https://discord.com/api/webhooks/..." value={url} onChange={(e) => setUrl(e.target.value)} />
         </div>

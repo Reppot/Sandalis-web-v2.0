@@ -5,11 +5,11 @@ import { useContent } from "@/entities/content";
 import { RegionTownFields } from "@/entities/world";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi } from "@/entities/stockpile";
-import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, useConfirm, useNotify, useT, type MessageKey } from "@/shared";
+import { Button, Field, Modal, errorText, formatCountdown, formatDateTime, secondsLeft, severityOf, timeUnits, useConfirm, useNotify, useT, type MessageKey, Icon } from "@/shared";
 import { timersApi, type TimerEvent } from "@/features/timers/api";
 import { timerPlace, useClock, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 
-const SEV_COLOR = { critical: "#ff5555", warning: "#ff9900", safe: "#a3e635" } as const;
+const SEV_COLOR = { critical: "var(--danger)", warning: "var(--warning)", safe: "var(--fg)" } as const;
 const RESET_SECONDS = 48 * 3600;
 
 interface TimeValue {
@@ -27,10 +27,10 @@ const TimeInputs: React.FC<{ value: TimeValue; onChange: (v: TimeValue) => void 
   const clean = (v: string) => v.replace(/[^\d]/g, "").slice(0, 4);
   const fields: [MessageKey, keyof TimeValue][] = [["timers.days", "days"], ["timers.hours", "hours"], ["timers.minutes", "minutes"]];
   return (
-    <div className="panel-inner flex flex-wrap items-center justify-center gap-3 rounded px-3 py-3">
+    <div className="panel-inner flex flex-wrap items-center justify-center gap-4 px-3 py-3">
       {fields.map(([label, key]) => (
         <label key={key} className="flex items-center gap-2">
-          <span className="hud-label text-white/80">{t(label)}:</span>
+          <span className="text-sm text-fg-2">{t(label)}</span>
           <input className="field field-mono w-[62px] text-center" placeholder="0" inputMode="numeric" value={value[key]} onChange={(e) => onChange({ ...value, [key]: clean(e.target.value) })} />
         </label>
       ))}
@@ -109,27 +109,27 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; can: Ca
   return (
     <Modal open onClose={onClose} title={t("timers.channelTitle", { location })} icon="timers" widthClass="max-w-2xl" backdropImage={media("bg_timers")}>
       <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
-        <div className="space-y-1 text-[0.85rem]">
-          <div>🗺️ {t("timers.region")}: <span className="text-accent">{region ?? "—"}</span></div>
-          <div>📍 {t("timers.location")}: <span className="text-accent">{location}</span></div>
-          {timer.note && <div className="text-white/70">📝 {timer.note}</div>}
-        </div>
-        <div data-guide="tmodal-left" className="panel-inner rounded px-4 py-2 text-center">
-          <div className="hud-label text-muted">{t("timers.left")}</div>
-          <div className="timer-value" style={{ color: SEV_COLOR[sev], textShadow: `0 0 14px ${SEV_COLOR[sev]}66` }}>
+        <dl className="kv-list">
+          <div><dt>{t("timers.region")}</dt><dd>{region ?? "—"}</dd></div>
+          <div><dt>{t("timers.location")}</dt><dd>{location}</dd></div>
+          {timer.note && <div><dt>{t("timers.note")}</dt><dd className="text-fg-2">{timer.note}</dd></div>}
+        </dl>
+        <div data-guide="tmodal-left" className="panel-inner px-5 py-3 text-center">
+          <div className="text-xs text-fg-3">{t("timers.left")}</div>
+          <div className="timer-value" style={{ color: SEV_COLOR[sev] }}>
             {timer.completed_at ? t("timers.completed") : ts > 0 ? formatCountdown(ts, timeUnits(t)) : t("timers.expired")}
           </div>
         </div>
       </div>
 
-      <div className="hud-label mt-4 text-white/80">📜 {t("timers.log")}:</div>
-      <div data-guide="tmodal-log" ref={logRef} className="console-log scroll-area mt-1 h-44 rounded px-3 py-2 leading-relaxed">
+      <div className="mt-5 text-sm font-semibold">{t("timers.log")}</div>
+      <div data-guide="tmodal-log" ref={logRef} className="console-log scroll-area mt-2 h-44 px-3 py-2 leading-relaxed">
         {events.length === 0 ? (
           <div className="opacity-60">{t("timers.logEmpty")}</div>
         ) : (
           events.map((e) => (
             <div key={e.id}>
-              <span className="opacity-60">{formatDateTime(e.created_at)} • {e.created_by}:</span> {e.message}
+              <span className="text-fg-3">{formatDateTime(e.created_at)} · {e.created_by}:</span> <span className="text-fg">{e.message}</span>
             </div>
           ))
         )}
@@ -138,8 +138,8 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; can: Ca
       {(
         <>
           {can(Scopes.TIMERS_LOG) && <div className="mt-3 flex gap-2">
-            <input className="field field-mono flex-1 text-xs" data-guide="tmodal-note" placeholder={t("timers.notePlaceholder")} value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void addNote()} />
-            <button className="btn" disabled={busy || !note.trim()} onClick={() => void addNote()}>📝 {t("timers.toLog")}</button>
+            <input className="field flex-1" data-guide="tmodal-note" placeholder={t("timers.notePlaceholder")} value={note} onChange={(e) => setNote(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void addNote()} />
+            <button className="btn" disabled={busy || !note.trim()} onClick={() => void addNote()}><Icon name="note" size={15} />{t("timers.toLog")}</button>
           </div>}
 
           {can(Scopes.TIMERS_UPDATE) && <>
@@ -148,11 +148,12 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; can: Ca
           </div>
 
           <div className="mt-3 grid gap-2 sm:grid-cols-2">
-            <button className="btn" data-guide="tmodal-reset" style={{ background: "#1e291b", color: "#a3e635", borderColor: "#16a34a" }} disabled={busy} onClick={() => void restart(RESET_SECONDS)}>
-              ♻️ {t("timers.reset48")}
+            <button className="btn btn-active btn-lg" data-guide="tmodal-reset" disabled={busy} onClick={() => void restart(RESET_SECONDS)}>
+              <Icon name="refresh" size={16} />
+              {t("timers.reset48")}
             </button>
             <button
-              className="btn btn-primary"
+              className="btn btn-primary btn-lg"
               data-guide="tmodal-set"
               disabled={busy}
               onClick={() => {
@@ -161,16 +162,17 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; can: Ca
                 void restart(seconds);
               }}
             >
-              ✅ {t("timers.setTimer")}
+              <Icon name="check" size={16} />
+              {t("timers.setTimer")}
             </button>
           </div>
           </>}
 
-          <div className="mt-4 flex items-center justify-between gap-2 border-t border-white/10 pt-3">
-            <span className="hud-label text-muted">{t("timers.createdBy", { name: timer.created_by })}</span>
+          <div className="mt-4 flex items-center justify-between gap-2 border-t border-line pt-3">
+            <span className="text-xs text-fg-3">{t("timers.createdBy", { name: timer.created_by })}</span>
             {can(Scopes.TIMERS_DELETE) && <button
               data-guide="tmodal-remove"
-              className={`btn btn-danger ${armed === "delete" ? "btn-active" : ""}`}
+              className={`btn ${armed === "delete" ? "btn-danger" : "btn-ghost text-danger"}`}
               disabled={busy}
               onClick={() =>
                 confirm("delete", () =>
@@ -183,7 +185,8 @@ export const TimerManagerModal: React.FC<{ timer: MonitoredTimer | null; can: Ca
                 )
               }
             >
-              {armed === "delete" ? `⚠️ ${t("timers.confirmRemove")}` : `🗑 ${t("timers.remove")}`}
+              <Icon name="trash" size={15} />
+              {armed === "delete" ? t("timers.confirmRemove") : t("timers.remove")}
             </button>}
           </div>
         </>
@@ -250,12 +253,12 @@ export const RegisterTimerModal: React.FC<{ open: boolean; onClose: () => void; 
           onEnter={() => void submit()}
         />
         <div>
-          <div className="hud-label mb-1 text-muted">{t("timers.startHold")}</div>
+          <div className="field-label mb-1.5">{t("timers.startHold")}</div>
           <TimeInputs value={time} onChange={setTime} />
         </div>
         <div className="flex justify-end gap-2">
           <Button onClick={onClose}>{t("common.cancel")}</Button>
-          <Button variant="primary" isLoading={busy} onClick={() => void submit()}>🏳️ {t("timers.monitor")}</Button>
+          <Button variant="primary" isLoading={busy} onClick={() => void submit()}><Icon name="clock" size={15} />{t("timers.monitor")}</Button>
         </div>
       </div>
     </Modal>

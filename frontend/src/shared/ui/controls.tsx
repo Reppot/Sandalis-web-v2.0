@@ -50,8 +50,8 @@ export const Field = React.forwardRef<HTMLInputElement, FieldProps>(({ label, mo
   const input = <input ref={ref} id={inputId} className={cn("field", mono && "field-mono", className)} {...props} />;
   if (!label) return input;
   return (
-    <label htmlFor={inputId} className="flex flex-col gap-1">
-      <span className="hud-label text-muted">{label}</span>
+    <label htmlFor={inputId} className="flex flex-col gap-1.5">
+      <span className="field-label">{label}</span>
       {input}
     </label>
   );
@@ -66,31 +66,106 @@ export const Select: React.FC<React.SelectHTMLAttributes<HTMLSelectElement> & { 
   );
   if (!label) return select;
   return (
-    <label className="flex flex-col gap-1">
-      <span className="hud-label text-muted">{label}</span>
+    <label className="flex flex-col gap-1.5">
+      <span className="field-label">{label}</span>
       {select}
     </label>
   );
 };
 
+/** Сегментированный переключатель: 2–4 взаимоисключающих варианта (ящики / штуки, фракции…). */
+export function Segmented<T extends string>({ options, value, onChange, label, size = "md", className }: {
+  options: ReadonlyArray<{ value: T; label: React.ReactNode; title?: string }>;
+  value: T;
+  onChange: (next: T) => void;
+  label: string;
+  size?: "sm" | "md" | "lg";
+  className?: string;
+}) {
+  return (
+    <div className={cn("segmented", `is-${size}`, className)} role="radiogroup" aria-label={label}>
+      {options.map((o) => (
+        <button key={o.value} type="button" role="radio" aria-checked={o.value === value} title={o.title} className={cn("segmented-item", o.value === value && "is-active")} onClick={() => onChange(o.value)}>
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Поле поиска с лупой и кнопкой очистки. */
+export const SearchField = React.forwardRef<HTMLInputElement, Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "size"> & { value: string; onChange: (next: string) => void; size?: "md" | "lg" }>(
+  ({ value, onChange, className, size = "md", ...props }, ref) => {
+    const t = useT();
+    return (
+      <label className={cn("search-field", `is-${size}`, className)}>
+        <svg className="search-field-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <circle cx="11" cy="11" r="7" />
+          <path d="M20 20l-3.5-3.5" />
+        </svg>
+        <input ref={ref} type="search" className="search-field-input" value={value} onChange={(e) => onChange(e.target.value)} {...props} />
+        {value ? (
+          <button type="button" className="search-field-clear" onClick={() => onChange("")} aria-label={t("common.clear")}>
+            ✕
+          </button>
+        ) : null}
+      </label>
+    );
+  },
+);
+SearchField.displayName = "SearchField";
+
+/** Заголовок блока внутри карточки: название слева, действия справа. */
+export const SectionHeader: React.FC<{ title: React.ReactNode; icon?: UiIcon; meta?: React.ReactNode; actions?: React.ReactNode; className?: string; as?: "h2" | "h3" }> = ({ title, icon, meta, actions, className, as: Tag = "h2" }) => (
+  <div className={cn("section-header", className)}>
+    <div className="flex min-w-0 items-center gap-2.5">
+      {icon ? <span className="icon-tile h-8 w-8 rounded-[10px]"><UiGlyph icon={icon} size={18} /></span> : null}
+      <Tag className="panel-title truncate">{title}</Tag>
+      {meta ? <span className="flex shrink-0 items-center gap-1.5">{meta}</span> : null}
+    </div>
+    {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
+  </div>
+);
+
+/** Шапка страницы-раздела: значок, надзаголовок, заголовок, пояснение, действия справа. */
+export const PageHeader: React.FC<{ icon?: UiIcon | React.ReactNode; eyebrow?: React.ReactNode; title: React.ReactNode; lead?: React.ReactNode; actions?: React.ReactNode; children?: React.ReactNode; className?: string; guide?: string }> = ({ icon, eyebrow, title, lead, actions, children, className, guide }) => (
+  <section data-guide={guide} className={cn("panel page-header", className)}>
+    <div className="page-header-main">
+      {icon ? <span className="page-header-icon">{typeof icon === "string" ? <UiGlyph icon={icon as UiIcon} size={26} /> : icon}</span> : null}
+      <div className="min-w-0 flex-1">
+        {eyebrow ? <div className="page-eyebrow">{eyebrow}</div> : null}
+        <h1 className="page-header-title">{title}</h1>
+        {lead ? <p className="page-header-lead">{lead}</p> : null}
+      </div>
+      {actions ? <div className="page-header-actions">{actions}</div> : null}
+    </div>
+    {children}
+  </section>
+);
+
 export const Panel: React.FC<React.HTMLAttributes<HTMLElement> & { as?: "section" | "div" | "aside" }> = ({ as: Tag = "section", className, ...props }) => (
-  <Tag className={cn("panel panel-corners rounded-md", className)} {...props} />
+  <Tag className={cn("panel", className)} {...props} />
 );
 
 export const Loading: React.FC<{ label?: string; className?: string }> = ({ label, className }) => {
   const t = useT();
   return (
-    <div className={cn("hud-label flex min-h-[160px] items-center justify-center text-muted", className)}>
-      <span className="pulse">{label ?? t("common.loading")}</span>
+    <div className={cn("flex min-h-[160px] flex-col items-center justify-center gap-3 text-sm text-fg-3", className)} role="status">
+      <span className="spinner" aria-hidden />
+      <span>{label ?? t("common.loading")}</span>
     </div>
   );
 };
 
 export const EmptyState: React.FC<{ icon?: UiIcon | null; title: string; hint?: string; children?: React.ReactNode }> = ({ icon, title, hint, children }) => (
-  <div className="flex min-h-[160px] flex-col items-center justify-center gap-2 px-4 text-center">
-    {icon && <UiGlyph icon={icon} size={56} className="opacity-70" />}
-    <div className="text-sm text-white/85">{title}</div>
-    {hint && <div className="hud-label text-muted">{hint}</div>}
+  <div className="empty-state">
+    {icon && (
+      <span className="empty-state-icon">
+        <UiGlyph icon={icon} size={28} />
+      </span>
+    )}
+    <div className="empty-state-title">{title}</div>
+    {hint && <div className="empty-state-hint">{hint}</div>}
     {children}
   </div>
 );
@@ -100,10 +175,10 @@ export const ItemIcon: React.FC<{ sources: ReadonlyArray<string | null | undefin
   const t = useT();
   const [failed, setFailed] = React.useState<string[]>([]);
   const src = sources.find((s): s is string => typeof s === "string" && s.length > 0 && !failed.includes(s));
-  const frame = cn("inline-flex shrink-0 items-center justify-center overflow-hidden rounded border border-[rgba(163,230,53,0.18)] bg-[#0b100c]", className);
+  const frame = cn("item-icon", className);
   if (!src) {
     return (
-      <span className={cn(frame, "font-display text-accent/60")} style={{ width: size, height: size, fontSize: Math.max(11, Math.round(size * 0.38)) }} aria-label={t("common.noIcon", { name: label })}>
+      <span className={cn(frame, "font-semibold text-fg-3")} style={{ width: size, height: size, fontSize: Math.max(11, Math.round(size * 0.38)) }} aria-label={t("common.noIcon", { name: label })}>
         {label.replace(/[^a-z0-9а-яё]+/giu, "").charAt(0).toUpperCase() || "?"}
       </span>
     );
@@ -131,7 +206,7 @@ export const QuantityStepper: React.FC<{ value: number; onChange: (next: number)
   const [draft, setDraft] = React.useState<string | null>(null);
   return (
     <div className="flex shrink-0 items-center gap-1">
-      <button type="button" className="btn px-2 py-1" onClick={() => onChange(Math.max(0, value - 1))} aria-label={t("common.decrease", { name: label })}>
+      <button type="button" className="stepper-btn" onClick={() => onChange(Math.max(0, value - 1))} aria-label={t("common.decrease", { name: label })}>
         −
       </button>
       <label className="factory-qty flex min-w-[78px] items-center justify-center gap-1">
@@ -139,7 +214,7 @@ export const QuantityStepper: React.FC<{ value: number; onChange: (next: number)
           type="text"
           inputMode="numeric"
           aria-label={t("common.quantityOf", { name: label })}
-          className="w-12 min-w-0 bg-transparent text-center text-[0.8rem] font-bold text-white outline-none"
+          className="w-12 min-w-0 bg-transparent text-center text-[0.8rem] font-semibold text-fg outline-none"
           value={draft ?? String(value)}
           onFocus={(e) => e.currentTarget.select()}
           onChange={(e) => {
@@ -157,8 +232,8 @@ export const QuantityStepper: React.FC<{ value: number; onChange: (next: number)
         />
         {unit ? <span className="shrink-0">{unit}</span> : null}
       </label>
-      <button type="button" className="btn px-2 py-1" onClick={() => onChange(value + 1)} aria-label={t("common.increase", { name: label })}>
-        ＋
+      <button type="button" className="stepper-btn" onClick={() => onChange(value + 1)} aria-label={t("common.increase", { name: label })}>
+        +
       </button>
     </div>
   );
@@ -194,10 +269,10 @@ export const LoadMore: React.FC<{ shown: number; total?: number | null; next: nu
   if (next <= 0 && (total == null || total <= shown)) return null;
   return (
     <div className="load-more">
-      <span className="hud-label text-muted">{t("common.shownOf", { shown, total: total ?? "?" })}</span>
+      <span className="text-xs">{t("common.shownOf", { shown, total: total ?? "?" })}</span>
       {next > 0 && (
         <button type="button" className="btn" disabled={busy} onClick={onMore}>
-          {busy ? t("common.loading") : `⬇ ${t("common.loadMore", { n: next })}`}
+          {busy ? t("common.loading") : t("common.loadMore", { n: next })}
         </button>
       )}
     </div>

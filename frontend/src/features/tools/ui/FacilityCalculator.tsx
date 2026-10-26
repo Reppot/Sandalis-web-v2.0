@@ -3,7 +3,8 @@
 import * as React from "react";
 import { RAW, buildChain, chainTotals, facilityData, powerPlan, type ChainChoice, type ChainNode, type Recipe } from "@/entities/recipe";
 import { codeSynonyms } from "@/entities/item";
-import { FilterCards, ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify, usePaged } from "@/shared";
+import { FilterCards, ItemIcon, PagedMore, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, UiGlyph, useI18n, useNotify, usePaged, Icon, SearchField } from "@/shared";
+import { ToolHeader } from "@/features/tools/ui/ToolHeader";
 import { SendOrderDialog } from "@/entities/report/ui/SendOrderDialog";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
@@ -183,31 +184,33 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
   return (
     <DisplayName.Provider value={dn}>
     <div className="tab-fade factory-page pb-24 lg:pb-0">
-      <section className="panel panel-corners factory-topbar">
-        <div className="flex min-w-0 items-center gap-3">
-          <UiGlyph icon="facility" size={40} />
-          <div className="min-w-0">
-            <div className="hud-label text-muted">FACILITY PLANNER • FOXHOLE</div>
-            <h2 className="panel-title mt-1 text-[1.1rem] md:text-[1.45rem]">⚙ {t("tools.facility")}</h2>
-            <p className="mt-1 text-sm text-white/65">{t("facility.hint")}</p>
-          </div>
-        </div>
-        <div className="factory-controls">
-          {canSend ? (
-            <button className="btn btn-primary" data-guide="facility-send" disabled={!roots.length} onClick={() => setSendOpen(true)}>📨 {t("orderSend.button")}</button>
-          ) : null}
-          <button className="btn" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: "FACILITY PLAN", message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
-            ⧉ {t("tools.sharePlan")}
-          </button>
-        </div>
-      </section>
+      <ToolHeader
+        icon={<UiGlyph icon="facility" size={26} />}
+        eyebrow="Facility planner"
+        title={t("tools.facility")}
+        hint={t("facility.hint")}
+        actions={
+          <>
+            <button className="btn h-10" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: t("tools.facility"), message: t("tools.planCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
+              <Icon name="copy" size={16} />
+              {t("tools.sharePlan")}
+            </button>
+            {canSend ? (
+              <button className="btn btn-primary h-10" data-guide="facility-send" disabled={!roots.length} onClick={() => setSendOpen(true)}>
+                <Icon name="send" size={16} />
+                {t("orderSend.button")}
+              </button>
+            ) : null}
+          </>
+        }
+      />
 
       <PaneToggles panes={panes} catalogLabel={t("facility.catalogPane")} planLabel={t("facility.queue")} />
 
       <div className={paneGridClass(panes)} data-wide={panes.wide}>
-        <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
+        <section className={`panel factory-catalog ${panes.catalog ? "" : "hidden"}`}>
           <div className="filter-head">
-            <span className="hud-label text-accent">{t("facility.sources")}</span>
+            <span className="tool-section-label">{t("facility.sources")}</span>
             <FilterCards
             compact
             guide="tool-factions"
@@ -228,14 +231,12 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
             onChange={setSource}
           />
 
-          <div className="factory-filters mt-3">
-            <input className="field h-11 flex-1" data-guide="facility-search" placeholder={t("facility.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
-          </div>
+          <SearchField className="mt-4" data-guide="facility-search" placeholder={t("facility.search")} value={query} onChange={setQuery} />
           {!source && !query.trim() ? (
-            <div className="hud-label py-6 text-center text-muted">{t("facility.pickSource")}</div>
+            <div className="py-8 text-center text-sm text-fg-3">{t("facility.pickSource")}</div>
           ) : (
           <>
-          <div className="factory-count hud-label">
+          <div className="factory-count text-xs">
             {source && source !== "all" ? `${source} • ` : ""}{t("codes.shown")}: {cards.length} / {totalItems}
           </div>
 
@@ -244,14 +245,14 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
               const queued = plan.find((p) => byId.get(p.recipeId)?.name === card.name);
               const first = card.recipes[0];
               return (
-                <button key={card.name} type="button" className={`factory-item-card relative min-h-[13rem] flex-col justify-start gap-2 p-3 text-center ${queued ? "border-accent" : ""}`} onClick={() => add(card)}>
-                  <span className="factory-add absolute top-2 right-2">＋</span>
-                  {queued ? <span className="queued-badge absolute top-2 left-2">{fmt(queued.amount)}</span> : null}
+                <button key={card.name} type="button" className={`factory-item-card tool-item min-h-[13rem] ${queued ? "is-selected" : ""}`} onClick={() => add(card)}>
+                  <span className="factory-add absolute top-2.5 right-2.5"><Icon name="plus" size={14} strokeWidth={2.5} /></span>
+                  {queued ? <span className="queued-badge absolute top-2.5 left-2.5">{fmt(queued.amount)}</span> : null}
                   <ItemIcon sources={[assetUrl(first.icon_url)]} size={72} label={dn(card.name)} className="mt-3" />
-                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{dn(card.name)}</strong>
-                  <small className="block w-full truncate text-[0.7rem] text-muted">{facilityData(first)?.source}</small>
+                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.85rem] font-semibold leading-tight text-fg">{dn(card.name)}</strong>
+                  <small className="block w-full truncate text-[0.72rem] text-fg-3">{facilityData(first)?.source}</small>
                   {card.recipes.length > 1 ? (
-                    <span className="mt-auto rounded-sm border border-amber-300/40 bg-black/30 px-1.5 py-0.5 font-mono text-[0.62rem] text-amber-200">{t("facility.recipes", { n: card.recipes.length })}</span>
+                    <span className="cost-chip is-warn mt-auto">{t("facility.recipes", { n: card.recipes.length })}</span>
                   ) : null}
                 </button>
               );
@@ -265,16 +266,16 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
         <ResourceSummaryPanel report={report} title={t("facility.queue")} emptyHint={t("facility.queueHint")} onClear={() => setPlan([])} hidden={!panes.plan} inline={panes.wide === "plan"}>
           {buildings.length ? (
             <div className="facility-buildings" data-guide="facility-buildings">
-              <div className="hud-label text-accent">🏭 {t("power.buildingsTitle")}</div>
-              <p className="hud-label mt-1 text-muted">{t("power.buildingsHint")}</p>
+              <div className="text-sm font-semibold">{t("power.buildingsTitle")}</div>
+              <p className="mt-0.5 text-xs text-fg-3">{t("power.buildingsHint")}</p>
               <div className="facility-buildings-list">
                 {buildings.map((b) => (
                   <div key={b.source} className={`facility-building ${b.used ? "is-used" : ""}`}>
                     <ItemIcon sources={[assetUrl(b.icon)]} size={40} label={b.source} />
                     <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[0.85rem] font-semibold text-white">{b.source}</span>
-                      <span className="hud-label block truncate text-muted" title={b.items.map(dn).join(", ")}>
-                        {b.used ? `✔ ${t("power.used")}` : t("power.alternative")} • {b.items.map(dn).join(", ")}
+                      <span className="block truncate text-[0.85rem] font-semibold text-fg">{b.source}</span>
+                      <span className="block truncate text-xs text-fg-3" title={b.items.map(dn).join(", ")}>
+                        {b.used ? t("power.used") : t("power.alternative")} · {b.items.map(dn).join(", ")}
                       </span>
                     </span>
                     <QuantityStepper
@@ -298,19 +299,19 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
                 <div className="factory-plan-row">
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={48} label={dn(recipe.name)} />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm text-white">{dn(recipe.name)}</span>
-                    <span className="hud-label mt-0.5 block truncate text-muted">{t("facility.perRun", { n: fmt(recipe.output_quantity) })}</span>
+                    <span className="block truncate text-sm text-fg">{dn(recipe.name)}</span>
+                    <span className="mt-0.5 block truncate text-xs text-fg-3">{t("facility.perRun", { n: fmt(recipe.output_quantity) })}</span>
                   </span>
                   <QuantityStepper value={row.amount} unit={unitOf(facilityData(recipe)?.output_unit ?? null)} label={dn(recipe.name)} onChange={(n) => update(row.key, { amount: Math.max(0, n) })} />
-                  <button type="button" className="btn btn-danger px-2 py-1" onClick={() => update(row.key, { amount: 0 })} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
+                  <button type="button" className="row-remove" onClick={() => update(row.key, { amount: 0 })} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}><Icon name="close" size={15} /></button>
                 </div>
                 <div className="facility-recipe" data-guide="facility-recipe">
-                  <span className="hud-label text-muted">{t("facility.recipe")}{options.length > 1 ? ` • ${t("facility.recipes", { n: options.length })}` : ""}</span>
+                  <span className="text-xs font-medium text-fg-3">{t("facility.recipe")}{options.length > 1 ? ` • ${t("facility.recipes", { n: options.length })}` : ""}</span>
                   <RecipePicker options={options} value={recipe.id} onChange={(id) => update(row.key, { recipeId: id })} />
                 </div>
                 {root ? (
                   <details className="facility-chain" open>
-                    <summary className="hud-label text-accent">{t("facility.chain")}</summary>
+                    <summary>{t("facility.chain")}</summary>
                     <ChainTier depth={1} parent={dn(root.name)}>
                       {root.children.map((child, i) => (
                         <ChainItem key={`${child.name}-${i}`} depth={1} node={child} byName={byName} allowed={allowed} choice={choice} setChoice={setChoice} unitOf={unitOf} />
@@ -369,10 +370,10 @@ const ChainItem: React.FC<{
     <li className="chain-node">
       <div className="facility-node">
         <ItemIcon sources={[assetUrl(node.icon_url)]} size={24} label={dn(node.name)} />
-        <span className="min-w-0 flex-1 truncate text-[0.8rem] text-white">{dn(node.name)}</span>
-        <span className="badge-count shrink-0">{fmt(Math.ceil(node.amount * 10) / 10)} {unitOf(node.unit)}</span>
+        <span className="min-w-0 flex-1 truncate text-[0.8rem] text-fg">{dn(node.name)}</span>
+        <span className="count-pill shrink-0">{fmt(Math.ceil(node.amount * 10) / 10)} {unitOf(node.unit)}</span>
       </div>
-      {node.cycle ? <span className="hud-label pl-8 text-warn">↻ {t("facility.cycle")}</span> : null}
+      {node.cycle ? <span className="pl-8 text-xs text-warn">↻ {t("facility.cycle")}</span> : null}
       {options.length > 0 && !node.cycle ? (
         <div className="facility-node-pick">
           <RecipePicker options={options} value={value} allowRaw onChange={(id) => setChoice((prev) => ({ ...prev, [node.name]: id }))} />
@@ -422,7 +423,7 @@ const RecipeCard: React.FC<{ recipe: Recipe | null; selected?: boolean; onClick:
           </span>
           {d.seconds || d.power_mw ? (
             <span className="recipe-card-meta">
-              {d.seconds ? `⏱ ${formatDuration(d.seconds, timeUnits(t))}` : ""}{d.seconds && d.power_mw ? "  •  " : ""}{d.power_mw ? `⚡ ${fmt(d.power_mw)} MW` : ""}
+              {d.seconds ? formatDuration(d.seconds, timeUnits(t)) : ""}{d.seconds && d.power_mw ? " · " : ""}{d.power_mw ? `${fmt(d.power_mw)} MW` : ""}
             </span>
           ) : null}
         </>
@@ -447,7 +448,7 @@ const RecipePicker: React.FC<{ options: Recipe[]; value: string; onChange: (id: 
         recipe={value === RAW ? null : current}
         selected
         onClick={() => count > 1 && setOpen(true)}
-        trailing={count > 1 ? <span className="recipe-card-change">▾ {t("facility.change")}</span> : null}
+        trailing={count > 1 ? <span className="recipe-card-change">{t("facility.change")}</span> : null}
       />
     );
   }

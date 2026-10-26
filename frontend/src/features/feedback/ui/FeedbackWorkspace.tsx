@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { EmptyState, Loading, UiGlyph, cn, errorText, formatDateTime, matchesWords, useConfirm, useI18n, useNotify, type MessageKey } from "@/shared";
-import { DonateBlock } from "@/features/feedback/ui/DonateBlock";
+import { EmptyState, Icon, Loading, PageHeader, SearchField, cn, errorText, formatDateTime, matchesWords, useConfirm, useI18n, useNotify, type IconName, type MessageKey } from "@/shared";
 import { feedbackApi, type Feedback, type FeedbackCategory, type FeedbackOverview, type FeedbackStatus } from "@/features/feedback/model/api";
 
-const CATEGORIES: { key: FeedbackCategory; icon: string; label: MessageKey; hint: MessageKey }[] = [
-  { key: "idea", icon: "💡", label: "feedback.cat.idea", hint: "feedback.cat.ideaHint" },
-  { key: "bug", icon: "🐞", label: "feedback.cat.bug", hint: "feedback.cat.bugHint" },
-  { key: "other", icon: "💬", label: "feedback.cat.other", hint: "feedback.cat.otherHint" },
+const CATEGORIES: { key: FeedbackCategory; icon: IconName; label: MessageKey; hint: MessageKey }[] = [
+  { key: "idea", icon: "sparkles", label: "feedback.cat.idea", hint: "feedback.cat.ideaHint" },
+  { key: "bug", icon: "warning", label: "feedback.cat.bug", hint: "feedback.cat.bugHint" },
+  { key: "other", icon: "message", label: "feedback.cat.other", hint: "feedback.cat.otherHint" },
 ];
 const STATUS_LABEL: Record<FeedbackStatus, MessageKey> = { new: "feedback.status.new", read: "feedback.status.read", done: "feedback.status.done" };
 const MAX = 4000;
@@ -51,33 +50,28 @@ export const FeedbackWorkspace: React.FC<{ displayName: string | null }> = ({ di
     }
   };
 
-  if (!data) return <div className="panel rounded-md"><Loading label={t("feedback.loading")} /></div>;
+  if (!data) return <div className="panel"><Loading label={t("feedback.loading")} /></div>;
 
   return (
-    <div className="tab-fade flex flex-col gap-3">
-      <section className="panel panel-corners rounded-md p-4">
-        <div className="flex flex-wrap items-start gap-3">
-          <UiGlyph icon="feedback" size={44} />
-          <div className="min-w-0 flex-1">
-            <div className="hud-label text-muted">{t("feedback.kicker")}</div>
-            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.25rem]">{t("feedback.title")}</h1>
-            <p className="mt-1 max-w-3xl text-[0.85rem] text-white/75">{t("feedback.hint")}</p>
-          </div>
-          {data.is_admin ? <span className="feedback-unread">{t("feedback.unread", { n: data.unread })}</span> : null}
-        </div>
-      </section>
+    <div className="tab-fade flex flex-col gap-4">
+      <PageHeader
+        icon="feedback"
+        eyebrow={t("feedback.kicker")}
+        title={t("feedback.title")}
+        lead={t("feedback.hint")}
+        actions={data.is_admin ? <span className="feedback-unread">{t("feedback.unread", { n: data.unread })}</span> : null}
+      />
 
       {data.is_admin ? <Inbox items={data.inbox} onChanged={load} /> : null}
 
-      <section data-guide="feedback-form" className="panel panel-corners rounded-md p-4">
-        <div className="panel-title">✍ {t("feedback.write")}</div>
-        <div className="cabinet-rule" />
+      <section data-guide="feedback-form" className="panel p-5">
+        <div className="panel-title mb-4">{t("feedback.write")}</div>
         {data.can_write ? (
           <div className="grid gap-3">
             <div className="feedback-cats" role="radiogroup" aria-label={t("feedback.category")}>
               {CATEGORIES.map((c) => (
                 <button key={c.key} type="button" role="radio" aria-checked={category === c.key} className={cn("feedback-cat", category === c.key && "is-active")} onClick={() => setCategory(c.key)}>
-                  <span className="feedback-cat-icon" aria-hidden>{c.icon}</span>
+                  <span className="feedback-cat-icon" aria-hidden><Icon name={c.icon} size={18} /></span>
                   <span className="min-w-0">
                     <b>{t(c.label)}</b>
                     <small>{t(c.hint)}</small>
@@ -85,33 +79,30 @@ export const FeedbackWorkspace: React.FC<{ displayName: string | null }> = ({ di
                 </button>
               ))}
             </div>
-            <label className="flex flex-col gap-1">
-              <span className="hud-label text-muted">{t("feedback.message")}</span>
-              <textarea className="field min-h-[9rem] resize-y text-[0.9rem]" maxLength={MAX} value={message} placeholder={t("feedback.placeholder")} onChange={(e) => setMessage(e.target.value)} />
-              <span className="hud-label self-end text-muted">{message.length} / {MAX}</span>
+            <label className="flex flex-col gap-1.5">
+              <span className="field-label">{t("feedback.message")}</span>
+              <textarea className="field min-h-[10rem] resize-y" maxLength={MAX} value={message} placeholder={t("feedback.placeholder")} onChange={(e) => setMessage(e.target.value)} />
+              <span className="self-end text-xs text-fg-3 tabular">{message.length} / {MAX}</span>
             </label>
-            <label className="flex flex-col gap-1">
-              <span className="hud-label text-muted">{t("feedback.page")}</span>
+            <label className="flex flex-col gap-1.5">
+              <span className="field-label">{t("feedback.page")}</span>
               <input className="field h-10" maxLength={120} value={page} placeholder={t("feedback.pagePlaceholder")} onChange={(e) => setPage(e.target.value)} />
             </label>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="hud-label text-muted">👤 {t("feedback.signedAs", { name: displayName ?? "—" })}</span>
-              <button type="button" className="btn btn-primary" data-guide="feedback-send" disabled={busy || message.trim().length < 3} onClick={() => void send()}>
-                {busy ? t("common.sending") : `📨 ${t("feedback.send")}`}
+              <span className="flex items-center gap-1.5 text-xs text-fg-3"><Icon name="user" size={14} />{t("feedback.signedAs", { name: displayName ?? "—" })}</span>
+              <button type="button" className="btn btn-primary btn-lg" data-guide="feedback-send" disabled={busy || message.trim().length < 3} onClick={() => void send()}>
+                {busy ? t("common.sending") : <><Icon name="send" size={16} />{t("feedback.send")}</>}
               </button>
             </div>
           </div>
         ) : (
-          <p className="text-[0.9rem] text-white/80">🔒 {t("feedback.loginRequired")}</p>
+          <p className="flex items-center gap-2 text-[0.9rem] text-fg-2"><Icon name="lock" size={16} />{t("feedback.loginRequired")}</p>
         )}
       </section>
 
-      <DonateBlock />
-
       {data.mine.length ? (
-        <section className="panel panel-corners rounded-md p-4">
-          <div className="panel-title">🗂 {t("feedback.mine", { n: data.mine.length })}</div>
-          <div className="cabinet-rule" />
+        <section className="panel p-5">
+          <div className="panel-title mb-4">{t("feedback.mine", { n: data.mine.length })}</div>
           <ul className="flex flex-col gap-2">
             {data.mine.map((f) => (
               <FeedbackItem key={f.id} item={f} />
@@ -144,27 +135,28 @@ const Inbox: React.FC<{ items: Feedback[]; onChanged: () => void }> = ({ items, 
   };
 
   return (
-    <section data-guide="feedback-inbox" className="panel panel-corners rounded-md p-4">
+    <section data-guide="feedback-inbox" className="panel p-5">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="panel-title">📥 {t("feedback.inbox")}</div>
-        <input className="field h-9 w-full max-w-xs py-1 text-xs" value={query} placeholder={t("feedback.search")} onChange={(e) => setQuery(e.target.value)} />
+        <div className="panel-title">{t("feedback.inbox")}</div>
+        <SearchField className="w-full max-w-xs" value={query} placeholder={t("feedback.search")} onChange={setQuery} />
       </div>
       <div className="mt-3 flex flex-wrap gap-1.5">
         {(["new", "read", "done", "all"] as const).map((s) => (
-          <button key={s} type="button" className={cn("chip h-9 px-4", filter === s && "is-active")} onClick={() => setFilter(s)}>
-            {s === "all" ? `${t("common.all")} • ${items.length}` : `${t(STATUS_LABEL[s])} • ${count(s)}`}
+          <button key={s} type="button" className={cn("chip", filter === s && "is-active")} onClick={() => setFilter(s)}>
+            {s === "all" ? t("common.all") : t(STATUS_LABEL[s])}
+            <span className="opacity-60">{s === "all" ? items.length : count(s)}</span>
           </button>
         ))}
       </div>
-      <div className="cabinet-rule" />
+      <div className="divider" />
       {shown.length ? (
         <ul className="flex flex-col gap-2">
           {shown.map((f) => (
             <FeedbackItem key={f.id} item={f} showAuthor>
-              {f.status !== "read" ? <button type="button" className="btn px-2 py-1 text-[0.65rem]" onClick={() => void act(() => feedbackApi.setStatus(f.id, "read"))}>👁 {t("feedback.markRead")}</button> : null}
-              {f.status !== "done" ? <button type="button" className="btn btn-primary px-2 py-1 text-[0.65rem]" onClick={() => void act(() => feedbackApi.setStatus(f.id, "done"))}>✔ {t("feedback.markDone")}</button> : null}
-              <button type="button" className={cn("btn btn-danger px-2 py-1 text-[0.65rem]", armed === f.id && "btn-active")} onClick={() => confirm(f.id, () => void act(() => feedbackApi.remove(f.id)))}>
-                {armed === f.id ? t("common.confirmQ") : "🗑"}
+              {f.status !== "read" ? <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={() => void act(() => feedbackApi.setStatus(f.id, "read"))}><Icon name="eye" size={14} />{t("feedback.markRead")}</button> : null}
+              {f.status !== "done" ? <button type="button" className="btn btn-primary h-8 min-h-0 px-3 text-[0.8rem]" onClick={() => void act(() => feedbackApi.setStatus(f.id, "done"))}><Icon name="check" size={14} />{t("feedback.markDone")}</button> : null}
+              <button type="button" className={cn(armed === f.id ? "btn btn-danger h-8 min-h-0 px-3 text-[0.8rem]" : "icon-btn h-8 w-8")} aria-label={t("common.delete")} onClick={() => confirm(f.id, () => void act(() => feedbackApi.remove(f.id)))}>
+                {armed === f.id ? t("common.confirmQ") : <Icon name="trash" size={15} />}
               </button>
             </FeedbackItem>
           ))}
@@ -182,20 +174,20 @@ const FeedbackItem: React.FC<React.PropsWithChildren<{ item: Feedback; showAutho
   return (
     <li className={cn("feedback-item", `is-${item.status}`)}>
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-        <span className="feedback-badge">{cat.icon} {t(cat.label)}</span>
+        <span className="feedback-badge"><Icon name={cat.icon} size={12} />{t(cat.label)}</span>
         {showAuthor ? (
           <>
             <b className="feedback-author">{item.user_name}</b>
-            {item.clan_name ? <span className="hud-label text-muted">🛡 {item.clan_name}</span> : null}
+            {item.clan_name ? <span className="text-xs text-fg-3">{item.clan_name}</span> : null}
           </>
         ) : null}
-        <span className="hud-label text-muted">{formatDateTime(item.created_at)}</span>
-        {item.page ? <span className="hud-label text-accent">📍 {item.page}</span> : null}
+        <span className="text-xs text-fg-3">{formatDateTime(item.created_at)}</span>
+        {item.page ? <span className="badge badge-neutral">{item.page}</span> : null}
         <span className={cn("feedback-status", `is-${item.status}`)}>{t(STATUS_LABEL[item.status])}</span>
         {children ? <span className="ml-auto flex flex-wrap gap-1">{children}</span> : null}
       </div>
       <p className="feedback-text">{item.message}</p>
-      {showAuthor ? <span className="hud-label text-muted">ID {item.user_id}</span> : null}
+      {showAuthor ? <span className="text-xs text-fg-3">ID {item.user_id}</span> : null}
     </li>
   );
 };

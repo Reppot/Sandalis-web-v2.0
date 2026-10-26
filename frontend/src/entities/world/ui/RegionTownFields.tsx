@@ -26,7 +26,7 @@ export const RegionTownFields: React.FC<{
   const townsId = React.useId();
   const regionNames = world ? world.regions.map((r) => r.name) : fallbackRegions;
   const towns = townsForStockpile(findRegion(world, region));
-  const tag = (f: string[]) => [f.includes("storage") ? `📦 ${t("world.fac.storage")}` : "", f.includes("seaport") ? `⚓ ${t("world.fac.seaport")}` : ""].filter(Boolean).join(" • ");
+  const tag = (f: string[]) => [f.includes("storage") ? t("world.fac.storage") : "", f.includes("seaport") ? t("world.fac.seaport") : ""].filter(Boolean).join(" · ");
 
   return (
     <>
@@ -37,7 +37,7 @@ export const RegionTownFields: React.FC<{
         ))}
       </datalist>
       <Field
-        label={towns.length ? `${townLabel} • ${t("world.townsHint", { n: towns.length })}` : townLabel}
+        label={towns.length ? `${townLabel} · ${t("world.townsHint", { n: towns.length })}` : townLabel}
         list={townsId}
         value={town}
         onChange={(e) => onTown(e.target.value)}

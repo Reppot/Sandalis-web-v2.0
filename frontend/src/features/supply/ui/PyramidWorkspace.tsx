@@ -6,7 +6,6 @@ import { orderDraft, type DraftLine } from "@/entities/report";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi, type Stockpile } from "@/entities/stockpile";
 import {
-  FilterCards,
   ItemIcon,
   Loading,
   Modal,
@@ -23,6 +22,9 @@ import {
   writeStorage,
   xlsxToText,
   type MessageKey,
+  Icon,
+  PageHeader,
+  Segmented,
 } from "@/shared";
 import { currentLevel, evaluatePyramid, pyramidApi, type Pyramid, type PyramidFaction, type PyramidLevel, type PyramidTier } from "@/features/supply/model/pyramid";
 import { itemSearchHay } from "@/entities/item";
@@ -223,7 +225,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   };
   const full = pyramid ? pyramid.configs.length >= pyramid.max_configs : false;
 
-  if (!pyramid) return <div className="panel rounded-md"><Loading label={t("pyramid.loading")} /></div>;
+  if (!pyramid) return <div className="panel"><Loading label={t("pyramid.loading")} /></div>;
 
   const totalMissing = levels.reduce((n, l) => n + l.missing, 0);
   const done = levels.filter((l) => l.done).length;
@@ -231,30 +233,28 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   const pickedMissing = levels.filter((l) => selected.has(l.index)).reduce((n, l) => n + l.missing, 0);
 
   return (
-    <div className="tab-fade flex flex-col gap-3">
-      <section className="panel panel-corners rounded-md p-4">
-        <div className="flex flex-wrap items-start gap-3">
-          <UiGlyph icon="pyramid" size={44} />
-          <div className="min-w-0 flex-1">
-            <div className="hud-label text-muted">{t("pyramid.kicker")}</div>
-            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.25rem]">{t("pyramid.title")}</h1>
-            <p className="mt-1 max-w-3xl text-[0.8rem] text-white/70">{t("pyramid.hint")}</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {draft ? (
-              <>
-                <button type="button" className="btn" onClick={() => setDraft(null)} disabled={busy}>{t("common.cancel")}</button>
-                <button type="button" className="btn btn-primary" disabled={busy || !draft.tiers.some((tier) => tier.items.length)} onClick={() => setNaming(true)}>
-                  💾 {t("common.save")}
-                </button>
-              </>
-            ) : null}
-          </div>
-        </div>
-        <div className="stencil-line mt-3" />
+    <div className="tab-fade flex flex-col gap-4">
+      <PageHeader
+        icon="pyramid"
+        eyebrow={t("pyramid.kicker")}
+        title={t("pyramid.title")}
+        lead={t("pyramid.hint")}
+        actions={
+          draft ? (
+            <>
+              <button type="button" className="btn h-10" onClick={() => setDraft(null)} disabled={busy}>{t("common.cancel")}</button>
+              <button type="button" className="btn btn-primary h-10" disabled={busy || !draft.tiers.some((tier) => tier.items.length)} onClick={() => setNaming(true)}>
+                <Icon name="check" size={16} />
+                {t("common.save")}
+              </button>
+            </>
+          ) : null
+        }
+      >
+        <div className="divider" />
 
-        <div className="mt-3 flex flex-col gap-1.5">
-          <span className="hud-label text-muted">{t("pyramid.config")}</span>
+        <div className="flex flex-col gap-2">
+          <span className="field-label">{t("pyramid.config")}</span>
           <div data-guide="pyramid-config" className="pyramid-configs" role="radiogroup" aria-label={t("pyramid.config")}>
             {pyramid.presets.map((p) => (
               <button key={p.key} type="button" role="radio" aria-checked={config === p.key} className={cn("pyramid-config", config === p.key && "is-active")} onClick={() => pickConfig(p.key)}>
@@ -264,100 +264,104 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
             {pyramid.configs.map((c) => (
               <button key={c.id} type="button" role="radio" aria-checked={config === CUSTOM_PREFIX + c.id} className={cn("pyramid-config is-own", config === CUSTOM_PREFIX + c.id && !draft && "is-active")} onClick={() => pickConfig(CUSTOM_PREFIX + c.id)}
                 title={c.updated_by ? t("pyramid.ownBy", { name: c.updated_by }) : undefined}>
-                ★ {c.name}
+                {c.name}
               </button>
             ))}
             {canEdit ? (
               <button type="button" data-guide="pyramid-custom" className={cn("pyramid-config is-custom", draft && !draft.id && "is-active")} disabled={full || Boolean(draft)} onClick={startCustom}
                 title={full ? t("pyramid.limitReached", { n: pyramid.max_configs }) : t("pyramid.customEditHint")}>
-                ＋ {t("pyramid.custom")}
+                <Icon name="plus" size={14} className="mr-1 inline" />
+                {t("pyramid.custom")}
               </button>
             ) : null}
           </div>
           {custom && !draft && canEdit ? (
             <div className="flex flex-wrap items-center gap-2">
-              <span className="hud-label text-muted">★ {custom.name}{custom.updated_by ? ` • ${t("pyramid.ownBy", { name: custom.updated_by })}` : ""}</span>
-              <button type="button" className="btn px-2.5 py-1 text-[0.7rem]" onClick={startEditOwn}>✎ {t("pyramid.editConfig")}</button>
-              <button type="button" className={cn("btn btn-danger px-2.5 py-1 text-[0.7rem]", armed === `del-${custom.id}` && "btn-active")} disabled={busy}
+              <span className="text-xs text-fg-3">{custom.name}{custom.updated_by ? ` · ${t("pyramid.ownBy", { name: custom.updated_by })}` : ""}</span>
+              <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={startEditOwn}>
+                <Icon name="edit" size={14} />
+                {t("pyramid.editConfig")}
+              </button>
+              <button type="button" className={cn("btn btn-ghost h-8 min-h-0 px-3 text-[0.8rem] text-danger", armed === `del-${custom.id}` && "btn-danger")} disabled={busy}
                 onClick={() => confirm(`del-${custom.id}`, () => void removeConfig(custom.id))}>
-                {armed === `del-${custom.id}` ? t("common.confirmQ") : `🗑 ${t("pyramid.deleteConfig")}`}
+                <Icon name="trash" size={14} />
+                {armed === `del-${custom.id}` ? t("common.confirmQ") : t("pyramid.deleteConfig")}
               </button>
             </div>
           ) : null}
-          {full && canEdit && !draft ? <span className="hud-label text-muted">{t("pyramid.limitReached", { n: pyramid.max_configs })}</span> : null}
+          {full && canEdit && !draft ? <span className="text-xs text-fg-3">{t("pyramid.limitReached", { n: pyramid.max_configs })}</span> : null}
         </div>
 
         <div className="pyramid-controls">
-          <div className="flex flex-col gap-1">
-            <span className="hud-label text-muted">{t("pyramid.source")}</span>
-            <FilterCards
-              compact
-              guide="pyramid-source"
+          <div data-guide="pyramid-source" className="flex flex-col gap-1.5">
+            <span className="field-label">{t("pyramid.source")}</span>
+            <Segmented
               label={t("pyramid.source")}
-              items={[{ key: "stockpile", label: `🏬 ${t("pyramid.sourceStockpile")}` }, { key: "bunker", label: `🛡 ${t("pyramid.sourceBunker")}` }]}
               value={source}
-              onChange={(k) => k && setSource(k as Source)}
+              onChange={(k) => setSource(k)}
+              options={[
+                { value: "stockpile", label: t("pyramid.sourceStockpile") },
+                { value: "bunker", label: t("pyramid.sourceBunker") },
+              ]}
             />
           </div>
 
-          <div className="flex flex-col gap-1">
-            <span className="hud-label text-muted">{t("pyramid.stockUnit")}</span>
-            <FilterCards
-              compact
-              guide="pyramid-unit"
+          <div data-guide="pyramid-unit" className="flex flex-col gap-1.5">
+            <span className="field-label">{t("pyramid.stockUnit")}</span>
+            <Segmented
               label={t("pyramid.stockUnit")}
-              items={[{ key: "crate", label: t("pyramid.inCrates") }, { key: "unit", label: t("pyramid.inUnits") }]}
               value={unit}
               onChange={(k) => {
-                if (!k) return;
-                setUnits((u) => ({ ...u, [source]: k as StockUnit }));
+                setUnits((u) => ({ ...u, [source]: k }));
                 writeStorage(UNIT_KEY(source), k);
               }}
+              options={[
+                { value: "crate", label: t("pyramid.inCrates") },
+                { value: "unit", label: t("pyramid.inUnits") },
+              ]}
             />
           </div>
 
-          <div className="flex flex-col gap-1">
-            <span className="hud-label text-muted">{t("tools.faction")}</span>
-            <FilterCards
-              compact
-              guide="pyramid-faction"
+          <div data-guide="pyramid-faction" className="flex flex-col gap-1.5">
+            <span className="field-label">{t("tools.faction")}</span>
+            <Segmented
               label={t("tools.faction")}
-              items={FACTIONS.map((f) => ({ key: f.key, label: t(f.label) }))}
               value={draft ? draft.faction : viewFaction}
-              onChange={(k) => k && (draft ? setDraft({ ...draft, faction: k as PyramidFaction }) : setViewFaction(k as PyramidFaction))}
+              onChange={(k) => (draft ? setDraft({ ...draft, faction: k }) : setViewFaction(k))}
+              options={FACTIONS.map((f) => ({ value: f.key, label: t(f.label) }))}
             />
           </div>
         </div>
 
         {source === "stockpile" ? (
-          <label className="mt-3 flex flex-col gap-1">
-            <span className="hud-label text-muted">{t("pyramid.stockpile")}</span>
+          <label className="mt-4 flex max-w-xl flex-col gap-1.5">
+            <span className="field-label">{t("pyramid.stockpile")}</span>
             <select data-guide="pyramid-stockpile" className="field h-11" value={stockpileId ?? ""} onChange={(e) => setStockpileId(e.target.value || null)}>
               {!stockpiles ? <option value="">{t("common.loading")}</option> : stockpiles.length === 0 ? <option value="">{t("pyramid.noStockpiles")}</option> : null}
               {(stockpiles ?? []).map((s) => (
-                <option key={s.id} value={s.id}>{s.region} ▶ {s.name}</option>
+                <option key={s.id} value={s.id}>{s.region} · {s.name}</option>
               ))}
             </select>
           </label>
         ) : (
           <BunkerPanel bunker={bunker} onLoad={setBunker} />
         )}
-        {preset && !draft ? <p className="hud-label mt-3 text-muted">{t("pyramid.presetHint")}</p> : null}
+        {preset && !draft ? <p className="mt-3 text-xs text-fg-3">{t("pyramid.presetHint")}</p> : null}
         {draft ? (
           <div className="pyramid-custom-bar">
-            <span className="text-[0.82rem] text-white/80">✎ {t("pyramid.customHint")}</span>
+            <span className="text-[0.85rem] text-fg">{t("pyramid.customHint")}</span>
             <select className="field h-9 py-1 text-xs" value="" onChange={(e) => e.target.value && fillFrom(e.target.value)} aria-label={t("pyramid.fillFrom")}>
               <option value="">{t("pyramid.fillFrom")}</option>
               {pyramid.presets.map((p) => (
                 <option key={p.key} value={p.key}>{t(presetLabel(p.key))}</option>
               ))}
               {pyramid.configs.filter((c) => c.id !== draft.id).map((c) => (
-                <option key={c.id} value={c.id}>★ {c.name}</option>
+                <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
           </div>
         ) : null}
-      </section>
+      </PageHeader>
       <NameConfigModal
         open={naming}
         initial={draft?.name ?? ""}
@@ -367,27 +371,27 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
       />
 
       {!draft ? (
-        <section data-guide="pyramid-now" className={cn("panel panel-corners pyramid-now rounded-md p-4", now < 0 && "is-done")}>
+        <section data-guide="pyramid-now" className={cn("panel pyramid-now p-5", now < 0 && "is-done")}>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="min-w-0">
               {now < 0 ? (
-                <div className="panel-title text-safe">✔ {t("pyramid.allDone")}</div>
+                <div className="panel-title text-safe">{t("pyramid.allDone")}</div>
               ) : (
                 <>
-                  <div className="hud-label text-warn">{t("pyramid.bringNow")}</div>
-                  <div className="panel-title mt-1">
+                  <div className="text-xs font-semibold text-warn">{t("pyramid.bringNow")}</div>
+                  <div className="mt-1 text-[1.15rem] font-semibold tracking-[-0.015em]">
                     {t("pyramid.level", { n: now + 1 })}{levels[now].title ? ` • ${levels[now].title}` : ""} — {t("pyramid.missingCrates", { n: levels[now].missing })}
                   </div>
                 </>
               )}
-              <div className="hud-label mt-1 text-muted">{t("pyramid.progress", { done, total: levels.length, n: totalMissing })}</div>
+              <div className="mt-1 text-xs text-fg-3">{t("pyramid.progress", { done, total: levels.length, n: totalMissing })}</div>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="hud-label text-muted">
+              <span className="text-xs text-fg-3">
                 {picked.length ? t("pyramid.selectedLevels", { list: picked.map((i) => i + 1).join(", "), n: pickedMissing }) : t("pyramid.selectedNone")}
               </span>
               <button type="button" className="btn btn-primary" data-guide="pyramid-order" disabled={!picked.length} onClick={() => toConstructor(picked)}>
-                📦 {t("pyramid.toBuilderSelected")}
+                {t("pyramid.toBuilderSelected")}
               </button>
               <button type="button" className="btn" onClick={() => setSelected(new Set(levels.filter((l) => !l.done).map((l) => l.index)))}>{t("pyramid.selectAllMissing")}</button>
             </div>
@@ -406,9 +410,12 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
         </section>
       ) : null}
 
-      <section data-guide="pyramid-tiers" className="panel panel-corners rounded-md p-4">
+      <section data-guide="pyramid-tiers" className="panel p-5">
         {draft ? (
-          <button type="button" className="btn mb-3 w-full" onClick={() => editTiers((tiers) => [...tiers, { title: "", items: [] }])}>＋ {t("pyramid.addTier")}</button>
+          <button type="button" className="btn mb-4 h-11 w-full border-dashed" onClick={() => editTiers((tiers) => [...tiers, { title: "", items: [] }])}>
+            <Icon name="plus" size={16} />
+            {t("pyramid.addTier")}
+          </button>
         ) : null}
         <div className="pyramid">
           {[...levels].reverse().map((level) => (
@@ -434,7 +441,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
             />
           ))}
         </div>
-        <p className="hud-label mt-3 text-center text-muted">{t("pyramid.legend")}</p>
+        <p className="mt-4 text-center text-xs text-fg-3">{t("pyramid.legend")}</p>
       </section>
     </div>
   );
@@ -451,12 +458,12 @@ const NameConfigModal: React.FC<{ open: boolean; initial: string; busy: boolean;
   return (
     <Modal open={open} onClose={onClose} title={t("pyramid.nameTitle")} icon="pyramid" widthClass="max-w-md">
       <div className="grid gap-3">
-        <p className="text-[0.85rem] text-white/75">{t("pyramid.nameHint")}</p>
+        <p className="text-[0.85rem] text-fg-2">{t("pyramid.nameHint")}</p>
         <input className="field h-11" autoFocus maxLength={40} value={name} placeholder={t("pyramid.namePlaceholder")}
           onChange={(e) => setName(e.target.value)} onKeyDown={(e) => e.key === "Enter" && ok && onSave(name)} />
         <div className="flex justify-end gap-2">
           <button type="button" className="btn" onClick={onClose}>{t("common.cancel")}</button>
-          <button type="button" className="btn btn-primary" disabled={!ok || busy} onClick={() => onSave(name)}>{busy ? t("common.sending") : `💾 ${t("common.save")}`}</button>
+          <button type="button" className="btn btn-primary" disabled={!ok || busy} onClick={() => onSave(name)}>{busy ? t("common.sending") : t("common.save")}</button>
         </div>
       </div>
     </Modal>
@@ -501,23 +508,23 @@ const BunkerPanel: React.FC<{ bunker: BunkerBase | null; onLoad: (b: BunkerBase 
 
   return (
     <div data-guide="pyramid-bunker" className="pyramid-bunker">
-      <label className="flex flex-col gap-1">
-        <span className="hud-label text-muted">{t("pyramid.bunkerName")}</span>
+      <label className="flex max-w-xl flex-col gap-1.5">
+        <span className="field-label">{t("pyramid.bunkerName")}</span>
         <input className="field h-11" value={name} placeholder={t("pyramid.bunkerNamePlaceholder")} onChange={(e) => setName(e.target.value)} />
       </label>
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-        <span className="hud-label text-accent">{bunker ? t("pyramid.bunkerReload") : t("pyramid.bunkerLoad")}</span>
+        <span className="text-sm font-semibold">{bunker ? t("pyramid.bunkerReload") : t("pyramid.bunkerLoad")}</span>
         {bunker ? (
-          <span className="hud-label text-accent">✔ {bunker.name} • {t("pyramid.bunkerLines", { n: bunker.lines.length })}</span>
+          <span className="badge badge-accent">{bunker.name} · {t("pyramid.bunkerLines", { n: bunker.lines.length })}</span>
         ) : null}
       </div>
       <div className="pyramid-import">
         <button type="button" className="pyramid-import-btn" disabled={busy} onClick={() => pick(textInput)}>
-          <UiGlyph icon="file-json" size={34} />
+          <span className="icon-tile h-11 w-11"><UiGlyph icon="file-json" size={22} /></span>
           <span><b>JSON / TXT</b><small>{t("pyramid.importFile")}</small></span>
         </button>
         <button type="button" className="pyramid-import-btn" disabled={busy} onClick={() => pick(xlsxInput)}>
-          <UiGlyph icon="file-xlsx" size={34} />
+          <span className="icon-tile h-11 w-11"><UiGlyph icon="file-xlsx" size={22} /></span>
           <span><b>XLSX</b><small>{t("pyramid.importXlsx")}</small></span>
         </button>
         <button
@@ -534,7 +541,7 @@ const BunkerPanel: React.FC<{ bunker: BunkerBase | null; onLoad: (b: BunkerBase 
               })
           }
         >
-          <UiGlyph icon="clipboard" size={34} />
+          <span className="icon-tile h-11 w-11"><UiGlyph icon="clipboard" size={22} /></span>
           <span><b>{t("export.fmt.clipboard")}</b><small>{t("pyramid.importClipboard")}</small></span>
         </button>
       </div>
@@ -548,7 +555,7 @@ const BunkerPanel: React.FC<{ bunker: BunkerBase | null; onLoad: (b: BunkerBase 
         if (file) void xlsxToText(file).then(importText).catch((err) => notify({ title: "XLSX", message: errorText(err, t("import.xlsxFailed")), tone: "danger" }));
       }} />
       <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("pyramid.sourceBunker")} icon="clipboard" widthClass="max-w-lg">
-        <p className="hud-label text-muted">{t("import.pasteHelp")}</p>
+        <p className="text-sm text-fg-2">{t("import.pasteHelp")}</p>
         <textarea className="field field-mono mt-2 h-48 w-full resize-y text-xs" value={pasteText} onChange={(e) => setPasteText(e.target.value)} autoFocus />
         <div className="mt-3 flex justify-end gap-2">
           <button className="btn" onClick={() => setPasteOpen(false)}>{t("common.cancel")}</button>
@@ -602,7 +609,8 @@ const TierRow: React.FC<{
       <div className="pyramid-tier-head">
         {editing ? null : (
           <button type="button" className={cn("pyramid-pick", selected && "is-on")} aria-pressed={selected} onClick={onToggle} title={t("pyramid.selectForOrder")}>
-            {selected ? "☑" : "☐"} <span>{t("pyramid.toOrder")}</span>
+            <span className="pyramid-pick-box" aria-hidden>{selected ? <Icon name="check" size={11} strokeWidth={3} /> : null}</span>
+            <span>{t("pyramid.toOrder")}</span>
           </button>
         )}
         <span className="pyramid-tier-n">{t("pyramid.level", { n: i + 1 })}</span>
@@ -610,18 +618,18 @@ const TierRow: React.FC<{
           <input className="field h-8 flex-1 py-1 text-xs" placeholder={t("pyramid.tierTitle")} value={level.title} maxLength={60}
             onChange={(e) => onEdit((tiers) => { tiers[i] = { ...tiers[i], title: e.target.value }; return tiers; })} />
         ) : (
-          <span className="min-w-0 flex-1 truncate text-[0.8rem] text-white/80">{level.title || (i === 0 ? t("pyramid.base") : "")}</span>
+          <span className="min-w-0 flex-1 truncate text-[0.85rem] text-fg-2">{level.title || (i === 0 ? t("pyramid.base") : "")}</span>
         )}
         {editing ? (
           <span className="flex gap-1">
-            <button type="button" className="btn btn-danger px-2 py-0.5" disabled={count <= 1} title={t("pyramid.removeTier")} aria-label={t("pyramid.removeTier")}
-              onClick={() => onEdit((tiers) => tiers.filter((_, n) => n !== i))}>✕</button>
-            <button type="button" className="btn px-2 py-0.5" disabled={i === count - 1} title={t("pyramid.up")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i + 1]] = [tiers[i + 1], tiers[i]]; return tiers; })}>▲</button>
-            <button type="button" className="btn px-2 py-0.5" disabled={i === 0} title={t("pyramid.down")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i - 1]] = [tiers[i - 1], tiers[i]]; return tiers; })}>▼</button>
+            <button type="button" className="btn btn-icon h-8 min-h-0 w-8" disabled={i === count - 1} title={t("pyramid.up")} aria-label={t("pyramid.up")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i + 1]] = [tiers[i + 1], tiers[i]]; return tiers; })}><Icon name="chevronDown" size={15} className="rotate-180" /></button>
+            <button type="button" className="btn btn-icon h-8 min-h-0 w-8" disabled={i === 0} title={t("pyramid.down")} aria-label={t("pyramid.down")} onClick={() => onEdit((tiers) => { [tiers[i], tiers[i - 1]] = [tiers[i - 1], tiers[i]]; return tiers; })}><Icon name="chevronDown" size={15} /></button>
+            <button type="button" className="row-remove h-8 w-8" disabled={count <= 1} title={t("pyramid.removeTier")} aria-label={t("pyramid.removeTier")}
+              onClick={() => onEdit((tiers) => tiers.filter((_, n) => n !== i))}><Icon name="trash" size={15} /></button>
           </span>
         ) : (
           <span className={cn("pyramid-tier-state", level.done ? "text-safe" : current ? "text-warn" : "text-muted")}>
-            {level.done ? `✔ ${t("pyramid.closed")}` : `−${level.missing} ${t("unit.crate")}`}
+            {level.done ? t("pyramid.closed") : `−${level.missing} ${t("unit.crate")}`}
           </span>
         )}
       </div>
@@ -641,7 +649,7 @@ const TierRow: React.FC<{
                         const crates = Math.max(1, Math.min(999, parseInt(e.target.value, 10) || 1));
                         onEdit((tiers) => { tiers[i].items = tiers[i].items.map((it) => (it.code === c.code ? { ...it, crates } : it)); return tiers; });
                       }} />
-                    <span className="hud-label text-muted">{t("unit.crate")}</span>
+                    <span className="text-xs text-fg-3">{t("unit.crate")}</span>
                   </span>
                 ) : (
                   <>
@@ -651,7 +659,7 @@ const TierRow: React.FC<{
                 )}
               </span>
               {editing ? (
-                <button type="button" className="btn btn-danger px-1.5 py-0.5" aria-label={t("pyramid.removeItem")} onClick={() => onEdit((tiers) => { tiers[i].items = tiers[i].items.filter((it) => it.code !== c.code); return tiers; })}>✕</button>
+                <button type="button" className="row-remove h-7 w-7" aria-label={t("pyramid.removeItem")} onClick={() => onEdit((tiers) => { tiers[i].items = tiers[i].items.filter((it) => it.code !== c.code); return tiers; })}><Icon name="close" size={13} /></button>
               ) : null}
             </div>
           );

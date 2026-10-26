@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { UserSession } from "@/entities/session";
-import { CopyrightNotice, env, errorText, roleColor, useT, type MessageKey } from "@/shared";
+import { CopyrightNotice, Icon, env, errorText, roleColor, useT, type MessageKey } from "@/shared";
 import { authApi, type AccessLevel, type DiscordSetup, type SetupChoice } from "@/features/cabinet/api/authApi";
 import { LanguageSwitch } from "@/features/cabinet/ui/LanguageSwitch";
 
@@ -78,7 +78,7 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
       window.history.replaceState(null, "", window.location.pathname);
       onLoggedIn(session);
     } catch (err) {
-      setError(`[${t("login.denied")}] ${errorText(err, t("login.noLink")).toUpperCase()}`);
+      setError(errorText(err, t("login.noLink")));
     } finally {
       setBusy(false);
     }
@@ -90,31 +90,27 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   return (
     <main className="auth-screen">
       <div className="auth-video-bg" aria-hidden>
-        <div className="auth-video-fallback" style={poster ? { backgroundImage: `radial-gradient(ellipse at center, rgba(16,28,18,0.65) 0%, rgba(6,10,7,0.9) 100%), url(${poster})` } : undefined} />
+        <div className="auth-video-fallback" style={poster ? { backgroundImage: `url(${poster})` } : undefined} />
         {video?.url && !videoFailed && !reducedMotion && (
           <video className="auth-video" src={video.url} poster={poster ?? undefined} autoPlay loop muted playsInline preload="metadata" onError={() => setVideoFailed(true)} />
         )}
         <div className="auth-video-overlay" />
       </div>
 
-      <section className="auth-panel panel panel-corners relative z-10">
-        <div className="auth-scanline" aria-hidden />
+      <section className="auth-panel">
         <div className="auth-header">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          {logo && <img src={logo} alt={t("common.crest")} width={180} height={230} className="auth-logo" />}
-          <h1 className="auth-title">SINDARIS Terminal</h1>
-          <p className="auth-subtitle">LOGISTICS OVERWATCH • FOXHOLE</p>
-          <div data-guide="login-lang"><LanguageSwitch className="mt-3 justify-center" /></div>
+          {logo && <img src={logo} alt={t("common.crest")} width={88} height={88} className="auth-logo" />}
+          <h1 className="auth-title">SINDARIS</h1>
+          <p className="auth-subtitle">{t("login.tagline")}</p>
         </div>
-
-        <div className="auth-rule" />
 
         {setupMode ? (
           <ServerPicker setup={setup} busy={busy} onPick={(choice) => void run(() => authApi.completeSetup(choice))} onCancel={() => setSetupMode(false)} />
         ) : (
           <>
             <div className="auth-form">
-              <a href={authApi.discordLoginUrl()} data-guide="login-discord" className="btn btn-primary auth-submit" style={{ backgroundColor: "#5865F2", borderColor: "#5865F2", color: "#fff", textDecoration: "none" }}>
+              <a href={authApi.discordLoginUrl()} data-guide="login-discord" className="btn btn-discord auth-submit" style={{ textDecoration: "none" }}>
                 <DiscordGlyph />
                 <span>{t("login.discord")}</span>
               </a>
@@ -132,21 +128,24 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
 
         {!setupMode && (
           <>
-            <div className="auth-rule" />
-            <div className="auth-form">
-              <button type="button" className="btn auth-submit" disabled={busy} data-guide="login-guest" onClick={() => void run(() => authApi.loginAsGuest())}>
-                <span className={busy ? "pulse" : ""}>👁 {t("login.guest")}</span>
+            <div className="auth-or"><span>{t("login.or")}</span></div>
+            <div className="auth-form mt-0">
+              <button type="button" className="btn auth-submit mt-0" disabled={busy} data-guide="login-guest" onClick={() => void run(() => authApi.loginAsGuest())}>
+                <span className={busy ? "pulse" : ""}>{t("login.guest")}</span>
               </button>
               <p className="auth-hint">{t("login.guestHint")}</p>
             </div>
           </>
         )}
 
+        <div data-guide="login-lang" className="auth-lang">
+          <LanguageSwitch compact />
+        </div>
+
         {env.enableDevLogin && !setupMode && (
           <>
-            <div className="auth-rule" />
             <button type="button" className="btn auth-submit" disabled={busy} onClick={() => void run(() => authApi.loginWithDevToken({ userId: "dev-admin", clanId: "SANDALIS", role: "owner", displayName: "DevAdmin" }))}>
-              DEV-TOKEN (ENV≠PROD)
+              Dev token (не прод)
             </button>
           </>
         )}
@@ -166,7 +165,7 @@ const ServerPicker: React.FC<{
   onCancel: () => void;
 }> = ({ setup, busy, onPick, onCancel }) => {
   const t = useT();
-  if (!setup) return <p className="hud-label pulse py-6 text-center text-muted">{t("setup.loading")}</p>;
+  if (!setup) return <p className="pulse py-6 text-center text-sm text-muted">{t("setup.loading")}</p>;
 
   return (
     <div className="auth-form mt-0">
@@ -185,19 +184,19 @@ const ServerPicker: React.FC<{
                     <span className="auth-server-icon auth-server-letter">{j.name.charAt(0).toUpperCase()}</span>
                   )}
                   <span className="min-w-0 flex-1 text-left">
-                    <span className="block text-sm text-white">{t("setup.join", { clan: j.name })}</span>
+                    <span className="block text-sm text-fg">{t("setup.join", { clan: j.name })}</span>
                     <span className="mt-1 flex flex-wrap gap-1">
                       {j.roles.length ? (
                         j.roles.map((r) => (
                           <span key={r.name} className="auth-role-chip" style={{ borderColor: roleColor(r.color), color: roleColor(r.color) }}>{r.name}</span>
                         ))
                       ) : (
-                        <span className="hud-label text-muted">{t("setup.noRoles")}</span>
+                        <span className="text-xs text-muted">{t("setup.noRoles")}</span>
                       )}
                     </span>
-                    <span className="hud-label mt-1 block text-accent">{t("setup.access", { level: t(LEVEL_KEY[j.level] ?? "level.basic") })}</span>
+                    <span className="mt-1 block text-xs text-accent">{t("setup.access", { level: t(LEVEL_KEY[j.level] ?? "level.basic") })}</span>
                   </span>
-                  <span className="text-accent" aria-hidden>▶</span>
+                  <Icon name="chevronRight" size={18} className="text-fg-3" />
                 </button>
               </li>
             ))}
@@ -220,10 +219,10 @@ const ServerPicker: React.FC<{
                 <span className="auth-server-icon auth-server-letter">{g.name.charAt(0).toUpperCase()}</span>
               )}
               <span className="min-w-0 flex-1 text-left">
-                <span className="block truncate text-sm text-white">{g.name}</span>
-                <span className={`hud-label block ${g.clanId ? "text-accent" : "text-muted"}`}>{g.clanId ? t("setup.linked") : t("setup.newClan")}</span>
+                <span className="block truncate text-sm text-fg">{g.name}</span>
+                <span className={`block text-xs ${g.clanId ? "text-accent" : "text-muted"}`}>{g.clanId ? t("setup.linked") : t("setup.newClan")}</span>
               </span>
-              <span className="text-accent" aria-hidden>▶</span>
+              <Icon name="chevronRight" size={18} className="text-fg-3" />
             </button>
           </li>
         ))}
@@ -240,10 +239,10 @@ const ServerPicker: React.FC<{
                 <button type="button" className="auth-server" disabled={busy} onClick={() => onPick({ clanId: m.clanId })}>
                   <span className="auth-server-icon auth-server-letter">{m.clanName.charAt(0).toUpperCase()}</span>
                   <span className="min-w-0 flex-1 text-left">
-                    <span className="block truncate text-sm text-white">{m.clanName}</span>
-                    <span className="hud-label block text-muted">{t(ROLE_KEY[m.role] ?? "role.member")}</span>
+                    <span className="block truncate text-sm text-fg">{m.clanName}</span>
+                    <span className="block text-xs text-muted">{t(ROLE_KEY[m.role] ?? "role.member")}</span>
                   </span>
-                  <span className="text-accent" aria-hidden>▶</span>
+                  <Icon name="chevronRight" size={18} className="text-fg-3" />
                 </button>
               </li>
             ))}
@@ -252,7 +251,7 @@ const ServerPicker: React.FC<{
       )}
 
       <button type="button" className="btn mt-4 w-full" disabled={busy} data-guide="setup-back" onClick={onCancel}>
-        ← {t("setup.back")}
+        {t("setup.back")}
       </button>
     </div>
   );

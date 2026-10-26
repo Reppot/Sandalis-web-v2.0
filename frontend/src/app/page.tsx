@@ -9,17 +9,16 @@ import { CodeBaseWorkspace } from "@/features/codes";
 import { ReportsWorkspace } from "@/features/reports";
 import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
 import { StockpilesWorkspace, TerminalProvider } from "@/features/timers";
-import { ToolsWorkspace, type ToolModule } from "@/features/tools";
+import { TOOL_CALCULATORS, ToolsWorkspace, type ToolModule } from "@/features/tools";
 import { TrainingWorkspace } from "@/features/training";
 import { GuideWorkspace } from "@/features/guide";
 import { FeedbackWorkspace, SupportWorkspace } from "@/features/feedback";
 import { ManagementWorkspace } from "@/features/management";
-import { BackgroundLayer } from "@/app/_shell/BackgroundLayer";
 import { ClanWorkspace, type ClanSection } from "@/app/_shell/ClanWorkspace";
 import { Header } from "@/app/_shell/Header";
-import { MobileNav, Sidebar } from "@/app/_shell/Navigation";
-import { TABS, isClanView, isTabKey, isToolModule, legacyClanView, visibleTabs, type ClanView, type TabKey } from "@/app/_shell/tabs";
-import { CopyrightNotice, useT } from "@/shared";
+import { MobileNav, Sidebar, type NavProps } from "@/app/_shell/Navigation";
+import { isClanView, isTabKey, isToolModule, legacyClanView, tabKeys, visibleTabs, type ClanView, type TabKey } from "@/app/_shell/tabs";
+import { CopyrightNotice, assetUrl, useT, type MessageKey } from "@/shared";
 
 export default function TerminalPage() {
   const t = useT();
@@ -31,23 +30,11 @@ export default function TerminalPage() {
   // подраздел «Вашего клана» (?tab=clan&view=...): заказы, склады, обучение, управление
   const [clanView, setClanView] = React.useState<ClanView>("reports");
   const [clan, setClan] = React.useState<ClanProfile | null>(null);
-  const chromeRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     // браузер не должен «восстанавливать» прокрутку старой страницы при перезагрузке
     if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
   }, []);
-
-  // высота шапки -> --chrome-h: меню и шапка вместе ровно в высоту окна, лишнего скролла нет
-  React.useEffect(() => {
-    const el = chromeRef.current;
-    if (!el) return;
-    const apply = () => document.documentElement.style.setProperty("--chrome-h", `${el.offsetHeight}px`);
-    const ro = new ResizeObserver(apply);
-    ro.observe(el);
-    apply();
-    return () => ro.disconnect();
-  });
 
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -71,6 +58,7 @@ export default function TerminalPage() {
 
   /** sub — модуль инструментов или подраздел клана; живёт в адресе страницы. */
   const select = React.useCallback((key: TabKey, sub: string | null = null) => {
+    sub = sub ?? null;
     setTab(key);
     setTool(key === "tools" ? sub : null);
     if (key === "clan" && isClanView(sub)) setClanView(sub);
@@ -124,20 +112,14 @@ export default function TerminalPage() {
     ],
     [can, isOwner, openTool],
   );
-  const clanBg: Record<ClanView, string> = { reports: "reports", stockpiles: "timers", training: "training", management: "cabinet" };
-
-  const toolBg = tool === "orders" || tool === "pyramid" ? "orders" : tool === "codes" ? "codes" : null;
-  const tabBg = current === "tools" && toolBg ? toolBg : current === "clan" ? clanBg[clanView] : TABS.find((t) => t.key === current)?.background ?? "tools";
-  const background = session ? media(`bg_${tabBg}`) : media("bg_home");
 
   if (loading) {
     return (
-      <>
-        <BackgroundLayer src={media("bg_home")} />
-        <div className="hud-label flex min-h-dvh items-center justify-center text-muted">
-          <span className="pulse">{t("app.connecting")}</span>
-        </div>
-      </>
+      <div className="app-splash">
+        <span className="title-brand text-lg">SINDARIS</span>
+        <span className="app-splash-bar" aria-hidden />
+        <span className="sr-only">{t("app.connecting")}</span>
+      </div>
     );
   }
 
@@ -160,19 +142,36 @@ export default function TerminalPage() {
     }
   })();
 
+  const allTools = [...toolModules, ...TOOL_CALCULATORS];
+  const currentTool = current === "tools" ? allTools.find((m) => m.id === tool) ?? null : null;
+  const currentClan = current === "clan" ? clanSections.find((s) => s.view === clanView) ?? clanSections[0] : null;
+  const nav: NavProps = {
+    tabs,
+    active: current,
+    onSelect: select,
+    clan,
+    tools: allTools.map((m) => ({ id: m.id, icon: m.icon, label: `toolsnav.${m.id}` as MessageKey, isNew: m.isNew })),
+    activeTool: currentTool?.id ?? null,
+    clanSections: clanSections.map((s) => ({ id: s.view, icon: s.icon, label: `clannav.${s.view}` as MessageKey })),
+    activeClanView: currentClan?.view ?? clanView,
+    user: { name: session.displayName ?? t("role.guest"), avatar: assetUrl(session.avatarUrl) },
+    logo: media("clan_logo"),
+  };
+  const section = current === "clan" ? clan?.name ?? t("nav.clan.label") : t(tabKeys(current).label);
+  const page = currentTool ? t(currentTool.label) : currentClan ? t(currentClan.label) : null;
+
   return (
     <TerminalProvider enabled={can(Scopes.TIMERS_READ)}>
-      <BackgroundLayer src={background} />
-      <div className="relative flex min-h-dvh flex-col gap-2.5 p-2.5 md:gap-3 md:p-3">
-        <div ref={chromeRef} className="z-40 md:sticky md:top-0">
-          <Header />
+      <div className="app">
+        <Sidebar {...nav} />
+        <div className="app-main">
+          <Header section={section} page={page} onHome={() => select("tools")} />
+          <main key={`${current}:${currentTool?.id ?? currentClan?.view ?? ""}`} className="app-content">
+            {workspace}
+          </main>
+          <CopyrightNotice className="app-footer" />
         </div>
-        <div className="flex flex-1 items-start gap-2.5 md:gap-3">
-          <Sidebar tabs={tabs} active={current} onSelect={select} clan={clan} />
-          <main key={current} className="min-w-0 flex-1 pb-20 md:pb-0">{workspace}</main>
-        </div>
-        <CopyrightNotice className="mb-20 md:mb-0" />
-        <MobileNav tabs={tabs} active={current} onSelect={select} clan={clan} />
+        <MobileNav {...nav} />
       </div>
     </TerminalProvider>
   );

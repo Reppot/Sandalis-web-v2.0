@@ -4,7 +4,8 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { RefineryData, Recipe } from "@/entities/recipe";
 import { MATERIAL_CODES, codeSynonyms } from "@/entities/item";
-import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, useI18n, useNotify } from "@/shared";
+import { FilterCards, ItemIcon, QuantityStepper, assetUrl, buildTxt, copyText, formatDuration, matchesWords, timeUnits, useI18n, useNotify, Icon, SearchField, Segmented, UiGlyph } from "@/shared";
+import { ToolHeader } from "@/features/tools/ui/ToolHeader";
 import { ResourceSummaryPanel, toolDoc, type ToolReport } from "@/features/tools/ui/ResourceSummaryPanel";
 import { truckLines } from "@/features/tools/ui/trucks";
 import { PaneToggles, paneCardsClass, paneGridClass, usePanes } from "@/features/tools/ui/ToolPanes";
@@ -97,28 +98,25 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
 
   return (
     <div className="tab-fade factory-page pb-24 lg:pb-0">
-      <section className="panel panel-corners factory-topbar">
-        <div className="flex min-w-0 items-center gap-3">
-          <ItemIcon sources={[labelIcon("material", "salvage")]} size={44} label="Refinery" />
-          <div className="min-w-0">
-            <div className="hud-label text-muted">REFINERY PLANNER • FOXHOLE</div>
-            <h2 className="panel-title mt-1 text-[1.1rem] md:text-[1.45rem]">🔨 {t("tools.refinery")}</h2>
-            <p className="mt-1 text-sm text-white/65">{t("tools.refineryHint")}</p>
-          </div>
-        </div>
-        <div className="factory-controls">
-          <button className="btn btn-primary" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: "REFINERY", message: t("tools.calcCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
-            ⧉ {t("tools.shareCalc")}
+      <ToolHeader
+        icon={<UiGlyph icon="refinery" size={26} />}
+        eyebrow="Refinery planner"
+        title={t("tools.refinery")}
+        hint={t("tools.refineryHint")}
+        actions={
+          <button className="btn btn-primary h-10" onClick={() => void copyText(buildTxt(toolDoc(report, t))).then((ok) => notify(ok ? { title: t("tools.refinery"), message: t("tools.calcCopied"), tone: "success" } : { title: t("export.clipboardTitle"), message: t("tools.copyFailed"), tone: "warning" }))}>
+            <Icon name="copy" size={16} />
+            {t("tools.shareCalc")}
           </button>
-        </div>
-      </section>
+        }
+      />
 
       <PaneToggles panes={panes} catalogLabel={t("tools.catalogPane")} planLabel={t("tools.refineryQueue")} />
 
       <div className={paneGridClass(panes)} data-wide={panes.wide}>
-        <section className={`panel panel-corners factory-catalog ${panes.catalog ? "" : "hidden"}`}>
+        <section className={`panel factory-catalog ${panes.catalog ? "" : "hidden"}`}>
           <div className="filter-head">
-            <span className="hud-label text-accent">{t("tools.categories")}</span>
+            <span className="tool-section-label">{t("tools.categories")}</span>
           </div>
           <FilterCards
             guide="tool-cats"
@@ -133,27 +131,25 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
             value={group}
             onChange={(k) => setGroup(k ?? "all")}
           />
-          <div className="factory-filters mt-3">
-            <input className="field h-11 flex-1" placeholder={t("tools.refinerySearch")} value={query} onChange={(e) => setQuery(e.target.value)} />
-          </div>
-          <div className="factory-count hud-label">{t("codes.shown")}: {visible.length} / {recipes.length} • {t("tools.dataSource")}: foxhole.wiki.gg</div>
+          <SearchField className="mt-4" placeholder={t("tools.refinerySearch")} value={query} onChange={setQuery} />
+          <div className="factory-count text-xs">{t("codes.shown")}: {visible.length} / {recipes.length} • {t("tools.dataSource")}: foxhole.wiki.gg</div>
 
           <div className={paneCardsClass(panes)}>
             {visible.map((recipe) => {
               const d = data(recipe);
               const queued = plan[recipe.id];
               return (
-                <button key={recipe.id} type="button" className={`factory-item-card relative min-h-[14.5rem] flex-col justify-start gap-2 p-3 text-center ${queued ? "border-accent" : ""}`} onClick={() => add(recipe)} title={`${locale === "ru" ? recipe.name_en : recipe.name}: ${d.input_per_unit} × ${label("material", d.input)} → 1`}>
-                  <span className="factory-add absolute top-2 right-2">＋</span>
-                  {queued ? <span className="queued-badge absolute top-2 left-2">{queued.quantity} {queued.unit === "crate" ? t("unit.crate") : d.unit_label}</span> : null}
+                <button key={recipe.id} type="button" className={`factory-item-card tool-item min-h-[14.5rem] ${queued ? "is-selected" : ""}`} onClick={() => add(recipe)} title={`${locale === "ru" ? recipe.name_en : recipe.name}: ${d.input_per_unit} × ${label("material", d.input)} → 1`}>
+                  <span className="factory-add absolute top-2.5 right-2.5"><Icon name="plus" size={14} strokeWidth={2.5} /></span>
+                  {queued ? <span className="queued-badge absolute top-2.5 left-2.5">{queued.quantity} {queued.unit === "crate" ? t("unit.crate") : d.unit_label}</span> : null}
                   <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={88} label={rname(recipe)} className="mt-3" />
-                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.82rem] leading-tight text-white">{rname(recipe)}</strong>
-                  <small className="hud-label text-accent">{recipe.item_class} • {label("refinery_group", recipe.category)}</small>
-                  <span className="mt-auto flex items-center justify-center gap-1.5 rounded-sm border border-white/10 bg-black/30 px-2 py-1 font-mono text-[0.68rem] text-white/85">
+                  <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.85rem] font-semibold leading-tight text-fg">{rname(recipe)}</strong>
+                  <small className="text-xs text-fg-3">{recipe.item_class} · {label("refinery_group", recipe.category)}</small>
+                  <span className="cost-chip mt-auto gap-1.5 px-2 py-1">
                     <ItemIcon sources={[labelIcon("material", d.input)]} size={22} label={label("material", d.input)} />
                     {d.input_per_unit} × {label("material", d.input)} → 1
                   </span>
-                  <small className="text-[0.66rem] text-muted">
+                  <small className="text-[0.7rem] text-fg-3">
                     {num(d.seconds_per_unit, 3)} {t("time.s")} / {d.unit_label} • {d.crate_size > 1 ? t("tools.crateSize", { n: d.crate_size }) : recipe.description ?? t("tools.noCrates")}
                   </small>
                 </button>
@@ -169,21 +165,27 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
               <div className="factory-plan-row flex-wrap" key={recipe.id}>
                 <ItemIcon sources={[assetUrl(recipe.icon_url)]} size={56} label={rname(recipe)} />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm text-white">{rname(recipe)}</span>
-                  <span className="hud-label mt-0.5 block truncate text-muted">
+                  <span className="block truncate text-sm text-fg">{rname(recipe)}</span>
+                  <span className="mt-0.5 block truncate text-xs text-fg-3">
                     = {num(units)} {d.unit_label} • {num(rawFor(recipe, units))} {label("material", d.input)} • {formatDuration(secondsFor(recipe, units), timeUnits(t))}
                   </span>
-                  {units > d.personal_limit ? <span className="hud-label mt-0.5 block text-warn">⚠ {t("tools.personalLimit", { personal: num(d.personal_limit), squad: num(d.personal_limit * 2) })}</span> : null}
+                  {units > d.personal_limit ? <span className="mt-0.5 block text-xs text-warn">{t("tools.personalLimit", { personal: num(d.personal_limit), squad: num(d.personal_limit * 2) })}</span> : null}
                 </span>
                 <div className="ml-auto flex items-center gap-1">
                   <QuantityStepper value={entry.quantity} unit={entry.unit === "crate" ? t("unit.crate") : d.unit_label} label={rname(recipe)} onChange={(n) => setQuantity(recipe, n)} />
                   {d.crate_size > 1 ? (
-                    <div className="flex overflow-hidden rounded border border-white/10" role="group" aria-label={t("tools.inputUnits", { name: rname(recipe) })}>
-                      <button type="button" className={`btn rounded-none border-0 px-1.5 py-1 text-[0.6rem] ${entry.unit === "crate" ? "btn-active" : ""}`} onClick={() => setUnit(recipe, "crate")} title={t("tools.cratesOf", { n: d.crate_size })}>{t("builder.crateShort")}</button>
-                      <button type="button" className={`btn rounded-none border-0 px-1.5 py-1 text-[0.6rem] ${entry.unit === "unit" ? "btn-active" : ""}`} onClick={() => setUnit(recipe, "unit")} title={t("tools.perUnit")}>{t("builder.unitShort")}</button>
-                    </div>
+                    <Segmented
+                      size="sm"
+                      label={t("tools.inputUnits", { name: rname(recipe) })}
+                      value={entry.unit}
+                      onChange={(u) => setUnit(recipe, u)}
+                      options={[
+                        { value: "crate", label: t("builder.crateShort"), title: t("tools.cratesOf", { n: d.crate_size }) },
+                        { value: "unit", label: t("builder.unitShort"), title: t("tools.perUnit") },
+                      ]}
+                    />
                   ) : null}
-                  <button type="button" className="btn btn-danger px-2 py-1" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}>✕</button>
+                  <button type="button" className="row-remove" onClick={() => setQuantity(recipe, 0)} title={t("tools.removeFromQueue")} aria-label={t("tools.removeFromQueue")}><Icon name="close" size={15} /></button>
                 </div>
               </div>
             );

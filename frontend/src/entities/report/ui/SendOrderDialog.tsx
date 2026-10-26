@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ItemIcon, Modal, assetUrl, errorText, useT, useNotify } from "@/shared";
+import { ItemIcon, Modal, assetUrl, errorText, useT, useNotify, Icon } from "@/shared";
 import { ORDER_KINDS, reportApi, type OrderKind, type Report, type ReportLineInput, type ReportMeta } from "@/entities/report";
 
 export interface SendOrderLine extends ReportLineInput {
@@ -58,16 +58,16 @@ export const SendOrderDialog: React.FC<{
     <Modal open={open} onClose={onClose} title={t("orderSend.title")} icon="orders" widthClass="max-w-xl">
       <div className="grid gap-3">
         <label className="flex flex-col gap-1">
-          <span className="hud-label text-muted">{t("orderSend.name")}</span>
+          <span className="field-label">{t("orderSend.name")}</span>
           <input className="field h-11" maxLength={160} autoFocus value={title} placeholder={t("orderSend.namePlaceholder")} onChange={(e) => setTitle(e.target.value)} onKeyDown={(e) => e.key === "Enter" && void submit()} />
         </label>
 
         <div>
-          <div className="hud-label mb-1.5 text-muted">{t("orderSend.kind")}</div>
+          <div className="field-label mb-1.5">{t("orderSend.kind")}</div>
           <div data-guide="order-kind" className="order-kinds">
             {ORDER_KINDS.map((k) => (
               <button key={k.key} type="button" className={`order-kind ${kind === k.key ? "is-active" : ""}`} aria-pressed={kind === k.key} onClick={() => setKind(k.key)}>
-                <span className="order-kind-icon" aria-hidden>{k.icon}</span>
+                <span className="order-kind-icon" aria-hidden><Icon name={k.icon} size={18} /></span>
                 <span className="order-kind-label">{t(k.label)}</span>
                 <span className="order-kind-hint">{t(k.hint)}</span>
               </button>
@@ -76,12 +76,12 @@ export const SendOrderDialog: React.FC<{
         </div>
 
         <label className="flex flex-col gap-1">
-          <span className="hud-label text-muted">{t(kind === "factory" ? "orderSend.whereFactory" : kind === "bunker" ? "orderSend.whereBunker" : "orderSend.whereStockpile")}</span>
+          <span className="field-label">{t(kind === "factory" ? "orderSend.whereFactory" : kind === "bunker" ? "orderSend.whereBunker" : "orderSend.whereStockpile")}</span>
           <input className="field h-10" maxLength={80} value={destination} placeholder={t("orderSend.wherePlaceholder")} onChange={(e) => setDestination(e.target.value)} />
         </label>
 
         <div className="order-send-summary">
-          <span className="hud-label text-muted">{t("orderSend.summary", { n: lines.length, q: total })}</span>
+          <span className="text-xs font-medium text-fg-3">{t("orderSend.summary", { n: lines.length, q: total })}</span>
           <span className="order-send-items">
             {lines.slice(0, 12).map((l) => (
               <span key={`${l.name}-${l.item_code ?? ""}`} className="report-log-item" title={l.name}>
@@ -90,14 +90,14 @@ export const SendOrderDialog: React.FC<{
                 <b>×{l.quantity}</b>
               </span>
             ))}
-            {lines.length > 12 ? <span className="hud-label text-muted">{t("common.more", { n: lines.length - 12 })}</span> : null}
+            {lines.length > 12 ? <span className="text-xs text-fg-3">{t("common.more", { n: lines.length - 12 })}</span> : null}
           </span>
         </div>
 
         <div className="flex justify-end gap-2">
           <button type="button" className="btn" onClick={onClose}>{t("common.cancel")}</button>
           <button type="button" className="btn btn-primary" data-guide="order-send" disabled={busy || !title.trim() || !lines.length} onClick={() => void submit()}>
-            {busy ? t("common.sending") : `📨 ${t("orderSend.submit")}`}
+            {busy ? t("common.sending") : t("orderSend.submit")}
           </button>
         </div>
       </div>

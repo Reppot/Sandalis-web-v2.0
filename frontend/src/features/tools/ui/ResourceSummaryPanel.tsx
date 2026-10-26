@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { useContent } from "@/entities/content";
-import { ExportBar, ItemIcon, useDocExport, useI18n, type ExportDoc, type Translate } from "@/shared";
+import { ExportBar, Icon, ItemIcon, useDocExport, useI18n, type ExportDoc, type Translate } from "@/shared";
 
 export interface SummaryLine {
   name: string;
@@ -62,38 +62,43 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
       aria-label={`${title}: ${t("tools.totals")}`}
       hidden={hidden}
       className={(inline
-        ? ["panel panel-corners flex w-full flex-col rounded-md"]
+        ? ["panel flex w-full flex-col"]
         : [
-            "panel panel-corners z-[55] flex flex-col rounded-md",
-            "fixed inset-x-2 bottom-[5.25rem] max-h-[calc(100dvh-7rem)]",
-            "md:right-3 md:bottom-3 md:left-auto md:w-[26rem]",
-            "lg:sticky lg:top-[calc(var(--chrome-h,72px)+0.75rem)] lg:right-auto lg:bottom-auto lg:left-auto lg:z-auto lg:max-h-[calc(100dvh-var(--chrome-h,72px)-2.25rem)] lg:w-auto lg:self-start",
+            "panel summary-dock z-[55] flex flex-col",
+            "fixed inset-x-2 bottom-[calc(4.6rem+env(safe-area-inset-bottom))] max-h-[calc(100dvh-8rem)]",
+            "md:right-4 md:bottom-4 md:left-auto md:w-[26rem]",
+            "lg:sticky lg:top-[calc(var(--topbar-h)+1.25rem)] lg:right-auto lg:bottom-auto lg:left-auto lg:z-auto lg:max-h-[calc(100dvh-var(--topbar-h)-2.5rem)] lg:w-auto lg:self-start",
           ]
       ).join(" ")}
     >
-      <button type="button" className={`flex w-full items-center gap-3 px-3 py-2.5 text-left lg:hidden ${inline ? "hidden" : ""}`} onClick={() => setMobileOpen((o) => !o)} aria-expanded={mobileOpen}>
-        <span className="status-dot shrink-0" style={{ color: "var(--accent)", background: "var(--accent)" }} />
+      <button type="button" className={`flex w-full items-center gap-3 px-4 py-3 text-left lg:hidden ${inline ? "hidden" : ""}`} onClick={() => setMobileOpen((o) => !o)} aria-expanded={mobileOpen}>
+        <span className="count-pill shrink-0">{count}</span>
         <span className="min-w-0 flex-1">
-          <span className="panel-title block truncate">{report.toolName}</span>
-          <span className="hud-label mt-0.5 block truncate text-muted">{count ? `${t("common.pos", { n: count })} • ${preview || t("tools.noResources")}` : t("tools.nothingSelected")}</span>
+          <span className="block truncate text-[0.95rem] font-semibold">{report.toolName}</span>
+          <span className="mt-0.5 block truncate text-xs text-fg-3">{count ? preview || t("tools.noResources") : t("tools.nothingSelected")}</span>
         </span>
-        <span className="hud-label shrink-0 text-accent">{mobileOpen ? `▼ ${t("tools.collapse")}` : `▲ ${t("tools.results")}`}</span>
+        <span className="flex shrink-0 items-center gap-1 text-xs font-semibold text-accent">
+          {mobileOpen ? t("tools.collapse") : t("tools.results")}
+          <Icon name="chevronDown" size={16} className={mobileOpen ? "" : "rotate-180"} />
+        </span>
       </button>
 
-      <div className={`${mobileOpen || inline ? "flex" : "hidden"} min-h-0 flex-1 flex-col overflow-y-auto border-t border-white/10 p-3 lg:flex lg:overflow-hidden lg:border-t-0 lg:p-4`}>
+      <div className={`${mobileOpen || inline ? "flex" : "hidden"} min-h-0 flex-1 flex-col overflow-y-auto border-t border-line p-4 lg:flex lg:overflow-hidden lg:border-t-0 lg:p-5`}>
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
             <div className="panel-title">{title}</div>
-            <div className="hud-label mt-1 text-muted">{report.subtitle}</div>
+            <div className="mt-0.5 text-xs text-fg-3">{report.subtitle}</div>
           </div>
-          <button type="button" className="btn btn-danger px-2" onClick={onClear} disabled={!count} title={t("tools.clearList")}>✕</button>
+          <button type="button" className="btn btn-ghost h-8 min-h-0 px-2.5 text-[0.8rem] text-danger" onClick={onClear} disabled={!count} title={t("tools.clearList")}>
+            {t("common.clear")}
+          </button>
         </div>
         <div className="factory-rule" />
         <div className="factory-plan-list scroll-area min-h-[120px] max-lg:flex-none max-lg:overflow-visible lg:min-h-[140px]">
-          {count ? children : <div className="hud-label py-8 text-center text-muted">{emptyHint}</div>}
+          {count ? children : <div className="py-10 text-center text-sm text-fg-3">{emptyHint}</div>}
         </div>
         <div className="factory-totals shrink-0">
-          <div data-guide="tool-totals" className="hud-label mb-2 text-accent">{t("tools.totals")}</div>
+          <div data-guide="tool-totals" className="mb-2.5 text-sm font-semibold">{t("tools.totals")}</div>
           <div className="factory-totals-scroll scroll-area">
             {[
               { title: null, lines: report.resources },
@@ -102,13 +107,13 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
             ].map((group, gi) =>
               group.lines.length ? (
                 <React.Fragment key={gi}>
-                  {group.title ? <div className={`hud-label mt-3 mb-2 ${"own" in group ? "summary-section-title" : "text-muted"}`}>{group.title}</div> : null}
+                  {group.title ? <div className={`mt-4 mb-2 text-xs font-semibold ${"own" in group ? "summary-section-title" : "text-fg-3"}`}>{group.title}</div> : null}
                   <div className="factory-total-grid">
                     {group.lines.map((line) => (
                       <div key={`${line.name}-${line.unit}`} className="min-w-0" title={line.name}>
                         <span className="flex min-w-0 items-center gap-1.5">
                           {line.icon ? <ItemIcon sources={[line.icon]} size={28} label={line.name} /> : null}
-                          <span className="hud-label truncate text-muted">{line.name}</span>
+                          <span className="truncate text-xs text-fg-3">{line.name}</span>
                         </span>
                         <strong className="truncate">{fmt(line.quantity)}{line.unit && typeof line.quantity === "number" && "own" in group ? ` ${line.unit}` : ""}</strong>
                         {line.note ? <span className="summary-note">{line.note}</span> : null}

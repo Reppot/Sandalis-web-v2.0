@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { catalogApi, itemSearchHay, type FoxholeItem, type ParseResult } from "@/entities/item";
-import { ItemIcon, Loading, assetUrl, copyText, downloadBlob, errorText, matchesWords, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged } from "@/shared";
+import { Icon, ItemIcon, Loading, PageHeader, SearchField, assetUrl, copyText, downloadBlob, errorText, matchesWords, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged } from "@/shared";
 
 const FACTIONS: Record<string, MessageKey> = { colonial: "codes.faction.colonial", warden: "codes.faction.warden", neutral: "codes.faction.neutral" };
 
@@ -74,58 +74,68 @@ export const CodeBaseWorkspace: React.FC = () => {
   };
 
   return (
-    <div className="tab-fade flex min-h-full flex-col gap-3">
-      <section className="panel panel-corners rounded-md p-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <div className="hud-label text-muted">Foxhole logistics intelligence registry</div>
-            <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">⌘ {t("codes.title")}</h1>
-            <p className="mt-1 max-w-3xl text-[0.8rem] text-white/70">{t("codes.subtitle")}</p>
-          </div>
-          <div className="flex flex-wrap gap-2" data-guide="codes-stats">
+    <div className="tab-fade flex min-h-full flex-col gap-4">
+      <PageHeader
+        icon="codes"
+        eyebrow="Foxhole item registry"
+        title={t("codes.title")}
+        lead={t("codes.subtitle")}
+        actions={
+          <div className="stat-row" data-guide="codes-stats">
             <Stat label={t("codes.total")} value={entries.length} />
-            <Stat label={t("codes.withIcon")} value={entries.filter((e) => e.iconUrl).length} color="var(--accent)" />
-            <Stat label={t("codes.needReview")} value={reviewCount} color="var(--warn)" />
+            <Stat label={t("codes.withIcon")} value={entries.filter((e) => e.iconUrl).length} />
+            <Stat label={t("codes.needReview")} value={reviewCount} tone="warn" />
           </div>
-        </div>
-        <div className="stencil-line mt-3" />
-
-        <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-center">
-          <input className="field field-mono min-w-0 flex-1" data-guide="codes-search" placeholder={t("codes.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
-          <select data-guide="codes-filters" className="field w-full lg:w-44" value={category} onChange={(e) => setCategory(e.target.value)}>
+        }
+      >
+        <div className="divider" />
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
+          <SearchField className="min-w-0 flex-1" size="lg" data-guide="codes-search" placeholder={t("codes.search")} value={query} onChange={setQuery} />
+          <select data-guide="codes-filters" className="field h-11 w-full lg:w-48" value={category} onChange={(e) => setCategory(e.target.value)} aria-label={t("codes.col.category")}>
             <option value="all">{t("codes.allCategories")}</option>
             {list<{ label: string }>("catalog_category").map((c) => (
               <option key={c.key} value={c.key}>{c.payload.label}</option>
             ))}
           </select>
-          <select className="field w-full lg:w-40" value={faction} onChange={(e) => setFaction(e.target.value)}>
+          <select className="field h-11 w-full lg:w-44" value={faction} onChange={(e) => setFaction(e.target.value)} aria-label={t("codes.col.faction")}>
             <option value="all">{t("codes.allFactions")}</option>
             {Object.entries(FACTIONS).map(([key, name]) => (
               <option key={key} value={key}>{t(name)}</option>
             ))}
           </select>
-          <button className={`btn ${reviewOnly ? "btn-active btn-warn" : ""}`} data-guide="codes-review" onClick={() => setReviewOnly((v) => !v)}>
-            {reviewOnly ? `✓ ${t("codes.disputedOnly")}` : t("codes.disputedOnly")}
+          <button className={`btn h-11 ${reviewOnly ? "btn-warn" : ""}`} data-guide="codes-review" aria-pressed={reviewOnly} onClick={() => setReviewOnly((v) => !v)}>
+            {reviewOnly ? <Icon name="check" size={15} /> : null}
+            {t("codes.disputedOnly")}
           </button>
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="hud-label text-muted">{t("codes.shown")}: <b className="text-white">{filtered.length}</b> / {entries.length}</span>
+        <div className="mt-3 flex flex-wrap items-center gap-2">
+          <span className="text-sm text-fg-3">{t("codes.shown")}: <b className="text-fg">{filtered.length}</b> / {entries.length}</span>
           <span className="flex-1" />
           <button className="btn" data-guide="codes-copy" onClick={() => void copyText(toJson(filtered)).then((ok) => notify(ok ? { title: t("codes.short"), message: t("codes.copied", { n: filtered.length }), tone: "success" } : { title: t("export.clipboardTitle"), message: t("export.clipboardUnavailable"), tone: "warning" }))}>
-            ⧉ {t("codes.copy")}
+            <Icon name="copy" size={15} />
+            {t("codes.copy")}
           </button>
-          <button className="btn" onClick={() => downloadBlob(new Blob([toCsv(filtered, t)], { type: "text/csv;charset=utf-8" }), "sindaris-code-base.csv")}>CSV</button>
-          <button className="btn" onClick={() => downloadBlob(new Blob([toJson(filtered)], { type: "application/json;charset=utf-8" }), "sindaris-code-base.json")}>JSON</button>
-          <button className={`btn ${compareOpen ? "btn-active" : ""}`} data-guide="codes-compare" onClick={() => setCompareOpen((v) => !v)}>⇄ {t("codes.export")}</button>
+          <button className="btn" onClick={() => downloadBlob(new Blob([toCsv(filtered, t)], { type: "text/csv;charset=utf-8" }), "sindaris-code-base.csv")}>
+            <Icon name="download" size={15} />
+            CSV
+          </button>
+          <button className="btn" onClick={() => downloadBlob(new Blob([toJson(filtered)], { type: "application/json;charset=utf-8" }), "sindaris-code-base.json")}>
+            <Icon name="download" size={15} />
+            JSON
+          </button>
+          <button className={`btn ${compareOpen ? "btn-active" : ""}`} data-guide="codes-compare" aria-pressed={compareOpen} onClick={() => setCompareOpen((v) => !v)}>
+            <Icon name="table" size={15} />
+            {t("codes.export")}
+          </button>
         </div>
-      </section>
+      </PageHeader>
 
       {compareOpen && (
-        <section className="panel rounded-md p-4">
+        <section className="panel p-5">
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="panel-title mr-auto text-[0.78rem]">{t("codes.compareHeading")}</h2>
-            {compare && <span className="hud-label text-muted">{t("codes.compareStats", { lines: compare.lines.length, matched: compare.matched, unknown: compare.unknown.length })} • Σ: {compare.lines.reduce((n, l) => n + l.count, 0)}</span>}
+            <h2 className="panel-title mr-auto">{t("codes.compareHeading")}</h2>
+            {compare && <span className="text-xs text-fg-3">{t("codes.compareStats", { lines: compare.lines.length, matched: compare.matched, unknown: compare.unknown.length })} • Σ: {compare.lines.reduce((n, l) => n + l.count, 0)}</span>}
           </div>
           <textarea className="field field-mono mt-3 h-48 resize-y text-xs" placeholder={t("codes.comparePlaceholder")} value={rawExport} onChange={(e) => setRawExport(e.target.value)} />
           {compare?.unknown.length ? (
@@ -142,19 +152,19 @@ export const CodeBaseWorkspace: React.FC = () => {
         </section>
       )}
 
-      <section className="panel panel-corners min-h-0 flex-1 overflow-hidden rounded-md">
-        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
+      <section className="panel min-h-0 flex-1 overflow-hidden">
+        <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4">
           <div>
-            <h2 className="panel-title text-[0.78rem]">{t("codes.registry")}</h2>
-            <div className="hud-label mt-1 text-muted">{t("codes.registryHint")}</div>
+            <h2 className="panel-title">{t("codes.registry")}</h2>
+            <div className="mt-0.5 text-xs text-fg-3">{t("codes.registryHint")}</div>
           </div>
         </div>
         {loading ? (
           <Loading label={t("codes.loading")} />
         ) : (
           <div className="scroll-area max-h-[calc(100dvh-330px)] overflow-auto">
-            <table data-guide="codes-table" className="w-full min-w-[900px] border-collapse text-left text-[0.76rem]">
-              <thead className="sticky top-0 z-10 bg-[#0b110c] text-[0.65rem] tracking-[0.12em] text-white/60 uppercase">
+            <table data-guide="codes-table" className="data-table min-w-[900px]">
+              <thead>
                 <tr>
                   <th className="px-4 py-3" />
                   <th className="px-3 py-3">{t("codes.col.code")}</th>
@@ -167,19 +177,19 @@ export const CodeBaseWorkspace: React.FC = () => {
               </thead>
               <tbody>
                 {page.items.map((e) => (
-                  <tr key={e.code} className="border-t border-white/5 transition-colors hover:bg-lime-300/10">
+                  <tr key={e.code}>
                     <td className="px-4 py-1.5"><ItemIcon sources={[assetUrl(e.iconUrl)]} size={30} label={e.name} /></td>
-                    <td className="px-3 py-2 font-mono font-bold text-accent">{e.code}</td>
-                    <td className="max-w-[280px] px-3 py-2 text-white/85">{e.englishName}</td>
-                    <td className="max-w-[280px] px-3 py-2 text-white/70">{e.aliases.join(" • ") || "—"}</td>
-                    <td className="px-3 py-2"><span className="chip cursor-default">{label("catalog_category", e.category)}</span></td>
-                    <td className="px-3 py-2 text-white/70">{FACTIONS[e.faction] ? t(FACTIONS[e.faction]) : e.faction}</td>
-                    <td className="px-4 py-2">{e.needsReview ? <span className="text-warn">⚠ {t("codes.review")}</span> : <span className="text-safe">● {t("codes.reference")}</span>}</td>
+                    <td className="px-3 py-2 font-mono text-[0.78rem] font-semibold">{e.code}</td>
+                    <td className="max-w-[280px] px-3 py-2 text-fg">{e.englishName}</td>
+                    <td className="max-w-[280px] px-3 py-2 text-fg-2">{e.aliases.join(" • ") || "—"}</td>
+                    <td className="px-3 py-2"><span className="badge badge-neutral">{label("catalog_category", e.category)}</span></td>
+                    <td className="px-3 py-2 text-fg-2">{FACTIONS[e.faction] ? t(FACTIONS[e.faction]) : e.faction}</td>
+                    <td className="px-4 py-2">{e.needsReview ? <span className="badge badge-warn">{t("codes.review")}</span> : <span className="badge badge-accent">{t("codes.reference")}</span>}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            {!filtered.length && <div className="hud-label px-4 py-12 text-center text-muted">{t("common.nothingFilter")}</div>}
+            {!filtered.length && <div className="px-4 py-14 text-center text-sm text-fg-3">{t("common.nothingFilter")}</div>}
             <PagedMore page={page} />
           </div>
         )}
@@ -188,9 +198,9 @@ export const CodeBaseWorkspace: React.FC = () => {
   );
 };
 
-const Stat: React.FC<{ label: string; value: number; color?: string }> = ({ label, value, color = "var(--accent)" }) => (
-  <div className="rounded border border-white/10 bg-black/20 px-2.5 py-1.5">
-    <div className="hud-label text-muted">{label}</div>
-    <div className="mt-0.5 font-mono text-sm font-bold" style={{ color }}>{value}</div>
+const Stat: React.FC<{ label: string; value: number; tone?: "warn" }> = ({ label, value, tone }) => (
+  <div className="stat">
+    <div className={`stat-value ${tone === "warn" ? "text-warn" : ""}`}>{value.toLocaleString()}</div>
+    <div className="stat-label">{label}</div>
   </div>
 );

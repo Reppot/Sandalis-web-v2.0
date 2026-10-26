@@ -24,7 +24,7 @@ export const paneGridClass = (p: Panes) =>
 export const paneCardsClass = (p: Panes) => `mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 ${p.wide === "catalog" ? "lg:grid-cols-4 2xl:grid-cols-5" : ""}`;
 
 export const PaneToggles: React.FC<{ panes: Panes; catalogLabel: string; planLabel: string }> = ({ panes, catalogLabel, planLabel }) => (
-  <SharedPaneToggles panes={panes.raw} first={{ label: catalogLabel, icon: "🗂" }} second={{ label: planLabel, icon: "📋" }} guide="tool-panes" />
+  <SharedPaneToggles panes={panes.raw} first={{ label: catalogLabel, icon: "" }} second={{ label: planLabel, icon: "" }} guide="tool-panes" />
 );
 
 /** Фракции — маленькие карточки над поиском. */

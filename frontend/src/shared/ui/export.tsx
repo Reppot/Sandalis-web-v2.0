@@ -3,6 +3,8 @@
 import * as React from "react";
 import type { UiIcon } from "@/shared/config/assets";
 import { UiGlyph } from "@/shared/ui/glyph";
+import { Segmented } from "@/shared/ui/controls";
+import { Icon } from "@/shared/ui/icons";
 import { useT, type MessageKey, type Translate } from "@/shared/i18n";
 import {
   buildTxt,
@@ -56,37 +58,36 @@ export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onTo
   const t = useT();
   const isImport = mode === "import";
   return (
-    <div className="mt-3 flex flex-col gap-2">
-      {mode && onToggleMode ? (
-        <button className={`btn w-full justify-between ${isImport ? "btn-warn btn-active" : ""}`} data-guide="export-mode" onClick={onToggleMode} title={t("export.toggleHint")}>
-          <span className="flex items-center gap-2">
-            <span className={`status-dot ${isImport ? "pulse" : ""}`} style={{ color: isImport ? "var(--warn)" : "var(--accent)", background: isImport ? "var(--warn)" : "var(--accent)" }} />
-            {isImport ? t("export.modeImport") : t("export.modeExport")}
-          </span>
-          <span className="hud-label opacity-70">{isImport ? t("export.modeImportHint") : t("export.modeExportHint")}</span>
-        </button>
-      ) : (
-        <div className="flex items-center justify-between gap-2">
-          <span className="hud-label flex items-center gap-2 text-accent">
-            <span className="status-dot" style={{ color: "var(--accent)", background: "var(--accent)" }} />
-            {title ?? t("export.title")}
-          </span>
-          <span className="hud-label opacity-70">{t("export.upload")}</span>
-        </div>
-      )}
-      <div data-guide="export-formats" className="grid grid-cols-4 gap-2">
+    <div className="export-bar">
+      <div className="export-bar-head">
+        {mode && onToggleMode ? (
+          <Segmented
+            size="sm"
+            label={t("export.toggleHint")}
+            value={mode}
+            onChange={(next) => next !== mode && onToggleMode()}
+            options={[
+              { value: "export", label: t("export.tabExport") },
+              { value: "import", label: t("export.tabImport") },
+            ]}
+          />
+        ) : (
+          <span className="export-bar-title">{title ?? t("export.title")}</span>
+        )}
+        <span className="export-bar-hint">{mode ? (isImport ? t("export.modeImportHint") : t("export.modeExportHint")) : t("export.upload")}</span>
+      </div>
+      <div data-guide="export-formats" className="export-bar-grid">
         {FORMATS.map((f) => (
           <button
             key={f.fmt}
             type="button"
-            className="btn h-[42px] px-1"
+            className={`export-format ${isImport && f.importable ? "is-import" : ""}`}
             disabled={busy || (isImport && !f.importable)}
             onClick={() => onAction(f.fmt)}
             title={t(isImport ? f.hintImport : f.hintExport)}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <UiGlyph icon={f.icon} size={22} />
-            <span className="hidden sm:inline">{t(f.label)}</span>
+            <UiGlyph icon={f.icon} size={20} />
+            <span>{t(f.label)}</span>
           </button>
         ))}
       </div>
@@ -188,7 +189,7 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
       widthClass="max-w-4xl"
       footer={
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="hud-label text-muted">{t("export.previewHint")}</span>
+          <span className="text-xs text-fg-3">{t("export.previewHint")}</span>
           <div className="flex gap-2">
             <button className="btn" onClick={onClose}>{t("common.close")}</button>
             <button className="btn btn-primary" onClick={() => void downloadAll()} disabled={!ready}>{t("export.downloadAll")}</button>
@@ -198,25 +199,26 @@ const PagesPreviewModal: React.FC<{ doc: ExportDoc | null; textureUrl: string | 
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {!ready ? (
-          <div className="hud-label pulse col-span-full py-10 text-center text-muted">{t("export.rendering")}</div>
+          <div className="pulse col-span-full py-10 text-center text-sm text-fg-3">{t("export.rendering")}</div>
         ) : (
           ready.urls.map((url, i) => (
-            <figure key={i} className="panel-inner flex flex-col gap-2 rounded p-2">
+            <figure key={i} className="panel-inner flex flex-col gap-2 p-2">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={url} alt={`${pageLabel} ${i + 1}`} className="w-full rounded border border-white/10" />
+              <img src={url} alt={`${pageLabel} ${i + 1}`} className="w-full rounded-lg border border-line" />
               <figcaption className="flex items-center justify-between gap-2">
-                <span className="hud-label text-muted">{pageLabel} {i + 1}/{ready.urls.length}</span>
+                <span className="text-xs text-fg-3">{pageLabel} {i + 1}/{ready.urls.length}</span>
                 <span className="flex gap-1">
-                  <button className="btn px-2 py-1" onClick={() => void copyPage(i)} title={t("export.toClipboard")}>📋</button>
+                  <button className="btn btn-icon h-8 min-h-0 w-8" onClick={() => void copyPage(i)} title={t("export.toClipboard")} aria-label={t("export.toClipboard")}><Icon name="copy" size={16} /></button>
                   <button
-                    className="btn px-2 py-1"
+                    className="btn btn-icon h-8 min-h-0 w-8"
                     title={t("export.downloadPng")}
+                    aria-label={t("export.downloadPng")}
                     onClick={async () => {
                       const blob = await canvasToBlob(ready.canvases[i]);
                       if (blob) downloadBlob(blob, name(i, ready.canvases.length));
                     }}
                   >
-                    ⬇
+                    <Icon name="download" size={16} />
                   </button>
                 </span>
               </figcaption>
@@ -301,12 +303,12 @@ export const DocReader: React.FC<{ doc: ExportDoc; textureUrl: string | null | u
   return (
     <div ref={ref} className={`doc-reader ${expanded ? "is-open" : ""}`}>
       {!urls ? (
-        <div className="doc-reader-loading hud-label pulse">{t("export.rendering")}</div>
+        <div className="doc-reader-loading pulse text-sm">{t("export.rendering")}</div>
       ) : !expanded ? (
         <button type="button" className="doc-reader-preview" onClick={onExpand} title={t("reports.readerOpen")}>
           {/* eslint-disable-next-line @next/next/no-img-element -- страница отрисована в canvas */}
           <img src={urls[0]} alt={`${pageLabel} 1`} />
-          <span className="doc-reader-badge">📄 {pageLabel} 1/{total}{total > 1 ? ` • ${t("reports.readerMore", { n: total - 1 })}` : ""}</span>
+          <span className="doc-reader-badge">{pageLabel} 1/{total}{total > 1 ? ` • ${t("reports.readerMore", { n: total - 1 })}` : ""}</span>
         </button>
       ) : (
         <div
@@ -324,7 +326,7 @@ export const DocReader: React.FC<{ doc: ExportDoc; textureUrl: string | null | u
             <button type="button" className="doc-reader-nav" disabled={current >= total - 1} onClick={() => go(1)} aria-label="›">›</button>
           </div>
           <div className="doc-reader-bar">
-            <span className="hud-label text-muted">{pageLabel} {current + 1} / {total}</span>
+            <span className="text-xs text-fg-3">{pageLabel} {current + 1} / {total}</span>
             {total > 1 ? (
               <span className="doc-reader-thumbs">
                 {urls.map((url, i) => (

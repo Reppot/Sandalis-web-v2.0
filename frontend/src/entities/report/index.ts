@@ -1,4 +1,4 @@
-import { STORAGE_KEYS, apiClient, readStorage, writeStorage } from "@/shared";
+import { STORAGE_KEYS, apiClient, readStorage, writeStorage, type IconName } from "@/shared";
 import type { MessageKey, Page } from "@/shared";
 import type { ItemUnit } from "@/entities/item";
 
@@ -12,10 +12,10 @@ export interface ReportMeta {
 
 /** Вид заказа (meta.type): на склад, на бункерную базу или на завод. */
 export type OrderKind = "stockpile" | "bunker" | "factory";
-export const ORDER_KINDS: { key: OrderKind; icon: string; label: MessageKey; hint: MessageKey }[] = [
-  { key: "stockpile", icon: "🏬", label: "orderKind.stockpile", hint: "orderKind.stockpileHint" },
-  { key: "bunker", icon: "🛡", label: "orderKind.bunker", hint: "orderKind.bunkerHint" },
-  { key: "factory", icon: "🏭", label: "orderKind.factory", hint: "orderKind.factoryHint" },
+export const ORDER_KINDS: { key: OrderKind; icon: IconName; label: MessageKey; hint: MessageKey }[] = [
+  { key: "stockpile", icon: "warehouse", label: "orderKind.stockpile", hint: "orderKind.stockpileHint" },
+  { key: "bunker", icon: "shield", label: "orderKind.bunker", hint: "orderKind.bunkerHint" },
+  { key: "factory", icon: "box", label: "orderKind.factory", hint: "orderKind.factoryHint" },
 ];
 export const orderKindOf = (type: string | null | undefined) => ORDER_KINDS.find((k) => k.key === type);
 

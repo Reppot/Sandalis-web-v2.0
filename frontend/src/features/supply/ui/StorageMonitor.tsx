@@ -27,8 +27,10 @@ import {
   xlsxToText,
   type ExportFormat,
   type PanelMode,
-  UiGlyph,
+  Icon,
   PagedMore,
+  SearchField,
+  SectionHeader,
   usePaged,
 } from "@/shared";
 
@@ -214,127 +216,132 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
     );
   };
 
-  return (
-    <section data-guide="stock-panel" className="panel panel-corners flex flex-col rounded-md p-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="panel-title">📦 {t("stock.title")}</h2>
-        <div className="flex items-center gap-2">
-          <span className="badge-count min-w-0 px-2" title={t("doc.lines")}>{t("common.pos", { n: items.length })}</span>
-          <span className="badge-count min-w-0 px-2" title={t("common.total")}>Σ {total}</span>
-        </div>
-      </div>
-      <div className="stencil-line mt-2" />
+  const clearContents = () =>
+    confirm("clear", () => {
+      void (async () => {
+        setBusy(true);
+        try {
+          const saved = await stockpileApi.replaceContents(pinned!.id, [], "manual");
+          setPinned(saved.stockpile);
+          onPinned(saved.stockpile);
+          notify({ title: t("stock.stockpile"), message: saved.message, tone: "warning" });
+        } catch (err) {
+          notify({ title: t("stock.stockpile"), message: errorText(err, t("stock.clearFailed")), tone: "danger" });
+        } finally {
+          setBusy(false);
+        }
+      })();
+    });
 
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <select data-guide="stock-select" className="field w-full flex-1 sm:w-auto" value={pinnedId ?? ""} onChange={(e) => setPinnedId(e.target.value || null)} disabled={loading}>
+  const deleteStockpile = () =>
+    pinned &&
+    confirm("delete", async () => {
+      try {
+        await stockpileApi.delete(pinned.id);
+        setStockpiles((prev) => prev.filter((s) => s.id !== pinned.id));
+        setPinnedId(stockpiles.find((s) => s.id !== pinned.id)?.id ?? null);
+        notify({ title: t("stock.stockpile"), message: t("stock.deleted", { name: pinned.name }), tone: "warning" });
+      } catch (err) {
+        notify({ title: t("stock.stockpile"), message: errorText(err, t("stock.deleteFailed")), tone: "danger" });
+      }
+    });
+
+  return (
+    <section data-guide="stock-panel" className="panel flex flex-col p-5">
+      <SectionHeader
+        icon="stockpile"
+        title={t("stock.title")}
+        meta={
+          <>
+            <span className="count-pill" title={t("doc.lines")}>{t("common.pos", { n: items.length })}</span>
+            <span className="count-pill" title={t("common.total")}>Σ {total}</span>
+          </>
+        }
+      />
+
+      <div className="mt-5 flex flex-wrap items-center gap-2">
+        <select data-guide="stock-select" className="field h-11 w-full flex-1 sm:w-auto" value={pinnedId ?? ""} onChange={(e) => setPinnedId(e.target.value || null)} disabled={loading} aria-label={t("stock.stockpile")}>
           {stockpiles.length === 0 && <option value="">{t("stock.none")}</option>}
           {stockpiles.map((s) => (
             <option key={s.id} value={s.id}>
-              {s.region} ▶ {s.name}
+              {s.region} · {s.name}
             </option>
           ))}
         </select>
-        {(
-          <>
-            {can(Scopes.STOCKPILES_CREATE) && <button className="btn" data-guide="stock-new" onClick={() => setEditing("create")} title={t("stock.new")}>＋</button>}
-            {can(Scopes.STOCKPILES_EDIT) && <button className="btn" onClick={() => setEditing("rename")} disabled={!pinned} title={t("stock.rename")}>✎</button>}
-            {can(Scopes.STOCKPILES_DELETE) && <button
-              className={`btn btn-danger ${armed === "delete" ? "btn-active" : ""}`}
-              disabled={!pinned}
-              title={t("stock.delete")}
-              onClick={() =>
-                pinned &&
-                confirm("delete", async () => {
-                  try {
-                    await stockpileApi.delete(pinned.id);
-                    setStockpiles((prev) => prev.filter((s) => s.id !== pinned.id));
-                    setPinnedId(stockpiles.find((s) => s.id !== pinned.id)?.id ?? null);
-                    notify({ title: t("stock.stockpile"), message: t("stock.deleted", { name: pinned.name }), tone: "warning" });
-                  } catch (err) {
-                    notify({ title: t("stock.stockpile"), message: errorText(err, t("stock.deleteFailed")), tone: "danger" });
-                  }
-                })
-              }
-            >
-              {armed === "delete" ? "?" : "🗑"}
-            </button>}
-          </>
-        )}
+        <div className="flex items-center gap-1.5">
+          {can(Scopes.STOCKPILES_CREATE) && (
+            <button className="btn btn-icon h-11 w-11" data-guide="stock-new" onClick={() => setEditing("create")} title={t("stock.new")} aria-label={t("stock.new")}>
+              <Icon name="plus" />
+            </button>
+          )}
+          {can(Scopes.STOCKPILES_EDIT) && (
+            <button className="btn btn-icon h-11 w-11" onClick={() => setEditing("rename")} disabled={!pinned} title={t("stock.rename")} aria-label={t("stock.rename")}>
+              <Icon name="edit" />
+            </button>
+          )}
+          {can(Scopes.STOCKPILES_DELETE) && (
+            <button className={`btn btn-icon h-11 ${armed === "delete" ? "btn-danger w-auto px-3" : "w-11"}`} disabled={!pinned} title={t("stock.delete")} aria-label={t("stock.delete")} onClick={deleteStockpile}>
+              {armed === "delete" ? t("common.confirmQ") : <Icon name="trash" />}
+            </button>
+          )}
+        </div>
       </div>
 
       {canItems && (
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <button className="btn btn-icon" onClick={() => pick(textInput)} data-guide="stock-load" title={t("stock.loadFile")} disabled={busy || !pinned}>
-            <UiGlyph icon="file-json" size={26} />
+        <div className="stock-actions mt-3">
+          <button className="btn" onClick={() => pick(textInput)} data-guide="stock-load" title={t("stock.loadFile")} disabled={busy || !pinned}>
+            <Icon name="upload" size={16} />
+            <span>{t("stock.loadShort")}</span>
           </button>
-          <button className="btn btn-icon" onClick={() => void readClipboard()} data-guide="stock-paste" title={t("stock.paste")} disabled={busy || !pinned}>
-            <UiGlyph icon="clipboard" size={26} />
+          <button className="btn" onClick={() => void readClipboard()} data-guide="stock-paste" title={t("stock.paste")} disabled={busy || !pinned}>
+            <Icon name="paste" size={16} />
+            <span>{t("stock.pasteShort")}</span>
           </button>
           <button className="btn" onClick={() => pick(savInput)} data-guide="stock-scan" title={t("stock.scanHint")} disabled={busy || !pinned}>
-            <span>📡</span>
-            <span className="hidden sm:inline">{t("stock.scan")}</span>
-            <span className="sm:hidden">.SAV</span>
+            <Icon name="scan" size={16} />
+            <span>{t("stock.scan")}</span>
           </button>
-          <div className="ml-auto flex items-center gap-2">
-            <input className="field w-36 py-1.5 text-xs sm:w-44" data-guide="stock-filter" placeholder={t("stock.filter")} value={query} onChange={(e) => setQuery(e.target.value)} />
-            <button
-              className={`btn btn-danger px-2 ${armed === "clear" ? "btn-active" : ""}`}
-              title={t("stock.clear")}
-              disabled={busy || !items.length}
-              onClick={() =>
-                confirm("clear", () => {
-                  void (async () => {
-                    setBusy(true);
-                    try {
-                      const saved = await stockpileApi.replaceContents(pinned!.id, [], "manual");
-                      setPinned(saved.stockpile);
-                      onPinned(saved.stockpile);
-                      notify({ title: t("stock.stockpile"), message: saved.message, tone: "warning" });
-                    } catch (err) {
-                      notify({ title: t("stock.stockpile"), message: errorText(err, t("stock.clearFailed")), tone: "danger" });
-                    } finally {
-                      setBusy(false);
-                    }
-                  })();
-                })
-              }
-            >
-              {armed === "clear" ? "?" : "✕"}
-            </button>
-          </div>
         </div>
       )}
 
-      <div data-guide="stock-sync" className="hud-label mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-muted">
+      <div data-guide="stock-sync" className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-fg-3">
         <span>
           {t("stock.sync")}:{" "}
-          <span className="text-white/80">
-            {pinned?.lastSyncAt ? `${formatDateTime(pinned.lastSyncAt)} • ${SOURCE_LABEL[pinned.lastSyncSource ?? ""] ?? t(pinned.lastSyncSource === "clipboard" ? "stock.srcClipboard" : "stock.srcManual")} • ${t("common.pos", { n: items.length })}` : t("common.noData")}
+          <span className="text-fg-2">
+            {pinned?.lastSyncAt ? `${formatDateTime(pinned.lastSyncAt)} · ${SOURCE_LABEL[pinned.lastSyncSource ?? ""] ?? t(pinned.lastSyncSource === "clipboard" ? "stock.srcClipboard" : "stock.srcManual")} · ${t("common.pos", { n: items.length })}` : t("common.noData")}
           </span>
         </span>
-        {busy && <span className="pulse text-warn">● {t("common.processing")}</span>}
+        {busy && <span className="pulse text-warn">{t("common.processing")}</span>}
       </div>
 
-      <div data-guide="stock-list" className="scroll-area panel-inner mt-3 max-h-[46vh] min-h-[200px] flex-1 rounded p-1.5">
+      <div className="mt-3 flex items-center gap-2">
+        <SearchField className="flex-1" data-guide="stock-filter" placeholder={t("stock.filter")} value={query} onChange={setQuery} />
+        {canItems ? (
+          <button className={`btn h-10 ${armed === "clear" ? "btn-danger" : "btn-ghost text-fg-2"}`} title={t("stock.clear")} disabled={busy || !items.length} onClick={clearContents}>
+            {armed === "clear" ? t("common.confirmQ") : t("common.clear")}
+          </button>
+        ) : null}
+      </div>
+
+      <div data-guide="stock-list" className="scroll-area panel-inner mt-2 max-h-[46vh] min-h-[220px] flex-1 p-1.5">
         {loading ? (
           <Loading label={t("stock.loading")} />
         ) : !pinned ? (
           <EmptyState icon="crates" title={t("stock.notPicked")} hint={can(Scopes.STOCKPILES_CREATE) ? t("stock.createHint") : t("stock.membersRegister")} />
         ) : visible.length === 0 ? (
-          <EmptyState
-            icon="crates"
-            title={items.length ? t("common.nothingFilter") : t("stock.empty")}
-            hint={t("stock.formatHint")}
-          />
+          <EmptyState icon="crates" title={items.length ? t("common.nothingFilter") : t("stock.empty")} hint={t("stock.formatHint")} />
         ) : (
-          <ul className="flex flex-col gap-0.5">
+          <ul className={`grid gap-0.5 ${isFullWidth ? "sm:grid-cols-2 xl:grid-cols-3" : ""}`}>
             {page.items.map((item) => (
               <li key={item.id} className="row-item">
-                <span className="flex min-w-0 items-center gap-2">
-                  <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 64 : 32} label={itemLabel(item)} />
-                  <span className={`truncate text-white ${isFullWidth ? "text-base font-semibold" : "text-[0.82rem]"}`}>• {itemLabel(item)}</span>
+                <span className="flex min-w-0 items-center gap-2.5">
+                  <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 44 : 30} label={itemLabel(item)} />
+                  <span className={`truncate ${isFullWidth ? "text-[0.95rem] font-medium" : "text-[0.85rem]"}`}>{itemLabel(item)}</span>
                 </span>
-                <span className="badge-count">{item.quantity}{item.looseQuantity ? ` + ${item.looseQuantity} ${t("unit.unit")}` : ""}</span>
+                <span className="stock-qty">
+                  {item.quantity}
+                  {item.looseQuantity ? <em> + {item.looseQuantity} {t("unit.unit")}</em> : null}
+                </span>
               </li>
             ))}
           </ul>
@@ -355,7 +362,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
       <input ref={savInput} type="file" accept=".sav,application/octet-stream" className="hidden" onChange={(e) => void onScan(e.target.files?.[0])} />
 
       <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("import.pasteTitle")} icon="clipboard" widthClass="max-w-lg">
-        <p className="hud-label text-muted">{t("import.pasteHelp")}</p>
+        <p className="text-sm text-fg-2">{t("import.pasteHelp")}</p>
         <textarea className="field field-mono mt-2 h-48 w-full resize-y text-xs" placeholder={t("import.pastePlaceholder")} value={pasteText} onChange={(e) => setPasteText(e.target.value)} autoFocus />
         <div className="mt-3 flex justify-end gap-2">
           <button className="btn" onClick={() => setPasteOpen(false)}>{t("common.cancel")}</button>

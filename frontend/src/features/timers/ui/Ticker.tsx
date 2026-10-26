@@ -55,7 +55,7 @@ export const Ticker: React.FC = () => {
       const crit = ts < HOUR;
       out.push({ text: t(crit ? "ticker.critical" : "ticker.warning", { where, left: formatCountdown(ts, units) }), tone: crit ? "critical" : "warning" });
     }
-    if (phrase) out.push({ text: `🟢 ${phrase}`, tone: "safe" });
+    if (phrase) out.push({ text: phrase, tone: "safe" });
     if (loading) out.push({ text: t("ticker.loading"), tone: "safe" });
     else if (connection === "offline") out.push({ text: t("ticker.offline"), tone: "critical" });
     // «все склады в безопасности» — только тем, кто видит склады клана

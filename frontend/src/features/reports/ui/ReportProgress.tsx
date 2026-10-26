@@ -4,7 +4,7 @@ import * as React from "react";
 import { localizeProgress, reportApi, type Report, type ReportProgress } from "@/entities/report";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi, type Stockpile } from "@/entities/stockpile";
-import { ItemIcon, Loading, Modal, assetUrl, errorText, formatDateTime, useConfirm, useI18n, useNotify, type Translate } from "@/shared";
+import { ItemIcon, Loading, Modal, assetUrl, errorText, formatDateTime, useConfirm, useI18n, useNotify, type Translate, Icon } from "@/shared";
 
 const unitLabel = (unit: string, t: Translate) => t(unit === "crate" ? "unit.crate" : "unit.unit");
 const pct = (part: number, whole: number) => (whole ? Math.min(100, Math.round((part / whole) * 100)) : 0);
@@ -54,7 +54,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
     <div data-guide="report-progress" className="report-progress">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <div className="hud-label text-accent">{t("progress.title")}</div>
+          <div className="text-sm font-semibold">{t("progress.title")}</div>
           <div className="report-progress-total">
             <span className="report-progress-track"><span style={{ width: `${total}%` }} /></span>
             <b>{total}%</b>
@@ -62,7 +62,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
           </div>
         </div>
         {canReport ? (
-          <button type="button" className="btn btn-primary" data-guide="report-contribute" onClick={() => setOpen(true)}>📦 {t("progress.report")}</button>
+          <button type="button" className="btn btn-primary" data-guide="report-contribute" onClick={() => setOpen(true)}><Icon name="check" size={15} />{t("progress.report")}</button>
         ) : null}
       </div>
 
@@ -83,22 +83,22 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
           ))}
         </div>
       ) : (
-        <p className="hud-label mt-3 text-muted">{t("progress.empty")}</p>
+        <p className="mt-3 text-sm text-fg-3">{t("progress.empty")}</p>
       )}
 
       {progress.contributions.length ? (
         <div className="report-log">
-          <div className="hud-label mb-1.5 text-muted">📜 {t("progress.log", { n: progress.contributions.length })}</div>
+          <div className="mb-2 text-xs font-semibold text-fg-3">{t("progress.log", { n: progress.contributions.length })}</div>
           <ul className="flex flex-col gap-1.5">
             {progress.contributions.map((c) => (
               <li key={c.id} className="report-log-entry">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                  <b className="text-white">{c.user_name ?? c.user_id}</b>
+                  <b className="text-fg">{c.user_name ?? c.user_id}</b>
                   <span className="hud-label text-muted">{formatDateTime(c.created_at)}</span>
-                  {c.stockpile_label ? <span className="hud-label text-accent">→ 🏬 {c.stockpile_label}</span> : null}
+                  {c.stockpile_label ? <span className="badge badge-neutral">{c.stockpile_label}</span> : null}
                   {c.user_id === userId || can(Scopes.REPORTS_DELETE) ? (
-                    <button type="button" className={`btn btn-danger ml-auto px-1.5 py-0 text-[0.6rem] ${armed === c.id ? "btn-active" : ""}`} onClick={() => confirm(c.id, () => void remove(c.id))}>
-                      {armed === c.id ? t("common.confirmQ") : "✕"}
+                    <button type="button" className={`ml-auto ${armed === c.id ? "btn btn-danger h-7 min-h-0 px-2 text-xs" : "icon-btn"}`} aria-label={t("common.delete")} onClick={() => confirm(c.id, () => void remove(c.id))}>
+                      {armed === c.id ? t("common.confirmQ") : <Icon name="close" size={14} />}
                     </button>
                   ) : null}
                 </div>
@@ -111,7 +111,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
                     </span>
                   ))}
                 </div>
-                {c.note ? <div className="order-note is-small"><p>📝 {c.note}</p></div> : null}
+                {c.note ? <div className="order-note is-small"><p>{c.note}</p></div> : null}
               </li>
             ))}
           </ul>
@@ -183,12 +183,12 @@ const ContributeModal: React.FC<{ open: boolean; report: Report; progress: Repor
   };
 
   return (
-    <Modal open={open} onClose={onClose} title={`${t("progress.report")} • ${report.title}`} icon="orders" widthClass="max-w-3xl">
+    <Modal open={open} onClose={onClose} title={`${t("progress.report")} · ${report.title}`} icon="orders" widthClass="max-w-3xl">
       <div className="grid gap-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <span className="hud-label text-muted">{t("progress.formHint")}</span>
-          <button type="button" className="btn px-2 py-1 text-[0.7rem]" onClick={() => setQty(Object.fromEntries(lines.filter((l) => l.left > 0).map((l) => [l.line_id, String(l.left)])))}>
-            ⇣ {t("progress.allLeft")}
+          <span className="text-sm text-fg-2">{t("progress.formHint")}</span>
+          <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={() => setQty(Object.fromEntries(lines.filter((l) => l.left > 0).map((l) => [l.line_id, String(l.left)])))}>
+            {t("progress.allLeft")}
           </button>
         </div>
         <div className="contribute-list scroll-area">
@@ -196,42 +196,42 @@ const ContributeModal: React.FC<{ open: boolean; report: Report; progress: Repor
             <div key={l.line_id} className={`contribute-row ${l.left === 0 ? "is-done" : ""}`}>
               <ItemIcon sources={[assetUrl(l.icon_url)]} size={36} label={l.name} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[0.85rem] text-white">{l.name}</span>
-                <span className="hud-label text-muted">{t("progress.rowState", { done: l.delivered, total: l.ordered, left: l.left })} {unitLabel(l.unit, t)}</span>
+                <span className="block truncate text-[0.85rem] text-fg">{l.name}</span>
+                <span className="text-xs text-fg-3">{t("progress.rowState", { done: l.delivered, total: l.ordered, left: l.left })} {unitLabel(l.unit, t)}</span>
               </span>
-              <button type="button" className="btn px-2 py-1" onClick={() => set(l.line_id, String(Math.max(0, (parseInt(qty[l.line_id] ?? "0", 10) || 0) - 1)))}>−</button>
-              <input className="field field-mono w-20 py-1 text-center" inputMode="numeric" placeholder="0" value={qty[l.line_id] ?? ""} onChange={(e) => set(l.line_id, e.target.value)} />
-              <button type="button" className="btn px-2 py-1" onClick={() => set(l.line_id, String((parseInt(qty[l.line_id] ?? "0", 10) || 0) + 1))}>＋</button>
-              <button type="button" className="btn px-2 py-1 text-[0.65rem]" disabled={l.left === 0} title={t("progress.allLeft")} onClick={() => set(l.line_id, String(l.left))}>{t("progress.max")}</button>
+              <button type="button" className="stepper-btn" aria-label="−1" onClick={() => set(l.line_id, String(Math.max(0, (parseInt(qty[l.line_id] ?? "0", 10) || 0) - 1)))}>−</button>
+              <input className="field field-mono h-8 min-h-0 w-20 py-0 text-center" inputMode="numeric" placeholder="0" value={qty[l.line_id] ?? ""} onChange={(e) => set(l.line_id, e.target.value)} />
+              <button type="button" className="stepper-btn" aria-label="+1" onClick={() => set(l.line_id, String((parseInt(qty[l.line_id] ?? "0", 10) || 0) + 1))}>+</button>
+              <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" disabled={l.left === 0} title={t("progress.allLeft")} onClick={() => set(l.line_id, String(l.left))}>{t("progress.max")}</button>
             </div>
           ))}
         </div>
         <div className="grid gap-2 md:grid-cols-2">
           <label className="flex flex-col gap-1">
-            <span className="hud-label text-muted">🏬 {t("progress.stockpile")}</span>
+            <span className="field-label">{t("progress.stockpile")}</span>
             <select className="field h-10" value={stockpileId} onChange={(e) => setStockpileId(e.target.value)}>
               {!stockpiles ? <option value="">{t("common.loading")}</option> : null}
               {(stockpiles ?? []).map((s) => (
-                <option key={s.id} value={s.id}>{s.region} ▶ {s.name}</option>
+                <option key={s.id} value={s.id}>{s.region} · {s.name}</option>
               ))}
               <option value="other">{t("progress.otherStockpile")}</option>
             </select>
           </label>
           {stockpileId === "other" ? (
             <label className="flex flex-col gap-1">
-              <span className="hud-label text-muted">{t("progress.otherLabel")}</span>
+              <span className="field-label">{t("progress.otherLabel")}</span>
               <input className="field h-10" maxLength={160} value={otherLabel} placeholder="BB Callahan's Gate" onChange={(e) => setOtherLabel(e.target.value)} />
             </label>
           ) : null}
         </div>
         <label className="flex flex-col gap-1">
-          <span className="hud-label text-muted">📝 {t("progress.note")}</span>
+          <span className="field-label">{t("progress.note")}</span>
           <input className="field h-10" maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} />
         </label>
         <div className="flex items-center justify-end gap-2">
-          <span className="hud-label mr-auto text-muted">{t("progress.selected", { n: chosen.length, q: chosen.reduce((n, l) => n + l.quantity, 0) })}</span>
+          <span className="mr-auto text-xs text-fg-3">{t("progress.selected", { n: chosen.length, q: chosen.reduce((n, l) => n + l.quantity, 0) })}</span>
           <button type="button" className="btn" onClick={onClose}>{t("common.cancel")}</button>
-          <button type="button" className="btn btn-primary" disabled={busy || !chosen.length} onClick={() => void submit()}>{busy ? t("common.sending") : `✔ ${t("progress.submit")}`}</button>
+          <button type="button" className="btn btn-primary" disabled={busy || !chosen.length} onClick={() => void submit()}>{busy ? t("common.sending") : t("progress.submit")}</button>
         </div>
       </div>
     </Modal>

@@ -9,6 +9,9 @@ import type { Stockpile } from "@/entities/stockpile";
 import {
   ExportBar,
   FilterCards,
+  SearchField,
+  SectionHeader,
+  Segmented,
   ItemIcon,
   Loading,
   Modal,
@@ -23,7 +26,6 @@ import {
   xlsxToText,
   type ExportFormat,
   type PanelMode,
-  UiGlyph,
 } from "@/shared";
 
 interface OrderBuilderProps {
@@ -169,111 +171,107 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
   };
 
   return (
-    <section data-guide="builder-panel" className="panel panel-corners flex flex-col rounded-md p-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="panel-title flex items-center gap-2">
-          <UiGlyph icon="orders" size={22} />
-          🛠️ {t("builder.title")}
-        </h2>
-        <div className="flex items-center gap-2">
-          <span className="badge-count min-w-0 px-2">{t("common.pos", { n: order.length })}</span>
-          <span className="badge-count min-w-0 px-2">Σ {totalUnits}</span>
-        </div>
-      </div>
-      <div className="stencil-line mt-2" />
+    <section data-guide="builder-panel" className="panel flex flex-col p-5">
+      <SectionHeader
+        icon="orders"
+        title={t("builder.title")}
+        meta={
+          <>
+            <span className="count-pill">{t("common.pos", { n: order.length })}</span>
+            <span className="count-pill">Σ {totalUnits}</span>
+          </>
+        }
+      />
 
-      <div className={`order-builder-controls mt-4 rounded-md border border-emerald-900/60 bg-black/25 ${isFullWidth ? "px-5 py-8" : "px-3 py-6"}`}>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,3fr)_minmax(120px,1fr)_auto_auto]">
-          <div data-guide="builder-pick" className={`field flex h-12 items-center gap-2 truncate text-base ${selected ? "text-accent" : "text-white/50"}`} title={selected ? itemName(selected, locale) : t("builder.pick")}>
-            {selected && <ItemIcon sources={[assetUrl(selected.iconUrl)]} size={28} label={selected.name} />}
-            <span className="truncate">{selected ? itemName(selected, locale) : t("builder.pick")}</span>
-          </div>
-          <input ref={countRef} className="field field-mono h-12 text-base" data-guide="builder-qty" placeholder={t("builder.qty")} inputMode="numeric" value={count} onChange={(e) => setCount(e.target.value.replace(/[^\d]/g, ""))} onKeyDown={(e) => e.key === "Enter" && submitLine()} />
-          <button
-            className="btn h-12 min-w-[64px] px-3 text-base"
-            onClick={() => setUnit((u) => (u === "crate" ? "unit" : "crate"))}
-            style={unit === "unit" ? { background: "#ff9900", color: "#000", borderColor: "#ff9900" } : undefined}
-            data-guide="builder-unit" title={t("builder.unitHint")}
-          >
-            {t(unit === "crate" ? "builder.crateShort" : "builder.unitShort")}
-          </button>
-          <button className="btn btn-primary h-12 px-5 text-sm" data-guide="builder-add" onClick={submitLine} disabled={!selected}>
-            {t("builder.add")}
-          </button>
+      {/* выбор предмета и количества */}
+      <div className="builder-composer mt-5">
+        <div data-guide="builder-pick" className={`builder-picked ${selected ? "is-set" : ""}`} title={selected ? itemName(selected, locale) : t("builder.pick")}>
+          {selected ? <ItemIcon sources={[assetUrl(selected.iconUrl)]} size={30} label={selected.name} /> : <span className="builder-picked-dot" aria-hidden />}
+          <span className="truncate">{selected ? itemName(selected, locale) : t("builder.pick")}</span>
         </div>
-
-        <div className="filter-head mt-5">
-          <span className="hud-label text-accent">{t("tools.categories")}</span>
-        </div>
-        <FilterCards
-          guide="builder-cats"
-          label={t("tools.categories")}
-          items={[{ key: "all", label: t("common.all"), glyph: "crates", hint: t("facility.items", { n: catalog.length }) }, ...categories]}
-          value={category}
-          onChange={(k) => setCategory(k ?? "all")}
+        <input ref={countRef} className="field field-mono h-11" data-guide="builder-qty" placeholder={t("builder.qty")} inputMode="numeric" value={count} onChange={(e) => setCount(e.target.value.replace(/[^\d]/g, ""))} onKeyDown={(e) => e.key === "Enter" && submitLine()} />
+        <Segmented
+          className="builder-unit"
+          size="lg"
+          label={t("builder.unitHint")}
+          value={unit}
+          onChange={setUnit}
+          options={[
+            { value: "crate", label: t("builder.crateShort"), title: t("unit.crate") },
+            { value: "unit", label: t("builder.unitShort"), title: t("unit.unit") },
+          ]}
         />
-        <div className="mt-3 flex items-center gap-3">
-          <input className="field h-12 flex-1 text-base" data-guide="builder-filter" placeholder={t("builder.filter")} value={filter} onChange={(e) => setFilter(e.target.value)} />
-          <UiGlyph icon="search" size={40} className="hidden sm:block" />
-        </div>
-
-        <div className="mt-5 flex gap-3">
-          <div data-guide="builder-matrix" className={`scroll-area panel-inner ${isFullWidth ? "grid h-[300px] grid-cols-2 gap-1.5 p-2 xl:grid-cols-3" : "h-[190px] p-1"} flex-1 rounded`}>
-            {catalogLoading ? (
-              <Loading label={t("builder.loading")} className="col-span-full min-h-0 h-full" />
-            ) : matrix.length === 0 ? (
-              <div className="hud-label col-span-full flex h-full items-center justify-center text-muted">{t("common.nothingFound")}</div>
-            ) : (
-              matrix.map((item) => (
-                <button key={item.code} className={`matrix-item ${isFullWidth ? "min-h-[76px] px-3" : ""} ${selected?.code === item.code ? "is-selected" : ""}`} onClick={() => setSelected(item)} title={`${locale === "ru" ? item.englishName : item.name} • ${item.code}`}>
-                  <span className="flex min-w-0 items-center gap-3">
-                    <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 64 : 28} label={itemName(item, locale)} />
-                    <span className={`truncate ${isFullWidth ? "text-base font-semibold" : ""}`}>{itemName(item, locale)}</span>
-                  </span>
-                  <span className="matrix-cat shrink-0">{label("catalog_category", item.category)}</span>
-                </button>
-              ))
-            )}
-          </div>
-          <button
-            className={`btn ${isFullWidth ? "h-[300px]" : "h-[190px]"} w-[58px] flex-col px-0 btn-danger ${armed === "clear" ? "btn-active" : ""}`}
-            onClick={() =>
-              confirm("clear", () => {
-                setOrder([]);
-                notify({ title: t("builder.short"), message: t("builder.cleared"), tone: "warning" });
-              })
-            }
-            data-guide="builder-clear" title={`⚠️ ${t("builder.clearHint")}`}
-            disabled={!order.length}
-          >
-            <span className="text-xl">🗑</span>
-            <span className="hud-label" style={{ writingMode: "vertical-rl" }}>{armed === "clear" ? t("common.confirmQ") : t("common.clear")}</span>
-          </button>
-        </div>
+        <button className="btn btn-primary btn-lg" data-guide="builder-add" onClick={submitLine} disabled={!selected}>
+          {t("builder.add")}
+        </button>
       </div>
 
-      <div className="order-divider" aria-hidden />
+      <div className="mt-5 text-sm font-semibold text-fg-2">{t("tools.categories")}</div>
+      <FilterCards
+        guide="builder-cats"
+        label={t("tools.categories")}
+        items={[{ key: "all", label: t("common.all"), glyph: "crates", hint: t("facility.items", { n: catalog.length }) }, ...categories]}
+        value={category}
+        onChange={(k) => setCategory(k ?? "all")}
+      />
+      <SearchField className="mt-4" size="lg" data-guide="builder-filter" placeholder={t("builder.filter")} value={filter} onChange={setFilter} />
 
-      <div className="scroll-area panel-inner mt-10 max-h-[40vh] min-h-[180px] flex-1 rounded p-2">
-        {order.length === 0 ? (
-          <div className="empty-order flex h-[45px] items-center justify-center rounded px-3 text-center text-[0.8rem]">{t("builder.empty")}</div>
+      <div data-guide="builder-matrix" className={`scroll-area panel-inner mt-3 p-1.5 ${isFullWidth ? "grid h-[340px] grid-cols-2 content-start gap-1 xl:grid-cols-3" : "h-[240px]"}`}>
+        {catalogLoading ? (
+          <Loading label={t("builder.loading")} className="col-span-full h-full min-h-0" />
+        ) : matrix.length === 0 ? (
+          <div className="col-span-full flex h-full items-center justify-center text-sm text-fg-3">{t("common.nothingFound")}</div>
         ) : (
-          <ul data-guide="builder-order" className={`grid grid-cols-1 gap-2 sm:grid-cols-2 ${isFullWidth ? "xl:grid-cols-4" : ""}`}>
+          matrix.map((item) => (
+            <button key={item.code} className={`matrix-item ${isFullWidth ? "min-h-[64px]" : ""} ${selected?.code === item.code ? "is-selected" : ""}`} onClick={() => setSelected(item)} title={`${locale === "ru" ? item.englishName : item.name} • ${item.code}`}>
+              <span className="flex min-w-0 items-center gap-3">
+                <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 48 : 30} label={itemName(item, locale)} />
+                <span className={`truncate ${isFullWidth ? "text-[0.95rem] font-medium" : ""}`}>{itemName(item, locale)}</span>
+              </span>
+              <span className="matrix-cat shrink-0">{label("catalog_category", item.category)}</span>
+            </button>
+          ))
+        )}
+      </div>
+
+      {/* сам заказ */}
+      <div className="mt-7 flex items-center justify-between gap-2">
+        <h3 className="text-[0.95rem] font-semibold">{t("builder.sheet")}</h3>
+        <button
+          className={`btn btn-ghost h-8 min-h-0 px-2.5 text-[0.8rem] text-danger ${armed === "clear" ? "btn-danger" : ""}`}
+          onClick={() =>
+            confirm("clear", () => {
+              setOrder([]);
+              notify({ title: t("builder.short"), message: t("builder.cleared"), tone: "warning" });
+            })
+          }
+          data-guide="builder-clear"
+          title={t("builder.clearHint")}
+          disabled={!order.length}
+        >
+          {armed === "clear" ? t("common.confirmQ") : t("common.clear")}
+        </button>
+      </div>
+      <div className="scroll-area mt-2 max-h-[42vh] min-h-[120px] flex-1">
+        {order.length === 0 ? (
+          <div className="builder-empty">{t("builder.empty")}</div>
+        ) : (
+          <ul data-guide="builder-order" className={`grid grid-cols-1 gap-1.5 sm:grid-cols-2 ${isFullWidth ? "xl:grid-cols-3" : ""}`}>
             {order.map((line) => (
-              <li key={line.name} className="row-item group min-w-0">
-                <span className="flex min-w-0 items-center gap-2">
-                  <ItemIcon sources={[assetUrl(line.icon_url)]} size={isFullWidth ? 64 : 32} label={line.name} />
-                  <span className={`truncate text-white ${isFullWidth ? "text-base font-semibold" : "text-[0.82rem]"}`} title={line.item_code ? undefined : t("builder.notInCatalog")}>
-                    • {line.name}
+              <li key={line.name} className="order-line group">
+                <ItemIcon sources={[assetUrl(line.icon_url)]} size={isFullWidth ? 44 : 34} label={line.name} />
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[0.875rem] font-medium" title={line.item_code ? undefined : t("builder.notInCatalog")}>
+                    {line.name}
                     {!line.item_code && <span className="text-warn"> ?</span>}
                   </span>
+                  <span className="order-line-qty">
+                    <button className="order-line-step" onClick={() => adjust(line.name, -1)} aria-label="−1">−</button>
+                    <span className="tabular">{line.quantity} {t(line.unit === "crate" ? "unit.crate" : "unit.unit")}</span>
+                    <button className="order-line-step" onClick={() => adjust(line.name, 1)} aria-label="+1">+</button>
+                  </span>
                 </span>
-                <span className="flex shrink-0 items-center gap-1">
-                  <button className="btn px-1.5 py-0.5 opacity-60 group-hover:opacity-100" onClick={() => adjust(line.name, -1)} title="−1">−</button>
-                  <span className="badge-count min-w-[85px]">{line.quantity} {t(line.unit === "crate" ? "unit.crate" : "unit.unit")}</span>
-                  <button className="btn px-1.5 py-0.5 opacity-60 group-hover:opacity-100" onClick={() => adjust(line.name, 1)} title="+1">+</button>
-                  <button className="btn btn-danger px-1.5 py-0.5 opacity-60 group-hover:opacity-100" onClick={() => remove(line.name)} title={t("builder.remove")}>✕</button>
-                </span>
+                <button className="order-line-remove" onClick={() => remove(line.name)} title={t("builder.remove")} aria-label={t("builder.remove")}>✕</button>
               </li>
             ))}
           </ul>
@@ -281,13 +279,11 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
       </div>
 
       {canWrite ? (
-        <div className="mt-2 flex">
-          <button className="btn btn-primary w-full" data-guide="builder-send" onClick={() => setSendOpen(true)} disabled={!order.length}>
-            📨 {t("orderSend.button")}
-          </button>
-        </div>
+        <button className="btn btn-primary btn-lg mt-4 w-full" data-guide="builder-send" onClick={() => setSendOpen(true)} disabled={!order.length}>
+          {t("orderSend.button")}
+        </button>
       ) : (
-        <div className="hud-label mt-2 text-muted">{t("builder.membersOnly")}</div>
+        <div className="mt-3 text-sm text-fg-3">{t("builder.membersOnly")}</div>
       )}
 
       <ExportBar mode={mode} onToggleMode={() => setMode((m) => (m === "export" ? "import" : "export"))} onAction={onAction} busy={busy} />
@@ -302,7 +298,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
       }} />
 
       <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("builder.pasteTitle")} icon="clipboard" widthClass="max-w-lg">
-        <p className="hud-label text-muted">{t("import.pasteHelp")}</p>
+        <p className="text-sm text-fg-2">{t("import.pasteHelp")}</p>
         <textarea className="field field-mono mt-2 h-48 w-full resize-y text-xs" value={pasteText} onChange={(e) => setPasteText(e.target.value)} autoFocus />
         <div className="mt-3 flex justify-end gap-2">
           <button className="btn" onClick={() => setPasteOpen(false)}>{t("common.cancel")}</button>

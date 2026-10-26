@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { cn, useI18n, type MessageKey } from "@/shared";
+import { Icon, cn, useI18n, type MessageKey } from "@/shared";
 
 type Method = "sbp" | "boosty" | "crypto";
 
@@ -21,7 +21,7 @@ interface MethodInfo {
 const METHODS: MethodInfo[] = [
   {
     key: "sbp",
-    icon: "🇷🇺",
+    icon: "СБП",
     tab: "donate.sbp.tab",
     title: "donate.sbp.title",
     text: "donate.sbp.text",
@@ -32,7 +32,7 @@ const METHODS: MethodInfo[] = [
   },
   {
     key: "boosty",
-    icon: "🌍",
+    icon: "Visa",
     tab: "donate.boosty.tab",
     title: "donate.boosty.title",
     text: "donate.boosty.text",
@@ -74,12 +74,12 @@ export const DonateBlock: React.FC = () => {
   };
 
   return (
-    <section data-guide="donate" className="panel panel-corners donate rounded-md p-4" aria-labelledby="donate-title">
+    <section data-guide="donate" className="panel donate p-5 md:p-6" aria-labelledby="donate-title">
       <div className="donate-head">
-        <span className="donate-cup" aria-hidden>☕</span>
+        <span className="donate-cup" aria-hidden><Icon name="heart" size={22} /></span>
         <div className="min-w-0">
-          <h2 id="donate-title" className="panel-title">{t("donate.title")}</h2>
-          <p className="mt-1 text-[0.85rem] text-white/75">{t("donate.hint")}</p>
+          <h2 id="donate-title" className="section-title">{t("donate.title")}</h2>
+          <p className="mt-1 max-w-2xl text-[0.92rem] text-fg-2">{t("donate.hint")}</p>
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export const DonateBlock: React.FC = () => {
             className={cn("donate-tab", active === m.key && "is-active")}
             onClick={() => setActive(m.key)}
           >
-            <span aria-hidden>{m.icon}</span>
+            <span className="donate-tab-mark" aria-hidden>{m.icon}</span>
             <span>{t(m.tab)}</span>
           </button>
         ))}
@@ -111,7 +111,8 @@ export const DonateBlock: React.FC = () => {
           <h3 className="donate-panel-title">{t(current.title)}</h3>
           <p className="donate-text">{t(current.text)}</p>
           <a className="donate-action" href={current.href} target="_blank" rel="noopener noreferrer">
-            {t(current.action)} <span aria-hidden>↗</span>
+            {t(current.action)}
+            <Icon name="external" size={16} />
           </a>
         </div>
         {current.qr ? (
@@ -146,7 +147,7 @@ const QrLightbox: React.FC<{ qr: NonNullable<MethodInfo["qr"]>; onClose: () => v
   return createPortal(
     <div className="qr-lightbox" role="dialog" aria-modal="true" aria-label={qr.alt} onClick={onClose}>
       <button type="button" className="qr-lightbox-close" aria-label={t("common.close")} onClick={onClose} autoFocus>
-        ✕
+        <Icon name="close" size={18} />
       </button>
       {/* eslint-disable-next-line @next/next/no-img-element -- статичная картинка из /api/v1/assets */}
       <img src={qr.src} alt={qr.alt} onClick={(e) => e.stopPropagation()} />

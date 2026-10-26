@@ -25,9 +25,11 @@ import {
   type ExportDoc,
   type MessageKey,
   type Translate,
-  UiGlyph,
   PagedMore,
   usePaged,
+  Icon,
+  PageHeader,
+  SearchField,
 } from "@/shared";
 
 type Filter = "active" | "all" | "done" | "cancelled";
@@ -39,11 +41,11 @@ const FILTERS: { key: Filter; label: MessageKey; statuses?: ReportStatus[] }[] =
   { key: "all", label: "common.all" },
 ];
 
-const STATUS_COLOR: Record<ReportStatus, string> = {
-  open: "var(--accent)",
-  in_progress: "#60a5fa",
-  done: "#4ade80",
-  cancelled: "var(--danger)",
+const STATUS_BADGE: Record<ReportStatus, string> = {
+  open: "badge-accent",
+  in_progress: "badge-info",
+  done: "badge-accent",
+  cancelled: "badge-danger",
 };
 
 const ACTION_LABEL: Record<ReportStatus, MessageKey> = {
@@ -172,41 +174,41 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
   );
 
   return (
-    <div className="tab-fade flex flex-col gap-3">
-      <section className="panel panel-corners rounded-md p-4">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <UiGlyph icon="reports" size={40} />
-            <div>
-              <div className="hud-label text-muted">{t("reports.kicker")}</div>
-              <h1 className="panel-title mt-1 text-[1rem] md:text-[1.2rem]">📋 {t("reports.title")}</h1>
-              <p className="mt-1 text-[0.8rem] text-white/70">{t("reports.subtitle")}</p>
-            </div>
+    <div className="tab-fade flex flex-col gap-4">
+      <PageHeader
+        icon="reports"
+        eyebrow={t("reports.kicker")}
+        title={t("reports.title")}
+        lead={t("reports.subtitle")}
+        actions={
+          <div className="stat-row">
+            <div className="stat"><div className="stat-value">{reports.length}</div><div className="stat-label">{t("reports.reports")}</div></div>
+            <div className="stat"><div className="stat-value">{totals.lines}</div><div className="stat-label">{t("doc.lines")}</div></div>
+            <div className="stat"><div className="stat-value">{totals.units.toLocaleString()}</div><div className="stat-label">{t("common.total")}</div></div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <span className="badge-count min-w-0 px-2">{t("reports.count", { n: reports.length })}</span>
-            <span className="badge-count min-w-0 px-2">{t("common.pos", { n: totals.lines })}</span>
-            <span className="badge-count min-w-0 px-2">Σ {totals.units}</span>
-          </div>
-        </div>
-        <div className="stencil-line mt-3" />
-        <div className="mt-3 flex flex-col gap-2 lg:flex-row lg:items-center">
-          <div data-guide="reports-filters" className="flex gap-1.5 overflow-x-auto">
+        }
+      >
+        <div className="divider" />
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
+          <div data-guide="reports-filters" className="flex gap-1.5 overflow-x-auto pb-0.5">
             {FILTERS.map((f) => (
-              <button key={f.key} className={`chip h-9 shrink-0 px-4 ${filter === f.key ? "is-active" : ""}`} onClick={() => setFilter(f.key)}>
+              <button key={f.key} className={`chip shrink-0 ${filter === f.key ? "is-active" : ""}`} onClick={() => setFilter(f.key)}>
                 {t(f.label)}
               </button>
             ))}
           </div>
-          <input className="field field-mono lg:ml-auto lg:w-72" data-guide="reports-search" placeholder={t("reports.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
-          <button className="btn" onClick={() => void load()}>⟳ {t("common.sync")}</button>
+          <SearchField className="lg:ml-auto lg:w-80" data-guide="reports-search" placeholder={t("reports.search")} value={query} onChange={setQuery} />
+          <button className="btn h-10" onClick={() => void load()}>
+            <Icon name="refresh" size={15} />
+            {t("common.sync")}
+          </button>
         </div>
-      </section>
+      </PageHeader>
 
       {loading ? (
-        <div className="panel rounded-md"><Loading label={t("reports.loading")} /></div>
+        <div className="panel"><Loading label={t("reports.loading")} /></div>
       ) : visible.length === 0 ? (
-        <div className="panel panel-corners rounded-md">
+        <div className="panel">
           <EmptyState icon="orders" title={reports.length ? t("common.nothingFound") : t("reports.empty")} />
         </div>
       ) : (
@@ -215,7 +217,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
             const open = expanded === report.id;
             const busy = busyId === report.id;
             return (
-              <li data-guide="report-card" key={report.id} className="panel panel-corners report-card rounded-md p-3">
+              <li data-guide="report-card" key={report.id} className="panel report-card p-4 md:p-5">
                 {/* слева — страница заказа целиком (как PNG-экспорт), справа — данные и действия */}
                 <div className="report-card-page">
                   <DocReader doc={toDoc(report, t, locale)} textureUrl={texture} expanded={open} onExpand={() => setExpanded(report.id)} />
@@ -223,55 +225,55 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                 <div className="report-card-body">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <button className="flex min-w-0 flex-1 items-start gap-2 text-left" onClick={() => setExpanded(open ? null : report.id)}>
-                    <span className="mt-0.5 shrink-0 text-white/50">{open ? "▾" : "▸"}</span>
+                    <Icon name="chevronRight" size={16} className={`mt-1 text-fg-3 transition-transform ${open ? "rotate-90" : ""}`} />
                     <span className="min-w-0">
-                      <span className="block truncate text-[0.95rem] font-bold text-white">{report.title}</span>
-                      <span className="hud-label mt-0.5 block text-muted">
-                        {formatDateTime(report.created_at)} • {report.created_by_name ?? report.created_by}
-                        {report.meta.stockpile ? ` • ${report.meta.region ?? ""} ▶ ${report.meta.stockpile}` : ""}
+                      <span className="block truncate text-[1.05rem] font-semibold tracking-[-0.01em] text-fg">{report.title}</span>
+                      <span className="mt-0.5 block text-xs text-fg-3">
+                        {formatDateTime(report.created_at)} · {report.created_by_name ?? report.created_by}
+                        {report.meta.stockpile ? ` · ${report.meta.region ?? ""} · ${report.meta.stockpile}` : ""}
                       </span>
                     </span>
                   </button>
-                  <span data-guide="report-status" className="hud-label shrink-0 rounded border px-1.5 py-0.5" style={{ color: STATUS_COLOR[report.status], borderColor: STATUS_COLOR[report.status] }}>
+                  <span data-guide="report-status" className={`badge shrink-0 ${STATUS_BADGE[report.status]}`}>
                     {t(REPORT_STATUS_LABEL[report.status])}
                   </span>
                 </div>
 
-                <div className="mt-2 flex flex-wrap items-center gap-2 pl-5">
-                  <span className="badge-count">{t("common.pos", { n: report.lines_count })}</span>
-                  <span className="badge-count">Σ {report.total_quantity}</span>
+                <div className="mt-2.5 flex flex-wrap items-center gap-1.5 pl-6">
+                  <span className="count-pill">{t("common.pos", { n: report.lines_count })}</span>
+                  <span className="count-pill">Σ {report.total_quantity}</span>
                   {orderKindOf(report.meta.type) ? (
-                    <span className="order-kind-badge">{orderKindOf(report.meta.type)!.icon} {t(orderKindOf(report.meta.type)!.label)}</span>
+                    <span className="order-kind-badge">{t(orderKindOf(report.meta.type)!.label)}</span>
                   ) : null}
-                  {report.discord_sent_at && <span className="hud-label text-accent" title={formatDateTime(report.discord_sent_at)}>✓ DISCORD</span>}
+                  {report.discord_sent_at && <span className="badge badge-info" title={formatDateTime(report.discord_sent_at)}><Icon name="check" size={11} strokeWidth={3} /> Discord</span>}
                 </div>
 
                 {report.note && (
-                  <div className="order-note"><span className="order-note-label">📝 {t("reports.noteLabel")}</span><p>{report.note}</p></div>
+                  <div className="order-note"><span className="order-note-label">{t("reports.noteLabel")}</span><p>{report.note}</p></div>
                 )}
 
-                <div data-guide="report-actions" className="mt-3 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
+                <div data-guide="report-actions" className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
                   {can(Scopes.REPORTS_STATUS) &&
                     REPORT_TRANSITIONS[report.status].map((next) => (
-                      <button key={next} className={`btn px-2 py-1 text-[0.65rem] ${next === "cancelled" ? "btn-danger" : next === "done" ? "btn-primary" : ""}`} disabled={busy} onClick={() => void setStatus(report, next)}>
+                      <button key={next} className={`btn ${next === "cancelled" ? "btn-danger" : next === "done" ? "btn-primary" : ""}`} disabled={busy} onClick={() => void setStatus(report, next)}>
                         {t(ACTION_LABEL[next])}
                       </button>
                     ))}
-                  <button className="btn px-2 py-1 text-[0.65rem]" disabled={busy} data-guide="report-builder" title={t("reports.toBuilderHint")} onClick={() => {
+                  <button className="btn" disabled={busy} data-guide="report-builder" title={t("reports.toBuilderHint")} onClick={() => {
                     orderDraft.write(orderDraft.fromReport(report));
                     notify({ title: t("builder.short"), message: t("reports.loadedToBuilder", { title: report.title }), tone: "info" });
                     onOpenConstructor();
                   }}>
-                    ⤴ {t("reports.toBuilder")}
+                    {t("reports.toBuilder")}
                   </button>
                   {can(Scopes.REPORTS_DISCORD) && (
-                    <button className="btn px-2 py-1 text-[0.65rem]" data-guide="report-discord" style={{ borderColor: "#5865F2", color: "#c7d2fe" }} disabled={busy} onClick={() => void sendToDiscord(report)}>
-                      {busy ? <span className="pulse">{t("common.sending")}</span> : `📨 ${t("reports.toDiscord")}`}
+                    <button className="btn btn-discord" data-guide="report-discord" disabled={busy} onClick={() => void sendToDiscord(report)}>
+                      {busy ? <span className="pulse">{t("common.sending")}</span> : <><Icon name="send" size={15} />{t("reports.toDiscord")}</>}
                     </button>
                   )}
                   {can(Scopes.REPORTS_DELETE) && (
-                    <button className={`btn btn-danger ml-auto px-2 py-1 text-[0.65rem] ${armed === report.id ? "btn-active" : ""}`} disabled={busy} onClick={() => confirm(report.id, () => void remove(report))}>
-                      {armed === report.id ? t("common.confirmQ") : "🗑"}
+                    <button className={`btn ml-auto ${armed === report.id ? "btn-danger" : "btn-ghost btn-icon text-fg-3"}`} disabled={busy} title={t("common.delete")} aria-label={t("common.delete")} onClick={() => confirm(report.id, () => void remove(report))}>
+                      {armed === report.id ? t("common.confirmQ") : <Icon name="trash" size={16} />}
                     </button>
                   )}
                 </div>

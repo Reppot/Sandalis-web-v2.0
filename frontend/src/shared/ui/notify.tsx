@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useT, type MessageKey } from "@/shared/i18n";
+import { Icon, type IconName } from "@/shared/ui/icons";
 
 export type Tone = "info" | "success" | "warning" | "danger";
 
@@ -25,14 +26,14 @@ const MAX_VISIBLE = 3;
 
 const NotificationContext = React.createContext<Notify>(() => {});
 
-const TONE_STYLES: Record<Tone, { border: string; glow: string; label: MessageKey }> = {
-  info: { border: "#a3e635", glow: "rgba(163,230,53,0.25)", label: "notify.info" },
-  success: { border: "#86efac", glow: "rgba(134,239,172,0.25)", label: "notify.success" },
-  warning: { border: "#f59e0b", glow: "rgba(245,158,11,0.25)", label: "notify.warning" },
-  danger: { border: "#ef4444", glow: "rgba(239,68,68,0.3)", label: "notify.danger" },
+const TONES: Record<Tone, { icon: IconName; label: MessageKey }> = {
+  info: { icon: "info", label: "notify.info" },
+  success: { icon: "check", label: "notify.success" },
+  warning: { icon: "warning", label: "notify.warning" },
+  danger: { icon: "warning", label: "notify.danger" },
 };
 
-/** Тосты терминала: локализованные message бэкенда и ошибки действий в одном месте. */
+/** Уведомления: локализованные message бэкенда и ошибки действий в одном месте. */
 export const NotificationProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const tr = useT();
   const [items, setItems] = React.useState<Notice[]>([]);
@@ -58,31 +59,21 @@ export const NotificationProvider: React.FC<React.PropsWithChildren> = ({ childr
   return (
     <NotificationContext.Provider value={notify}>
       {children}
-      <div className="pointer-events-none fixed right-3 bottom-20 z-[90] flex w-[min(380px,calc(100vw-1.5rem))] flex-col gap-2 md:bottom-4" aria-live="polite">
+      <div className="toast-stack" aria-live="polite">
         {items.map((n) => {
-          const t = TONE_STYLES[n.tone];
+          const tone = TONES[n.tone];
           return (
-            <div
-              key={n.id}
-              className="toast panel pointer-events-auto px-4 py-3"
-              style={{ borderLeft: `4px solid ${t.border}`, boxShadow: `0 10px 30px rgba(0,0,0,0.45), 0 0 18px ${t.glow}` }}
-              role="status"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <div className="hud-label" style={{ color: t.border }}>
-                    {tr(t.label)} • {n.title}
-                  </div>
-                  <div className="mt-1 text-[0.8rem] leading-snug whitespace-pre-line text-white/90">{n.message}</div>
-                </div>
-                <button
-                  onClick={() => dismiss(n.id)}
-                  className="hud-label shrink-0 rounded border border-white/15 px-1.5 py-0.5 text-white/70 hover:border-white/50 hover:text-white"
-                  aria-label={tr("common.close")}
-                >
-                  ✕
-                </button>
+            <div key={n.id} className={`toast is-${n.tone}`} role="status">
+              <span className="toast-icon" aria-hidden>
+                <Icon name={tone.icon} size={16} strokeWidth={2.4} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="toast-title">{n.title || tr(tone.label)}</div>
+                <div className="toast-message">{n.message}</div>
               </div>
+              <button onClick={() => dismiss(n.id)} className="toast-close" aria-label={tr("common.close")}>
+                <Icon name="close" size={14} />
+              </button>
             </div>
           );
         })}

@@ -14,7 +14,8 @@ import {
   Loading,
   Modal,
   PagedMore,
-  UiGlyph,
+  Icon,
+  SearchField,
   copyText,
   errorText,
   matchesWords,
@@ -26,16 +27,17 @@ import {
   useI18n,
   useNotify,
   usePaged,
+  type IconName,
   type MessageKey,
 } from "@/shared";
 import { useClock, useRiskSummary, useTerminal, type MonitoredTimer } from "@/features/timers/model";
 import { RegisterTimerModal, TimerManagerModal } from "@/features/timers/ui/TimerModals";
 
-const BAR = { critical: "#ff5555", warning: "#ff9900", safe: "#a3e635" } as const;
-const KINDS: { key: StockpileKind; label: MessageKey; icon: string }[] = [
-  { key: "seaport", label: "stock.kind.seaport", icon: "⚓" },
-  { key: "depot", label: "stock.kind.depot", icon: "📦" },
-  { key: "other", label: "stock.kind.other", icon: "🏚" },
+const BAR = { critical: "var(--danger)", warning: "var(--warning)", safe: "var(--success)" } as const;
+const KINDS: { key: StockpileKind; label: MessageKey; icon: IconName }[] = [
+  { key: "seaport", label: "stock.kind.seaport", icon: "anchor" },
+  { key: "depot", label: "stock.kind.depot", icon: "warehouse" },
+  { key: "other", label: "stock.kind.other", icon: "home" },
 ];
 const kindOf = (k: StockpileKind | null | undefined) => KINDS.find((x) => x.key === k);
 
@@ -103,37 +105,45 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
   const managed = managedId ? timers.find((tm) => tm.id === managedId) ?? null : null;
 
   return (
-    <div className="flex flex-col gap-2.5 md:gap-3">
-      <section className="panel panel-corners rounded-md px-4 py-2.5">
-        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-          <div className="flex items-center gap-2">
-            <UiGlyph icon="stockpile" size={30} />
-            <h2 className="panel-title">{t("clan.stockpilesTitle")} • {rows.length}</h2>
+    <div className="flex flex-col gap-4">
+      <section className="panel p-5">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="min-w-0">
+            <h2 className="section-title">{t("clan.stockpilesTitle")}</h2>
+            <p className="mt-0.5 text-sm text-fg-3">{t("clan.stockpilesHint")}</p>
           </div>
-          <Stat guide="timers-stats" label={`🚨 ${t("timers.critical")}`} value={risk.critical} color="var(--danger)" />
-          <Stat label={`⚠️ ${t("timers.warning")}`} value={risk.warning} color="var(--warn)" />
-          <Stat label={`✅ ${t("timers.safe")}`} value={risk.safe} color="var(--tk-safe)" />
-          <div className="ml-auto flex flex-wrap items-center gap-2">
-            <input className="field w-44 py-1.5 text-xs" data-guide="timers-search" placeholder={t("timers.search")} value={query} onChange={(e) => setQuery(e.target.value)} />
-            <button className="btn" onClick={() => void refresh()} title={t("common.syncHint")}>⟳ <span className="hidden sm:inline">{t("common.sync")}</span></button>
-            {can(Scopes.STOCKPILES_CREATE) ? (
-              <button className="btn btn-primary" data-guide="stockpile-new" onClick={() => setEditing("new")}>＋ {t("stock.newClan")}</button>
-            ) : null}
-          </div>
+          {can(Scopes.STOCKPILES_CREATE) ? (
+            <button className="btn btn-primary h-10" data-guide="stockpile-new" onClick={() => setEditing("new")}>
+              <Icon name="plus" size={16} />
+              {t("stock.newClan")}
+            </button>
+          ) : null}
         </div>
-        <p className="mt-1.5 text-[0.78rem] text-white/60">{t("clan.stockpilesHint")}</p>
+        <div data-guide="timers-stats" className="risk-stats mt-4">
+          <Stat label={t("clan.stockpilesTitle")} value={rows.length} tone="neutral" />
+          <Stat label={t("timers.critical")} value={risk.critical} tone="danger" />
+          <Stat label={t("timers.warning")} value={risk.warning} tone="warning" />
+          <Stat label={t("timers.safe")} value={risk.safe} tone="success" />
+        </div>
+        <div className="mt-4 flex items-center gap-2">
+          <SearchField className="flex-1" data-guide="timers-search" placeholder={t("timers.search")} value={query} onChange={setQuery} />
+          <button className="btn h-10" onClick={() => void refresh()} title={t("common.syncHint")}>
+            <Icon name="refresh" size={15} />
+            <span className="hidden sm:inline">{t("common.sync")}</span>
+          </button>
+        </div>
       </section>
 
       {loading ? (
-        <div className="panel rounded-md"><Loading label={t("timers.loading")} /></div>
+        <div className="panel"><Loading label={t("timers.loading")} /></div>
       ) : visible.length === 0 ? (
-        <div className="panel panel-corners rounded-md">
+        <div className="panel">
           <EmptyState icon="stockpile" title={rows.length ? t("common.nothingFound") : t("clan.noStockpiles")}>
-            {connection === "offline" && <div className="hud-label text-danger">{t("common.noDb")}</div>}
+            {connection === "offline" && <div className="text-sm text-danger">{t("common.noDb")}</div>}
           </EmptyState>
         </div>
       ) : (
-        <ul data-guide="clan-stockpiles" className="flex flex-col gap-2.5">
+        <ul data-guide="clan-stockpiles" className="flex flex-col gap-3">
           {page.items.map((row) => (
             <StockpileCard
               key={row.key}
@@ -169,15 +179,13 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
   );
 };
 
-const Stat: React.FC<{ label: string; value: number; color: string; guide?: string }> = ({ label, value, color, guide }) => {
-  const { t } = useI18n();
-  return (
-    <div data-guide={guide} className="flex items-center gap-2 font-mono text-[0.72rem] font-bold tracking-wide" style={{ color }}>
-      <span>{label}:</span>
-      <span className="rounded border px-1.5 py-0.5 tabular-nums" style={{ borderColor: color, background: "rgba(0,0,0,0.3)" }}>{t("timers.bases", { n: value })}</span>
-    </div>
-  );
-};
+const Stat: React.FC<{ label: string; value: number; tone: "neutral" | "danger" | "warning" | "success" }> = ({ label, value, tone }) => (
+  <div className={`risk-stat is-${tone}`}>
+    <span className="risk-stat-dot" aria-hidden />
+    <span className="risk-stat-value">{value}</span>
+    <span className="risk-stat-label">{label}</span>
+  </div>
+);
 
 const StockpileCard: React.FC<{
   row: Row;
@@ -204,38 +212,43 @@ const StockpileCard: React.FC<{
   const bg = media("bg_card");
 
   return (
-    <li
-      className={`timer-card stockpile-card sev-${active ? sev : "none"}`}
-      style={bg ? { backgroundImage: `linear-gradient(90deg, var(--card-bg), var(--card-bg)), url(${bg})` } : undefined}
-    >
+    <li className={`timer-card stockpile-card sev-${active ? sev : "none"}`}>
+      {bg ? <span className="stockpile-card-art" style={{ backgroundImage: `url(${bg})` }} aria-hidden /> : null}
       <div className="stockpile-card-grid">
-        <span className="clan-stockpile-kind" title={kind ? t(kind.label) : undefined}>{kind?.icon ?? "🏬"}</span>
+        <span className="clan-stockpile-kind" title={kind ? t(kind.label) : undefined}>
+          <Icon name={kind?.icon ?? "warehouse"} size={20} />
+        </span>
 
         <div className="min-w-0">
-          <div className="flex items-center gap-2 text-[0.98rem] font-bold text-white">
-            <span className="truncate">{s?.name ?? timer?.title}</span>
-          </div>
-          <div className="clan-stockpile-meta">
-            🗺 {s?.region ?? "—"}{s?.town ? ` • ${s.town}` : ""}{kind ? ` • ${t(kind.label)}` : ""}
+          <div className="truncate text-[1.02rem] font-semibold tracking-[-0.01em] text-fg">{s?.name ?? timer?.title}</div>
+          <div className="clan-stockpile-meta flex items-center gap-1">
+            <Icon name="map" size={13} />
+            {s?.region ?? "—"}{s?.town ? ` · ${s.town}` : ""}{kind ? ` · ${t(kind.label)}` : ""}
           </div>
           <div className="stockpile-card-info">
-            <span className="flex items-center gap-1">
-              <span className="hud-label text-muted">🔑 {t("stock.password")}:</span>
+            <span className="flex items-center gap-1.5">
+              <Icon name="lock" size={14} className="text-fg-3" />
+              <span className="sr-only">{t("stock.password")}</span>
               {s?.accessCode ? (
                 <>
                   <code className="clan-stockpile-code">{revealed ? s.accessCode : "•".repeat(Math.min(8, s.accessCode.length))}</code>
-                  <button type="button" className="btn px-1.5 py-0.5" title={revealed ? t("stock.hide") : t("stock.show")} onClick={onReveal}>{revealed ? "🙈" : "👁"}</button>
-                  <button type="button" className="btn px-1.5 py-0.5" title={t("common.copy")}
-                    onClick={() => void copyText(s.accessCode!).then((ok) => ok && notify({ title: s.name, message: t("stock.passwordCopied"), tone: "success" }))}>⧉</button>
+                  <button type="button" className="icon-btn" title={revealed ? t("stock.hide") : t("stock.show")} aria-label={revealed ? t("stock.hide") : t("stock.show")} onClick={onReveal}>
+                    <Icon name={revealed ? "eyeOff" : "eye"} size={15} />
+                  </button>
+                  <button type="button" className="icon-btn" title={t("common.copy")} aria-label={t("common.copy")}
+                    onClick={() => void copyText(s.accessCode!).then((ok) => ok && notify({ title: s.name, message: t("stock.passwordCopied"), tone: "success" }))}>
+                    <Icon name="copy" size={15} />
+                  </button>
                 </>
               ) : (
-                <span className="hud-label text-muted">—</span>
+                <span className="text-xs text-fg-3">{t("stock.noPassword")}</span>
               )}
             </span>
             {s ? (
               <button type="button" className={`stockpile-items-toggle ${expanded ? "is-open" : ""}`} aria-expanded={expanded} disabled={!s.itemsCount} onClick={onToggleItems}>
-                📦 {t("clan.stockpileLines", { n: s.itemsCount })}{s.lastSyncAt ? ` • ${formatDateTime(new Date(s.lastSyncAt))}` : ""}
-                {s.itemsCount ? <b>{expanded ? `▲ ${t("stock.hideItems")}` : `▼ ${t("stock.showItems")}`}</b> : null}
+                <Icon name="box" size={14} />
+                {t("clan.stockpileLines", { n: s.itemsCount })}{s.lastSyncAt ? ` · ${formatDateTime(new Date(s.lastSyncAt))}` : ""}
+                {s.itemsCount ? <Icon name="chevronDown" size={14} className={expanded ? "rotate-180" : ""} /> : null}
               </button>
             ) : null}
           </div>
@@ -244,32 +257,43 @@ const StockpileCard: React.FC<{
         <div className="stockpile-card-timer">
           {timer ? (
             <>
-              <div className="hud-label text-white/60">
+              <div className="text-xs font-medium text-fg-3">
                 {timer.completed_at ? t("timers.completed") : ts > 0 ? t(sev === "critical" ? "timers.sevCritical" : sev === "warning" ? "timers.sevWarning" : "timers.sevSafe") : t("timers.timerExpired")}
               </div>
               <div data-guide="timer-left" className={`timer-value ${sev === "critical" && ts > 0 && active ? "pulse" : ""}`}>
                 {!active ? "—" : ts > 0 ? formatCountdown(ts, timeUnits(t)) : "00:00:00"}
               </div>
               <div className="progress-track mt-1.5 w-full">
-                <div className="progress-bar" style={{ width: `${active ? pct : 100}%`, background: BAR[sev], boxShadow: `0 0 10px ${BAR[sev]}` }} />
+                <div className="progress-bar" style={{ width: `${active ? pct : 100}%`, background: BAR[sev] }} />
               </div>
             </>
           ) : (
-            <div className="hud-label text-muted">⏱ {t("clan.noTimer")}</div>
+            <div className="text-sm text-fg-3">{t("clan.noTimer")}</div>
           )}
         </div>
 
         <div className="stockpile-card-actions">
           {timer ? (
-            <button className="btn h-[34px] min-w-[110px]" data-guide="timer-manage" onClick={onManage}>{t("timers.manage")}</button>
+            <button className="btn" data-guide="timer-manage" onClick={onManage}>
+              <Icon name="clock" size={15} />
+              {t("timers.manage")}
+            </button>
           ) : s && can(Scopes.TIMERS_CREATE) ? (
-            <button className="btn btn-primary h-[34px]" onClick={onMonitor}>⏱ {t("clan.startTimer")}</button>
+            <button className="btn btn-primary" onClick={onMonitor}>
+              <Icon name="clock" size={15} />
+              {t("clan.startTimer")}
+            </button>
           ) : null}
           {s && can(Scopes.STOCKPILES_ITEMS) ? (
-            <button className="btn h-[34px]" data-guide="stockpile-contents" onClick={onContents}>📥 {t("stock.updateContents")}</button>
+            <button className="btn" data-guide="stockpile-contents" onClick={onContents}>
+              <Icon name="upload" size={15} />
+              {t("stock.updateContents")}
+            </button>
           ) : null}
           {s && can(Scopes.STOCKPILES_EDIT) ? (
-            <button className="btn h-[34px] px-2.5" title={t("clan.editStockpile")} onClick={onEdit}>✎</button>
+            <button className="btn btn-icon" title={t("clan.editStockpile")} aria-label={t("clan.editStockpile")} onClick={onEdit}>
+              <Icon name="edit" size={16} />
+            </button>
           ) : null}
         </div>
       </div>
@@ -305,7 +329,7 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
   return (
     <div className="stockpile-items" data-guide="stockpile-items">
       {items.length > 12 ? (
-        <input className="field mb-2 w-full max-w-xs py-1.5 text-xs" placeholder={t("stock.searchItems")} value={query} onChange={(e) => setQuery(e.target.value)} />
+        <SearchField className="mb-3 max-w-sm" placeholder={t("stock.searchItems")} value={query} onChange={setQuery} />
       ) : null}
       {shown.length ? (
         <ul className="stockpile-items-grid">
@@ -321,7 +345,7 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
           ))}
         </ul>
       ) : (
-        <p className="hud-label text-muted">{t("common.nothingFound")}</p>
+        <p className="text-sm text-fg-3">{t("common.nothingFound")}</p>
       )}
     </div>
   );
@@ -364,14 +388,14 @@ const StockpileContentsModal: React.FC<{ target: Stockpile | null; onClose: () =
   };
 
   return (
-    <Modal open={Boolean(target)} onClose={onClose} title={`${t("stock.updateContents")} • ${target?.name ?? ""}`} icon="stockpile" widthClass="max-w-2xl">
+    <Modal open={Boolean(target)} onClose={onClose} title={`${t("stock.updateContents")} · ${target?.name ?? ""}`} icon="stockpile" widthClass="max-w-2xl">
       <div className="grid gap-3">
-        <p className="text-[0.85rem] text-white/75">{t("stock.updateContentsHint")}</p>
+        <p className="text-[0.85rem] text-fg-2">{t("stock.updateContentsHint")}</p>
         <textarea className="field field-mono min-h-[16rem] text-[0.75rem]" autoFocus spellCheck={false} value={text} placeholder='{ "items": [ ... ] }' onChange={(e) => setText(e.target.value)} />
-        <p className="hud-label" style={{ color: "var(--warn)" }}>⚠ {t("stock.updateContentsWarn")}</p>
+        <p className="flex items-start gap-2 text-sm text-warn"><Icon name="warning" size={16} className="mt-0.5" />{t("stock.updateContentsWarn")}</p>
         <div className="flex justify-end gap-2">
           <button className="btn" onClick={onClose}>{t("common.cancel")}</button>
-          <button className="btn btn-primary" disabled={busy || !text.trim()} onClick={() => void submit()}>{busy ? t("common.sending") : `📥 ${t("stock.updateContents")}`}</button>
+          <button className="btn btn-primary" disabled={busy || !text.trim()} onClick={() => void submit()}>{busy ? t("common.sending") : t("stock.updateContents")}</button>
         </div>
       </div>
     </Modal>
@@ -432,17 +456,18 @@ const StockpileDetailsModal: React.FC<{ target: Stockpile | "new" | null; onClos
         />
         <Field label={t("stock.name")} value={name} onChange={(e) => setName(e.target.value)} placeholder={town || "Port Kirknell"} />
         <div>
-          <div className="hud-label mb-1 text-muted">{t("stock.kind")}</div>
+          <div className="field-label mb-1.5">{t("stock.kind")}</div>
           <div className="flex flex-wrap gap-2">
             {KINDS.map((k) => (
               <button key={k.key} type="button" className={`btn ${kind === k.key ? "btn-active" : ""}`} aria-pressed={kind === k.key} onClick={() => setKind(kind === k.key ? "" : k.key)}>
-                {k.icon} {t(k.label)}
+                <Icon name={k.icon} size={15} />
+                {t(k.label)}
               </button>
             ))}
           </div>
         </div>
         <Field label={t("stock.password")} mono value={code} maxLength={32} autoComplete="off" onChange={(e) => setCode(e.target.value)} placeholder="123456" onKeyDown={(e) => e.key === "Enter" && void submit()} />
-        <p className="hud-label text-muted">{t("stock.passwordHint")}</p>
+        <p className="text-xs text-fg-3">{t("stock.passwordHint")}</p>
         <div className="flex justify-end gap-2">
           <button className="btn" onClick={onClose}>{t("common.cancel")}</button>
           <button className="btn btn-primary" disabled={busy || !name.trim() || !region.trim()} onClick={() => void submit()}>{busy ? t("common.sending") : t("common.save")}</button>

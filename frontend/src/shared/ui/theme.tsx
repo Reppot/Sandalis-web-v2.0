@@ -4,14 +4,14 @@ import * as React from "react";
 import { STORAGE_KEYS } from "@/shared/lib/storage";
 
 /**
- * Темы сайта. Базовые — dark / light; остальные — «скины» поверх тёмной основы
- * (html[data-theme] — основа, html[data-skin] — скин): общие правила тёмной темы
- * продолжают работать, скин меняет палитру и отдельные детали.
+ * Темы сайта — наборы токенов (app/styles/tokens.css). html[data-theme] — основа
+ * (dark / light), html[data-skin] — палитра поверх основы. Без сохранённого выбора
+ * тема следует системной (светлая / тёмная).
  */
 export type Theme = "dark" | "light" | "contrast" | "noir" | "soft";
 export const THEMES: readonly Theme[] = ["dark", "light", "contrast", "noir", "soft"];
 
-const BASE: Record<Theme, "dark" | "light"> = { dark: "dark", light: "light", contrast: "dark", noir: "dark", soft: "dark" };
+const BASE: Record<Theme, "dark" | "light"> = { dark: "dark", light: "light", contrast: "dark", noir: "light", soft: "light" };
 
 function apply(theme: Theme): void {
   const root = document.documentElement;
@@ -57,7 +57,7 @@ export function useTheme(): ThemeContextValue {
 }
 
 /** Инлайн-скрипт: тема до первой отрисовки, без мерцания. */
-export const THEME_INIT_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");var b={dark:"dark",light:"light",contrast:"dark",noir:"dark",soft:"dark"};if(!b[t]){t="dark"}d.setAttribute("data-theme",b[t]);if(t!=="dark"&&t!=="light"){d.setAttribute("data-skin",t)}}catch(e){d.setAttribute("data-theme","dark")}})();`;
+export const THEME_INIT_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");var b={dark:"dark",light:"light",contrast:"dark",noir:"light",soft:"light"};if(!b[t]){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}d.setAttribute("data-theme",b[t]);if(t!=="dark"&&t!=="light"){d.setAttribute("data-skin",t)}}catch(e){d.setAttribute("data-theme","dark")}})();`;
 
 export const ThemeIcon: React.FC<{ theme: Theme; size?: number }> = ({ theme, size = 30 }) => {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
