@@ -80,6 +80,7 @@
 .page-header-icon { display: grid; width: 3.25rem; height: 3.25rem; flex-shrink: 0; place-items: center; border-radius: 15px; background: var(--accent-soft); color: var(--accent-fg); }
 .page-header-title { margin-top: 0.2rem; font-family: var(--font-heading); font-size: clamp(1.35rem, 2.4vw, 1.75rem); font-weight: 650; letter-spacing: -0.025em; line-height: 1.15; color: var(--fg); }
 .page-header-lead { max-width: 46rem; margin-top: 0.4rem; color: var(--fg-2); font-size: 0.92rem; line-height: 1.55; }
+.page-header-text { min-width: 0; flex: 1 1 24rem; }
 .page-header-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 @media (max-width: 640px) { .page-header { padding: 1.15rem; } .page-header-icon { width: 2.75rem; height: 2.75rem; border-radius: 13px; } .page-header-actions { width: 100%; } }
 

@@ -17,6 +17,8 @@ import { ManagementWorkspace } from "@/features/management";
 import { ClanWorkspace, type ClanSection } from "@/app/_shell/ClanWorkspace";
 import { Header } from "@/app/_shell/Header";
 import { MobileNav, Sidebar, type NavProps } from "@/app/_shell/Navigation";
+import { CommandPalette, usePaletteHotkey } from "@/app/_shell/CommandPalette";
+import { ClanPulse } from "@/app/_shell/ClanPulse";
 import { isClanView, isTabKey, isToolModule, legacyClanView, tabKeys, visibleTabs, type ClanView, type TabKey } from "@/app/_shell/tabs";
 import { CopyrightNotice, assetUrl, useT, type MessageKey } from "@/shared";
 
@@ -30,6 +32,10 @@ export default function TerminalPage() {
   // подраздел «Вашего клана» (?tab=clan&view=...): заказы, склады, обучение, управление
   const [clanView, setClanView] = React.useState<ClanView>("reports");
   const [clan, setClan] = React.useState<ClanProfile | null>(null);
+  const [palette, setPalette] = React.useState(false);
+  const openPalette = React.useCallback(() => setPalette(true), []);
+  const closePalette = React.useCallback(() => setPalette(false), []);
+  usePaletteHotkey(openPalette);
 
   React.useEffect(() => {
     // браузер не должен «восстанавливать» прокрутку старой страницы при перезагрузке
@@ -130,7 +136,16 @@ export default function TerminalPage() {
       case "clan":
         return <ClanWorkspace profile={clan} role={session.role} sections={clanSections} view={clanView} onView={openClan} />;
       case "tools":
-        return <ToolsWorkspace modules={toolModules} active={tool} onOpen={openTool} canSendOrders={can(Scopes.REPORTS_CREATE)} onOrderSent={() => openClan("reports")} />;
+        return (
+          <ToolsWorkspace
+            modules={toolModules}
+            active={tool}
+            onOpen={openTool}
+            canSendOrders={can(Scopes.REPORTS_CREATE)}
+            onOrderSent={() => openClan("reports")}
+            summary={isGuest ? null : <ClanPulse canReports={can(Scopes.REPORTS_READ)} canStockpiles={can(Scopes.STOCKPILES_READ) || can(Scopes.TIMERS_READ)} onOpen={openClan} />}
+          />
+        );
       case "guide":
         return <GuideWorkspace />;
       case "feedback":
@@ -165,13 +180,14 @@ export default function TerminalPage() {
       <div className="app">
         <Sidebar {...nav} />
         <div className="app-main">
-          <Header section={section} page={page} onHome={() => select("tools")} />
+          <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} />
           <main key={`${current}:${currentTool?.id ?? currentClan?.view ?? ""}`} className="app-content">
             {workspace}
           </main>
           <CopyrightNotice className="app-footer" />
         </div>
         <MobileNav {...nav} />
+        <CommandPalette {...nav} open={palette} onClose={closePalette} />
       </div>
     </TerminalProvider>
   );

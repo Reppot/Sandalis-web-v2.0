@@ -132,7 +132,7 @@ export const PageHeader: React.FC<{ icon?: UiIcon | React.ReactNode; eyebrow?: R
   <section data-guide={guide} className={cn("panel page-header", className)}>
     <div className="page-header-main">
       {icon ? <span className="page-header-icon">{typeof icon === "string" ? <UiGlyph icon={icon as UiIcon} size={26} /> : icon}</span> : null}
-      <div className="min-w-0 flex-1">
+      <div className="page-header-text">
         {eyebrow ? <div className="page-eyebrow">{eyebrow}</div> : null}
         <h1 className="page-header-title">{title}</h1>
         {lead ? <p className="page-header-lead">{lead}</p> : null}

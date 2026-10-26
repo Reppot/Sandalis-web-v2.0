@@ -3,13 +3,13 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { Ticker, useClock, useRiskSummary, useTerminal } from "@/features/timers";
-import { cn, formatClock, useT } from "@/shared";
+import { Icon, cn, formatClock, useT } from "@/shared";
 
 /**
  * Верхняя панель: где вы находитесь (раздел › модуль), сводка складов бегущей строкой
  * и состояние связи. На телефоне — компактная шапка с гербом.
  */
-export const Header: React.FC<{ section: string; page?: string | null; onHome: () => void }> = ({ section, page, onHome }) => {
+export const Header: React.FC<{ section: string; page?: string | null; onHome: () => void; onSearch: () => void }> = ({ section, page, onHome, onSearch }) => {
   const t = useT();
   const { connection, lastSync } = useTerminal();
   const { media } = useContent();
@@ -54,6 +54,12 @@ export const Header: React.FC<{ section: string; page?: string | null; onHome: (
         <div data-guide="shell-ticker" className="topbar-ticker">
           <Ticker />
         </div>
+
+        <button type="button" className="topbar-search" onClick={onSearch} aria-label={t("palette.title")} title={t("palette.title")}>
+          <Icon name="search" size={15} />
+          <span className="topbar-search-label">{t("palette.short")}</span>
+          <kbd className="palette-kbd">Ctrl K</kbd>
+        </button>
 
         <div data-guide="shell-status" className="topbar-status">
           <span className={cn("status-pill", `is-${link.tone}`)} title={t("header.link")}>

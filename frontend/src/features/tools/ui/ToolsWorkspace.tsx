@@ -41,7 +41,9 @@ export const ToolsWorkspace: React.FC<{
   /** Можно отправлять заказы клана (reports:create) — кнопка в калькуляторе завода. */
   canSendOrders?: boolean;
   onOrderSent?: () => void;
-}> = ({ modules, active, onOpen, canSendOrders, onOrderSent }) => {
+  /** Сводка клана под шапкой витрины (собирает page.tsx). */
+  summary?: React.ReactNode;
+}> = ({ modules, active, onOpen, canSendOrders, onOrderSent, summary }) => {
   const notify = useNotify();
   const t = useT();
   const { list } = useContent();
@@ -131,6 +133,8 @@ export const ToolsWorkspace: React.FC<{
           <span><b>Wiki</b>{t("tools.statData")}</span>
         </div>
       </section>
+
+      {summary}
 
       <section data-guide="tools-modules" className="tools-group" aria-labelledby="tools-logistics">
         <h2 id="tools-logistics" className="tools-group-title">{t("tools.groupLogistics")}</h2>

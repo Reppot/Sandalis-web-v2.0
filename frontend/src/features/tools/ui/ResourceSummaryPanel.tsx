@@ -113,7 +113,7 @@ export const ResourceSummaryPanel: React.FC<React.PropsWithChildren<{ report: To
                       <div key={`${line.name}-${line.unit}`} className="min-w-0" title={line.name}>
                         <span className="flex min-w-0 items-center gap-1.5">
                           {line.icon ? <ItemIcon sources={[line.icon]} size={28} label={line.name} /> : null}
-                          <span className="truncate text-xs text-fg-3">{line.name}</span>
+                          <span className="line-clamp-2 text-xs leading-snug text-fg-3">{line.name}</span>
                         </span>
                         <strong className="truncate">{fmt(line.quantity)}{line.unit && typeof line.quantity === "number" && "own" in group ? ` ${line.unit}` : ""}</strong>
                         {line.note ? <span className="summary-note">{line.note}</span> : null}

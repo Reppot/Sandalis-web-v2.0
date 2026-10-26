@@ -58,7 +58,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
           <div className="report-progress-total">
             <span className="report-progress-track"><span style={{ width: `${total}%` }} /></span>
             <b>{total}%</b>
-            <span className="hud-label text-muted">{t("progress.totals", { done: progress.delivered_total, total: progress.ordered_total })}</span>
+            <span className="text-xs text-fg-3">{t("progress.totals", { done: progress.delivered_total, total: progress.ordered_total })}</span>
           </div>
         </div>
         {canReport ? (
@@ -94,7 +94,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
               <li key={c.id} className="report-log-entry">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                   <b className="text-fg">{c.user_name ?? c.user_id}</b>
-                  <span className="hud-label text-muted">{formatDateTime(c.created_at)}</span>
+                  <span className="text-xs text-fg-3">{formatDateTime(c.created_at)}</span>
                   {c.stockpile_label ? <span className="badge badge-neutral">{c.stockpile_label}</span> : null}
                   {c.user_id === userId || can(Scopes.REPORTS_DELETE) ? (
                     <button type="button" className={`ml-auto ${armed === c.id ? "btn btn-danger h-7 min-h-0 px-2 text-xs" : "icon-btn"}`} aria-label={t("common.delete")} onClick={() => confirm(c.id, () => void remove(c.id))}>
