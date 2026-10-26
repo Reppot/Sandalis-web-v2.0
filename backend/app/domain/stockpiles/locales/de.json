@@ -1,0 +1,15 @@
+{
+  "stockpile": {
+    "not_found": "Lager in deinem Clan nicht gefunden.",
+    "created": "Lager „{name}“ angelegt.",
+    "updated": "Lager „{name}“ aktualisiert.",
+    "deleted": "Lager „{name}“ gelöscht.",
+    "name_taken": "Ein Lager namens „{name}“ gibt es bereits.",
+    "synced": "Lager „{name}“ synchronisiert: {count} Positionen."
+  },
+  "item": {
+    "not_found": "Kein „{item}“ in diesem Lager.",
+    "saved": "„{item}“: {quantity} Stk.",
+    "removed": "„{item}“ aus dem Lager entfernt."
+  }
+}

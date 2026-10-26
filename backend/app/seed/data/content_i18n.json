@@ -8,6 +8,34 @@
    "cs": {
     "tag": "Mapa a plánování",
     "description": "Interaktivní mapa pro plánování a dělostřelectvo s povely, které vidí všichni členové týmu současně."
+   },
+   "uk": {
+    "tag": "Мапа й планування",
+    "description": "Інтерактивна мапа для планування й артилерії: команди загону бачать усі учасники одночасно."
+   },
+   "de": {
+    "tag": "Karte und Planung",
+    "description": "Interaktive Karte für Planung und Artillerie – Trupp-Befehle sehen alle Teammitglieder gleichzeitig."
+   },
+   "pl": {
+    "tag": "Mapa i planowanie",
+    "description": "Interaktywna mapa do planowania i artylerii – rozkazy oddziału widzą od razu wszyscy członkowie drużyny."
+   },
+   "fr": {
+    "tag": "Carte et planification",
+    "description": "Carte interactive pour la planification et l'artillerie, avec des ordres d'escouade visibles par toute l'équipe en même temps."
+   },
+   "es": {
+    "tag": "Mapa y planificación",
+    "description": "Mapa interactivo para planificar y para la artillería, con órdenes de escuadra que todo el equipo ve a la vez."
+   },
+   "pt": {
+    "tag": "Mapa e planejamento",
+    "description": "Mapa interativo para planejamento e artilharia, com ordens de esquadrão que toda a equipe vê ao mesmo tempo."
+   },
+   "zh": {
+    "tag": "地图与规划",
+    "description": "用于规划和炮兵的交互式地图，小队指令会同时显示给所有队员。"
    }
   },
   "foxhole-hq": {
@@ -18,6 +46,34 @@
    "cs": {
     "tag": "3D modely a mapa",
     "description": "Obrovská knihovna 3D modelů staveb a techniky a mapa s uživatelskými poznámkami."
+   },
+   "uk": {
+    "tag": "3D-моделі й мапа",
+    "description": "Величезна бібліотека 3D-моделей споруд і техніки та мапа з нотатками користувачів."
+   },
+   "de": {
+    "tag": "3D-Modelle und Karte",
+    "description": "Riesige Bibliothek mit 3D-Modellen von Strukturen und Fahrzeugen plus eine Karte mit Notizen der Nutzer."
+   },
+   "pl": {
+    "tag": "Modele 3D i mapa",
+    "description": "Ogromna biblioteka modeli 3D budowli i pojazdów oraz mapa z notatkami użytkowników."
+   },
+   "fr": {
+    "tag": "Modèles 3D et carte",
+    "description": "Une immense bibliothèque de modèles 3D de structures et de véhicules, plus une carte avec des notes d'utilisateurs."
+   },
+   "es": {
+    "tag": "Modelos 3D y mapa",
+    "description": "Enorme biblioteca de modelos 3D de estructuras y vehículos, además de un mapa con notas de los usuarios."
+   },
+   "pt": {
+    "tag": "Modelos 3D e mapa",
+    "description": "Enorme biblioteca de modelos 3D de estruturas e veículos, além de um mapa com notas dos usuários."
+   },
+   "zh": {
+    "tag": "3D 模型与地图",
+    "description": "庞大的建筑和载具 3D 模型库，以及带用户标注的地图。"
    }
   },
   "foxhole-planner": {
@@ -28,6 +84,34 @@
    "cs": {
     "tag": "Plánovač staveb",
     "description": "Plánovač zástavby základen s mnoha hotovými předlohami pevností, skladů a obranných linií."
+   },
+   "uk": {
+    "tag": "Планувальник баз",
+    "description": "Планувальник забудови баз із багатьма готовими шаблонами фортів, депо й ліній оборони."
+   },
+   "de": {
+    "tag": "Basisplaner",
+    "description": "Planer für Basislayouts mit vielen fertigen Vorlagen für Forts, Depots und Verteidigungslinien."
+   },
+   "pl": {
+    "tag": "Planer baz",
+    "description": "Planer zabudowy baz z mnóstwem gotowych szablonów fortów, składów i linii obrony."
+   },
+   "fr": {
+    "tag": "Planificateur de base",
+    "description": "Planificateur de bases avec de nombreux modèles prêts à l'emploi de forts, dépôts et lignes de défense."
+   },
+   "es": {
+    "tag": "Planificador de bases",
+    "description": "Planificador de bases con muchas plantillas listas de fuertes, depósitos y líneas defensivas."
+   },
+   "pt": {
+    "tag": "Planejador de bases",
+    "description": "Planejador de bases com muitos modelos prontos de fortes, depósitos e linhas de defesa."
+   },
+   "zh": {
+    "tag": "基地规划",
+    "description": "基地布局规划工具，内置大量堡垒、仓库和防线的现成模板。"
    }
   },
   "fharty-artillery-calculator": {
@@ -38,6 +122,34 @@
    "cs": {
     "tag": "Dělostřelectvo",
     "description": "Jednoduchá a rychlá kalkulačka dělostřeleckých vzdáleností a korekcí."
+   },
+   "uk": {
+    "tag": "Артилерія",
+    "description": "Простий і швидкий калькулятор дистанцій і поправок для артилерії."
+   },
+   "de": {
+    "tag": "Artillerie",
+    "description": "Einfacher, schneller Rechner für Artillerie-Entfernungen und Korrekturen."
+   },
+   "pl": {
+    "tag": "Artyleria",
+    "description": "Prosty i szybki kalkulator odległości i poprawek dla artylerii."
+   },
+   "fr": {
+    "tag": "Artillerie",
+    "description": "Un calculateur simple et rapide pour les distances et corrections d'artillerie."
+   },
+   "es": {
+    "tag": "Artillería",
+    "description": "Calculadora sencilla y rápida de distancias y correcciones de artillería."
+   },
+   "pt": {
+    "tag": "Artilharia",
+    "description": "Calculadora simples e rápida de distâncias e correções de artilharia."
+   },
+   "zh": {
+    "tag": "火炮",
+    "description": "简单快速的火炮距离与修正计算器。"
    }
   },
   "plane-damage-calculator": {
@@ -48,6 +160,34 @@
    "cs": {
     "tag": "Letectvo",
     "description": "Kalkulačka poškození pro vzdušný boj: porovnání letadel, výzbroje a odolnosti."
+   },
+   "uk": {
+    "tag": "Авіація",
+    "description": "Калькулятор шкоди для повітряного бою: порівняння літаків, озброєння й живучості."
+   },
+   "de": {
+    "tag": "Luftfahrt",
+    "description": "Schadensrechner für den Luftkampf: Flugzeuge, Waffen und Überlebensfähigkeit vergleichen."
+   },
+   "pl": {
+    "tag": "Lotnictwo",
+    "description": "Kalkulator obrażeń w walce powietrznej: porównanie samolotów, uzbrojenia i wytrzymałości."
+   },
+   "fr": {
+    "tag": "Aviation",
+    "description": "Calculateur de dégâts pour le combat aérien : comparez avions, armes et résistance."
+   },
+   "es": {
+    "tag": "Aviación",
+    "description": "Calculadora de daño para el combate aéreo: compara aviones, armas y resistencia."
+   },
+   "pt": {
+    "tag": "Aviação",
+    "description": "Calculadora de dano para combate aéreo: compare aviões, armas e resistência."
+   },
+   "zh": {
+    "tag": "航空",
+    "description": "空战伤害计算器：比较飞机、武器和生存能力。"
    }
   },
   "sravdar-map": {
@@ -58,6 +198,34 @@
    "cs": {
     "tag": "Mapa",
     "description": "Interaktivní mapa Foxhole s živými dlaždicemi."
+   },
+   "uk": {
+    "tag": "Мапа",
+    "description": "Інтерактивна мапа Foxhole з живими тайлами."
+   },
+   "de": {
+    "tag": "Karte",
+    "description": "Interaktive Foxhole-Karte mit Live-Kacheln."
+   },
+   "pl": {
+    "tag": "Mapa",
+    "description": "Interaktywna mapa Foxhole z kafelkami na żywo."
+   },
+   "fr": {
+    "tag": "Carte",
+    "description": "Carte interactive de Foxhole avec tuiles en direct."
+   },
+   "es": {
+    "tag": "Mapa",
+    "description": "Mapa interactivo de Foxhole con teselas en directo."
+   },
+   "pt": {
+    "tag": "Mapa",
+    "description": "Mapa interativo do Foxhole com blocos ao vivo."
+   },
+   "zh": {
+    "tag": "地图",
+    "description": "带实时图块的 Foxhole 交互式地图。"
    }
   }
  },
@@ -67,7 +235,28 @@
     "label": "BMATS"
    },
    "cs": {
-    "label": "BMATY"
+    "label": "BMATS"
+   },
+   "uk": {
+    "label": "BMATS"
+   },
+   "de": {
+    "label": "BMATS"
+   },
+   "pl": {
+    "label": "BMATS"
+   },
+   "fr": {
+    "label": "BMATS"
+   },
+   "es": {
+    "label": "BMATS"
+   },
+   "pt": {
+    "label": "BMATS"
+   },
+   "zh": {
+    "label": "BMATS"
    }
   },
   "rmat": {
@@ -75,7 +264,28 @@
     "label": "RMATS"
    },
    "cs": {
-    "label": "RMATY"
+    "label": "RMATS"
+   },
+   "uk": {
+    "label": "RMATS"
+   },
+   "de": {
+    "label": "RMATS"
+   },
+   "pl": {
+    "label": "RMATS"
+   },
+   "fr": {
+    "label": "RMATS"
+   },
+   "es": {
+    "label": "RMATS"
+   },
+   "pt": {
+    "label": "RMATS"
+   },
+   "zh": {
+    "label": "RMATS"
    }
   },
   "emat": {
@@ -83,7 +293,28 @@
     "label": "EMATS"
    },
    "cs": {
-    "label": "EMATY"
+    "label": "EMATS"
+   },
+   "uk": {
+    "label": "EMATS"
+   },
+   "de": {
+    "label": "EMATS"
+   },
+   "pl": {
+    "label": "EMATS"
+   },
+   "fr": {
+    "label": "EMATS"
+   },
+   "es": {
+    "label": "EMATS"
+   },
+   "pt": {
+    "label": "EMATS"
+   },
+   "zh": {
+    "label": "EMATS"
    }
   },
   "hemat": {
@@ -91,7 +322,28 @@
     "label": "HEMATS"
    },
    "cs": {
-    "label": "HEMATY"
+    "label": "HEMATS"
+   },
+   "uk": {
+    "label": "HEMATS"
+   },
+   "de": {
+    "label": "HEMATS"
+   },
+   "pl": {
+    "label": "HEMATS"
+   },
+   "fr": {
+    "label": "HEMATS"
+   },
+   "es": {
+    "label": "HEMATS"
+   },
+   "pt": {
+    "label": "HEMATS"
+   },
+   "zh": {
+    "label": "HEMATS"
    }
   },
   "salvage": {
@@ -100,6 +352,27 @@
    },
    "cs": {
     "label": "Šrot"
+   },
+   "uk": {
+    "label": "Брухт"
+   },
+   "de": {
+    "label": "Schrott"
+   },
+   "pl": {
+    "label": "Złom"
+   },
+   "fr": {
+    "label": "Récupération"
+   },
+   "es": {
+    "label": "Chatarra"
+   },
+   "pt": {
+    "label": "Sucata"
+   },
+   "zh": {
+    "label": "废料"
    }
   },
   "components": {
@@ -107,7 +380,28 @@
     "label": "Components"
    },
    "cs": {
-    "label": "Součástky"
+    "label": "Komponenty"
+   },
+   "uk": {
+    "label": "Компоненти"
+   },
+   "de": {
+    "label": "Komponenten"
+   },
+   "pl": {
+    "label": "Komponenty"
+   },
+   "fr": {
+    "label": "Composants"
+   },
+   "es": {
+    "label": "Componentes"
+   },
+   "pt": {
+    "label": "Componentes"
+   },
+   "zh": {
+    "label": "组件"
    }
   },
   "sulfur": {
@@ -116,6 +410,27 @@
    },
    "cs": {
     "label": "Síra"
+   },
+   "uk": {
+    "label": "Сірка"
+   },
+   "de": {
+    "label": "Schwefel"
+   },
+   "pl": {
+    "label": "Siarka"
+   },
+   "fr": {
+    "label": "Soufre"
+   },
+   "es": {
+    "label": "Azufre"
+   },
+   "pt": {
+    "label": "Enxofre"
+   },
+   "zh": {
+    "label": "硫磺"
    }
   },
   "coal": {
@@ -124,6 +439,27 @@
    },
    "cs": {
     "label": "Uhlí"
+   },
+   "uk": {
+    "label": "Вугілля"
+   },
+   "de": {
+    "label": "Kohle"
+   },
+   "pl": {
+    "label": "Węgiel"
+   },
+   "fr": {
+    "label": "Charbon"
+   },
+   "es": {
+    "label": "Carbón"
+   },
+   "pt": {
+    "label": "Carvão"
+   },
+   "zh": {
+    "label": "煤"
    }
   },
   "aluminum": {
@@ -132,6 +468,27 @@
    },
    "cs": {
     "label": "Hliník"
+   },
+   "uk": {
+    "label": "Алюміній"
+   },
+   "de": {
+    "label": "Aluminium"
+   },
+   "pl": {
+    "label": "Aluminium"
+   },
+   "fr": {
+    "label": "Aluminium"
+   },
+   "es": {
+    "label": "Aluminio"
+   },
+   "pt": {
+    "label": "Alumínio"
+   },
+   "zh": {
+    "label": "铝"
    }
   },
   "copper": {
@@ -140,6 +497,27 @@
    },
    "cs": {
     "label": "Měď"
+   },
+   "uk": {
+    "label": "Мідь"
+   },
+   "de": {
+    "label": "Kupfer"
+   },
+   "pl": {
+    "label": "Miedź"
+   },
+   "fr": {
+    "label": "Cuivre"
+   },
+   "es": {
+    "label": "Cobre"
+   },
+   "pt": {
+    "label": "Cobre"
+   },
+   "zh": {
+    "label": "铜"
    }
   },
   "iron": {
@@ -148,6 +526,27 @@
    },
    "cs": {
     "label": "Železo"
+   },
+   "uk": {
+    "label": "Залізо"
+   },
+   "de": {
+    "label": "Eisen"
+   },
+   "pl": {
+    "label": "Żelazo"
+   },
+   "fr": {
+    "label": "Fer"
+   },
+   "es": {
+    "label": "Hierro"
+   },
+   "pt": {
+    "label": "Ferro"
+   },
+   "zh": {
+    "label": "铁"
    }
   }
  },
@@ -158,6 +557,27 @@
    },
    "cs": {
     "label": "Zbraně"
+   },
+   "uk": {
+    "label": "Зброя"
+   },
+   "de": {
+    "label": "Waffen"
+   },
+   "pl": {
+    "label": "Broń"
+   },
+   "fr": {
+    "label": "Armes"
+   },
+   "es": {
+    "label": "Armas"
+   },
+   "pt": {
+    "label": "Armas"
+   },
+   "zh": {
+    "label": "武器"
    }
   },
   "ammo": {
@@ -166,6 +586,27 @@
    },
    "cs": {
     "label": "Munice"
+   },
+   "uk": {
+    "label": "Набої"
+   },
+   "de": {
+    "label": "Munition"
+   },
+   "pl": {
+    "label": "Amunicja"
+   },
+   "fr": {
+    "label": "Munitions"
+   },
+   "es": {
+    "label": "Munición"
+   },
+   "pt": {
+    "label": "Munição"
+   },
+   "zh": {
+    "label": "弹药"
    }
   },
   "materials": {
@@ -174,6 +615,27 @@
    },
    "cs": {
     "label": "Materiály"
+   },
+   "uk": {
+    "label": "Матеріали"
+   },
+   "de": {
+    "label": "Materialien"
+   },
+   "pl": {
+    "label": "Materiały"
+   },
+   "fr": {
+    "label": "Matériaux"
+   },
+   "es": {
+    "label": "Materiales"
+   },
+   "pt": {
+    "label": "Materiais"
+   },
+   "zh": {
+    "label": "材料"
    }
   },
   "medical": {
@@ -182,6 +644,27 @@
    },
    "cs": {
     "label": "Zdravotnictví"
+   },
+   "uk": {
+    "label": "Медицина"
+   },
+   "de": {
+    "label": "Medizin"
+   },
+   "pl": {
+    "label": "Medyczne"
+   },
+   "fr": {
+    "label": "Médical"
+   },
+   "es": {
+    "label": "Médico"
+   },
+   "pt": {
+    "label": "Médico"
+   },
+   "zh": {
+    "label": "医疗"
    }
   },
   "equipment": {
@@ -190,6 +673,27 @@
    },
    "cs": {
     "label": "Vybavení"
+   },
+   "uk": {
+    "label": "Спорядження"
+   },
+   "de": {
+    "label": "Ausrüstung"
+   },
+   "pl": {
+    "label": "Wyposażenie"
+   },
+   "fr": {
+    "label": "Équipement"
+   },
+   "es": {
+    "label": "Equipo"
+   },
+   "pt": {
+    "label": "Equipamento"
+   },
+   "zh": {
+    "label": "装备"
    }
   },
   "uniforms": {
@@ -198,6 +702,27 @@
    },
    "cs": {
     "label": "Uniformy"
+   },
+   "uk": {
+    "label": "Форма"
+   },
+   "de": {
+    "label": "Uniformen"
+   },
+   "pl": {
+    "label": "Mundury"
+   },
+   "fr": {
+    "label": "Uniformes"
+   },
+   "es": {
+    "label": "Uniformes"
+   },
+   "pt": {
+    "label": "Uniformes"
+   },
+   "zh": {
+    "label": "制服"
    }
   },
   "vehicles": {
@@ -205,7 +730,28 @@
     "label": "Vehicles"
    },
    "cs": {
-    "label": "Technika"
+    "label": "Vozidla"
+   },
+   "uk": {
+    "label": "Техніка"
+   },
+   "de": {
+    "label": "Fahrzeuge"
+   },
+   "pl": {
+    "label": "Pojazdy"
+   },
+   "fr": {
+    "label": "Véhicules"
+   },
+   "es": {
+    "label": "Vehículos"
+   },
+   "pt": {
+    "label": "Veículos"
+   },
+   "zh": {
+    "label": "载具"
    }
   },
   "structures": {
@@ -214,6 +760,27 @@
    },
    "cs": {
     "label": "Stavby"
+   },
+   "uk": {
+    "label": "Споруди"
+   },
+   "de": {
+    "label": "Strukturen"
+   },
+   "pl": {
+    "label": "Konstrukcje"
+   },
+   "fr": {
+    "label": "Structures"
+   },
+   "es": {
+    "label": "Estructuras"
+   },
+   "pt": {
+    "label": "Estruturas"
+   },
+   "zh": {
+    "label": "建筑"
    }
   },
   "other": {
@@ -222,6 +789,27 @@
    },
    "cs": {
     "label": "Ostatní"
+   },
+   "uk": {
+    "label": "Інше"
+   },
+   "de": {
+    "label": "Sonstiges"
+   },
+   "pl": {
+    "label": "Inne"
+   },
+   "fr": {
+    "label": "Autre"
+   },
+   "es": {
+    "label": "Otros"
+   },
+   "pt": {
+    "label": "Outros"
+   },
+   "zh": {
+    "label": "其他"
    }
   }
  },
@@ -232,6 +820,27 @@
    },
    "cs": {
     "label": "Ruční zbraně"
+   },
+   "uk": {
+    "label": "Легка зброя"
+   },
+   "de": {
+    "label": "Handfeuerwaffen"
+   },
+   "pl": {
+    "label": "Broń lekka"
+   },
+   "fr": {
+    "label": "Armes légères"
+   },
+   "es": {
+    "label": "Armas ligeras"
+   },
+   "pt": {
+    "label": "Armas leves"
+   },
+   "zh": {
+    "label": "轻武器"
    }
   },
   "heavy_arms": {
@@ -240,6 +849,27 @@
    },
    "cs": {
     "label": "Těžké zbraně"
+   },
+   "uk": {
+    "label": "Важка зброя"
+   },
+   "de": {
+    "label": "Schwere Waffen"
+   },
+   "pl": {
+    "label": "Broń ciężka"
+   },
+   "fr": {
+    "label": "Armes lourdes"
+   },
+   "es": {
+    "label": "Armas pesadas"
+   },
+   "pt": {
+    "label": "Armas pesadas"
+   },
+   "zh": {
+    "label": "重武器"
    }
   },
   "heavy_ammunition": {
@@ -248,6 +878,27 @@
    },
    "cs": {
     "label": "Těžká munice"
+   },
+   "uk": {
+    "label": "Важкі боєприпаси"
+   },
+   "de": {
+    "label": "Schwere Munition"
+   },
+   "pl": {
+    "label": "Ciężka amunicja"
+   },
+   "fr": {
+    "label": "Munitions lourdes"
+   },
+   "es": {
+    "label": "Munición pesada"
+   },
+   "pt": {
+    "label": "Munição pesada"
+   },
+   "zh": {
+    "label": "重型弹药"
    }
   },
   "utilities": {
@@ -256,6 +907,27 @@
    },
    "cs": {
     "label": "Vybavení"
+   },
+   "uk": {
+    "label": "Спорядження"
+   },
+   "de": {
+    "label": "Ausrüstung"
+   },
+   "pl": {
+    "label": "Wyposażenie"
+   },
+   "fr": {
+    "label": "Équipement"
+   },
+   "es": {
+    "label": "Utilidades"
+   },
+   "pt": {
+    "label": "Utilitários"
+   },
+   "zh": {
+    "label": "工具"
    }
   },
   "resource": {
@@ -264,6 +936,27 @@
    },
    "cs": {
     "label": "Suroviny"
+   },
+   "uk": {
+    "label": "Ресурси"
+   },
+   "de": {
+    "label": "Ressourcen"
+   },
+   "pl": {
+    "label": "Surowce"
+   },
+   "fr": {
+    "label": "Ressources"
+   },
+   "es": {
+    "label": "Recursos"
+   },
+   "pt": {
+    "label": "Recursos"
+   },
+   "zh": {
+    "label": "资源"
    }
   },
   "medical": {
@@ -272,6 +965,27 @@
    },
    "cs": {
     "label": "Zdravotnictví"
+   },
+   "uk": {
+    "label": "Медицина"
+   },
+   "de": {
+    "label": "Medizin"
+   },
+   "pl": {
+    "label": "Medyczne"
+   },
+   "fr": {
+    "label": "Médical"
+   },
+   "es": {
+    "label": "Médico"
+   },
+   "pt": {
+    "label": "Médico"
+   },
+   "zh": {
+    "label": "医疗"
    }
   },
   "uniforms": {
@@ -280,6 +994,27 @@
    },
    "cs": {
     "label": "Uniformy"
+   },
+   "uk": {
+    "label": "Форма"
+   },
+   "de": {
+    "label": "Uniformen"
+   },
+   "pl": {
+    "label": "Mundury"
+   },
+   "fr": {
+    "label": "Uniformes"
+   },
+   "es": {
+    "label": "Uniformes"
+   },
+   "pt": {
+    "label": "Uniformes"
+   },
+   "zh": {
+    "label": "制服"
    }
   },
   "vehicles": {
@@ -287,7 +1022,28 @@
     "label": "Vehicles"
    },
    "cs": {
-    "label": "Technika"
+    "label": "Vozidla"
+   },
+   "uk": {
+    "label": "Техніка"
+   },
+   "de": {
+    "label": "Fahrzeuge"
+   },
+   "pl": {
+    "label": "Pojazdy"
+   },
+   "fr": {
+    "label": "Véhicules"
+   },
+   "es": {
+    "label": "Vehículos"
+   },
+   "pt": {
+    "label": "Veículos"
+   },
+   "zh": {
+    "label": "载具"
    }
   },
   "shipables": {
@@ -295,7 +1051,28 @@
     "label": "Shippables"
    },
    "cs": {
-    "label": "Stavby"
+    "label": "Přepravitelné stavby"
+   },
+   "uk": {
+    "label": "Транспортовані споруди"
+   },
+   "de": {
+    "label": "Transportierbare Strukturen"
+   },
+   "pl": {
+    "label": "Konstrukcje do transportu"
+   },
+   "fr": {
+    "label": "Structures transportables"
+   },
+   "es": {
+    "label": "Estructuras transportables"
+   },
+   "pt": {
+    "label": "Estruturas transportáveis"
+   },
+   "zh": {
+    "label": "可运输建筑"
    }
   },
   "supplies": {
@@ -304,6 +1081,27 @@
    },
    "cs": {
     "label": "Zásoby"
+   },
+   "uk": {
+    "label": "Припаси"
+   },
+   "de": {
+    "label": "Vorräte"
+   },
+   "pl": {
+    "label": "Zaopatrzenie"
+   },
+   "fr": {
+    "label": "Fournitures"
+   },
+   "es": {
+    "label": "Suministros"
+   },
+   "pt": {
+    "label": "Suprimentos"
+   },
+   "zh": {
+    "label": "补给"
    }
   }
  },
@@ -314,6 +1112,27 @@
    },
    "cs": {
     "label": "Materiály"
+   },
+   "uk": {
+    "label": "Матеріали"
+   },
+   "de": {
+    "label": "Materialien"
+   },
+   "pl": {
+    "label": "Materiały"
+   },
+   "fr": {
+    "label": "Matériaux"
+   },
+   "es": {
+    "label": "Materiales"
+   },
+   "pt": {
+    "label": "Materiais"
+   },
+   "zh": {
+    "label": "材料"
    }
   },
   "fuel": {
@@ -322,6 +1141,27 @@
    },
    "cs": {
     "label": "Palivo"
+   },
+   "uk": {
+    "label": "Пальне"
+   },
+   "de": {
+    "label": "Treibstoff"
+   },
+   "pl": {
+    "label": "Paliwo"
+   },
+   "fr": {
+    "label": "Carburant"
+   },
+   "es": {
+    "label": "Combustible"
+   },
+   "pt": {
+    "label": "Combustível"
+   },
+   "zh": {
+    "label": "燃料"
    }
   },
   "construction": {
@@ -329,7 +1169,28 @@
     "label": "Construction"
    },
    "cs": {
-    "label": "Stavební materiály"
+    "label": "Stavebnictví"
+   },
+   "uk": {
+    "label": "Будівництво"
+   },
+   "de": {
+    "label": "Bau"
+   },
+   "pl": {
+    "label": "Budowa"
+   },
+   "fr": {
+    "label": "Construction"
+   },
+   "es": {
+    "label": "Construcción"
+   },
+   "pt": {
+    "label": "Construção"
+   },
+   "zh": {
+    "label": "建造"
    }
   },
   "alloys": {
@@ -338,6 +1199,27 @@
    },
    "cs": {
     "label": "Slitiny"
+   },
+   "uk": {
+    "label": "Сплави"
+   },
+   "de": {
+    "label": "Legierungen"
+   },
+   "pl": {
+    "label": "Stopy"
+   },
+   "fr": {
+    "label": "Alliages"
+   },
+   "es": {
+    "label": "Aleaciones"
+   },
+   "pt": {
+    "label": "Ligas"
+   },
+   "zh": {
+    "label": "合金"
    }
   }
  },
@@ -345,29 +1227,99 @@
   "terminal": {
    "en": {
     "title": "Working with the SINDARIS terminal",
-    "summary": "Stockpile, order builder, reports and export.",
+    "summary": "Stockpile, order builder, clan orders and export.",
     "body": [
      "1. “Orders” → left panel: pick the pinned stockpile and load a scanner report (JSON/TXT, XLSX, clipboard) or scan MapData.sav.",
-     "2. Right panel: pick an item from the matrix (search by name, English name or code), set the amount and unit (CRATE/PCS), press “Add to order”.",
-     "3. The “MODE” button switches the bottom keys between export (TXT/XLSX/PNG/clipboard) and import.",
-     "4. “Send report to HQ” stores the order on the server — it appears under “Clan orders”, where it can be exported or sent to Discord."
+     "2. Right panel: pick an item from the catalog (search by name, English name or code), set the amount and the unit (crates or pieces) and press “Add to order”.",
+     "3. The export bar under the order switches between export (TXT/XLSX/PNG/clipboard) and import.",
+     "4. “Send order to the clan” saves the order on the server — it appears under “Clan orders”, where members record deliveries and where it can be exported or posted to Discord."
     ]
    },
    "cs": {
     "title": "Práce s terminálem SINDARIS",
-    "summary": "Sklad, sestavovač objednávky, hlášení a export.",
+    "summary": "Sklad, konstruktor objednávky, objednávky klanu a export.",
     "body": [
      "1. „Objednávky“ → levý panel: vyberte připnutý sklad a nahrajte hlášení skeneru (JSON/TXT, XLSX, schránka) nebo naskenujte MapData.sav.",
-     "2. Pravý panel: vyberte předmět z matice (hledání podle názvu, anglického názvu nebo kódu), zadejte množství a jednotku (BED/KS) a stiskněte „Přidat do objednávky“.",
-     "3. Tlačítko „REŽIM“ přepíná spodní klávesy mezi exportem (TXT/XLSX/PNG/schránka) a importem.",
-     "4. „Odeslat hlášení na velitelství“ uloží objednávku na server — objeví se v „Objednávkách klanu“, odkud ji lze exportovat nebo poslat do Discordu."
+     "2. Pravý panel: vyberte předmět z katalogu (hledání podle názvu, anglického názvu nebo kódu), zadejte množství a jednotku (bedny nebo kusy) a stiskněte „Přidat do objednávky“.",
+     "3. Lišta exportu pod objednávkou přepíná mezi exportem (TXT/XLSX/PNG/schránka) a importem.",
+     "4. „Odeslat objednávku klanu“ uloží objednávku na server — objeví se v „Objednávkách klanu“, kde členové zapisují dodávky a odkud ji lze exportovat nebo poslat do Discordu."
+    ]
+   },
+   "uk": {
+    "title": "Робота з терміналом SINDARIS",
+    "summary": "Склад, конструктор замовлення, замовлення клану й експорт.",
+    "body": [
+     "1. «Замовлення» → ліва панель: виберіть закріплений склад і завантажте звіт сканера (JSON/TXT, XLSX, буфер обміну) або проскануйте MapData.sav.",
+     "2. Права панель: виберіть предмет із каталогу (пошук за назвою, англійською назвою або кодом), задайте кількість і одиницю (ящики чи штуки) й натисніть «Додати в замовлення».",
+     "3. Панель експорту під замовленням перемикається між вивантаженням (TXT/XLSX/PNG/буфер) і завантаженням.",
+     "4. «Надіслати замовлення клану» зберігає замовлення на сервері — воно з’являється в «Замовленнях клану», де учасники позначають доставки й звідки його можна вивантажити чи надіслати в Discord."
+    ]
+   },
+   "de": {
+    "title": "Arbeiten mit dem SINDARIS-Terminal",
+    "summary": "Lager, Bestellbaukasten, Clan-Bestellungen und Export.",
+    "body": [
+     "1. „Bestellungen“ → linkes Feld: Wähle das angeheftete Lager und lade einen Scanner-Bericht (JSON/TXT, XLSX, Zwischenablage) oder scanne MapData.sav.",
+     "2. Rechtes Feld: Wähle einen Gegenstand aus dem Katalog (Suche nach Name, englischem Namen oder Code), gib Menge und Einheit (Kisten oder Stück) an und tippe auf „Zur Bestellung hinzufügen“.",
+     "3. Die Exportleiste unter der Bestellung wechselt zwischen Export (TXT/XLSX/PNG/Zwischenablage) und Import.",
+     "4. „Bestellung an den Clan senden“ speichert die Bestellung auf dem Server – sie erscheint unter „Clan-Bestellungen“, wo Mitglieder Lieferungen eintragen und von wo sie exportiert oder an Discord gesendet werden kann."
+    ]
+   },
+   "pl": {
+    "title": "Praca z terminalem SINDARIS",
+    "summary": "Magazyn, kreator zamówień, zamówienia klanu i eksport.",
+    "body": [
+     "1. „Zamówienia” → lewy panel: wybierz przypięty magazyn i wczytaj raport skanera (JSON/TXT, XLSX, schowek) albo przeskanuj MapData.sav.",
+     "2. Prawy panel: wybierz przedmiot z katalogu (szukaj po nazwie, nazwie angielskiej lub kodzie), ustaw ilość i jednostkę (skrzynie lub sztuki) i naciśnij „Dodaj do zamówienia”.",
+     "3. Pasek eksportu pod zamówieniem przełącza się między eksportem (TXT/XLSX/PNG/schowek) a importem.",
+     "4. „Wyślij zamówienie do klanu” zapisuje zamówienie na serwerze – pojawia się w „Zamówieniach klanu”, gdzie członkowie zgłaszają dostawy i skąd można je wyeksportować lub wysłać na Discorda."
+    ]
+   },
+   "fr": {
+    "title": "Utiliser le terminal SINDARIS",
+    "summary": "Réserve, constructeur de commande, commandes du clan et export.",
+    "body": [
+     "1. « Commandes » → panneau de gauche : choisissez la réserve épinglée et chargez un rapport du scanner (JSON/TXT, XLSX, presse-papiers) ou scannez MapData.sav.",
+     "2. Panneau de droite : choisissez un objet dans le catalogue (recherche par nom, nom anglais ou code), indiquez la quantité et l'unité (caisses ou pièces), puis appuyez sur « Ajouter à la commande ».",
+     "3. La barre d'export sous la commande bascule entre export (TXT/XLSX/PNG/presse-papiers) et import.",
+     "4. « Envoyer la commande au clan » l'enregistre sur le serveur — elle apparaît dans « Commandes du clan », où les membres déclarent leurs livraisons et d'où elle peut être exportée ou publiée sur Discord."
+    ]
+   },
+   "es": {
+    "title": "Cómo usar el terminal SINDARIS",
+    "summary": "Almacén, creador de pedidos, pedidos del clan y exportación.",
+    "body": [
+     "1. «Pedidos» → panel izquierdo: elige el almacén fijado y carga un informe del escáner (JSON/TXT, XLSX, portapapeles) o escanea MapData.sav.",
+     "2. Panel derecho: elige un objeto del catálogo (busca por nombre, nombre en inglés o código), indica la cantidad y la unidad (cajas o unidades) y pulsa «Añadir al pedido».",
+     "3. La barra de exportación bajo el pedido cambia entre exportar (TXT/XLSX/PNG/portapapeles) e importar.",
+     "4. «Enviar el pedido al clan» lo guarda en el servidor: aparece en «Pedidos del clan», donde los miembros registran entregas y desde donde se puede exportar o publicar en Discord."
+    ]
+   },
+   "pt": {
+    "title": "Como usar o terminal SINDARIS",
+    "summary": "Estoque, montador de pedidos, pedidos do clã e exportação.",
+    "body": [
+     "1. “Pedidos” → painel esquerdo: escolha o estoque fixado e carregue um relatório do scanner (JSON/TXT, XLSX, área de transferência) ou escaneie o MapData.sav.",
+     "2. Painel direito: escolha um item do catálogo (busque por nome, nome em inglês ou código), defina a quantidade e a unidade (caixas ou unidades) e toque em “Adicionar ao pedido”.",
+     "3. A barra de exportação abaixo do pedido alterna entre exportar (TXT/XLSX/PNG/área de transferência) e importar.",
+     "4. “Enviar o pedido ao clã” salva o pedido no servidor — ele aparece em “Pedidos do clã”, onde os membros registram entregas e de onde ele pode ser exportado ou publicado no Discord."
+    ]
+   },
+   "zh": {
+    "title": "使用 SINDARIS 终端",
+    "summary": "仓库、订单构建器、军团订单和导出。",
+    "body": [
+     "1. “订单”→ 左侧面板：选择固定仓库，加载扫描器报告（JSON/TXT、XLSX、剪贴板）或扫描 MapData.sav。",
+     "2. 右侧面板：从目录中选择物品（可按名称、英文名称或代码搜索），设置数量和单位（箱或件），然后点击“加入订单”。",
+     "3. 订单下方的导出栏可在导出（TXT/XLSX/PNG/剪贴板）和导入之间切换。",
+     "4. “向军团发送订单”会把订单保存到服务器——它会出现在“军团订单”中，成员在那里记录运送，也可以导出或发布到 Discord。"
     ]
    }
   },
   "formats": {
    "en": {
     "title": "Scanner report formats",
-    "summary": "Which lines the terminal parser understands.",
+    "summary": "Which lines the terminal understands.",
     "body": [
      "• “Item name, 50” — classic scanner format.",
      "• “Item name -> 50 pcs” — terminal export format.",
@@ -379,38 +1331,199 @@
    },
    "cs": {
     "title": "Formáty hlášení skeneru",
-    "summary": "Jakým řádkům parser terminálu rozumí.",
+    "summary": "Kterým řádkům terminál rozumí.",
     "body": [
      "• „Název předmětu, 50“ — klasický formát skeneru.",
      "• „Název předmětu -> 50 ks“ — formát exportu terminálu.",
-     "• „Název předmětu: 12 beden“ — formát zpráv z Discordu.",
+     "• „Název předmětu: 12 beden“ — formát zpráv v Discordu.",
      "• Značky •, *, „ks“, „bedny“ se odstraní automaticky.",
      "• JSON: pole objektů {name, count} nebo slovník {\"Název\": 50}.",
      "• MapData.sav: server vyhledá kódy předmětů z katalogu a přečte jejich množství."
+    ]
+   },
+   "uk": {
+    "title": "Формати звітів сканера",
+    "summary": "Які рядки розуміє термінал.",
+    "body": [
+     "• «Назва предмета, 50» — класичний формат сканера.",
+     "• «Назва предмета -> 50 шт.» — формат експорту терміналу.",
+     "• «Назва предмета: 12 ящ» — формат повідомлень Discord.",
+     "• Маркери •, *, «шт», «ящ», «pcs», «crates» прибираються автоматично.",
+     "• JSON: масив об’єктів {name, count} або словник {\"Назва\": 50}.",
+     "• MapData.sav: сервер шукає коди предметів каталогу й читає їхню кількість."
+    ]
+   },
+   "de": {
+    "title": "Formate der Scanner-Berichte",
+    "summary": "Welche Zeilen das Terminal versteht.",
+    "body": [
+     "• „Name des Gegenstands, 50“ – klassisches Scanner-Format.",
+     "• „Name des Gegenstands -> 50 pcs“ – Exportformat des Terminals.",
+     "• „Name des Gegenstands: 12 crates“ – Format von Discord-Nachrichten.",
+     "• Markierungen wie •, *, „pcs“, „crates“ werden automatisch entfernt.",
+     "• JSON: ein Array von {name, count}-Objekten oder ein Wörterbuch {\"Name\": 50}.",
+     "• MapData.sav: Der Server sucht die Codes der Katalog-Gegenstände und liest ihre Mengen."
+    ]
+   },
+   "pl": {
+    "title": "Formaty raportów skanera",
+    "summary": "Jakie wiersze rozumie terminal.",
+    "body": [
+     "• „Nazwa przedmiotu, 50” – klasyczny format skanera.",
+     "• „Nazwa przedmiotu -> 50 pcs” – format eksportu terminala.",
+     "• „Nazwa przedmiotu: 12 crates” – format wiadomości z Discorda.",
+     "• Znaczniki •, *, „pcs”, „crates” są usuwane automatycznie.",
+     "• JSON: tablica obiektów {name, count} albo słownik {\"Nazwa\": 50}.",
+     "• MapData.sav: serwer wyszukuje kody przedmiotów z katalogu i odczytuje ich ilości."
+    ]
+   },
+   "fr": {
+    "title": "Formats des rapports du scanner",
+    "summary": "Les lignes que le terminal comprend.",
+    "body": [
+     "• « Nom de l'objet, 50 » — format classique du scanner.",
+     "• « Nom de l'objet -> 50 pcs » — format d'export du terminal.",
+     "• « Nom de l'objet : 12 crates » — format des messages Discord.",
+     "• Les marqueurs •, *, « pcs », « crates » sont retirés automatiquement.",
+     "• JSON : un tableau d'objets {name, count} ou un dictionnaire {\"Nom\": 50}.",
+     "• MapData.sav : le serveur recherche les codes des objets du catalogue et lit leurs quantités."
+    ]
+   },
+   "es": {
+    "title": "Formatos de informes del escáner",
+    "summary": "Qué líneas entiende el terminal.",
+    "body": [
+     "• «Nombre del objeto, 50»: formato clásico del escáner.",
+     "• «Nombre del objeto -> 50 pcs»: formato de exportación del terminal.",
+     "• «Nombre del objeto: 12 crates»: formato de mensajes de Discord.",
+     "• Los marcadores •, *, «pcs» y «crates» se eliminan automáticamente.",
+     "• JSON: un array de objetos {name, count} o un diccionario {\"Nombre\": 50}.",
+     "• MapData.sav: el servidor busca los códigos de los objetos del catálogo y lee sus cantidades."
+    ]
+   },
+   "pt": {
+    "title": "Formatos de relatório do scanner",
+    "summary": "Quais linhas o terminal entende.",
+    "body": [
+     "• “Nome do item, 50” — formato clássico do scanner.",
+     "• “Nome do item -> 50 pcs” — formato de exportação do terminal.",
+     "• “Nome do item: 12 crates” — formato de mensagens do Discord.",
+     "• Os marcadores •, *, “pcs” e “crates” são removidos automaticamente.",
+     "• JSON: um array de objetos {name, count} ou um dicionário {\"Nome\": 50}.",
+     "• MapData.sav: o servidor procura os códigos dos itens do catálogo e lê as quantidades."
+    ]
+   },
+   "zh": {
+    "title": "扫描器报告格式",
+    "summary": "终端能识别哪些行。",
+    "body": [
+     "• “物品名称, 50”——经典扫描器格式。",
+     "• “物品名称 -> 50 pcs”——终端导出格式。",
+     "• “物品名称: 12 crates”——Discord 消息格式。",
+     "• 标记 •、*、“pcs”、“crates”会被自动去除。",
+     "• JSON：{name, count} 对象数组，或字典 {\"名称\": 50}。",
+     "• MapData.sav：服务器查找目录中的物品代码并读取其数量。"
     ]
    }
   },
   "timers": {
    "en": {
-    "title": "Stockpile decay timers",
-    "summary": "The 48-hour rule and the refresh protocol.",
+    "title": "Stockpile timers",
+    "summary": "The 48-hour rule and how to refresh.",
     "body": [
      "• Public and private Foxhole stockpiles disappear after 48 hours without a refresh.",
      "• Red — under 1 hour: send someone to refresh the stockpile right now.",
-     "• Orange — under 24 hours: plan a refresh during the next shift.",
+     "• Orange — under 24 hours: plan a refresh during the next session.",
      "• After refreshing in game press “Reset to 48 hours” or set the exact time.",
-     "• Every action is recorded in the timer log with a timestamp and author."
+     "• Every action is recorded in the stockpile history with the time and author."
     ]
    },
    "cs": {
-    "title": "Časovače rozpadu skladů",
-    "summary": "Pravidlo 48 hodin a postup obnovy.",
+    "title": "Časovače skladů",
+    "summary": "Pravidlo 48 hodin a jak sklad obnovit.",
     "body": [
      "• Veřejné i soukromé sklady ve Foxhole zmizí po 48 hodinách bez obnovení.",
-     "• Červená — méně než 1 hodina: okamžitě pošlete někoho sklad obnovit.",
-     "• Oranžová — méně než 24 hodin: naplánujte obnovu v příští směně.",
-     "• Po obnovení ve hře stiskněte „Resetovat na 48 hodin“ nebo nastavte přesný čas.",
-     "• Každá akce se zapisuje do deníku časovače s časem a autorem."
+     "• Červená — méně než 1 hodina: pošlete někoho sklad obnovit hned teď.",
+     "• Oranžová — méně než 24 hodin: naplánujte obnovení na příští hraní.",
+     "• Po obnovení ve hře stiskněte „Resetovat na 48 hodin“ nebo zadejte přesný čas.",
+     "• Každá akce se zapíše do historie skladu s časem a autorem."
+    ]
+   },
+   "uk": {
+    "title": "Таймери складів",
+    "summary": "Правило 48 годин і як оновлювати склад.",
+    "body": [
+     "• Публічні й приватні склади Foxhole зникають через 48 годин без оновлення.",
+     "• Червоний — менше 1 години: просто зараз відправте когось оновити склад.",
+     "• Помаранчевий — менше 24 годин: заплануйте оновлення на найближчу гру.",
+     "• Після оновлення в грі натисніть «Скинути на 48 годин» або задайте точний час.",
+     "• Кожна дія записується в історію складу з часом і автором."
+    ]
+   },
+   "de": {
+    "title": "Lager-Timer",
+    "summary": "Die 48-Stunden-Regel und wie man auffrischt.",
+    "body": [
+     "• Öffentliche und private Lager verschwinden in Foxhole nach 48 Stunden ohne Auffrischen.",
+     "• Rot – weniger als 1 Stunde: Schick sofort jemanden zum Auffrischen.",
+     "• Orange – weniger als 24 Stunden: Plane das Auffrischen für die nächste Spielrunde.",
+     "• Tippe nach dem Auffrischen im Spiel auf „Auf 48 Stunden zurücksetzen“ oder stell die genaue Zeit ein.",
+     "• Jede Aktion wird mit Zeit und Autor im Verlauf des Lagers festgehalten."
+    ]
+   },
+   "pl": {
+    "title": "Liczniki magazynów",
+    "summary": "Zasada 48 godzin i jak odświeżać.",
+    "body": [
+     "• Publiczne i prywatne magazyny w Foxhole znikają po 48 godzinach bez odświeżenia.",
+     "• Czerwony – mniej niż 1 godzina: od razu wyślij kogoś, żeby odświeżył magazyn.",
+     "• Pomarańczowy – mniej niż 24 godziny: zaplanuj odświeżenie na najbliższą grę.",
+     "• Po odświeżeniu w grze naciśnij „Ustaw na 48 godzin” albo podaj dokładny czas.",
+     "• Każde działanie trafia do historii magazynu z czasem i autorem."
+    ]
+   },
+   "fr": {
+    "title": "Minuteurs des réserves",
+    "summary": "La règle des 48 heures et comment rafraîchir.",
+    "body": [
+     "• Les réserves publiques et privées de Foxhole disparaissent après 48 heures sans rafraîchissement.",
+     "• Rouge — moins d'1 heure : envoyez quelqu'un rafraîchir la réserve tout de suite.",
+     "• Orange — moins de 24 heures : prévoyez un rafraîchissement à la prochaine session.",
+     "• Après avoir rafraîchi en jeu, appuyez sur « Remettre à 48 heures » ou indiquez l'heure exacte.",
+     "• Chaque action est inscrite dans l'historique de la réserve avec l'heure et l'auteur."
+    ]
+   },
+   "es": {
+    "title": "Temporizadores de almacenes",
+    "summary": "La regla de las 48 horas y cómo renovar.",
+    "body": [
+     "• Los almacenes públicos y privados de Foxhole desaparecen tras 48 horas sin renovarse.",
+     "• Rojo, menos de 1 hora: manda a alguien a renovar el almacén ahora mismo.",
+     "• Naranja, menos de 24 horas: planifica la renovación para la próxima partida.",
+     "• Tras renovarlo en el juego, pulsa «Reiniciar a 48 horas» o fija la hora exacta.",
+     "• Cada acción queda en el historial del almacén con la hora y el autor."
+    ]
+   },
+   "pt": {
+    "title": "Cronômetros dos estoques",
+    "summary": "A regra das 48 horas e como renovar.",
+    "body": [
+     "• Estoques públicos e privados do Foxhole somem depois de 48 horas sem renovação.",
+     "• Vermelho — menos de 1 hora: mande alguém renovar o estoque agora mesmo.",
+     "• Laranja — menos de 24 horas: planeje a renovação para a próxima sessão.",
+     "• Depois de renovar no jogo, toque em “Zerar para 48 horas” ou defina o horário exato.",
+     "• Cada ação fica registrada no histórico do estoque com horário e autor."
+    ]
+   },
+   "zh": {
+    "title": "仓库计时器",
+    "summary": "48 小时规则以及如何刷新。",
+    "body": [
+     "• Foxhole 的公共和私有仓库在 48 小时内无人刷新就会消失。",
+     "• 红色——不到 1 小时：立即派人去刷新仓库。",
+     "• 橙色——不到 24 小时：在下次游戏时安排刷新。",
+     "• 在游戏中刷新后，点击“重置为 48 小时”或设置准确时间。",
+     "• 每个操作都会连同时间和操作者记录在仓库历史中。"
     ]
    }
   },
@@ -420,18 +1533,74 @@
     "summary": "Supply chains, MPF, facilities."
    },
    "cs": {
-    "title": "Základy logistiky Foxhole",
-    "summary": "Zásobovací řetězce, MPF, zařízení."
+    "title": "Základy logistiky ve Foxhole",
+    "summary": "Zásobovací řetězce, MPF, budovy."
+   },
+   "uk": {
+    "title": "Основи логістики Foxhole",
+    "summary": "Ланцюжки постачання, MPF, будівлі."
+   },
+   "de": {
+    "title": "Grundlagen der Foxhole-Logistik",
+    "summary": "Versorgungsketten, MPF, Anlagen."
+   },
+   "pl": {
+    "title": "Podstawy logistyki w Foxhole",
+    "summary": "Łańcuchy dostaw, MPF, budynki."
+   },
+   "fr": {
+    "title": "Les bases de la logistique Foxhole",
+    "summary": "Chaînes d'approvisionnement, MPF, installations."
+   },
+   "es": {
+    "title": "Fundamentos de logística en Foxhole",
+    "summary": "Cadenas de suministro, MPF, instalaciones."
+   },
+   "pt": {
+    "title": "Noções básicas de logística no Foxhole",
+    "summary": "Cadeias de suprimento, MPF, instalações."
+   },
+   "zh": {
+    "title": "Foxhole 后勤基础",
+    "summary": "补给链、MPF、设施。"
    }
   },
   "protocol": {
    "en": {
-    "title": "Supply report protocol",
-    "summary": "Standard for clan HQ requests."
+    "title": "How to write a supply order",
+    "summary": "A shared standard for clan requests."
    },
    "cs": {
-    "title": "Protokol hlášení zásobování",
-    "summary": "Standard pro žádosti na velitelství klanu."
+    "title": "Jak sestavit objednávku zásob",
+    "summary": "Společný standard pro požadavky klanu."
+   },
+   "uk": {
+    "title": "Як оформити замовлення постачання",
+    "summary": "Спільний стандарт запитів для клану."
+   },
+   "de": {
+    "title": "So schreibst du eine Versorgungsbestellung",
+    "summary": "Ein gemeinsamer Standard für Anfragen im Clan."
+   },
+   "pl": {
+    "title": "Jak przygotować zamówienie zaopatrzenia",
+    "summary": "Wspólny standard próśb w klanie."
+   },
+   "fr": {
+    "title": "Rédiger une commande de ravitaillement",
+    "summary": "Une norme commune pour les demandes du clan."
+   },
+   "es": {
+    "title": "Cómo redactar un pedido de suministro",
+    "summary": "Un estándar común para las peticiones del clan."
+   },
+   "pt": {
+    "title": "Como montar um pedido de suprimentos",
+    "summary": "Um padrão comum para os pedidos do clã."
+   },
+   "zh": {
+    "title": "如何填写补给订单",
+    "summary": "军团请求的统一规范。"
    }
   },
   "front": {
@@ -441,7 +1610,35 @@
    },
    "cs": {
     "title": "Logistika na frontě",
-    "summary": "Doprava pod palbou, priority, trasy."
+    "summary": "Doručování pod palbou, priority, trasy."
+   },
+   "uk": {
+    "title": "Логістика на передовій",
+    "summary": "Доставка під вогнем, пріоритети, маршрути."
+   },
+   "de": {
+    "title": "Logistik an der Front",
+    "summary": "Lieferungen unter Beschuss, Prioritäten, Routen."
+   },
+   "pl": {
+    "title": "Logistyka na froncie",
+    "summary": "Dostawy pod ostrzałem, priorytety, trasy."
+   },
+   "fr": {
+    "title": "Logistique au front",
+    "summary": "Livrer sous le feu, priorités, itinéraires."
+   },
+   "es": {
+    "title": "Logística en el frente",
+    "summary": "Entregas bajo fuego, prioridades, rutas."
+   },
+   "pt": {
+    "title": "Logística no front",
+    "summary": "Entregas sob fogo, prioridades, rotas."
+   },
+   "zh": {
+    "title": "前线后勤",
+    "summary": "火线运送、优先级、路线。"
    }
   }
  }

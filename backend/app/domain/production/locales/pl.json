@@ -1,0 +1,15 @@
+{
+  "order": {
+    "not_found": "Nie znaleziono zamówienia {order_id} w twoim klanie.",
+    "created": "Utworzono zamówienie „{title}”.",
+    "duplicate": "Takie zamówienie już istnieje.",
+    "status_changed": "Zmieniono status zamówienia na „{status}”.",
+    "invalid_transition": "Nie można przejść ze statusu „{from_status}” na „{to_status}”.",
+    "not_enough_stock": "W magazynie brakuje „{item}”: potrzeba {needed}, dostępne {available}.",
+    "queued": {
+      "one": "Dodano do kolejki {count} pozycję.",
+      "few": "Dodano do kolejki {count} pozycje.",
+      "many": "Dodano do kolejki {count} pozycji."
+    }
+  }
+}

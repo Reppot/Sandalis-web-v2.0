@@ -10,8 +10,10 @@
   --font-jetbrains: "JetBrains Mono Variable";
   --font-russo: "Russo One";
   /* шрифты: Inter — текст интерфейса, Inter Tight — заголовки, Russo One — только логотип */
-  --font-sans: var(--font-inter), "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-  --font-heading: var(--font-grotesk), var(--font-inter), "Segoe UI", system-ui, sans-serif;
+  /* для китайского — системные CJK-шрифты: Inter не содержит иероглифов */
+  --font-cjk: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC";
+  --font-sans: var(--font-inter), "Segoe UI", system-ui, -apple-system, Roboto, Arial, var(--font-cjk), sans-serif;
+  --font-heading: var(--font-grotesk), var(--font-inter), "Segoe UI", system-ui, var(--font-cjk), sans-serif;
   --font-brand: var(--font-russo), "Arial Black", Impact, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, "SFMono-Regular", Consolas, monospace;
 

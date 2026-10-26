@@ -1,0 +1,19 @@
+{
+  "timer": {
+    "not_found": "Minuteur introuvable dans votre clan.",
+    "created": "Minuteur « {title} » lancé.",
+    "updated": "Minuteur « {title} » mis à jour.",
+    "completed": "Minuteur « {title} » terminé.",
+    "reopened": "Le minuteur « {title} » est de nouveau suivi.",
+    "invalid_window": "La fin doit être postérieure au début.",
+    "stockpile_missing": "La réserve liée est introuvable dans votre clan.",
+    "restarted": "Minuteur « {title} » relancé.",
+    "note_added": "Note ajoutée au journal.",
+    "log": {
+      "created": "Minuteur lancé, fin {ends}.",
+      "restarted": "Minuteur relancé pour {duration}.",
+      "completed": "Minuteur marqué comme terminé.",
+      "reopened": "Le minuteur est de nouveau suivi."
+    }
+  }
+}

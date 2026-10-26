@@ -3,7 +3,7 @@
 import * as React from "react";
 import { EmptyState, Loading, Modal, UiGlyph, apiClient, assetUrl, cn, useI18n, type Locale, type UiIcon, Icon, PageHeader } from "@/shared";
 
-type L = Record<Locale, string>;
+type L = Partial<Record<Locale, string>>;
 
 interface GuideMarker {
   /** Центр метки в процентах ширины/высоты скриншота. */
@@ -14,11 +14,11 @@ interface GuideMarker {
 interface GuideShot {
   id: string;
   caption: L;
-  images: Record<Locale, string>;
-  size: Record<Locale, { w: number; h: number }>;
-  markers: Record<Locale, GuideMarker[]>;
+  images: Partial<Record<Locale, string>>;
+  size: Partial<Record<Locale, { w: number; h: number }>>;
+  markers: Partial<Record<Locale, GuideMarker[]>>;
   /** notes[locale][i] — пояснение к метке №(i+1). */
-  notes: Record<Locale, string[]>;
+  notes: Partial<Record<Locale, string[]>>;
 }
 
 interface GuideChapter {
@@ -34,7 +34,9 @@ interface GuideEntry {
   payload: GuideChapter;
 }
 
-const pick = (value: L | undefined, locale: Locale) => value?.[locale] ?? value?.ru ?? "";
+/** Скриншоты сняты на ru/en/cs: для остальных языков — английский кадр с его метками. */
+const shotLocale = (shot: GuideShot, locale: Locale): Locale => (shot.images[locale] ? locale : shot.images.en ? "en" : "ru");
+const pick = (value: L | undefined, locale: Locale) => value?.[locale] ?? (locale === "ru" ? "" : value?.en) ?? value?.ru ?? "";
 
 /**
  * «Навигация»: руководство по терминалу. Главы, скриншоты (на языке интерфейса),
@@ -122,9 +124,10 @@ export const GuideWorkspace: React.FC = () => {
 };
 
 const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; active?: number | null; onMarker?: (i: number) => void }> = ({ shot, locale, active, onMarker }) => {
-  const markers = shot.markers[locale] ?? shot.markers.ru ?? [];
-  const src = assetUrl(shot.images[locale] ?? shot.images.ru) ?? "";
-  const size = shot.size[locale] ?? shot.size.ru;
+  const at = shotLocale(shot, locale);
+  const markers = shot.markers[at] ?? [];
+  const src = assetUrl(shot.images[at]) ?? "";
+  const size = shot.size[at] ?? { w: 1440, h: 900 };
   return (
     // высокие снимки (экран входа, модальные окна) целиком помещаются по высоте экрана
     <div className="guide-shot" style={{ aspectRatio: `${size.w} / ${size.h}`, width: `min(100%, calc(78dvh * ${size.w / size.h}))` }}>
@@ -152,7 +155,7 @@ const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; active?: number | n
 
 const GuideFigure: React.FC<{ shot: GuideShot; locale: Locale; onZoom: () => void; zoomLabel: string }> = ({ shot, locale, onZoom, zoomLabel }) => {
   const [active, setActive] = React.useState<number | null>(null);
-  const notes = shot.notes[locale] ?? shot.notes.ru ?? [];
+  const notes = shot.notes[locale] ?? (locale === "ru" ? undefined : shot.notes.en) ?? shot.notes.ru ?? [];
   return (
     <figure className="panel p-4 md:p-5">
       <figcaption className="mb-4 flex items-center justify-between gap-2">

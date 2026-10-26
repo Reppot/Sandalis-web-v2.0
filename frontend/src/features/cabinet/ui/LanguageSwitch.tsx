@@ -20,13 +20,17 @@ export const LanguageSwitch: React.FC<{ persist?: boolean; className?: string; c
 
   if (compact) {
     return (
-      <div className={cn("lang-pills", className)} role="radiogroup" aria-label={t("lang.title")}>
-        {LOCALES.map((l) => (
-          <button key={l.code} type="button" role="radio" aria-checked={l.code === locale} lang={l.code} title={l.label} className={cn("lang-pill", l.code === locale && "is-active")} onClick={() => pick(l.code)}>
-            {l.flag}
-          </button>
-        ))}
-      </div>
+      <label className={cn("lang-select", className)}>
+        <Icon name="globe" size={15} />
+        <select value={locale} onChange={(e) => pick(e.target.value as Locale)} aria-label={t("lang.title")}>
+          {LOCALES.map((l) => (
+            <option key={l.code} value={l.code} lang={l.code}>
+              {l.label}
+            </option>
+          ))}
+        </select>
+        <Icon name="chevronDown" size={14} />
+      </label>
     );
   }
 

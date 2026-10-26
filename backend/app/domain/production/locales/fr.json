@@ -1,0 +1,14 @@
+{
+  "order": {
+    "not_found": "Commande {order_id} introuvable dans votre clan.",
+    "created": "Commande « {title} » créée.",
+    "duplicate": "Cette commande existe déjà.",
+    "status_changed": "Statut de la commande changé en « {status} ».",
+    "invalid_transition": "Impossible de passer de « {from_status} » à « {to_status} ».",
+    "not_enough_stock": "Pas assez de « {item} » dans la réserve : il en faut {needed}, disponible {available}.",
+    "queued": {
+      "one": "{count} ligne ajoutée à la file.",
+      "other": "{count} lignes ajoutées à la file."
+    }
+  }
+}

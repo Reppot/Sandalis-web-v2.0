@@ -10,10 +10,10 @@
     "restarted": "Timer \"{title}\" restarted.",
     "note_added": "Note added to the log.",
     "log": {
-      "created": "[SYSTEM] Timer started, ends {ends}.",
-      "restarted": "[QUARTERMASTER] Timer restarted for {duration}.",
-      "completed": "[QUARTERMASTER] Timer marked as completed.",
-      "reopened": "[QUARTERMASTER] Timer reopened."
+      "created": "Timer started, ends {ends}.",
+      "restarted": "Timer restarted for {duration}.",
+      "completed": "Timer marked as completed.",
+      "reopened": "Timer is tracked again."
     }
   }
 }

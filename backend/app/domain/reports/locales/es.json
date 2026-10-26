@@ -1,0 +1,49 @@
+{
+  "report": {
+    "not_found": "No se encontró el pedido en tu clan.",
+    "default_title": "Pedido de suministro {date}",
+    "created": "Pedido enviado al clan: {count} líneas.",
+    "updated": "Pedido «{title}» actualizado.",
+    "status_changed": "Pedido «{title}»: {status}.",
+    "bad_transition": "No se puede pasar un pedido de «{from}» a «{to}».",
+    "discord_not_configured": "El canal de Discord no está conectado. El comandante puede conectarlo en «Gestión».",
+    "discord_webhook_invalid": "Discord rechazó el webhook: se eliminó o la URL es incorrecta. Actualízalo en «Gestión».",
+    "discord_failed": "Discord no aceptó el mensaje. Inténtalo más tarde.",
+    "discord_sent": "Pedido «{title}» enviado a Discord.",
+    "image_too_large": "La imagen del pedido supera los {limit_mb} MB.",
+    "status": {
+      "open": "Abierto",
+      "in_progress": "En curso",
+      "done": "Completado",
+      "cancelled": "Cancelado"
+    },
+    "unit": {
+      "crate": "cajas",
+      "unit": "u."
+    },
+    "embed": {
+      "status": "Estado",
+      "lines": "Líneas",
+      "author": "Autor",
+      "place": "Almacén",
+      "note": "Nota"
+    },
+    "progress_saved": "Entrega registrada en el pedido: {n} u./cajas.",
+    "progress_cancelled": "El pedido está cancelado: no se aceptan entregas.",
+    "progress_bad_line": "La entrega incluye una línea que no pertenece a este pedido.",
+    "progress_no_stockpile": "No se encontró el almacén en tu clan.",
+    "progress_not_found": "No se encontró la entrada del registro.",
+    "progress_not_yours": "Solo puedes eliminar tu propia entrada del registro."
+  },
+  "settings": {
+    "saved": "Ajustes del clan guardados.",
+    "roles_saved": "Asignación de roles de Discord guardada. Los roles se actualizarán en el próximo inicio de sesión de los miembros."
+  },
+  "roles": {
+    "owner_only": "Solo el comandante del clan (dueño del servidor) gestiona los roles de Discord.",
+    "bot_missing": "El bot del clan no ve el servidor: añádelo con «Añadir bot».",
+    "pulled": "Roles del servidor obtenidos: {n}. Los roles nuevos empiezan en nivel básico.",
+    "saved": "Niveles de acceso guardados. Los miembros los recibirán en su próximo inicio de sesión.",
+    "unknown_permission": "Permisos desconocidos: {permissions}."
+  }
+}

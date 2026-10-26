@@ -1,0 +1,15 @@
+{
+  "stockpile": {
+    "not_found": "Estoque não encontrado no seu clã.",
+    "created": "Estoque “{name}” criado.",
+    "updated": "Estoque “{name}” atualizado.",
+    "deleted": "Estoque “{name}” excluído.",
+    "name_taken": "Já existe um estoque chamado “{name}”.",
+    "synced": "Estoque “{name}” sincronizado: {count} linhas."
+  },
+  "item": {
+    "not_found": "Não há “{item}” neste estoque.",
+    "saved": "“{item}”: {quantity} un.",
+    "removed": "“{item}” removido do estoque."
+  }
+}

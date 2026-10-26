@@ -1,0 +1,47 @@
+{
+  "discord": {
+    "disabled": "El inicio de sesión con Discord está desactivado en este entorno.",
+    "state_invalid": "No se pudo verificar el inicio de sesión OAuth: state no válido o caducado.",
+    "exchange_failed": "Discord no emitió un token de acceso. Vuelve a intentar iniciar sesión.",
+    "profile_failed": "No se pudo obtener tu perfil de Discord. Vuelve a intentar iniciar sesión.",
+    "signed_in": "Bienvenido, {name}."
+  },
+  "dev": {
+    "issued": "Token de desarrollo emitido para {user_id}.",
+    "disabled": "La emisión de tokens de desarrollo está desactivada en este entorno.",
+    "forbidden": "Clave de desarrollador no válida."
+  },
+  "user": {
+    "not_member": "El usuario {user_id} no es miembro del clan {clan_id}.",
+    "no_clan": "No estás en ningún clan. El comandante tiene que añadir el bot del clan a su servidor de Discord y obtener los roles; después podrás unirte al iniciar sesión. O entra como invitado."
+  },
+  "code": {
+    "invalid": "El código de invitación no existe o fue revocado.",
+    "expired": "El código de invitación ha caducado.",
+    "exhausted": "Se alcanzó el límite de usos del código.",
+    "redeemed": "Te uniste al clan «{clan}» con el rol «{role}»."
+  },
+  "clan_token": {
+    "created": "Token «{label}» creado. Guárdalo ahora: solo se muestra una vez.",
+    "users_only": "Solo un usuario puede emitir tokens de clan, no otro token.",
+    "role_too_high": "No puedes emitir un token con un rol superior al tuyo: {role}."
+  },
+  "invite": {
+    "created": "Código de invitación {code} creado.",
+    "revoked": "Código de invitación {code} revocado.",
+    "not_found": "No se encontró el código de invitación en tu clan."
+  },
+  "setup": {
+    "expired": "Se acabó el tiempo para elegir servidor; vuelve a iniciar sesión con Discord.",
+    "guild_not_owned": "No eres el dueño de este servidor de Discord.",
+    "clan_not_member": "No eres miembro de este clan.",
+    "nothing_selected": "Elige un servidor o un clan.",
+    "clan_created": "El clan «{clan}» está vinculado a tu servidor de Discord. Eres el comandante.",
+    "signed_in": "Bienvenido, {name}.",
+    "joined": "Te uniste al terminal del clan «{clan}»."
+  },
+  "guest": {
+    "disabled": "El acceso de invitado está desactivado.",
+    "signed_in": "Acceso de invitado: solo herramientas, los datos de los clanes están ocultos."
+  }
+}

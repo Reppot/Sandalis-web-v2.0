@@ -1,0 +1,14 @@
+{
+  "order": {
+    "not_found": "No se encontró el pedido {order_id} en tu clan.",
+    "created": "Pedido «{title}» creado.",
+    "duplicate": "Ese pedido ya existe.",
+    "status_changed": "Estado del pedido cambiado a «{status}».",
+    "invalid_transition": "No se puede pasar de «{from_status}» a «{to_status}».",
+    "not_enough_stock": "No hay suficiente «{item}» en el almacén: hacen falta {needed}, hay {available}.",
+    "queued": {
+      "one": "{count} línea añadida a la cola.",
+      "other": "{count} líneas añadidas a la cola."
+    }
+  }
+}

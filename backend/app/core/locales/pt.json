@@ -1,0 +1,23 @@
+{
+  "errors": {
+    "internal": "Erro interno do servidor. Tente de novo mais tarde.",
+    "unauthorized": "É preciso entrar no clã.",
+    "token_expired": "A sessão expirou. Entre de novo.",
+    "forbidden": "Permissões insuficientes. Acesso necessário: {scopes}.",
+    "not_found": "Objeto não encontrado.",
+    "validation": "Dados da requisição inválidos.",
+    "clan_context_missing": "Não foi possível identificar o clã desta requisição.",
+    "clan_scope_violation": "Operação recusada: {entity} pertence a outro clã.",
+    "db_unavailable": "O banco de dados está acordando — tente de novo em alguns segundos.",
+    "war_api_unavailable": "A Foxhole War API está indisponível — tente de novo mais tarde.",
+    "pyramid_unknown_items": "Itens desconhecidos na pirâmide: {codes}",
+    "pyramid_no_vehicles": "Veículos e estruturas não podem entrar na pirâmide: {codes}",
+    "pyramid_too_many": "O clã já tem {n} configurações personalizadas — exclua uma para salvar outra.",
+    "pyramid_name_taken": "Já existe a configuração “{name}” — escolha outro nome.",
+    "pyramid_config_not_found": "Configuração não encontrada — talvez já tenha sido excluída.",
+    "feedback_admin_only": "Só o dono do site pode ler todo o feedback.",
+    "feedback_login_required": "Entre com o Discord para escrever — assim seu apelido aparece.",
+    "feedback_rate_limited": "No máximo {n} mensagens por hora — tente de novo daqui a pouco.",
+    "guest_no_clan": "O acesso de convidado não tem clã"
+  }
+}

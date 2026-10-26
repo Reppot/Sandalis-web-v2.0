@@ -1,0 +1,23 @@
+{
+  "errors": {
+    "internal": "Error interno del servidor. Inténtalo más tarde.",
+    "unauthorized": "Hace falta iniciar sesión en el clan.",
+    "token_expired": "La sesión caducó. Vuelve a iniciar sesión.",
+    "forbidden": "Permisos insuficientes. Se requiere: {scopes}.",
+    "not_found": "No se encontró el objeto.",
+    "validation": "Datos de la solicitud no válidos.",
+    "clan_context_missing": "No se pudo determinar el clan de la solicitud.",
+    "clan_scope_violation": "Operación rechazada: {entity} pertenece a otro clan.",
+    "db_unavailable": "La base de datos se está despertando; repite la solicitud en unos segundos.",
+    "war_api_unavailable": "La Foxhole War API no está disponible; inténtalo más tarde.",
+    "pyramid_unknown_items": "Objetos desconocidos en la pirámide: {codes}",
+    "pyramid_no_vehicles": "Los vehículos y estructuras no se pueden añadir a la pirámide: {codes}",
+    "pyramid_too_many": "El clan ya tiene {n} configuraciones personalizadas: elimina una para guardar otra.",
+    "pyramid_name_taken": "Ya existe la configuración «{name}»: elige otro nombre.",
+    "pyramid_config_not_found": "No se encontró la configuración; puede que ya se haya eliminado.",
+    "feedback_admin_only": "Solo el dueño del sitio puede leer todos los comentarios.",
+    "feedback_login_required": "Inicia sesión con Discord para escribir: así se verá tu apodo.",
+    "feedback_rate_limited": "Como máximo {n} mensajes por hora; inténtalo un poco más tarde.",
+    "guest_no_clan": "El acceso de invitado no tiene clan"
+  }
+}

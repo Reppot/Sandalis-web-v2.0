@@ -1,0 +1,19 @@
+{
+  "timer": {
+    "not_found": "Cronômetro não encontrado no seu clã.",
+    "created": "Cronômetro “{title}” iniciado.",
+    "updated": "Cronômetro “{title}” atualizado.",
+    "completed": "Cronômetro “{title}” concluído.",
+    "reopened": "O cronômetro “{title}” voltou a ser monitorado.",
+    "invalid_window": "O fim precisa ser depois do início.",
+    "stockpile_missing": "O estoque vinculado não foi encontrado no seu clã.",
+    "restarted": "Cronômetro “{title}” reiniciado.",
+    "note_added": "Nota adicionada ao diário.",
+    "log": {
+      "created": "Cronômetro iniciado, termina {ends}.",
+      "restarted": "Cronômetro reiniciado por {duration}.",
+      "completed": "Cronômetro marcado como concluído.",
+      "reopened": "O cronômetro voltou a ser monitorado."
+    }
+  }
+}

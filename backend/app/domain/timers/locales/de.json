@@ -1,0 +1,19 @@
+{
+  "timer": {
+    "not_found": "Timer in deinem Clan nicht gefunden.",
+    "created": "Timer „{title}“ gestartet.",
+    "updated": "Timer „{title}“ aktualisiert.",
+    "completed": "Timer „{title}“ abgeschlossen.",
+    "reopened": "Timer „{title}“ wird wieder überwacht.",
+    "invalid_window": "Das Ende muss nach dem Start liegen.",
+    "stockpile_missing": "Das verknüpfte Lager wurde in deinem Clan nicht gefunden.",
+    "restarted": "Timer „{title}“ neu gestartet.",
+    "note_added": "Eintrag zum Protokoll hinzugefügt.",
+    "log": {
+      "created": "Timer gestartet, endet {ends}.",
+      "restarted": "Timer neu gestartet für {duration}.",
+      "completed": "Timer als abgeschlossen markiert.",
+      "reopened": "Timer wird wieder überwacht."
+    }
+  }
+}

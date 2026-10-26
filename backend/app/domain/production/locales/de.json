@@ -1,0 +1,14 @@
+{
+  "order": {
+    "not_found": "Bestellung {order_id} wurde in deinem Clan nicht gefunden.",
+    "created": "Bestellung „{title}“ wurde erstellt.",
+    "duplicate": "Diese Bestellung gibt es bereits.",
+    "status_changed": "Status der Bestellung auf „{status}“ geändert.",
+    "invalid_transition": "Wechsel von „{from_status}“ zu „{to_status}“ ist nicht möglich.",
+    "not_enough_stock": "Nicht genug „{item}“ im Lager: benötigt {needed}, vorhanden {available}.",
+    "queued": {
+      "one": "{count} Position eingereiht.",
+      "other": "{count} Positionen eingereiht."
+    }
+  }
+}

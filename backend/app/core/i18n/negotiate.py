@@ -3,7 +3,11 @@ from __future__ import annotations
 from app.core.config import settings
 
 # Фронт/браузеры шлют разное: cs-CZ, cs, cz, ru-RU, ru, en-GB...
-_ALIASES = {"cz": "cs", "cze": "cs", "ces": "cs", "rus": "ru", "eng": "en", "ua": "ru"}
+_ALIASES = {
+    "cz": "cs", "cze": "cs", "ces": "cs", "sk": "cs", "rus": "ru", "be": "ru", "eng": "en",
+    "ua": "uk", "ukr": "uk", "ger": "de", "deu": "de", "pol": "pl", "fra": "fr", "fre": "fr",
+    "spa": "es", "por": "pt", "chi": "zh", "zho": "zh", "cn": "zh",
+}
 
 
 def normalize_locale(tag: str | None) -> str | None:

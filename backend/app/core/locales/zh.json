@@ -1,0 +1,23 @@
+{
+  "errors": {
+    "internal": "服务器内部错误，请稍后再试。",
+    "unauthorized": "需要登录军团。",
+    "token_expired": "会话已过期，请重新登录。",
+    "forbidden": "权限不足。需要：{scopes}。",
+    "not_found": "未找到对象。",
+    "validation": "请求数据无效。",
+    "clan_context_missing": "无法确定此请求所属的军团。",
+    "clan_scope_violation": "操作被拒绝：{entity} 属于其他军团。",
+    "db_unavailable": "数据库正在唤醒，请几秒后重试。",
+    "war_api_unavailable": "Foxhole War API 暂不可用——请稍后再试。",
+    "pyramid_unknown_items": "金字塔中有未知物品：{codes}",
+    "pyramid_no_vehicles": "载具和建筑不能加入金字塔：{codes}",
+    "pyramid_too_many": "军团已有 {n} 个自定义配置——请删除一个后再保存新的。",
+    "pyramid_name_taken": "已存在名为“{name}”的配置——请换一个名称。",
+    "pyramid_config_not_found": "未找到该配置——可能已被删除。",
+    "feedback_admin_only": "只有网站所有者可以查看全部反馈。",
+    "feedback_login_required": "请使用 Discord 登录后再写——这样会显示你的昵称。",
+    "feedback_rate_limited": "每小时最多 {n} 条消息——请稍后再试。",
+    "guest_no_clan": "访客访问没有军团"
+  }
+}

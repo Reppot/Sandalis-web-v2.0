@@ -1,0 +1,47 @@
+{
+  "discord": {
+    "disabled": "Die Anmeldung mit Discord ist in dieser Umgebung deaktiviert.",
+    "state_invalid": "Die OAuth-Anmeldung konnte nicht bestätigt werden: ungültiger oder abgelaufener State.",
+    "exchange_failed": "Discord hat kein Zugriffstoken ausgegeben. Bitte melde dich erneut an.",
+    "profile_failed": "Dein Profil konnte nicht von Discord abgerufen werden. Bitte melde dich erneut an.",
+    "signed_in": "Willkommen, {name}."
+  },
+  "dev": {
+    "issued": "Dev-Token für {user_id} ausgestellt.",
+    "disabled": "Die Ausgabe von Dev-Tokens ist in dieser Umgebung deaktiviert.",
+    "forbidden": "Ungültiger Entwicklerschlüssel."
+  },
+  "user": {
+    "not_member": "Der Benutzer {user_id} ist kein Mitglied des Clans {clan_id}.",
+    "no_clan": "Du bist in keinem Clan. Der Kommandant muss den Clan-Bot zu seinem Discord-Server hinzufügen und die Rollen abrufen – danach kannst du bei der Anmeldung beitreten. Oder melde dich als Gast an."
+  },
+  "code": {
+    "invalid": "Einladungscode nicht gefunden oder widerrufen.",
+    "expired": "Der Einladungscode ist abgelaufen.",
+    "exhausted": "Der Einladungscode wurde zu oft verwendet.",
+    "redeemed": "Du bist dem Clan „{clan}“ mit der Rolle „{role}“ beigetreten."
+  },
+  "clan_token": {
+    "created": "Token „{label}“ erstellt. Speichere ihn jetzt – er wird nur einmal angezeigt.",
+    "users_only": "Clan-Tokens kann nur ein Benutzer ausstellen, kein anderer Token.",
+    "role_too_high": "Du kannst keinen Token mit einer höheren Rolle als deiner eigenen ausstellen: {role}."
+  },
+  "invite": {
+    "created": "Einladungscode {code} erstellt.",
+    "revoked": "Einladungscode {code} widerrufen.",
+    "not_found": "Einladungscode in deinem Clan nicht gefunden."
+  },
+  "setup": {
+    "expired": "Die Zeit für die Serverauswahl ist abgelaufen – melde dich erneut mit Discord an.",
+    "guild_not_owned": "Dieser Discord-Server gehört dir nicht.",
+    "clan_not_member": "Du bist kein Mitglied dieses Clans.",
+    "nothing_selected": "Wähle einen Server oder einen Clan.",
+    "clan_created": "Der Clan „{clan}“ ist mit deinem Discord-Server verknüpft. Du bist der Kommandant.",
+    "signed_in": "Willkommen, {name}.",
+    "joined": "Du bist dem Terminal des Clans „{clan}“ beigetreten."
+  },
+  "guest": {
+    "disabled": "Der Gastzugang ist deaktiviert.",
+    "signed_in": "Gastzugang: nur Werkzeuge, Clan-Daten sind ausgeblendet."
+  }
+}

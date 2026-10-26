@@ -1,0 +1,49 @@
+{
+  "report": {
+    "not_found": "Commande introuvable dans votre clan.",
+    "default_title": "Commande de ravitaillement {date}",
+    "created": "Commande envoyée au clan : {count} lignes.",
+    "updated": "Commande « {title} » mise à jour.",
+    "status_changed": "Commande « {title} » : {status}.",
+    "bad_transition": "Impossible de passer une commande de « {from} » à « {to} ».",
+    "discord_not_configured": "Le salon Discord n'est pas connecté. Le commandant peut le connecter dans « Gestion ».",
+    "discord_webhook_invalid": "Discord a refusé le webhook : il a été supprimé ou l'URL est incorrecte. Mettez-le à jour dans « Gestion ».",
+    "discord_failed": "Discord n'a pas accepté le message. Réessayez plus tard.",
+    "discord_sent": "Commande « {title} » envoyée sur Discord.",
+    "image_too_large": "L'image de la commande dépasse {limit_mb} Mo.",
+    "status": {
+      "open": "Ouverte",
+      "in_progress": "En cours",
+      "done": "Terminée",
+      "cancelled": "Annulée"
+    },
+    "unit": {
+      "crate": "caisses",
+      "unit": "pcs"
+    },
+    "embed": {
+      "status": "Statut",
+      "lines": "Lignes",
+      "author": "Auteur",
+      "place": "Réserve",
+      "note": "Note"
+    },
+    "progress_saved": "Livraison enregistrée sur la commande : {n} pcs/caisses.",
+    "progress_cancelled": "La commande est annulée — les livraisons ne sont plus acceptées.",
+    "progress_bad_line": "La livraison contient une ligne qui n'appartient pas à cette commande.",
+    "progress_no_stockpile": "Réserve introuvable dans votre clan.",
+    "progress_not_found": "Entrée du journal introuvable.",
+    "progress_not_yours": "Vous ne pouvez supprimer que votre propre entrée du journal."
+  },
+  "settings": {
+    "saved": "Paramètres du clan enregistrés.",
+    "roles_saved": "Association des rôles Discord enregistrée. Les rôles seront mis à jour à la prochaine connexion des membres."
+  },
+  "roles": {
+    "owner_only": "Seul le commandant du clan (propriétaire du serveur) gère les rôles Discord.",
+    "bot_missing": "Le bot du clan ne voit pas le serveur : ajoutez-le avec « Ajouter le bot ».",
+    "pulled": "Rôles du serveur récupérés : {n}. Les nouveaux rôles commencent au niveau de base.",
+    "saved": "Niveaux d'accès enregistrés. Les membres les recevront à leur prochaine connexion.",
+    "unknown_permission": "Droits inconnus : {permissions}."
+  }
+}

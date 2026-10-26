@@ -1,0 +1,47 @@
+{
+  "discord": {
+    "disabled": "此环境已禁用 Discord 登录。",
+    "state_invalid": "无法验证 OAuth 登录：state 无效或已过期。",
+    "exchange_failed": "Discord 未签发访问令牌，请重新登录。",
+    "profile_failed": "无法从 Discord 获取你的个人资料，请重新登录。",
+    "signed_in": "欢迎，{name}。"
+  },
+  "dev": {
+    "issued": "已为 {user_id} 签发开发令牌。",
+    "disabled": "此环境已禁用开发令牌签发。",
+    "forbidden": "开发者密钥无效。"
+  },
+  "user": {
+    "not_member": "用户 {user_id} 不是军团 {clan_id} 的成员。",
+    "no_clan": "你还不在任何军团中。指挥官需要把军团机器人添加到自己的 Discord 服务器并获取角色——之后你登录时即可加入。也可以以访客身份登录。"
+  },
+  "code": {
+    "invalid": "邀请码不存在或已被撤销。",
+    "expired": "邀请码已过期。",
+    "exhausted": "邀请码的使用次数已用完。",
+    "redeemed": "你已加入军团“{clan}”，角色为“{role}”。"
+  },
+  "clan_token": {
+    "created": "令牌“{label}”已创建。请立即保存——它只显示一次。",
+    "users_only": "军团令牌只能由用户签发，不能由其他令牌签发。",
+    "role_too_high": "不能签发角色高于你自己的令牌：{role}。"
+  },
+  "invite": {
+    "created": "邀请码 {code} 已创建。",
+    "revoked": "邀请码 {code} 已撤销。",
+    "not_found": "在你的军团中未找到该邀请码。"
+  },
+  "setup": {
+    "expired": "选择服务器的时间已过——请重新使用 Discord 登录。",
+    "guild_not_owned": "你不是这个 Discord 服务器的所有者。",
+    "clan_not_member": "你不是这个军团的成员。",
+    "nothing_selected": "请选择服务器或军团。",
+    "clan_created": "军团“{clan}”已关联到你的 Discord 服务器。你是指挥官。",
+    "signed_in": "欢迎，{name}。",
+    "joined": "你已加入军团“{clan}”的终端。"
+  },
+  "guest": {
+    "disabled": "访客访问已禁用。",
+    "signed_in": "访客访问：仅限工具，军团数据已隐藏。"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "report": {
+    "not_found": "Bestellung in deinem Clan nicht gefunden.",
+    "default_title": "Versorgungsbestellung {date}",
+    "created": "Bestellung an den Clan gesendet: {count} Positionen.",
+    "updated": "Bestellung „{title}“ aktualisiert.",
+    "status_changed": "Bestellung „{title}“: {status}.",
+    "bad_transition": "Eine Bestellung kann nicht von „{from}“ zu „{to}“ wechseln.",
+    "discord_not_configured": "Der Discord-Kanal ist nicht verbunden. Der Kommandant kann ihn unter „Verwaltung“ verbinden.",
+    "discord_webhook_invalid": "Discord hat den Webhook abgelehnt: Er wurde gelöscht oder die URL ist falsch. Aktualisiere ihn unter „Verwaltung“.",
+    "discord_failed": "Discord hat die Nachricht nicht angenommen. Versuch es später noch einmal.",
+    "discord_sent": "Bestellung „{title}“ an Discord gesendet.",
+    "image_too_large": "Das Bild der Bestellung ist größer als {limit_mb} MB.",
+    "status": {
+      "open": "Offen",
+      "in_progress": "In Arbeit",
+      "done": "Erledigt",
+      "cancelled": "Storniert"
+    },
+    "unit": {
+      "crate": "Ki.",
+      "unit": "Stk."
+    },
+    "embed": {
+      "status": "Status",
+      "lines": "Positionen",
+      "author": "Autor",
+      "place": "Lager",
+      "note": "Notiz"
+    },
+    "progress_saved": "Lieferung zur Bestellung eingetragen: {n} Stk./Ki.",
+    "progress_cancelled": "Die Bestellung ist storniert – Lieferungen werden nicht angenommen.",
+    "progress_bad_line": "Die Lieferung enthält eine Zeile, die nicht zu dieser Bestellung gehört.",
+    "progress_no_stockpile": "Lager in deinem Clan nicht gefunden.",
+    "progress_not_found": "Protokolleintrag nicht gefunden.",
+    "progress_not_yours": "Du kannst nur deinen eigenen Protokolleintrag löschen."
+  },
+  "settings": {
+    "saved": "Clan-Einstellungen gespeichert.",
+    "roles_saved": "Zuordnung der Discord-Rollen gespeichert. Die Rollen werden bei der nächsten Anmeldung der Mitglieder aktualisiert."
+  },
+  "roles": {
+    "owner_only": "Discord-Rollen verwaltet nur der Clan-Kommandant (Besitzer des Servers).",
+    "bot_missing": "Der Clan-Bot sieht den Server nicht: Füge ihn mit „Bot hinzufügen“ hinzu.",
+    "pulled": "Server-Rollen abgerufen: {n}. Neue Rollen beginnen mit der einfachen Stufe.",
+    "saved": "Zugriffsstufen gespeichert. Die Mitglieder erhalten sie bei der nächsten Anmeldung.",
+    "unknown_permission": "Unbekannte Rechte: {permissions}."
+  }
+}

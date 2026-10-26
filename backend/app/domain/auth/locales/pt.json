@@ -1,0 +1,47 @@
+{
+  "discord": {
+    "disabled": "O login pelo Discord está desativado neste ambiente.",
+    "state_invalid": "Não foi possível confirmar o login OAuth: state inválido ou expirado.",
+    "exchange_failed": "O Discord não emitiu um token de acesso. Tente entrar de novo.",
+    "profile_failed": "Não foi possível obter seu perfil do Discord. Tente entrar de novo.",
+    "signed_in": "Bem-vindo, {name}."
+  },
+  "dev": {
+    "issued": "Token de desenvolvimento emitido para {user_id}.",
+    "disabled": "A emissão de tokens de desenvolvimento está desativada neste ambiente.",
+    "forbidden": "Chave de desenvolvedor inválida."
+  },
+  "user": {
+    "not_member": "O usuário {user_id} não é membro do clã {clan_id}.",
+    "no_clan": "Você não está em nenhum clã. O comandante precisa adicionar o bot do clã ao servidor do Discord dele e puxar os cargos — depois disso você entra ao fazer login. Ou entre como convidado."
+  },
+  "code": {
+    "invalid": "Código de convite não encontrado ou revogado.",
+    "expired": "O código de convite expirou.",
+    "exhausted": "O código de convite atingiu o limite de usos.",
+    "redeemed": "Você entrou no clã “{clan}” com o cargo “{role}”."
+  },
+  "clan_token": {
+    "created": "Token “{label}” criado. Salve agora — ele aparece só uma vez.",
+    "users_only": "Só um usuário pode emitir tokens de clã, não outro token.",
+    "role_too_high": "Não é possível emitir um token com cargo acima do seu: {role}."
+  },
+  "invite": {
+    "created": "Código de convite {code} criado.",
+    "revoked": "Código de convite {code} revogado.",
+    "not_found": "Código de convite não encontrado no seu clã."
+  },
+  "setup": {
+    "expired": "O tempo para escolher o servidor acabou — entre pelo Discord de novo.",
+    "guild_not_owned": "Você não é o dono deste servidor do Discord.",
+    "clan_not_member": "Você não é membro deste clã.",
+    "nothing_selected": "Escolha um servidor ou um clã.",
+    "clan_created": "O clã “{clan}” foi vinculado ao seu servidor do Discord. Você é o comandante.",
+    "signed_in": "Bem-vindo, {name}.",
+    "joined": "Você entrou no terminal do clã “{clan}”."
+  },
+  "guest": {
+    "disabled": "O acesso de convidado está desativado.",
+    "signed_in": "Acesso de convidado: só ferramentas, os dados dos clãs ficam ocultos."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "timer": {
+    "not_found": "No se encontró el temporizador en tu clan.",
+    "created": "Temporizador «{title}» iniciado.",
+    "updated": "Temporizador «{title}» actualizado.",
+    "completed": "Temporizador «{title}» completado.",
+    "reopened": "El temporizador «{title}» vuelve a vigilarse.",
+    "invalid_window": "El final debe ser posterior al inicio.",
+    "stockpile_missing": "No se encontró el almacén vinculado en tu clan.",
+    "restarted": "Temporizador «{title}» reiniciado.",
+    "note_added": "Nota añadida al registro.",
+    "log": {
+      "created": "Temporizador iniciado, termina {ends}.",
+      "restarted": "Temporizador reiniciado por {duration}.",
+      "completed": "Temporizador marcado como completado.",
+      "reopened": "El temporizador vuelve a vigilarse."
+    }
+  }
+}

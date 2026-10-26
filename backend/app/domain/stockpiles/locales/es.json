@@ -1,0 +1,15 @@
+{
+  "stockpile": {
+    "not_found": "No se encontró el almacén en tu clan.",
+    "created": "Almacén «{name}» creado.",
+    "updated": "Almacén «{name}» actualizado.",
+    "deleted": "Almacén «{name}» eliminado.",
+    "name_taken": "Ya existe un almacén llamado «{name}».",
+    "synced": "Almacén «{name}» sincronizado: {count} líneas."
+  },
+  "item": {
+    "not_found": "No hay «{item}» en este almacén.",
+    "saved": "«{item}»: {quantity} u.",
+    "removed": "«{item}» quitado del almacén."
+  }
+}

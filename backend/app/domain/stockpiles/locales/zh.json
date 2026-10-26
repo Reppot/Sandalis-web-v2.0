@@ -1,0 +1,15 @@
+{
+  "stockpile": {
+    "not_found": "在你的军团中未找到该仓库。",
+    "created": "仓库“{name}”已创建。",
+    "updated": "仓库“{name}”已更新。",
+    "deleted": "仓库“{name}”已删除。",
+    "name_taken": "名为“{name}”的仓库已存在。",
+    "synced": "仓库“{name}”已同步：{count} 项。"
+  },
+  "item": {
+    "not_found": "此仓库中没有“{item}”。",
+    "saved": "“{item}”：{quantity} 件。",
+    "removed": "已从仓库中移除“{item}”。"
+  }
+}

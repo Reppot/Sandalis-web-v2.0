@@ -1,0 +1,9 @@
+{
+  "item": {
+    "unknown_code": "目录中未找到代码为 {code} 的物品。",
+    "inactive": "物品 {code} 已停产。"
+  },
+  "scan": {
+    "too_large": "文件过大（上限 {limit_mb} MB）。"
+  }
+}

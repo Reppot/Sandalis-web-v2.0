@@ -1,0 +1,19 @@
+{
+  "timer": {
+    "not_found": "Nie znaleziono licznika w twoim klanie.",
+    "created": "Uruchomiono licznik „{title}”.",
+    "updated": "Zaktualizowano licznik „{title}”.",
+    "completed": "Zakończono licznik „{title}”.",
+    "reopened": "Licznik „{title}” jest znowu monitorowany.",
+    "invalid_window": "Koniec musi być później niż początek.",
+    "stockpile_missing": "Nie znaleziono powiązanego magazynu w twoim klanie.",
+    "restarted": "Ponownie uruchomiono licznik „{title}”.",
+    "note_added": "Dodano wpis do dziennika.",
+    "log": {
+      "created": "Licznik uruchomiony, koniec {ends}.",
+      "restarted": "Licznik uruchomiony ponownie na {duration}.",
+      "completed": "Licznik oznaczony jako zakończony.",
+      "reopened": "Licznik jest znowu monitorowany."
+    }
+  }
+}

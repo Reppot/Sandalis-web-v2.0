@@ -1,0 +1,49 @@
+{
+  "report": {
+    "not_found": "在你的军团中未找到该订单。",
+    "default_title": "补给订单 {date}",
+    "created": "订单已发给军团：{count} 项。",
+    "updated": "订单“{title}”已更新。",
+    "status_changed": "订单“{title}”：{status}。",
+    "bad_transition": "订单无法从“{from}”变更为“{to}”。",
+    "discord_not_configured": "尚未连接 Discord 频道。指挥官可以在“管理”中连接。",
+    "discord_webhook_invalid": "Discord 拒绝了该 Webhook：它已被删除或 URL 错误。请在“管理”中更新。",
+    "discord_failed": "Discord 未接受该消息，请稍后再试。",
+    "discord_sent": "订单“{title}”已发送到 Discord。",
+    "image_too_large": "订单图片超过 {limit_mb} MB。",
+    "status": {
+      "open": "待处理",
+      "in_progress": "进行中",
+      "done": "已完成",
+      "cancelled": "已取消"
+    },
+    "unit": {
+      "crate": "箱",
+      "unit": "件"
+    },
+    "embed": {
+      "status": "状态",
+      "lines": "项目数",
+      "author": "作者",
+      "place": "仓库",
+      "note": "备注"
+    },
+    "progress_saved": "订单运送已记录：{n} 件/箱。",
+    "progress_cancelled": "订单已取消——不再接受运送记录。",
+    "progress_bad_line": "运送记录中有不属于此订单的行。",
+    "progress_no_stockpile": "在你的军团中未找到该仓库。",
+    "progress_not_found": "未找到日志记录。",
+    "progress_not_yours": "只能删除你自己的日志记录。"
+  },
+  "settings": {
+    "saved": "军团设置已保存。",
+    "roles_saved": "Discord 角色映射已保存。成员下次登录时角色会更新。"
+  },
+  "roles": {
+    "owner_only": "只有军团指挥官（服务器所有者）可以管理 Discord 角色。",
+    "bot_missing": "军团机器人看不到服务器：请用“添加机器人”添加它。",
+    "pulled": "已获取服务器角色：{n}。新角色默认为基础级别。",
+    "saved": "权限级别已保存。成员将在下次登录时获得。",
+    "unknown_permission": "未知权限：{permissions}。"
+  }
+}

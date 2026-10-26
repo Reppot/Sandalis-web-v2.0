@@ -1,0 +1,23 @@
+{
+  "errors": {
+    "internal": "Wewnętrzny błąd serwera. Spróbuj później.",
+    "unauthorized": "Wymagane zalogowanie w klanie.",
+    "token_expired": "Sesja wygasła. Zaloguj się ponownie.",
+    "forbidden": "Brak uprawnień. Wymagany dostęp: {scopes}.",
+    "not_found": "Nie znaleziono obiektu.",
+    "validation": "Nieprawidłowe dane żądania.",
+    "clan_context_missing": "Nie udało się ustalić klanu dla tego żądania.",
+    "clan_scope_violation": "Operacja odrzucona: {entity} należy do innego klanu.",
+    "db_unavailable": "Baza danych się budzi – ponów żądanie za kilka sekund.",
+    "war_api_unavailable": "Foxhole War API jest niedostępne – spróbuj później.",
+    "pyramid_unknown_items": "Nieznane przedmioty w piramidzie: {codes}",
+    "pyramid_no_vehicles": "Pojazdów i konstrukcji nie można dodać do piramidy: {codes}",
+    "pyramid_too_many": "Klan ma już {n} własnych konfiguracji – usuń jedną, aby zapisać nową.",
+    "pyramid_name_taken": "Konfiguracja „{name}” już istnieje – wybierz inną nazwę.",
+    "pyramid_config_not_found": "Nie znaleziono konfiguracji – być może została usunięta.",
+    "feedback_admin_only": "Wszystkie opinie może czytać tylko właściciel strony.",
+    "feedback_login_required": "Aby napisać, zaloguj się przez Discord – wtedy widać twój nick.",
+    "feedback_rate_limited": "Maksymalnie {n} wiadomości na godzinę – spróbuj za chwilę.",
+    "guest_no_clan": "Dostęp gościa nie ma klanu"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "order": {
+    "not_found": "Pedido {order_id} não encontrado no seu clã.",
+    "created": "Pedido “{title}” criado.",
+    "duplicate": "Esse pedido já existe.",
+    "status_changed": "Status do pedido alterado para “{status}”.",
+    "invalid_transition": "Não é possível passar de “{from_status}” para “{to_status}”.",
+    "not_enough_stock": "Falta “{item}” no estoque: são necessários {needed}, há {available}.",
+    "queued": {
+      "one": "{count} linha adicionada à fila.",
+      "other": "{count} linhas adicionadas à fila."
+    }
+  }
+}

@@ -96,7 +96,7 @@ def test_locale_preference_roundtrip(db):
             assert saved.json()["locale"] == "cs"
             assert (await c.get(f"{API}/auth/me", headers=auth)).json()["locale"] == "cs"
 
-            bad = await c.put(f"{API}/auth/me/locale", json={"locale": "de"}, headers=auth)
+            bad = await c.put(f"{API}/auth/me/locale", json={"locale": "ja"}, headers=auth)
             assert bad.status_code == 422
 
     run(main())

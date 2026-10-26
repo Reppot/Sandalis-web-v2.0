@@ -82,7 +82,7 @@ class Settings(BaseSettings):
 
     # --- i18n -----------------------------------------------------------
     DEFAULT_LOCALE: str = "en"
-    SUPPORTED_LOCALES: tuple[str, ...] = ("ru", "en", "cs")
+    SUPPORTED_LOCALES: tuple[str, ...] = ("ru", "en", "uk", "de", "pl", "fr", "es", "pt", "cs", "zh")
     I18N_HOT_RELOAD: bool = Field(default=False)  # True только локально
 
 

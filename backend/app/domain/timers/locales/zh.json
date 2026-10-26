@@ -1,0 +1,19 @@
+{
+  "timer": {
+    "not_found": "在你的军团中未找到该计时器。",
+    "created": "计时器“{title}”已启动。",
+    "updated": "计时器“{title}”已更新。",
+    "completed": "计时器“{title}”已完成。",
+    "reopened": "计时器“{title}”重新开始跟踪。",
+    "invalid_window": "结束时间必须晚于开始时间。",
+    "stockpile_missing": "在你的军团中未找到关联的仓库。",
+    "restarted": "计时器“{title}”已重启。",
+    "note_added": "已添加到日志。",
+    "log": {
+      "created": "计时器已启动，结束于 {ends}。",
+      "restarted": "计时器已重启，时长 {duration}。",
+      "completed": "计时器已标记为完成。",
+      "reopened": "计时器重新开始跟踪。"
+    }
+  }
+}

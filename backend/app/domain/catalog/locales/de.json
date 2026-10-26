@@ -1,0 +1,9 @@
+{
+  "item": {
+    "unknown_code": "Gegenstand mit dem Code {code} wurde im Katalog nicht gefunden.",
+    "inactive": "Gegenstand {code} wird nicht mehr hergestellt."
+  },
+  "scan": {
+    "too_large": "Die Datei ist zu groß (Limit {limit_mb} MB)."
+  }
+}

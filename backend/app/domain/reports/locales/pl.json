@@ -1,0 +1,49 @@
+{
+  "report": {
+    "not_found": "Nie znaleziono zamówienia w twoim klanie.",
+    "default_title": "Zamówienie zaopatrzenia {date}",
+    "created": "Zamówienie wysłane do klanu: pozycji {count}.",
+    "updated": "Zaktualizowano zamówienie „{title}”.",
+    "status_changed": "Zamówienie „{title}”: {status}.",
+    "bad_transition": "Nie można przenieść zamówienia z „{from}” do „{to}”.",
+    "discord_not_configured": "Kanał Discord nie jest podłączony. Dowódca może go podłączyć w sekcji „Zarządzanie”.",
+    "discord_webhook_invalid": "Discord odrzucił webhook: został usunięty albo adres URL jest błędny. Zaktualizuj go w sekcji „Zarządzanie”.",
+    "discord_failed": "Discord nie przyjął wiadomości. Spróbuj później.",
+    "discord_sent": "Zamówienie „{title}” wysłano na Discorda.",
+    "image_too_large": "Obraz zamówienia przekracza {limit_mb} MB.",
+    "status": {
+      "open": "Otwarte",
+      "in_progress": "W toku",
+      "done": "Zrealizowane",
+      "cancelled": "Anulowane"
+    },
+    "unit": {
+      "crate": "skrz.",
+      "unit": "szt."
+    },
+    "embed": {
+      "status": "Status",
+      "lines": "Pozycji",
+      "author": "Autor",
+      "place": "Magazyn",
+      "note": "Uwagi"
+    },
+    "progress_saved": "Zapisano realizację zamówienia: {n} szt./skrz.",
+    "progress_cancelled": "Zamówienie jest anulowane – realizacja nie jest przyjmowana.",
+    "progress_bad_line": "Zgłoszenie dostawy zawiera wiersz spoza tego zamówienia.",
+    "progress_no_stockpile": "Nie znaleziono magazynu w twoim klanie.",
+    "progress_not_found": "Nie znaleziono wpisu w dzienniku.",
+    "progress_not_yours": "Usunąć można tylko własny wpis w dzienniku."
+  },
+  "settings": {
+    "saved": "Zapisano ustawienia klanu.",
+    "roles_saved": "Zapisano przypisanie ról z Discorda. Role zaktualizują się przy następnym logowaniu członków."
+  },
+  "roles": {
+    "owner_only": "Rolami z Discorda zarządza tylko dowódca klanu (właściciel serwera).",
+    "bot_missing": "Bot klanu nie widzi serwera: dodaj go przyciskiem „Dodaj bota”.",
+    "pulled": "Pobrano role serwera: {n}. Nowe role mają poziom podstawowy.",
+    "saved": "Zapisano poziomy dostępu. Członkowie otrzymają je przy następnym logowaniu.",
+    "unknown_permission": "Nieznane uprawnienia: {permissions}."
+  }
+}

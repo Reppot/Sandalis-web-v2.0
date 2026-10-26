@@ -55,7 +55,7 @@ const JSON_LD = {
   description: DESCRIPTION,
   applicationCategory: "GameApplication",
   operatingSystem: "Any",
-  inLanguage: ["ru", "en", "cs"],
+  inLanguage: ["ru", "en", "uk", "de", "pl", "fr", "es", "pt-BR", "cs", "zh-CN"],
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   author: { "@type": "Person", name: "Reppot" },
 };

@@ -1,0 +1,47 @@
+{
+  "discord": {
+    "disabled": "Logowanie przez Discord jest wyłączone w tym środowisku.",
+    "state_invalid": "Nie udało się potwierdzić logowania OAuth: nieprawidłowy lub wygasły state.",
+    "exchange_failed": "Discord nie wydał tokenu dostępu. Spróbuj zalogować się ponownie.",
+    "profile_failed": "Nie udało się pobrać twojego profilu z Discorda. Spróbuj zalogować się ponownie.",
+    "signed_in": "Witaj, {name}."
+  },
+  "dev": {
+    "issued": "Wydano token deweloperski dla {user_id}.",
+    "disabled": "Wydawanie tokenów deweloperskich jest wyłączone w tym środowisku.",
+    "forbidden": "Nieprawidłowy klucz dewelopera."
+  },
+  "user": {
+    "not_member": "Użytkownik {user_id} nie należy do klanu {clan_id}.",
+    "no_clan": "Nie należysz do żadnego klanu. Dowódca musi dodać bota klanu na swój serwer Discord i pobrać role – wtedy dołączysz przy logowaniu. Możesz też wejść jako gość."
+  },
+  "code": {
+    "invalid": "Nie znaleziono kodu zaproszenia albo został odwołany.",
+    "expired": "Kod zaproszenia wygasł.",
+    "exhausted": "Wyczerpano limit użyć kodu.",
+    "redeemed": "Dołączyłeś do klanu „{clan}” z rolą „{role}”."
+  },
+  "clan_token": {
+    "created": "Utworzono token „{label}”. Zapisz go teraz – jest pokazywany tylko raz.",
+    "users_only": "Tokeny klanu może wydawać tylko użytkownik, a nie inny token.",
+    "role_too_high": "Nie można wydać tokenu z rolą wyższą niż twoja: {role}."
+  },
+  "invite": {
+    "created": "Utworzono kod zaproszenia {code}.",
+    "revoked": "Odwołano kod zaproszenia {code}.",
+    "not_found": "Nie znaleziono kodu zaproszenia w twoim klanie."
+  },
+  "setup": {
+    "expired": "Czas na wybór serwera minął – zaloguj się przez Discord ponownie.",
+    "guild_not_owned": "Nie jesteś właścicielem tego serwera Discord.",
+    "clan_not_member": "Nie należysz do tego klanu.",
+    "nothing_selected": "Wybierz serwer lub klan.",
+    "clan_created": "Klan „{clan}” został powiązany z twoim serwerem Discord. Jesteś dowódcą.",
+    "signed_in": "Witaj, {name}.",
+    "joined": "Dołączyłeś do terminala klanu „{clan}”."
+  },
+  "guest": {
+    "disabled": "Dostęp gościa jest wyłączony.",
+    "signed_in": "Dostęp gościa: tylko narzędzia, dane klanów są ukryte."
+  }
+}

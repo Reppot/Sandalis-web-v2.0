@@ -1,0 +1,15 @@
+{
+  "stockpile": {
+    "not_found": "Réserve introuvable dans votre clan.",
+    "created": "Réserve « {name} » créée.",
+    "updated": "Réserve « {name} » mise à jour.",
+    "deleted": "Réserve « {name} » supprimée.",
+    "name_taken": "Une réserve nommée « {name} » existe déjà.",
+    "synced": "Réserve « {name} » synchronisée : {count} lignes."
+  },
+  "item": {
+    "not_found": "Pas de « {item} » dans cette réserve.",
+    "saved": "« {item} » : {quantity} pcs.",
+    "removed": "« {item} » retiré de la réserve."
+  }
+}

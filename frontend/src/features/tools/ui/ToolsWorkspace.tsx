@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent, type ExternalToolPayload } from "@/entities/content";
 import { recipeApi, type Recipe } from "@/entities/recipe";
-import { Loading, STORAGE_KEYS, errorText, readStorage, UiGlyph, cn, useNotify, useT, writeStorage, type MessageKey, type UiIcon } from "@/shared";
+import { LOCALES, Loading, STORAGE_KEYS, errorText, readStorage, UiGlyph, cn, useNotify, useT, writeStorage, type MessageKey, type UiIcon } from "@/shared";
 import { FactoryCalculator } from "@/features/tools/ui/FactoryCalculator";
 import { RefineryCalculator } from "@/features/tools/ui/RefineryCalculator";
 import { FacilityCalculator } from "@/features/tools/ui/FacilityCalculator";
@@ -156,7 +156,7 @@ export const ToolsWorkspace: React.FC<{
         ) : (
           <div className="tools-hero-stats">
             <span><b>{all.length}</b>{t("tools.statModules")}</span>
-            <span><b>3</b>{t("tools.statLanguages")}</span>
+            <span><b>{LOCALES.length}</b>{t("tools.statLanguages")}</span>
             <span><b>Wiki</b>{t("tools.statData")}</span>
           </div>
         )}

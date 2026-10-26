@@ -10,10 +10,10 @@
     "restarted": "Časovač „{title}“ byl restartován.",
     "note_added": "Záznam přidán do deníku.",
     "log": {
-      "created": "[SYSTÉM] Časovač spuštěn, konec {ends}.",
-      "restarted": "[ZÁSOBOVAČ] Časovač restartován na {duration}.",
-      "completed": "[ZÁSOBOVAČ] Časovač označen jako dokončený.",
-      "reopened": "[ZÁSOBOVAČ] Časovač znovu otevřen."
+      "created": "Časovač spuštěn, konec {ends}.",
+      "restarted": "Časovač restartován na {duration}.",
+      "completed": "Časovač označen jako dokončený.",
+      "reopened": "Časovač se znovu sleduje."
     }
   }
 }

@@ -1,0 +1,15 @@
+{
+  "order": {
+    "not_found": "Замовлення {order_id} не знайдено у вашому клані.",
+    "created": "Замовлення «{title}» створено.",
+    "duplicate": "Таке замовлення вже існує.",
+    "status_changed": "Статус замовлення змінено на «{status}».",
+    "invalid_transition": "Не можна перейти зі статусу «{from_status}» у «{to_status}».",
+    "not_enough_stock": "На складі бракує «{item}»: потрібно {needed}, доступно {available}.",
+    "queued": {
+      "one": "У чергу додано {count} позицію.",
+      "few": "У чергу додано {count} позиції.",
+      "many": "У чергу додано {count} позицій."
+    }
+  }
+}

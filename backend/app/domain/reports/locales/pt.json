@@ -1,0 +1,49 @@
+{
+  "report": {
+    "not_found": "Pedido não encontrado no seu clã.",
+    "default_title": "Pedido de suprimentos {date}",
+    "created": "Pedido enviado ao clã: {count} linhas.",
+    "updated": "Pedido “{title}” atualizado.",
+    "status_changed": "Pedido “{title}”: {status}.",
+    "bad_transition": "Não é possível passar um pedido de “{from}” para “{to}”.",
+    "discord_not_configured": "O canal do Discord não está conectado. O comandante pode conectar em “Gestão”.",
+    "discord_webhook_invalid": "O Discord recusou o webhook: ele foi excluído ou a URL está errada. Atualize em “Gestão”.",
+    "discord_failed": "O Discord não aceitou a mensagem. Tente mais tarde.",
+    "discord_sent": "Pedido “{title}” enviado ao Discord.",
+    "image_too_large": "A imagem do pedido passa de {limit_mb} MB.",
+    "status": {
+      "open": "Aberto",
+      "in_progress": "Em andamento",
+      "done": "Concluído",
+      "cancelled": "Cancelado"
+    },
+    "unit": {
+      "crate": "cx.",
+      "unit": "un."
+    },
+    "embed": {
+      "status": "Status",
+      "lines": "Linhas",
+      "author": "Autor",
+      "place": "Estoque",
+      "note": "Observação"
+    },
+    "progress_saved": "Entrega registrada no pedido: {n} un./cx.",
+    "progress_cancelled": "O pedido foi cancelado — entregas não são aceitas.",
+    "progress_bad_line": "O registro de entrega tem uma linha que não é deste pedido.",
+    "progress_no_stockpile": "Estoque não encontrado no seu clã.",
+    "progress_not_found": "Registro do diário não encontrado.",
+    "progress_not_yours": "Você só pode excluir o seu próprio registro do diário."
+  },
+  "settings": {
+    "saved": "Configurações do clã salvas.",
+    "roles_saved": "Vínculo de cargos do Discord salvo. Os cargos serão atualizados no próximo login dos membros."
+  },
+  "roles": {
+    "owner_only": "Só o comandante do clã (dono do servidor) gerencia os cargos do Discord.",
+    "bot_missing": "O bot do clã não enxerga o servidor: adicione-o com “Adicionar bot”.",
+    "pulled": "Cargos do servidor puxados: {n}. Cargos novos começam no nível básico.",
+    "saved": "Níveis de acesso salvos. Os membros vão recebê-los no próximo login.",
+    "unknown_permission": "Permissões desconhecidas: {permissions}."
+  }
+}

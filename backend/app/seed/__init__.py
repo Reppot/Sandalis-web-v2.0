@@ -104,6 +104,26 @@ async def seed_content_icons(conn: AsyncConnection, rows: list[dict[str, Any]]) 
     return updated
 
 
+async def seed_training_text(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int:
+    """Тексты уроков обучения — системные (редактора в интерфейсе нет): заголовок, описание
+    и шаги обновляются из content.json при каждом деплое, остальные поля payload не трогаются."""
+    updated = 0
+    for row in rows:
+        if row.get("kind") != "training_module":
+            continue
+        payload = row.get("payload") or {}
+        text = {k: payload[k] for k in ("title", "summary", "body") if k in payload}
+        result = await conn.execute(
+            update(AppContent)
+            .where(AppContent.kind == row["kind"], AppContent.key == row["key"])
+            .values(payload=AppContent.payload.op("||")(
+                cast(cast(json.dumps(text, ensure_ascii=False), String), JSONB)
+            ))
+        )
+        updated += result.rowcount or 0
+    return updated
+
+
 async def seed_content_i18n(conn: AsyncConnection, i18n: dict[str, dict[str, Any]]) -> int:
     """Переводы en/cs — системные данные: payload.i18n перезаписывается всегда,
     остальные поля payload (возможно, правленые админом) не трогаются."""
@@ -143,6 +163,7 @@ async def run(conn: AsyncConnection) -> dict[str, int]:
         if (DATA_DIR / "facility_recipes.json").exists() else 0,
         "content_inserted": await seed_content(conn, load("content.json")),
         "content_icons": await seed_content_icons(conn, load("content.json")),
+        "training_text": await seed_training_text(conn, load("content.json")),
         "content_translated": await seed_content_i18n(
             conn, json.loads((DATA_DIR / "content_i18n.json").read_text(encoding="utf-8"))
         ),

@@ -8,10 +8,16 @@ from app.core.i18n.catalog import lookup
 
 
 def _plural_category(locale: str, n: int) -> str:
-    """Упрощённые CLDR-правила для ru/cs/en."""
-    if locale in ("ru",):
-        mod10, mod100 = n % 10, n % 100
+    """Упрощённые CLDR-правила для целых чисел."""
+    mod10, mod100 = n % 10, n % 100
+    if locale in ("ru", "uk"):
         if mod10 == 1 and mod100 != 11:
+            return "one"
+        if 2 <= mod10 <= 4 and not 12 <= mod100 <= 14:
+            return "few"
+        return "many"
+    if locale == "pl":
+        if n == 1:
             return "one"
         if 2 <= mod10 <= 4 and not 12 <= mod100 <= 14:
             return "few"
@@ -21,6 +27,10 @@ def _plural_category(locale: str, n: int) -> str:
             return "one"
         if 2 <= n <= 4:
             return "few"
+        return "other"
+    if locale in ("fr", "pt"):
+        return "one" if n in (0, 1) else "other"
+    if locale == "zh":
         return "other"
     return "one" if n == 1 else "other"
 

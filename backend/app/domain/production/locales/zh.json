@@ -1,0 +1,13 @@
+{
+  "order": {
+    "not_found": "在你的军团中未找到订单 {order_id}。",
+    "created": "订单“{title}”已创建。",
+    "duplicate": "该订单已存在。",
+    "status_changed": "订单状态已改为“{status}”。",
+    "invalid_transition": "无法从“{from_status}”变更为“{to_status}”。",
+    "not_enough_stock": "仓库中“{item}”不足：需要 {needed}，现有 {available}。",
+    "queued": {
+      "other": "已加入队列 {count} 项。"
+    }
+  }
+}

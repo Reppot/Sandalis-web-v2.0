@@ -41,7 +41,7 @@ const RU_LABELS: ExportLabels = {
   name: "Название",
   quantity: "Количество",
   unit: "Ед. изм.",
-  footer: "SINDARIS LOGISTICS OVERWATCH • ТАКТИЧЕСКИЙ РАПОРТ",
+  footer: "SINDARIS • логистика клана",
 };
 
 export interface ExportDoc {

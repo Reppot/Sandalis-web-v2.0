@@ -1,0 +1,47 @@
+{
+  "discord": {
+    "disabled": "La connexion avec Discord est désactivée dans cet environnement.",
+    "state_invalid": "Connexion OAuth non vérifiée : state invalide ou expiré.",
+    "exchange_failed": "Discord n'a pas fourni de jeton d'accès. Réessayez de vous connecter.",
+    "profile_failed": "Impossible de récupérer votre profil Discord. Réessayez de vous connecter.",
+    "signed_in": "Bienvenue, {name}."
+  },
+  "dev": {
+    "issued": "Jeton de développement émis pour {user_id}.",
+    "disabled": "L'émission de jetons de développement est désactivée dans cet environnement.",
+    "forbidden": "Clé de développeur invalide."
+  },
+  "user": {
+    "not_member": "L'utilisateur {user_id} n'est pas membre du clan {clan_id}.",
+    "no_clan": "Vous n'êtes dans aucun clan. Le commandant doit ajouter le bot du clan à son serveur Discord et récupérer les rôles — vous pourrez alors rejoindre en vous connectant. Vous pouvez aussi entrer en invité."
+  },
+  "code": {
+    "invalid": "Code d'invitation introuvable ou révoqué.",
+    "expired": "Le code d'invitation a expiré.",
+    "exhausted": "Le code d'invitation a atteint sa limite d'utilisations.",
+    "redeemed": "Vous avez rejoint le clan « {clan} » avec le rôle « {role} »."
+  },
+  "clan_token": {
+    "created": "Jeton « {label} » créé. Enregistrez-le maintenant — il ne s'affiche qu'une fois.",
+    "users_only": "Seul un utilisateur peut émettre des jetons de clan, pas un autre jeton.",
+    "role_too_high": "Impossible d'émettre un jeton avec un rôle supérieur au vôtre : {role}."
+  },
+  "invite": {
+    "created": "Code d'invitation {code} créé.",
+    "revoked": "Code d'invitation {code} révoqué.",
+    "not_found": "Code d'invitation introuvable dans votre clan."
+  },
+  "setup": {
+    "expired": "Le délai de choix du serveur est écoulé — reconnectez-vous avec Discord.",
+    "guild_not_owned": "Vous n'êtes pas propriétaire de ce serveur Discord.",
+    "clan_not_member": "Vous n'êtes pas membre de ce clan.",
+    "nothing_selected": "Choisissez un serveur ou un clan.",
+    "clan_created": "Le clan « {clan} » est lié à votre serveur Discord. Vous êtes le commandant.",
+    "signed_in": "Bienvenue, {name}.",
+    "joined": "Vous avez rejoint le terminal du clan « {clan} »."
+  },
+  "guest": {
+    "disabled": "L'accès invité est désactivé.",
+    "signed_in": "Accès invité : outils uniquement, les données des clans sont masquées."
+  }
+}
