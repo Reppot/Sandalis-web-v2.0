@@ -6,6 +6,7 @@ import { useContent } from "@/entities/content";
 import { Scopes } from "@/entities/session";
 import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
 import { CodeBaseWorkspace } from "@/features/codes";
+import { PlanningWorkspace } from "@/features/planning";
 import { ReportsWorkspace } from "@/features/reports";
 import { StatsWorkspace } from "@/features/stats";
 import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
@@ -97,6 +98,7 @@ export default function TerminalPage() {
       ...(can(Scopes.STOCKPILES_READ)
         ? [{ id: "pyramid", icon: "pyramid" as const, label: "nav.pyramid.label" as const, clanData: true, isNew: true, render: () => <PyramidWorkspace can={can} onOpenConstructor={() => openTool("orders")} /> }]
         : []),
+      { id: "planning", icon: "map" as const, label: "nav.planning.label" as const, isNew: true, render: () => <PlanningWorkspace /> },
       { id: "codes", icon: "codes" as const, label: "nav.codes.label" as const, render: () => <CodeBaseWorkspace /> },
     ],
     [can, openClan, openTool],

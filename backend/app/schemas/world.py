@@ -38,3 +38,39 @@ class WorldRead(BaseModel):
     war: WarRead
     regions: list[RegionRead]
     source: str
+
+
+class MapItemRead(BaseModel):
+    kind: Literal["town_hall", "relic", "storage", "seaport", "coastal_gun", "runway"]
+    tier: int | None                # уровень ратуши / реликвии / аэродрома
+    team: Literal["colonials", "wardens", "neutral"]
+    x: float                        # доли картинки гекса (0..1)
+    y: float
+    victory: bool
+    scorched: bool
+
+
+class MapLabelRead(BaseModel):
+    text: str
+    x: float
+    y: float
+
+
+class MapRegionRead(BaseModel):
+    key: str                        # имя карты War API: DeadLandsHex
+    slug: str                       # картинка static/maps/hex/<slug>.webp
+    name: str
+    col: int                        # колонка сетки шестиугольников
+    row: int                        # полу-ряд
+    items: list[MapItemRead]
+    labels: list[MapLabelRead]      # крупные города
+
+
+class WorldMapRead(BaseModel):
+    """Суточный снимок карты войны для «Планирования» (кеш сервера)."""
+    war_number: int | None
+    updated_at: str
+    next_update_at: str
+    unavailable: list[str]          # виды построек, которых нет в War API (маяк, зенитка)
+    regions: list[MapRegionRead]
+    source: str
