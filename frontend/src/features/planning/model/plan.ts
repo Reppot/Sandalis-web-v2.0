@@ -8,11 +8,15 @@ import { HEX_H, HEX_W } from "@/features/planning/model/map";
 export const M_PER_PX_X = 2184 / HEX_W;
 export const M_PER_PX_Y = 1890 / HEX_H;
 
-export const TOOLS = ["select", "line", "ruler", "arrow", "radius", "structure", "eraser"] as const;
+export const TOOLS = ["select", "line", "ruler", "arrow", "radius", "structure", "order", "eraser"] as const;
 export type Tool = (typeof TOOLS)[number];
 export const UNITS = ["infantry", "tanks", "artillery", "ships"] as const;
 export type Unit = (typeof UNITS)[number];
 export const UNIT_COLOR: Record<Unit, string> = { infantry: "#e5484d", tanks: "#f5a524", artillery: "#a855f7", ships: "#38bdf8" };
+export const FACTIONS = ["wardens", "colonials"] as const;
+export type Faction = (typeof FACTIONS)[number];
+/** Цвета фракций, рекомендованные README War API (Map Icon Colours, sRGB). */
+export const FACTION_COLOR: Record<Faction, string> = { wardens: "#245682", colonials: "#516c4b" };
 export const COLORS = ["#e5484d", "#f5a524", "#facc15", "#a3e635", "#38bdf8", "#a855f7", "#f4f4f5", "#18181b"] as const;
 
 interface Base {
@@ -28,8 +32,10 @@ export interface ArrowShape extends Base { kind: "arrow"; length: number; width:
 /** Радиус: сектор шириной sweep° вокруг азимута angle (360 — полный круг). */
 export interface RadiusShape extends Base { kind: "radius"; radius: number; sweep: number; color: string }
 /** Постройка из меню строительства; size — масштаб значка, %. */
-export interface StructureShape extends Base { kind: "structure"; ref: string; size: number }
-export type Shape = LineShape | RulerShape | ArrowShape | RadiusShape | StructureShape;
+export interface StructureShape extends Base { kind: "structure"; ref: string; size: number; team?: Faction }
+/** Метка заказа клана: report — id заказа, title — название на момент установки (если заказ удалят). */
+export interface OrderShape extends Base { kind: "order"; report: string; title: string; size: number }
+export type Shape = LineShape | RulerShape | ArrowShape | RadiusShape | StructureShape | OrderShape;
 
 /** Настройки для новых объектов (панель инструментов). */
 export interface Defaults {
@@ -39,8 +45,10 @@ export interface Defaults {
   name: string;
   sweep: number;
   structure: string | null;
+  team: Faction;
+  order: string | null;
 }
-export const DEFAULTS: Defaults = { color: "#f5a524", width: 4, unit: "infantry", name: "", sweep: 360, structure: null };
+export const DEFAULTS: Defaults = { color: "#f5a524", width: 4, unit: "infantry", name: "", sweep: 360, structure: null, team: "wardens", order: null };
 
 const PLAN_KEY = "sindaris-planning-plan";
 const DEFAULTS_KEY = "sindaris-planning-defaults";

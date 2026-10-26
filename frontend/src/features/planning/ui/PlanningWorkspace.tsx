@@ -5,6 +5,8 @@ import { FILTER_ICON, MAP_KINDS, planningApi, type MapKind, type WorldMap } from
 import { DEFAULTS, STRUCTURES_URL, loadDefaults, loadPlan, saveDefaults, savePlan, type Defaults, type Shape, type StructureCatalog, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { MapCanvas } from "@/features/planning/ui/MapCanvas";
 import { ToolsPanel } from "@/features/planning/ui/ToolsPanel";
+import { useSession } from "@/features/cabinet";
+import { reportApi, type Report } from "@/entities/report";
 import { EmptyState, Icon, Loading, assetUrl, cn, errorText, formatDateTime, readStorage, useT, writeStorage, type MessageKey } from "@/shared";
 
 const FILTERS_KEY = "sindaris-planning-hidden";
@@ -28,6 +30,14 @@ export const PlanningWorkspace: React.FC = () => {
   const [selected, setSelected] = React.useState<string | null>(null);
   const [defaults, setDefaults] = React.useState<Defaults>(DEFAULTS);
   const [catalog, setCatalog] = React.useState<StructureCatalog | null>(null);
+  // активные заказы клана — для меток на карте; у гостя заказов нет
+  const { session } = useSession();
+  const member = Boolean(session) && session?.subjectType !== "guest";
+  const [orders, setOrders] = React.useState<Report[] | null>(null);
+  React.useEffect(() => {
+    if (!member) return setOrders([]);
+    reportApi.list(["open", "in_progress"]).then(setOrders).catch(() => setOrders([]));
+  }, [member]);
 
   React.useEffect(() => {
     setHidden(new Set(readStorage<MapKind[]>(FILTERS_KEY, []).filter((k) => MAP_KINDS.includes(k))));
@@ -58,6 +68,7 @@ export const PlanningWorkspace: React.FC = () => {
       selected,
       defaults,
       structures,
+      orders: orders ?? [],
       onSelect: setSelected,
       onAdd: (s: Shape) => {
         commit((prev) => [...prev, s]);
@@ -70,7 +81,7 @@ export const PlanningWorkspace: React.FC = () => {
         setSelected((cur) => (cur === id ? null : cur));
       },
     }),
-    [tool, shapes, selected, defaults, structures, commit],
+    [tool, shapes, selected, defaults, structures, orders, commit],
   );
 
   // Delete — удалить выбранное, Esc — снять выбор и вернуться к курсору
@@ -124,14 +135,31 @@ export const PlanningWorkspace: React.FC = () => {
   const resistance = data?.phase === "resistance";
   const selectedShape = shapes.find((s) => s.id === selected) ?? null;
 
+  // карта занимает всё место до низа окна (на телефоне — до нижней панели навигации)
+  const page = React.useRef<HTMLDivElement>(null);
+  React.useLayoutEffect(() => {
+    const fitHeight = () => {
+      const el = page.current;
+      if (!el) return;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const bar = document.querySelector<HTMLElement>(".tabbar");
+      // панель навигации на телефоне fixed — у неё нет offsetParent, смотрим display
+      const bottom = bar && getComputedStyle(bar).display !== "none" ? bar.getBoundingClientRect().height : 0;
+      el.style.height = `${Math.max(352, window.innerHeight - top - bottom - 12)}px`;
+    };
+    fitHeight();
+    window.addEventListener("resize", fitHeight);
+    return () => window.removeEventListener("resize", fitHeight);
+  }, [resistance]);
+
   return (
-    <div className="planning-page tab-fade">
+    <div ref={page} className="planning-page tab-fade">
       {resistance ? (
         <div className="planning-alert" role="alert">
           <Icon name="warning" size={18} />
           <div className="min-w-0">
             <div className="font-semibold text-fg">{t("planning.resistanceTitle")}</div>
-            <div className="mt-0.5 text-sm text-fg-2">
+            <div className="mt-0.5 text-sm text-fg-2 max-sm:line-clamp-2">
               {t("planning.resistanceText", {
                 war: data?.war_number ?? "—",
                 winner: data?.winner ? t(data.winner === "wardens" ? "world.wardens" : "world.colonials") : "—",
@@ -194,6 +222,8 @@ export const PlanningWorkspace: React.FC = () => {
               count={shapes.length}
               catalog={catalog}
               structures={structures}
+              orders={orders}
+              member={member}
             />
           </aside>
         ) : null}

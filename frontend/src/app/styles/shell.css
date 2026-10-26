@@ -8,6 +8,8 @@
 .app { display: flex; min-height: 100dvh; background: var(--bg); }
 .app-main { display: flex; min-width: 0; flex: 1; flex-direction: column; }
 .app-content { width: 100%; max-width: var(--content-max); flex: 1; margin: 0 auto; padding: 1.75rem 2rem 1rem; }
+/* «Планирование»: карта на всю рабочую зону, без ограничения ширины */
+.app-content.is-full { max-width: none; padding: 1rem 1.25rem 0.75rem; }
 .app-footer { padding-bottom: 1.5rem; }
 @media (max-width: 1023px) { .app-content { padding: 1.25rem 1.25rem 1rem; } }
 @media (max-width: 767px) {

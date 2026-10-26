@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { COLORS, TOOLS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Shape, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
-import { Icon, assetUrl, cn, useConfirm, useT, type IconName, type MessageKey } from "@/shared";
+import { COLORS, FACTIONS, FACTION_COLOR, TOOLS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type Shape, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
+import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
+import { Icon, assetUrl, cn, formatDateTime, useConfirm, useT, type IconName, type MessageKey } from "@/shared";
 
-const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", eraser: "eraser" };
+const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", eraser: "eraser" };
 
 /**
  * Правая панель «Планирования»: инструменты, настройки новых объектов, свойства выбранного
@@ -22,7 +23,10 @@ export const ToolsPanel: React.FC<{
   count: number;
   catalog: StructureCatalog | null;
   structures: Map<string, StructureDef>;
-}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures }) => {
+  /** Активные заказы клана; null — ещё грузятся. */
+  orders: Report[] | null;
+  member: boolean;
+}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
   const set = <K extends keyof Defaults>(key: K, value: Defaults[K]) => onDefaults({ ...defaults, [key]: value });
@@ -41,7 +45,7 @@ export const ToolsPanel: React.FC<{
       <p className="text-xs text-fg-3">{t(`planning.tool.${tool}Hint` as MessageKey)}</p>
 
       {selected ? (
-        <Properties shape={selected} onUpdate={onUpdate} onDelete={onDelete} structures={structures} />
+        <Properties shape={selected} onUpdate={onUpdate} onDelete={onDelete} structures={structures} orders={orders ?? []} />
       ) : drawing ? (
         <section className="planning-props">
           <h3 className="planning-props-title">{t("planning.newObject")}</h3>
@@ -60,7 +64,13 @@ export const ToolsPanel: React.FC<{
         </section>
       ) : null}
 
-      {tool === "structure" && !selected ? <StructurePicker catalog={catalog} value={defaults.structure} onChange={(id) => set("structure", id)} /> : null}
+      {tool === "structure" && !selected ? (
+        <>
+          <FactionPicker value={defaults.team} onChange={(team) => set("team", team)} />
+          <StructurePicker catalog={catalog} value={defaults.structure} onChange={(id) => set("structure", id)} />
+        </>
+      ) : null}
+      {tool === "order" && !selected ? <OrderPicker orders={orders} member={member} value={defaults.order} onChange={(id) => set("order", id)} /> : null}
 
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-[var(--border)] pt-3 text-xs text-fg-3">
         <span>{t("planning.objects", { n: count })} · {t("planning.savedLocal")}</span>
@@ -75,10 +85,14 @@ export const ToolsPanel: React.FC<{
 
 /* ───────────── свойства выбранного объекта ───────────── */
 
-const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelete: (id: string) => void; structures: Map<string, StructureDef> }> = ({ shape, onUpdate, onDelete, structures }) => {
+const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelete: (id: string) => void; structures: Map<string, StructureDef>; orders: Report[] }> = ({ shape, onUpdate, onDelete, structures, orders }) => {
   const t = useT();
   const s = shape;
-  const title = s.kind === "structure" ? structures.get(s.ref)?.name ?? t("planning.tool.structure") : t(`planning.tool.${s.kind}` as MessageKey);
+  const order = s.kind === "order" ? orders.find((o) => o.id === s.report) : undefined;
+  const title =
+    s.kind === "structure" ? structures.get(s.ref)?.name ?? t("planning.tool.structure")
+    : s.kind === "order" ? order?.title ?? s.title
+    : t(`planning.tool.${s.kind}` as MessageKey);
   return (
     <section className="planning-props">
       <div className="flex items-center justify-between gap-2">
@@ -95,7 +109,17 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
         </>
       ) : null}
 
-      <Range label={s.kind === "structure" ? t("planning.prop.rotation") : t("planning.prop.angle")} value={s.angle} min={0} max={359} unit="°" onChange={(v) => onUpdate({ ...s, angle: normAngle(v) })} />
+      {s.kind === "order" ? (
+        <>
+          <p className="text-sm text-fg-2">{order ? `${t(REPORT_STATUS_LABEL[order.status])} · ${t("planning.orderLines", { n: order.lines_count })}` : t("planning.orderGone")}</p>
+          <a className="btn h-9 min-h-0 justify-center text-sm" href="/?tab=clan&view=reports">
+            <Icon name="external" size={15} />
+            {t("planning.openOrders")}
+          </a>
+        </>
+      ) : (
+        <Range label={s.kind === "structure" ? t("planning.prop.rotation") : t("planning.prop.angle")} value={s.angle} min={0} max={359} unit="°" onChange={(v) => onUpdate({ ...s, angle: normAngle(v) })} />
+      )}
 
       {s.kind === "line" || s.kind === "ruler" || s.kind === "arrow" ? (
         <Range label={t("planning.prop.length")} value={s.length} min={5} max={5000} step={5} unit="m" onChange={(v) => onUpdate({ ...s, length: v })} />
@@ -107,7 +131,8 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
         </>
       ) : null}
       {s.kind === "line" || s.kind === "arrow" ? <Range label={t("planning.prop.width")} value={s.width} min={1} max={12} unit="px" onChange={(v) => onUpdate({ ...s, width: v })} /> : null}
-      {s.kind === "structure" ? <Range label={t("planning.prop.size")} value={s.size} min={50} max={300} step={10} unit="%" onChange={(v) => onUpdate({ ...s, size: v })} /> : null}
+      {s.kind === "structure" ? <FactionPicker value={s.team ?? null} onChange={(team) => onUpdate({ ...s, team })} /> : null}
+      {s.kind === "structure" || s.kind === "order" ? <Range label={t("planning.prop.size")} value={s.size} min={50} max={300} step={10} unit="%" onChange={(v) => onUpdate({ ...s, size: v })} /> : null}
       {s.kind === "line" || s.kind === "ruler" || s.kind === "radius" ? <ColorPicker value={s.color} onChange={(color) => onUpdate({ ...s, color })} /> : null}
     </section>
   );
@@ -204,6 +229,55 @@ const StructurePicker: React.FC<{ catalog: StructureCatalog | null; value: strin
           );
         })}
       </div>
+    </section>
+  );
+};
+
+/* ───────────── фракция построек ───────────── */
+
+const FactionPicker: React.FC<{ value: Faction | null; onChange: (f: Faction) => void }> = ({ value, onChange }) => {
+  const t = useT();
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="field-label">{t("planning.prop.faction")}</span>
+      <div className="grid grid-cols-2 gap-1.5">
+        {FACTIONS.map((f) => (
+          <button key={f} type="button" className={cn("planning-unit", value === f && "is-active")} onClick={() => onChange(f)} aria-pressed={value === f}>
+            <span className="planning-unit-dot" style={{ background: FACTION_COLOR[f] }} />
+            {t(f === "wardens" ? "world.wardens" : "world.colonials")}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/* ───────────── заказы клана ───────────── */
+
+const OrderPicker: React.FC<{ orders: Report[] | null; member: boolean; value: string | null; onChange: (id: string) => void }> = ({ orders, member, value, onChange }) => {
+  const t = useT();
+  if (!member) return <p className="text-sm text-fg-3">{t("planning.ordersGuest")}</p>;
+  if (!orders) return <p className="text-sm text-fg-3">{t("planning.loading")}</p>;
+  return (
+    <section className="planning-props">
+      <h3 className="planning-props-title">{t("planning.orders")}</h3>
+      {orders.length ? (
+        <div className="planning-structures">
+          {orders.map((o) => (
+            <button key={o.id} type="button" className={cn("planning-structure", value === o.id && "is-active")} onClick={() => onChange(o.id)} aria-pressed={value === o.id}>
+              <span className="planning-structure-icon"><Icon name="paste" size={15} /></span>
+              <span className="min-w-0 flex-1 text-left">
+                <span className="block truncate">{o.title}</span>
+                <span className="block truncate text-xs text-fg-3">
+                  {[t(REPORT_STATUS_LABEL[o.status]), o.meta?.region, t("planning.orderLines", { n: o.lines_count }), formatDateTime(o.created_at)].filter(Boolean).join(" · ")}
+                </span>
+              </span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-fg-3">{t("planning.ordersEmpty")}</p>
+      )}
     </section>
   );
 };

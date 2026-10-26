@@ -202,7 +202,7 @@ export default function TerminalPage() {
         <Sidebar {...nav} />
         <div className="app-main">
           <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} onAlerts={clanSections.some((s) => s.view === "stockpiles") ? () => openClan("stockpiles") : undefined} />
-          <main key={`${current}:${currentTool?.id ?? currentClan?.view ?? ""}`} className="app-content">
+          <main key={`${current}:${currentTool?.id ?? currentClan?.view ?? ""}`} className={currentTool?.id === "planning" ? "app-content is-full" : "app-content"}>
             {workspace}
           </main>
           <CopyrightNotice className="app-footer" />

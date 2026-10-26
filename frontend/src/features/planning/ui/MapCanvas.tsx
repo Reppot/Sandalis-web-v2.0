@@ -4,6 +4,7 @@ import * as React from "react";
 import { HEX_H, HEX_W, hexLeft, hexTop, iconOf, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
 import { M_PER_PX_X, UNIT_COLOR, measure, moveShape, newId, type Defaults, type Shape, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { PlanLayer } from "@/features/planning/ui/PlanLayer";
+import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, useT, type MessageKey } from "@/shared";
 
 const MIN_SCALE = 0.05;
@@ -28,6 +29,8 @@ export interface Editor {
   selected: string | null;
   defaults: Defaults;
   structures: Map<string, StructureDef>;
+  /** Активные заказы клана — для меток заказов (пусто у гостя). */
+  orders: Report[];
   onSelect: (id: string | null) => void;
   onAdd: (shape: Shape) => void;
   onUpdate: (shape: Shape) => void;
@@ -138,7 +141,11 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
   const onPointerDown = (e: React.PointerEvent) => {
     const target = e.target as Element;
     if (target.closest("button, input, select, textarea, a") || !viewRef.current) return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // указатель уже отпущен (синтетическое событие) — рисуем без захвата
+    }
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.current.size === 2) {
       gesture.current = null;
@@ -164,8 +171,14 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
       }
     } else if (tool === "structure") {
       if (defaults.structure) {
-        const shape: Shape = { id: newId(), kind: "structure", x: p.x, y: p.y, angle: 0, size: 100, ref: defaults.structure };
+        const shape: Shape = { id: newId(), kind: "structure", x: p.x, y: p.y, angle: 0, size: 100, ref: defaults.structure, team: defaults.team };
         onAdd(shape);
+        gesture.current = null;
+      } else gesture.current = { type: "pan" };
+    } else if (tool === "order") {
+      const report = defaults.order ? ed.current.orders.find((o) => o.id === defaults.order) : null;
+      if (report) {
+        onAdd({ id: newId(), kind: "order", x: p.x, y: p.y, angle: 0, size: 100, report: report.id, title: report.title });
         gesture.current = null;
       } else gesture.current = { type: "pan" };
     } else {
@@ -204,7 +217,7 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
       gesture.current = { ...g, last: p };
     } else if (g.type === "handle") {
       const s = shapes.find((x) => x.id === g.id);
-      if (!s || s.kind === "structure") return;
+      if (!s || s.kind === "structure" || s.kind === "order") return;
       const { angle, meters } = measure(s, toWorld(e.clientX, e.clientY));
       const size = Math.max(1, Math.round(meters));
       onUpdate(s.kind === "radius" ? { ...s, angle, radius: size } : { ...s, angle, length: size });
@@ -262,8 +275,9 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
             selected={editor.selected}
             scale={scale}
             structures={editor.structures}
+            orders={editor.orders}
             bounds={bounds}
-            labels={{ arrow: (u) => t(`planning.unit.${u}` as MessageKey) }}
+            labels={{ arrow: (u) => t(`planning.unit.${u}` as MessageKey), status: (st) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")) }}
           />
         </div>
       ) : null}
@@ -276,18 +290,37 @@ export const MapCanvas: React.FC<{ data: WorldMap; hidden: Set<MapKind>; editor:
   );
 };
 
+/**
+ * Подписи без каши: крупные города — с середины масштаба, малые отметки — только вблизи;
+ * подпись, которая налезла бы на уже показанную (в экранных пикселях), пропускаем.
+ */
+function visibleLabels(all: MapRegion["labels"], scale: number) {
+  if (scale <= 0.3) return [];
+  const shown: { l: MapRegion["labels"][number]; x0: number; x1: number; y0: number; y1: number }[] = [];
+  const pool = [...all].filter((l) => l.major || scale > 1.2).sort((a, b) => Number(b.major) - Number(a.major));
+  for (const l of pool) {
+    const cx = l.x * HEX_W * scale, cy = l.y * HEX_H * scale;
+    const w = l.text.length * (l.major ? 7 : 6) + 14, h = l.major ? 20 : 17;
+    // крупный город подписан под точкой (над ней — значок ратуши), малая отметка — по центру
+    const top = l.major ? cy + 2 : cy - h / 2;
+    const box = { l, x0: cx - w / 2, x1: cx + w / 2, y0: top, y1: top + h };
+    if (shown.some((b) => box.x0 < b.x1 + 4 && box.x1 + 4 > b.x0 && box.y0 < b.y1 + 2 && box.y1 + 2 > b.y0)) continue;
+    shown.push(box);
+  }
+  return shown.map((b) => b.l);
+}
+
 const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; marker: number; scale: number; showItems: boolean }> = React.memo(({ region, hidden, marker, scale, showItems }) => {
   const t = useT();
   const items = showItems ? region.items.filter((it) => !hidden.has(it.kind)) : [];
-  // крупные города — с середины масштаба, малые отметки — только вблизи
-  const labels = region.labels.filter((l) => (l.major ? scale > 0.3 : scale > 0.9));
+  const labels = React.useMemo(() => visibleLabels(region.labels, scale), [region.labels, scale]);
   return (
     <div className="planning-hex" style={{ left: hexLeft(region.col), top: hexTop(region.row), width: HEX_W, height: HEX_H }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- карта региона War API, WebP */}
       <img src={assetUrl(`/api/v1/assets/maps/hex/${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} />
       {scale > 0.3
         ? labels.map((l) => (
-            <span key={l.text} className={cn("planning-town", !l.major && "is-minor")} style={{ left: l.x * HEX_W, top: l.y * HEX_H, transform: `translate(-50%, -50%) scale(${marker})` }}>{l.text}</span>
+            <span key={l.text} className={cn("planning-town", !l.major && "is-minor")} style={{ left: l.x * HEX_W, top: l.y * HEX_H, transform: `scale(${1 / scale}) translate(-50%, ${l.major ? "3px" : "-50%"})` }}>{l.text}</span>
           ))
         : <span className="planning-region" style={{ left: HEX_W / 2, top: HEX_H / 2, transform: `translate(-50%, -50%) scale(${marker * 1.6})` }}>{region.name}</span>}
       {items.map((it, i) => (

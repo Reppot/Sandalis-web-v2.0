@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { M_PER_PX_X, M_PER_PX_Y, UNIT_COLOR, endPoint, fmtMeters, structureIcon, type Shape, type StructureDef, type Unit } from "@/features/planning/model/plan";
+import { FACTION_COLOR, M_PER_PX_X, M_PER_PX_Y, UNIT_COLOR, endPoint, fmtMeters, structureIcon, type Shape, type StructureDef, type Unit } from "@/features/planning/model/plan";
+import type { Report, ReportStatus } from "@/entities/report";
 import { assetUrl } from "@/shared";
 
 /**
@@ -14,9 +15,11 @@ export const PlanLayer: React.FC<{
   selected: string | null;
   scale: number;
   structures: Map<string, StructureDef>;
+  orders: Report[];
   bounds: { minX: number; minY: number; w: number; h: number };
-  labels: { arrow: (unit: Unit) => string };
-}> = ({ shapes, draft, selected, scale, structures, bounds, labels }) => {
+  labels: Labels;
+}> = ({ shapes, draft, selected, scale, structures, orders, bounds, labels }) => {
+  const byId = React.useMemo(() => new Map(orders.map((o) => [o.id, o])), [orders]);
   const px = 1 / scale; // один экранный пиксель в мировых единицах
   return (
     <svg
@@ -26,9 +29,9 @@ export const PlanLayer: React.FC<{
       overflow="visible"
     >
       {shapes.map((s) => (
-        <ShapeView key={s.id} s={s} px={px} selected={s.id === selected} structures={structures} labels={labels} />
+        <ShapeView key={s.id} s={s} px={px} selected={s.id === selected} structures={structures} orders={byId} labels={labels} />
       ))}
-      {draft ? <ShapeView s={draft} px={px} selected={false} structures={structures} labels={labels} draft /> : null}
+      {draft ? <ShapeView s={draft} px={px} selected={false} structures={structures} orders={byId} labels={labels} draft /> : null}
     </svg>
   );
 };
@@ -44,11 +47,15 @@ const Label: React.FC<{ x: number; y: number; px: number; children: React.ReactN
 /** Конец отрезка-объекта и его «ручка» для изменения угла и размера. */
 function tip(s: Shape) {
   if (s.kind === "radius") return endPoint(s.x, s.y, s.angle, s.radius);
-  if (s.kind === "structure") return null;
+  if (s.kind === "structure" || s.kind === "order") return null;
   return endPoint(s.x, s.y, s.angle, s.length);
 }
 
-const ShapeView: React.FC<{ s: Shape; px: number; selected: boolean; draft?: boolean; structures: Map<string, StructureDef>; labels: { arrow: (unit: Unit) => string } }> = React.memo(({ s, px, selected, draft, structures, labels }) => {
+type Labels = { arrow: (unit: Unit) => string; status: (status: ReportStatus | null) => string };
+/** Цвет метки заказа по статусу; заказа нет (удалён) — серый. */
+const ORDER_COLOR: Record<ReportStatus, string> = { open: "#f5a524", in_progress: "#38bdf8", done: "#a3e635", cancelled: "#71717a" };
+
+const ShapeView: React.FC<{ s: Shape; px: number; selected: boolean; draft?: boolean; structures: Map<string, StructureDef>; orders: Map<string, Report>; labels: Labels }> = React.memo(({ s, px, selected, draft, structures, orders, labels }) => {
   const end = tip(s);
   const hit = { stroke: "transparent", strokeWidth: 16 * px, fill: "none", pointerEvents: "stroke" } as const;
   const sel = selected ? <SelectionRing s={s} px={px} end={end} /> : null;
@@ -130,16 +137,37 @@ const ShapeView: React.FC<{ s: Shape; px: number; selected: boolean; draft?: boo
     // значок держит экранный размер: заметен на общем плане, не раздувается вблизи
     const r = Math.max(9, 15 * (s.size / 100)) * px;
     const src = def?.icon ? assetUrl(structureIcon(def.icon)) ?? "" : "";
+    const team = s.team;
     return (
       <g data-shape={draft ? undefined : s.id} transform={`translate(${s.x} ${s.y})`}>
-        <circle r={r} fill="#1c1f24" stroke="#f5a524" strokeWidth={2 * px} />
+        <circle r={r} fill={team ? FACTION_COLOR[team] : "#1c1f24"} stroke={team ? "#f4f4f5" : "#f5a524"} strokeWidth={2 * px} />
         <g transform={`rotate(${s.angle})`}>
           {src ? <image href={src} x={-r * 0.78} y={-r * 0.78} width={r * 1.56} height={r * 1.56} /> : <rect x={-r * 0.45} y={-r * 0.45} width={r * 0.9} height={r * 0.9} fill="#f5a524" />}
-          <path d={`M0,${-r - 5 * px} L${-4 * px},${-r + 1 * px} L${4 * px},${-r + 1 * px} Z`} fill="#f5a524" />
+          <path d={`M0,${-r - 5 * px} L${-4 * px},${-r + 1 * px} L${4 * px},${-r + 1 * px} Z`} fill={team ? "#f4f4f5" : "#f5a524"} />
         </g>
         <circle r={r + 4 * px} fill="transparent" pointerEvents="all" />
         {def && px < 2.2 ? <Label x={0} y={r + 10 * px} px={px} size={11}>{def.name}</Label> : null}
         {selected ? <circle r={r + 6 * px} fill="none" stroke="#fff" strokeWidth={1.5 * px} strokeDasharray={`${4 * px} ${3 * px}`} pointerEvents="none" /> : null}
+      </g>
+    );
+  }
+  if (s.kind === "order") {
+    const order = orders.get(s.report);
+    const color = order ? ORDER_COLOR[order.status] : "#71717a";
+    // булавка: острие в точке заказа, головка с «планшетом»; экранный размер, как у построек
+    const k = Math.max(0.6, s.size / 100) * px;
+    const h = 34 * k, r = 12 * k;
+    return (
+      <g data-shape={draft ? undefined : s.id} transform={`translate(${s.x} ${s.y})`}>
+        <path d={`M0,0 L${-r * 0.75},${-h + r * 1.2} A${r},${r} 0 1 1 ${r * 0.75},${-h + r * 1.2} Z`} fill={color} stroke="#111" strokeWidth={1.5 * px} />
+        <g transform={`translate(0 ${-h + r * 0.2})`} stroke="#111" strokeWidth={1.4 * px} fill="none">
+          <rect x={-r * 0.45} y={-r * 0.55} width={r * 0.9} height={r * 1.1} rx={1.5 * px} fill="#fff" />
+          <path d={`M${-r * 0.25},${-r * 0.15} H${r * 0.25} M${-r * 0.25},${r * 0.15} H${r * 0.2}`} />
+        </g>
+        <circle cx={0} cy={-h + r * 0.2} r={r + 3 * px} fill="transparent" pointerEvents="all" />
+        <Label x={0} y={9 * px} px={px} size={11.5}>{order?.title ?? s.title}</Label>
+        <Label x={0} y={23 * px} px={px} size={10} color={color}>{labels.status(order?.status ?? null)}</Label>
+        {selected ? <circle cx={0} cy={-h + r * 0.2} r={r + 6 * px} fill="none" stroke="#fff" strokeWidth={1.5 * px} strokeDasharray={`${4 * px} ${3 * px}`} pointerEvents="none" /> : null}
       </g>
     );
   }
