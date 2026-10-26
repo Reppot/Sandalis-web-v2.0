@@ -16,6 +16,8 @@ export const Runs: React.FC<{ runs: Run[] }> = ({ runs }) => (
         </React.Fragment>
       ));
       const cls = cn(flags.includes("b") && "font-semibold text-fg", flags.includes("u") && "course-u", flags.includes("i") && "italic");
+      // ссылка на раздел самого сайта открывается здесь же, внешние — в новой вкладке
+      if (href?.startsWith("/")) return <a key={i} href={href} className={cn("course-link", cls)}>{content}</a>;
       if (href) return <a key={i} href={href} target="_blank" rel="noreferrer noopener" className={cn("course-link", cls)}>{content}</a>;
       return cls ? <span key={i} className={cls}>{content}</span> : <React.Fragment key={i}>{content}</React.Fragment>;
     })}

@@ -11,8 +11,8 @@ type Tab = "dev" | "clan";
 const TAB_KEY = "sindaris-training-tab";
 
 /**
- * «Обучение»: две кнопки — «Курсы разработчика» (готовый базовый курс: логистика, пехота,
- * укрепления, танки) и «Курсы вашего клана» (пишут командир и офицеры с правом clan:content).
+ * «Обучение»: две кнопки — «Курсы разработчика» (готовые базовый и продвинутый курсы)
+ * и «Курсы вашего клана» (пишут командир и офицеры с правом clan:content).
  */
 export const TrainingWorkspace: React.FC = () => {
   const { t } = useI18n();
@@ -51,9 +51,9 @@ const SwitchButton: React.FC<{ active: boolean; icon: UiIcon; title: string; hin
 const DevCoursesView: React.FC = () => {
   const { t, locale } = useI18n();
   const notify = useNotify();
-  const [data, setData] = React.useState<DevCourses | null>(null);
+  const [data, setData] = React.useState<DevCourses[] | null>(null);
   const [failed, setFailed] = React.useState(false);
-  const [open, setOpen] = React.useState<Course | null>(null);
+  const [open, setOpen] = React.useState<{ course: Course; group: string } | null>(null);
 
   React.useEffect(() => {
     trainingApi.devCourses().then(setData).catch((err) => {
@@ -68,30 +68,34 @@ const DevCoursesView: React.FC = () => {
   const onlyRu = locale !== "ru" ? <div className="training-note"><Icon name="globe" size={16} />{t("training.onlyRu")}</div> : null;
 
   if (open) {
-    const header = <p className="mt-2 text-xs text-fg-3">{data.title}</p>;
-    return <CourseReader course={open} onBack={() => setOpen(null)} header={header} note={onlyRu} />;
+    const header = <p className="mt-2 text-xs text-fg-3">{open.group}</p>;
+    return <CourseReader course={open.course} onBack={() => setOpen(null)} header={header} note={onlyRu} />;
   }
 
   return (
     <>
       {onlyRu}
-      <section className="panel p-5">
-        <h2 className="section-title">{data.title}</h2>
-        <p className="mt-1 text-sm text-fg-3">{t("training.devTabHint")}</p>
-      </section>
-      <div className="training-grid">
-        {data.courses.map((c) => (
-          <button key={c.key} type="button" className="training-card" onClick={() => setOpen(c)}>
-            <span className="training-card-icon"><UiGlyph icon={(c.icon ?? "training") as UiIcon} size={28} /></span>
-            <span className="training-card-title">{c.title}</span>
-            <span className="training-card-summary">{c.summary}</span>
-            <span className="training-card-meta">
-              {t("training.sections", { n: c.sections.length })} · {t("training.pages", { n: topicCount(c) })}
-            </span>
-            <span className="tool-card-cta">{t("training.start")}</span>
-          </button>
-        ))}
-      </div>
+      {data.map((group, gi) => (
+        <React.Fragment key={group.title}>
+          <section className="panel p-5">
+            <h2 className="section-title">{group.title}</h2>
+            <p className="mt-1 text-sm text-fg-3">{t(gi ? "training.advancedHint" : "training.basicHint")}</p>
+          </section>
+          <div className="training-grid">
+            {group.courses.map((c) => (
+              <button key={c.key} type="button" className="training-card" onClick={() => setOpen({ course: c, group: group.title })}>
+                <span className="training-card-icon"><UiGlyph icon={(c.icon ?? "training") as UiIcon} size={28} /></span>
+                <span className="training-card-title">{c.title}</span>
+                <span className="training-card-summary">{c.summary}</span>
+                <span className="training-card-meta">
+                  {t("training.sections", { n: c.sections.length })} · {t("training.pages", { n: topicCount(c) })}
+                </span>
+                <span className="tool-card-cta">{t("training.start")}</span>
+              </button>
+            ))}
+          </div>
+        </React.Fragment>
+      ))}
     </>
   );
 };

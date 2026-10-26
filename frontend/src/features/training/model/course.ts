@@ -63,13 +63,17 @@ export interface ClanCourseInput {
 }
 
 /** Версия в адресе — кэш статики (7 дней) сбрасывается при обновлении курса. */
-const DEV_COURSES_URL = "/api/v1/assets/training/dev/courses.json?v=2026-10-27-c";
+const DEV_COURSES_URL = "/api/v1/assets/training/dev/courses.json?v=2026-10-27-r";
+const ADV_COURSES_URL = "/api/v1/assets/training/adv/courses.json?v=2026-10-27-a";
+
+const loadCourses = (url: string) => fetch(url).then((r) => {
+  if (!r.ok) throw new Error(String(r.status));
+  return r.json() as Promise<DevCourses>;
+});
 
 export const trainingApi = {
-  devCourses: () => fetch(DEV_COURSES_URL).then((r) => {
-    if (!r.ok) throw new Error(String(r.status));
-    return r.json() as Promise<DevCourses>;
-  }),
+  /** Базовый и продвинутый курсы разработчика. */
+  devCourses: () => Promise.all([loadCourses(DEV_COURSES_URL), loadCourses(ADV_COURSES_URL)]),
   clanCourses: () => apiClient.get<ClanCourseList>("/api/v1/clan/courses"),
   create: (body: ClanCourseInput) => apiClient.post<ClanCourse>("/api/v1/clan/courses", body),
   update: (id: string, body: ClanCourseInput) => apiClient.put<ClanCourse>(`/api/v1/clan/courses/${id}`, body),
