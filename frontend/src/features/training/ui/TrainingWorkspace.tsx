@@ -4,7 +4,7 @@ import * as React from "react";
 import { useSession } from "@/features/cabinet";
 import { parseMarkup, topicCount, trainingApi, type ClanCourse, type ClanCourseList, type Course, type DevCourses } from "@/features/training/model/course";
 import { ClanCourseEditor } from "@/features/training/ui/ClanCourseEditor";
-import { Blocks, CourseReader } from "@/features/training/ui/CourseReader";
+import { CourseReader } from "@/features/training/ui/CourseReader";
 import { EmptyState, Icon, Loading, PageHeader, UiGlyph, cn, errorText, formatDateTime, readStorage, useConfirm, useI18n, useNotify, writeStorage, type UiIcon } from "@/shared";
 
 type Tab = "dev" | "clan";
@@ -54,7 +54,6 @@ const DevCoursesView: React.FC = () => {
   const [data, setData] = React.useState<DevCourses | null>(null);
   const [failed, setFailed] = React.useState(false);
   const [open, setOpen] = React.useState<Course | null>(null);
-  const [about, setAbout] = React.useState(false);
 
   React.useEffect(() => {
     trainingApi.devCourses().then(setData).catch((err) => {
@@ -67,11 +66,9 @@ const DevCoursesView: React.FC = () => {
   if (!data) return <div className="panel"><Loading /></div>;
 
   const onlyRu = locale !== "ru" ? <div className="training-note"><Icon name="globe" size={16} />{t("training.onlyRu")}</div> : null;
-  const byline = [data.release ? t("training.release", { date: data.release }) : "", ...data.credits].filter(Boolean);
-  const credits = <p className="mt-2 text-xs text-fg-3">{byline.join(" · ")}</p>;
 
   if (open) {
-    const header = <p className="mt-2 text-xs text-fg-3">{[data.title, ...byline].join(" · ")}</p>;
+    const header = <p className="mt-2 text-xs text-fg-3">{data.title}</p>;
     return <CourseReader course={open} onBack={() => setOpen(null)} header={header} note={onlyRu} />;
   }
 
@@ -79,28 +76,8 @@ const DevCoursesView: React.FC = () => {
     <>
       {onlyRu}
       <section className="panel p-5">
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h2 className="section-title">{data.title}</h2>
-            {credits}
-          </div>
-          {data.about.length ? (
-            <button type="button" className="btn h-9 min-h-0 text-sm" onClick={() => setAbout((v) => !v)} aria-expanded={about}>
-              <Icon name="info" size={15} />
-              {t("training.about")}
-            </button>
-          ) : null}
-        </div>
-        {about ? (
-          <div className="course-body mt-3">
-            {data.about.map((a, i) => (
-              <div key={i}>
-                <h4 className="course-h">{a.title}</h4>
-                <Blocks blocks={a.blocks} onZoom={() => {}} />
-              </div>
-            ))}
-          </div>
-        ) : null}
+        <h2 className="section-title">{data.title}</h2>
+        <p className="mt-1 text-sm text-fg-3">{t("training.devTabHint")}</p>
       </section>
       <div className="training-grid">
         {data.courses.map((c) => (
