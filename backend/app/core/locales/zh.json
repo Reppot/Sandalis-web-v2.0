@@ -18,6 +18,7 @@
     "feedback_admin_only": "只有网站所有者可以查看全部反馈。",
     "feedback_login_required": "请使用 Discord 登录后再写——这样会显示你的昵称。",
     "feedback_rate_limited": "每小时最多 {n} 条消息——请稍后再试。",
-    "guest_no_clan": "访客访问没有军团"
+    "guest_no_clan": "访客访问没有军团",
+    "courses_too_many": "军团已有 {n} 门课程——请删除一门后再添加新的。"
   }
 }

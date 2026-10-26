@@ -18,6 +18,7 @@
     "feedback_admin_only": "Wszystkie opinie może czytać tylko właściciel strony.",
     "feedback_login_required": "Aby napisać, zaloguj się przez Discord – wtedy widać twój nick.",
     "feedback_rate_limited": "Maksymalnie {n} wiadomości na godzinę – spróbuj za chwilę.",
-    "guest_no_clan": "Dostęp gościa nie ma klanu"
+    "guest_no_clan": "Dostęp gościa nie ma klanu",
+    "courses_too_many": "Klan ma już {n} kursów – usuń jeden, aby dodać nowy."
   }
 }

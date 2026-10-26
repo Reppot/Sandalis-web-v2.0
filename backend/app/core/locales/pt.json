@@ -18,6 +18,7 @@
     "feedback_admin_only": "Só o dono do site pode ler todo o feedback.",
     "feedback_login_required": "Entre com o Discord para escrever — assim seu apelido aparece.",
     "feedback_rate_limited": "No máximo {n} mensagens por hora — tente de novo daqui a pouco.",
-    "guest_no_clan": "O acesso de convidado não tem clã"
+    "guest_no_clan": "O acesso de convidado não tem clã",
+    "courses_too_many": "O clã já tem {n} cursos — exclua um para adicionar outro."
   }
 }

@@ -18,6 +18,7 @@
     "feedback_admin_only": "Das gesamte Feedback kann nur der Betreiber der Seite lesen.",
     "feedback_login_required": "Melde dich mit Discord an, um zu schreiben – dann ist dein Nickname sichtbar.",
     "feedback_rate_limited": "Höchstens {n} Nachrichten pro Stunde – versuch es gleich noch einmal.",
-    "guest_no_clan": "Der Gastzugang hat keinen Clan"
+    "guest_no_clan": "Der Gastzugang hat keinen Clan",
+    "courses_too_many": "Der Clan hat bereits {n} Kurse – lösche einen, um einen neuen hinzuzufügen."
   }
 }

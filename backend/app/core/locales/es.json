@@ -18,6 +18,7 @@
     "feedback_admin_only": "Solo el dueño del sitio puede leer todos los comentarios.",
     "feedback_login_required": "Inicia sesión con Discord para escribir: así se verá tu apodo.",
     "feedback_rate_limited": "Como máximo {n} mensajes por hora; inténtalo un poco más tarde.",
-    "guest_no_clan": "El acceso de invitado no tiene clan"
+    "guest_no_clan": "El acceso de invitado no tiene clan",
+    "courses_too_many": "El clan ya tiene {n} cursos: elimina uno para añadir otro."
   }
 }

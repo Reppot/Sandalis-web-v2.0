@@ -18,6 +18,7 @@
     "feedback_admin_only": "Veškerou zpětnou vazbu může číst jen vlastník webu.",
     "feedback_login_required": "Pro napsání se přihlaste přes Discord — zobrazí se vaše přezdívka.",
     "feedback_rate_limited": "Nejvýše {n} zpráv za hodinu — zkuste to později.",
-    "guest_no_clan": "Přístup hosta nemá klan"
+    "guest_no_clan": "Přístup hosta nemá klan",
+    "courses_too_many": "Klan už má {n} kurzů — jeden smažte, abyste mohli přidat nový."
   }
 }
