@@ -143,6 +143,12 @@
 [data-theme="light"] .tool-item .item-icon { background: var(--item-bg); border-radius: 14px; }
 .cost-chip { display: inline-flex; align-items: center; gap: 0.25rem; border-radius: 7px; background: var(--surface); padding: 0.12rem 0.45rem; color: var(--fg-2); font-size: 0.66rem; box-shadow: 0 0 0 1px var(--border); }
 .cost-chip b { color: var(--fg); font-family: var(--font-mono); font-weight: 600; }
+.cost-chip.is-resource { gap: 0.45rem; border-radius: 10px; padding: 0.25rem 0.65rem 0.25rem 0.35rem; font-size: var(--text-sm); }
+.cost-chip.is-resource b { font-family: var(--font-heading); font-size: 0.95rem; font-weight: 650; }
+.cost-chip.is-resource .item-icon { background: transparent; box-shadow: none; }
+/* иконки ресурсов — белые силуэты: на светлых темах плашка тёмная */
+[data-theme="light"] .cost-chip.is-resource { background: var(--item-bg); box-shadow: none; }
+[data-theme="light"] .cost-chip.is-resource b { color: #fff; }
 .cost-chip.is-warn { color: var(--warning); box-shadow: 0 0 0 1px rgb(var(--warning-rgb, 251 191 36) / 0.35); }
 .row-remove { display: grid; width: 2rem; height: 2rem; flex-shrink: 0; place-items: center; border-radius: 8px; color: var(--fg-3); transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
 .row-remove:hover { background: rgb(var(--danger-rgb, 255 107 107) / 0.12); color: var(--danger); }

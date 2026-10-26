@@ -223,7 +223,11 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
                   <small className="block w-full truncate text-[0.7rem] text-muted">{recipe.item_class ?? label("factory_category", recipe.category)} • x{(facility === "mpf" ? mpfData(recipe)?.amount : undefined) ?? recipe.output_quantity}</small>
                   <span className="mt-auto flex flex-wrap justify-center gap-1">
                     {Object.entries(crateCost(recipe, facility)).map(([key, value]) => (
-                      <span key={key} className="cost-chip">{label("material", key)} <b>{value}</b></span>
+                      // иконка ресурса из игры вместо подписи «РМАТ», название — во всплывающей подсказке
+                      <span key={key} className="cost-chip is-resource" title={label("material", key)}>
+                        {labelIcon("material", key) ? <ItemIcon sources={[labelIcon("material", key)]} size={24} label={label("material", key)} /> : <span>{label("material", key)}</span>}
+                        <b>{value}</b>
+                      </span>
                     ))}
                   </span>
                 </button>
