@@ -64,7 +64,7 @@ export interface ClanCourseInput {
 
 /** Версия в адресе — кэш статики (7 дней) сбрасывается при обновлении курса. */
 const DEV_COURSES_URL = "/api/v1/assets/training/dev/courses.json?v=2026-10-27-r";
-const ADV_COURSES_URL = "/api/v1/assets/training/adv/courses.json?v=2026-10-27-a";
+const ADV_COURSES_URL = "/api/v1/assets/training/adv/courses.json?v=2026-10-27-b";
 
 const loadCourses = (url: string) => fetch(url).then((r) => {
   if (!r.ok) throw new Error(String(r.status));
