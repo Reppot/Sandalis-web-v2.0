@@ -18,6 +18,7 @@ interface Command {
 const THEME_LABEL: Record<Theme, MessageKey> = {
   dark: "nav.themeNight",
   light: "nav.themeSimple",
+  amber: "settings.themeAmber",
   contrast: "settings.themeContrast",
   noir: "settings.themeNoir",
   soft: "settings.themeSoft",

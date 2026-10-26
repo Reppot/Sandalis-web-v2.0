@@ -48,6 +48,8 @@ const STATUS_BADGE: Record<ReportStatus, string> = {
   cancelled: "badge-danger",
 };
 
+const HIDDEN_ACTIONS = new Set<ReportStatus>(["in_progress", "cancelled"]);
+
 const ACTION_LABEL: Record<ReportStatus, MessageKey> = {
   open: "reports.action.open",
   in_progress: "reports.action.in_progress",
@@ -257,7 +259,8 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
 
                 <div data-guide="report-actions" className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
                   {can(Scopes.REPORTS_STATUS) &&
-                    REPORT_TRANSITIONS[report.status].map((next) => (
+                    // «Взять в работу» и «Отменить» убраны: в заказах клана — только «Выполнен» и «Вернуть в очередь»
+                    REPORT_TRANSITIONS[report.status].filter((next) => !HIDDEN_ACTIONS.has(next)).map((next) => (
                       <button key={next} className={`btn ${next === "cancelled" ? "btn-danger" : next === "done" ? "btn-primary" : ""}`} disabled={busy} onClick={() => void setStatus(report, next)}>
                         {t(ACTION_LABEL[next])}
                       </button>

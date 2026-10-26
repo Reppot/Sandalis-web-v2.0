@@ -122,6 +122,7 @@ export const CabinetWorkspace: React.FC = () => {
 const THEME_CHOICES: { key: Theme; label: MessageKey; hint: MessageKey }[] = [
   { key: "dark", label: "nav.themeNight", hint: "settings.themeDarkHint" },
   { key: "light", label: "nav.themeSimple", hint: "settings.themeLightHint" },
+  { key: "amber", label: "settings.themeAmber", hint: "settings.themeAmberHint" },
   { key: "contrast", label: "settings.themeContrast", hint: "settings.themeContrastHint" },
   { key: "noir", label: "settings.themeNoir", hint: "settings.themeNoirHint" },
   { key: "soft", label: "settings.themeSoft", hint: "settings.themeSoftHint" },

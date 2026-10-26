@@ -8,10 +8,10 @@ import { STORAGE_KEYS } from "@/shared/lib/storage";
  * (dark / light), html[data-skin] — палитра поверх основы. Без сохранённого выбора
  * тема следует системной (светлая / тёмная).
  */
-export type Theme = "dark" | "light" | "contrast" | "noir" | "soft";
-export const THEMES: readonly Theme[] = ["dark", "light", "contrast", "noir", "soft"];
+export type Theme = "dark" | "light" | "amber" | "contrast" | "noir" | "soft";
+export const THEMES: readonly Theme[] = ["dark", "light", "amber", "contrast", "noir", "soft"];
 
-const BASE: Record<Theme, "dark" | "light"> = { dark: "dark", light: "light", contrast: "dark", noir: "light", soft: "light" };
+const BASE: Record<Theme, "dark" | "light"> = { dark: "dark", light: "light", amber: "dark", contrast: "dark", noir: "light", soft: "light" };
 
 function apply(theme: Theme): void {
   const root = document.documentElement;
@@ -57,7 +57,7 @@ export function useTheme(): ThemeContextValue {
 }
 
 /** Инлайн-скрипт: тема до первой отрисовки, без мерцания. */
-export const THEME_INIT_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");var b={dark:"dark",light:"light",contrast:"dark",noir:"light",soft:"light"};if(!b[t]){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}d.setAttribute("data-theme",b[t]);if(t!=="dark"&&t!=="light"){d.setAttribute("data-skin",t)}}catch(e){d.setAttribute("data-theme","dark")}})();`;
+export const THEME_INIT_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");var b={dark:"dark",light:"light",amber:"dark",contrast:"dark",noir:"light",soft:"light"};if(!b[t]){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"}d.setAttribute("data-theme",b[t]);if(t!=="dark"&&t!=="light"){d.setAttribute("data-skin",t)}}catch(e){d.setAttribute("data-theme","dark")}})();`;
 
 export const ThemeIcon: React.FC<{ theme: Theme; size?: number }> = ({ theme, size = 30 }) => {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
@@ -80,6 +80,12 @@ export const ThemeIcon: React.FC<{ theme: Theme; size?: number }> = ({ theme, si
         <svg {...common}>
           <circle cx="12" cy="12" r="9" />
           <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor" />
+        </svg>
+      );
+    case "amber":
+      return (
+        <svg {...common}>
+          <path d="M12 3c2.5 3.2 5 5.9 5 9.5A5 5 0 0 1 7 12.5c0-1.6.6-3 1.6-4.2.2 1.6 1 2.6 2.1 2.9C10.4 8.6 11 5.6 12 3z" />
         </svg>
       );
     case "soft":

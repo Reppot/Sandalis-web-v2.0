@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import { catalogApi, itemSearchHay, type FoxholeItem, type ParseResult } from "@/entities/item";
-import { Icon, ItemIcon, Loading, PageHeader, SearchField, assetUrl, copyText, downloadBlob, errorText, matchesWords, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged } from "@/shared";
+import { Icon, ItemIcon, Loading, PageHeader, SearchField, assetUrl, copyText, downloadBlob, errorText, matchesWords, useNotify, useT, type MessageKey, type Translate, PagedMore, usePaged, SheetHead, sortRows, type SheetSort } from "@/shared";
 
 const FACTIONS: Record<string, MessageKey> = { colonial: "codes.faction.colonial", warden: "codes.faction.warden", neutral: "codes.faction.neutral" };
 
@@ -23,13 +23,15 @@ function toCsv(entries: FoxholeItem[], t: Translate): string {
 export const CodeBaseWorkspace: React.FC = () => {
   const notify = useNotify();
   const t = useT();
-  const { label, list } = useContent();
+  const { label } = useContent();
   const [entries, setEntries] = React.useState<FoxholeItem[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [query, setQuery] = React.useState("");
-  const [category, setCategory] = React.useState("all");
-  const [faction, setFaction] = React.useState("all");
-  const [reviewOnly, setReviewOnly] = React.useState(false);
+  // фильтры и сортировка — в заголовках таблицы (как в Google Таблицах)
+  const [sort, setSort] = React.useState<SheetSort | null>(null);
+  const [categories, setCategories] = React.useState<Set<string> | null>(null);
+  const [factions, setFactions] = React.useState<Set<string> | null>(null);
+  const [statuses, setStatuses] = React.useState<Set<string> | null>(null);
   const [compareOpen, setCompareOpen] = React.useState(false);
   const [rawExport, setRawExport] = React.useState("");
   const [compare, setCompare] = React.useState<ParseResult | null>(null);
@@ -43,14 +45,29 @@ export const CodeBaseWorkspace: React.FC = () => {
       .finally(() => setLoading(false));
   }, [notify, t]);
 
+  const statusOf = (e: FoxholeItem) => (e.needsReview ? "review" : "ok");
   const filtered = React.useMemo(() => {
     const needle = query.trim();
-    return entries.filter((e) => {
-      const hay = itemSearchHay(e);
-      return (!needle || matchesWords(hay, needle)) && (category === "all" || e.category === category) && (faction === "all" || e.faction === faction) && (!reviewOnly || e.needsReview);
-    });
-  }, [entries, query, category, faction, reviewOnly]);
-  const page = usePaged(filtered, 100, [query, category, faction, reviewOnly].join("|"));
+    const rows = entries.filter(
+      (e) =>
+        (!needle || matchesWords(itemSearchHay(e), needle)) &&
+        (!categories || categories.has(e.category)) &&
+        (!factions || factions.has(e.faction)) &&
+        (!statuses || statuses.has(statusOf(e))),
+    );
+    return sortRows(rows, sort, (e, key) =>
+      key === "code" ? e.code : key === "en" ? e.englishName : key === "ru" ? e.aliases.join(" ") : key === "category" ? label("catalog_category", e.category) : key === "faction" ? e.faction : statusOf(e),
+    );
+  }, [entries, query, categories, factions, statuses, sort, label]);
+  const page = usePaged(filtered, 100, [query, [...(categories ?? [])], [...(factions ?? [])], [...(statuses ?? [])], sort?.key, sort?.dir].join("|"));
+  const countBy = (pick: (e: FoxholeItem) => string) => {
+    const m = new Map<string, number>();
+    for (const e of entries) m.set(pick(e), (m.get(pick(e)) ?? 0) + 1);
+    return m;
+  };
+  const categoryCounts = countBy((e) => e.category);
+  const factionCounts = countBy((e) => e.faction);
+  const anyFilter = Boolean(categories || factions || statuses || sort);
 
   const reviewCount = entries.filter((e) => e.needsReview).length;
 
@@ -91,22 +108,23 @@ export const CodeBaseWorkspace: React.FC = () => {
         <div className="divider" />
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
           <SearchField className="min-w-0 flex-1" size="lg" data-guide="codes-search" placeholder={t("codes.search")} value={query} onChange={setQuery} />
-          <select data-guide="codes-filters" className="field h-11 w-full lg:w-48" value={category} onChange={(e) => setCategory(e.target.value)} aria-label={t("codes.col.category")}>
-            <option value="all">{t("codes.allCategories")}</option>
-            {list<{ label: string }>("catalog_category").map((c) => (
-              <option key={c.key} value={c.key}>{c.payload.label}</option>
-            ))}
-          </select>
-          <select className="field h-11 w-full lg:w-44" value={faction} onChange={(e) => setFaction(e.target.value)} aria-label={t("codes.col.faction")}>
-            <option value="all">{t("codes.allFactions")}</option>
-            {Object.entries(FACTIONS).map(([key, name]) => (
-              <option key={key} value={key}>{t(name)}</option>
-            ))}
-          </select>
-          <button className={`btn h-11 ${reviewOnly ? "btn-warn" : ""}`} data-guide="codes-review" aria-pressed={reviewOnly} onClick={() => setReviewOnly((v) => !v)}>
-            {reviewOnly ? <Icon name="check" size={15} /> : null}
-            {t("codes.disputedOnly")}
-          </button>
+          {anyFilter ? (
+            <button
+              className="btn btn-ghost h-11"
+              data-guide="codes-filters"
+              onClick={() => {
+                setCategories(null);
+                setFactions(null);
+                setStatuses(null);
+                setSort(null);
+              }}
+            >
+              <Icon name="close" size={15} />
+              {t("sheet.reset")}
+            </button>
+          ) : (
+            <span className="text-xs text-fg-3" data-guide="codes-filters">{t("sheet.hint")}</span>
+          )}
         </div>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -167,12 +185,45 @@ export const CodeBaseWorkspace: React.FC = () => {
               <thead>
                 <tr>
                   <th className="px-4 py-3" />
-                  <th className="px-3 py-3">{t("codes.col.code")}</th>
-                  <th className="px-3 py-3">English name</th>
-                  <th className="px-3 py-3">{t("codes.col.ru")}</th>
-                  <th className="px-3 py-3">{t("codes.col.category")}</th>
-                  <th className="px-3 py-3">{t("codes.col.faction")}</th>
-                  <th className="px-4 py-3">{t("doc.status")}</th>
+                  <SheetHead label={t("codes.col.code")} sortKey="code" sort={sort} onSort={setSort} />
+                  <SheetHead label="English name" sortKey="en" sort={sort} onSort={setSort} />
+                  <SheetHead label={t("codes.col.ru")} sortKey="ru" sort={sort} onSort={setSort} />
+                  <SheetHead
+                    label={t("codes.col.category")}
+                    sortKey="category"
+                    sort={sort}
+                    onSort={setSort}
+                    filter={{
+                      options: [...categoryCounts].map(([value, count]) => ({ value, label: label("catalog_category", value), count })).sort((a, b) => a.label.localeCompare(b.label)),
+                      selected: categories,
+                      onChange: setCategories,
+                    }}
+                  />
+                  <SheetHead
+                    label={t("codes.col.faction")}
+                    sortKey="faction"
+                    sort={sort}
+                    onSort={setSort}
+                    filter={{
+                      options: [...factionCounts].map(([value, count]) => ({ value, label: FACTIONS[value] ? t(FACTIONS[value]) : value, count })),
+                      selected: factions,
+                      onChange: setFactions,
+                    }}
+                  />
+                  <SheetHead
+                    label={t("doc.status")}
+                    sortKey="status"
+                    sort={sort}
+                    onSort={setSort}
+                    filter={{
+                      options: [
+                        { value: "ok", label: t("codes.reference"), count: entries.length - reviewCount },
+                        { value: "review", label: t("codes.review"), count: reviewCount },
+                      ],
+                      selected: statuses,
+                      onChange: setStatuses,
+                    }}
+                  />
                 </tr>
               </thead>
               <tbody>

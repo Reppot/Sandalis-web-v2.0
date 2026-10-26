@@ -93,6 +93,10 @@ export interface FacilityData {
   byproducts: FacilityPart[];
   /** Иконка постройки с вики (static/items/facilities). */
   source_icon?: string | null;
+  /** Название постройки в русском клиенте игры. */
+  source_ru?: string;
+  /** Рецепт — само здание (категория «Здания»): строится на месте из стройматериалов. */
+  building?: boolean;
   /** Русское название выпускаемого предмета (цепочка связывает предметы по английскому name). */
   name_ru?: string;
 }

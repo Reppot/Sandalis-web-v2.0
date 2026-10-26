@@ -16,5 +16,6 @@ export * from "./ui/notify";
 export * from "./ui/theme";
 export * from "./ui/export";
 export * from "./ui/panes";
+export * from "./ui/sheet";
 export * from "./ui/copyright";
 export * from "./i18n";

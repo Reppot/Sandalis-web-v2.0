@@ -46,7 +46,8 @@
    "byproducts": [],
    "crate": true,
    "page": "“Dawn” Ve.II",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 0
  },
@@ -97,7 +98,8 @@
    "byproducts": [],
    "crate": true,
    "page": "“Quickhatch” Rt.I",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 1
  },
@@ -140,7 +142,8 @@
    "byproducts": [],
    "crate": false,
    "page": "“Typhon” ra.XII",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 2
  },
@@ -183,7 +186,8 @@
    "byproducts": [],
    "crate": false,
    "page": "00MS “Stinger”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 3
  },
@@ -227,7 +231,8 @@
    "byproducts": [],
    "crate": false,
    "page": "03MM “Caster”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 4
  },
@@ -271,7 +276,8 @@
    "byproducts": [],
    "crate": false,
    "page": "120-68 “Koronides” Field Gun",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 5
  },
@@ -324,6 +330,7 @@
    "crate": false,
    "page": "120mm",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "120-мм"
   },
   "sort": 6
@@ -367,7 +374,8 @@
    "byproducts": [],
    "crate": true,
    "page": "14.5mm",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 7
  },
@@ -420,6 +428,7 @@
    "crate": false,
    "page": "150mm",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "150-мм"
   },
   "sort": 8
@@ -464,6 +473,7 @@
    "crate": false,
    "page": "20mm",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "20мм"
   },
   "sort": 9
@@ -515,7 +525,8 @@
    "byproducts": [],
    "crate": true,
    "page": "228 Satterley Heavy Storm Rifle",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 10
  },
@@ -575,7 +586,8 @@
    "byproducts": [],
    "crate": false,
    "page": "250mm “Fury” Shell",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 11
  },
@@ -627,7 +639,8 @@
    "byproducts": [],
    "crate": false,
    "page": "250mm “Purity” Shell",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 12
  },
@@ -671,7 +684,8 @@
    "byproducts": [],
    "crate": false,
    "page": "30-250 “Tisiphone” Field Cannon",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 13
  },
@@ -722,7 +736,8 @@
    "byproducts": [],
    "crate": false,
    "page": "300mm",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 14
  },
@@ -775,6 +790,7 @@
    "crate": true,
    "page": "30mm",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "30мм"
   },
   "sort": 15
@@ -828,6 +844,7 @@
    "crate": false,
    "page": "3C-High Explosive Rocket",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "3C-Фугасная ракета"
   },
   "sort": 16
@@ -887,7 +904,8 @@
    "byproducts": [],
    "crate": false,
    "page": "40-250 “Alekto” Heavy Cannon",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 17
  },
@@ -938,7 +956,8 @@
    "byproducts": [],
    "crate": false,
    "page": "40-45 “Smelter”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 18
  },
@@ -991,6 +1010,7 @@
    "crate": true,
    "page": "40mm",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "40-мм"
   },
   "sort": 19
@@ -1043,7 +1063,8 @@
    "byproducts": [],
    "crate": false,
    "page": "4C-Fire Rocket",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 20
  },
@@ -1087,7 +1108,8 @@
    "byproducts": [],
    "crate": false,
    "page": "50-500 “Thunderbolt” Cannon",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 21
  },
@@ -1131,7 +1153,8 @@
    "byproducts": [],
    "crate": false,
    "page": "68A-4 Ronan Fathomer",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 22
  },
@@ -1184,6 +1207,7 @@
    "crate": true,
    "page": "68mm",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "68мм"
   },
   "sort": 23
@@ -1228,7 +1252,8 @@
    "byproducts": [],
    "crate": false,
    "page": "74b-1 Ronan Gunship",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 24
  },
@@ -1280,7 +1305,8 @@
    "byproducts": [],
    "crate": false,
    "page": "75mm",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 25
  },
@@ -1324,7 +1350,8 @@
    "byproducts": [],
    "crate": false,
    "page": "81f-f Ronan Blackguard",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 26
  },
@@ -1383,7 +1410,8 @@
    "byproducts": [],
    "crate": false,
    "page": "85K-a “Spatha”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 27
  },
@@ -1427,7 +1455,8 @@
    "byproducts": [],
    "crate": false,
    "page": "85K-b “Falchion”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 28
  },
@@ -1494,7 +1523,8 @@
    "byproducts": [],
    "crate": false,
    "page": "85V-g “Talos”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 29
  },
@@ -1538,7 +1568,8 @@
    "byproducts": [],
    "crate": false,
    "page": "86K-a “Bardiche”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 30
  },
@@ -1597,7 +1628,8 @@
    "byproducts": [],
    "crate": false,
    "page": "86K-c “Ranseur”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 31
  },
@@ -1641,7 +1673,8 @@
    "byproducts": [],
    "crate": false,
    "page": "90T-v “Nemesis”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 32
  },
@@ -1693,7 +1726,8 @@
    "byproducts": [],
    "crate": false,
    "page": "912 Shrike Rounds",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 33
  },
@@ -1745,7 +1779,8 @@
    "byproducts": [],
    "crate": false,
    "page": "94.5mm",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 34
  },
@@ -1804,7 +1839,8 @@
    "byproducts": [],
    "crate": false,
    "page": "945g “Stygian Bolt”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 35
  },
@@ -1857,6 +1893,7 @@
    "crate": false,
    "page": "950-70b Anti-Aircraft Shell",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "950-70b Зенитный снаряд"
   },
   "sort": 36
@@ -1916,84 +1953,10 @@
    "byproducts": [],
    "crate": false,
    "page": "A0E-9 Rocket Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 37
- },
- {
-  "id": "facility-a0e-9-rocket-booster-small-assembly-station-advanced-s-c12ade36",
-  "kind": "facility",
-  "name": "A0E-9 Rocket Booster",
-  "name_en": "A0E-9 Rocket Booster",
-  "item_code": "RocketPartBottom",
-  "category": "small-assembly-station",
-  "item_class": "Advanced Structure Manufactory",
-  "description": null,
-  "factions": [
-   "neutral"
-  ],
-  "facilities": [
-   "small-assembly-station"
-  ],
-  "icon_url": "/api/v1/assets/items/RocketPartBottom.png",
-  "output_quantity": 1,
-  "cost": {
-   "Steel Construction Materials": 20,
-   "Thermal Shielding": 75,
-   "Assembly Materials II": 55,
-   "Rare Alloys": 150,
-   "Assembly Materials V": 25
-  },
-  "data": {
-   "source": "Small Assembly Station",
-   "module": "Advanced Structure Manufactory",
-   "inputs": [
-    {
-     "name": "Steel Construction Materials",
-     "amount": 20,
-     "unit": null,
-     "code": "FacilityMaterials3",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials3.png"
-    },
-    {
-     "name": "Thermal Shielding",
-     "amount": 75,
-     "unit": null,
-     "code": "FacilityMaterials11",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials11.png"
-    },
-    {
-     "name": "Assembly Materials II",
-     "amount": 55,
-     "unit": null,
-     "code": "FacilityMaterials5",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials5.png"
-    },
-    {
-     "name": "Rare Alloys",
-     "amount": 150,
-     "unit": null,
-     "code": "FacilityMaterials9",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials9.png"
-    },
-    {
-     "name": "Assembly Materials V",
-     "amount": 25,
-     "unit": null,
-     "code": "FacilityMaterials8",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials8.png"
-    }
-   ],
-   "vehicle": null,
-   "power_mw": 2,
-   "seconds": 86400,
-   "output_unit": null,
-   "byproducts": [],
-   "crate": false,
-   "page": "A0E-9 Rocket Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
-  },
-  "sort": 38
  },
  {
   "id": "facility-a0e-9-rocket-body-small-assembly-station-advanced-stru-3180530c",
@@ -2066,7 +2029,84 @@
    "byproducts": [],
    "crate": false,
    "page": "A0E-9 Rocket Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
+  },
+  "sort": 38
+ },
+ {
+  "id": "facility-a0e-9-rocket-booster-small-assembly-station-advanced-s-c12ade36",
+  "kind": "facility",
+  "name": "A0E-9 Rocket Booster",
+  "name_en": "A0E-9 Rocket Booster",
+  "item_code": "RocketPartBottom",
+  "category": "small-assembly-station",
+  "item_class": "Advanced Structure Manufactory",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "small-assembly-station"
+  ],
+  "icon_url": "/api/v1/assets/items/RocketPartBottom.png",
+  "output_quantity": 1,
+  "cost": {
+   "Steel Construction Materials": 20,
+   "Thermal Shielding": 75,
+   "Assembly Materials II": 55,
+   "Rare Alloys": 150,
+   "Assembly Materials V": 25
+  },
+  "data": {
+   "source": "Small Assembly Station",
+   "module": "Advanced Structure Manufactory",
+   "inputs": [
+    {
+     "name": "Steel Construction Materials",
+     "amount": 20,
+     "unit": null,
+     "code": "FacilityMaterials3",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials3.png"
+    },
+    {
+     "name": "Thermal Shielding",
+     "amount": 75,
+     "unit": null,
+     "code": "FacilityMaterials11",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials11.png"
+    },
+    {
+     "name": "Assembly Materials II",
+     "amount": 55,
+     "unit": null,
+     "code": "FacilityMaterials5",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials5.png"
+    },
+    {
+     "name": "Rare Alloys",
+     "amount": 150,
+     "unit": null,
+     "code": "FacilityMaterials9",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials9.png"
+    },
+    {
+     "name": "Assembly Materials V",
+     "amount": 25,
+     "unit": null,
+     "code": "FacilityMaterials8",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials8.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 2,
+   "seconds": 86400,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "A0E-9 Rocket Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 39
  },
@@ -2125,7 +2165,8 @@
    "byproducts": [],
    "crate": false,
    "page": "A0E-9 Rocket Platform",
-   "source_icon": "/api/v1/assets/items/facilities/a0e-9-rocket-platform.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/a0e-9-rocket-platform.jpg",
+   "source_ru": "Ракетная платформа A0E-9"
   },
   "sort": 40
  },
@@ -2169,7 +2210,8 @@
    "byproducts": [],
    "crate": false,
    "page": "A51 Venti “Daedalus”",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png",
+   "source_ru": "Авиационный ангар"
   },
   "sort": 41
  },
@@ -2213,7 +2255,8 @@
    "byproducts": [],
    "crate": false,
    "page": "A59 Venti “Perdix”",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png",
+   "source_ru": "Авиационный ангар"
   },
   "sort": 42
  },
@@ -2257,7 +2300,8 @@
    "byproducts": [],
    "crate": false,
    "page": "AA-2 Battering Ram",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 43
  },
@@ -2308,7 +2352,8 @@
    "byproducts": [],
    "crate": false,
    "page": "AB-11 “Doru”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 44
  },
@@ -2352,7 +2397,8 @@
    "byproducts": [],
    "crate": false,
    "page": "AB-8 “Acheron”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 45
  },
@@ -2404,7 +2450,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Abisme AT-99",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 46
  },
@@ -2456,7 +2503,8 @@
    "byproducts": [],
    "crate": false,
    "page": "AC-b “Trident”",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 47
  },
@@ -2515,7 +2563,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Aegis Steelbreaker K5a",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 48
  },
@@ -2568,6 +2617,7 @@
    "crate": true,
    "page": "Anti-Tank Sticky Bomb",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Противотанковая липкая бомба"
   },
   "sort": 49
@@ -2621,6 +2671,7 @@
    "crate": true,
    "page": "AP⧸RPG",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Бронебойный/РПГ"
   },
   "sort": 50
@@ -2674,6 +2725,7 @@
    "crate": true,
    "page": "ARC⧸RPG",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Бронебойный навесной/РПГ"
   },
   "sort": 51
@@ -2717,7 +2769,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Armoured Fighting Tractor",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 52
  },
@@ -2768,7 +2821,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Assembly Materials I",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов"
   },
   "sort": 53
  },
@@ -2820,7 +2874,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Assembly Materials II",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов"
   },
   "sort": 54
  },
@@ -2871,7 +2926,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Assembly Materials III",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 55
  },
@@ -2923,7 +2979,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Assembly Materials IV",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 56
  },
@@ -2990,7 +3047,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Assembly Materials V",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 57
  },
@@ -3033,7 +3091,8 @@
    "byproducts": [],
    "crate": false,
    "page": "AU-A150 Taurine Rigger",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 58
  },
@@ -3076,7 +3135,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Auster's Harness",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 59
  },
@@ -3119,7 +3179,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Aviator's Raiment",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 60
  },
@@ -3171,7 +3232,8 @@
    "byproducts": [],
    "crate": true,
    "page": "B2 Varsi Anti-Tank Grenade",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 61
  },
@@ -3216,6 +3278,7 @@
    "crate": false,
    "page": "Balfour Falconer 250mm",
    "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж",
    "name_ru": "Balfour Falconer 250-мм"
   },
   "sort": 62
@@ -3268,6 +3331,7 @@
    "crate": false,
    "page": "Balfour Rampart 68mm",
    "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция",
    "name_ru": "Balfour Rampart 68-мм"
   },
   "sort": 63
@@ -3327,7 +3391,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Balfour Stockade 75mm",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 64
  },
@@ -3371,7 +3436,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Balfour Wolfhound 40mm",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 65
  },
@@ -3423,6 +3489,7 @@
    "crate": false,
    "page": "Barbed Wire (Material)",
    "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов",
    "name_ru": "Колючая проволока"
   },
   "sort": 66
@@ -3467,7 +3534,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Bellweather by VAC",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 67
  },
@@ -3520,6 +3588,7 @@
    "crate": true,
    "page": "BF5 White Ash Flask Grenade",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Граната BF5 White Ash Flask"
   },
   "sort": 68
@@ -3572,7 +3641,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Blacksteele",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 69
  },
@@ -3616,7 +3686,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Aquatipper",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 70
  },
@@ -3668,7 +3739,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Bluefin",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 71
  },
@@ -3720,7 +3792,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Bowhead",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 72
  },
@@ -3765,6 +3838,7 @@
    "crate": false,
    "page": "BMS - Class 2 Mobile Auto-Crane",
    "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж",
    "name_ru": "Мобильный автокран БМС 2 класса"
   },
   "sort": 73
@@ -3810,6 +3884,7 @@
    "crate": false,
    "page": "BMS - Class 2 Mobile Auto-Crane",
    "source_icon": null,
+   "source_ru": "Главная база",
    "name_ru": "Мобильный автокран БМС 2 класса"
   },
   "sort": 74
@@ -3853,7 +3928,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Fabricator",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 75
  },
@@ -3897,7 +3973,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Grouper",
-   "source_icon": null
+   "source_icon": null,
+   "source_ru": "Пляж"
   },
   "sort": 76
  },
@@ -3941,7 +4018,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Ironship",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 77
  },
@@ -3993,7 +4071,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Longhook",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 78
  },
@@ -4036,7 +4115,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Overseer Sky-Hauler",
-   "source_icon": "/api/v1/assets/items/facilities/crane-railway-track.png"
+   "source_icon": "/api/v1/assets/items/facilities/crane-railway-track.png",
+   "source_ru": "Крановые рельсы"
   },
   "sort": 79
  },
@@ -4081,6 +4161,7 @@
    "crate": false,
    "page": "BMS - Packmule Flatbed",
    "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж",
    "name_ru": "Бортовой грузовик BMS - Packmule"
   },
   "sort": 80
@@ -4132,7 +4213,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Scrap Hauler",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 81
  },
@@ -4176,7 +4258,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Universal Assembly Rig",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 82
  },
@@ -4220,7 +4303,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS - Universal Assembly Rig",
-   "source_icon": null
+   "source_icon": null,
+   "source_ru": "Главная база"
   },
   "sort": 83
  },
@@ -4279,7 +4363,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Black Bolt",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 84
  },
@@ -4354,7 +4439,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Bloodtender",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 85
  },
@@ -4413,7 +4499,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Holdout",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 86
  },
@@ -4472,7 +4559,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Linerunner",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 87
  },
@@ -4531,7 +4619,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Longrider",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 88
  },
@@ -4590,7 +4679,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Mineseeker",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 89
  },
@@ -4649,7 +4739,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Railtruck",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 90
  },
@@ -4708,7 +4799,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Roadhouse",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 91
  },
@@ -4767,7 +4859,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Rockhold",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 92
  },
@@ -4826,7 +4919,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Stowheel",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 93
  },
@@ -4885,7 +4979,8 @@
    "byproducts": [],
    "crate": false,
    "page": "BMS Tinderbox",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 94
  },
@@ -4936,7 +5031,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Booker Greyhound Model 910",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 95
  },
@@ -4996,7 +5092,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Callahan (Battleship)",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 96
  },
@@ -5040,6 +5137,7 @@
    "crate": true,
    "page": "Caoivish Parka",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Парка Caoivish"
   },
   "sort": 97
@@ -5091,7 +5189,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Clancy-Raca M4",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 98
  },
@@ -5134,7 +5233,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Cloudrunner's Vesture",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 99
  },
@@ -5177,7 +5277,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Cnute Cliffwrest",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 100
  },
@@ -5237,7 +5338,8 @@
    ],
    "crate": false,
    "page": "Coke",
-   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png",
+   "source_ru": "Угольный завод"
   },
   "sort": 101
  },
@@ -5288,7 +5390,8 @@
    ],
    "crate": false,
    "page": "Coke",
-   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png",
+   "source_ru": "Угольный завод"
   },
   "sort": 102
  },
@@ -5331,7 +5434,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Coke",
-   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png",
+   "source_ru": "Угольный завод"
   },
   "sort": 103
  },
@@ -5376,6 +5480,7 @@
    "crate": false,
    "page": "Collins Cannon 68mm",
    "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж",
    "name_ru": "Collins орудие 68-мм"
   },
   "sort": 104
@@ -5427,7 +5532,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Engine (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 105
  },
@@ -5478,7 +5584,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Engine (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 106
  },
@@ -5529,7 +5636,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Engine (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 107
  },
@@ -5580,7 +5688,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Engine (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 108
  },
@@ -5631,7 +5740,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Mechanical Parts (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 109
  },
@@ -5682,7 +5792,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Mechanical Parts (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 110
  },
@@ -5733,7 +5844,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Mechanical Parts (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 111
  },
@@ -5784,7 +5896,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Colonial Aircraft Mechanical Parts (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 112
  },
@@ -5827,7 +5940,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Components",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 113
  },
@@ -5894,7 +6008,8 @@
    ],
    "crate": false,
    "page": "Concrete Materials",
-   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png",
+   "source_ru": "Угольный завод"
   },
   "sort": 114
  },
@@ -5961,7 +6076,8 @@
    ],
    "crate": false,
    "page": "Concrete Materials",
-   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/coal-refinery.png",
+   "source_ru": "Угольный завод"
   },
   "sort": 115
  },
@@ -6004,7 +6120,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Concrete Materials",
-   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png"
+   "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png",
+   "source_ru": "Бетономешалка"
   },
   "sort": 116
  },
@@ -6048,7 +6165,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Concrete Mixer",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 117
  },
@@ -6100,7 +6218,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Conqueror",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 118
  },
@@ -6145,6 +6264,7 @@
    "crate": false,
    "page": "Construction Equipment",
    "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка",
    "name_ru": "Строительное оборудование"
   },
   "sort": 119
@@ -6197,7 +6317,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов"
   },
   "sort": 120
  },
@@ -6240,7 +6361,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов"
   },
   "sort": 121
  },
@@ -6291,7 +6413,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов"
   },
   "sort": 122
  },
@@ -6350,7 +6473,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Construction Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 123
  },
@@ -6402,7 +6526,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Crow's Foot Mine",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 124
  },
@@ -6477,7 +6602,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Cullen Predator Mk. III",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 125
  },
@@ -6520,7 +6646,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Cutler Foebreaker",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 126
  },
@@ -6564,7 +6691,8 @@
    "byproducts": [],
    "crate": false,
    "page": "DAE 1b-2 “Serra”",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 127
  },
@@ -6608,7 +6736,8 @@
    "byproducts": [],
    "crate": false,
    "page": "DAE 1o-3 “Polybolos”",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 128
  },
@@ -6667,7 +6796,8 @@
    "byproducts": [],
    "crate": false,
    "page": "DAE 2a-1 “Ruptura”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 129
  },
@@ -6726,7 +6856,8 @@
    "byproducts": [],
    "crate": false,
    "page": "DAE 3b-2 “Hades' Net”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 130
  },
@@ -6770,7 +6901,8 @@
    "byproducts": [],
    "crate": false,
    "page": "DAE 5b “Zeal”",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 131
  },
@@ -6829,7 +6961,8 @@
    "byproducts": [],
    "crate": false,
    "page": "DAE 5b “Zeal”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 132
  },
@@ -6896,7 +7029,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Daimon aK-5 “Harpy”",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 133
  },
@@ -6940,7 +7074,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Das Krokodil by VAC",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 134
  },
@@ -6983,7 +7118,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Daucus isg.III",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 135
  },
@@ -7042,7 +7178,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Devitt Ironhide Mk. IV",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 136
  },
@@ -7086,7 +7223,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Devitt Mk. III",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 137
  },
@@ -7145,7 +7283,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Devitt-Caine Mk. IV MMR",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 138
  },
@@ -7189,7 +7328,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Drummond 100a",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 139
  },
@@ -7240,7 +7380,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Drummond Loscann 55c",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 140
  },
@@ -7291,7 +7432,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Drummond Spitfire 100d",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 141
  },
@@ -7342,7 +7484,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Duncan's Coin 14.5mm",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 142
  },
@@ -7386,7 +7529,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Caravaner 2f",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 143
  },
@@ -7437,7 +7581,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Dousing Engine 3r",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 144
  },
@@ -7481,7 +7626,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Fuelrunner 2d",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 145
  },
@@ -7524,7 +7670,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Landrunner 12c",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 146
  },
@@ -7567,7 +7714,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Leatherback 2a",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 147
  },
@@ -7612,6 +7760,7 @@
    "crate": false,
    "page": "Dunne Loadlugger 3c",
    "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж",
    "name_ru": "Самосвал Dunne Loadlugger 3c"
   },
   "sort": 148
@@ -7656,7 +7805,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Responder 3e",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 149
  },
@@ -7700,7 +7850,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Dunne Transport",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 150
  },
@@ -7752,7 +7903,8 @@
    "byproducts": [],
    "crate": false,
    "page": "E680-S Rudder Lock",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 151
  },
@@ -7795,7 +7947,8 @@
    "byproducts": [],
    "crate": false,
    "page": "E681-B Hullbreaker Mine",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 152
  },
@@ -7838,7 +7991,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Enriched Oil",
-   "source_icon": "/api/v1/assets/items/facilities/offshore-platform.png"
+   "source_icon": "/api/v1/assets/items/facilities/offshore-platform.png",
+   "source_ru": "Морская платформа"
   },
   "sort": 153
  },
@@ -7890,7 +8044,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Enriched Oil",
-   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png"
+   "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png",
+   "source_ru": "Нефтеперерабатывающий завод"
   },
   "sort": 154
  },
@@ -7933,7 +8088,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Fabri Rucksack",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 155
  },
@@ -7986,6 +8142,7 @@
    "crate": false,
    "page": "Flame Ammo",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "Огнемётное топливо"
   },
   "sort": 156
@@ -8039,6 +8196,7 @@
    "crate": true,
    "page": "Flare Mortar Shell",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Осветительный Минометный Снаряд"
   },
   "sort": 157
@@ -8106,7 +8264,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Flood Juggernaut Mk. VII",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 158
  },
@@ -8173,7 +8332,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Flood Mk. I",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 159
  },
@@ -8240,7 +8400,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Flood Mk. IX Stain",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 160
  },
@@ -8284,7 +8445,8 @@
    "byproducts": [],
    "crate": false,
    "page": "G40 “Sagittarii”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 161
  },
@@ -8335,7 +8497,8 @@
    "byproducts": [],
    "crate": false,
    "page": "GA6 “Cestus”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 162
  },
@@ -8379,7 +8542,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Gallagher Brigand Mk. I",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 163
  },
@@ -8438,7 +8602,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Gallagher Highwayman Mk. III",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 164
  },
@@ -8497,7 +8662,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Gallagher Outlaw Mk. II",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 165
  },
@@ -8564,7 +8730,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Gallagher Thornfall Mk. VI",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 166
  },
@@ -8607,7 +8774,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Gentleman's Peacoat",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 167
  },
@@ -8651,6 +8819,7 @@
    "crate": false,
    "page": "Gravel",
    "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png",
+   "source_ru": "Бетономешалка",
    "name_ru": "Гравий"
   },
   "sort": 168
@@ -8695,6 +8864,7 @@
    "crate": false,
    "page": "Gravel",
    "source_icon": "/api/v1/assets/items/facilities/concrete-mixer.png",
+   "source_ru": "Бетономешалка",
    "name_ru": "Гравий"
   },
   "sort": 169
@@ -8738,7 +8908,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Grenadier's Baldric",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 170
  },
@@ -8782,6 +8953,7 @@
    "crate": true,
    "page": "Gunner's Breastplate",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Стальная кираса"
   },
   "sort": 171
@@ -8841,7 +9013,8 @@
    "byproducts": [],
    "crate": false,
    "page": "H-10 “Pelekys”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 172
  },
@@ -8900,7 +9073,8 @@
    "byproducts": [],
    "crate": false,
    "page": "H-19 “Vulcan”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 173
  },
@@ -8944,7 +9118,8 @@
    "byproducts": [],
    "crate": false,
    "page": "H-5 “Hatchet”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 174
  },
@@ -9003,7 +9178,8 @@
    "byproducts": [],
    "crate": false,
    "page": "H-8 “Kranesca”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 175
  },
@@ -9047,7 +9223,8 @@
    "byproducts": [],
    "crate": false,
    "page": "HA-1 “Sagaris”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 176
  },
@@ -9091,7 +9268,8 @@
    "byproducts": [],
    "crate": false,
    "page": "HC-2 “Scorpion”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 177
  },
@@ -9142,7 +9320,8 @@
    "byproducts": [],
    "crate": false,
    "page": "HC-7 “Ballista”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 178
  },
@@ -9186,6 +9365,7 @@
    "crate": false,
    "page": "Heavy Oil",
    "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png",
+   "source_ru": "Нефтеперерабатывающий завод",
    "name_ru": "Тяжелое топливо"
   },
   "sort": 179
@@ -9229,7 +9409,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Heavy Topcoat",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 180
  },
@@ -9273,7 +9454,8 @@
    "byproducts": [],
    "crate": false,
    "page": "HH-a “Javelin”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 181
  },
@@ -9324,7 +9506,8 @@
    "byproducts": [],
    "crate": false,
    "page": "HH-b “Hoplite”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 182
  },
@@ -9383,7 +9566,8 @@
    "byproducts": [],
    "crate": false,
    "page": "HH-d “Peltast”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 183
  },
@@ -9427,7 +9611,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Huber Exalt 150mm",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 184
  },
@@ -9472,6 +9657,7 @@
    "crate": false,
    "page": "Huber Lariat 120mm",
    "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка",
    "name_ru": "Huber Lariat 120мм"
   },
   "sort": 185
@@ -9531,7 +9717,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Huber Starbreaker 94.5mm",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 186
  },
@@ -9583,7 +9770,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Ignifist 30",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 187
  },
@@ -9636,6 +9824,7 @@
    "crate": true,
    "page": "Incendiary Mortar Shell",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Зажигательный минометный снаряд"
   },
   "sort": 188
@@ -9695,7 +9884,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Intelligence Center",
-   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png",
+   "source_ru": "Фундамент крупного сооружения"
   },
   "sort": 189
  },
@@ -9754,7 +9944,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Intelligence Center Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 190
  },
@@ -9798,7 +9989,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Interceptor PA-12",
-   "source_icon": "/api/v1/assets/items/facilities/base-ship.png"
+   "source_icon": "/api/v1/assets/items/facilities/base-ship.png",
+   "source_ru": "Корабль-база"
   },
   "sort": 191
  },
@@ -9842,7 +10034,8 @@
    "byproducts": [],
    "crate": false,
    "page": "K-81e “Sombre”",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 192
  },
@@ -9893,7 +10086,8 @@
    "byproducts": [],
    "crate": false,
    "page": "King Gallant Mk. II",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 193
  },
@@ -9952,7 +10146,8 @@
    "byproducts": [],
    "crate": false,
    "page": "King Jester Mk. I-1",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 194
  },
@@ -9996,7 +10191,8 @@
    "byproducts": [],
    "crate": false,
    "page": "King Spire Mk. I",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 195
  },
@@ -10040,7 +10236,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Kivela Power Wheel 80-1",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 196
  },
@@ -10091,7 +10288,8 @@
    "byproducts": [],
    "crate": true,
    "page": "KRR3-792 Auger",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 197
  },
@@ -10134,7 +10332,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Lamentum mm.IV",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 198
  },
@@ -10201,7 +10400,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Lance-25 “Hasta”",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 199
  },
@@ -10268,7 +10468,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Lance-36",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 200
  },
@@ -10335,7 +10536,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Lance-46 “Sarissa”",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 201
  },
@@ -10379,7 +10581,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Leary AA-70 Bolas",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 202
  },
@@ -10438,7 +10641,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Leary AA-70 Bolas",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 203
  },
@@ -10483,6 +10687,7 @@
    "crate": false,
    "page": "Leary Shellbore 68mm",
    "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка",
    "name_ru": "Leary Shellbore 68-мм"
   },
   "sort": 204
@@ -10527,7 +10732,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Leary Snare Trap 20",
-   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg"
+   "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка"
   },
   "sort": 205
  },
@@ -10578,7 +10784,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Legion Vexillum",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 206
  },
@@ -10621,7 +10828,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Legionary's Oilcoat",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 207
  },
@@ -10666,6 +10874,7 @@
    "crate": false,
    "page": "Liquid Container",
    "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка",
    "name_ru": "Жидкостный контейнер"
   },
   "sort": 208
@@ -10709,7 +10918,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Lodesman's Lorica",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 209
  },
@@ -10776,7 +10986,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Luminary Mk. II Harbinger",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 210
  },
@@ -10820,7 +11031,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Luminary Mk. IV Herald",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png",
+   "source_ru": "Авиационный ангар"
   },
   "sort": 211
  },
@@ -10864,7 +11076,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Luminary Mk. VI Emissary",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-hangar.png",
+   "source_ru": "Авиационный ангар"
   },
   "sort": 212
  },
@@ -10939,7 +11152,8 @@
    "byproducts": [],
    "crate": false,
    "page": "M925 Austringer Man-O-War",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 213
  },
@@ -10983,7 +11197,8 @@
    "byproducts": [],
    "crate": false,
    "page": "MacConmara Shorerunner",
-   "source_icon": "/api/v1/assets/items/facilities/base-ship.png"
+   "source_icon": "/api/v1/assets/items/facilities/base-ship.png",
+   "source_ru": "Корабль-база"
   },
   "sort": 214
  },
@@ -11027,6 +11242,7 @@
    "crate": false,
    "page": "Maintenance Supplies",
    "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов",
    "name_ru": "Припасы Обслуживания"
   },
   "sort": 215
@@ -11070,7 +11286,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Malone Ratcatcher MK.1",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 216
  },
@@ -11122,7 +11339,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Mark II Raidbreaker",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 217
  },
@@ -11167,6 +11385,7 @@
    "crate": false,
    "page": "Material Pallet",
    "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка",
    "name_ru": "Поддон для материалов"
   },
   "sort": 218
@@ -11212,6 +11431,7 @@
    "crate": false,
    "page": "Material Pallet",
    "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция",
    "name_ru": "Поддон для материалов"
   },
   "sort": 219
@@ -11255,7 +11475,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Medic Fatigues",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 220
  },
@@ -11307,7 +11528,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Mercy",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 221
  },
@@ -11382,7 +11604,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Mergo-4 “Myrmidon”",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 222
  },
@@ -11434,6 +11657,7 @@
    "crate": false,
    "page": "Metal Beam",
    "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов",
    "name_ru": "Металлическая балка"
   },
   "sort": 223
@@ -11486,7 +11710,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Model-7 “Evie”",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 224
  },
@@ -11538,7 +11763,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Moray Torpedo",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 225
  },
@@ -11591,6 +11817,7 @@
    "crate": true,
    "page": "Mortar Shell",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Минометный Снаряд"
   },
   "sort": 226
@@ -11635,6 +11862,7 @@
    "crate": false,
    "page": "Mounted Bonesaw MK.3",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "Станковый Bonesaw MK.3"
   },
   "sort": 227
@@ -11679,6 +11907,7 @@
    "crate": false,
    "page": "Mounted Fissura gd.I",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "Станковый Fissura gd.I"
   },
   "sort": 228
@@ -11723,7 +11952,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Mulloy LPC",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 229
  },
@@ -11775,7 +12005,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Nakki",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 230
  },
@@ -11818,7 +12049,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Naval Buoy",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 231
  },
@@ -11901,7 +12133,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Naval Hull Segments",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 232
  },
@@ -11953,6 +12186,7 @@
    "crate": false,
    "page": "Naval Shell Plating",
    "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция",
    "name_ru": "Корабельная обшивка корпуса"
   },
   "sort": 233
@@ -12004,7 +12238,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Naval Turbine Components",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 234
  },
@@ -12049,6 +12284,7 @@
    "crate": false,
    "page": "Niska Mk. I Gun Motor Carriage",
    "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж",
    "name_ru": "Полугусеничный Бронетранспортер Niska Mk. I"
   },
   "sort": 235
@@ -12108,7 +12344,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Niska Mk. II Blinder",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 236
  },
@@ -12159,7 +12396,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Niska Mk. III Scar Twin",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 237
  },
@@ -12218,7 +12456,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Niska-Rycker Mk. IX Skycaller",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 238
  },
@@ -12277,7 +12516,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Noble Firebrand Mk. XVII",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 239
  },
@@ -12321,7 +12561,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Noble Widow MK. XIV",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 240
  },
@@ -12396,7 +12637,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O-75b “Ares”",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 241
  },
@@ -12447,7 +12689,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien V.101 Freeman",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 242
  },
@@ -12491,7 +12734,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien V.110",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 243
  },
@@ -12542,7 +12786,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien V.113 Gravekeeper",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 244
  },
@@ -12593,7 +12838,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien V.121 Highlander",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 245
  },
@@ -12644,7 +12890,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien V.130 Wild Jack",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 246
  },
@@ -12688,7 +12935,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien V.190 Knave",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 247
  },
@@ -12747,7 +12995,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien V.200 Squire",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 248
  },
@@ -12806,7 +13055,8 @@
    "byproducts": [],
    "crate": false,
    "page": "O'Brien Warsmith v.215",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 249
  },
@@ -12849,7 +13099,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Officer's Regalia",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 250
  },
@@ -12892,7 +13143,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Officialis' Attire",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 251
  },
@@ -12936,6 +13188,7 @@
    "crate": true,
    "page": "Outrider's Mantle",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Дозорная мантия"
   },
   "sort": 252
@@ -12980,6 +13233,7 @@
    "crate": true,
    "page": "Padded Boiler Suit",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Стеганный Комбинезон"
   },
   "sort": 253
@@ -13024,6 +13278,7 @@
    "crate": true,
    "page": "Paratrooper's Ruck",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Рюкзак Десантника"
   },
   "sort": 254
@@ -13068,6 +13323,7 @@
    "crate": false,
    "page": "Petrol",
    "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png",
+   "source_ru": "Нефтеперерабатывающий завод",
    "name_ru": "Бензин"
   },
   "sort": 255
@@ -13121,6 +13377,7 @@
    "crate": false,
    "page": "Petrol",
    "source_icon": "/api/v1/assets/items/facilities/oil-refinery.png",
+   "source_ru": "Нефтеперерабатывающий завод",
    "name_ru": "Бензин"
   },
   "sort": 256
@@ -13165,6 +13422,7 @@
    "crate": true,
    "page": "Physician's Jacket",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Куртка врача"
   },
   "sort": 257
@@ -13208,7 +13466,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Pipe",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 258
  },
@@ -13251,7 +13510,8 @@
    "byproducts": [],
    "crate": false,
    "page": "PL-1 “Phalanx”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 259
  },
@@ -13303,7 +13563,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Poseidon",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 260
  },
@@ -13363,7 +13624,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Processed Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 261
  },
@@ -13414,7 +13676,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Processed Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 262
  },
@@ -13475,7 +13738,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Processed Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 263
  },
@@ -13519,6 +13783,7 @@
    "crate": true,
    "page": "PT-815 Smoke Grenade",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Дымовая граната PT-815"
   },
   "sort": 264
@@ -13563,6 +13828,7 @@
    "crate": false,
    "page": "Quillback Torpedo",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "Торпеда \"Quillback\""
   },
   "sort": 265
@@ -13607,7 +13873,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-1 Hauler",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 266
  },
@@ -13651,7 +13918,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-12 - “Salus” Ambulance",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 267
  },
@@ -13702,7 +13970,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-12b - “Salva” Flame Truck",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 268
  },
@@ -13746,7 +14015,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-15 - “Chariot”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 269
  },
@@ -13805,7 +14075,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-17 “Retiarius” Skirmisher",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 270
  },
@@ -13849,7 +14120,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-5 “Atlas” Hauler",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 271
  },
@@ -13892,7 +14164,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-5b “Sisyphus” Hauler",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 272
  },
@@ -13935,7 +14208,8 @@
    "byproducts": [],
    "crate": false,
    "page": "R-9 “Speartip” Escort",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 273
  },
@@ -13994,7 +14268,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rare Alloys",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 274
  },
@@ -14045,7 +14320,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rare Materials",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 275
  },
@@ -14088,7 +14364,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Recon Camo",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 276
  },
@@ -14131,7 +14408,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Remex Garb",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 277
  },
@@ -14174,7 +14452,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Repurposed Truck",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 278
  },
@@ -14219,6 +14498,7 @@
    "crate": false,
    "page": "Resource Container",
    "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка",
    "name_ru": "Контейнер для ресурсов"
   },
   "sort": 279
@@ -14294,7 +14574,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rinnspeir Mk. I Zealot",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 280
  },
@@ -14338,7 +14619,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rinnspeir Ornitier-Class Gunship",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 281
  },
@@ -14382,7 +14664,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rooster - Junkwagon",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 282
  },
@@ -14426,7 +14709,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rooster - Lamploader",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 283
  },
@@ -14470,7 +14754,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rooster - Tumblebox",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 284
  },
@@ -14523,6 +14808,7 @@
    "crate": true,
    "page": "RPG",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "РПГ"
   },
   "sort": 285
@@ -14567,7 +14853,8 @@
    "byproducts": [],
    "crate": false,
    "page": "RR-3 “Stolon” Tanker",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 286
  },
@@ -14626,7 +14913,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Rycker 4/3-F Wasp Nest",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 287
  },
@@ -14678,6 +14966,7 @@
    "crate": false,
    "page": "Sandbag",
    "source_icon": "/api/v1/assets/items/facilities/materials-factory.png",
+   "source_ru": "Фабрика материалов",
    "name_ru": "Мешок с песком"
   },
   "sort": 288
@@ -14722,6 +15011,7 @@
    "crate": true,
    "page": "Sapper Gear",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Сапёрное снаряжение"
   },
   "sort": 289
@@ -14781,7 +15071,8 @@
    "byproducts": [],
    "crate": false,
    "page": "SC-3 Aerial Interceptor Array",
-   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png",
+   "source_ru": "Фундамент крупного сооружения"
   },
   "sort": 290
  },
@@ -14840,7 +15131,8 @@
    "byproducts": [],
    "crate": false,
    "page": "SC-3 Aerial Interceptor Array Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 291
  },
@@ -14884,7 +15176,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Sharkey-Devitt Birdeater Mk. I",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 292
  },
@@ -14937,6 +15230,7 @@
    "crate": false,
    "page": "Shatter Missile",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "Разрушающая ракета"
   },
   "sort": 293
@@ -14982,6 +15276,7 @@
    "crate": false,
    "page": "Shipping Container",
    "source_icon": "/api/v1/assets/items/facilities/construction-yard.jpg",
+   "source_ru": "Строительная площадка",
    "name_ru": "Грузовой контейнер"
   },
   "sort": 294
@@ -15035,6 +15330,7 @@
    "crate": true,
    "page": "Shrapnel Mortar Shell",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Осколочный минометный снаряд"
   },
   "sort": 295
@@ -15079,7 +15375,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Silverhand - Mk. IV",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 296
  },
@@ -15138,7 +15435,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Silverhand Chieftain - Mk. VI",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 297
  },
@@ -15197,7 +15495,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Silverhand Lordscar - Mk. X",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 298
  },
@@ -15241,6 +15540,7 @@
    "crate": true,
    "page": "Specialist's Overcoat",
    "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения",
    "name_ru": "Шинель специалиста"
   },
   "sort": 299
@@ -15284,7 +15584,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Staff Car",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 300
  },
@@ -15352,7 +15653,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Steel Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 301
  },
@@ -15420,7 +15722,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Steel Construction Materials",
-   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/metalworks-factory.png",
+   "source_ru": "Металлургический завод"
   },
   "sort": 302
  },
@@ -15479,7 +15782,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Storm Cannon",
-   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png",
+   "source_ru": "Фундамент крупного сооружения"
   },
   "sort": 303
  },
@@ -15538,7 +15842,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Storm Cannon Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 304
  },
@@ -15581,7 +15886,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Storm Tank",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 305
  },
@@ -15625,7 +15931,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Strider",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 306
  },
@@ -15684,7 +15991,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Structure Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 307
  },
@@ -15728,7 +16036,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Swallowtail 988/127-2",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 308
  },
@@ -15772,7 +16081,8 @@
    "byproducts": [],
    "crate": false,
    "page": "T12 “Actaeon” Tankette",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 309
  },
@@ -15832,6 +16142,7 @@
    "crate": false,
    "page": "T13 “Deioneus” Rocket Battery",
    "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция",
    "name_ru": "Реактивный миномет T13 “Deioneus”"
   },
   "sort": 310
@@ -15883,7 +16194,8 @@
    "byproducts": [],
    "crate": false,
    "page": "T14 “Vesta” Tankette",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 311
  },
@@ -15934,7 +16246,8 @@
    "byproducts": [],
    "crate": false,
    "page": "T20 “Ixion” Tankette",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 312
  },
@@ -15978,7 +16291,8 @@
    "byproducts": [],
    "crate": false,
    "page": "T3 “Xiphos”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 313
  },
@@ -16029,7 +16343,8 @@
    "byproducts": [],
    "crate": false,
    "page": "T5 “Percutio”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 314
  },
@@ -16080,7 +16395,8 @@
    "byproducts": [],
    "crate": false,
    "page": "T8 “Gemini”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 315
  },
@@ -16123,7 +16439,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Tankman's Coveralls",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 316
  },
@@ -16206,7 +16523,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Tempest Cannon RA-2",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 317
  },
@@ -16258,7 +16576,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Tenta Torpedo",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 318
  },
@@ -16309,7 +16628,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Thermal Shielding",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 319
  },
@@ -16369,7 +16689,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Titan",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 320
  },
@@ -16436,7 +16757,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Toxot-902 “Blind Silver”",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 321
  },
@@ -16488,7 +16810,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Tremola Grenade GPb-1",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 322
  },
@@ -16532,6 +16855,7 @@
    "crate": false,
    "page": "Tripod",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов",
    "name_ru": "Тренога"
   },
   "sort": 323
@@ -16599,7 +16923,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Tulka I1.9 White Raven",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 324
  },
@@ -16682,7 +17007,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Tulka P4 Welkinrive",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 325
  },
@@ -16734,7 +17060,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Tümmler by VAC",
-   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png"
+   "source_icon": "/api/v1/assets/items/facilities/dry-dock.png",
+   "source_ru": "Сухой док"
   },
   "sort": 326
  },
@@ -16778,7 +17105,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Type B - “Lucian”",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 327
  },
@@ -16822,7 +17150,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Type C - “Charon”",
-   "source_icon": "/api/v1/assets/items/facilities/shipyard.png"
+   "source_icon": "/api/v1/assets/items/facilities/shipyard.png",
+   "source_ru": "Верфь"
   },
   "sort": 328
  },
@@ -16881,7 +17210,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Underground Fortress",
-   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png",
+   "source_ru": "Фундамент крупного сооружения"
   },
   "sort": 329
  },
@@ -16940,7 +17270,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Underground Fortress Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 330
  },
@@ -16993,7 +17324,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Unstable Substances",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 331
  },
@@ -17037,7 +17369,8 @@
    "byproducts": [],
    "crate": false,
    "page": "UV-05a “Argonaut”",
-   "source_icon": "/api/v1/assets/items/facilities/garage.png"
+   "source_icon": "/api/v1/assets/items/facilities/garage.png",
+   "source_ru": "Гараж"
   },
   "sort": 332
  },
@@ -17088,7 +17421,8 @@
    "byproducts": [],
    "crate": false,
    "page": "UV-24 “Icarus”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 333
  },
@@ -17131,7 +17465,8 @@
    "byproducts": [],
    "crate": false,
    "page": "UV-5c “Odyssey”",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 334
  },
@@ -17214,7 +17549,8 @@
    "byproducts": [],
    "crate": false,
    "page": "V-1 Tzykalia",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 335
  },
@@ -17289,7 +17625,8 @@
    "byproducts": [],
    "crate": false,
    "page": "V-5b Pegasus",
-   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-assembly-station.png",
+   "source_ru": "Большая сборочная станция"
   },
   "sort": 336
  },
@@ -17332,7 +17669,8 @@
    "byproducts": [],
    "crate": true,
    "page": "Velian Flak Vest",
-   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+   "source_ru": "Фабрика пехотного снаряжения"
   },
   "sort": 337
  },
@@ -17383,7 +17721,8 @@
    "byproducts": [],
    "crate": false,
    "page": "War Ensign",
-   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
+   "source_ru": "Завод боеприпасов"
   },
   "sort": 338
  },
@@ -17434,7 +17773,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Engine (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 339
  },
@@ -17485,7 +17825,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Engine (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 340
  },
@@ -17536,7 +17877,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Engine (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 341
  },
@@ -17587,7 +17929,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Engine (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 342
  },
@@ -17638,7 +17981,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Mechanical Parts (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 343
  },
@@ -17689,7 +18033,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Mechanical Parts (Large)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 344
  },
@@ -17740,7 +18085,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Mechanical Parts (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 345
  },
@@ -17791,7 +18137,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Warden Aircraft Mechanical Parts (Small)",
-   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png"
+   "source_icon": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+   "source_ru": "Завод обслуживания авиации"
   },
   "sort": 346
  },
@@ -17850,7 +18197,8 @@
    "byproducts": [],
    "crate": false,
    "page": "Weather Station",
-   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png"
+   "source_icon": "/api/v1/assets/items/facilities/large-structure-foundation.png",
+   "source_ru": "Фундамент крупного сооружения"
   },
   "sort": 347
  },
@@ -17909,8 +18257,1627 @@
    "byproducts": [],
    "crate": false,
    "page": "Weather Station Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png"
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
   },
   "sort": 348
+ },
+ {
+  "id": "building-a0e-9-rocket-platform",
+  "kind": "facility",
+  "name": "A0E-9 Rocket Platform",
+  "name_en": "A0E-9 Rocket Platform",
+  "item_code": "RocketSite",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/a0e-9-rocket-platform.jpg",
+  "output_quantity": 1,
+  "cost": {
+   "Rare Alloys": 100
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Rare Alloys",
+     "amount": 100,
+     "unit": null,
+     "code": "FacilityMaterials9",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials9.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "A0E-9 Rocket Platform",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Ракетная платформа A0E-9"
+  },
+  "sort": 349
+ },
+ {
+  "id": "building-aircraft-maintenance-factory",
+  "kind": "facility",
+  "name": "Aircraft Maintenance Factory",
+  "name_en": "Aircraft Maintenance Factory",
+  "item_code": "FacilityFactoryAircraft",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/aircraft-maintenance-factory.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 250
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 250,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Aircraft Maintenance Factory",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Завод обслуживания авиации"
+  },
+  "sort": 350
+ },
+ {
+  "id": "building-ammunition-factory",
+  "kind": "facility",
+  "name": "Ammunition Factory",
+  "name_en": "Ammunition Factory",
+  "item_code": "FacilityFactoryAmmo",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/ammunition-factory.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 25
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 25,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Ammunition Factory",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Завод боеприпасов"
+  },
+  "sort": 351
+ },
+ {
+  "id": "building-bms-foreman-stacker",
+  "kind": "facility",
+  "name": "BMS Foreman Stacker",
+  "name_en": "BMS Foreman Stacker",
+  "item_code": "FacilityCrane",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/bms-foreman-stacker.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 10
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 10,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "BMS Foreman Stacker",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Штабелёр BMS Foreman"
+  },
+  "sort": 352
+ },
+ {
+  "id": "building-coal-refinery",
+  "kind": "facility",
+  "name": "Coal Refinery",
+  "name_en": "Coal Refinery",
+  "item_code": "FacilityRefineryCoal",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/coal-refinery.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 50
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 50,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Coal Refinery",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Угольный завод"
+  },
+  "sort": 353
+ },
+ {
+  "id": "building-concrete-foundation-1x1",
+  "kind": "facility",
+  "name": "Concrete Foundation (1x1)",
+  "name_en": "Concrete Foundation (1x1)",
+  "item_code": "Foundation01T3",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/concrete-foundation-1x1.png",
+  "output_quantity": 1,
+  "cost": {
+   "Concrete Materials": 5
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Concrete Materials",
+     "amount": 5,
+     "unit": null,
+     "code": "Concrete",
+     "icon_url": "/api/v1/assets/items/Concrete.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Бетонный фундамент (1×1)"
+  },
+  "sort": 354
+ },
+ {
+  "id": "building-concrete-foundation-1x2",
+  "kind": "facility",
+  "name": "Concrete Foundation (1x2)",
+  "name_en": "Concrete Foundation (1x2)",
+  "item_code": "Foundation011x2T3",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/concrete-foundation-1x2.png",
+  "output_quantity": 1,
+  "cost": {
+   "Concrete Materials": 10
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Concrete Materials",
+     "amount": 10,
+     "unit": null,
+     "code": "Concrete",
+     "icon_url": "/api/v1/assets/items/Concrete.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Бетонный фундамент (1×2)"
+  },
+  "sort": 355
+ },
+ {
+  "id": "building-concrete-foundation-2x2",
+  "kind": "facility",
+  "name": "Concrete Foundation (2x2)",
+  "name_en": "Concrete Foundation (2x2)",
+  "item_code": "Foundation012x2T3",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/concrete-foundation-2x2.png",
+  "output_quantity": 1,
+  "cost": {
+   "Concrete Materials": 15
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Concrete Materials",
+     "amount": 15,
+     "unit": null,
+     "code": "Concrete",
+     "icon_url": "/api/v1/assets/items/Concrete.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Бетонный фундамент (2×2)"
+  },
+  "sort": 356
+ },
+ {
+  "id": "building-concrete-foundation-corner-1x1",
+  "kind": "facility",
+  "name": "Concrete Foundation Corner (1x1)",
+  "name_en": "Concrete Foundation Corner (1x1)",
+  "item_code": "Foundation02T3",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/concrete-foundation-corner-1x1.png",
+  "output_quantity": 1,
+  "cost": {
+   "Concrete Materials": 5
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Concrete Materials",
+     "amount": 5,
+     "unit": null,
+     "code": "Concrete",
+     "icon_url": "/api/v1/assets/items/Concrete.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Угловой бетонный фундамент (1×1)"
+  },
+  "sort": 357
+ },
+ {
+  "id": "building-crate-transfer-station",
+  "kind": "facility",
+  "name": "Crate Transfer Station",
+  "name_en": "Crate Transfer Station",
+  "item_code": "FacilityTransferCrate",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/crate-transfer-station.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 35
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 35,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Crate Transfer Station",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Станция перегрузки ящиков"
+  },
+  "sort": 358
+ },
+ {
+  "id": "building-diesel-power-plant",
+  "kind": "facility",
+  "name": "Diesel Power Plant",
+  "name_en": "Diesel Power Plant",
+  "item_code": "FacilityPowerDiesel",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/diesel-power-plant.png",
+  "output_quantity": 1,
+  "cost": {
+   "Basic Materials": 150
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Basic Materials",
+     "amount": 150,
+     "unit": null,
+     "code": "Cloth",
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Diesel Power Plant",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Дизельная электростанция"
+  },
+  "sort": 359
+ },
+ {
+  "id": "building-dry-dock",
+  "kind": "facility",
+  "name": "Dry Dock",
+  "name_en": "Dry Dock",
+  "item_code": "FacilityVehicleFactory3",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/dry-dock.png",
+  "output_quantity": 1,
+  "cost": {
+   "Rare Alloys": 35
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Rare Alloys",
+     "amount": 35,
+     "unit": null,
+     "code": "FacilityMaterials9",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials9.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Dry Dock",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Сухой док"
+  },
+  "sort": 360
+ },
+ {
+  "id": "building-field-modification-center",
+  "kind": "facility",
+  "name": "Field Modification Center",
+  "name_en": "Field Modification Center",
+  "item_code": "FacilityModificationCenter",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/field-modification-center.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 150
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 150,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Field Modification Center",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Полевой центр модификаций"
+  },
+  "sort": 361
+ },
+ {
+  "id": "building-foundation-1x1",
+  "kind": "facility",
+  "name": "Foundation (1x1)",
+  "name_en": "Foundation (1x1)",
+  "item_code": "Foundation01T1",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/foundation-1x1.png",
+  "output_quantity": 1,
+  "cost": {
+   "Gravel": 75
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Gravel",
+     "amount": 75,
+     "unit": null,
+     "code": "GroundMaterials",
+     "icon_url": "/api/v1/assets/items/GroundMaterials.png",
+     "name_ru": "Гравий"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Фундамент (1×1)"
+  },
+  "sort": 362
+ },
+ {
+  "id": "building-foundation-1x2",
+  "kind": "facility",
+  "name": "Foundation (1x2)",
+  "name_en": "Foundation (1x2)",
+  "item_code": "Foundation011x2T1",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/foundation-1x2.png",
+  "output_quantity": 1,
+  "cost": {
+   "Gravel": 115
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Gravel",
+     "amount": 115,
+     "unit": null,
+     "code": "GroundMaterials",
+     "icon_url": "/api/v1/assets/items/GroundMaterials.png",
+     "name_ru": "Гравий"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Фундамент (1×2)"
+  },
+  "sort": 363
+ },
+ {
+  "id": "building-foundation-2x2",
+  "kind": "facility",
+  "name": "Foundation (2x2)",
+  "name_en": "Foundation (2x2)",
+  "item_code": "Foundation012x2T1",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/foundation-2x2.png",
+  "output_quantity": 1,
+  "cost": {
+   "Gravel": 150
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Gravel",
+     "amount": 150,
+     "unit": null,
+     "code": "GroundMaterials",
+     "icon_url": "/api/v1/assets/items/GroundMaterials.png",
+     "name_ru": "Гравий"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Фундамент (2×2)"
+  },
+  "sort": 364
+ },
+ {
+  "id": "building-foundation-corner-1x1",
+  "kind": "facility",
+  "name": "Foundation Corner (1x1)",
+  "name_en": "Foundation Corner (1x1)",
+  "item_code": "Foundation02T1",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/foundation-corner-1x1.png",
+  "output_quantity": 1,
+  "cost": {
+   "Gravel": 75
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Gravel",
+     "amount": 75,
+     "unit": null,
+     "code": "GroundMaterials",
+     "icon_url": "/api/v1/assets/items/GroundMaterials.png",
+     "name_ru": "Гравий"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Foundation",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Угловой фундамент (1×1)"
+  },
+  "sort": 365
+ },
+ {
+  "id": "building-infantry-kit-factory",
+  "kind": "facility",
+  "name": "Infantry Kit Factory",
+  "name_en": "Infantry Kit Factory",
+  "item_code": "FacilityFactorySmallArms",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/infantry-kit-factory.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 250
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 250,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Infantry Kit Factory",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Фабрика пехотного снаряжения"
+  },
+  "sort": 366
+ },
+ {
+  "id": "building-large-assembly-station",
+  "kind": "facility",
+  "name": "Large Assembly Station",
+  "name_en": "Large Assembly Station",
+  "item_code": "FacilityVehicleFactory2",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/large-assembly-station.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 250
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 250,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Large Assembly Station",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Большая сборочная станция"
+  },
+  "sort": 367
+ },
+ {
+  "id": "building-liquid-transfer-station",
+  "kind": "facility",
+  "name": "Liquid Transfer Station",
+  "name_en": "Liquid Transfer Station",
+  "item_code": "FacilityTransferLiquid",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/liquid-transfer-station.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 35
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 35,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Liquid Transfer Station",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Станция перекачки жидкостей"
+  },
+  "sort": 368
+ },
+ {
+  "id": "building-maintenance-tunnel",
+  "kind": "facility",
+  "name": "Maintenance Tunnel",
+  "name_en": "Maintenance Tunnel",
+  "item_code": "MaintenanceTunnel",
+  "category": "buildings",
+  "item_class": "Hammer",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/maintenance-tunnel.png",
+  "output_quantity": 1,
+  "cost": {
+   "Basic Materials": 50
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Basic Materials",
+     "amount": 50,
+     "unit": null,
+     "code": "Cloth",
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Maintenance Tunnel",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Технический тоннель"
+  },
+  "sort": 369
+ },
+ {
+  "id": "building-material-transfer-station",
+  "kind": "facility",
+  "name": "Material Transfer Station",
+  "name_en": "Material Transfer Station",
+  "item_code": "FacilityTransferMaterial",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/material-transfer-station.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 35
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 35,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Material Transfer Station",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Станция перегрузки материалов"
+  },
+  "sort": 370
+ },
+ {
+  "id": "building-materials-factory",
+  "kind": "facility",
+  "name": "Materials Factory",
+  "name_en": "Materials Factory",
+  "item_code": "FacilityRefinery1",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/materials-factory.png",
+  "output_quantity": 1,
+  "cost": {
+   "Basic Materials": 200
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Basic Materials",
+     "amount": 200,
+     "unit": null,
+     "code": "Cloth",
+     "icon_url": "/api/v1/assets/items/Cloth.png",
+     "name_ru": "Базовые материалы"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Materials Factory",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Фабрика материалов"
+  },
+  "sort": 371
+ },
+ {
+  "id": "building-metalworks-factory",
+  "kind": "facility",
+  "name": "Metalworks Factory",
+  "name_en": "Metalworks Factory",
+  "item_code": "FacilityRefinery2",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/metalworks-factory.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 125
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 125,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Metalworks Factory",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Металлургический завод"
+  },
+  "sort": 372
+ },
+ {
+  "id": "building-oil-refinery",
+  "kind": "facility",
+  "name": "Oil Refinery",
+  "name_en": "Oil Refinery",
+  "item_code": "FacilityRefineryOil",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/oil-refinery.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 50
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 50,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Oil Refinery",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Нефтеперерабатывающий завод"
+  },
+  "sort": 373
+ },
+ {
+  "id": "building-oil-well",
+  "kind": "facility",
+  "name": "Oil Well",
+  "name_en": "Oil Well",
+  "item_code": "FacilityMineOil",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/oil-well.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 35
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 35,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Oil Well",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Нефтяная скважина"
+  },
+  "sort": 374
+ },
+ {
+  "id": "building-power-station",
+  "kind": "facility",
+  "name": "Power Station",
+  "name_en": "Power Station",
+  "item_code": "FacilityPowerOil",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/power-station.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 25
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 25,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Power Station",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Электростанция"
+  },
+  "sort": 375
+ },
+ {
+  "id": "building-provisional-road",
+  "kind": "facility",
+  "name": "Provisional Road",
+  "name_en": "Provisional Road",
+  "item_code": "FacilityRoad",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/provisional-road.png",
+  "output_quantity": 1,
+  "cost": {
+   "Gravel": 150
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Gravel",
+     "amount": 150,
+     "unit": null,
+     "code": "GroundMaterials",
+     "icon_url": "/api/v1/assets/items/GroundMaterials.png",
+     "name_ru": "Гравий"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Provisional Road",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Временная дорога"
+  },
+  "sort": 376
+ },
+ {
+  "id": "building-resource-transfer-station",
+  "kind": "facility",
+  "name": "Resource Transfer Station",
+  "name_en": "Resource Transfer Station",
+  "item_code": "FacilityTransferResource",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/resource-transfer-station.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 35
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 35,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Resource Transfer Station",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Станция перегрузки ресурсов"
+  },
+  "sort": 377
+ },
+ {
+  "id": "building-small-assembly-station",
+  "kind": "facility",
+  "name": "Small Assembly Station",
+  "name_en": "Small Assembly Station",
+  "item_code": "FacilityVehicleFactory1",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/small-assembly-station.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 75
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 75,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Small Assembly Station",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Малая сборочная станция"
+  },
+  "sort": 378
+ },
+ {
+  "id": "building-stationary-harvester-coal",
+  "kind": "facility",
+  "name": "Stationary Harvester (Coal)",
+  "name_en": "Stationary Harvester (Coal)",
+  "item_code": "FacilityMineResource4",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/stationary-harvester-coal.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 175
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 175,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Stationary Harvester (Coal)",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Стационарный харвестер (уголь)"
+  },
+  "sort": 379
+ },
+ {
+  "id": "building-stationary-harvester-components",
+  "kind": "facility",
+  "name": "Stationary Harvester (Components)",
+  "name_en": "Stationary Harvester (Components)",
+  "item_code": "FacilityMineResource2",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/stationary-harvester-components.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 45
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 45,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Stationary Harvester (Components)",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Стационарный харвестер (компоненты)"
+  },
+  "sort": 380
+ },
+ {
+  "id": "building-stationary-harvester-salvage",
+  "kind": "facility",
+  "name": "Stationary Harvester (Salvage)",
+  "name_en": "Stationary Harvester (Salvage)",
+  "item_code": "FacilityMineResource1",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/stationary-harvester-salvage.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 150
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 150,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Stationary Harvester (Salvage)",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Стационарный харвестер (утиль)"
+  },
+  "sort": 381
+ },
+ {
+  "id": "building-stationary-harvester-sulfur",
+  "kind": "facility",
+  "name": "Stationary Harvester (Sulfur)",
+  "name_en": "Stationary Harvester (Sulfur)",
+  "item_code": "FacilityMineResource3",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/stationary-harvester-sulfur.png",
+  "output_quantity": 1,
+  "cost": {
+   "Processed Construction Materials": 45
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Processed Construction Materials",
+     "amount": 45,
+     "unit": null,
+     "code": "FacilityMaterials2",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials2.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Stationary Harvester (Sulfur)",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Стационарный харвестер (сера)"
+  },
+  "sort": 382
+ },
+ {
+  "id": "building-water-pump",
+  "kind": "facility",
+  "name": "Water Pump",
+  "name_en": "Water Pump",
+  "item_code": "FacilityMineWater",
+  "category": "buildings",
+  "item_class": "Construction Vehicle",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "buildings"
+  ],
+  "icon_url": "/api/v1/assets/items/facilities/water-pump.png",
+  "output_quantity": 1,
+  "cost": {
+   "Construction Materials": 35
+  },
+  "data": {
+   "source": "Buildings",
+   "module": null,
+   "inputs": [
+    {
+     "name": "Construction Materials",
+     "amount": 35,
+     "unit": null,
+     "code": "FacilityMaterials1",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials1.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 0,
+   "seconds": 0,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "Water Pump",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "building": true,
+   "source_ru": "Здания",
+   "name_ru": "Водяной насос"
+  },
+  "sort": 383
  }
 ]

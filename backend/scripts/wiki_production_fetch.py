@@ -120,6 +120,117 @@ def ensure_icon(entry: str | None) -> str | None:
     return f"/api/v1/assets/items/facilities/{filename}"
 
 
+# Категория «Здания»: постройки, которые клан возводит сам (стоимость строительства из
+# Cargo-таблицы structures). Мелкие сегменты (трубы, провода, рельсы, мостки) — не заказ.
+# Названия построек в русском клиенте игры: категории калькулятора завода (data.source_ru)
+# и категория «Здания» (data.name_ru у зданий).
+STRUCTURE_RU = {
+    "Buildings": "Здания",
+    "A0E-9 Rocket Platform": "Ракетная платформа A0E-9",
+    "Aircraft Hangar": "Авиационный ангар",
+    "Aircraft Maintenance Factory": "Завод обслуживания авиации",
+    "Ammunition Factory": "Завод боеприпасов",
+    "Base Ship": "Корабль-база",
+    "Beach": "Пляж",
+    "BMS Foreman Stacker": "Штабелёр BMS Foreman",
+    "Coal Refinery": "Угольный завод",
+    "Concrete Foundation (1x1)": "Бетонный фундамент (1×1)",
+    "Concrete Foundation (1x2)": "Бетонный фундамент (1×2)",
+    "Concrete Foundation (2x2)": "Бетонный фундамент (2×2)",
+    "Concrete Foundation Corner (1x1)": "Угловой бетонный фундамент (1×1)",
+    "Concrete Mixer": "Бетономешалка",
+    "Construction Yard": "Строительная площадка",
+    "Crane Railway Track": "Крановые рельсы",
+    "Crate Transfer Station": "Станция перегрузки ящиков",
+    "Diesel Power Plant": "Дизельная электростанция",
+    "Dry Dock": "Сухой док",
+    "Field Modification Center": "Полевой центр модификаций",
+    "Foundation (1x1)": "Фундамент (1×1)",
+    "Foundation (1x2)": "Фундамент (1×2)",
+    "Foundation (2x2)": "Фундамент (2×2)",
+    "Foundation Corner (1x1)": "Угловой фундамент (1×1)",
+    "Garage": "Гараж",
+    "Home Base": "Главная база",
+    "Infantry Kit Factory": "Фабрика пехотного снаряжения",
+    "Large Assembly Station": "Большая сборочная станция",
+    "Large Structure Foundation": "Фундамент крупного сооружения",
+    "Liquid Transfer Station": "Станция перекачки жидкостей",
+    "Maintenance Tunnel": "Технический тоннель",
+    "Material Transfer Station": "Станция перегрузки материалов",
+    "Materials Factory": "Фабрика материалов",
+    "Metalworks Factory": "Металлургический завод",
+    "Offshore Platform": "Морская платформа",
+    "Oil Refinery": "Нефтеперерабатывающий завод",
+    "Oil Well": "Нефтяная скважина",
+    "Power Station": "Электростанция",
+    "Provisional Road": "Временная дорога",
+    "Resource Transfer Station": "Станция перегрузки ресурсов",
+    "Shipyard": "Верфь",
+    "Small Assembly Station": "Малая сборочная станция",
+    "Stationary Harvester (Coal)": "Стационарный харвестер (уголь)",
+    "Stationary Harvester (Components)": "Стационарный харвестер (компоненты)",
+    "Stationary Harvester (Salvage)": "Стационарный харвестер (утиль)",
+    "Stationary Harvester (Sulfur)": "Стационарный харвестер (сера)",
+    "Water Pump": "Водяной насос",
+}
+
+BUILDING_TYPES = {"production", "large production", "power production", "resource production", "storage", "utility", "foundation"}
+BUILDINGS_SOURCE = "Buildings"
+
+
+def fetch_buildings() -> list[dict[str, str]]:
+    params = {
+        "action": "cargoquery", "format": "json", "tables": "structures",
+        "fields": "_pageName=page,codename,name,image,built_with,build_material,build_amount,facility,faction",
+        "where": "facility IS NOT NULL AND facility<>''", "limit": "500",
+    }
+    req = urllib.request.Request(f"{API}?{urllib.parse.urlencode(params)}", headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        rows = [x["title"] for x in json.load(r)["cargoquery"]]
+    return [r for r in rows if (r.get("facility") or "").strip() in BUILDING_TYPES and num(r.get("build amount")) > 0
+            and (r.get("build material") or "").strip()]
+
+
+def building_recipes(part, icon_entries: dict[str, str], start: int) -> list[dict]:
+    out: list[dict] = []
+    for r in sorted(fetch_buildings(), key=lambda x: x["name"]):
+        name = r["name"].strip()
+        material = r["build material"].strip()
+        inputs = [part(material, r["build amount"], None)]
+        icon = ensure_icon(icon_entries.get(name.lower()))
+        out.append({
+            "id": f"building-{slug(name)}"[:72],
+            "kind": "facility",
+            "name": name,
+            "name_en": name,
+            "item_code": (r.get("codename") or "").strip() or None,
+            "category": "buildings",
+            "item_class": (r.get("built with") or "").strip() or None,
+            "description": None,
+            "factions": FACTIONS.get((r.get("faction") or "").strip(), ["neutral"]),
+            "facilities": ["buildings"],
+            "icon_url": icon,
+            "output_quantity": 1,
+            "cost": {material: inputs[0]["amount"]},
+            "data": {
+                "source": BUILDINGS_SOURCE,
+                "module": None,
+                "inputs": inputs,
+                "vehicle": None,
+                "power_mw": 0,
+                "seconds": 0,
+                "output_unit": None,
+                "byproducts": [],
+                "crate": False,
+                "page": r.get("page"),
+                "source_icon": ensure_icon(icon_entries.get("small assembly station")),
+                "building": True,
+            },
+            "sort": start + len(out),
+        })
+    return out
+
+
 def keep_russian_names(out: list[dict]) -> None:
     """Русские названия (data.name_ru у рецепта и входов) не приходят с вики — берём их
     из прежнего файла и из каталога (name предмета на русском), чтобы синхронизация их не стирала."""
@@ -136,6 +247,10 @@ def keep_russian_names(out: list[dict]) -> None:
         if c.get("english_name") and cyr.search(c.get("name") or ""):
             ru.setdefault(c["english_name"], c["name"])
     for x in out:
+        if x["data"]["source"] in STRUCTURE_RU:
+            x["data"]["source_ru"] = STRUCTURE_RU[x["data"]["source"]]
+        if x["category"] == "buildings" and x["name"] in STRUCTURE_RU:
+            ru.setdefault(x["name"], STRUCTURE_RU[x["name"]])
         if x["name"] in ru:
             x["data"]["name_ru"] = ru[x["name"]]
         for p in x["data"].get("inputs", []):
@@ -211,6 +326,7 @@ def main() -> None:
             "sort": len(out),
         })
 
+    out += building_recipes(part, icon_entries, len(out))
     keep_russian_names(out)
     OUT.write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
     sources = sorted({x["data"]["source"] for x in out})

@@ -140,6 +140,7 @@
 .tool-section-label { color: var(--fg-2); font-size: var(--text-sm); font-weight: 600; }
 .factory-item-card.tool-item { flex-direction: column; justify-content: flex-start; gap: 0.5rem; padding: 0.85rem 0.75rem 0.9rem; text-align: center; }
 .tool-item .item-icon { background: transparent; box-shadow: none; }
+[data-theme="light"] .tool-item .item-icon { background: var(--item-bg); border-radius: 14px; }
 .cost-chip { display: inline-flex; align-items: center; gap: 0.25rem; border-radius: 7px; background: var(--surface); padding: 0.12rem 0.45rem; color: var(--fg-2); font-size: 0.66rem; box-shadow: 0 0 0 1px var(--border); }
 .cost-chip b { color: var(--fg); font-family: var(--font-mono); font-weight: 600; }
 .cost-chip.is-warn { color: var(--warning); box-shadow: 0 0 0 1px rgb(var(--warning-rgb, 251 191 36) / 0.35); }
@@ -242,6 +243,7 @@
 .theme-preview-light { background: linear-gradient(135deg, #f8f9f6 0 30%, #ffffff 30%); color: #4d7c0f; }
 .theme-preview-contrast { background: #000; color: #ffd400; box-shadow: inset 0 0 0 2px #fff; }
 .theme-preview-noir { background: linear-gradient(135deg, #101214 0 30%, #c8c2cf 30%); color: #101214; }
+.theme-preview-amber { background: linear-gradient(135deg, #1b1e21 0 30%, #272c31 30%); color: #e08a3c; }
 .theme-preview-soft { background: linear-gradient(135deg, #f9f3ee 0 30%, #f5e2d8 30%, #dfe6f5); color: #c4705a; }
 .theme-choice-label { display: block; padding: 0 0.3rem; color: var(--fg); font-size: var(--text-sm); font-weight: 600; }
 .theme-choice-hint { display: block; margin-top: 0.1rem; padding: 0 0.3rem; color: var(--fg-3); font-size: var(--text-xs); }
@@ -530,6 +532,24 @@
 @media (min-width: 900px) { .guide-notes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .guide-notes li { display: flex; align-items: flex-start; gap: 0.65rem; border-radius: 10px; padding: 0.5rem 0.6rem; color: var(--fg-2); font-size: var(--text-sm); line-height: 1.5; }
 .guide-notes li.is-active { background: var(--accent-soft); color: var(--fg); }
+
+/* ─────────────────────────── СТАТИСТИКА ─────────────────────────── */
+.stats-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: 0.75rem; }
+.stats-kpi { display: flex; flex-direction: column; gap: 0.15rem; padding: 1rem 1.1rem; }
+.stats-kpi-value { color: var(--fg); font-family: var(--font-heading); font-size: 1.65rem; font-weight: 650; letter-spacing: -0.025em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stats-kpi-label { color: var(--fg-2); font-size: var(--text-sm); font-weight: 500; }
+.stats-kpi-hint { color: var(--fg-3); font-size: var(--text-xs); }
+.stats-chart { display: grid; height: 9rem; grid-auto-columns: minmax(0, 1fr); grid-auto-flow: column; align-items: end; gap: 3px; margin-top: 1rem; border-bottom: 1px solid var(--border); }
+.stats-bar { display: flex; height: 100%; align-items: flex-end; border-radius: 4px 4px 0 0; }
+.stats-bar:hover { background: var(--surface-hover); }
+.stats-bar-stack { display: flex; width: 100%; min-height: 2px; flex-direction: column-reverse; overflow: hidden; border-radius: 4px 4px 0 0; }
+.stats-bar-stack > span { min-height: 0; }
+.stats-bar-stack .is-deliveries, .stats-dot.is-deliveries { background: var(--accent); }
+.stats-bar-stack .is-orders, .stats-dot.is-orders { background: var(--info); }
+.stats-dot { display: inline-block; width: 8px; height: 8px; border-radius: 3px; }
+.stats-meter { position: relative; display: inline-block; width: 5rem; height: 6px; overflow: hidden; border-radius: 999px; background: var(--surface-3); }
+.stats-meter > span { position: absolute; inset: 0 auto 0 0; border-radius: inherit; background: var(--accent); }
+.stats-top .stats-meter { display: block; }
 
 /* ─────────────────────────── УПРАВЛЕНИЕ ─────────────────────────── */
 .setup-step { display: flex; align-items: center; gap: 0.65rem; border-radius: 12px; background: var(--surface-2); padding: 0.6rem 0.75rem; color: var(--fg-2); font-size: var(--text-sm); box-shadow: inset 0 0 0 1px var(--border); }

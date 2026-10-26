@@ -11,6 +11,8 @@ import { FACTION_FILTERS, PaneToggles, paneCardsClass, paneGridClass, usePanes }
 
 
 /** Название предмета на языке интерфейса: цепочка хранит английские имена, показываем русские. */
+/** Категория «Здания»: data.source у построек, которые клан возводит сам. */
+const BUILDINGS = "Buildings";
 const DisplayName = React.createContext<(name: string) => string>((name) => name);
 const useDisplayName = () => React.useContext(DisplayName);
 
@@ -53,6 +55,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
       const d = facilityData(r);
       if (!d) continue;
       if (d.name_ru) ru.set(r.name, d.name_ru);
+      if (d.source_ru) ru.set(d.source, d.source_ru);
       for (const p of [...d.inputs, ...d.byproducts]) if (p.name_ru) ru.set(p.name, p.name_ru);
     }
     return (name: string) => ru.get(name) ?? name;
@@ -74,8 +77,10 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
       entry.items.add(r.name);
       map.set(d.source, entry);
     }
-    return [...map].map(([name, v]) => ({ name, icon: v.icon, count: v.items.size })).sort((a, b) => a.name.localeCompare(b.name));
-  }, [recipes, allowed]);
+    // «Здания» (постройки, которые клан строит сам) — первой карточкой, остальные по алфавиту
+    const rank = (name: string) => (name === BUILDINGS ? 0 : 1);
+    return [...map].map(([name, v]) => ({ name, icon: v.icon, count: v.items.size })).sort((a, b) => rank(a.name) - rank(b.name) || dn(a.name).localeCompare(dn(b.name)));
+  }, [recipes, allowed, dn]);
   const totalItems = React.useMemo(() => new Set(recipes.filter(allowed).map((r) => r.name)).size, [recipes, allowed]);
 
   // карточка — предмет; рецепты под фильтром постройки и фракции
@@ -119,6 +124,8 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
   const buildings = React.useMemo(() => {
     const map = new Map<string, { icon: string | null; items: Set<string>; used: boolean }>();
     const note = (source: string, icon: string | null | undefined, item: string, used: boolean) => {
+      // «Здания» строятся на месте — это не производственная постройка с мощностью и временем
+      if (source === BUILDINGS) return;
       const entry = map.get(source) ?? { icon: icon ?? null, items: new Set<string>(), used: false };
       entry.items.add(item);
       entry.used ||= used;
@@ -154,19 +161,19 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
       stats: [
         { name: t("facility.runs"), quantity: totals.runs, unit: "" },
         { name: t("tools.time"), quantity: formatDuration(power.seconds, timeUnits(t)), unit: "" },
-        ...power.sources.map((src) => ({ name: `⏱ ${src.source} ×${src.buildings}`, quantity: formatDuration(src.seconds, timeUnits(t)), unit: "" })),
+        ...power.sources.filter((src) => src.source !== BUILDINGS).map((src) => ({ name: `${dn(src.source)} ×${src.buildings}`, quantity: formatDuration(src.seconds, timeUnits(t)), unit: "" })),
         ...[...totals.byproducts].map(([name, v]) => ({ name: t("facility.byproduct", { name: dn(name) }), quantity: withUnit(v.amount, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       ],
       sections: power.peakMw
         ? [
             {
-              title: `⚡ ${t("power.title")}`,
+              title: t("power.title"),
               lines: [
                 { name: t("power.peak"), quantity: mw(power.peakMw), unit: "", note: t("power.peakNote") },
                 { name: t("power.energy"), quantity: `${fmt(Math.round(power.energyMwh * 100) / 100)} MWh`, unit: "" },
                 ...power.sources
                   .filter((src) => src.peakMw)
-                  .map((src) => ({ name: `${src.source} ×${src.buildings}`, quantity: mw(src.peakMw), unit: "", icon: assetUrl(src.icon), note: t("power.active", { n: src.active, total: src.buildings }) })),
+                  .map((src) => ({ name: `${dn(src.source)} ×${src.buildings}`, quantity: mw(src.peakMw), unit: "", icon: assetUrl(src.icon), note: t("power.active", { n: src.active, total: src.buildings }) })),
                 ...power.fuels.map((f) => ({
                   name: t(`power.fuel.${f.fuel.key}`),
                   quantity: f.cans,
@@ -225,7 +232,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
             label={t("facility.sources")}
             items={[
               { key: "all", label: t("facility.allSources"), glyph: "facility", hint: t("facility.items", { n: totalItems }) },
-              ...sources.map((s) => ({ key: s.name, label: s.name, icon: s.icon ? assetUrl(s.icon) : null, glyph: "facility" as const, hint: t("facility.items", { n: s.count }) })),
+              ...sources.map((s) => ({ key: s.name, label: dn(s.name), icon: s.icon ? assetUrl(s.icon) : null, glyph: "facility" as const, hint: t("facility.items", { n: s.count }) })),
             ]}
             value={source}
             onChange={setSource}
@@ -237,7 +244,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
           ) : (
           <>
           <div className="factory-count text-xs">
-            {source && source !== "all" ? `${source} • ` : ""}{t("codes.shown")}: {cards.length} / {totalItems}
+            {source && source !== "all" ? `${dn(source)} · ` : ""}{t("codes.shown")}: {cards.length} / {totalItems}
           </div>
 
           <div className={paneCardsClass(panes)}>
@@ -250,7 +257,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
                   {queued ? <span className="queued-badge absolute top-2.5 left-2.5">{fmt(queued.amount)}</span> : null}
                   <ItemIcon sources={[assetUrl(first.icon_url)]} size={72} label={dn(card.name)} className="mt-3" />
                   <strong className="line-clamp-2 min-h-[2.5em] w-full text-[0.85rem] font-semibold leading-tight text-fg">{dn(card.name)}</strong>
-                  <small className="block w-full truncate text-[0.72rem] text-fg-3">{facilityData(first)?.source}</small>
+                  <small className="block w-full truncate text-[0.72rem] text-fg-3">{dn(facilityData(first)?.source ?? "")}</small>
                   {card.recipes.length > 1 ? (
                     <span className="cost-chip is-warn mt-auto">{t("facility.recipes", { n: card.recipes.length })}</span>
                   ) : null}
@@ -405,7 +412,7 @@ const RecipeCard: React.FC<{ recipe: Recipe | null; selected?: boolean; onClick:
       ) : (
         <>
           <span className="recipe-card-head">
-            <span className="recipe-card-source">{d.source}</span>
+            <span className="recipe-card-source">{dn(d.source)}</span>
             {d.module ? <span className="recipe-card-module">{d.module}</span> : null}
             {trailing}
           </span>

@@ -7,6 +7,7 @@ import { Scopes } from "@/entities/session";
 import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
 import { CodeBaseWorkspace } from "@/features/codes";
 import { ReportsWorkspace } from "@/features/reports";
+import { StatsWorkspace } from "@/features/stats";
 import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
 import { StockpilesWorkspace, TerminalProvider } from "@/features/timers";
 import { TOOL_CALCULATORS, ToolsWorkspace, type ToolModule } from "@/features/tools";
@@ -110,6 +111,9 @@ export default function TerminalPage() {
             view: "stockpiles" as const, icon: "stockpile" as const, label: "clan.stockpilesTitle" as const, hint: "clan.stockpilesNav" as const,
             render: () => <StockpilesWorkspace can={can} />,
           }]
+        : []),
+      ...(can(Scopes.REPORTS_READ)
+        ? [{ view: "stats" as const, icon: "stats" as const, label: "nav.stats.label" as const, hint: "nav.stats.hint" as const, render: () => <StatsWorkspace /> }]
         : []),
       { view: "training" as const, icon: "training" as const, label: "nav.training.label" as const, hint: "nav.training.hint" as const, render: () => <TrainingWorkspace /> },
       ...(isOwner
