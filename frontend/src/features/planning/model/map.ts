@@ -77,13 +77,13 @@ export const FILTER_ICON: Record<MapKind, string> = {
 export const markerFactor = (scale: number) => Math.min(1, Math.max(0.4, scale * 5));
 
 /**
- * Подписи без каши: крупные города — с середины масштаба, малые отметки — только вблизи;
- * подпись, которая налезла бы на уже показанную (в экранных пикселях), пропускаем.
+ * Подписи без каши: только города (Major) — с середины масштаба; малые отметки местности
+ * (Minor) не показываем. Подпись, которая налезла бы на уже показанную, пропускаем.
  */
 export function visibleLabels(all: MapRegion["labels"], scale: number) {
   if (scale <= 0.3) return [];
   const shown: { l: MapRegion["labels"][number]; x0: number; x1: number; y0: number; y1: number }[] = [];
-  const pool = [...all].filter((l) => l.major || scale > 1.2).sort((a, b) => Number(b.major) - Number(a.major));
+  const pool = all.filter((l) => l.major);
   for (const l of pool) {
     const cx = l.x * HEX_W * scale, cy = l.y * HEX_H * scale;
     const w = l.text.length * (l.major ? 7 : 6) + 14, h = l.major ? 20 : 17;
