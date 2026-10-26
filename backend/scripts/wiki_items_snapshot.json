@@ -3624,6 +3624,17 @@
     "version": ""
    },
    {
+    "page": "Drummond 100a",
+    "codename": "ScoutVehicleW",
+    "name": "Drummond 100a",
+    "image": "ScoutVehicleWarVehicleIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "type": "Light Utility Vehicle",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Drummond Loscann 55c",
     "codename": "ScoutVehicleUtilityW",
     "name": "Drummond Loscann 55c",
@@ -11535,6 +11546,16 @@
     "version": ""
    },
    {
+    "page": "Drummond 100a",
+    "codename": "ScoutVehicleW",
+    "name": "Drummond 100a",
+    "image": "ScoutVehicleWarVehicleIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Drummond Loscann 55c",
     "codename": "ScoutVehicleUtilityW",
     "name": "Drummond Loscann 55c",
@@ -18130,6 +18151,7 @@
   "ScoutVehicleOffensiveVehicleIcon.png": "https://foxhole.wiki.gg/images/ScoutVehicleOffensiveVehicleIcon.png?907747",
   "ScoutVehicleOffensiveWarVehicleIcon.png": "https://foxhole.wiki.gg/images/ScoutVehicleOffensiveWarVehicleIcon.png?51f5b1",
   "ScoutVehicleUtilityCVehicleIcon.png": "https://foxhole.wiki.gg/images/ScoutVehicleUtilityCVehicleIcon.png?fab541",
+  "ScoutVehicleWarVehicleIcon.png": "https://foxhole.wiki.gg/images/ScoutVehicleWarVehicleIcon.png?5f1e9b",
   "Scout Tanks.png": "https://foxhole.wiki.gg/images/Scout_Tanks.png?6a5e07",
   "Scoutplane.png": "https://foxhole.wiki.gg/images/Scoutplane.png?1ad939",
   "ScrapMineIcon.png": "https://foxhole.wiki.gg/images/ScrapMineIcon.png?59ba67",
@@ -18256,8 +18278,8 @@
   "TruckOffensiveVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckOffensiveVehicleIcon.png?4e6408",
   "TruckUtilityVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckUtilityVehicleIcon.png?b3a828",
   "TruckUtilityWarVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckUtilityWarVehicleIcon.png?956603",
-  "TruckVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckVehicleIcon.png?bdbe71",
   "townhallSquared.jpg": "https://foxhole.wiki.gg/images/TownhallSquared.jpg?8b575c",
+  "TruckVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckVehicleIcon.png?bdbe71",
   "TruckWarVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckWarVehicleIcon.png?9f870b",
   "TunnelNetworkStructureIcon.png": "https://foxhole.wiki.gg/images/TunnelNetworkStructureIcon.png?221b4d",
   "Tunnel_Network_Squared.png": "https://foxhole.wiki.gg/images/Tunnel_Network_Squared.png?440423",
