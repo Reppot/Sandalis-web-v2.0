@@ -217,11 +217,13 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
             const open = expanded === report.id;
             const busy = busyId === report.id;
             return (
-              <li data-guide="report-card" key={report.id} className="panel report-card p-4 md:p-5">
-                {/* слева — страница заказа целиком (как PNG-экспорт), справа — данные и действия */}
-                <div className="report-card-page">
-                  <DocReader doc={toDoc(report, t, locale)} textureUrl={texture} expanded={open} onExpand={() => setExpanded(report.id)} />
-                </div>
+              <li data-guide="report-card" key={report.id} className={`panel report-card p-4 md:p-5 ${open ? "is-open" : "is-compact"}`}>
+                {/* развёрнуто: слева — страница заказа целиком (как PNG-экспорт), справа — данные и действия */}
+                {open ? (
+                  <div className="report-card-page">
+                    <DocReader doc={toDoc(report, t, locale)} textureUrl={texture} expanded onExpand={() => setExpanded(report.id)} />
+                  </div>
+                ) : null}
                 <div className="report-card-body">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <button className="flex min-w-0 flex-1 items-start gap-2 text-left" onClick={() => setExpanded(open ? null : report.id)}>
@@ -277,8 +279,14 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                     </button>
                   )}
                 </div>
-                <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t, locale), fmt)} busy={busy} />
-                <ReportProgressPanel report={report} can={can} userId={userId} onStatusMaybeChanged={() => void load()} />
+                {open ? <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t, locale), fmt)} busy={busy} /> : null}
+                <ReportProgressPanel report={report} can={can} userId={userId} compact={!open} onStatusMaybeChanged={() => void load()} />
+                {open ? null : (
+                  <button type="button" className="report-more" onClick={() => setExpanded(report.id)}>
+                    {t("reports.showDetails")}
+                    <Icon name="chevronDown" size={15} />
+                  </button>
+                )}
                 </div>
               </li>
             );

@@ -189,7 +189,9 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); width
 
 /* ─────────────────────────── ЧИПЫ / СЕГМЕНТЫ ─────────────────────────── */
 .segmented { display: inline-flex; flex-shrink: 0; align-items: stretch; gap: 2px; padding: 3px; border: 1px solid var(--border); border-radius: 11px; background: var(--surface-2); }
-.segmented-item { display: inline-flex; min-height: 1.85rem; align-items: center; justify-content: center; gap: 0.35rem; padding: 0 0.8rem; border-radius: 8px; color: var(--fg-2); font-size: var(--text-sm); font-weight: 500; white-space: nowrap; transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease); }
+.segmented { scrollbar-width: none; }
+.segmented::-webkit-scrollbar { display: none; }
+.segmented-item { display: inline-flex; flex-shrink: 0; min-height: 1.85rem; align-items: center; justify-content: center; gap: 0.35rem; padding: 0 0.8rem; border-radius: 8px; color: var(--fg-2); font-size: var(--text-sm); font-weight: 500; white-space: nowrap; transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease); }
 .segmented-item:hover { color: var(--fg); }
 .segmented-item.is-active { background: var(--surface); color: var(--fg); font-weight: 600; box-shadow: var(--shadow-1), 0 0 0 1px var(--border); }
 .segmented.is-lg .segmented-item { min-height: 2.6rem; padding: 0 1.1rem; font-size: 0.9rem; }

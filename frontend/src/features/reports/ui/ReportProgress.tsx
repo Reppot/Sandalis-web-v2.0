@@ -13,7 +13,7 @@ const pct = (part: number, whole: number) => (whole ? Math.min(100, Math.round((
  * Выполнение заказа: общий прогресс, что уже привезено (иконки, количество, кто привёз)
  * и журнал вкладов. Кнопка «Сообщить о выполнении» — состав заказа с количествами и склад.
  */
-export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: string; onStatusMaybeChanged: () => void }> = ({ report, can, userId, onStatusMaybeChanged }) => {
+export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: string; onStatusMaybeChanged: () => void; compact?: boolean }> = ({ report, can, userId, onStatusMaybeChanged, compact }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
   const [raw, setProgress] = React.useState<ReportProgress | null>(null);
@@ -26,7 +26,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
   }, [report.id]);
   React.useEffect(load, [load, report.updated_at]);
 
-  if (!progress) return <div className="report-progress"><Loading /></div>;
+  if (!progress) return <div className="report-progress"><Loading className="min-h-[60px]" /></div>;
 
   const total = pct(progress.delivered_total, progress.ordered_total);
   // кто что привёз: строка -> {имя: количество}
@@ -66,7 +66,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
         ) : null}
       </div>
 
-      {started.length ? (
+      {compact ? null : started.length ? (
         <div className="report-progress-lines">
           {started.map((l) => (
             <div key={l.line_id} className={`report-progress-line ${l.delivered >= l.ordered ? "is-done" : ""}`}>
@@ -86,7 +86,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
         <p className="mt-3 text-sm text-fg-3">{t("progress.empty")}</p>
       )}
 
-      {progress.contributions.length ? (
+      {!compact && progress.contributions.length ? (
         <div className="report-log">
           <div className="mb-2 text-xs font-semibold text-fg-3">{t("progress.log", { n: progress.contributions.length })}</div>
           <ul className="flex flex-col gap-1.5">

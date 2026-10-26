@@ -16,6 +16,7 @@ import {
   PagedMore,
   Icon,
   SearchField,
+  Segmented,
   copyText,
   errorText,
   matchesWords,
@@ -39,6 +40,8 @@ const KINDS: { key: StockpileKind; label: MessageKey; icon: IconName }[] = [
   { key: "depot", label: "stock.kind.depot", icon: "warehouse" },
   { key: "other", label: "stock.kind.other", icon: "home" },
 ];
+/** Сколько позиций склада видно сразу — остальное по кнопке «Показать все». */
+const PREVIEW = 8;
 const kindOf = (k: StockpileKind | null | undefined) => KINDS.find((x) => x.key === k);
 
 /** Склад клана и его таймер — одна запись. Таймер без склада (старые записи) — запись без описания. */
@@ -58,6 +61,7 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
   const risk = useRiskSummary();
   const now = useClock();
   const [query, setQuery] = React.useState("");
+  const [filter, setFilter] = React.useState<"all" | "risk" | "safe" | "none">("all");
   const [managedId, setManagedId] = React.useState<string | null>(null);
   const [editing, setEditing] = React.useState<Stockpile | "new" | null>(null);
   const [monitor, setMonitor] = React.useState<{ region: string; location: string } | null>(null);
@@ -96,12 +100,29 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
     );
   }, [stockpiles, timers]);
 
+  // фильтр по состоянию таймера: под угрозой — истёк, критично или внимание
+  const stateOf = React.useCallback(
+    (r: Row): "risk" | "safe" | "none" => {
+      if (!r.timer || r.timer.completed_at) return "none";
+      return severityOf(secondsLeft(r.timer.ends_at, now || Date.now())) === "safe" ? "safe" : "risk";
+    },
+    [now],
+  );
+  const counts = React.useMemo(() => {
+    const c = { all: rows.length, risk: 0, safe: 0, none: 0 };
+    for (const r of rows) c[stateOf(r)] += 1;
+    return c;
+  }, [rows, stateOf]);
+
   const visible = React.useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return rows;
-    return rows.filter((r) => matchesWords(`${r.stockpile?.name ?? r.timer?.title ?? ""} ${r.stockpile?.region ?? ""} ${r.stockpile?.town ?? ""}`, q));
-  }, [rows, query]);
-  const page = usePaged(visible, 30, query);
+    return rows.filter(
+      (r) =>
+        (filter === "all" || stateOf(r) === filter) &&
+        (!q || matchesWords(`${r.stockpile?.name ?? r.timer?.title ?? ""} ${r.stockpile?.region ?? ""} ${r.stockpile?.town ?? ""}`, q)),
+    );
+  }, [rows, query, filter, stateOf]);
+  const page = usePaged(visible, 30, `${query}|${filter}`);
   const managed = managedId ? timers.find((tm) => tm.id === managedId) ?? null : null;
 
   return (
@@ -125,8 +146,20 @@ export const StockpilesWorkspace: React.FC<{ can: Can }> = ({ can }) => {
           <Stat label={t("timers.warning")} value={risk.warning} tone="warning" />
           <Stat label={t("timers.safe")} value={risk.safe} tone="success" />
         </div>
-        <div className="mt-4 flex items-center gap-2">
-          <SearchField className="flex-1" data-guide="timers-search" placeholder={t("timers.search")} value={query} onChange={setQuery} />
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <Segmented
+            label={t("stock.filter")}
+            value={filter}
+            onChange={setFilter}
+            className="max-w-full overflow-x-auto"
+            options={[
+              { value: "all", label: <>{t("common.all")} <span className="opacity-60">{counts.all}</span></> },
+              { value: "risk", label: <>{t("stock.filterRisk")} <span className="opacity-60">{counts.risk}</span></> },
+              { value: "safe", label: <>{t("stock.filterSafe")} <span className="opacity-60">{counts.safe}</span></> },
+              { value: "none", label: <>{t("stock.filterNoTimer")} <span className="opacity-60">{counts.none}</span></> },
+            ]}
+          />
+          <SearchField className="min-w-[12rem] flex-1" data-guide="timers-search" placeholder={t("timers.search")} value={query} onChange={setQuery} />
           <button className="btn h-10" onClick={() => void refresh()} title={t("common.syncHint")}>
             <Icon name="refresh" size={15} />
             <span className="hidden sm:inline">{t("common.sync")}</span>
@@ -307,6 +340,7 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
   const { t, locale } = useI18n();
   const [items, setItems] = React.useState<Stockpile["items"] | null>(null);
   const [query, setQuery] = React.useState("");
+  const [all, setAll] = React.useState(false);
 
   React.useEffect(() => {
     let cancelled = false;
@@ -333,7 +367,7 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
       ) : null}
       {shown.length ? (
         <ul className="stockpile-items-grid">
-          {shown.map((i) => (
+          {(needle || all ? shown : shown.slice(0, PREVIEW)).map((i) => (
             <li key={i.id} className="stockpile-item" title={name(i)}>
               <ItemIcon sources={[assetUrl(i.iconUrl)]} size={34} label={name(i)} />
               <span className="min-w-0 flex-1 truncate">{name(i)}</span>
@@ -347,6 +381,12 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
       ) : (
         <p className="text-sm text-fg-3">{t("common.nothingFound")}</p>
       )}
+      {!needle && shown.length > PREVIEW ? (
+        <button type="button" className="report-more" onClick={() => setAll((v) => !v)}>
+          {all ? t("stock.showLess") : t("stock.showAllItems", { n: shown.length })}
+          <Icon name="chevronDown" size={15} className={all ? "rotate-180" : ""} />
+        </button>
+      ) : null}
     </div>
   );
 };
