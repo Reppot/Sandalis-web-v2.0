@@ -4,9 +4,11 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import { codeSynonyms } from "@/entities/item";
 import { Scopes, type Can } from "@/entities/session";
-import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
-import { operationsApi, parseDate, today, type Operation } from "@/features/operations/model/operations";
-import { lineName, orderKindOf, REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
+import { operationsApi, today, type Operation } from "@/features/operations/model/operations";
+import { NO_FACETS, VIEWS, applyFacets, applyView, sortTasks, summarize, type Facets, type View } from "@/features/reports/model/hq";
+import { HqSummary, OperationsStrip, TaskRow } from "@/features/reports/ui/HqParts";
+import { OrderCard } from "@/features/reports/ui/OrderCard";
+import { PRIORITIES, lineName, orderKindOf, REPORT_STATUS_LABEL, orderDraft, reportApi, type Assignee, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
   DocReader,
@@ -19,8 +21,10 @@ import {
   errorText,
   formatDateTime,
   renderPages,
+  readStorage,
   useConfirm,
   useDocExport,
+  writeStorage,
   useI18n,
   useNotify,
   type ExportDoc,
@@ -33,31 +37,10 @@ import {
   SearchField,
 } from "@/shared";
 
-type Filter = "active" | "all" | "done" | "cancelled" | "operations";
-
-const FILTERS: { key: Filter; label: MessageKey; statuses?: ReportStatus[] }[] = [
-  { key: "active", label: "reports.filter.active", statuses: ["open", "in_progress"] },
-  { key: "done", label: "reports.filter.done", statuses: ["done"] },
-  { key: "cancelled", label: "reports.filter.cancelled", statuses: ["cancelled"] },
-  // заказы, отмеченные на картах предстоящих операций (любой статус)
-  { key: "operations", label: "reports.filter.operations" },
-  { key: "all", label: "common.all" },
-];
-
-const STATUS_BADGE: Record<ReportStatus, string> = {
-  open: "badge-accent",
-  in_progress: "badge-info",
-  done: "badge-accent",
-  cancelled: "badge-danger",
-};
-
-const HIDDEN_ACTIONS = new Set<ReportStatus>(["in_progress", "cancelled"]);
-
-const ACTION_LABEL: Record<ReportStatus, MessageKey> = {
-  open: "reports.action.open",
-  in_progress: "reports.action.in_progress",
-  done: "reports.action.done",
-  cancelled: "reports.action.cancelled",
+const VIEW_KEY = "sindaris-orders-view";
+const VIEW_LABEL: Record<View, MessageKey> = {
+  active: "hq.view.active", mine: "hq.view.mine", overdue: "hq.view.overdue", unassigned: "hq.view.unassigned",
+  operations: "hq.view.operations", done: "hq.view.done", cancelled: "hq.view.cancelled", all: "common.all",
 };
 
 interface ReportsWorkspaceProps {
@@ -66,6 +49,8 @@ interface ReportsWorkspaceProps {
   userId: string;
   /** Строки рапорта загружены в черновик — открыть вкладку «Заказы». */
   onOpenConstructor: () => void;
+  /** Полоса операций → раздел «Операции». */
+  onOpenOperations: () => void;
 }
 
 function toDoc(report: Report, t: Translate, locale: string): ExportDoc {
@@ -87,54 +72,74 @@ function toDoc(report: Report, t: Translate, locale: string): ExportDoc {
 
 const unitLabel = (unit: string, t: Translate) => t(unit === "crate" ? "unit.crate" : "unit.unit");
 
-/** «Текущие заказы клана» — рапорты снабжения штаба: статусы, экспорт, отправка в Discord. */
-export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId, onOpenConstructor }) => {
+/**
+ * «Заказы клана» — штаб: сводка, ближайшие операции с готовностью, представления и совмещаемые
+ * фильтры, список задач (приоритет, исполнители, срок, прогресс) и карточка заказа справа.
+ */
+export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId, onOpenConstructor, onOpenOperations }) => {
   const notify = useNotify();
   const { t, locale } = useI18n();
   const { media } = useContent();
   const texture = media("bg_report_texture");
   const { run: exportDoc, previewModal } = useDocExport(texture);
-  const [filter, setFilter] = React.useState<Filter>("active");
+  const [view, setViewState] = React.useState<View>("active");
+  const [facets, setFacets] = React.useState<Facets>(NO_FACETS);
   const [query, setQuery] = React.useState("");
   const [reports, setReports] = React.useState<Report[]>([]);
+  const [ops, setOps] = React.useState<Operation[]>([]);
+  const [members, setMembers] = React.useState<Assignee[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [expanded, setExpanded] = React.useState<string | null>(null);
+  const [openId, setOpenId] = React.useState<string | null>(null);
   const [busyId, setBusyId] = React.useState<string | null>(null);
   const [armed, confirm] = useConfirm();
-  // заказ → предстоящие операции, где он отмечен на карте (фильтр «Операции»)
-  const [opsByReport, setOpsByReport] = React.useState<Map<string, Operation[]>>(new Map());
 
+  React.useEffect(() => {
+    const saved = readStorage<View>(VIEW_KEY, "active");
+    if (VIEWS.includes(saved)) setViewState(saved);
+  }, []);
+  const setView = (v: View) => {
+    setViewState(v);
+    writeStorage(VIEW_KEY, v);
+  };
+
+  // все заказы разом: представления и фильтры считаются здесь же и совмещаются
   const load = React.useCallback(async () => {
     setLoading(true);
     try {
-      if (filter === "operations") {
-        const [all, ops] = await Promise.all([reportApi.list(), operationsApi.list().then((r) => r.operations).catch(() => [] as Operation[])]);
-        const now = today();
-        const map = new Map<string, Operation[]>();
-        for (const op of ops) if (op.date >= now) for (const id of op.report_ids) map.set(id, [...(map.get(id) ?? []), op]);
-        setOpsByReport(map);
-        setReports(all.filter((r) => map.has(r.id)));
-        return;
-      }
-      setReports(await reportApi.list(FILTERS.find((f) => f.key === filter)?.statuses));
+      const [all, opList, people] = await Promise.all([
+        reportApi.list(),
+        operationsApi.list().then((r) => r.operations).catch(() => [] as Operation[]),
+        reportApi.assignees().catch(() => [] as Assignee[]),
+      ]);
+      setReports(all);
+      setOps(opList);
+      setMembers(people);
     } catch (err) {
       notify({ title: t("reports.reports"), message: errorText(err, t("reports.loadFailed")), tone: "danger" });
       setReports([]);
     } finally {
       setLoading(false);
     }
-  }, [filter, notify, t]);
+  }, [notify, t]);
 
   React.useEffect(() => {
     void load();
   }, [load]);
 
   const visible = React.useMemo(() => {
+    let list = applyFacets(applyView(reports, view, userId, ops), facets, ops);
     const q = query.trim().toLowerCase();
-    if (!q) return reports;
-    return reports.filter((r) => matchesWords(`${r.title} ${r.lines.map((l) => `${l.name} ${l.name_ru ?? ""} ${l.name_en ?? ""} ${codeSynonyms(l.item_code).join(" ")}`).join(" ")}`, q));
-  }, [reports, query]);
-  const page = usePaged(visible, 20, query);
+    if (q) list = list.filter((r) => matchesWords(`${r.title} ${r.tags.join(" ")} ${r.meta.region ?? ""} ${r.meta.stockpile ?? ""} ${r.assignees.map((a) => a.name).join(" ")} ${r.lines.map((l) => `${l.name} ${l.name_ru ?? ""} ${l.name_en ?? ""} ${codeSynonyms(l.item_code).join(" ")}`).join(" ")}`, q));
+    return sortTasks(list);
+  }, [reports, view, facets, query, userId, ops]);
+  const page = usePaged(visible, 30, `${query}|${view}|${JSON.stringify(facets)}`);
+
+  const summary = React.useMemo(() => summarize(reports), [reports]);
+  const upcoming = React.useMemo(() => ops.filter((o) => o.date >= today()).slice(0, 4), [ops]);
+  const regions = React.useMemo(() => [...new Set(reports.map((r) => r.meta.region).filter(Boolean) as string[])].sort(), [reports]);
+  const tags = React.useMemo(() => [...new Set(reports.flatMap((r) => r.tags))].sort(), [reports]);
+  const filtered = Object.values(facets).some(Boolean);
+  const current = reports.find((r) => r.id === openId) ?? null;
 
   const replace = (report: Report) => setReports((prev) => prev.map((r) => (r.id === report.id ? report : r)));
 
@@ -152,9 +157,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
       try {
         const r = await reportApi.setStatus(report.id, status);
         notify({ title: t("reports.report"), message: r.message, tone: "success" });
-        const keep = FILTERS.find((f) => f.key === filter)?.statuses;
-        if (keep && !keep.includes(status)) setReports((prev) => prev.filter((x) => x.id !== report.id));
-        else replace(r.report);
+        replace(r.report);
       } catch (err) {
         notify({ title: t("reports.report"), message: errorText(err, t("reports.statusFailed")), tone: "danger" });
       }
@@ -179,16 +182,16 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
       try {
         await reportApi.delete(report.id);
         setReports((prev) => prev.filter((r) => r.id !== report.id));
+        setOpenId(null);
         notify({ title: t("reports.archive"), message: t("reports.deleted", { title: report.title }), tone: "warning" });
       } catch (err) {
         notify({ title: t("reports.archive"), message: errorText(err, t("reports.deleteFailed")), tone: "danger" });
       }
     });
 
-  const totals = React.useMemo(
-    () => ({ lines: reports.reduce((n, r) => n + r.lines_count, 0), units: reports.reduce((n, r) => n + r.total_quantity, 0) }),
-    [reports],
-  );
+  const facet = <K extends keyof Facets>(key: K, value: Facets[K]) => setFacets((f) => ({ ...f, [key]: value }));
+
+  const busy = current ? busyId === current.id : false;
 
   return (
     <div className="tab-fade flex flex-col gap-4">
@@ -196,31 +199,56 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
         icon="reports"
         eyebrow={t("reports.kicker")}
         title={t("reports.title")}
-        lead={t("reports.subtitle")}
+        lead={t("hq.lead")}
         actions={
-          <div className="stat-row">
-            <div className="stat"><div className="stat-value">{reports.length}</div><div className="stat-label">{t("reports.reports")}</div></div>
-            <div className="stat"><div className="stat-value">{totals.lines}</div><div className="stat-label">{t("doc.lines")}</div></div>
-            <div className="stat"><div className="stat-value">{totals.units.toLocaleString()}</div><div className="stat-label">{t("common.total")}</div></div>
-          </div>
+          can(Scopes.REPORTS_CREATE) ? (
+            <button type="button" className="btn btn-primary" onClick={onOpenConstructor}><Icon name="plus" size={16} />{t("reports.emptyAction")}</button>
+          ) : null
         }
       >
         <div className="divider" />
-        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
-          <div data-guide="reports-filters" className="flex gap-1.5 overflow-x-auto pb-0.5">
-            {FILTERS.map((f) => (
-              <button key={f.key} className={`chip shrink-0 ${filter === f.key ? "is-active" : ""}`} onClick={() => setFilter(f.key)}>
-                {t(f.label)}
-              </button>
-            ))}
-          </div>
-          <SearchField className="lg:ml-auto lg:w-80" data-guide="reports-search" placeholder={t("reports.search")} value={query} onChange={setQuery} />
-          <button className="btn h-10" onClick={() => void load()}>
+        <HqSummary summary={summary} view={view} onView={setView} />
+        <OperationsStrip ops={upcoming} reports={reports} active={facets.operation} onPick={(id) => facet("operation", id)} onOpenOperations={onOpenOperations} />
+      </PageHeader>
+
+      <section className="panel hq-toolbar">
+        <div data-guide="reports-filters" className="flex gap-1.5 overflow-x-auto pb-0.5">
+          {VIEWS.map((v) => (
+            <button key={v} className={`chip shrink-0 ${view === v ? "is-active" : ""}`} onClick={() => setView(v)}>{t(VIEW_LABEL[v])}</button>
+          ))}
+        </div>
+        <div className="hq-facets">
+          <select className="field h-9 py-0 text-sm" value={facets.assignee} onChange={(e) => facet("assignee", e.target.value)} aria-label={t("hq.assignees")}>
+            <option value="">{t("hq.f.anyAssignee")}</option>
+            <option value="none">{t("hq.noAssignee")}</option>
+            {members.map((m) => <option key={m.user_id} value={m.user_id}>{m.name}</option>)}
+          </select>
+          <select className="field h-9 py-0 text-sm" value={facets.priority} onChange={(e) => facet("priority", e.target.value as Facets["priority"])} aria-label={t("hq.priorityLabel")}>
+            <option value="">{t("hq.f.anyPriority")}</option>
+            {PRIORITIES.map((p) => <option key={p} value={p}>{t(`hq.priority.${p}` as MessageKey)}</option>)}
+          </select>
+          <select className="field h-9 py-0 text-sm" value={facets.region} onChange={(e) => facet("region", e.target.value)} aria-label={t("doc.hex")}>
+            <option value="">{t("hq.f.anyRegion")}</option>
+            {regions.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+          <select className="field h-9 py-0 text-sm" value={facets.operation} onChange={(e) => facet("operation", e.target.value)} aria-label={t("hq.operation")}>
+            <option value="">{t("hq.f.anyOperation")}</option>
+            <option value="none">{t("hq.noOperation")}</option>
+            {ops.map((o) => <option key={o.id} value={o.id}>{o.title} · {o.date}</option>)}
+          </select>
+          {tags.length ? (
+            <select className="field h-9 py-0 text-sm" value={facets.tag} onChange={(e) => facet("tag", e.target.value)} aria-label={t("hq.tags")}>
+              <option value="">{t("hq.f.anyTag")}</option>
+              {tags.map((x) => <option key={x} value={x}>#{x}</option>)}
+            </select>
+          ) : null}
+          {filtered ? <button type="button" className="btn h-9 min-h-0 px-3 text-sm" onClick={() => setFacets(NO_FACETS)}><Icon name="close" size={14} />{t("hq.f.reset")}</button> : null}
+          <SearchField className="hq-search" data-guide="reports-search" placeholder={t("reports.search")} value={query} onChange={setQuery} />
+          <button className="btn h-9 min-h-0" onClick={() => void load()} title={t("common.sync")} aria-label={t("common.sync")}>
             <Icon name="refresh" size={15} />
-            {t("common.sync")}
           </button>
         </div>
-      </PageHeader>
+      </section>
 
       {loading ? (
         <div className="panel"><Loading label={t("reports.loading")} /></div>
@@ -228,11 +256,11 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
         <div className="panel">
           <EmptyState
             icon="orders"
-            title={query.trim() ? t("common.nothingFound") : t("reports.emptyTitle")}
-            hint={query.trim() ? t("reports.emptySearchHint") : t("reports.emptyHint")}
+            title={query.trim() || filtered ? t("common.nothingFound") : t("reports.emptyTitle")}
+            hint={query.trim() || filtered ? t("reports.emptySearchHint") : t("reports.emptyHint")}
             actions={
-              query.trim() ? (
-                <button type="button" className="btn" onClick={() => setQuery("")}>{t("common.clearSearch")}</button>
+              query.trim() || filtered ? (
+                <button type="button" className="btn" onClick={() => { setQuery(""); setFacets(NO_FACETS); }}>{t("common.clearSearch")}</button>
               ) : can(Scopes.REPORTS_CREATE) ? (
                 <button type="button" className="btn btn-primary" onClick={onOpenConstructor}><Icon name="plus" size={16} />{t("reports.emptyAction")}</button>
               ) : null
@@ -240,99 +268,68 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
           />
         </div>
       ) : (
-        <ul className="grid gap-3">
-          {page.items.map((report) => {
-            const open = expanded === report.id;
-            const busy = busyId === report.id;
-            return (
-              <li data-guide="report-card" key={report.id} className={`panel report-card p-4 md:p-5 ${open ? "is-open" : "is-compact"}`}>
-                {/* развёрнуто: слева — страница заказа целиком (как PNG-экспорт), справа — данные и действия */}
-                {open ? (
-                  <div className="report-card-page">
-                    <DocReader doc={toDoc(report, t, locale)} textureUrl={texture} expanded onExpand={() => setExpanded(report.id)} />
-                  </div>
-                ) : null}
-                <div className="report-card-body">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <button className="flex min-w-0 flex-1 items-start gap-2 text-left" onClick={() => setExpanded(open ? null : report.id)}>
-                    <Icon name="chevronRight" size={16} className={`mt-1 text-fg-3 transition-transform ${open ? "rotate-90" : ""}`} />
-                    <span className="min-w-0">
-                      <span className="block truncate text-[1.05rem] font-semibold tracking-[-0.01em] text-fg">{report.title}</span>
-                      <span className="mt-0.5 block text-xs text-fg-3">
-                        {formatDateTime(report.created_at)} · {report.created_by_name ?? report.created_by}
-                        {report.meta.stockpile ? ` · ${report.meta.region ?? ""} · ${report.meta.stockpile}` : ""}
-                      </span>
-                      {filter === "operations" && opsByReport.get(report.id)?.length ? (
-                        <span className="mt-1.5 flex flex-wrap gap-1.5">
-                          {opsByReport.get(report.id)!.map((op) => (
-                            <span key={op.id} className="report-op-chip">
-                              <Icon name="flag" size={12} />
-                              {op.title} · {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseDate(op.date))}
-                            </span>
-                          ))}
-                        </span>
-                      ) : null}
-                    </span>
-                  </button>
-                  <span data-guide="report-status" className={`badge shrink-0 ${STATUS_BADGE[report.status]}`}>
-                    {t(REPORT_STATUS_LABEL[report.status])}
-                  </span>
-                </div>
-
-                <div className="mt-2.5 flex flex-wrap items-center gap-1.5 pl-6">
-                  <span className="count-pill">{t("common.pos", { n: report.lines_count })}</span>
-                  <span className="count-pill">Σ {report.total_quantity}</span>
-                  {orderKindOf(report.meta.type) ? (
-                    <span className="order-kind-badge">{t(orderKindOf(report.meta.type)!.label)}</span>
-                  ) : null}
-                  {report.discord_sent_at && <span className="badge badge-info" title={formatDateTime(report.discord_sent_at)}><Icon name="check" size={11} strokeWidth={3} /> Discord</span>}
-                </div>
-
-                {report.note && (
-                  <div className="order-note"><span className="order-note-label">{t("reports.noteLabel")}</span><p>{report.note}</p></div>
-                )}
-
-                <div data-guide="report-actions" className="mt-4 flex flex-wrap gap-2 border-t border-line pt-4">
-                  {can(Scopes.REPORTS_STATUS) &&
-                    // «Взять в работу» и «Отменить» убраны: в заказах клана — только «Выполнен» и «Вернуть в очередь»
-                    REPORT_TRANSITIONS[report.status].filter((next) => !HIDDEN_ACTIONS.has(next)).map((next) => (
-                      <button key={next} className={`btn ${next === "cancelled" ? "btn-danger" : next === "done" ? "btn-primary" : ""}`} disabled={busy} onClick={() => void setStatus(report, next)}>
-                        {t(ACTION_LABEL[next])}
-                      </button>
-                    ))}
-                  <button className="btn" disabled={busy} data-guide="report-builder" title={t("reports.toBuilderHint")} onClick={() => {
-                    orderDraft.write(orderDraft.fromReport(report));
-                    notify({ title: t("builder.short"), message: t("reports.loadedToBuilder", { title: report.title }), tone: "info" });
-                    onOpenConstructor();
-                  }}>
-                    {t("reports.toBuilder")}
-                  </button>
-                  {can(Scopes.REPORTS_DISCORD) && (
-                    <button className="btn btn-discord" data-guide="report-discord" disabled={busy} onClick={() => void sendToDiscord(report)}>
-                      {busy ? <span className="pulse">{t("common.sending")}</span> : <><Icon name="send" size={15} />{t("reports.toDiscord")}</>}
-                    </button>
-                  )}
-                  {can(Scopes.REPORTS_DELETE) && (
-                    <button className={`btn ml-auto ${armed === report.id ? "btn-danger" : "btn-ghost btn-icon text-fg-3"}`} disabled={busy} title={t("common.delete")} aria-label={t("common.delete")} onClick={() => confirm(report.id, () => void remove(report))}>
-                      {armed === report.id ? t("common.confirmQ") : <Icon name="trash" size={16} />}
-                    </button>
-                  )}
-                </div>
-                {open ? <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(report, t, locale), fmt)} busy={busy} /> : null}
-                <ReportProgressPanel report={report} can={can} userId={userId} compact={!open} onStatusMaybeChanged={() => void load()} />
-                {open ? null : (
-                  <button type="button" className="report-more" onClick={() => setExpanded(report.id)}>
-                    {t("reports.showDetails")}
-                    <Icon name="chevronDown" size={15} />
-                  </button>
-                )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <section className="panel hq-list">
+          <div className="hq-head" aria-hidden>
+            <span />
+            <span>{t("hq.col.order")}</span>
+            <span>{t("hq.assignees")}</span>
+            <span>{t("hq.due")}</span>
+            <span>{t("hq.progress")}</span>
+            <span>{t("doc.status")}</span>
+          </div>
+          <ul data-guide="report-card">
+            {page.items.map((report) => (
+              <TaskRow key={report.id} report={report} ops={ops} selected={report.id === openId} onOpen={() => setOpenId(report.id)} />
+            ))}
+          </ul>
+        </section>
       )}
       {visible.length > 0 && <PagedMore page={page} />}
+
+      {current ? (
+        <OrderCard
+          report={current}
+          ops={ops}
+          members={members}
+          can={can}
+          userId={userId}
+          busy={busy}
+          onClose={() => setOpenId(null)}
+          onChange={replace}
+          onStatus={(r, st) => void setStatus(r, st)}
+          onReload={() => void load()}
+          document={
+            <>
+              <DocReader doc={toDoc(current, t, locale)} textureUrl={texture} expanded onExpand={() => undefined} />
+              <ExportBar title={t("reports.exportTitle")} onAction={(fmt) => void exportDoc(toDoc(current, t, locale), fmt)} busy={busy} />
+            </>
+          }
+          actions={
+            <>
+              <button className="btn" disabled={busy} data-guide="report-builder" title={t("reports.toBuilderHint")} onClick={() => {
+                orderDraft.write(orderDraft.fromReport(current));
+                notify({ title: t("builder.short"), message: t("reports.loadedToBuilder", { title: current.title }), tone: "info" });
+                onOpenConstructor();
+              }}>
+                {t("reports.toBuilder")}
+              </button>
+              {can(Scopes.REPORTS_DISCORD) && (
+                <button className="btn btn-discord" data-guide="report-discord" disabled={busy} onClick={() => void sendToDiscord(current)}>
+                  {busy ? <span className="pulse">{t("common.sending")}</span> : <><Icon name="send" size={15} />{t("reports.toDiscord")}</>}
+                </button>
+              )}
+              {can(Scopes.REPORTS_STATUS) && current.status !== "cancelled" && current.status !== "done" ? (
+                <button className="btn" disabled={busy} onClick={() => void setStatus(current, "cancelled")}>{t("reports.action.cancelled")}</button>
+              ) : null}
+              {can(Scopes.REPORTS_DELETE) && (
+                <button className={`btn ml-auto ${armed === current.id ? "btn-danger" : "btn-ghost btn-icon text-fg-3"}`} disabled={busy} title={t("common.delete")} aria-label={t("common.delete")} onClick={() => confirm(current.id, () => void remove(current))}>
+                  {armed === current.id ? t("common.confirmQ") : <Icon name="trash" size={16} />}
+                </button>
+              )}
+            </>
+          }
+        />
+      ) : null}
       {previewModal}
     </div>
   );

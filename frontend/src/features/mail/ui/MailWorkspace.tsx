@@ -9,7 +9,7 @@ import { EmptyState, Icon, Loading, cn, errorText, formatDateTime, useI18n, useN
  * Почта на сайте (раздел «Сайт»): упоминания ролей Discord («@роль») в операциях клана
  * и ответы разработчика на обратную связь. Открыть источник, отметить прочитанным, удалить.
  */
-export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedback: () => void }> = ({ onOpenOperations, onOpenFeedback }) => {
+export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedback: () => void; onOpenOrders: () => void }> = ({ onOpenOperations, onOpenFeedback, onOpenOrders }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
   const [items, setItems] = React.useState<Mail[] | null>(null);
@@ -59,7 +59,12 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
           {items.map((m) => (
             <li key={m.id} className={cn("panel mail-item", !m.read && "is-unread")} onClick={() => void markRead(m)}>
               <span className="mail-icon"><Icon name="mail" size={16} /></span>
-              {m.kind === "feedback_reply" ? (
+              {m.kind === "task_assigned" ? (
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm text-fg">{t("mail.taskAssigned", { name: m.sender_name, title: m.payload.title ?? "" })}</div>
+                  <div className="mt-0.5 text-xs text-fg-3">{m.payload.due_date ? `${t("hq.due")}: ${day(m.payload.due_date)} · ` : ""}{formatDateTime(m.created_at)}</div>
+                </div>
+              ) : m.kind === "feedback_reply" ? (
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold text-fg">{t("mail.feedbackReply", { name: m.sender_name })}</div>
                   <div className="mt-0.5 text-xs text-fg-3">{formatDateTime(m.created_at)}</div>
@@ -76,9 +81,9 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
                 </div>
               )}
               <span className="flex shrink-0 flex-col items-end gap-1.5">
-                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : onOpenOperations)(); }}>
+                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : m.kind === "task_assigned" ? onOpenOrders : onOpenOperations)(); }}>
                   <Icon name="external" size={14} />
-                  {m.kind === "feedback_reply" ? t("mail.openFeedback") : t("mail.openOperation")}
+                  {m.kind === "feedback_reply" ? t("mail.openFeedback") : m.kind === "task_assigned" ? t("mail.openOrders") : t("mail.openOperation")}
                 </button>
                 <button type="button" className="icon-btn" onClick={(e) => { e.stopPropagation(); void remove(m); }} aria-label={t("common.delete")} title={t("common.delete")}><Icon name="trash" size={15} /></button>
               </span>

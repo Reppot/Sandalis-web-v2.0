@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -69,6 +69,28 @@ class ReportLineRead(BaseModel):
     name_en: str | None = None
 
 
+class Assignee(BaseModel):
+    user_id: str
+    name: str
+
+
+class ReportTaskUpdate(BaseModel):
+    """Поля задачи: передаются только меняемые (null — очистить срок / операцию)."""
+    model_config = ConfigDict(extra="forbid")
+
+    priority: Literal["high", "normal", "low"] | None = None
+    due_date: date | None = None
+    tags: Annotated[list[Annotated[str, Field(max_length=24)]], Field(max_length=8)] | None = None
+    operation_id: uuid.UUID | None = None
+    assignees: Annotated[list[str], Field(max_length=10)] | None = None   # user_id участников клана
+
+
+class ReportTake(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    take: bool
+
+
 class ReportRead(BaseModel):
     # clan_id НЕ отдаём наружу
     model_config = ConfigDict(from_attributes=True)
@@ -86,6 +108,14 @@ class ReportRead(BaseModel):
     lines: list[ReportLineRead]
     lines_count: int = 0
     total_quantity: int = 0
+    # задача
+    assignees: list[Assignee] = []
+    priority: Literal["high", "normal", "low"] = "normal"
+    due_date: date | None = None
+    tags: list[str] = []
+    operation_id: uuid.UUID | None = None
+    delivered_total: int = 0           # доставлено ящиков/шт. (по строкам, не больше заказанного)
+    contributor_ids: list[str] = []    # кто вносил вклад — для «Мои задачи»
 
 
 class ReportSaved(BaseModel):

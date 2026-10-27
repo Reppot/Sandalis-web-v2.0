@@ -111,7 +111,7 @@ export default function TerminalPage() {
   const clanSections = React.useMemo<ClanSection[]>(
     () => [
       ...(can(Scopes.REPORTS_READ)
-        ? [{ view: "reports" as const, icon: "reports" as const, label: "nav.reports.label" as const, hint: "nav.reports.hint" as const, render: () => <ReportsWorkspace can={can} userId={session?.userId ?? ""} onOpenConstructor={() => openTool("orders")} /> }]
+        ? [{ view: "reports" as const, icon: "reports" as const, label: "nav.reports.label" as const, hint: "nav.reports.hint" as const, render: () => <ReportsWorkspace can={can} userId={session?.userId ?? ""} onOpenConstructor={() => openTool("orders")} onOpenOperations={() => openClan("operations")} /> }]
         : []),
       ...(can(Scopes.STOCKPILES_READ) || can(Scopes.TIMERS_READ)
         ? [{
@@ -181,7 +181,7 @@ export default function TerminalPage() {
       case "feedback":
         return <FeedbackWorkspace displayName={session.displayName} />;
       case "mail":
-        return <MailWorkspace onOpenOperations={() => openClan("operations")} onOpenFeedback={() => select("feedback")} />;
+        return <MailWorkspace onOpenOperations={() => openClan("operations")} onOpenFeedback={() => select("feedback")} onOpenOrders={() => openClan("reports")} />;
       case "support":
         return <SupportWorkspace />;
       case "cabinet":

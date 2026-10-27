@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from enum import StrEnum
 from typing import Any
 
 from sqlalchemy import (
     CheckConstraint,
+    Date,
     DateTime,
     ForeignKey,
     Index,
@@ -67,6 +68,16 @@ class OrderReport(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     created_by_name: Mapped[str | None] = mapped_column(String(120), nullable=True)
     discord_sent_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
+    )
+    # заказ как задача («штаб» заказов)
+    assignees: Mapped[list[dict[str, Any]]] = mapped_column(   # [{user_id, name}]
+        JSONB, default=list, server_default=text("'[]'::jsonb"), nullable=False
+    )
+    priority: Mapped[str] = mapped_column(String(8), default="normal", server_default="normal", nullable=False)
+    due_date: Mapped[date | None] = mapped_column(Date, nullable=True)
+    tags: Mapped[list[str]] = mapped_column(JSONB, default=list, server_default=text("'[]'::jsonb"), nullable=False)
+    operation_id: Mapped[uuid.UUID | None] = mapped_column(
+        ForeignKey("clan_operations.id", ondelete="SET NULL"), nullable=True
     )
 
     lines: Mapped[list[OrderReportLine]] = relationship(

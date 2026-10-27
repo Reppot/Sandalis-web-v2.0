@@ -38,6 +38,23 @@ export function lineName(line: { name: string; name_ru?: string | null; name_en?
 }
 
 /** Рапорт снабжения (GET /api/v1/reports) — DTO сервера используется как есть. */
+export type Priority = "high" | "normal" | "low";
+export const PRIORITIES: Priority[] = ["high", "normal", "low"];
+
+export interface Assignee {
+  user_id: string;
+  name: string;
+}
+
+/** Поля задачи: передаются только меняемые; null — очистить срок или операцию. */
+export interface ReportTaskPatch {
+  priority?: Priority;
+  due_date?: string | null;
+  tags?: string[];
+  operation_id?: string | null;
+  assignees?: string[];
+}
+
 export interface Report {
   id: string;
   title: string;
@@ -52,6 +69,17 @@ export interface Report {
   lines: ReportLine[];
   lines_count: number;
   total_quantity: number;
+  // заказ как задача («штаб» заказов)
+  assignees: Assignee[];
+  priority: Priority;
+  /** YYYY-MM-DD или null. */
+  due_date: string | null;
+  tags: string[];
+  operation_id: string | null;
+  /** Доставлено (по строкам, не больше заказанного). */
+  delivered_total: number;
+  /** Кто вносил вклад — для «Мои задачи». */
+  contributor_ids: string[];
 }
 
 export interface ReportLineInput {
@@ -145,6 +173,18 @@ export const reportApi = {
 
   async delete(id: string): Promise<void> {
     await apiClient.delete<void>(`/api/v1/reports/${id}`);
+  },
+
+  /** Участники клана, которых можно назначить исполнителями. */
+  assignees(): Promise<Assignee[]> {
+    return apiClient.get<Assignee[]>("/api/v1/reports/assignees");
+  },
+  setTask(id: string, patch: ReportTaskPatch): Promise<Report> {
+    return apiClient.patch<Report>(`/api/v1/reports/${id}/task`, patch);
+  },
+  /** Взять заказ себе / отказаться. */
+  take(id: string, take: boolean): Promise<Report> {
+    return apiClient.post<Report>(`/api/v1/reports/${id}/take`, { take });
   },
 
   progress(id: string): Promise<ReportProgress> {
