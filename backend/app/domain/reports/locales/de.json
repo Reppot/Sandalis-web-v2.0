@@ -26,14 +26,38 @@
       "lines": "Positionen",
       "author": "Autor",
       "place": "Lager",
-      "note": "Notiz"
+      "note": "Notiz",
+      "progress": "Geliefert",
+      "assignees": "Zuständig",
+      "nobody": "noch niemand – „Übernehmen“ drücken",
+      "due": "Frist"
     },
     "progress_saved": "Lieferung zur Bestellung eingetragen: {n} Stk./Ki.",
     "progress_cancelled": "Die Bestellung ist storniert – Lieferungen werden nicht angenommen.",
     "progress_bad_line": "Die Lieferung enthält eine Zeile, die nicht zu dieser Bestellung gehört.",
     "progress_no_stockpile": "Lager in deinem Clan nicht gefunden.",
     "progress_not_found": "Protokolleintrag nicht gefunden.",
-    "progress_not_yours": "Du kannst nur deinen eigenen Protokolleintrag löschen."
+    "progress_not_yours": "Du kannst nur deinen eigenen Protokolleintrag löschen.",
+    "discord": {
+      "take": "Übernehmen",
+      "deliver": "Geliefert",
+      "open": "Auf der Website öffnen",
+      "taken": "Der Auftrag „{title}“ gehört jetzt dir. Nochmals „Übernehmen“ drücken, um ihn abzugeben.",
+      "dropped": "Du hast den Auftrag „{title}“ abgegeben.",
+      "closed": "Dieser Auftrag ist bereits geschlossen.",
+      "pick_line": "Was hast du für „{title}“ geliefert?",
+      "pick_placeholder": "Position wählen",
+      "modal_title": "Lieferung zum Auftrag",
+      "left": "noch {n}",
+      "place": "Wohin (Lager, optional)",
+      "bad_qty": "Gib eine ganze Zahl größer als null ein.",
+      "not_member": "Melde dich zuerst mit Discord auf der Website an und tritt dem Clan bei: {url}",
+      "forbidden": "Dafür hast du im Clan keine Berechtigung.",
+      "no_clan": "Dieser Discord-Server ist mit keinem Clan auf der Website verknüpft.",
+      "my_tasks_title": "Meine Aufgaben – {clan}",
+      "my_tasks_empty": "Du hast keine aktiven Aufträge. Übernimm einen mit „Übernehmen“ unter seinem Beitrag.",
+      "unknown": "Diese Aktion ist veraltet – öffne den Auftrag auf der Website."
+    }
   },
   "settings": {
     "saved": "Clan-Einstellungen gespeichert.",

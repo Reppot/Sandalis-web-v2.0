@@ -51,9 +51,12 @@ class Settings(BaseSettings):
     DISCORD_CLIENT_SECRET: str = ""
     DISCORD_REDIRECT_URI: str = ""
     DISCORD_OAUTH_STATE_TTL_SEC: int = 600   # срок жизни подписанного state
-    # Токен бота клана: только чтобы показать названия ролей сервера при сопоставлении
-    # (бот добавляется на сервер без прав). Пусто — сопоставление по ролям недоступно.
+    # Токен бота: роли сервера для сопоставления, посты заказов с кнопками, слэш-команды.
+    # Пусто — сопоставление по ролям недоступно, заказы уходят через вебхук.
     DISCORD_BOT_TOKEN: str = ""
+    # публичный ключ приложения (Developer Portal → General Information): подпись запросов
+    # на /discord/interactions — кнопки на постах заказов и слэш-команды
+    DISCORD_PUBLIC_KEY: str = ""
 
     # --- Frontend / session-cookie --------------------------------------
     FRONTEND_URL: str = "http://localhost:3000"

@@ -26,14 +26,38 @@
       "lines": "Položek",
       "author": "Autor",
       "place": "Sklad",
-      "note": "Poznámka"
+      "note": "Poznámka",
+      "progress": "Dodáno",
+      "assignees": "Řešitelé",
+      "nobody": "nikdo — stiskněte „Beru si“",
+      "due": "Termín"
     },
     "progress_saved": "Plnění objednávky zapsáno: {n} ks/beden.",
     "progress_cancelled": "Objednávka je zrušena — plnění se nepřijímá.",
     "progress_bad_line": "Záznam o dodání obsahuje řádek, který není v této objednávce.",
     "progress_no_stockpile": "Sklad ve vašem klanu nenalezen.",
     "progress_not_found": "Záznam deníku nenalezen.",
-    "progress_not_yours": "Smazat lze jen vlastní záznam deníku."
+    "progress_not_yours": "Smazat lze jen vlastní záznam deníku.",
+    "discord": {
+      "take": "Beru si",
+      "deliver": "Dovezeno",
+      "open": "Otevřít na webu",
+      "taken": "Objednávka „{title}“ je teď vaše. Dalším stisknutím „Beru si“ ji vrátíte.",
+      "dropped": "Vzdali jste se objednávky „{title}“.",
+      "closed": "Objednávka je už uzavřená.",
+      "pick_line": "Co jste dovezli k objednávce „{title}“?",
+      "pick_placeholder": "Vyberte položku",
+      "modal_title": "Dodávka k objednávce",
+      "left": "zbývá {n}",
+      "place": "Kam (sklad, nepovinné)",
+      "bad_qty": "Zadejte celé číslo větší než nula.",
+      "not_member": "Nejdřív se přihlaste na web přes Discord a vstupte do klanu: {url}",
+      "forbidden": "V klanu na to nemáte oprávnění.",
+      "no_clan": "Tento server Discord není propojen s klanem na webu.",
+      "my_tasks_title": "Moje úkoly — {clan}",
+      "my_tasks_empty": "Nemáte žádné aktivní objednávky. Převezměte jednu tlačítkem „Beru si“ pod příspěvkem.",
+      "unknown": "Tato akce je zastaralá — otevřete objednávku na webu."
+    }
   },
   "settings": {
     "saved": "Nastavení klanu uloženo.",

@@ -14,6 +14,7 @@ from app.models.recipe import ProductionRecipe
 from app.models.report import REPORT_TRANSITIONS, OrderReport, OrderReportLine, ReportStatus
 from app.schemas.report import ReportCreate, ReportLineIn, ReportStatusUpdate, ReportUpdate
 from app.services.base import ClanScopedService
+from app.services import discord_bot
 from app.services.discord_webhook import post_webhook, truncate_lines
 
 DOMAIN = "reports"
@@ -227,7 +228,9 @@ class ReportService(ClanScopedService):
             "timestamp": report.created_at.isoformat(),
             "footer": {"text": "SINDARIS LOGISTICS OVERWATCH"},
         }
-        await post_webhook(webhook, embed=embed, image=image)
+        # бот — пост с кнопками «Взять себе» / «Привёз»; нет бота или доступа к каналу — вебхук
+        if not await discord_bot.post_order(self.session, report, self.t, webhook, image):
+            await post_webhook(webhook, embed=embed, image=image)
 
         report.discord_sent_at = datetime.now(UTC)
         await self.session.commit()

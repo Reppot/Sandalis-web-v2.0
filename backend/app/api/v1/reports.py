@@ -4,7 +4,7 @@ import uuid
 from datetime import date
 from typing import Annotated, Sequence
 
-from fastapi import APIRouter, Depends, File, Query, Response, UploadFile, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Query, Response, UploadFile, status
 from sqlalchemy import select
 
 from app.api.deps import (
@@ -38,7 +38,7 @@ from app.schemas.report import (
 )
 from app.services.clan_settings import ClanSettingsService, to_read
 from app.services.report_progress import ReportProgressService
-from app.services import report_tasks
+from app.services import discord_bot, report_tasks
 from app.services.reports import CatalogNames, ReportService, line_icon, line_names
 
 router = APIRouter(prefix="/reports", tags=["reports"])
@@ -113,7 +113,8 @@ async def list_assignees(service: ServiceDep) -> list[Assignee]:
     summary="Поля задачи: исполнители, приоритет, срок, теги, операция",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_STATUS]))],
 )
-async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: ServiceDep, principal: CurrentPrincipal) -> ReportRead:
+async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: ServiceDep, principal: CurrentPrincipal,
+                      background: BackgroundTasks) -> ReportRead:
     report = await service.get_report(report_id, for_update=True)
     fields = payload.model_fields_set
     actor, actor_name = _who(principal)
@@ -156,6 +157,7 @@ async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: 
             sender_id=principal.user_id, sender_name=principal.display_name or principal.user_id,
         )
     await service.session.commit()
+    background.add_task(discord_bot.refresh_post, report_id)
     return await _one(service, await service.get_report(report_id))
 
 
@@ -165,18 +167,14 @@ async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: 
     summary="Взять заказ себе / отказаться (любой, кто видит заказы)",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
-async def take_task(report_id: uuid.UUID, payload: ReportTake, service: ServiceDep, principal: CurrentPrincipal) -> ReportRead:
+async def take_task(report_id: uuid.UUID, payload: ReportTake, service: ServiceDep, principal: CurrentPrincipal,
+                    background: BackgroundTasks) -> ReportRead:
     if principal.subject_type != "user":
         raise NotFoundError()
     report = await service.get_report(report_id, for_update=True)
-    people = [a for a in report.assignees or [] if a.get("user_id") != principal.user_id]
-    if payload.take:
-        people.append({"user_id": principal.user_id, "name": (principal.display_name or principal.user_id)[:120]})
-    was = any(a.get("user_id") == principal.user_id for a in report.assignees or [])
-    if was != payload.take:
-        report_tasks.log(service.session, report.id, "take" if payload.take else "drop", *_who(principal))
-    report.assignees = people
+    report_tasks.take(service.session, report, *_who(principal), take=payload.take)
     await service.session.commit()
+    background.add_task(discord_bot.refresh_post, report_id)
     return await _one(service, await service.get_report(report_id))
 
 
@@ -262,9 +260,10 @@ async def create_report(payload: ReportCreate, service: ServiceDep, principal: C
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_EDIT]))],
 )
 async def update_report(
-    report_id: uuid.UUID, payload: ReportUpdate, service: ServiceDep
+    report_id: uuid.UUID, payload: ReportUpdate, service: ServiceDep, background: BackgroundTasks
 ) -> ReportSaved:
     report, message = await service.update_report(report_id, payload)
+    background.add_task(discord_bot.refresh_post, report_id)
     return ReportSaved(report=await _one(service, report), message=message)
 
 
@@ -274,13 +273,15 @@ async def update_report(
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_STATUS]))],
 )
 async def change_status(
-    report_id: uuid.UUID, payload: ReportStatusUpdate, service: ServiceDep, principal: CurrentPrincipal
+    report_id: uuid.UUID, payload: ReportStatusUpdate, service: ServiceDep, principal: CurrentPrincipal,
+    background: BackgroundTasks,
 ) -> ReportSaved:
     before = (await service.get_report(report_id)).status
     report, message = await service.change_status(report_id, payload)
     if report.status != before:
         report_tasks.log(service.session, report.id, "status", *_who(principal), value=report.status, was=before)
         await service.session.commit()
+        background.add_task(discord_bot.refresh_post, report_id)
     return ReportSaved(report=await _one(service, report), message=message)
 
 
@@ -351,16 +352,11 @@ async def report_progress(report_id: uuid.UUID, service: ProgressDep) -> ReportP
     summary="Сообщить о выполнении части заказа (сколько и на какой склад)",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_PROGRESS]))],
 )
-async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, service: ProgressDep, principal: CurrentPrincipal) -> ReportProgressRead:
+async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, service: ProgressDep, principal: CurrentPrincipal,
+                       background: BackgroundTasks) -> ReportProgressRead:
     result = await service.contribute(report_id, payload)
-    actor, actor_name = _who(principal)
-    qty = sum(line.quantity for line in payload.lines)
-    newest = max(result.contributions, key=lambda c: c.created_at, default=None)
-    report_tasks.log(service.session, report_id, "contribution", actor, actor_name, qty=qty,
-                     place=payload.stockpile_label or (newest.stockpile_label if newest else None), note=payload.note or None)
-    report = (await service.session.execute(select(OrderReport).where(OrderReport.id == report_id))).scalar_one()
-    await report_tasks.check_delivered(service.session, report, clan_id=principal.clan_id, actor_id=actor, actor_name=actor_name)
-    await service.session.commit()
+    await report_tasks.after_contribution(service.session, report_id, payload, result, principal.clan_id, *_who(principal))
+    background.add_task(discord_bot.refresh_post, report_id)
     return result
 
 
@@ -370,8 +366,11 @@ async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, servic
     summary="Удалить запись журнала (свою; чужую — с правом reports:delete)",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
-async def remove_progress(report_id: uuid.UUID, contribution_id: uuid.UUID, service: ProgressDep) -> ReportProgressRead:
-    return await service.remove_contribution(report_id, contribution_id)
+async def remove_progress(report_id: uuid.UUID, contribution_id: uuid.UUID, service: ProgressDep,
+                          background: BackgroundTasks) -> ReportProgressRead:
+    result = await service.remove_contribution(report_id, contribution_id)
+    background.add_task(discord_bot.refresh_post, report_id)
+    return result
 
 
 @settings_router.get(

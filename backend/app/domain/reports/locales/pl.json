@@ -26,14 +26,38 @@
       "lines": "Pozycji",
       "author": "Autor",
       "place": "Magazyn",
-      "note": "Uwagi"
+      "note": "Uwagi",
+      "progress": "Dostarczono",
+      "assignees": "Wykonawcy",
+      "nobody": "nikt — naciśnij „Biorę”",
+      "due": "Termin"
     },
     "progress_saved": "Zapisano realizację zamówienia: {n} szt./skrz.",
     "progress_cancelled": "Zamówienie jest anulowane – realizacja nie jest przyjmowana.",
     "progress_bad_line": "Zgłoszenie dostawy zawiera wiersz spoza tego zamówienia.",
     "progress_no_stockpile": "Nie znaleziono magazynu w twoim klanie.",
     "progress_not_found": "Nie znaleziono wpisu w dzienniku.",
-    "progress_not_yours": "Usunąć można tylko własny wpis w dzienniku."
+    "progress_not_yours": "Usunąć można tylko własny wpis w dzienniku.",
+    "discord": {
+      "take": "Biorę",
+      "deliver": "Dowiozłem",
+      "open": "Otwórz na stronie",
+      "taken": "Zamówienie „{title}” jest teraz twoje. Naciśnij „Biorę” ponownie, aby zrezygnować.",
+      "dropped": "Zrezygnowałeś z zamówienia „{title}”.",
+      "closed": "To zamówienie jest już zamknięte.",
+      "pick_line": "Co dowiozłeś do zamówienia „{title}”?",
+      "pick_placeholder": "Wybierz pozycję",
+      "modal_title": "Dostawa do zamówienia",
+      "left": "zostało {n}",
+      "place": "Dokąd (magazyn, opcjonalnie)",
+      "bad_qty": "Podaj liczbę całkowitą większą od zera.",
+      "not_member": "Najpierw zaloguj się na stronie przez Discord i dołącz do klanu: {url}",
+      "forbidden": "Nie masz w klanie uprawnień do tej akcji.",
+      "no_clan": "Ten serwer Discord nie jest powiązany z klanem na stronie.",
+      "my_tasks_title": "Moje zadania — {clan}",
+      "my_tasks_empty": "Nie masz aktywnych zamówień. Weź jedno przyciskiem „Biorę” pod jego postem.",
+      "unknown": "Ta akcja jest nieaktualna — otwórz zamówienie na stronie."
+    }
   },
   "settings": {
     "saved": "Zapisano ustawienia klanu.",

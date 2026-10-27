@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import logging
 import mimetypes
 from collections.abc import AsyncIterator
@@ -17,6 +18,7 @@ from app.core.config import settings
 from app.core.db import dispose_engine, warmup
 from app.core.errors import register_exception_handlers
 from app.core.i18n import Translator, load_catalogs, normalize_locale, parse_accept_language
+from app.services import discord_bot
 
 logging.basicConfig(level=logging.INFO)
 
@@ -25,6 +27,8 @@ logging.basicConfig(level=logging.INFO)
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     load_catalogs()      # поднять все app/domain/*/locales/*.json в память (~КБ)
     await warmup()       # прогреть один коннект к Supabase
+    # слэш-команды бота (идемпотентно); сбой Discord не мешает старту
+    app.state.discord_commands = asyncio.get_running_loop().create_task(discord_bot.register_commands())
     yield
     await dispose_engine()
 

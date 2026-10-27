@@ -26,14 +26,38 @@
       "lines": "Lignes",
       "author": "Auteur",
       "place": "Réserve",
-      "note": "Note"
+      "note": "Note",
+      "progress": "Livré",
+      "assignees": "Responsables",
+      "nobody": "personne — appuyez sur « Je prends »",
+      "due": "Échéance"
     },
     "progress_saved": "Livraison enregistrée sur la commande : {n} pcs/caisses.",
     "progress_cancelled": "La commande est annulée — les livraisons ne sont plus acceptées.",
     "progress_bad_line": "La livraison contient une ligne qui n'appartient pas à cette commande.",
     "progress_no_stockpile": "Réserve introuvable dans votre clan.",
     "progress_not_found": "Entrée du journal introuvable.",
-    "progress_not_yours": "Vous ne pouvez supprimer que votre propre entrée du journal."
+    "progress_not_yours": "Vous ne pouvez supprimer que votre propre entrée du journal.",
+    "discord": {
+      "take": "Je prends",
+      "deliver": "Livré",
+      "open": "Ouvrir sur le site",
+      "taken": "La commande « {title} » est à vous. Appuyez à nouveau sur « Je prends » pour la laisser.",
+      "dropped": "Vous avez laissé la commande « {title} ».",
+      "closed": "Cette commande est déjà close.",
+      "pick_line": "Qu'avez-vous livré pour « {title} » ?",
+      "pick_placeholder": "Choisissez une ligne",
+      "modal_title": "Livraison de la commande",
+      "left": "reste {n}",
+      "place": "Où (dépôt, facultatif)",
+      "bad_qty": "Indiquez un nombre entier supérieur à zéro.",
+      "not_member": "Connectez-vous d'abord au site avec Discord et rejoignez le clan : {url}",
+      "forbidden": "Vous n'avez pas ce droit dans le clan.",
+      "no_clan": "Ce serveur Discord n'est lié à aucun clan sur le site.",
+      "my_tasks_title": "Mes tâches — {clan}",
+      "my_tasks_empty": "Vous n'avez aucune commande active. Prenez-en une avec « Je prends » sous sa publication.",
+      "unknown": "Cette action est obsolète — ouvrez la commande sur le site."
+    }
   },
   "settings": {
     "saved": "Paramètres du clan enregistrés.",

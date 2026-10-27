@@ -83,6 +83,10 @@ class OrderReport(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     # письма «штаба» уходят один раз: напоминание о сроке (на этот срок) и «доставлен полностью»
     reminded_due: Mapped[date | None] = mapped_column(Date, nullable=True)
     delivered_notified: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
+    # пост бота в Discord (кнопки «Взять себе» / «Привёз»): где он и на каком языке — чтобы обновлять
+    discord_channel_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    discord_message_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    discord_locale: Mapped[str | None] = mapped_column(String(8), nullable=True)
 
     lines: Mapped[list[OrderReportLine]] = relationship(
         back_populates="report",

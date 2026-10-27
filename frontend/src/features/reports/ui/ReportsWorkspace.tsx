@@ -120,6 +120,9 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
     const l = readStorage<Layout>(LAYOUT_KEY, "list");
     if (LAYOUTS.some((x) => x.key === l)) setLayoutState(l);
     setSavedViews(readStorage<SavedView[]>(SAVED_KEY, []));
+    // ссылка «Открыть на сайте» из поста бота в Discord: ?order=<id> — сразу карточка заказа
+    const order = new URLSearchParams(window.location.search).get("order");
+    if (order) setOpenId(order);
   }, []);
   const setLayout = (l: Layout) => {
     setLayoutState(l);

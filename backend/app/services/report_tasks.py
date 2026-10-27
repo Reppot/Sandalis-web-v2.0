@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import uuid
 from collections.abc import Sequence
-from typing import Any, Final
+from typing import TYPE_CHECKING, Any, Final
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -13,6 +13,9 @@ from app.models.mail import ClanMail
 from app.models.operation import ClanOperation
 from app.models.rbac import ClanMembership, User
 from app.models.report import OrderReport, ReportContribution, ReportContributionLine
+
+if TYPE_CHECKING:
+    from app.schemas.report import ContributionCreate, ReportProgressRead
 
 PRIORITIES: Final[tuple[str, ...]] = ("high", "normal", "low")
 MAX_ASSIGNEES: Final[int] = 10
@@ -69,6 +72,30 @@ def notify_assigned(session: AsyncSession, *, clan_id: str, report: OrderReport,
         if uid != sender_id:
             session.add(ClanMail(clan_id=clan_id, recipient_id=uid, sender_id=sender_id,
                                  sender_name=sender_name[:120], kind="task_assigned", payload=payload))
+
+
+def take(session: AsyncSession, report: OrderReport, user_id: str, name: str, *, take: bool) -> bool:
+    """«Взять себе» / отказаться (сайт и кнопка в Discord). True — что-то изменилось."""
+    was = any(a.get("user_id") == user_id for a in report.assignees or [])
+    people = [a for a in report.assignees or [] if a.get("user_id") != user_id]
+    if take:
+        people.append({"user_id": user_id, "name": (name or user_id)[:120]})
+    report.assignees = people
+    if was != take:
+        log(session, report.id, "take" if take else "drop", user_id, name)
+    return was != take
+
+
+async def after_contribution(session: AsyncSession, report_id: uuid.UUID, payload: ContributionCreate,
+                             result: ReportProgressRead, clan_id: str, actor: str, actor_name: str) -> None:
+    """После вклада (сайт и «Привёз» в Discord): запись в ленту и «доставлен полностью»."""
+    qty = sum(line.quantity for line in payload.lines)
+    newest = max(result.contributions, key=lambda c: c.created_at, default=None)
+    log(session, report_id, "contribution", actor, actor_name, qty=qty,
+        place=payload.stockpile_label or (newest.stockpile_label if newest else None), note=payload.note or None)
+    report = (await session.execute(select(OrderReport).where(OrderReport.id == report_id))).scalar_one()
+    await check_delivered(session, report, clan_id=clan_id, actor_id=actor, actor_name=actor_name)
+    await session.commit()
 
 
 # ───────────────────────── лента событий ─────────────────────────

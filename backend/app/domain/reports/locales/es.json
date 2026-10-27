@@ -26,14 +26,38 @@
       "lines": "Líneas",
       "author": "Autor",
       "place": "Almacén",
-      "note": "Nota"
+      "note": "Nota",
+      "progress": "Entregado",
+      "assignees": "Responsables",
+      "nobody": "nadie aún: pulsa «Me lo quedo»",
+      "due": "Plazo"
     },
     "progress_saved": "Entrega registrada en el pedido: {n} u./cajas.",
     "progress_cancelled": "El pedido está cancelado: no se aceptan entregas.",
     "progress_bad_line": "La entrega incluye una línea que no pertenece a este pedido.",
     "progress_no_stockpile": "No se encontró el almacén en tu clan.",
     "progress_not_found": "No se encontró la entrada del registro.",
-    "progress_not_yours": "Solo puedes eliminar tu propia entrada del registro."
+    "progress_not_yours": "Solo puedes eliminar tu propia entrada del registro.",
+    "discord": {
+      "take": "Me lo quedo",
+      "deliver": "Entregado",
+      "open": "Abrir en el sitio",
+      "taken": "El pedido «{title}» es tuyo. Pulsa «Me lo quedo» otra vez para dejarlo.",
+      "dropped": "Dejaste el pedido «{title}».",
+      "closed": "Este pedido ya está cerrado.",
+      "pick_line": "¿Qué entregaste para «{title}»?",
+      "pick_placeholder": "Elige una posición",
+      "modal_title": "Entrega del pedido",
+      "left": "faltan {n}",
+      "place": "Dónde (almacén, opcional)",
+      "bad_qty": "Indica un número entero mayor que cero.",
+      "not_member": "Primero inicia sesión en el sitio con Discord y únete al clan: {url}",
+      "forbidden": "No tienes permiso para esto en el clan.",
+      "no_clan": "Este servidor de Discord no está vinculado a un clan del sitio.",
+      "my_tasks_title": "Mis tareas — {clan}",
+      "my_tasks_empty": "No tienes pedidos activos. Toma uno con «Me lo quedo» bajo su publicación.",
+      "unknown": "Esta acción está obsoleta: abre el pedido en el sitio."
+    }
   },
   "settings": {
     "saved": "Ajustes del clan guardados.",

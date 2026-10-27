@@ -26,14 +26,38 @@
       "lines": "Linhas",
       "author": "Autor",
       "place": "Estoque",
-      "note": "Observação"
+      "note": "Observação",
+      "progress": "Entregue",
+      "assignees": "Responsáveis",
+      "nobody": "ninguém — toque em “Eu pego”",
+      "due": "Prazo"
     },
     "progress_saved": "Entrega registrada no pedido: {n} un./cx.",
     "progress_cancelled": "O pedido foi cancelado — entregas não são aceitas.",
     "progress_bad_line": "O registro de entrega tem uma linha que não é deste pedido.",
     "progress_no_stockpile": "Estoque não encontrado no seu clã.",
     "progress_not_found": "Registro do diário não encontrado.",
-    "progress_not_yours": "Você só pode excluir o seu próprio registro do diário."
+    "progress_not_yours": "Você só pode excluir o seu próprio registro do diário.",
+    "discord": {
+      "take": "Eu pego",
+      "deliver": "Entreguei",
+      "open": "Abrir no site",
+      "taken": "O pedido “{title}” agora é seu. Toque em “Eu pego” de novo para desistir.",
+      "dropped": "Você desistiu do pedido “{title}”.",
+      "closed": "Este pedido já está fechado.",
+      "pick_line": "O que você entregou para “{title}”?",
+      "pick_placeholder": "Escolha um item",
+      "modal_title": "Entrega do pedido",
+      "left": "faltam {n}",
+      "place": "Onde (depósito, opcional)",
+      "bad_qty": "Informe um número inteiro maior que zero.",
+      "not_member": "Primeiro entre no site com o Discord e junte-se ao clã: {url}",
+      "forbidden": "Você não tem permissão para isso no clã.",
+      "no_clan": "Este servidor do Discord não está vinculado a um clã no site.",
+      "my_tasks_title": "Minhas tarefas — {clan}",
+      "my_tasks_empty": "Você não tem pedidos ativos. Pegue um com “Eu pego” abaixo da publicação.",
+      "unknown": "Esta ação está desatualizada — abra o pedido no site."
+    }
   },
   "settings": {
     "saved": "Configurações do clã salvas.",

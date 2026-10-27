@@ -26,14 +26,38 @@
       "lines": "Items",
       "author": "Author",
       "place": "Stockpile",
-      "note": "Note"
+      "note": "Note",
+      "progress": "Delivered",
+      "assignees": "Assignees",
+      "nobody": "nobody yet — press “Take it”",
+      "due": "Due"
     },
     "progress_saved": "Order progress recorded: {n} units/crates.",
     "progress_cancelled": "The order is cancelled — progress is not accepted.",
     "progress_bad_line": "The delivery record has a line that isn't in this order.",
     "progress_no_stockpile": "Stockpile not found in your clan.",
     "progress_not_found": "Log entry not found.",
-    "progress_not_yours": "You can only delete your own log entry."
+    "progress_not_yours": "You can only delete your own log entry.",
+    "discord": {
+      "take": "Take it",
+      "deliver": "Delivered",
+      "open": "Open on the site",
+      "taken": "The order “{title}” is yours now. Press “Take it” again to drop it.",
+      "dropped": "You dropped the order “{title}”.",
+      "closed": "This order is already closed.",
+      "pick_line": "What did you deliver for “{title}”?",
+      "pick_placeholder": "Pick an item",
+      "modal_title": "Delivery for the order",
+      "left": "{n} left",
+      "place": "Where (stockpile, optional)",
+      "bad_qty": "Enter a whole number greater than zero.",
+      "not_member": "Sign in to the site with Discord and join the clan first: {url}",
+      "forbidden": "You don't have permission for this in the clan.",
+      "no_clan": "This Discord server isn't linked to a clan on the site.",
+      "my_tasks_title": "My tasks — {clan}",
+      "my_tasks_empty": "You have no active orders. Take one with the “Take it” button under its post.",
+      "unknown": "This action is outdated — open the order on the site."
+    }
   },
   "settings": {
     "saved": "Clan settings saved.",

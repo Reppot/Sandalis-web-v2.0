@@ -26,14 +26,38 @@
       "lines": "项目数",
       "author": "作者",
       "place": "仓库",
-      "note": "备注"
+      "note": "备注",
+      "progress": "已送达",
+      "assignees": "负责人",
+      "nobody": "暂无——按“我来接”",
+      "due": "截止"
     },
     "progress_saved": "订单运送已记录：{n} 件/箱。",
     "progress_cancelled": "订单已取消——不再接受运送记录。",
     "progress_bad_line": "运送记录中有不属于此订单的行。",
     "progress_no_stockpile": "在你的军团中未找到该仓库。",
     "progress_not_found": "未找到日志记录。",
-    "progress_not_yours": "只能删除你自己的日志记录。"
+    "progress_not_yours": "只能删除你自己的日志记录。",
+    "discord": {
+      "take": "我来接",
+      "deliver": "已送达",
+      "open": "在网站打开",
+      "taken": "订单“{title}”已由你负责。再按一次“我来接”即可放弃。",
+      "dropped": "你已放弃订单“{title}”。",
+      "closed": "该订单已关闭。",
+      "pick_line": "你为“{title}”送了什么？",
+      "pick_placeholder": "选择物品",
+      "modal_title": "订单送达",
+      "left": "还差 {n}",
+      "place": "送到哪里（仓库，可选）",
+      "bad_qty": "请输入大于零的整数。",
+      "not_member": "请先用 Discord 登录网站并加入战团：{url}",
+      "forbidden": "你在战团中没有此权限。",
+      "no_clan": "此 Discord 服务器未关联网站上的战团。",
+      "my_tasks_title": "我的任务 — {clan}",
+      "my_tasks_empty": "你没有进行中的订单。在订单帖子下按“我来接”即可接单。",
+      "unknown": "此操作已过期——请在网站上打开订单。"
+    }
   },
   "settings": {
     "saved": "军团设置已保存。",
