@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import DateTime, String, UniqueConstraint
+from sqlalchemy import DateTime, Integer, String, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -16,6 +16,11 @@ class ClanSettings(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     __table_args__ = (UniqueConstraint("clan_id", name="uq_clan_settings_clan_id"),)
 
     discord_webhook_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    # напоминания о резервных складах: роль Discord для пинга (её носители получают и письмо),
+    # за сколько минут до конца предупреждать, на каком языке писать в канал
+    timer_ping_role_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    timer_warn_minutes: Mapped[int] = mapped_column(Integer, default=120, server_default=text("120"), nullable=False)
+    discord_locale: Mapped[str | None] = mapped_column(String(8), nullable=True)
     # роли Discord-сервера клана (services/discord_roles.py): снимок ролей, который
     # подтягивает командир, и уровни доступа {id роли: basic|medium|high}
     discord_roles: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)

@@ -30,7 +30,9 @@
       "progress": "已送达",
       "assignees": "负责人",
       "nobody": "暂无——按“我来接”",
-      "due": "截止"
+      "due": "截止",
+      "more": "……另有 {n} 项见网站",
+      "finished": "✅ 已送达 {n} 项"
     },
     "progress_saved": "订单运送已记录：{n} 件/箱。",
     "progress_cancelled": "订单已取消——不再接受运送记录。",

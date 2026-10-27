@@ -14,6 +14,15 @@
       "restarted": "Temporizador reiniciado por {duration}.",
       "completed": "Temporizador marcado como completado.",
       "reopened": "El temporizador vuelve a vigilarse."
+    },
+    "alert": {
+      "warn": "la reserva «{title}» caduca pronto: renuévala en el juego.",
+      "warn_body": "Caduca <t:{stamp}:t> (<t:{stamp}:R>)",
+      "expired": "¡la reserva «{title}» ha caducado!",
+      "expired_body": "Caducó <t:{stamp}:R>. Renueva la reserva en el juego y pulsa el botón.",
+      "reset": "Reserva renovada",
+      "open": "Abrir almacenes",
+      "reset_done": "{name} renovó la reserva. Próximo plazo: <t:{stamp}:f> (<t:{stamp}:R>)."
     }
   }
 }

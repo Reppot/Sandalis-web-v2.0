@@ -37,6 +37,9 @@ class Timer(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
         DateTime(timezone=True), nullable=True
     )
     created_by: Mapped[str] = mapped_column(String(64), nullable=False)
+    # напоминания уходят один раз на каждый срок: здесь — для какого ends_at уже писали
+    warned_for: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    expired_for: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class TimerEvent(Base, UUIDPkMixin, ClanScopedMixin):

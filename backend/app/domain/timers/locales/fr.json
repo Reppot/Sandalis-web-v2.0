@@ -14,6 +14,15 @@
       "restarted": "Minuteur relancé pour {duration}.",
       "completed": "Minuteur marqué comme terminé.",
       "reopened": "Le minuteur est de nouveau suivi."
+    },
+    "alert": {
+      "warn": "la réserve « {title} » expire bientôt — renouvelez-la en jeu.",
+      "warn_body": "Expire <t:{stamp}:t> (<t:{stamp}:R>)",
+      "expired": "la réserve « {title} » a expiré !",
+      "expired_body": "Expirée <t:{stamp}:R>. Renouvelez la réserve en jeu puis appuyez ci-dessous.",
+      "reset": "Réserve renouvelée",
+      "open": "Ouvrir les dépôts",
+      "reset_done": "{name} a renouvelé la réserve. Prochaine échéance : <t:{stamp}:f> (<t:{stamp}:R>)."
     }
   }
 }

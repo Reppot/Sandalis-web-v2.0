@@ -30,7 +30,9 @@
       "progress": "Dodáno",
       "assignees": "Řešitelé",
       "nobody": "nikdo — stiskněte „Beru si“",
-      "due": "Termín"
+      "due": "Termín",
+      "more": "… dalších {n} na webu",
+      "finished": "✅ dodané položky: {n}"
     },
     "progress_saved": "Plnění objednávky zapsáno: {n} ks/beden.",
     "progress_cancelled": "Objednávka je zrušena — plnění se nepřijímá.",

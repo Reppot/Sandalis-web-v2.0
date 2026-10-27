@@ -30,7 +30,9 @@
       "progress": "Dostarczono",
       "assignees": "Wykonawcy",
       "nobody": "nikt — naciśnij „Biorę”",
-      "due": "Termin"
+      "due": "Termin",
+      "more": "… jeszcze {n} — na stronie",
+      "finished": "✅ dostarczone pozycje: {n}"
     },
     "progress_saved": "Zapisano realizację zamówienia: {n} szt./skrz.",
     "progress_cancelled": "Zamówienie jest anulowane – realizacja nie jest przyjmowana.",

@@ -282,6 +282,7 @@ def test_report_discord_webhook(db):
             assert saved.status_code == 200, saved.text
             assert saved.json()["settings"] == {
                 "discord_webhook_configured": True, "discord_webhook_hint": "…/abcd",
+                "timer_ping_role_id": None, "timer_warn_minutes": 120,
             }
             assert WEBHOOK not in (await c.get(f"{API}/clan/settings", headers=member)).text
 

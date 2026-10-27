@@ -14,6 +14,15 @@
       "restarted": "Timer neu gestartet für {duration}.",
       "completed": "Timer als abgeschlossen markiert.",
       "reopened": "Timer wird wieder überwacht."
+    },
+    "alert": {
+      "warn": "Reserve „{title}“ läuft bald ab – im Spiel erneuern.",
+      "warn_body": "Läuft ab <t:{stamp}:t> (<t:{stamp}:R>)",
+      "expired": "Reserve „{title}“ ist abgelaufen!",
+      "expired_body": "Abgelaufen <t:{stamp}:R>. Reserve im Spiel erneuern und unten klicken.",
+      "reset": "Reserve erneuert",
+      "open": "Lager öffnen",
+      "reset_done": "{name} hat die Reserve erneuert. Nächste Frist: <t:{stamp}:f> (<t:{stamp}:R>)."
     }
   }
 }

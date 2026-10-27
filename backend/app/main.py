@@ -18,7 +18,7 @@ from app.core.config import settings
 from app.core.db import dispose_engine, warmup
 from app.core.errors import register_exception_handlers
 from app.core.i18n import Translator, load_catalogs, normalize_locale, parse_accept_language
-from app.services import discord_bot
+from app.services import discord_bot, timer_alerts
 
 logging.basicConfig(level=logging.INFO)
 
@@ -29,7 +29,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     await warmup()       # прогреть один коннект к Supabase
     # слэш-команды бота (идемпотентно); сбой Discord не мешает старту
     app.state.discord_commands = asyncio.get_running_loop().create_task(discord_bot.register_commands())
+    # напоминания о резервных складах — фоновая проверка раз в минуту
+    app.state.timer_alerts = asyncio.get_running_loop().create_task(timer_alerts.watch())
     yield
+    app.state.timer_alerts.cancel()
     await dispose_engine()
 
 

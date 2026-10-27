@@ -127,6 +127,8 @@ export interface ClanApiTokenCreated {
 export interface ClanWebhook {
   discord_webhook_configured: boolean;
   discord_webhook_hint: string | null;
+  timer_ping_role_id: string | null;
+  timer_warn_minutes: number;
 }
 
 export const integrationsApi = {
@@ -144,5 +146,9 @@ export const integrationsApi = {
   /** null или "" — отключить отправку рапортов в Discord. */
   setWebhook(url: string | null): Promise<{ settings: ClanWebhook; message: string }> {
     return apiClient.put("/api/v1/clan/settings", { discord_webhook_url: url || null });
+  },
+  /** Напоминания о резервных складах: роль для пинга (null — без пинга) и за сколько минут. */
+  setTimerAlerts(roleId: string | null, minutes: number): Promise<{ settings: ClanWebhook; message: string }> {
+    return apiClient.put("/api/v1/clan/settings", { timer_ping_role_id: roleId ?? "", timer_warn_minutes: minutes });
   },
 };

@@ -9,6 +9,7 @@ custom_id:
     order:deliver:<report>          — «Привёз»: выбор строки, если их несколько
     order:line:<report>             — выбранная строка → форма количества
     order:qty:<report>:<line>       — форма: количество и склад
+    timer:reset:<timer>             — «Обновил резерв» под напоминанием о складе
 """
 from __future__ import annotations
 
@@ -29,9 +30,13 @@ from app.core.tenancy import bind_session_to_clan, bypass_clan_filter, set_curre
 from app.models.operation import ClanOperation
 from app.models.rbac import Clan, ClanMembership
 from app.models.report import OrderReport, ReportStatus
+from app.models.timer import Timer
 from app.schemas.report import ContributionCreate, ContributionLineIn
-from app.services import discord_bot, report_tasks
+from app.domain.timers.calculations import DEFAULT_DURATION_SECONDS
+from app.schemas.timer import TimerKind, TimerUpdate
+from app.services import discord_bot, report_tasks, timer_alerts
 from app.services.report_progress import ReportProgressService
+from app.services.timers import TimerService
 
 PING, COMMAND, COMPONENT, MODAL_SUBMIT = 1, 2, 3, 5
 EPHEMERAL = 64
@@ -73,6 +78,8 @@ async def handle(session: AsyncSession, it: dict[str, Any], background: Backgrou
     try:
         if kind == COMMAND and data.get("name") == "my-tasks":
             return await my_tasks(session, it.get("guild_id"), user_id, t)
+        if kind == COMPONENT and str(data.get("custom_id", "")).startswith("timer:"):
+            return await timer_action(session, data, user_id, name, it.get("locale"))
         if kind in (COMPONENT, MODAL_SUBMIT):
             return await order_action(session, data, user_id, name, t, background)
     except AppError as err:
@@ -118,14 +125,16 @@ async def order_action(session: AsyncSession, data: dict[str, Any], user_id: str
     if report.status == ReportStatus.CANCELLED.value:
         return reply(t.t("report.progress_cancelled"))
     delivered = await discord_bot.delivered_by_line(session, report.id)
+    names = await discord_bot.catalog_names(session, report)
+    label = lambda line: discord_bot.local_name(line, names, t.locale)  # noqa: E731
 
     if action == "deliver":
         if len(report.lines) == 1:
-            return _qty_modal(report, report.lines[0], delivered, t)
+            return _qty_modal(report, report.lines[0], label(report.lines[0]), delivered, t)
         return {"type": 4, "data": {"flags": EPHEMERAL, "content": t.t("report.discord.pick_line", title=report.title)[:2000],
                 "components": [{"type": 1, "components": [{
                     "type": 3, "custom_id": f"order:line:{report.id}", "placeholder": t.t("report.discord.pick_placeholder")[:150],
-                    "options": [{"label": line.name[:100], "value": str(line.id),
+                    "options": [{"label": label(line)[:100], "value": str(line.id),
                                  "description": f"{min(delivered.get(line.id, 0), line.quantity)}/{line.quantity} {_unit(t, line.unit)}"[:100]}
                                 for line in report.lines[:25]],
                 }]}]}}
@@ -135,7 +144,7 @@ async def order_action(session: AsyncSession, data: dict[str, Any], user_id: str
         line = next((x for x in report.lines if values and str(x.id) == values[0]), None)
         if line is None:
             return reply(t.t("report.progress_bad_line"))
-        return _qty_modal(report, line, delivered, t)
+        return _qty_modal(report, line, label(line), delivered, t)
 
     if action == "qty" and len(parts) == 4:
         fields = {c["custom_id"]: (c.get("value") or "").strip()
@@ -161,7 +170,7 @@ def _unit(t: Translator, unit: str) -> str:
     return t.t(f"report.unit.{unit}")
 
 
-def _qty_modal(report: OrderReport, line: Any, delivered: dict[uuid.UUID, int], t: Translator) -> dict[str, Any]:
+def _qty_modal(report: OrderReport, line: Any, name: str, delivered: dict[uuid.UUID, int], t: Translator) -> dict[str, Any]:
     left = max(line.quantity - delivered.get(line.id, 0), 0)
     return {"type": 9, "data": {
         "custom_id": f"order:qty:{report.id}:{line.id}",
@@ -169,7 +178,7 @@ def _qty_modal(report: OrderReport, line: Any, delivered: dict[uuid.UUID, int], 
         "components": [
             {"type": 1, "components": [{
                 "type": 4, "custom_id": "qty", "style": 1, "required": True, "min_length": 1, "max_length": 6,
-                "label": f"{line.name} ({_unit(t, line.unit)})"[:45],
+                "label": f"{name} ({_unit(t, line.unit)})"[:45],
                 "placeholder": t.t("report.discord.left", n=left)[:100],
                 **({"value": str(left)} if left else {}),
             }]},
@@ -180,6 +189,35 @@ def _qty_modal(report: OrderReport, line: Any, delivered: dict[uuid.UUID, int], 
             }]},
         ],
     }}
+
+
+# ───────────────────────── «Обновил резерв» ─────────────────────────
+
+async def timer_action(session: AsyncSession, data: dict[str, Any], user_id: str, name: str, locale: str | None) -> dict[str, Any]:
+    t = Translator(locale=normalize_locale(locale) or settings.DEFAULT_LOCALE, default_domain="timers")
+    parts = str(data.get("custom_id", "")).split(":")
+    try:
+        timer_id = uuid.UUID(parts[2]) if len(parts) == 3 and parts[1] == "reset" else None
+    except ValueError:
+        timer_id = None
+    if timer_id is None:
+        return reply(t.t("report.discord.unknown", domain="reports"))
+    with bypass_clan_filter():
+        timer = (await session.execute(select(Timer).where(Timer.id == timer_id))).scalar_one_or_none()
+    if timer is None:
+        return reply(t.t("timer.not_found"))
+    _bind(session, timer.clan_id)
+    principal = await _principal(session, timer.clan_id, user_id, name)
+    if principal is None:
+        return reply(t.t("report.discord.not_member", domain="reports", url=timer_alerts.stockpiles_url()))
+    if not principal.can(Scopes.TIMERS_UPDATE):
+        return reply(t.t("report.discord.forbidden", domain="reports"))
+    # резерв в игре обновляется на 48 ч — как «Сбросить на 48 ч» на сайте; прочие таймеры — на свою длительность
+    duration = DEFAULT_DURATION_SECONDS if timer.kind == TimerKind.STOCKPILE_DECAY.value else None
+    timer, _ = await TimerService(session, principal, t).update_timer(timer.id, TimerUpdate(restart=True, duration_seconds=duration))
+    # кнопка — на самом напоминании: заменяем его отметкой «обновлено» (без пинга и кнопок)
+    channel_t = Translator(locale=t.locale, default_domain="timers")
+    return {"type": 7, "data": timer_alerts.reset_message(timer, name, channel_t)}
 
 
 # ───────────────────────── /мои-задачи ─────────────────────────

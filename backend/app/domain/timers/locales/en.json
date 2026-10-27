@@ -14,6 +14,15 @@
       "restarted": "Timer restarted for {duration}.",
       "completed": "Timer marked as completed.",
       "reopened": "Timer is tracked again."
+    },
+    "alert": {
+      "warn": "reserve “{title}” expires soon — refresh it in game.",
+      "warn_body": "Expires <t:{stamp}:t> (<t:{stamp}:R>)",
+      "expired": "reserve “{title}” has expired!",
+      "expired_body": "Expired <t:{stamp}:R>. Refresh the reserve in game and press the button below.",
+      "reset": "Refreshed",
+      "open": "Open stockpiles",
+      "reset_done": "{name} refreshed the reserve. Next deadline: <t:{stamp}:f> (<t:{stamp}:R>)."
     }
   }
 }

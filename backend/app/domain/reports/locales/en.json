@@ -30,7 +30,9 @@
       "progress": "Delivered",
       "assignees": "Assignees",
       "nobody": "nobody yet — press “Take it”",
-      "due": "Due"
+      "due": "Due",
+      "more": "… {n} more on the site",
+      "finished": "✅ items delivered: {n}"
     },
     "progress_saved": "Order progress recorded: {n} units/crates.",
     "progress_cancelled": "The order is cancelled — progress is not accepted.",

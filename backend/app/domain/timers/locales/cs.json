@@ -14,6 +14,15 @@
       "restarted": "Časovač restartován na {duration}.",
       "completed": "Časovač označen jako dokončený.",
       "reopened": "Časovač se znovu sleduje."
+    },
+    "alert": {
+      "warn": "rezerva „{title}“ brzy vyprší — obnovte ji ve hře.",
+      "warn_body": "Vyprší <t:{stamp}:t> (<t:{stamp}:R>)",
+      "expired": "rezerva „{title}“ vypršela!",
+      "expired_body": "Vypršela <t:{stamp}:R>. Obnovte rezervu ve hře a stiskněte tlačítko níže.",
+      "reset": "Rezerva obnovena",
+      "open": "Otevřít sklady",
+      "reset_done": "{name} obnovil(a) rezervu. Další termín: <t:{stamp}:f> (<t:{stamp}:R>)."
     }
   }
 }

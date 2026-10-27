@@ -30,7 +30,9 @@
       "progress": "Entregado",
       "assignees": "Responsables",
       "nobody": "nadie aún: pulsa «Me lo quedo»",
-      "due": "Plazo"
+      "due": "Plazo",
+      "more": "… {n} más en el sitio",
+      "finished": "✅ posiciones entregadas: {n}"
     },
     "progress_saved": "Entrega registrada en el pedido: {n} u./cajas.",
     "progress_cancelled": "El pedido está cancelado: no se aceptan entregas.",

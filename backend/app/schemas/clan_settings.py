@@ -17,6 +17,8 @@ class ClanSettingsRead(BaseModel):
     """Секрет вебхука наружу не уходит: только признак и последние символы."""
     discord_webhook_configured: bool
     discord_webhook_hint: str | None
+    timer_ping_role_id: str | None = None
+    timer_warn_minutes: int = 120
 
 
 class ClanSettingsUpdate(BaseModel):
@@ -24,6 +26,9 @@ class ClanSettingsUpdate(BaseModel):
 
     # "" или null — отключить отправку в Discord
     discord_webhook_url: Annotated[str | None, Field(default=None, max_length=512)]
+    # напоминания о резервах: роль для пинга ("" / null — без пинга) и за сколько минут
+    timer_ping_role_id: Annotated[str | None, Field(default=None, max_length=32, pattern=r"^\d*$")]
+    timer_warn_minutes: Annotated[int | None, Field(default=None, ge=15, le=1440)]
 
     @field_validator("discord_webhook_url")
     @classmethod

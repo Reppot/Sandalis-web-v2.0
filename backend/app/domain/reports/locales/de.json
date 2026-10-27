@@ -30,7 +30,9 @@
       "progress": "Geliefert",
       "assignees": "Zuständig",
       "nobody": "noch niemand – „Übernehmen“ drücken",
-      "due": "Frist"
+      "due": "Frist",
+      "more": "… {n} weitere auf der Website",
+      "finished": "✅ geliefert: {n} Positionen"
     },
     "progress_saved": "Lieferung zur Bestellung eingetragen: {n} Stk./Ki.",
     "progress_cancelled": "Die Bestellung ist storniert – Lieferungen werden nicht angenommen.",

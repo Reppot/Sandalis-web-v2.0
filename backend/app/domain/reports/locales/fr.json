@@ -30,7 +30,9 @@
       "progress": "Livré",
       "assignees": "Responsables",
       "nobody": "personne — appuyez sur « Je prends »",
-      "due": "Échéance"
+      "due": "Échéance",
+      "more": "… {n} de plus sur le site",
+      "finished": "✅ lignes livrées : {n}"
     },
     "progress_saved": "Livraison enregistrée sur la commande : {n} pcs/caisses.",
     "progress_cancelled": "La commande est annulée — les livraisons ne sont plus acceptées.",

@@ -30,7 +30,9 @@
       "progress": "Entregue",
       "assignees": "Responsáveis",
       "nobody": "ninguém — toque em “Eu pego”",
-      "due": "Prazo"
+      "due": "Prazo",
+      "more": "… mais {n} no site",
+      "finished": "✅ itens entregues: {n}"
     },
     "progress_saved": "Entrega registrada no pedido: {n} un./cx.",
     "progress_cancelled": "O pedido foi cancelado — entregas não são aceitas.",

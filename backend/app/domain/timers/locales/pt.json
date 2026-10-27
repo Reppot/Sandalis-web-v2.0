@@ -14,6 +14,15 @@
       "restarted": "Cronômetro reiniciado por {duration}.",
       "completed": "Cronômetro marcado como concluído.",
       "reopened": "O cronômetro voltou a ser monitorado."
+    },
+    "alert": {
+      "warn": "a reserva “{title}” expira em breve — renove no jogo.",
+      "warn_body": "Expira <t:{stamp}:t> (<t:{stamp}:R>)",
+      "expired": "a reserva “{title}” expirou!",
+      "expired_body": "Expirou <t:{stamp}:R>. Renove a reserva no jogo e toque no botão abaixo.",
+      "reset": "Reserva renovada",
+      "open": "Abrir depósitos",
+      "reset_done": "{name} renovou a reserva. Próximo prazo: <t:{stamp}:f> (<t:{stamp}:R>)."
     }
   }
 }

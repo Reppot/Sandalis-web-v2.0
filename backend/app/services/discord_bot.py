@@ -7,7 +7,6 @@
 """
 from __future__ import annotations
 
-import json
 import logging
 import uuid
 from datetime import UTC, datetime, time
@@ -73,43 +72,77 @@ async def delivered_by_line(session: AsyncSession, report_id: uuid.UUID) -> dict
     return {line_id: int(qty or 0) for line_id, qty in rows.all()}
 
 
-def order_embed(report: OrderReport, t: Translator, delivered: dict[uuid.UUID, int]) -> dict[str, Any]:
-    """Эмбед заказа: строки с выполнением, статус, исполнители, срок, склад, примечание."""
+CatalogNames = dict[str, tuple[str | None, str | None]]
+SHOWN_LINES = 8
+
+
+async def catalog_names(session: AsyncSession, report: OrderReport) -> CatalogNames:
+    """Названия строк из каталога: (русское — как в русском клиенте игры, английское)."""
+    from app.models.catalog import CatalogItem
+
+    codes = {line.item_code for line in report.lines if line.item_code}
+    if not codes:
+        return {}
+    rows = await session.execute(select(CatalogItem.code, CatalogItem.name, CatalogItem.english_name).where(CatalogItem.code.in_(codes)))
+    return {code: (ru, en) for code, ru, en in rows.all()}
+
+
+def local_name(line: Any, names: CatalogNames, locale: str) -> str:
+    """Название строки на языке поста: русский клиент игры — для ru, английский — для остальных."""
+    ru, en = names.get(line.item_code or "", (None, None))
+    return (ru if locale == "ru" else en) or line.name
+
+
+def _bar(ratio: float, width: int = 10) -> str:
+    full = round(max(0.0, min(ratio, 1.0)) * width)
+    return "▰" * full + "▱" * (width - full)
+
+
+def order_embed(report: OrderReport, t: Translator, delivered: dict[uuid.UUID, int], names: CatalogNames | None = None) -> dict[str, Any]:
+    """Компактный эмбед: полоса выполнения, несделанные строки (до 8), статус, срок, исполнители.
+    Полный список и журнал — на сайте (кнопка «Открыть на сайте»)."""
     from app.services.reports import STATUS_COLORS
 
     tr = lambda key, **kw: t.t(key, domain="reports", **kw)  # noqa: E731
+    names = names or {}
     units = {"crate": tr("report.unit.crate"), "unit": tr("report.unit.unit")}
-    lines = []
-    for line in report.lines:
-        got = min(delivered.get(line.id, 0), line.quantity)
-        amount = f"{got}/{line.quantity}" if got else str(line.quantity)
-        lines.append(f"{'✅' if got >= line.quantity else '•'} {line.name} — **{amount}** {units[line.unit]}")
     ordered = sum(line.quantity for line in report.lines)
     done = sum(min(delivered.get(line.id, 0), line.quantity) for line in report.lines)
+    ratio = done / ordered if ordered else 0.0
+
+    rows: list[str] = []
+    meta = [report.meta.get(k) for k in ("region", "stockpile") if report.meta.get(k)]
+    if meta:
+        rows.append(f"📦 {' • '.join(meta)}")
+    rows.append(f"`{_bar(ratio)}` **{round(ratio * 100)}%** · {done}/{ordered} {units['crate']}")
+    rows.append("")
+    open_lines = [line for line in report.lines if delivered.get(line.id, 0) < line.quantity]
+    for line in open_lines[:SHOWN_LINES]:
+        got = delivered.get(line.id, 0)
+        amount = f"{got}/{line.quantity}" if got else str(line.quantity)
+        rows.append(f"• {local_name(line, names, t.locale)} — **{amount}** {units[line.unit]}")
+    if len(open_lines) > SHOWN_LINES:
+        rows.append(tr("report.embed.more", n=len(open_lines) - SHOWN_LINES))
+    finished = len(report.lines) - len(open_lines)
+    if finished:
+        rows.append(tr("report.embed.finished", n=finished))
+
     status = ReportStatus(report.status)
-    fields = [
-        {"name": tr("report.embed.status"), "value": tr(f"report.status.{status.value}"), "inline": True},
-        {"name": tr("report.embed.progress"), "value": f"{round(done * 100 / ordered) if ordered else 0}% ({done}/{ordered})", "inline": True},
-        {"name": tr("report.embed.author"), "value": report.created_by_name or report.created_by, "inline": True},
-        {"name": tr("report.embed.assignees"),
-         "value": ", ".join(f"<@{a['user_id']}>" for a in report.assignees or []) or tr("report.embed.nobody"), "inline": False},
-    ]
+    fields = [{"name": tr("report.embed.status"), "value": tr(f"report.status.{status.value}"), "inline": True}]
     if report.due_date:
         stamp = int(datetime.combine(report.due_date, time(), tzinfo=UTC).timestamp())
-        fields.append({"name": tr("report.embed.due"), "value": f"<t:{stamp}:D> (<t:{stamp}:R>)", "inline": True})
-    meta = [report.meta.get(k) for k in ("region", "type", "stockpile") if report.meta.get(k)]
-    if meta:
-        fields.append({"name": tr("report.embed.place"), "value": " • ".join(meta), "inline": False})
-    if report.note:
-        fields.append({"name": tr("report.embed.note"), "value": report.note[:1024], "inline": False})
+        fields.append({"name": tr("report.embed.due"), "value": f"<t:{stamp}:d> · <t:{stamp}:R>", "inline": True})
+    fields.append({"name": tr("report.embed.assignees"),
+                   "value": ", ".join(f"<@{a['user_id']}>" for a in report.assignees or []) or tr("report.embed.nobody"),
+                   "inline": True})
     return {
         "title": f"📋 {report.title}"[:256],
         "url": site_url(report.id),
-        "description": truncate_lines(lines),
+        "description": truncate_lines(rows),
         "color": STATUS_COLORS[status],
         "fields": fields,
         "timestamp": report.created_at.isoformat(),
-        "footer": {"text": "SINDARIS LOGISTICS OVERWATCH"},
+        "footer": {"text": f"{tr('report.embed.author')}: {report.created_by_name or report.created_by} · SINDARIS"},
     }
 
 
@@ -127,7 +160,7 @@ def order_components(report: OrderReport, t: Translator) -> list[dict[str, Any]]
 
 async def order_message(session: AsyncSession, report: OrderReport, t: Translator) -> dict[str, Any]:
     return {
-        "embeds": [order_embed(report, t, await delivered_by_line(session, report.id))],
+        "embeds": [order_embed(report, t, await delivered_by_line(session, report.id), await catalog_names(session, report))],
         "components": order_components(report, t),
         # исполнители в эмбеде — упоминания без пинга
         "allowed_mentions": {"parse": []},
@@ -156,15 +189,9 @@ async def post_order(session: AsyncSession, report: OrderReport, t: Translator, 
     channel = await webhook_channel(webhook_url)
     if not channel:
         return False
+    # картинку заказа бот не прикладывает: она повторяет список, а эмбед с кнопками обновляется сам
     payload = await order_message(session, report, t)
-    if image:
-        # картинка — отдельным вложением, не в эмбеде: правки эмбеда её не трогают
-        filename, data = image
-        r = await _bot("POST", f"/channels/{channel}/messages",
-                       data={"payload_json": json.dumps(payload, ensure_ascii=False)},
-                       files={"files[0]": (filename, data, "image/png")})
-    else:
-        r = await _bot("POST", f"/channels/{channel}/messages", json=payload)
+    r = await _bot("POST", f"/channels/{channel}/messages", json=payload)
     if r is None or r.status_code >= 400:
         log.warning("discord bot could not post to channel %s: %s", channel, r.status_code if r else "error")
         return False
@@ -224,3 +251,19 @@ async def register_commands() -> None:
     r = await _bot("PUT", f"/applications/{settings.DISCORD_CLIENT_ID}/commands", json=COMMANDS)
     if r is None or r.status_code >= 400:
         log.warning("discord command registration failed: %s", r.text if r is not None else "error")
+
+
+async def send_to_channel(webhook_url: str, payload: dict[str, Any]) -> bool:
+    """Сообщение в канал клана: ботом (с кнопками), без бота или доступа — вебхуком (без кнопок)."""
+    channel = await webhook_channel(webhook_url) if enabled() else None
+    if channel:
+        r = await _bot("POST", f"/channels/{channel}/messages", json=payload)
+        if r is not None and r.status_code < 400:
+            return True
+    plain = {k: v for k, v in payload.items() if k != "components"}
+    try:
+        async with discord_oauth.get_http_client() as client:
+            r = await client.post(webhook_url, json={"username": "SINDARIS Terminal", **plain})
+    except httpx.HTTPError:
+        return False
+    return r.status_code < 400

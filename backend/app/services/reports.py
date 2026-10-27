@@ -15,7 +15,7 @@ from app.models.report import REPORT_TRANSITIONS, OrderReport, OrderReportLine, 
 from app.schemas.report import ReportCreate, ReportLineIn, ReportStatusUpdate, ReportUpdate
 from app.services.base import ClanScopedService
 from app.services import discord_bot
-from app.services.discord_webhook import post_webhook, truncate_lines
+from app.services.discord_webhook import post_webhook
 
 DOMAIN = "reports"
 STATUS_COLORS = {
@@ -197,39 +197,14 @@ class ReportService(ClanScopedService):
                 code="discord_not_configured",
             )
 
-        units = {
-            "crate": self.t.t("report.unit.crate", domain=DOMAIN),
-            "unit": self.t.t("report.unit.unit", domain=DOMAIN),
-        }
-        status = ReportStatus(report.status)
-        fields = [
-            {"name": self.t.t("report.embed.status", domain=DOMAIN),
-             "value": self.t.t(f"report.status.{status.value}", domain=DOMAIN), "inline": True},
-            {"name": self.t.t("report.embed.lines", domain=DOMAIN),
-             "value": str(len(report.lines)), "inline": True},
-            {"name": self.t.t("report.embed.author", domain=DOMAIN),
-             "value": report.created_by_name or report.created_by, "inline": True},
-        ]
-        meta_parts = [report.meta.get(k) for k in ("region", "type", "stockpile") if report.meta.get(k)]
-        if meta_parts:
-            fields.append({"name": self.t.t("report.embed.place", domain=DOMAIN),
-                           "value": " • ".join(meta_parts), "inline": False})
-        if report.note:
-            fields.append({"name": self.t.t("report.embed.note", domain=DOMAIN),
-                           "value": report.note[:1024], "inline": False})
-
-        embed = {
-            "title": f"📋 {report.title}"[:256],
-            "description": truncate_lines(
-                [f"• {line.name} — **{line.quantity}** {units[line.unit]}" for line in report.lines]
-            ),
-            "color": STATUS_COLORS[status],
-            "fields": fields,
-            "timestamp": report.created_at.isoformat(),
-            "footer": {"text": "SINDARIS LOGISTICS OVERWATCH"},
-        }
         # бот — пост с кнопками «Взять себе» / «Привёз»; нет бота или доступа к каналу — вебхук
+        # с тем же компактным эмбедом (без кнопок, с картинкой заказа)
         if not await discord_bot.post_order(self.session, report, self.t, webhook, image):
+            embed = discord_bot.order_embed(
+                report, self.t,
+                await discord_bot.delivered_by_line(self.session, report.id),
+                await discord_bot.catalog_names(self.session, report),
+            )
             await post_webhook(webhook, embed=embed, image=image)
 
         report.discord_sent_at = datetime.now(UTC)

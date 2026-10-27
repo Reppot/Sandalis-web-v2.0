@@ -14,6 +14,15 @@
       "restarted": "Licznik uruchomiony ponownie na {duration}.",
       "completed": "Licznik oznaczony jako zakończony.",
       "reopened": "Licznik jest znowu monitorowany."
+    },
+    "alert": {
+      "warn": "rezerwa „{title}” wkrótce wygaśnie — odnów ją w grze.",
+      "warn_body": "Wygasa <t:{stamp}:t> (<t:{stamp}:R>)",
+      "expired": "rezerwa „{title}” wygasła!",
+      "expired_body": "Wygasła <t:{stamp}:R>. Odnów rezerwę w grze i naciśnij przycisk poniżej.",
+      "reset": "Odnowiłem rezerwę",
+      "open": "Otwórz magazyny",
+      "reset_done": "{name} odnowił(a) rezerwę. Następny termin: <t:{stamp}:f> (<t:{stamp}:R>)."
     }
   }
 }

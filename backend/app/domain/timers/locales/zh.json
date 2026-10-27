@@ -14,6 +14,15 @@
       "restarted": "计时器已重启，时长 {duration}。",
       "completed": "计时器已标记为完成。",
       "reopened": "计时器重新开始跟踪。"
+    },
+    "alert": {
+      "warn": "储备“{title}”即将到期——请在游戏中刷新。",
+      "warn_body": "到期 <t:{stamp}:t>（<t:{stamp}:R>）",
+      "expired": "储备“{title}”已到期！",
+      "expired_body": "已于 <t:{stamp}:R> 到期。请在游戏中刷新储备并按下方按钮。",
+      "reset": "已刷新储备",
+      "open": "打开仓库",
+      "reset_done": "{name} 已刷新储备。下次截止：<t:{stamp}:f>（<t:{stamp}:R>）。"
     }
   }
 }

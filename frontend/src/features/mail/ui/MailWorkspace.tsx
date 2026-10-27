@@ -11,8 +11,9 @@ import { EmptyState, Icon, Loading, cn, errorText, formatDateTime, useI18n, useN
  */
 /** Письма «штаба» заказов — ведут в «Заказы клана». */
 const ORDER_KINDS = new Set(["task_assigned", "task_due", "order_delivered", "order_comment"]);
+const TIMER_KINDS = new Set(["timer_warn", "timer_expired"]);
 
-export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedback: () => void; onOpenOrders: () => void }> = ({ onOpenOperations, onOpenFeedback, onOpenOrders }) => {
+export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedback: () => void; onOpenOrders: () => void; onOpenStockpiles: () => void }> = ({ onOpenOperations, onOpenFeedback, onOpenOrders, onOpenStockpiles }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
   const [items, setItems] = React.useState<Mail[] | null>(null);
@@ -76,6 +77,16 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
                   <div className="mt-0.5 text-xs text-fg-3">{m.kind === "task_assigned" && m.payload.due_date ? `${t("hq.due")}: ${day(m.payload.due_date)} · ` : ""}{formatDateTime(m.created_at)}</div>
                   {m.kind === "order_comment" && m.payload.text ? <MentionText text={m.payload.text} className="mt-2 text-sm text-fg-2" /> : null}
                 </div>
+              ) : TIMER_KINDS.has(m.kind) ? (
+                <div className="min-w-0 flex-1">
+                  <div className={cn("text-sm", m.kind === "timer_expired" ? "font-semibold text-danger" : "text-fg")}>
+                    {t(m.kind === "timer_expired" ? "mail.timerExpired" : "mail.timerWarn", {
+                      title: m.payload.title ?? "",
+                      time: m.payload.ends_at ? formatDateTime(m.payload.ends_at) : "",
+                    })}
+                  </div>
+                  <div className="mt-0.5 text-xs text-fg-3">{m.payload.stockpile ? `${m.payload.stockpile} · ` : ""}{formatDateTime(m.created_at)}</div>
+                </div>
               ) : m.kind === "feedback_reply" ? (
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold text-fg">{t("mail.feedbackReply", { name: m.sender_name })}</div>
@@ -93,9 +104,9 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
                 </div>
               )}
               <span className="flex shrink-0 flex-col items-end gap-1.5">
-                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : ORDER_KINDS.has(m.kind) ? onOpenOrders : onOpenOperations)(); }}>
+                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : ORDER_KINDS.has(m.kind) ? onOpenOrders : TIMER_KINDS.has(m.kind) ? onOpenStockpiles : onOpenOperations)(); }}>
                   <Icon name="external" size={14} />
-                  {m.kind === "feedback_reply" ? t("mail.openFeedback") : ORDER_KINDS.has(m.kind) ? t("mail.openOrders") : t("mail.openOperation")}
+                  {m.kind === "feedback_reply" ? t("mail.openFeedback") : ORDER_KINDS.has(m.kind) ? t("mail.openOrders") : TIMER_KINDS.has(m.kind) ? t("mail.openStockpiles") : t("mail.openOperation")}
                 </button>
                 <button type="button" className="icon-btn" onClick={(e) => { e.stopPropagation(); void remove(m); }} aria-label={t("common.delete")} title={t("common.delete")}><Icon name="trash" size={15} /></button>
               </span>

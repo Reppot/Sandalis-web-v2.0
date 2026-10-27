@@ -15,6 +15,8 @@ def to_read(row: ClanSettings | None) -> ClanSettingsRead:
         discord_webhook_configured=bool(url),
         # узнаваемый хвост без секрета: «…/a1b2»
         discord_webhook_hint=f"…/{url.rstrip('/')[-4:]}" if url else None,
+        timer_ping_role_id=row.timer_ping_role_id if row else None,
+        timer_warn_minutes=row.timer_warn_minutes if row and row.timer_warn_minutes else 120,
     )
 
 
@@ -29,8 +31,15 @@ class ClanSettingsService(ClanScopedService):
         if row is None:
             row = ClanSettings()
             self.session.add(row)
-        if "discord_webhook_url" in payload.model_fields_set:
+        fields = payload.model_fields_set
+        if "discord_webhook_url" in fields:
             row.discord_webhook_url = payload.discord_webhook_url
+        if "timer_ping_role_id" in fields:
+            row.timer_ping_role_id = payload.timer_ping_role_id or None
+        if "timer_warn_minutes" in fields and payload.timer_warn_minutes:
+            row.timer_warn_minutes = payload.timer_warn_minutes
+        # язык постов бота в канал — язык того, кто настраивает
+        row.discord_locale = self.t.locale
         await self.session.commit()
         await self.session.refresh(row)
         return row, self.t.t("settings.saved", domain=DOMAIN)
