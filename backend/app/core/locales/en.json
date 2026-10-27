@@ -19,6 +19,8 @@
     "feedback_login_required": "Sign in with Discord to write — your nickname will be shown.",
     "feedback_rate_limited": "Up to {n} messages per hour — please try again later.",
     "guest_no_clan": "Guest access has no clan",
-    "courses_too_many": "The clan already has {n} courses — delete one to add a new one."
+    "courses_too_many": "The clan already has {n} courses — delete one to add a new one.",
+    "operations_too_many": "The clan already has {n} operations — delete old ones to add a new one.",
+    "operation_not_yours": "Only the author or an officer with clan content rights can change or delete this operation."
   }
 }

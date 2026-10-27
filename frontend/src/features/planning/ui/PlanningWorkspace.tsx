@@ -4,6 +4,9 @@ import * as React from "react";
 import { FILTER_ICON, MAP_KINDS, planningApi, regionsIn, type MapKind, type WorldMap } from "@/features/planning/model/map";
 import { DEFAULTS, STRUCTURES_URL, loadDefaults, loadPlan, loadSnapshots, newId, saveDefaults, savePlan, saveSnapshots, type Defaults, type Rect, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { SnapshotViewer } from "@/features/planning/ui/SnapshotViewer";
+import { OperationDialog } from "@/features/operations/ui/OperationDialog";
+import { toOperationSnapshot } from "@/features/operations/model/operations";
+import { Scopes } from "@/entities/session";
 import { MapCanvas } from "@/features/planning/ui/MapCanvas";
 import { ToolsPanel } from "@/features/planning/ui/ToolsPanel";
 import { useSession } from "@/features/cabinet";
@@ -33,6 +36,8 @@ export const PlanningWorkspace: React.FC = () => {
   const [catalog, setCatalog] = React.useState<StructureCatalog | null>(null);
   const [snapshots, setSnapshots] = React.useState<Snapshot[]>([]);
   const [viewing, setViewing] = React.useState<Snapshot | null>(null);
+  // «Перенести в операции»: снимок уходит в календарь операций клана
+  const [moving, setMoving] = React.useState<Snapshot | null>(null);
   React.useEffect(() => setSnapshots(loadSnapshots()), []);
   const changeSnapshots = React.useCallback((fn: (prev: Snapshot[]) => Snapshot[]) => {
     setSnapshots((prev) => {
@@ -42,7 +47,7 @@ export const PlanningWorkspace: React.FC = () => {
     });
   }, []);
   // активные заказы клана — для меток на карте; у гостя заказов нет
-  const { session } = useSession();
+  const { session, can } = useSession();
   const member = Boolean(session) && session?.subjectType !== "guest";
   const [orders, setOrders] = React.useState<Report[] | null>(null);
   React.useEffect(() => {
@@ -260,7 +265,14 @@ export const PlanningWorkspace: React.FC = () => {
           </aside>
         ) : null}
       </div>
-      <SnapshotViewer snapshot={viewing} onClose={() => setViewing(null)} structures={structures} orders={orders ?? []} />
+      <SnapshotViewer
+        snapshot={viewing}
+        onClose={() => setViewing(null)}
+        structures={structures}
+        orders={orders ?? []}
+        onMove={member && can(Scopes.REPORTS_CREATE) ? (s) => { setViewing(null); setMoving(s); } : undefined}
+      />
+      <OperationDialog open={Boolean(moving)} onClose={() => setMoving(null)} snapshot={moving ? toOperationSnapshot(moving) : null} initialTitle={moving?.name ?? ""} />
     </div>
   );
 };

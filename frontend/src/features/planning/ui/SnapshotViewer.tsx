@@ -22,7 +22,11 @@ export const SnapshotViewer: React.FC<{
   onClose: () => void;
   structures: Map<string, StructureDef>;
   orders: Report[];
-}> = ({ snapshot, onClose, structures, orders }) => {
+  /** «Перенести в операции» — кнопка появляется, если передан обработчик. */
+  onMove?: (s: Snapshot) => void;
+  /** Заголовок окна вместо названия снимка (например, дата операции). */
+  subtitle?: React.ReactNode;
+}> = ({ snapshot, onClose, structures, orders, onMove, subtitle }) => {
   const t = useT();
   const notify = useNotify();
   const exportBox = React.useRef<HTMLDivElement>(null);
@@ -74,13 +78,21 @@ export const SnapshotViewer: React.FC<{
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-2 text-sm text-fg-3">
             <span>
-              {formatDateTime(snapshot.created)}
+              {subtitle ?? formatDateTime(snapshot.created)}
               {snapshot.war ? ` · ${t("planning.snapshotWar", { war: snapshot.war })}` : ""} · {t("planning.objects", { n: snapshot.shapes.length })}
             </span>
-            <button type="button" className="btn btn-primary h-9 min-h-0" disabled={busy} onClick={() => void download()}>
-              <Icon name="download" size={15} />
-              {t("planning.snapshotPng")}
-            </button>
+            <span className="flex flex-wrap gap-2">
+              {onMove ? (
+                <button type="button" className="btn h-9 min-h-0" onClick={() => onMove(snapshot)}>
+                  <Icon name="send" size={15} />
+                  {t("operations.moveButton")}
+                </button>
+              ) : null}
+              <button type="button" className="btn btn-primary h-9 min-h-0" disabled={busy} onClick={() => void download()}>
+                <Icon name="download" size={15} />
+                {t("planning.snapshotPng")}
+              </button>
+            </span>
           </div>
           <div className="planning-snapshot-view">
             <MapCanvas data={data} hidden={NOTHING_HIDDEN} editor={editor} frame={snapshot.rect} />

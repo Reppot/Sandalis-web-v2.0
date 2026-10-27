@@ -19,6 +19,8 @@
     "feedback_login_required": "Melde dich mit Discord an, um zu schreiben – dann ist dein Nickname sichtbar.",
     "feedback_rate_limited": "Höchstens {n} Nachrichten pro Stunde – versuch es gleich noch einmal.",
     "guest_no_clan": "Der Gastzugang hat keinen Clan",
-    "courses_too_many": "Der Clan hat bereits {n} Kurse – lösche einen, um einen neuen hinzuzufügen."
+    "courses_too_many": "Der Clan hat bereits {n} Kurse – lösche einen, um einen neuen hinzuzufügen.",
+    "operations_too_many": "Der Clan hat bereits {n} Operationen – lösche alte, um eine neue anzulegen.",
+    "operation_not_yours": "Nur der Autor oder ein Offizier mit Clan-Inhaltsrechten kann diese Operation ändern oder löschen."
   }
 }

@@ -1,4 +1,5 @@
-import { readStorage, writeStorage } from "@/shared";
+import * as React from "react";
+import { assetUrl, readStorage, writeStorage } from "@/shared";
 import { HEX_H, HEX_W, type MapRegion } from "@/features/planning/model/map";
 
 /* План на карте: линии, линейки, стрелки, радиусы и постройки. Координаты — «мировые»
@@ -130,3 +131,13 @@ export const rectFrom = (a: { x: number; y: number }, b: { x: number; y: number 
   w: Math.abs(b.x - a.x),
   h: Math.abs(b.y - a.y),
 });
+
+/** Каталог построек меню строительства (для подписей построек в снимках). */
+export function useStructureCatalog() {
+  const [catalog, setCatalog] = React.useState<StructureCatalog | null>(null);
+  React.useEffect(() => {
+    fetch(assetUrl(STRUCTURES_URL) ?? STRUCTURES_URL).then((r) => (r.ok ? r.json() : null)).then(setCatalog).catch(() => setCatalog(null));
+  }, []);
+  const map = React.useMemo(() => new Map<string, StructureDef>((catalog?.items ?? []).map((i) => [i.id, i])), [catalog]);
+  return { catalog, structures: map };
+}

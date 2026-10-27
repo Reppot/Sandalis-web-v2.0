@@ -19,6 +19,8 @@
     "feedback_login_required": "Inicia sesión con Discord para escribir: así se verá tu apodo.",
     "feedback_rate_limited": "Como máximo {n} mensajes por hora; inténtalo un poco más tarde.",
     "guest_no_clan": "El acceso de invitado no tiene clan",
-    "courses_too_many": "El clan ya tiene {n} cursos: elimina uno para añadir otro."
+    "courses_too_many": "El clan ya tiene {n} cursos: elimina uno para añadir otro.",
+    "operations_too_many": "El clan ya tiene {n} operaciones: borra las antiguas para añadir una nueva.",
+    "operation_not_yours": "Solo el autor o un oficial con permisos de contenido del clan puede cambiar o borrar esta operación."
   }
 }

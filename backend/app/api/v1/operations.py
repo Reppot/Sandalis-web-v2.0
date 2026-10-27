@@ -1,0 +1,138 @@
+"""Операции клана (/clan/operations): календарь, снимки карты из «Планирования», заказы
+на снимке и опрос «отметьтесь участником». Читают участники клана (гостю — пусто); создают
+те, кто может оформлять заказы (reports:create); править и удалять — автор или clan:content."""
+from __future__ import annotations
+
+import uuid
+from datetime import UTC, date, datetime
+from typing import Any
+
+from fastapi import APIRouter, Depends, Query, Response, status
+from sqlalchemy import select
+
+from app.api.deps import CurrentPrincipal, DbDep, PermissionChecker
+from app.core.errors import AppError, NotFoundError
+from app.core.permissions import Scopes
+from app.core.security import Principal
+from app.models.operation import ClanOperation
+from app.schemas.operation import Attend, OperationCreate, OperationList, OperationRead, OperationSummary, OperationWrite
+
+router = APIRouter(prefix="/clan/operations", tags=["clan"])
+CanCreate = [Depends(PermissionChecker([Scopes.REPORTS_CREATE]))]
+
+MAX_OPERATIONS = 500
+
+
+def _member(principal: Principal) -> bool:
+    return principal.subject_type == "user"
+
+
+def _can_edit(principal: Principal, row: ClanOperation) -> bool:
+    return _member(principal) and (row.author_id == principal.user_id or principal.can(Scopes.CLAN_CONTENT))
+
+
+def _report_ids(snapshot: dict[str, Any] | None) -> list[str]:
+    """Заказы, отмеченные на снимке метками «Заказ»."""
+    ids: list[str] = []
+    for shape in (snapshot or {}).get("shapes") or []:
+        rid = shape.get("report") if isinstance(shape, dict) and shape.get("kind") == "order" else None
+        if isinstance(rid, str) and rid not in ids:
+            ids.append(rid[:64])
+    return ids
+
+
+def _summary(row: ClanOperation, principal: Principal) -> OperationSummary:
+    return OperationSummary(
+        id=row.id, title=row.title, date=row.date, note=row.note, report_ids=row.report_ids or [],
+        participants=row.participants or [], has_snapshot=row.snapshot is not None, author_id=row.author_id,
+        author_name=row.author_name, created_at=row.created_at, can_edit=_can_edit(principal, row),
+    )
+
+
+async def _get(session: DbDep, operation_id: uuid.UUID) -> ClanOperation:
+    row = (await session.execute(select(ClanOperation).where(ClanOperation.id == operation_id))).scalar_one_or_none()
+    if row is None:
+        raise NotFoundError()
+    return row
+
+
+@router.get("", response_model=OperationList, summary="Операции клана (календарь)")
+async def list_operations(
+    principal: CurrentPrincipal,
+    session: DbDep,
+    start: date | None = Query(default=None),
+    end: date | None = Query(default=None),
+) -> OperationList:
+    if not _member(principal):
+        return OperationList(can_create=False, operations=[])
+    query = select(ClanOperation).order_by(ClanOperation.date, ClanOperation.created_at)
+    if start:
+        query = query.where(ClanOperation.date >= start)
+    if end:
+        query = query.where(ClanOperation.date <= end)
+    rows = (await session.execute(query)).scalars().all()
+    return OperationList(can_create=principal.can(Scopes.REPORTS_CREATE), operations=[_summary(r, principal) for r in rows])
+
+
+@router.get("/{operation_id}", response_model=OperationRead, summary="Операция со снимком карты")
+async def read_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep) -> OperationRead:
+    if not _member(principal):
+        raise NotFoundError()
+    row = await _get(session, operation_id)
+    return OperationRead(**_summary(row, principal).model_dump(), snapshot=row.snapshot)
+
+
+@router.post("", response_model=OperationSummary, status_code=status.HTTP_201_CREATED, dependencies=CanCreate,
+             summary="Новая операция (из снимка «Планирования» или просто дата)")
+async def create_operation(payload: OperationCreate, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+    if not _member(principal):
+        raise NotFoundError()
+    count = len((await session.execute(select(ClanOperation.id))).all())
+    if count >= MAX_OPERATIONS:
+        raise AppError(message_key="errors.operations_too_many", code="validation_error", status_code=422,
+                       params={"n": MAX_OPERATIONS})
+    row = ClanOperation(
+        title=payload.title, date=payload.date, note=payload.note, snapshot=payload.snapshot,
+        report_ids=_report_ids(payload.snapshot), participants=[],
+        author_id=principal.user_id, author_name=(principal.display_name or principal.user_id)[:120],
+    )
+    session.add(row)
+    await session.commit()
+    await session.refresh(row)
+    return _summary(row, principal)
+
+
+@router.put("/{operation_id}", response_model=OperationSummary, summary="Переименовать / перенести операцию")
+async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+    row = await _get(session, operation_id)
+    if not _can_edit(principal, row):
+        raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
+    row.title, row.date, row.note = payload.title, payload.date, payload.note
+    await session.commit()
+    await session.refresh(row)
+    return _summary(row, principal)
+
+
+@router.delete("/{operation_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Удалить операцию")
+async def delete_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep) -> Response:
+    row = await _get(session, operation_id)
+    if not _can_edit(principal, row):
+        raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
+    await session.delete(row)
+    await session.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.post("/{operation_id}/attend", response_model=OperationSummary, summary="Отметиться участником операции")
+async def attend_operation(operation_id: uuid.UUID, payload: Attend, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+    if not _member(principal):
+        raise NotFoundError()
+    row = await _get(session, operation_id)
+    people = [p for p in (row.participants or []) if p.get("user_id") != principal.user_id]
+    if payload.going:
+        people.append({"user_id": principal.user_id, "name": (principal.display_name or principal.user_id)[:120],
+                       "at": datetime.now(UTC).isoformat()})
+    row.participants = people  # новый список — JSONB помечается изменённым
+    await session.commit()
+    await session.refresh(row)
+    return _summary(row, principal)

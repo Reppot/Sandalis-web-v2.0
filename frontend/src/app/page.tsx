@@ -7,6 +7,7 @@ import { Scopes } from "@/entities/session";
 import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
 import { CodeBaseWorkspace } from "@/features/codes";
 import { PlanningWorkspace } from "@/features/planning";
+import { OperationsWorkspace } from "@/features/operations";
 import { ReportsWorkspace } from "@/features/reports";
 import { StatsWorkspace } from "@/features/stats";
 import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
@@ -118,12 +119,15 @@ export default function TerminalPage() {
       ...(can(Scopes.REPORTS_READ)
         ? [{ view: "stats" as const, icon: "stats" as const, label: "nav.stats.label" as const, hint: "nav.stats.hint" as const, render: () => <StatsWorkspace /> }]
         : []),
+      ...(!isGuest
+        ? [{ view: "operations" as const, icon: "alarm" as const, label: "nav.operations.label" as const, hint: "nav.operations.hint" as const, render: () => <OperationsWorkspace onOpenPlanning={() => openTool("planning")} /> }]
+        : []),
       { view: "training" as const, icon: "training" as const, label: "nav.training.label" as const, hint: "nav.training.hint" as const, render: () => <TrainingWorkspace /> },
       ...(isOwner
         ? [{ view: "management" as const, icon: "map" as const, label: "nav.management.label" as const, hint: "nav.management.hint" as const, render: () => <ManagementWorkspace /> }]
         : []),
     ],
-    [can, isOwner, openTool],
+    [can, isOwner, isGuest, openTool],
   );
 
   if (loading) {
