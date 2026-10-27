@@ -172,10 +172,16 @@ async def fetch_member_count(guild_id: str) -> int | None:
     return int(n) if isinstance(n, int) else None
 
 
+# Права бота при приглашении: каналы и история, сообщения со встраиванием и файлами, @упоминания,
+# реакции и внешние эмодзи, роли, события сервера, публичные ветки, закрепы и опросы.
+# Без администратора, модерации и голоса.
+BOT_PERMISSIONS = sum(1 << bit for bit in (6, 10, 11, 14, 15, 16, 17, 18, 28, 33, 34, 35, 38, 44, 49, 51))
+
+
 def bot_invite_url(guild_id: str | None) -> str | None:
     if not settings.DISCORD_CLIENT_ID:
         return None
-    params = {"client_id": settings.DISCORD_CLIENT_ID, "scope": "bot", "permissions": "0"}
+    params = {"client_id": settings.DISCORD_CLIENT_ID, "scope": "bot applications.commands", "permissions": str(BOT_PERMISSIONS)}
     if guild_id:
         # сервер клана подставлен заранее, но не зафиксирован: если у аккаунта нет прав
         # на этот сервер, Discord иначе показывает пустой список и не даёт выбрать другой
