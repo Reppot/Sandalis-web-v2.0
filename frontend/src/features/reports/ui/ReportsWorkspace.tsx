@@ -8,7 +8,8 @@ import { operationsApi, today, type Operation } from "@/features/operations/mode
 import { NO_FACETS, VIEWS, applyFacets, applyView, sortTasks, summarize, type Facets, type View } from "@/features/reports/model/hq";
 import { HqSummary, OperationsStrip, TaskRow } from "@/features/reports/ui/HqParts";
 import { OrderCard } from "@/features/reports/ui/OrderCard";
-import { PRIORITIES, lineName, orderKindOf, REPORT_STATUS_LABEL, orderDraft, reportApi, type Assignee, type Report, type ReportStatus } from "@/entities/report";
+import { BoardView, CalendarView } from "@/features/reports/ui/HqViews";
+import { PRIORITIES, lineName, orderKindOf, REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Assignee, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
   DocReader,
@@ -38,6 +39,22 @@ import {
 } from "@/shared";
 
 const VIEW_KEY = "sindaris-orders-view";
+const LAYOUT_KEY = "sindaris-orders-layout";
+const SAVED_KEY = "sindaris-orders-saved-views";
+type Layout = "list" | "board" | "calendar";
+const LAYOUTS: { key: Layout; icon: "list" | "grid" | "clock"; label: MessageKey }[] = [
+  { key: "list", icon: "list", label: "hq.layout.list" },
+  { key: "board", icon: "grid", label: "hq.layout.board" },
+  { key: "calendar", icon: "clock", label: "hq.layout.calendar" },
+];
+/** Сохранённый вид: представление + фильтры + поиск (в этом браузере). */
+interface SavedView {
+  id: string;
+  name: string;
+  view: View;
+  facets: Facets;
+  query: string;
+}
 const VIEW_LABEL: Record<View, MessageKey> = {
   active: "hq.view.active", mine: "hq.view.mine", overdue: "hq.view.overdue", unassigned: "hq.view.unassigned",
   operations: "hq.view.operations", done: "hq.view.done", cancelled: "hq.view.cancelled", all: "common.all",
@@ -92,11 +109,36 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
   const [openId, setOpenId] = React.useState<string | null>(null);
   const [busyId, setBusyId] = React.useState<string | null>(null);
   const [armed, confirm] = useConfirm();
+  const [layout, setLayoutState] = React.useState<Layout>("list");
+  const [picked, setPicked] = React.useState<Set<string>>(new Set());
+  const [savedViews, setSavedViews] = React.useState<SavedView[]>([]);
+  const [naming, setNaming] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     const saved = readStorage<View>(VIEW_KEY, "active");
     if (VIEWS.includes(saved)) setViewState(saved);
+    const l = readStorage<Layout>(LAYOUT_KEY, "list");
+    if (LAYOUTS.some((x) => x.key === l)) setLayoutState(l);
+    setSavedViews(readStorage<SavedView[]>(SAVED_KEY, []));
   }, []);
+  const setLayout = (l: Layout) => {
+    setLayoutState(l);
+    writeStorage(LAYOUT_KEY, l);
+  };
+  const storeViews = (list: SavedView[]) => {
+    setSavedViews(list);
+    writeStorage(SAVED_KEY, list);
+  };
+  const saveView = () => {
+    const name = (naming ?? "").trim();
+    if (name) storeViews([...savedViews, { id: Math.random().toString(36).slice(2, 9), name: name.slice(0, 32), view, facets, query }]);
+    setNaming(null);
+  };
+  const applySaved = (v: SavedView) => {
+    setView(v.view);
+    setFacets(v.facets);
+    setQuery(v.query);
+  };
   const setView = (v: View) => {
     setViewState(v);
     writeStorage(VIEW_KEY, v);
@@ -191,6 +233,25 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
 
   const facet = <K extends keyof Facets>(key: K, value: Facets[K]) => setFacets((f) => ({ ...f, [key]: value }));
 
+  // массовые действия: по каждому выбранному заказу — тот же запрос, что и в карточке
+  const pickedReports = reports.filter((r) => picked.has(r.id));
+  const bulk = async (run: (r: Report) => Promise<Report | null>) => {
+    let ok = 0;
+    for (const r of pickedReports) {
+      try {
+        const next = await run(r);
+        if (next) replace(next);
+        ok += 1;
+      } catch {
+        // заказ мог стать недоступен — продолжаем с остальными
+      }
+    }
+    notify({ title: t("hq.bulk.done"), message: t("hq.bulk.applied", { n: ok, total: pickedReports.length }), tone: ok === pickedReports.length ? "success" : "warning" });
+    setPicked(new Set());
+  };
+  const bulkStatus = (status: ReportStatus) =>
+    bulk(async (r) => (REPORT_TRANSITIONS[r.status].includes(status) ? (await reportApi.setStatus(r.id, status)).report : null));
+
   const busy = current ? busyId === current.id : false;
 
   return (
@@ -212,10 +273,36 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
       </PageHeader>
 
       <section className="panel hq-toolbar">
-        <div data-guide="reports-filters" className="flex gap-1.5 overflow-x-auto pb-0.5">
-          {VIEWS.map((v) => (
-            <button key={v} className={`chip shrink-0 ${view === v ? "is-active" : ""}`} onClick={() => setView(v)}>{t(VIEW_LABEL[v])}</button>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="segmented" role="tablist" aria-label={t("hq.layout.label")}>
+            {LAYOUTS.map((l) => (
+              <button key={l.key} type="button" role="tab" aria-selected={layout === l.key} className={`segmented-item ${layout === l.key ? "is-active" : ""}`} onClick={() => setLayout(l.key)}>
+                <Icon name={l.icon} size={14} />{t(l.label)}
+              </button>
+            ))}
+          </div>
+          <div data-guide="reports-filters" className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto pb-0.5">
+            {VIEWS.map((v) => (
+              <button key={v} className={`chip shrink-0 ${view === v ? "is-active" : ""}`} onClick={() => setView(v)}>{t(VIEW_LABEL[v])}</button>
+            ))}
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
+          <span className="text-xs text-fg-3">{t("hq.saved.label")}</span>
+          {savedViews.map((v) => (
+            <span key={v.id} className="hq-saved">
+              <button type="button" onClick={() => applySaved(v)}><Icon name="pin" size={12} />{v.name}</button>
+              <button type="button" className="hq-person-x" aria-label={t("common.delete")} onClick={() => storeViews(savedViews.filter((x) => x.id !== v.id))}><Icon name="close" size={11} /></button>
+            </span>
           ))}
+          {naming === null ? (
+            <button type="button" className="chip shrink-0" onClick={() => setNaming("")}><Icon name="plus" size={12} />{t("hq.saved.save")}</button>
+          ) : (
+            <span className="flex items-center gap-1">
+              <input autoFocus className="field h-8 w-40 px-2 py-0 text-sm" value={naming} maxLength={32} placeholder={t("hq.saved.name")} onChange={(e) => setNaming(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") saveView(); if (e.key === "Escape") setNaming(null); }} />
+              <button type="button" className="btn h-8 min-h-0 px-2.5 text-sm" onClick={saveView}><Icon name="check" size={13} /></button>
+            </span>
+          )}
         </div>
         <div className="hq-facets">
           <select className="field h-9 py-0 text-sm" value={facets.assignee} onChange={(e) => facet("assignee", e.target.value)} aria-label={t("hq.assignees")}>
@@ -267,8 +354,39 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
             }
           />
         </div>
+      ) : layout === "board" ? (
+        <BoardView reports={visible} ops={ops} canStatus={can(Scopes.REPORTS_STATUS)} showClosed={view === "all" || view === "cancelled"} onOpen={(r) => setOpenId(r.id)} onMove={(r, st) => void setStatus(r, st)} />
+      ) : layout === "calendar" ? (
+        <CalendarView reports={visible} ops={ops} onOpen={(r) => setOpenId(r.id)} />
       ) : (
         <section className="panel hq-list">
+          {picked.size ? (
+            <div className="hq-bulk">
+              <b className="text-sm">{t("hq.bulk.selected", { n: picked.size })}</b>
+              {can(Scopes.REPORTS_STATUS) ? (
+                <>
+                  <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulk(async (r) => reportApi.setTask(r.id, { assignees: [...new Set([...r.assignees.map((a) => a.user_id), e.target.value])] }))}>
+                    <option value="">{t("hq.bulk.assign")}</option>
+                    {members.map((m) => <option key={m.user_id} value={m.user_id}>{m.name}</option>)}
+                  </select>
+                  <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulk(async (r) => reportApi.setTask(r.id, { priority: e.target.value as Report["priority"] }))}>
+                    <option value="">{t("hq.bulk.priority")}</option>
+                    {PRIORITIES.map((p) => <option key={p} value={p}>{t(`hq.priority.${p}` as MessageKey)}</option>)}
+                  </select>
+                  <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulk(async (r) => reportApi.setTask(r.id, { operation_id: e.target.value === "none" ? null : e.target.value }))}>
+                    <option value="">{t("hq.bulk.operation")}</option>
+                    <option value="none">{t("hq.noOperation")}</option>
+                    {ops.filter((o) => o.date >= today()).map((o) => <option key={o.id} value={o.id}>{o.title} · {o.date}</option>)}
+                  </select>
+                  <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulkStatus(e.target.value as ReportStatus)}>
+                    <option value="">{t("hq.bulk.status")}</option>
+                    {(["open", "in_progress", "done", "cancelled"] as ReportStatus[]).map((st) => <option key={st} value={st}>{t(REPORT_STATUS_LABEL[st])}</option>)}
+                  </select>
+                </>
+              ) : null}
+              <button type="button" className="btn h-8 min-h-0 px-2.5 text-sm" onClick={() => setPicked(new Set())}><Icon name="close" size={13} />{t("hq.bulk.clear")}</button>
+            </div>
+          ) : null}
           <div className="hq-head" aria-hidden>
             <span />
             <span>{t("hq.col.order")}</span>
@@ -279,7 +397,15 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
           </div>
           <ul data-guide="report-card">
             {page.items.map((report) => (
-              <TaskRow key={report.id} report={report} ops={ops} selected={report.id === openId} onOpen={() => setOpenId(report.id)} />
+              <TaskRow
+                key={report.id}
+                report={report}
+                ops={ops}
+                selected={report.id === openId}
+                onOpen={() => setOpenId(report.id)}
+                checked={picked.has(report.id)}
+                onCheck={(on) => setPicked((prev) => { const next = new Set(prev); if (on) next.add(report.id); else next.delete(report.id); return next; })}
+              />
             ))}
           </ul>
         </section>

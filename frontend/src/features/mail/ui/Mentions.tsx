@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { roleColor, splitMentions, useMentionRoles, type MentionRole } from "@/features/mail/model";
-import { cn, useT } from "@/shared";
+import { Icon, cn, useT } from "@/shared";
 
 /**
  * Поле текста с упоминаниями: набираешь «@» — снизу подсказка ролей Discord-сервера клана.
@@ -14,9 +14,17 @@ export const MentionTextarea: React.FC<{
   placeholder?: string;
   maxLength?: number;
   className?: string;
-}> = ({ value, onChange, placeholder, maxLength, className }) => {
+  /** Дополнительно к ролям — участники клана (@Ник). */
+  people?: { user_id: string; name: string }[];
+  /** Ctrl+Enter — отправить (комментарий). */
+  onSubmit?: () => void;
+}> = ({ value, onChange, placeholder, maxLength, className, people, onSubmit }) => {
   const t = useT();
-  const roles = useMentionRoles();
+  const clanRoles = useMentionRoles();
+  const roles = React.useMemo<MentionRole[]>(
+    () => [...clanRoles, ...(people ?? []).map((p) => ({ id: `user:${p.user_id}`, name: p.name, color: -1 }))],
+    [clanRoles, people],
+  );
   const ref = React.useRef<HTMLTextAreaElement>(null);
   const [query, setQuery] = React.useState<{ text: string; start: number } | null>(null);
   const [active, setActive] = React.useState(0);
@@ -46,6 +54,11 @@ export const MentionTextarea: React.FC<{
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (onSubmit && e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      onSubmit();
+      return;
+    }
     if (!options.length) return;
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       e.preventDefault();
@@ -84,7 +97,7 @@ export const MentionTextarea: React.FC<{
           {options.map((r, i) => (
             <li key={r.id} role="option" aria-selected={i === active}>
               <button type="button" className={cn("mention-option", i === active && "is-active")} onMouseDown={(e) => e.preventDefault()} onClick={() => pick(r)} onMouseEnter={() => setActive(i)}>
-                <span className="mention-dot" style={{ background: roleColor(r.color) }} />
+                {r.color < 0 ? <Icon name="user" size={13} className="text-fg-3" /> : <span className="mention-dot" style={{ background: roleColor(r.color) }} />}
                 <span className="truncate">@{r.name}</span>
                 {r.id === "everyone" ? <span className="ml-auto text-xs text-fg-3">{t("mail.everyone")}</span> : null}
               </button>

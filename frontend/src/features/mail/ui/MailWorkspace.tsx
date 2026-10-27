@@ -9,6 +9,9 @@ import { EmptyState, Icon, Loading, cn, errorText, formatDateTime, useI18n, useN
  * Почта на сайте (раздел «Сайт»): упоминания ролей Discord («@роль») в операциях клана
  * и ответы разработчика на обратную связь. Открыть источник, отметить прочитанным, удалить.
  */
+/** Письма «штаба» заказов — ведут в «Заказы клана». */
+const ORDER_KINDS = new Set(["task_assigned", "task_due", "order_delivered", "order_comment"]);
+
 export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedback: () => void; onOpenOrders: () => void }> = ({ onOpenOperations, onOpenFeedback, onOpenOrders }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
@@ -59,10 +62,19 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
           {items.map((m) => (
             <li key={m.id} className={cn("panel mail-item", !m.read && "is-unread")} onClick={() => void markRead(m)}>
               <span className="mail-icon"><Icon name="mail" size={16} /></span>
-              {m.kind === "task_assigned" ? (
+              {ORDER_KINDS.has(m.kind) ? (
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm text-fg">{t("mail.taskAssigned", { name: m.sender_name, title: m.payload.title ?? "" })}</div>
-                  <div className="mt-0.5 text-xs text-fg-3">{m.payload.due_date ? `${t("hq.due")}: ${day(m.payload.due_date)} · ` : ""}{formatDateTime(m.created_at)}</div>
+                  <div className="text-sm text-fg">
+                    {m.kind === "task_due"
+                      ? t("mail.taskDue", { title: m.payload.title ?? "", date: day(m.payload.due_date ?? undefined) })
+                      : m.kind === "order_delivered"
+                        ? t("mail.orderDelivered", { name: m.sender_name, title: m.payload.title ?? "", operation: m.payload.operation ?? "" })
+                        : m.kind === "order_comment"
+                          ? t("mail.orderComment", { name: m.sender_name, title: m.payload.title ?? "" })
+                          : t("mail.taskAssigned", { name: m.sender_name, title: m.payload.title ?? "" })}
+                  </div>
+                  <div className="mt-0.5 text-xs text-fg-3">{m.kind === "task_assigned" && m.payload.due_date ? `${t("hq.due")}: ${day(m.payload.due_date)} · ` : ""}{formatDateTime(m.created_at)}</div>
+                  {m.kind === "order_comment" && m.payload.text ? <MentionText text={m.payload.text} className="mt-2 text-sm text-fg-2" /> : null}
                 </div>
               ) : m.kind === "feedback_reply" ? (
                 <div className="min-w-0 flex-1">
@@ -81,9 +93,9 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
                 </div>
               )}
               <span className="flex shrink-0 flex-col items-end gap-1.5">
-                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : m.kind === "task_assigned" ? onOpenOrders : onOpenOperations)(); }}>
+                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : ORDER_KINDS.has(m.kind) ? onOpenOrders : onOpenOperations)(); }}>
                   <Icon name="external" size={14} />
-                  {m.kind === "feedback_reply" ? t("mail.openFeedback") : m.kind === "task_assigned" ? t("mail.openOrders") : t("mail.openOperation")}
+                  {m.kind === "feedback_reply" ? t("mail.openFeedback") : ORDER_KINDS.has(m.kind) ? t("mail.openOrders") : t("mail.openOperation")}
                 </button>
                 <button type="button" className="icon-btn" onClick={(e) => { e.stopPropagation(); void remove(m); }} aria-label={t("common.delete")} title={t("common.delete")}><Icon name="trash" size={15} /></button>
               </span>

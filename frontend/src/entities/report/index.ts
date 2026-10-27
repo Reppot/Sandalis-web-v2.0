@@ -46,6 +46,16 @@ export interface Assignee {
   name: string;
 }
 
+/** Запись ленты заказа: события и комментарии. */
+export interface ReportEvent {
+  id: string;
+  kind: "created" | "status" | "assigned" | "unassigned" | "take" | "drop" | "priority" | "due" | "tags" | "operation" | "contribution" | "delivered" | "comment" | string;
+  actor_id: string;
+  actor_name: string;
+  payload: { value?: string | string[] | null; was?: string; name?: string; qty?: number; place?: string; note?: string; text?: string; mentions?: string[]; operation?: string };
+  created_at: string;
+}
+
 /** Поля задачи: передаются только меняемые; null — очистить срок или операцию. */
 export interface ReportTaskPatch {
   priority?: Priority;
@@ -181,6 +191,13 @@ export const reportApi = {
   },
   setTask(id: string, patch: ReportTaskPatch): Promise<Report> {
     return apiClient.patch<Report>(`/api/v1/reports/${id}/task`, patch);
+  },
+  events(id: string): Promise<ReportEvent[]> {
+    return apiClient.get<ReportEvent[]>(`/api/v1/reports/${id}/events`);
+  },
+  /** Комментарий; @роль и @участник получат письмо в почту сайта. */
+  comment(id: string, text: string): Promise<ReportEvent> {
+    return apiClient.post<ReportEvent>(`/api/v1/reports/${id}/comments`, { text });
   },
   /** Взять заказ себе / отказаться. */
   take(id: string, take: boolean): Promise<Report> {

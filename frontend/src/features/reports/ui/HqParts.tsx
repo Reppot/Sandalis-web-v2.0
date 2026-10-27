@@ -87,12 +87,21 @@ export const DueLabel: React.FC<{ report: Report }> = ({ report }) => {
 };
 
 /** Строка задачи в списке штаба. */
-export const TaskRow: React.FC<{ report: Report; ops: Operation[]; selected: boolean; onOpen: () => void }> = ({ report, ops, selected, onOpen }) => {
+export const TaskRow: React.FC<{
+  report: Report;
+  ops: Operation[];
+  selected: boolean;
+  onOpen: () => void;
+  /** Выбор для массовых действий (флажок слева); нет — без флажка. */
+  checked?: boolean;
+  onCheck?: (on: boolean) => void;
+}> = ({ report, ops, selected, onOpen, checked, onCheck }) => {
   const { t, locale } = useI18n();
   const pct = Math.round(progressOf(report) * 100);
   const mine = operationsOf(report, ops);
   return (
-    <li>
+    <li className={cn("hq-li", onCheck && "is-selectable", checked && "is-checked")}>
+      {onCheck ? <input type="checkbox" className="hq-check" checked={Boolean(checked)} onChange={(e) => onCheck(e.target.checked)} aria-label={report.title} /> : null}
       <button type="button" className={cn("hq-row", selected && "is-selected", `prio-${report.priority}`)} onClick={onOpen}>
         <span className={cn("hq-prio", `is-${report.priority}`)} title={t(`hq.priority.${report.priority}` as MessageKey)}>
           <Icon name={PRIORITY_ICON[report.priority]} size={14} className={report.priority === "high" ? "rotate-180" : undefined} />

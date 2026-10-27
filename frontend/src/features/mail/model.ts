@@ -16,7 +16,7 @@ export interface Mail {
   id: string;
   kind: "operation_mention" | string;
   sender_name: string;
-  payload: { operation_id?: string; title?: string; date?: string; note?: string; roles?: string[]; feedback_id?: string; message?: string; reply?: string; report_id?: string; due_date?: string | null; priority?: string };
+  payload: { operation_id?: string; title?: string; date?: string; note?: string; roles?: string[]; feedback_id?: string; message?: string; reply?: string; report_id?: string; due_date?: string | null; priority?: string; text?: string; operation?: string };
   read: boolean;
   created_at: string;
 }

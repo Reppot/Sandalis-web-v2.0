@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import uuid
+from datetime import date
 from typing import Annotated, Sequence
 
 from fastapi import APIRouter, Depends, File, Query, Response, UploadFile, status
+from sqlalchemy import select
 
 from app.api.deps import (
     ClanSession,
@@ -14,6 +16,7 @@ from app.api.deps import (
 from app.core.errors import AppError, NotFoundError
 from app.core.i18n import Translator
 from app.core.permissions import Scopes
+from app.core.security import Principal
 from app.models.report import OrderReport, ReportStatus
 from app.schemas.clan_settings import ClanSettingsRead, ClanSettingsSaved, ClanSettingsUpdate
 from app.schemas.common import Page
@@ -21,7 +24,9 @@ from app.schemas.report import (
     Assignee,
     ContributionCreate,
     DiscordSent,
+    ReportComment,
     ReportCreate,
+    ReportEventRead,
     ReportLineRead,
     ReportProgressRead,
     ReportRead,
@@ -57,6 +62,10 @@ async def get_settings_service(
 
 ServiceDep = Annotated[ReportService, Depends(get_report_service)]
 SettingsServiceDep = Annotated[ClanSettingsService, Depends(get_settings_service)]
+
+
+def _who(principal: Principal) -> tuple[str, str]:
+    return principal.user_id, (principal.display_name or principal.user_id)
 
 
 def _read(report: OrderReport, icons: dict[str, str | None], names: CatalogNames,
@@ -107,9 +116,13 @@ async def list_assignees(service: ServiceDep) -> list[Assignee]:
 async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: ServiceDep, principal: CurrentPrincipal) -> ReportRead:
     report = await service.get_report(report_id, for_update=True)
     fields = payload.model_fields_set
-    if "priority" in fields and payload.priority:
+    actor, actor_name = _who(principal)
+    ev = lambda kind, **kw: report_tasks.log(service.session, report.id, kind, actor, actor_name, **kw)  # noqa: E731
+    if "priority" in fields and payload.priority and payload.priority != report.priority:
+        ev("priority", value=payload.priority)
         report.priority = payload.priority
-    if "due_date" in fields:
+    if "due_date" in fields and payload.due_date != report.due_date:
+        ev("due", value=payload.due_date.isoformat() if payload.due_date else None)
         report.due_date = payload.due_date
     if "tags" in fields and payload.tags is not None:
         clean: list[str] = []
@@ -117,15 +130,25 @@ async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: 
             tag = tag.strip().lstrip("#").strip().lower()[:24]
             if tag and tag not in clean:
                 clean.append(tag)
+        if clean != list(report.tags or []):
+            ev("tags", value=clean)
         report.tags = clean
     if "operation_id" in fields:
         if payload.operation_id and not await report_tasks.operation_exists(service.session, payload.operation_id):
             raise NotFoundError()
+        if payload.operation_id != report.operation_id:
+            ev("operation", value=str(payload.operation_id) if payload.operation_id else None)
         report.operation_id = payload.operation_id
     if "assignees" in fields and payload.assignees is not None:
         known = {m["user_id"]: m["name"] for m in await report_tasks.members(service.session)}
         wanted = [uid for uid in dict.fromkeys(payload.assignees) if uid in known]
         before = {a.get("user_id") for a in report.assignees or []}
+        for uid in wanted:
+            if uid not in before:
+                ev("assigned", name=known[uid])
+        for a in report.assignees or []:
+            if a.get("user_id") not in wanted:
+                ev("unassigned", name=a.get("name"))
         report.assignees = [{"user_id": uid, "name": known[uid]} for uid in wanted]
         report_tasks.notify_assigned(
             service.session, clan_id=principal.clan_id, report=report,
@@ -149,9 +172,44 @@ async def take_task(report_id: uuid.UUID, payload: ReportTake, service: ServiceD
     people = [a for a in report.assignees or [] if a.get("user_id") != principal.user_id]
     if payload.take:
         people.append({"user_id": principal.user_id, "name": (principal.display_name or principal.user_id)[:120]})
+    was = any(a.get("user_id") == principal.user_id for a in report.assignees or [])
+    if was != payload.take:
+        report_tasks.log(service.session, report.id, "take" if payload.take else "drop", *_who(principal))
     report.assignees = people
     await service.session.commit()
     return await _one(service, await service.get_report(report_id))
+
+
+@router.get(
+    "/{report_id}/events",
+    response_model=list[ReportEventRead],
+    summary="Лента заказа: события и комментарии (новые первыми)",
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
+)
+async def report_events(report_id: uuid.UUID, service: ServiceDep) -> list[ReportEventRead]:
+    await service.get_report(report_id)
+    return [ReportEventRead.model_validate(e) for e in await report_tasks.events(service.session, report_id)]
+
+
+@router.post(
+    "/{report_id}/comments",
+    response_model=ReportEventRead,
+    status_code=status.HTTP_201_CREATED,
+    summary="Комментарий к заказу; @роль и @участник получают письмо в почту сайта",
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
+)
+async def add_comment(report_id: uuid.UUID, payload: ReportComment, service: ServiceDep, principal: CurrentPrincipal) -> ReportEventRead:
+    if principal.subject_type != "user":
+        raise NotFoundError()
+    report = await service.get_report(report_id)
+    actor, actor_name = _who(principal)
+    recipients, mentions = await report_tasks.comment_recipients(service.session, payload.text, actor)
+    report_tasks.log(service.session, report.id, "comment", actor, actor_name, text=payload.text, mentions=mentions or None)
+    report_tasks.mail(service.session, clan_id=principal.clan_id, recipients=recipients, sender_id=actor, sender_name=actor_name,
+                      kind="order_comment", payload={"report_id": str(report.id), "title": report.title, "text": payload.text[:500]})
+    await service.session.commit()
+    [latest] = await report_tasks.events(service.session, report.id, limit=1)
+    return ReportEventRead.model_validate(latest)
 
 
 @router.get(
@@ -162,10 +220,13 @@ async def take_task(report_id: uuid.UUID, payload: ReportTake, service: ServiceD
 )
 async def list_reports(
     service: ServiceDep,
+    principal: CurrentPrincipal,
     status_filter: Annotated[list[ReportStatus] | None, Query(alias="status")] = None,
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> Page[ReportRead]:
+    if principal.subject_type == "user" and await report_tasks.remind_due(service.session, principal.clan_id, date.today()):
+        await service.session.commit()
     rows, total = await service.list_reports(statuses=status_filter, limit=limit, offset=offset)
     return Page[ReportRead](
         items=await _many(service, rows), total=total, limit=limit, offset=offset
@@ -188,8 +249,10 @@ async def get_report(report_id: uuid.UUID, service: ServiceDep) -> ReportRead:
     summary="Отправить рапорт в штаб (строки без кода резолвятся по названию)",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_CREATE]))],
 )
-async def create_report(payload: ReportCreate, service: ServiceDep) -> ReportSaved:
+async def create_report(payload: ReportCreate, service: ServiceDep, principal: CurrentPrincipal) -> ReportSaved:
     report, message = await service.create_report(payload)
+    report_tasks.log(service.session, report.id, "created", *_who(principal))
+    await service.session.commit()
     return ReportSaved(report=await _one(service, report), message=message)
 
 
@@ -211,9 +274,13 @@ async def update_report(
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_STATUS]))],
 )
 async def change_status(
-    report_id: uuid.UUID, payload: ReportStatusUpdate, service: ServiceDep
+    report_id: uuid.UUID, payload: ReportStatusUpdate, service: ServiceDep, principal: CurrentPrincipal
 ) -> ReportSaved:
+    before = (await service.get_report(report_id)).status
     report, message = await service.change_status(report_id, payload)
+    if report.status != before:
+        report_tasks.log(service.session, report.id, "status", *_who(principal), value=report.status, was=before)
+        await service.session.commit()
     return ReportSaved(report=await _one(service, report), message=message)
 
 
@@ -284,8 +351,17 @@ async def report_progress(report_id: uuid.UUID, service: ProgressDep) -> ReportP
     summary="Сообщить о выполнении части заказа (сколько и на какой склад)",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_PROGRESS]))],
 )
-async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, service: ProgressDep) -> ReportProgressRead:
-    return await service.contribute(report_id, payload)
+async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, service: ProgressDep, principal: CurrentPrincipal) -> ReportProgressRead:
+    result = await service.contribute(report_id, payload)
+    actor, actor_name = _who(principal)
+    qty = sum(line.quantity for line in payload.lines)
+    newest = max(result.contributions, key=lambda c: c.created_at, default=None)
+    report_tasks.log(service.session, report_id, "contribution", actor, actor_name, qty=qty,
+                     place=payload.stockpile_label or (newest.stockpile_label if newest else None), note=payload.note or None)
+    report = (await service.session.execute(select(OrderReport).where(OrderReport.id == report_id))).scalar_one()
+    await report_tasks.check_delivered(service.session, report, clan_id=principal.clan_id, actor_id=actor, actor_name=actor_name)
+    await service.session.commit()
+    return result
 
 
 @router.delete(

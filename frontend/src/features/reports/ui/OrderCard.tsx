@@ -8,6 +8,7 @@ import { parseDate, today, type Operation } from "@/features/operations/model/op
 import { progressOf } from "@/features/reports/model/hq";
 import { Avatars, DueLabel, STATUS_BADGE } from "@/features/reports/ui/HqParts";
 import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
+import { OrderActivity } from "@/features/reports/ui/OrderActivity";
 import { Icon, cn, errorText, formatDateTime, useI18n, useNotify, type MessageKey } from "@/shared";
 
 const STEPS: ReportStatus[] = ["open", "in_progress", "done"];
@@ -184,6 +185,9 @@ export const OrderCard: React.FC<{
 
         {/* выполнение по строкам и журнал вкладов */}
         <ReportProgressPanel report={report} can={can} userId={userId} onStatusMaybeChanged={onReload} />
+
+        {/* лента событий и обсуждение — обновляется после каждого изменения заказа */}
+        <OrderActivity reportId={report.id} members={members} canComment={Boolean(userId)} refreshKey={`${report.updated_at}|${report.delivered_total}|${report.assignees.length}|${report.status}`} />
 
         <div className="hq-drawer-actions">{actions}</div>
         <details className="hq-doc">

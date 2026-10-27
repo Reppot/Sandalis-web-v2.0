@@ -6,6 +6,7 @@ from enum import StrEnum
 from typing import Any
 
 from sqlalchemy import (
+    Boolean,
     CheckConstraint,
     Date,
     DateTime,
@@ -79,6 +80,9 @@ class OrderReport(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     operation_id: Mapped[uuid.UUID | None] = mapped_column(
         ForeignKey("clan_operations.id", ondelete="SET NULL"), nullable=True
     )
+    # письма «штаба» уходят один раз: напоминание о сроке (на этот срок) и «доставлен полностью»
+    reminded_due: Mapped[date | None] = mapped_column(Date, nullable=True)
+    delivered_notified: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
 
     lines: Mapped[list[OrderReportLine]] = relationship(
         back_populates="report",

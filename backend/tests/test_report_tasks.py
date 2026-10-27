@@ -90,3 +90,50 @@ def test_report_task_fields_take_and_progress(db):
             assert (await c.get(f"{API}/reports/{rid}", headers=boss)).json()["operation_id"] is None
 
     run(main())
+
+
+def test_report_feed_comments_reminders_and_delivered_mail(db):
+    async def main() -> None:
+        from datetime import date
+
+        await seed()
+        boss, tank = auth("boss", ClanRole.OFFICER, "Boss"), auth("tank", ClanRole.MEMBER, "Tank")
+        async with client() as c:
+            created = (await c.post(f"{API}/reports", headers=boss, json={"title": "Склад", "lines": [{"name": "Rifle", "quantity": 4, "unit": "crate"}]})).json()["report"]
+            rid, line = created["id"], created["lines"][0]["id"]
+            op = (await c.post(f"{API}/clan/operations", headers=boss, json={"title": "Штурм", "date": "2026-12-01"})).json()
+            await c.patch(f"{API}/reports/{rid}/task", headers=boss, json={"priority": "high", "assignees": ["tank"], "operation_id": op["id"], "due_date": date.today().isoformat()})
+
+            # лента: события в обратном порядке, от имени того, кто действовал
+            kinds = [e["kind"] for e in (await c.get(f"{API}/reports/{rid}/events", headers=tank)).json()]
+            assert kinds[-1] == "created" and {"priority", "assigned", "operation", "due"} <= set(kinds)
+
+            # комментарий с @участником → письмо упомянутому, автору — нет
+            r = await c.post(f"{API}/reports/{rid}/comments", headers=boss, json={"text": "  @Tank вези к фронту  "})
+            assert r.status_code == 201 and r.json()["kind"] == "comment" and r.json()["payload"]["text"] == "@Tank вези к фронту"
+            assert r.json()["actor_name"] == "Boss"
+            mail = (await c.get(f"{API}/mail", headers=tank)).json()["items"]
+            assert [m["kind"] for m in mail].count("order_comment") == 1
+            assert (await c.post(f"{API}/reports/{rid}/comments", headers=boss, json={"text": "   "})).status_code == 422
+
+            # напоминание о сроке — один раз при открытии списка
+            await c.get(f"{API}/reports", headers=tank)
+            await c.get(f"{API}/reports", headers=boss)
+            mail = (await c.get(f"{API}/mail", headers=tank)).json()["items"]
+            assert [m["kind"] for m in mail].count("task_due") == 1
+
+            # доставлено полностью → письмо автору заказа и запись в ленте (тоже один раз)
+            await c.post(f"{API}/reports/{rid}/progress", headers=tank, json={"stockpile_label": "BB", "lines": [{"line_id": line, "quantity": 3}]})
+            assert (await c.get(f"{API}/mail", headers=boss)).json()["items"] == []
+            await c.post(f"{API}/reports/{rid}/progress", headers=tank, json={"stockpile_label": "BB", "lines": [{"line_id": line, "quantity": 2}]})
+            await c.post(f"{API}/reports/{rid}/progress", headers=tank, json={"stockpile_label": "BB", "lines": [{"line_id": line, "quantity": 1}]})
+            [m] = (await c.get(f"{API}/mail", headers=boss)).json()["items"]
+            assert m["kind"] == "order_delivered" and m["payload"]["operation"] == "Штурм" and m["sender_name"] == "Tank"
+            feed = (await c.get(f"{API}/reports/{rid}/events", headers=boss)).json()
+            assert [e["kind"] for e in feed].count("delivered") == 1 and [e["kind"] for e in feed].count("contribution") == 3
+
+            # чужой клан не видит ленту
+            eve = auth("eve", ClanRole.OWNER, "Eve", "CLAN_B")
+            assert (await c.get(f"{API}/reports/{rid}/events", headers=eve)).status_code == 404
+
+    run(main())

@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import uuid
 from datetime import date, datetime
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from app.models.report import ReportStatus
 
@@ -83,6 +83,33 @@ class ReportTaskUpdate(BaseModel):
     tags: Annotated[list[Annotated[str, Field(max_length=24)]], Field(max_length=8)] | None = None
     operation_id: uuid.UUID | None = None
     assignees: Annotated[list[str], Field(max_length=10)] | None = None   # user_id участников клана
+
+
+class ReportComment(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    text: Annotated[str, Field(min_length=1, max_length=2000)]
+
+    @field_validator("text")
+    @classmethod
+    def _strip(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("empty comment")
+        return value
+
+
+class ReportEventRead(BaseModel):
+    """Запись ленты заказа: kind — created / status / assigned / unassigned / take / drop /
+    priority / due / tags / operation / contribution / delivered / comment."""
+    model_config = ConfigDict(from_attributes=True)
+
+    id: uuid.UUID
+    kind: str
+    actor_id: str
+    actor_name: str
+    payload: dict[str, Any]
+    created_at: datetime
 
 
 class ReportTake(BaseModel):
