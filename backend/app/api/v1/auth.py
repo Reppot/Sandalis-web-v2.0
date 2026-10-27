@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import secrets
 import uuid
 from datetime import UTC, datetime, timedelta
@@ -7,7 +8,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Cookie, Depends, Header, Query, Response, status
 from fastapi.responses import JSONResponse, RedirectResponse
-from sqlalchemy import delete, select
+from sqlalchemy import delete, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import (
@@ -18,15 +19,18 @@ from app.api.deps import (
     domain_translator,
 )
 from app.core.config import settings
-from app.core.errors import AppError, PermissionDeniedError, UnauthorizedError
+from app.core.errors import AppError, NotFoundError, PermissionDeniedError, UnauthorizedError
 from app.core.i18n import Translator, normalize_locale
-from app.core.permissions import Scopes
-from app.core.security import Principal
-from app.models.rbac import User
+from app.core.permissions import ClanRole, Scopes, scopes_for
+from app.core.security import Principal, is_site_admin, issue_access_token
+from app.core.tenancy import bypass_clan_filter
+from app.models.rbac import Clan, ClanMembership, User
 from app.models.setup import DiscordSetup
 from app.schemas.auth import (
     ClanApiTokenCreate,
     ClanApiTokenCreated,
+    DeveloperClanRead,
+    DeveloperEnter,
     DevTokenRequest,
     DiscordSetupRead,
     DiscordSetupSelect,
@@ -35,7 +39,7 @@ from app.schemas.auth import (
     TokenResponse,
 )
 from app.schemas.common import Page
-from app.services.auth import AuthService
+from app.services.auth import GUEST_CLAN_SENTINEL, AuthService
 from app.services.discord_oauth import (
     avatar_url,
     build_authorize_url,
@@ -51,6 +55,8 @@ from app.services.discord_oauth import (
     unseal,
     verify_state,
 )
+
+log = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -140,6 +146,8 @@ async def read_me(principal: CurrentPrincipal, session: DbDep) -> MeRead:
 
 def _me(principal: Principal, avatar: str | None, locale: str | None) -> MeRead:
     return MeRead(
+        site_admin=principal.subject_type == "user" and is_site_admin(principal.user_id),
+        developer=principal.developer,
         subject_type=principal.subject_type,
         user_id=principal.user_id,
         clan_id=principal.clan_id,
@@ -450,6 +458,45 @@ async def discord_setup_select(
     _set_session_cookie(response, token.access_token)
     response.delete_cookie(key=SETUP_COOKIE, path="/")
     return token
+
+
+# ---------------- режим разработчика -------------------------------------- #
+def _require_site_admin(principal: Principal) -> None:
+    if principal.subject_type != "user" or not is_site_admin(principal.user_id):
+        raise PermissionDeniedError()
+
+
+@router.get("/developer/clans", response_model=list[DeveloperClanRead],
+            summary="Разработчик: все кланы сайта (для входа с правами командира)")
+async def developer_clans(principal: CurrentPrincipal, session: DbDep) -> list[DeveloperClanRead]:
+    _require_site_admin(principal)
+    with bypass_clan_filter():
+        counts = dict((await session.execute(
+            select(ClanMembership.clan_id, func.count()).where(ClanMembership.is_active.is_(True)).group_by(ClanMembership.clan_id)
+        )).all())
+    clans = (await session.execute(select(Clan).where(Clan.is_active.is_(True)).order_by(Clan.name))).scalars().all()
+    return [DeveloperClanRead(id=c.id, name=c.name, icon_url=c.icon_url, members=counts.get(c.id, 0),
+                              discord_linked=bool(c.discord_guild_id))
+            for c in clans if c.id != GUEST_CLAN_SENTINEL]
+
+
+@router.post("/developer/enter", response_model=TokenResponse,
+             summary="Разработчик: войти в клан с правами командира (роли, доступ, интеграции)")
+async def developer_enter(payload: DeveloperEnter, response: Response, principal: CurrentPrincipal,
+                          session: DbDep, translator: AuthTranslator) -> TokenResponse:
+    _require_site_admin(principal)
+    clan = await session.get(Clan, payload.clan_id)
+    if clan is None or not clan.is_active:
+        raise NotFoundError()
+    name = principal.display_name or principal.user_id
+    token = issue_access_token(user_id=principal.user_id, clan_id=clan.id, role=ClanRole.OWNER,
+                               display_name=name, developer=True)
+    log.warning("developer %s entered clan %s (%s)", principal.user_id, clan.id, clan.name)
+    me = MeRead(subject_type="user", user_id=principal.user_id, clan_id=clan.id, role=ClanRole.OWNER,
+                scopes=sorted(scopes_for(ClanRole.OWNER)), display_name=name, site_admin=True, developer=True)
+    _set_session_cookie(response, token)
+    return TokenResponse(access_token=token, expires_in=settings.ACCESS_TOKEN_TTL_MIN * 60, me=me,
+                         message=translator.t("developer.entered", domain="auth", clan=clan.name))
 
 
 @router.post(

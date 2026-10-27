@@ -12,6 +12,10 @@ export interface UserSession {
   avatarUrl: string | null;
   /** Язык интерфейса из профиля (users.preferred_locale). */
   locale: string | null;
+  /** Разработчик сайта: может войти в любой клан с правами командира. */
+  siteAdmin: boolean;
+  /** Сейчас в клане в режиме разработчика. */
+  developer: boolean;
 }
 
 export interface MeReadDto {
@@ -23,6 +27,8 @@ export interface MeReadDto {
   display_name: string | null;
   avatar_url?: string | null;
   locale?: string | null;
+  site_admin?: boolean;
+  developer?: boolean;
 }
 
 export interface TokenResponseDto {
@@ -43,6 +49,8 @@ export function toUserSession(dto: MeReadDto): UserSession {
     displayName: dto.display_name,
     avatarUrl: dto.avatar_url ?? null,
     locale: dto.locale ?? null,
+    siteAdmin: Boolean(dto.site_admin),
+    developer: Boolean(dto.developer),
   };
 }
 

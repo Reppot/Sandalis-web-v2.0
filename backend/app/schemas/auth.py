@@ -20,6 +20,20 @@ class MeRead(BaseModel):
     display_name: str | None
     avatar_url: str | None = None   # Discord CDN; None у dev/invite-юзеров и clan_token
     locale: str | None = None       # язык интерфейса из профиля (users.preferred_locale)
+    site_admin: bool = False        # разработчик сайта: может войти в любой клан
+    developer: bool = False         # сейчас в клане в режиме разработчика
+
+
+class DeveloperClanRead(BaseModel):
+    id: str
+    name: str
+    icon_url: str | None
+    members: int
+    discord_linked: bool
+
+
+class DeveloperEnter(BaseModel):
+    clan_id: str = Field(min_length=1, max_length=64)
 
 
 class LocaleUpdate(BaseModel):

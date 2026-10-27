@@ -43,5 +43,8 @@
   "guest": {
     "disabled": "Guest access is disabled.",
     "signed_in": "Guest access: tools only, clan data is hidden."
+  },
+  "developer": {
+    "entered": "Developer mode: you are in “{clan}” with commander rights."
   }
 }

@@ -43,5 +43,8 @@
   "guest": {
     "disabled": "Dostęp gościa jest wyłączony.",
     "signed_in": "Dostęp gościa: tylko narzędzia, dane klanów są ukryte."
+  },
+  "developer": {
+    "entered": "Tryb dewelopera: jesteś w klanie „{clan}” z prawami dowódcy."
   }
 }

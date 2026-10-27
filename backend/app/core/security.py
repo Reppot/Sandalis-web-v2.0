@@ -24,12 +24,20 @@ class Principal(BaseModel):
     scopes: frozenset[str] = Field(default_factory=frozenset)
     display_name: str | None = None
     session_id: str | None = None
+    # режим разработчика: владелец сайта вошёл в чужой клан с правами командира
+    developer: bool = False
 
     def can(self, scope: str) -> bool:
         return has_scope(self.scopes, scope)
 
     def missing(self, required: list[str]) -> list[str]:
         return missing_scopes(self.scopes, required)
+
+
+def is_site_admin(user_id: str | None) -> bool:
+    """Владелец / разработчик сайта: Discord ID из FEEDBACK_ADMIN_IDS (через запятую)."""
+    admins = {x.strip() for x in settings.FEEDBACK_ADMIN_IDS.split(",") if x.strip()}
+    return bool(user_id) and user_id in admins
 
 
 def hash_clan_token(raw: str) -> str:
@@ -51,6 +59,7 @@ def issue_access_token(
     display_name: str | None = None,
     ttl_minutes: int | None = None,
     guest: bool = False,
+    developer: bool = False,
 ) -> str:
     now = datetime.now(UTC)
     payload: dict[str, Any] = {
@@ -71,6 +80,8 @@ def issue_access_token(
     }
     if guest:
         payload["gst"] = True   # гостевой просмотр: без профиля и membership
+    if developer:
+        payload["dev"] = True   # режим разработчика (см. Principal.developer)
     return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALG)
 
 
@@ -103,6 +114,11 @@ def decode_access_token(token: str) -> Principal:
     except ValueError:
         role = ClanRole.GUEST
 
+    developer = bool(payload.get("dev"))
+    if developer and not is_site_admin(str(payload["sub"])):
+        # разработчика убрали из FEEDBACK_ADMIN_IDS — его вход в чужие кланы больше не действует
+        raise UnauthorizedError(code="invalid_token")
+
     return Principal(
         subject_type="guest" if payload.get("gst") else "user",
         user_id=str(payload["sub"]),
@@ -111,4 +127,5 @@ def decode_access_token(token: str) -> Principal:
         scopes=scopes_for(role, payload.get("xsc", []), payload.get("rsc", [])),
         display_name=payload.get("name"),
         session_id=payload.get("jti"),
+        developer=developer,
     )

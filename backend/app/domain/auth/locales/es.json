@@ -43,5 +43,8 @@
   "guest": {
     "disabled": "El acceso de invitado está desactivado.",
     "signed_in": "Acceso de invitado: solo herramientas, los datos de los clanes están ocultos."
+  },
+  "developer": {
+    "entered": "Modo desarrollador: estás en «{clan}» con derechos de comandante."
   }
 }

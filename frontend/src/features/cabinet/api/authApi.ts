@@ -1,4 +1,12 @@
 import { apiClient, env } from "@/shared";
+
+export interface DeveloperClan {
+  id: string;
+  name: string;
+  icon_url: string | null;
+  members: number;
+  discord_linked: boolean;
+}
 import {
   toUserSession,
   type ClanRole,
@@ -97,6 +105,13 @@ export const authApi = {
     await apiClient.put<MeReadDto>("/api/v1/auth/me/locale", { locale });
   },
 
+  /** Разработчик сайта: все кланы и вход в любой с правами командира. */
+  developerClans(): Promise<DeveloperClan[]> {
+    return apiClient.get<DeveloperClan[]>("/api/v1/auth/developer/clans");
+  },
+  async enterClan(clanId: string): Promise<void> {
+    await apiClient.post<TokenResponseDto>("/api/v1/auth/developer/enter", { clan_id: clanId });
+  },
   async logout(): Promise<void> {
     await apiClient.post<void>("/api/v1/auth/logout");
   },

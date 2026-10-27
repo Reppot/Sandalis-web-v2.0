@@ -17,7 +17,9 @@ export const Header: React.FC<{
   onAlerts?: () => void;
   /** Почта на сайте: непрочитанные и переход в раздел. */
   mail?: { unread: number; onOpen: () => void };
-}> = ({ section, page, onHome, onSearch, onAlerts, mail }) => {
+  /** Режим разработчика: вошли в чужой клан с правами командира. */
+  developer?: boolean;
+}> = ({ section, page, onHome, onSearch, onAlerts, mail, developer }) => {
   const t = useT();
   const { connection, lastSync } = useTerminal();
   const { media } = useContent();
@@ -58,6 +60,13 @@ export const Header: React.FC<{
             <span className="topbar-crumb">{section}</span>
           )}
         </nav>
+
+        {developer ? (
+          <span className="status-pill is-warning shrink-0" title={t("settings.developerHint")}>
+            <Icon name="shield" size={13} />
+            {t("dev.badge")}
+          </span>
+        ) : null}
 
         <div data-guide="shell-ticker" className="topbar-ticker">
           <Ticker onOpen={onAlerts} />

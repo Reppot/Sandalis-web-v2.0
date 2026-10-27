@@ -43,5 +43,8 @@
   "guest": {
     "disabled": "Přístup pro hosty je vypnutý.",
     "signed_in": "Přístup hosta: jen nástroje, data klanů jsou skrytá."
+  },
+  "developer": {
+    "entered": "Vývojářský režim: jste v klanu „{clan}“ s právy velitele."
   }
 }

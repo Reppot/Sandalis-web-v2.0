@@ -43,5 +43,8 @@
   "guest": {
     "disabled": "Der Gastzugang ist deaktiviert.",
     "signed_in": "Gastzugang: nur Werkzeuge, Clan-Daten sind ausgeblendet."
+  },
+  "developer": {
+    "entered": "Entwicklermodus: Du bist in „{clan}“ mit Kommandantenrechten."
   }
 }

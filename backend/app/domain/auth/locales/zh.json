@@ -43,5 +43,8 @@
   "guest": {
     "disabled": "访客访问已禁用。",
     "signed_in": "访客访问：仅限工具，军团数据已隐藏。"
+  },
+  "developer": {
+    "entered": "开发者模式：你以指挥官权限进入了“{clan}”。"
   }
 }
