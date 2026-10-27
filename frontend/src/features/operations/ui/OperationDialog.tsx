@@ -13,11 +13,12 @@ import { Icon, Modal, errorText, useI18n, useNotify } from "@/shared";
 export const OperationDialog: React.FC<{
   open: boolean;
   onClose: () => void;
-  snapshot?: OperationSnapshot | null;
+  /** Снимки «Планирования», которые переносятся (все снимки сессии). */
+  snapshots?: OperationSnapshot[];
   initialTitle?: string;
   initialDate?: string | null;
   onCreated?: (op: Operation) => void;
-}> = ({ open, onClose, snapshot, initialTitle = "", initialDate, onCreated }) => {
+}> = ({ open, onClose, snapshots = [], initialTitle = "", initialDate, onCreated }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
   const [ops, setOps] = React.useState<Operation[]>([]);
@@ -25,23 +26,31 @@ export const OperationDialog: React.FC<{
   const [title, setTitle] = React.useState("");
   const [note, setNote] = React.useState("");
   const [busy, setBusy] = React.useState(false);
+  // куда переносим: новая операция или уже созданная в этот день (свою можно дополнить)
+  const [target, setTarget] = React.useState<string>("new");
+  const moving = snapshots.length > 0;
 
   React.useEffect(() => {
     if (!open) return;
     setTitle(initialTitle);
     setNote("");
     setDate(initialDate && initialDate >= today() ? initialDate : today());
+    setTarget("new");
     operationsApi.list().then((r) => setOps(r.operations)).catch(() => setOps([]));
   }, [open, initialTitle, initialDate]);
 
   const sameDay = byDate(ops).get(date) ?? [];
+  const mine = moving ? sameDay.filter((o) => o.can_edit) : [];
+  React.useEffect(() => setTarget("new"), [date]);
   const pretty = new Intl.DateTimeFormat(locale, { weekday: "long", day: "numeric", month: "long" }).format(parseDate(date));
 
   const submit = async () => {
-    if (!title.trim()) return;
+    if (target === "new" && !title.trim()) return;
     setBusy(true);
     try {
-      const op = await operationsApi.create({ title: title.trim(), date, note, snapshot: snapshot ?? null });
+      const op = target === "new"
+        ? await operationsApi.create({ title: title.trim(), date, note, snapshots })
+        : await operationsApi.addSnapshots(target, snapshots);
       notify({ title: t("operations.created"), message: `${op.title} · ${pretty}`, tone: "success" });
       onCreated?.(op);
       onClose();
@@ -56,15 +65,15 @@ export const OperationDialog: React.FC<{
     <Modal
       open={open}
       onClose={onClose}
-      title={snapshot ? t("operations.moveTitle") : t("operations.newTitle")}
+      title={moving ? t("operations.moveTitle") : t("operations.newTitle")}
       icon="alarm"
       widthClass="max-w-3xl"
       footer={
         <div className="flex flex-wrap items-center justify-end gap-2">
           <button type="button" className="btn" onClick={onClose}>{t("common.cancel")}</button>
-          <button type="button" className="btn btn-primary" disabled={busy || !title.trim()} onClick={() => void submit()}>
+          <button type="button" className="btn btn-primary" disabled={busy || (target === "new" && !title.trim())} onClick={() => void submit()}>
             <Icon name="check" size={16} />
-            {snapshot ? t("operations.moveSubmit") : t("operations.create")}
+            {moving ? t("operations.moveSubmit") : t("operations.create")}
           </button>
         </div>
       }
@@ -84,6 +93,19 @@ export const OperationDialog: React.FC<{
               <div className="mt-1 text-xs text-fg-3">{t("operations.freeDay")}</div>
             )}
           </div>
+          {mine.length ? (
+            <div className="flex flex-col gap-1">
+              <span className="field-label">{t("operations.target")}</span>
+              <div className="segmented flex-wrap">
+                <button type="button" className={`segmented-item ${target === "new" ? "is-active" : ""}`} onClick={() => setTarget("new")}>{t("operations.targetNew")}</button>
+                {mine.map((o) => (
+                  <button key={o.id} type="button" className={`segmented-item ${target === o.id ? "is-active" : ""}`} onClick={() => setTarget(o.id)}>+ {o.title}</button>
+                ))}
+              </div>
+            </div>
+          ) : null}
+          {target === "new" ? (
+          <>
           <label className="flex flex-col gap-1">
             <span className="field-label">{t("operations.title")}</span>
             <input className="field" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} placeholder={t("operations.titlePlaceholder")} />
@@ -92,7 +114,16 @@ export const OperationDialog: React.FC<{
             <span className="field-label">{t("operations.note")}</span>
             <MentionTextarea className="min-h-[5rem] w-full" value={note} maxLength={1000} onChange={setNote} placeholder={t("operations.notePlaceholder")} />
           </div>
-          <p className="text-xs text-fg-3">{snapshot ? t("operations.withSnapshot", { n: snapshot.shapes.length }) : t("operations.withoutSnapshot")}</p>
+          </>
+          ) : null}
+          {moving ? (
+            <div className="text-xs text-fg-3">
+              {t("operations.withSnapshots", { n: snapshots.length })}
+              <ul className="mt-1 flex flex-wrap gap-1.5">{snapshots.map((s, i) => <li key={i} className="ops-chip">{s.name || `#${i + 1}`}</li>)}</ul>
+            </div>
+          ) : (
+            <p className="text-xs text-fg-3">{t("operations.withoutSnapshot")}</p>
+          )}
         </div>
       </div>
     </Modal>

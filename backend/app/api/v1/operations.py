@@ -15,7 +15,7 @@ from app.core.errors import AppError, NotFoundError
 from app.core.permissions import Scopes
 from app.core.security import Principal
 from app.models.operation import ClanOperation
-from app.schemas.operation import Attend, OperationCreate, OperationList, OperationRead, OperationSummary, OperationWrite
+from app.schemas.operation import MAX_SNAPSHOTS, Attend, OperationCreate, OperationList, OperationRead, OperationSummary, OperationWrite, SnapshotsAdd
 from app.services.mentions import clan_roles, deliver, mentioned
 
 router = APIRouter(prefix="/clan/operations", tags=["clan"])
@@ -32,20 +32,21 @@ def _can_edit(principal: Principal, row: ClanOperation) -> bool:
     return _member(principal) and (row.author_id == principal.user_id or principal.can(Scopes.CLAN_CONTENT))
 
 
-def _report_ids(snapshot: dict[str, Any] | None) -> list[str]:
-    """Заказы, отмеченные на снимке метками «Заказ»."""
+def _report_ids(snapshots: list[dict[str, Any]]) -> list[str]:
+    """Заказы, отмеченные на снимках метками «Заказ»."""
     ids: list[str] = []
-    for shape in (snapshot or {}).get("shapes") or []:
-        rid = shape.get("report") if isinstance(shape, dict) and shape.get("kind") == "order" else None
-        if isinstance(rid, str) and rid not in ids:
-            ids.append(rid[:64])
+    for snap in snapshots:
+        for shape in snap.get("shapes") or []:
+            rid = shape.get("report") if isinstance(shape, dict) and shape.get("kind") == "order" else None
+            if isinstance(rid, str) and rid[:64] not in ids:
+                ids.append(rid[:64])
     return ids
 
 
 async def _notify(session: DbDep, principal: Principal, row: ClanOperation, roles: list[dict[str, Any]]) -> None:
     """Письма в почту сайта тем, чьи роли упомянуты в заметке («@роль»)."""
     await deliver(
-        session, roles=roles, sender_id=principal.user_id,
+        session, clan_id=principal.clan_id, roles=roles, sender_id=principal.user_id,
         sender_name=principal.display_name or principal.user_id, kind="operation_mention",
         payload={"operation_id": str(row.id), "title": row.title, "date": row.date.isoformat(), "note": row.note[:500]},
     )
@@ -54,7 +55,7 @@ async def _notify(session: DbDep, principal: Principal, row: ClanOperation, role
 def _summary(row: ClanOperation, principal: Principal) -> OperationSummary:
     return OperationSummary(
         id=row.id, title=row.title, date=row.date, note=row.note, report_ids=row.report_ids or [],
-        participants=row.participants or [], has_snapshot=row.snapshot is not None, author_id=row.author_id,
+        participants=row.participants or [], snapshot_names=[s.get("name") or "" for s in row.snapshots or []], author_id=row.author_id,
         author_name=row.author_name, created_at=row.created_at, can_edit=_can_edit(principal, row),
     )
 
@@ -89,7 +90,7 @@ async def read_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, s
     if not _member(principal):
         raise NotFoundError()
     row = await _get(session, operation_id)
-    return OperationRead(**_summary(row, principal).model_dump(), snapshot=row.snapshot)
+    return OperationRead(**_summary(row, principal).model_dump(), snapshots=row.snapshots or [])
 
 
 @router.post("", response_model=OperationSummary, status_code=status.HTTP_201_CREATED, dependencies=CanCreate,
@@ -102,8 +103,8 @@ async def create_operation(payload: OperationCreate, principal: CurrentPrincipal
         raise AppError(message_key="errors.operations_too_many", code="validation_error", status_code=422,
                        params={"n": MAX_OPERATIONS})
     row = ClanOperation(
-        title=payload.title, date=payload.date, note=payload.note, snapshot=payload.snapshot,
-        report_ids=_report_ids(payload.snapshot), participants=[],
+        title=payload.title, date=payload.date, note=payload.note, snapshots=payload.snapshots,
+        report_ids=_report_ids(payload.snapshots), participants=[],
         author_id=principal.user_id, author_name=(principal.display_name or principal.user_id)[:120],
     )
     session.add(row)
@@ -124,6 +125,22 @@ async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, pri
     row.title, row.date, row.note = payload.title, payload.date, payload.note
     # письма — только ролям, которых в заметке раньше не было
     await _notify(session, principal, row, [r for r in mentioned(row.note, roles) if r["id"] not in before])
+    await session.commit()
+    await session.refresh(row)
+    return _summary(row, principal)
+
+
+@router.post("/{operation_id}/snapshots", response_model=OperationSummary, summary="Добавить снимки карты в операцию")
+async def add_snapshots(operation_id: uuid.UUID, payload: SnapshotsAdd, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+    row = await _get(session, operation_id)
+    if not _can_edit(principal, row):
+        raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
+    snapshots = [*(row.snapshots or []), *payload.snapshots]
+    if len(snapshots) > MAX_SNAPSHOTS:
+        raise AppError(message_key="errors.operation_snapshots_too_many", code="validation_error", status_code=422,
+                       params={"n": MAX_SNAPSHOTS})
+    row.snapshots = snapshots
+    row.report_ids = _report_ids(snapshots)
     await session.commit()
     await session.refresh(row)
     return _summary(row, principal)

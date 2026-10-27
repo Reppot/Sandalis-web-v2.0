@@ -10,6 +10,7 @@ from tests.conftest import bearer, run, seed_clan
 
 API = "/api/v1/clan/operations"
 SNAPSHOT = {
+    "name": "Прорыв на карте",
     "rect": {"x": 0, "y": 0, "w": 500, "h": 300},
     "war": 141,
     "phase": "conquest",
@@ -42,18 +43,25 @@ def test_operations_calendar_snapshot_and_poll(db):
         async with client() as c:
             assert (await c.get(API, headers=member)).json()["operations"] == []
 
-            r = await c.post(API, headers=boss, json={"title": "  Прорыв  ", "date": "2026-11-02", "note": "сбор в 19:00", "snapshot": SNAPSHOT})
+            r = await c.post(API, headers=boss, json={"title": "  Прорыв  ", "date": "2026-11-02", "note": "сбор в 19:00", "snapshots": [SNAPSHOT]})
             assert r.status_code == 201, r.text
             op = r.json()
-            assert op["title"] == "Прорыв" and op["report_ids"] == ["rep-1"] and op["has_snapshot"] and op["can_edit"]
+            assert op["title"] == "Прорыв" and op["report_ids"] == ["rep-1"] and op["snapshot_names"] == ["Прорыв на карте"] and op["can_edit"]
             plain = (await c.post(API, headers=boss, json={"title": "Логистика", "date": "2026-11-05"})).json()
-            assert plain["has_snapshot"] is False
+            assert plain["snapshot_names"] == []
 
             # календарь: фильтр по датам, участник видит, но править чужое не может
             listed = (await c.get(API, headers=member, params={"start": "2026-11-01", "end": "2026-11-03"})).json()
             assert [o["title"] for o in listed["operations"]] == ["Прорыв"] and listed["operations"][0]["can_edit"] is False
             full = (await c.get(f"{API}/{op['id']}", headers=member)).json()
-            assert full["snapshot"]["shapes"][2]["name"] == "Удар"
+            assert full["snapshots"][0]["shapes"][2]["name"] == "Удар"
+
+            # ещё снимки в ту же операцию: автор может, участник — нет; заказы пересчитываются
+            extra = {**SNAPSHOT, "name": "Вторая волна", "shapes": [{"id": "z", "kind": "order", "report": "rep-2", "title": "Порт", "x": 0, "y": 0, "angle": 0, "size": 100}]}
+            assert (await c.post(f"{API}/{op['id']}/snapshots", headers=member, json={"snapshots": [extra]})).status_code == 403
+            r = await c.post(f"{API}/{op['id']}/snapshots", headers=boss, json={"snapshots": [extra]})
+            assert r.status_code == 200 and r.json()["snapshot_names"] == ["Прорыв на карте", "Вторая волна"]
+            assert r.json()["report_ids"] == ["rep-1", "rep-2"]
             assert (await c.put(f"{API}/{op['id']}", headers=member, json={"title": "x", "date": "2026-11-02"})).status_code == 403
             assert (await c.delete(f"{API}/{op['id']}", headers=member)).status_code == 403
 
@@ -76,7 +84,7 @@ def test_operations_calendar_snapshot_and_poll(db):
             assert (await c.post(f"{API}/{op['id']}/attend", headers=guest, json={"going": True})).status_code == 404
 
             # кривой снимок не принимается
-            assert (await c.post(API, headers=boss, json={"title": "X", "date": "2026-11-02", "snapshot": {"rect": 1}})).status_code == 422
+            assert (await c.post(API, headers=boss, json={"title": "X", "date": "2026-11-02", "snapshots": [{"rect": 1}]})).status_code == 422
 
             assert (await c.delete(f"{API}/{plain['id']}", headers=boss)).status_code == 204
             assert [o["title"] for o in (await c.get(API, headers=boss)).json()["operations"]] == ["Прорыв 2"]

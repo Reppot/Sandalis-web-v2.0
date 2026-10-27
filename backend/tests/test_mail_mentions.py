@@ -78,3 +78,25 @@ def test_role_mentions_reach_mailboxes(db):
             assert (await c.get("/api/v1/mail", headers=log1)).json()["unread"] == 0
 
     run(main())
+
+
+def test_feedback_reply_reaches_author_mail(db, monkeypatch):
+    async def main() -> None:
+        from app.core.config import settings
+        monkeypatch.setattr(settings, "FEEDBACK_ADMIN_IDS", "dev")
+        await seed()
+        author = auth("tank1", ClanRole.MEMBER, "Tank One")
+        dev = auth("dev", ClanRole.OWNER, "Reppot")
+        async with client() as c:
+            fb = (await c.post("/api/v1/feedback", headers=author, json={"category": "idea", "message": "Добавьте почту"})).json()
+            # отвечать может только владелец сайта
+            assert (await c.post(f"/api/v1/feedback/{fb['id']}/reply", headers=author, json={"text": "сам себе"})).status_code == 403
+            r = await c.post(f"/api/v1/feedback/{fb['id']}/reply", headers=dev, json={"text": "  Готово, смотрите раздел «Почта»  "})
+            assert r.status_code == 200 and r.json()["reply"] == "Готово, смотрите раздел «Почта»" and r.json()["status"] == "done"
+            mail = (await c.get("/api/v1/mail", headers=author)).json()
+            [m] = mail["items"]
+            assert m["kind"] == "feedback_reply" and m["sender_name"] == "Reppot" and m["payload"]["message"] == "Добавьте почту"
+            mine = (await c.get("/api/v1/feedback", headers=author)).json()["mine"]
+            assert mine[0]["reply"].startswith("Готово")
+
+    run(main())

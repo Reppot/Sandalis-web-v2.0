@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { operationsApi, parseDate, today, toViewerSnapshot, type Operation } from "@/features/operations/model/operations";
+import { operationsApi, parseDate, today, toViewerSnapshot, type Operation, type OperationSnapshot } from "@/features/operations/model/operations";
 import { OperationDialog } from "@/features/operations/ui/OperationDialog";
 import { OperationsCalendar } from "@/features/operations/ui/OperationsCalendar";
 import { useStructureCatalog, type Snapshot } from "@/features/planning/model/plan";
@@ -14,7 +14,8 @@ import { EmptyState, Icon, Loading, cn, errorText, useConfirm, useI18n, useNotif
 /**
  * «Операции» клана. Шапка — календарь с занятыми днями (в дне — названия операций) и выбором
  * даты новой операции. Ниже — операции выбранного периода: снимок карты из «Планирования»
- * (интерактивный), заказы на снимке, опрос «отметьтесь участником»; и сводка заказов в операциях.
+ * (интерактивные, их может быть несколько), заказы на снимках, опрос «отметьтесь участником».
+ * Сводка заказов операций — в «Заказах клана», фильтр «Операции».
  */
 export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ onOpenPlanning }) => {
   const { t, locale } = useI18n();
@@ -26,6 +27,8 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
   const [day, setDay] = React.useState<string>(today());
   const [creating, setCreating] = React.useState(false);
   const [viewing, setViewing] = React.useState<{ snap: Snapshot; op: Operation } | null>(null);
+  // снимки открытой операции грузим один раз
+  const fullCache = React.useRef(new Map<string, OperationSnapshot[]>());
   const [showPast, setShowPast] = React.useState(false);
   const { structures } = useStructureCatalog();
   const [armed, confirm] = useConfirm();
@@ -57,9 +60,6 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
   const upcoming = list.filter((o) => o.date >= now);
   const past = list.filter((o) => o.date < now).reverse();
   const shown = showPast ? past : upcoming;
-  // заказы, задействованные в операциях, — сводка
-  const involved = new Map<string, Operation[]>();
-  for (const op of upcoming) for (const id of op.report_ids) involved.set(id, [...(involved.get(id) ?? []), op]);
 
   const attend = async (op: Operation, going: boolean) => {
     try {
@@ -84,10 +84,14 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
       notify({ title: t("operations.saveFailed"), message: errorText(err, t("operations.saveFailed")), tone: "danger" });
     }
   };
-  const openMap = async (op: Operation) => {
+  const openMap = async (op: Operation, i: number) => {
     try {
-      const full = await operationsApi.get(op.id);
-      if (full.snapshot) setViewing({ snap: toViewerSnapshot(op, full.snapshot), op });
+      let snaps = fullCache.current.get(op.id);
+      if (!snaps || snaps.length !== op.snapshot_names.length) {
+        snaps = (await operationsApi.get(op.id)).snapshots;
+        fullCache.current.set(op.id, snaps);
+      }
+      if (snaps[i]) setViewing({ snap: toViewerSnapshot(op, snaps[i], i), op });
     } catch (err) {
       notify({ title: t("operations.loadFailed"), message: errorText(err, t("operations.loadFailed")), tone: "danger" });
     }
@@ -107,7 +111,7 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
                 {dayOps.map((o) => (
                   <li key={o.id} className="ops-day-item">
                     <span className="font-semibold text-fg">{o.title}</span>
-                    <span className="text-xs text-fg-3">{t("operations.participants", { n: o.participants.length })}{o.has_snapshot ? ` · ${t("operations.hasMap")}` : ""}</span>
+                    <span className="text-xs text-fg-3">{t("operations.participants", { n: o.participants.length })}{o.snapshot_names.length ? ` · ${t("operations.maps", { n: o.snapshot_names.length })}` : ""}</span>
                   </li>
                 ))}
               </ul>
@@ -163,11 +167,15 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
                   </header>
                   {op.note ? <MentionText text={op.note} className="text-sm text-fg-2" /> : null}
 
-                  {op.has_snapshot ? (
-                    <button type="button" className="ops-map-btn" onClick={() => void openMap(op)}>
-                      <Icon name="map" size={18} />
-                      <span>{t("operations.openMap")}</span>
-                    </button>
+                  {op.snapshot_names.length ? (
+                    <div className="ops-maps">
+                      {op.snapshot_names.map((name, i) => (
+                        <button key={i} type="button" className="ops-map-btn" onClick={() => void openMap(op, i)}>
+                          <Icon name="map" size={18} />
+                          <span className="min-w-0 truncate">{name || t("operations.openMap")}</span>
+                        </button>
+                      ))}
+                    </div>
                   ) : null}
 
                   {op.report_ids.length ? (
@@ -199,29 +207,6 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
               );
             })}
           </div>
-        )}
-      </section>
-
-      {/* заказы, задействованные в предстоящих операциях */}
-      <section className="panel p-4 md:p-5">
-        <h2 className="section-title">{t("operations.ordersTitle")}</h2>
-        {involved.size ? (
-          <ul className="mt-3 flex flex-col divide-y divide-[var(--border)]">
-            {[...involved.entries()].map(([id, ops]) => {
-              const r = reportById.get(id);
-              return (
-                <li key={id} className="flex flex-wrap items-center justify-between gap-2 py-2">
-                  <span className="min-w-0">
-                    <span className="font-medium text-fg">{r?.title ?? t("planning.orderGone")}</span>
-                    {r ? <span className="ml-2 text-xs text-fg-3">{t(REPORT_STATUS_LABEL[r.status])}{r.meta?.region ? ` · ${r.meta.region}` : ""}</span> : null}
-                  </span>
-                  <span className="text-xs text-fg-3">{ops.map((o) => `${o.title} (${fmt(o.date, { day: "numeric", month: "short" })})`).join(", ")}</span>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <p className="mt-2 text-sm text-fg-3">{t("operations.ordersEmpty")}</p>
         )}
       </section>
 

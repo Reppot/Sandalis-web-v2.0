@@ -155,7 +155,7 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect, clan, tool
 
         <div className="nav-group">
           {collapsed ? <div className="nav-sep" /> : <div className="nav-group-title">{t("nav.siteGroup")}</div>}
-          {(["guide", "feedback", "support"] as const).filter(has).map((key) => (
+          {(["guide", "feedback", "mail", "support"] as const).filter(has).map((key) => (
             <NavItem key={key} on={active === key} label={label(key)} title={t(tabKeys(key).hint)} icon={<TabIcon tab={tab(key)} size={18} />} collapsed={collapsed} onClick={() => onSelect(key)} />
           ))}
         </div>

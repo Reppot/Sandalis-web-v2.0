@@ -14,8 +14,9 @@ from app.core.errors import AppError, NotFoundError, PermissionDeniedError
 from app.core.security import Principal
 from app.core.tenancy import bypass_clan_filter
 from app.models.feedback import Feedback
+from app.models.mail import ClanMail
 from app.models.rbac import Clan
-from app.schemas.feedback import FeedbackCreate, FeedbackOverview, FeedbackRead, FeedbackStatusUpdate
+from app.schemas.feedback import FeedbackCreate, FeedbackOverview, FeedbackRead, FeedbackReply, FeedbackStatusUpdate
 
 router = APIRouter(prefix="/feedback", tags=["feedback"])
 
@@ -101,6 +102,24 @@ async def set_status(feedback_id: uuid.UUID, payload: FeedbackStatusUpdate, prin
         if row is None:
             raise NotFoundError()
         row.status = payload.status
+        await session.commit()
+        await session.refresh(row)
+    return FeedbackRead.model_validate(row)
+
+
+@router.post("/{feedback_id}/reply", response_model=FeedbackRead, summary="Ответить автору (владелец сайта) — ответ придёт ему в почту")
+async def reply(feedback_id: uuid.UUID, payload: FeedbackReply, principal: CurrentPrincipal, session: DbDep) -> FeedbackRead:
+    _require_admin(principal)
+    with bypass_clan_filter():
+        row = await session.get(Feedback, feedback_id)
+        if row is None:
+            raise NotFoundError()
+        row.reply, row.replied_at, row.status = payload.text, datetime.now(UTC), "done"
+        session.add(ClanMail(
+            clan_id=row.clan_id, recipient_id=row.user_id, sender_id=principal.user_id,
+            sender_name=(principal.display_name or principal.user_id)[:120], kind="feedback_reply",
+            payload={"feedback_id": str(row.id), "category": row.category, "message": row.message[:500], "reply": payload.text},
+        ))
         await session.commit()
         await session.refresh(row)
     return FeedbackRead.model_validate(row)

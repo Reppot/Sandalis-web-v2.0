@@ -44,6 +44,7 @@ def mentioned(text: str, roles: list[dict[str, Any]]) -> list[dict[str, Any]]:
 async def deliver(
     session: AsyncSession,
     *,
+    clan_id: str,
     roles: list[dict[str, Any]],
     sender_id: str,
     sender_name: str,
@@ -61,6 +62,6 @@ async def deliver(
     ]
     names = [r["name"] for r in roles]
     for uid in recipients:
-        session.add(ClanMail(recipient_id=uid, sender_id=sender_id, sender_name=sender_name[:120], kind=kind,
+        session.add(ClanMail(clan_id=clan_id, recipient_id=uid, sender_id=sender_id, sender_name=sender_name[:120], kind=kind,
                              payload={**payload, "roles": names}))
     return len(recipients)

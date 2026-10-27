@@ -125,7 +125,6 @@ export default function TerminalPage() {
       ...(!isGuest
         ? [
             { view: "operations" as const, icon: "alarm" as const, label: "nav.operations.label" as const, hint: "nav.operations.hint" as const, render: () => <OperationsWorkspace onOpenPlanning={() => openTool("planning")} /> },
-            { view: "mail" as const, icon: "mail" as const, label: "nav.mail.label" as const, hint: "nav.mail.hint" as const, render: () => <MailWorkspace onOpenOperations={() => openClan("operations")} /> },
           ]
         : []),
       { view: "training" as const, icon: "training" as const, label: "nav.training.label" as const, hint: "nav.training.hint" as const, render: () => <TrainingWorkspace /> },
@@ -181,6 +180,8 @@ export default function TerminalPage() {
         return <GuideWorkspace />;
       case "feedback":
         return <FeedbackWorkspace displayName={session.displayName} />;
+      case "mail":
+        return <MailWorkspace onOpenOperations={() => openClan("operations")} onOpenFeedback={() => select("feedback")} />;
       case "support":
         return <SupportWorkspace />;
       case "cabinet":
@@ -211,7 +212,7 @@ export default function TerminalPage() {
       <div className="app">
         <Sidebar {...nav} />
         <div className="app-main">
-          <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} onAlerts={clanSections.some((s) => s.view === "stockpiles") ? () => openClan("stockpiles") : undefined} mail={isGuest ? undefined : { unread: unreadMail, onOpen: () => openClan("mail") }} />
+          <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} onAlerts={clanSections.some((s) => s.view === "stockpiles") ? () => openClan("stockpiles") : undefined} mail={isGuest ? undefined : { unread: unreadMail, onOpen: () => select("mail") }} />
           <main key={`${current}:${currentTool?.id ?? currentClan?.view ?? ""}`} className={currentTool?.id === "planning" ? "app-content is-full" : "app-content"}>
             {workspace}
           </main>

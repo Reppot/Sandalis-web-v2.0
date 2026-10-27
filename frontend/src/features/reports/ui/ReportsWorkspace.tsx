@@ -5,6 +5,7 @@ import { useContent } from "@/entities/content";
 import { codeSynonyms } from "@/entities/item";
 import { Scopes, type Can } from "@/entities/session";
 import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
+import { operationsApi, parseDate, today, type Operation } from "@/features/operations/model/operations";
 import { lineName, orderKindOf, REPORT_STATUS_LABEL, REPORT_TRANSITIONS, orderDraft, reportApi, type Report, type ReportStatus } from "@/entities/report";
 import {
   ApiError,
@@ -32,12 +33,14 @@ import {
   SearchField,
 } from "@/shared";
 
-type Filter = "active" | "all" | "done" | "cancelled";
+type Filter = "active" | "all" | "done" | "cancelled" | "operations";
 
 const FILTERS: { key: Filter; label: MessageKey; statuses?: ReportStatus[] }[] = [
   { key: "active", label: "reports.filter.active", statuses: ["open", "in_progress"] },
   { key: "done", label: "reports.filter.done", statuses: ["done"] },
   { key: "cancelled", label: "reports.filter.cancelled", statuses: ["cancelled"] },
+  // заказы, отмеченные на картах предстоящих операций (любой статус)
+  { key: "operations", label: "reports.filter.operations" },
   { key: "all", label: "common.all" },
 ];
 
@@ -98,10 +101,21 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
   const [expanded, setExpanded] = React.useState<string | null>(null);
   const [busyId, setBusyId] = React.useState<string | null>(null);
   const [armed, confirm] = useConfirm();
+  // заказ → предстоящие операции, где он отмечен на карте (фильтр «Операции»)
+  const [opsByReport, setOpsByReport] = React.useState<Map<string, Operation[]>>(new Map());
 
   const load = React.useCallback(async () => {
     setLoading(true);
     try {
+      if (filter === "operations") {
+        const [all, ops] = await Promise.all([reportApi.list(), operationsApi.list().then((r) => r.operations).catch(() => [] as Operation[])]);
+        const now = today();
+        const map = new Map<string, Operation[]>();
+        for (const op of ops) if (op.date >= now) for (const id of op.report_ids) map.set(id, [...(map.get(id) ?? []), op]);
+        setOpsByReport(map);
+        setReports(all.filter((r) => map.has(r.id)));
+        return;
+      }
       setReports(await reportApi.list(FILTERS.find((f) => f.key === filter)?.statuses));
     } catch (err) {
       notify({ title: t("reports.reports"), message: errorText(err, t("reports.loadFailed")), tone: "danger" });
@@ -248,6 +262,16 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                         {formatDateTime(report.created_at)} · {report.created_by_name ?? report.created_by}
                         {report.meta.stockpile ? ` · ${report.meta.region ?? ""} · ${report.meta.stockpile}` : ""}
                       </span>
+                      {filter === "operations" && opsByReport.get(report.id)?.length ? (
+                        <span className="mt-1.5 flex flex-wrap gap-1.5">
+                          {opsByReport.get(report.id)!.map((op) => (
+                            <span key={op.id} className="report-op-chip">
+                              <Icon name="flag" size={12} />
+                              {op.title} · {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseDate(op.date))}
+                            </span>
+                          ))}
+                        </span>
+                      ) : null}
                     </span>
                   </button>
                   <span data-guide="report-status" className={`badge shrink-0 ${STATUS_BADGE[report.status]}`}>

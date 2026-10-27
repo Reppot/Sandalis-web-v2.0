@@ -1,8 +1,8 @@
 import { apiClient } from "@/shared";
 import type { Snapshot } from "@/features/planning/model/plan";
 
-/** Снимок карты в операции — то же, что снимок «Планирования», без своих id/названия. */
-export type OperationSnapshot = Pick<Snapshot, "rect" | "war" | "phase" | "regions" | "shapes">;
+/** Снимок карты в операции — то же, что снимок «Планирования», без своего id. */
+export type OperationSnapshot = Pick<Snapshot, "name" | "rect" | "war" | "phase" | "regions" | "shapes">;
 
 export interface Participant {
   user_id: string;
@@ -18,7 +18,8 @@ export interface Operation {
   note: string;
   report_ids: string[];
   participants: Participant[];
-  has_snapshot: boolean;
+  /** Названия снимков карты (пусто — операция без карты). */
+  snapshot_names: string[];
   author_id: string;
   author_name: string;
   created_at: string;
@@ -26,7 +27,7 @@ export interface Operation {
 }
 
 export interface OperationFull extends Operation {
-  snapshot: OperationSnapshot | null;
+  snapshots: OperationSnapshot[];
 }
 
 export interface OperationList {
@@ -45,17 +46,23 @@ const BASE = "/api/v1/clan/operations";
 export const operationsApi = {
   list: () => apiClient.get<OperationList>(BASE),
   get: (id: string) => apiClient.get<OperationFull>(`${BASE}/${id}`),
-  create: (body: OperationInput & { snapshot?: OperationSnapshot | null }) => apiClient.post<Operation>(BASE, body),
+  create: (body: OperationInput & { snapshots?: OperationSnapshot[] }) => apiClient.post<Operation>(BASE, body),
+  addSnapshots: (id: string, snapshots: OperationSnapshot[]) => apiClient.post<Operation>(`${BASE}/${id}/snapshots`, { snapshots }),
   update: (id: string, body: OperationInput) => apiClient.put<Operation>(`${BASE}/${id}`, body),
   remove: (id: string) => apiClient.delete<void>(`${BASE}/${id}`),
   attend: (id: string, going: boolean) => apiClient.post<Operation>(`${BASE}/${id}/attend`, { going }),
 };
 
 /** Снимок «Планирования» → то, что хранится в операции. */
-export const toOperationSnapshot = (s: Snapshot): OperationSnapshot => ({ rect: s.rect, war: s.war, phase: s.phase, regions: s.regions, shapes: s.shapes });
+export const toOperationSnapshot = (s: Snapshot): OperationSnapshot => ({ name: s.name, rect: s.rect, war: s.war, phase: s.phase, regions: s.regions, shapes: s.shapes });
 
 /** Снимок операции → снимок для просмотрщика «Планирования». */
-export const toViewerSnapshot = (op: Operation, snap: OperationSnapshot): Snapshot => ({ id: op.id, name: op.title, created: op.created_at, ...snap });
+export const toViewerSnapshot = (op: Operation, snap: OperationSnapshot, i: number): Snapshot => ({
+  ...snap,
+  id: `${op.id}:${i}`,
+  name: snap.name || op.title,
+  created: op.created_at,
+});
 
 /* ───────────── даты (локальные, без часовых поясов) ───────────── */
 

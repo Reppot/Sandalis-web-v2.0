@@ -21,6 +21,7 @@
     "guest_no_clan": "O acesso de convidado não tem clã",
     "courses_too_many": "O clã já tem {n} cursos — exclua um para adicionar outro.",
     "operations_too_many": "O clã já tem {n} operações — exclua as antigas para adicionar uma nova.",
-    "operation_not_yours": "Só o autor ou um oficial com permissão de conteúdo do clã pode alterar ou excluir esta operação."
+    "operation_not_yours": "Só o autor ou um oficial com permissão de conteúdo do clã pode alterar ou excluir esta operação.",
+    "operation_snapshots_too_many": "A operação já tem {n} capturas — não é possível adicionar mais."
   }
 }

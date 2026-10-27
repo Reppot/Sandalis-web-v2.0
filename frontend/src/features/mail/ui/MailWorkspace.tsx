@@ -6,10 +6,10 @@ import { MentionText } from "@/features/mail/ui/Mentions";
 import { EmptyState, Icon, Loading, cn, errorText, formatDateTime, useI18n, useNotify } from "@/shared";
 
 /**
- * Почта на сайте: письма участнику клана. Сейчас — упоминания его ролей Discord («@роль»)
- * в заметках операций. Открыть операцию, отметить прочитанным, удалить.
+ * Почта на сайте (раздел «Сайт»): упоминания ролей Discord («@роль») в операциях клана
+ * и ответы разработчика на обратную связь. Открыть источник, отметить прочитанным, удалить.
  */
-export const MailWorkspace: React.FC<{ onOpenOperations: () => void }> = ({ onOpenOperations }) => {
+export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedback: () => void }> = ({ onOpenOperations, onOpenFeedback }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
   const [items, setItems] = React.useState<Mail[] | null>(null);
@@ -59,17 +59,26 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void }> = ({ onOp
           {items.map((m) => (
             <li key={m.id} className={cn("panel mail-item", !m.read && "is-unread")} onClick={() => void markRead(m)}>
               <span className="mail-icon"><Icon name="mail" size={16} /></span>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm text-fg">
-                  {t("mail.operationMention", { name: m.sender_name, roles: (m.payload.roles ?? []).map((r) => `@${r}`).join(", "), title: m.payload.title ?? "" })}
+              {m.kind === "feedback_reply" ? (
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-fg">{t("mail.feedbackReply", { name: m.sender_name })}</div>
+                  <div className="mt-0.5 text-xs text-fg-3">{formatDateTime(m.created_at)}</div>
+                  {m.payload.message ? <blockquote className="mail-quote">{m.payload.message}</blockquote> : null}
+                  <p className="mt-2 whitespace-pre-line text-sm text-fg">{m.payload.reply}</p>
                 </div>
-                <div className="mt-0.5 text-xs text-fg-3">{day(m.payload.date)} · {formatDateTime(m.created_at)}</div>
-                {m.payload.note ? <MentionText text={m.payload.note} className="mt-2 text-sm text-fg-2" /> : null}
-              </div>
+              ) : (
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm text-fg">
+                    {t("mail.operationMention", { name: m.sender_name, roles: (m.payload.roles ?? []).map((r) => `@${r}`).join(", "), title: m.payload.title ?? "" })}
+                  </div>
+                  <div className="mt-0.5 text-xs text-fg-3">{day(m.payload.date)} · {formatDateTime(m.created_at)}</div>
+                  {m.payload.note ? <MentionText text={m.payload.note} className="mt-2 text-sm text-fg-2" /> : null}
+                </div>
+              )}
               <span className="flex shrink-0 flex-col items-end gap-1.5">
-                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); onOpenOperations(); }}>
+                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : onOpenOperations)(); }}>
                   <Icon name="external" size={14} />
-                  {t("mail.openOperation")}
+                  {m.kind === "feedback_reply" ? t("mail.openFeedback") : t("mail.openOperation")}
                 </button>
                 <button type="button" className="icon-btn" onClick={(e) => { e.stopPropagation(); void remove(m); }} aria-label={t("common.delete")} title={t("common.delete")}><Icon name="trash" size={15} /></button>
               </span>

@@ -30,7 +30,9 @@ export const ToolsPanel: React.FC<{
   onOpenSnapshot: (s: Snapshot) => void;
   onRenameSnapshot: (id: string, name: string) => void;
   onDeleteSnapshot: (id: string) => void;
-}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot }) => {
+  /** «Перенести в операции» — все снимки сессии; нет — нет права создавать операции. */
+  onMoveSnapshots?: () => void;
+}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
   const set = <K extends keyof Defaults>(key: K, value: Defaults[K]) => onDefaults({ ...defaults, [key]: value });
@@ -74,7 +76,7 @@ export const ToolsPanel: React.FC<{
           <StructurePicker catalog={catalog} value={defaults.structure} onChange={(id) => set("structure", id)} />
         </>
       ) : null}
-      {tool === "frame" || snapshots.length ? <SnapshotList list={snapshots} onOpen={onOpenSnapshot} onRename={onRenameSnapshot} onDelete={onDeleteSnapshot} /> : null}
+      {tool === "frame" || snapshots.length ? <SnapshotList list={snapshots} onOpen={onOpenSnapshot} onRename={onRenameSnapshot} onDelete={onDeleteSnapshot} onMove={onMoveSnapshots} /> : null}
       {tool === "order" && !selected ? <OrderPicker orders={orders} member={member} value={defaults.order} onChange={(id) => set("order", id)} /> : null}
 
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-[var(--border)] pt-3 text-xs text-fg-3">
@@ -289,7 +291,7 @@ const OrderPicker: React.FC<{ orders: Report[] | null; member: boolean; value: s
 
 /* ───────────── снимки операций ───────────── */
 
-const SnapshotList: React.FC<{ list: Snapshot[]; onOpen: (s: Snapshot) => void; onRename: (id: string, name: string) => void; onDelete: (id: string) => void }> = ({ list, onOpen, onRename, onDelete }) => {
+const SnapshotList: React.FC<{ list: Snapshot[]; onOpen: (s: Snapshot) => void; onRename: (id: string, name: string) => void; onDelete: (id: string) => void; onMove?: () => void }> = ({ list, onOpen, onRename, onDelete, onMove }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
   return (
@@ -312,6 +314,12 @@ const SnapshotList: React.FC<{ list: Snapshot[]; onOpen: (s: Snapshot) => void; 
       ) : (
         <p className="text-sm text-fg-3">{t("planning.snapshotsEmpty")}</p>
       )}
+      {onMove && list.length ? (
+        <button type="button" className="btn btn-primary h-9 min-h-0 justify-center text-sm" onClick={onMove}>
+          <Icon name="send" size={15} />
+          {t("operations.moveAll", { n: list.length })}
+        </button>
+      ) : null}
     </section>
   );
 };

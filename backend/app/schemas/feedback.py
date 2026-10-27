@@ -26,6 +26,20 @@ class FeedbackCreate(BaseModel):
         return value
 
 
+class FeedbackReply(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    text: Annotated[str, Field(min_length=1, max_length=4000)]
+
+    @field_validator("text")
+    @classmethod
+    def _strip(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("empty reply")
+        return value
+
+
 class FeedbackStatusUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -44,6 +58,8 @@ class FeedbackRead(BaseModel):
     message: str
     page: str | None
     status: Status
+    reply: str | None = None
+    replied_at: datetime | None = None
     created_at: datetime
 
 

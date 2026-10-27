@@ -24,9 +24,11 @@ export const SnapshotViewer: React.FC<{
   orders: Report[];
   /** «Перенести в операции» — кнопка появляется, если передан обработчик. */
   onMove?: (s: Snapshot) => void;
+  /** Сколько снимков уйдёт в операции (все снимки сессии). */
+  moveCount?: number;
   /** Заголовок окна вместо названия снимка (например, дата операции). */
   subtitle?: React.ReactNode;
-}> = ({ snapshot, onClose, structures, orders, onMove, subtitle }) => {
+}> = ({ snapshot, onClose, structures, orders, onMove, moveCount, subtitle }) => {
   const t = useT();
   const notify = useNotify();
   const exportBox = React.useRef<HTMLDivElement>(null);
@@ -85,7 +87,7 @@ export const SnapshotViewer: React.FC<{
               {onMove ? (
                 <button type="button" className="btn h-9 min-h-0" onClick={() => onMove(snapshot)}>
                   <Icon name="send" size={15} />
-                  {t("operations.moveButton")}
+                  {moveCount && moveCount > 1 ? t("operations.moveAll", { n: moveCount }) : t("operations.moveButton")}
                 </button>
               ) : null}
               <button type="button" className="btn btn-primary h-9 min-h-0" disabled={busy} onClick={() => void download()}>

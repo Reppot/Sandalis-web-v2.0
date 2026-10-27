@@ -21,6 +21,7 @@
     "guest_no_clan": "Přístup hosta nemá klan",
     "courses_too_many": "Klan už má {n} kurzů — jeden smažte, abyste mohli přidat nový.",
     "operations_too_many": "Klan už má {n} operací — smažte staré, abyste mohli přidat novou.",
-    "operation_not_yours": "Operaci může měnit a mazat jen její autor nebo důstojník s právem na obsah klanu."
+    "operation_not_yours": "Operaci může měnit a mazat jen její autor nebo důstojník s právem na obsah klanu.",
+    "operation_snapshots_too_many": "Operace už má {n} snímků — další přidat nelze."
   }
 }

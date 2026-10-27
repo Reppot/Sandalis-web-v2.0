@@ -152,7 +152,7 @@ const Inbox: React.FC<{ items: Feedback[]; onChanged: () => void }> = ({ items, 
       {shown.length ? (
         <ul className="flex flex-col gap-2">
           {shown.map((f) => (
-            <FeedbackItem key={f.id} item={f} showAuthor>
+            <FeedbackItem key={f.id} item={f} showAuthor footer={<ReplyBox item={f} onSent={onChanged} />}>
               {f.status !== "read" ? <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={() => void act(() => feedbackApi.setStatus(f.id, "read"))}><Icon name="eye" size={14} />{t("feedback.markRead")}</button> : null}
               {f.status !== "done" ? <button type="button" className="btn btn-primary h-8 min-h-0 px-3 text-[0.8rem]" onClick={() => void act(() => feedbackApi.setStatus(f.id, "done"))}><Icon name="check" size={14} />{t("feedback.markDone")}</button> : null}
               <button type="button" className={cn(armed === f.id ? "btn btn-danger h-8 min-h-0 px-3 text-[0.8rem]" : "icon-btn h-8 w-8")} aria-label={t("common.delete")} onClick={() => confirm(f.id, () => void act(() => feedbackApi.remove(f.id)))}>
@@ -168,7 +168,49 @@ const Inbox: React.FC<{ items: Feedback[]; onChanged: () => void }> = ({ items, 
   );
 };
 
-const FeedbackItem: React.FC<React.PropsWithChildren<{ item: Feedback; showAuthor?: boolean }>> = ({ item, showAuthor, children }) => {
+/** Ответ автору (владелец сайта): сохраняется у сообщения и приходит автору в почту. */
+const ReplyBox: React.FC<{ item: Feedback; onSent: () => void }> = ({ item, onSent }) => {
+  const { t } = useI18n();
+  const notify = useNotify();
+  const [open, setOpen] = React.useState(false);
+  const [text, setText] = React.useState("");
+  const [busy, setBusy] = React.useState(false);
+  if (!open) {
+    return (
+      <button type="button" className="btn mt-2 h-8 min-h-0 self-start px-3 text-[0.8rem]" onClick={() => { setText(item.reply ?? ""); setOpen(true); }}>
+        <Icon name="send" size={14} />
+        {item.reply ? t("feedback.replyAgain") : t("feedback.reply")}
+      </button>
+    );
+  }
+  const send = async () => {
+    setBusy(true);
+    try {
+      await feedbackApi.reply(item.id, text.trim());
+      notify({ title: t("feedback.replySent"), message: item.user_name, tone: "success" });
+      setOpen(false);
+      onSent();
+    } catch (err) {
+      notify({ title: t("feedback.replyFailed"), message: errorText(err, t("feedback.replyFailed")), tone: "danger" });
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <div className="mt-2 flex flex-col gap-2">
+      <textarea className="field min-h-[5rem]" value={text} maxLength={4000} onChange={(e) => setText(e.target.value)} placeholder={t("feedback.replyPlaceholder")} />
+      <div className="flex justify-end gap-2">
+        <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={() => setOpen(false)}>{t("common.cancel")}</button>
+        <button type="button" className="btn btn-primary h-8 min-h-0 px-3 text-[0.8rem]" disabled={busy || !text.trim()} onClick={() => void send()}>
+          <Icon name="send" size={14} />
+          {t("feedback.replySend")}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const FeedbackItem: React.FC<React.PropsWithChildren<{ item: Feedback; showAuthor?: boolean; footer?: React.ReactNode }>> = ({ item, showAuthor, footer, children }) => {
   const { t } = useI18n();
   const cat = categoryOf(item.category);
   return (
@@ -187,7 +229,14 @@ const FeedbackItem: React.FC<React.PropsWithChildren<{ item: Feedback; showAutho
         {children ? <span className="ml-auto flex flex-wrap gap-1">{children}</span> : null}
       </div>
       <p className="feedback-text">{item.message}</p>
+      {item.reply ? (
+        <div className="feedback-reply">
+          <span className="feedback-reply-head"><Icon name="send" size={12} />{t("feedback.replyFrom")}{item.replied_at ? ` · ${formatDateTime(item.replied_at)}` : ""}</span>
+          <p className="whitespace-pre-line">{item.reply}</p>
+        </div>
+      ) : null}
       {showAuthor ? <span className="text-xs text-fg-3">ID {item.user_id}</span> : null}
+      {footer}
     </li>
   );
 };

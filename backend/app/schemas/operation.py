@@ -9,6 +9,19 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 # снимок карты небольшой (кусок гексов + объекты плана), но ограничим, чтобы не раздувать базу
 MAX_SNAPSHOT_BYTES = 400_000
+MAX_SNAPSHOTS = 20
+
+
+def check_snapshots(value: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if len(value) > MAX_SNAPSHOTS:
+        raise ValueError("too many snapshots")
+    for snap in value:
+        if not isinstance(snap.get("rect"), dict) or not isinstance(snap.get("shapes"), list) or not isinstance(snap.get("regions"), list):
+            raise ValueError("snapshot needs rect, regions and shapes")
+        if len(json.dumps(snap, ensure_ascii=False).encode()) > MAX_SNAPSHOT_BYTES:
+            raise ValueError("snapshot is too large")
+        snap["name"] = str(snap.get("name") or "")[:60]
+    return value
 
 
 class OperationWrite(BaseModel):
@@ -33,18 +46,24 @@ class OperationWrite(BaseModel):
 
 
 class OperationCreate(OperationWrite):
-    snapshot: dict[str, Any] | None = None
+    snapshots: list[dict[str, Any]] = Field(default_factory=list)
 
-    @field_validator("snapshot")
+    @field_validator("snapshots")
     @classmethod
-    def _snapshot(cls, value: dict[str, Any] | None) -> dict[str, Any] | None:
-        if value is None:
-            return None
-        if not isinstance(value.get("rect"), dict) or not isinstance(value.get("shapes"), list) or not isinstance(value.get("regions"), list):
-            raise ValueError("snapshot needs rect, regions and shapes")
-        if len(json.dumps(value, ensure_ascii=False).encode()) > MAX_SNAPSHOT_BYTES:
-            raise ValueError("snapshot is too large")
-        return value
+    def _snapshots(cls, value: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        return check_snapshots(value)
+
+
+class SnapshotsAdd(BaseModel):
+    """Добавить снимки «Планирования» в уже созданную операцию."""
+    model_config = ConfigDict(extra="forbid")
+
+    snapshots: Annotated[list[dict[str, Any]], Field(min_length=1)]
+
+    @field_validator("snapshots")
+    @classmethod
+    def _snapshots(cls, value: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        return check_snapshots(value)
 
 
 class Participant(BaseModel):
@@ -62,7 +81,7 @@ class OperationSummary(BaseModel):
     note: str
     report_ids: list[str]
     participants: list[Participant]
-    has_snapshot: bool
+    snapshot_names: list[str]          # названия снимков карты (пусто — операция без карты)
     author_id: str
     author_name: str
     created_at: datetime
@@ -70,7 +89,7 @@ class OperationSummary(BaseModel):
 
 
 class OperationRead(OperationSummary):
-    snapshot: dict[str, Any] | None
+    snapshots: list[dict[str, Any]]
 
 
 class OperationList(BaseModel):

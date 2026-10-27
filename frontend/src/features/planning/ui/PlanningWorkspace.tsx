@@ -37,7 +37,8 @@ export const PlanningWorkspace: React.FC = () => {
   const [snapshots, setSnapshots] = React.useState<Snapshot[]>([]);
   const [viewing, setViewing] = React.useState<Snapshot | null>(null);
   // «Перенести в операции»: снимок уходит в календарь операций клана
-  const [moving, setMoving] = React.useState<Snapshot | null>(null);
+  // переносятся все снимки сессии планирования — в одну операцию
+  const [moving, setMoving] = React.useState(false);
   React.useEffect(() => setSnapshots(loadSnapshots()), []);
   const changeSnapshots = React.useCallback((fn: (prev: Snapshot[]) => Snapshot[]) => {
     setSnapshots((prev) => {
@@ -49,6 +50,7 @@ export const PlanningWorkspace: React.FC = () => {
   // активные заказы клана — для меток на карте; у гостя заказов нет
   const { session, can } = useSession();
   const member = Boolean(session) && session?.subjectType !== "guest";
+  const canMove = member && can(Scopes.REPORTS_CREATE);
   const [orders, setOrders] = React.useState<Report[] | null>(null);
   React.useEffect(() => {
     if (!member) return setOrders([]);
@@ -261,6 +263,7 @@ export const PlanningWorkspace: React.FC = () => {
               onOpenSnapshot={setViewing}
               onRenameSnapshot={(id, name) => changeSnapshots((prev) => prev.map((x) => (x.id === id ? { ...x, name } : x)))}
               onDeleteSnapshot={(id) => changeSnapshots((prev) => prev.filter((x) => x.id !== id))}
+              onMoveSnapshots={canMove ? () => setMoving(true) : undefined}
             />
           </aside>
         ) : null}
@@ -270,9 +273,10 @@ export const PlanningWorkspace: React.FC = () => {
         onClose={() => setViewing(null)}
         structures={structures}
         orders={orders ?? []}
-        onMove={member && can(Scopes.REPORTS_CREATE) ? (s) => { setViewing(null); setMoving(s); } : undefined}
+        onMove={canMove ? () => { setViewing(null); setMoving(true); } : undefined}
+        moveCount={snapshots.length}
       />
-      <OperationDialog open={Boolean(moving)} onClose={() => setMoving(null)} snapshot={moving ? toOperationSnapshot(moving) : null} initialTitle={moving?.name ?? ""} />
+      <OperationDialog open={moving} onClose={() => setMoving(false)} snapshots={moving ? snapshots.map(toOperationSnapshot) : []} initialTitle={snapshots[0]?.name ?? ""} />
     </div>
   );
 };

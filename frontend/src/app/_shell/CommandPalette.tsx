@@ -59,7 +59,7 @@ export const CommandPalette: React.FC<NavProps & { open: boolean; onClose: () =>
     if (has("clan")) {
       for (const s of clanSections) out.push({ id: `clan-${s.id}`, group: clan?.name ?? t("nav.clan.label"), label: t(s.label), hint: t(`nav.${s.id === "stockpiles" ? "timers" : s.id}.hint` as MessageKey), icon: glyph(s.icon), run: () => onSelect("clan", s.id) });
     }
-    for (const key of ["guide", "feedback", "support", "cabinet"] as const) {
+    for (const key of ["guide", "feedback", "mail", "support", "cabinet"] as const) {
       const tab = tabs.find((x) => x.key === key);
       if (tab) out.push({ id: key, group: sections, label: t(tabKeys(key).label), hint: t(tabKeys(key).hint), icon: glyph(tab.icon), run: () => onSelect(key) });
     }

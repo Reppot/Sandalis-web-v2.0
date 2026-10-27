@@ -14,6 +14,9 @@ export interface Feedback {
   message: string;
   page: string | null;
   status: FeedbackStatus;
+  /** Ответ владельца сайта — он же приходит автору в почту. */
+  reply: string | null;
+  replied_at: string | null;
   created_at: string;
 }
 
@@ -30,4 +33,5 @@ export const feedbackApi = {
   send: (data: { category: FeedbackCategory; message: string; page?: string | null }) => apiClient.post<Feedback>("/api/v1/feedback", data),
   setStatus: (id: string, status: FeedbackStatus) => apiClient.patch<Feedback>(`/api/v1/feedback/${id}`, { status }),
   remove: (id: string) => apiClient.delete<void>(`/api/v1/feedback/${id}`),
+  reply: (id: string, text: string) => apiClient.post<Feedback>(`/api/v1/feedback/${id}/reply`, { text }),
 };

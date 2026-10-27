@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from sqlalchemy import Index, String, Text
+from datetime import datetime
+
+from sqlalchemy import DateTime, Index, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.models.base import Base, TimestampMixin, UUIDPkMixin
@@ -23,3 +25,6 @@ class Feedback(Base, UUIDPkMixin, TimestampMixin):
     message: Mapped[str] = mapped_column(Text, nullable=False)
     page: Mapped[str | None] = mapped_column(String(120), nullable=True)
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="new")
+    # ответ владельца сайта — виден автору в «Обратной связи» и приходит ему в почту
+    reply: Mapped[str | None] = mapped_column(Text, nullable=True)
+    replied_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
