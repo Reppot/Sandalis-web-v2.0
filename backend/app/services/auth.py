@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.errors import ConflictError, NotFoundError, PermissionDeniedError
 from app.core.i18n import Translator, normalize_locale
-from app.core.permissions import ClanRole, Scopes, scopes_for
+from app.core.permissions import ROLE_SCOPES, ClanRole, Scopes, scopes_for
 from app.core.security import decode_access_token, hash_clan_token, issue_access_token  # noqa: F401
 from app.core.tenancy import bypass_clan_filter
 from app.models.rbac import Clan, ClanApiToken, ClanMembership, User
@@ -29,9 +29,8 @@ DOMAIN = "auth"
 # Арендатор без данных для анонимного гостя (клан с таким id создать нельзя:
 # Discord-серверы — числа, а dev/seed-кланы так не называются).
 GUEST_CLAN_SENTINEL: Final[str] = "__guest__"
-GUEST_REVOKED_SCOPES: Final[tuple[str, ...]] = (
-    Scopes.REPORTS_READ, Scopes.STOCKPILES_READ, Scopes.TIMERS_READ,
-)
+# анонимному гостю — только каталог: всё прочее из пресета гостя клана снимаем
+GUEST_REVOKED_SCOPES: Final[tuple[str, ...]] = tuple(sorted(ROLE_SCOPES[ClanRole.GUEST] - {Scopes.CATALOG_READ}))
 
 ROLE_RANK: Final[dict[ClanRole, int]] = {
     ClanRole.GUEST: 0,

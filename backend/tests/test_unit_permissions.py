@@ -37,6 +37,26 @@ class TestRoleMatrix:
         assert has_scope(scopes, "timers:write")
         assert not has_scope(scopes, "orders:write")
 
+    def test_split_pyramid_and_legacy_scope(self):
+        # смотреть пирамиду может любой участник; добавлять / править / удалять — офицер
+        assert has_scope(scopes_for(ClanRole.GUEST), Scopes.PYRAMID_READ)
+        assert not has_scope(scopes_for(ClanRole.MEMBER), Scopes.PYRAMID_CREATE)
+        assert all(has_scope(scopes_for(ClanRole.OFFICER), s)
+                   for s in (Scopes.PYRAMID_CREATE, Scopes.PYRAMID_EDIT, Scopes.PYRAMID_DELETE))
+        # старое право stockpiles:pyramid в сохранённых грантах раскрывается в новые
+        legacy = scopes_for(ClanRole.MEMBER, extra=["stockpiles:pyramid"])
+        assert has_scope(legacy, Scopes.PYRAMID_CREATE) and has_scope(legacy, Scopes.PYRAMID_DELETE)
+        assert not has_scope(scopes_for(ClanRole.OFFICER, revoked=["stockpiles:pyramid"]), Scopes.PYRAMID_EDIT)
+
+    def test_new_scopes_keep_preset_behaviour(self):
+        member, guest, officer, admin = (scopes_for(r) for r in (ClanRole.MEMBER, ClanRole.GUEST, ClanRole.OFFICER, ClanRole.ADMIN))
+        assert all(has_scope(member, s) for s in (Scopes.REPORTS_ASSIGN, Scopes.REPORTS_COMMENT, Scopes.STOCKPILES_CODES,
+                                                    Scopes.OPERATIONS_CREATE, Scopes.CLAN_STATS))
+        assert has_scope(guest, Scopes.OPERATIONS_ATTEND) and not has_scope(guest, Scopes.STOCKPILES_CODES)
+        assert has_scope(officer, Scopes.CLAN_EVERYONE) and not has_scope(member, Scopes.CLAN_EVERYONE)
+        assert has_scope(admin, Scopes.CLAN_TRAINING) and has_scope(admin, Scopes.OPERATIONS_MANAGE)
+        assert not has_scope(officer, Scopes.OPERATIONS_MANAGE)
+
     def test_namespace_wildcard(self):
         assert has_scope(["orders:*"], "orders:read")
         assert not has_scope(["orders:*"], "timers:read")

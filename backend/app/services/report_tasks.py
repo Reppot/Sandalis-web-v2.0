@@ -118,13 +118,13 @@ async def events(session: AsyncSession, report_id: uuid.UUID, limit: int = 200) 
 
 # ───────────────────────── комментарии и упоминания ─────────────────────────
 
-async def comment_recipients(session: AsyncSession, text: str, author_id: str) -> tuple[list[str], list[str]]:
+async def comment_recipients(session: AsyncSession, text: str, author_id: str, *, everyone: bool = True) -> tuple[list[str], list[str]]:
     """Кому письмо по комментарию: носители упомянутых ролей (@роль, @everyone) и упомянутые
     участники (@Ник). Возвращает (user_id получателей, упомянутые названия)."""
     from app.services.mentions import clan_roles, mentioned
 
     low = (text or "").lower()
-    roles = mentioned(text, await clan_roles(session))
+    roles = [r for r in mentioned(text, await clan_roles(session)) if everyone or r["id"] != "everyone"]
     role_ids = {r["id"] for r in roles}
     people = await members(session)
     named = sorted((m for m in people if f"@{m['name'].lower()}" in low), key=lambda m: -len(m["name"]))

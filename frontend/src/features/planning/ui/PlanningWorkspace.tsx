@@ -50,7 +50,7 @@ export const PlanningWorkspace: React.FC = () => {
   // активные заказы клана — для меток на карте; у гостя заказов нет
   const { session, can } = useSession();
   const member = Boolean(session) && session?.subjectType !== "guest";
-  const canMove = member && can(Scopes.REPORTS_CREATE);
+  const canMove = member && can(Scopes.OPERATIONS_CREATE);
   const [orders, setOrders] = React.useState<Report[] | null>(null);
   React.useEffect(() => {
     if (!member) return setOrders([]);

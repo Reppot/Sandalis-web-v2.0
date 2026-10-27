@@ -111,7 +111,7 @@ async def list_assignees(service: ServiceDep) -> list[Assignee]:
     "/{report_id}/task",
     response_model=ReportRead,
     summary="Поля задачи: исполнители, приоритет, срок, теги, операция",
-    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_STATUS]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_ASSIGN]))],
 )
 async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: ServiceDep, principal: CurrentPrincipal,
                       background: BackgroundTasks) -> ReportRead:
@@ -164,8 +164,8 @@ async def update_task(report_id: uuid.UUID, payload: ReportTaskUpdate, service: 
 @router.post(
     "/{report_id}/take",
     response_model=ReportRead,
-    summary="Взять заказ себе / отказаться (любой, кто видит заказы)",
-    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
+    summary="Взять заказ себе / отказаться",
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_TAKE]))],
 )
 async def take_task(report_id: uuid.UUID, payload: ReportTake, service: ServiceDep, principal: CurrentPrincipal,
                     background: BackgroundTasks) -> ReportRead:
@@ -194,14 +194,15 @@ async def report_events(report_id: uuid.UUID, service: ServiceDep) -> list[Repor
     response_model=ReportEventRead,
     status_code=status.HTTP_201_CREATED,
     summary="Комментарий к заказу; @роль и @участник получают письмо в почту сайта",
-    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_COMMENT]))],
 )
 async def add_comment(report_id: uuid.UUID, payload: ReportComment, service: ServiceDep, principal: CurrentPrincipal) -> ReportEventRead:
     if principal.subject_type != "user":
         raise NotFoundError()
     report = await service.get_report(report_id)
     actor, actor_name = _who(principal)
-    recipients, mentions = await report_tasks.comment_recipients(service.session, payload.text, actor)
+    recipients, mentions = await report_tasks.comment_recipients(service.session, payload.text, actor,
+                                                                 everyone=principal.can(Scopes.CLAN_EVERYONE))
     report_tasks.log(service.session, report.id, "comment", actor, actor_name, text=payload.text, mentions=mentions or None)
     report_tasks.mail(service.session, clan_id=principal.clan_id, recipients=recipients, sender_id=actor, sender_name=actor_name,
                       kind="order_comment", payload={"report_id": str(report.id), "title": report.title, "text": payload.text[:500]})

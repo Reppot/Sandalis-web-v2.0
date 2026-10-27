@@ -1,5 +1,5 @@
 """Пирамида снабжения клана (/clan/pyramid): читают все, у кого есть склады; свои (кастомные)
-конфигурации — до MAX_CONFIGS на клан — создают и правят с правом stockpiles:pyramid. Сравнение со
+конфигурации — до MAX_CONFIGS на клан — создают, правят и удаляют с правами pyramid:create / edit / delete. Сравнение со
 складом делает клиент: содержимое склада у него уже есть."""
 from __future__ import annotations
 
@@ -21,8 +21,10 @@ from app.schemas.clan_settings import PyramidConfigRead, PyramidConfigWrite, Pyr
 from app.services.clan_settings import ClanSettingsService
 
 router = APIRouter(prefix="/clan", tags=["clan"])
-CanRead = [Depends(PermissionChecker([Scopes.STOCKPILES_READ]))]
-CanEdit = [Depends(PermissionChecker([Scopes.STOCKPILES_PYRAMID]))]
+CanRead = [Depends(PermissionChecker([Scopes.PYRAMID_READ]))]
+CanCreate = [Depends(PermissionChecker([Scopes.PYRAMID_CREATE]))]
+CanEdit = [Depends(PermissionChecker([Scopes.PYRAMID_EDIT]))]
+CanDelete = [Depends(PermissionChecker([Scopes.PYRAMID_DELETE]))]
 
 MAX_CONFIGS = 10
 NOT_IN_PYRAMID = frozenset({"vehicles", "structures"})
@@ -99,7 +101,7 @@ async def read_pyramid(service: SettingsServiceDep) -> PyramidRead:
 
 
 @router.post("/pyramid/configs", response_model=PyramidRead, status_code=status.HTTP_201_CREATED,
-             summary="Сохранить новую кастомную конфигурацию", dependencies=CanEdit)
+             summary="Сохранить новую кастомную конфигурацию", dependencies=CanCreate)
 async def create_config(payload: PyramidConfigWrite, service: SettingsServiceDep) -> PyramidRead:
     await _validate(service, payload)
     row = await service.get()
@@ -130,7 +132,7 @@ async def update_config(config_id: str, payload: PyramidConfigWrite, service: Se
 
 
 @router.delete("/pyramid/configs/{config_id}", response_model=PyramidRead,
-               summary="Удалить кастомную конфигурацию", dependencies=CanEdit)
+               summary="Удалить кастомную конфигурацию", dependencies=CanDelete)
 async def delete_config(config_id: str, service: SettingsServiceDep) -> PyramidRead:
     row = await service.get()
     configs = _configs(row)

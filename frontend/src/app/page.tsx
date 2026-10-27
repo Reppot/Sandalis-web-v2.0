@@ -99,7 +99,7 @@ export default function TerminalPage() {
       ...(can(Scopes.STOCKPILES_READ) || can(Scopes.REPORTS_CREATE)
         ? [{ id: "orders", icon: "orders" as const, label: "nav.orders.label" as const, clanData: true, render: () => <SupplyWorkspace can={can} onReportSubmitted={() => openClan("reports")} /> }]
         : []),
-      ...(can(Scopes.STOCKPILES_READ)
+      ...(can(Scopes.PYRAMID_READ)
         ? [{ id: "pyramid", icon: "pyramid" as const, label: "nav.pyramid.label" as const, clanData: true, isNew: true, render: () => <PyramidWorkspace can={can} onOpenConstructor={() => openTool("orders")} /> }]
         : []),
       { id: "planning", icon: "map" as const, label: "nav.planning.label" as const, isNew: true, render: () => <PlanningWorkspace /> },
@@ -119,10 +119,10 @@ export default function TerminalPage() {
             render: () => <StockpilesWorkspace can={can} />,
           }]
         : []),
-      ...(can(Scopes.REPORTS_READ)
+      ...(can(Scopes.CLAN_STATS)
         ? [{ view: "stats" as const, icon: "stats" as const, label: "nav.stats.label" as const, hint: "nav.stats.hint" as const, render: () => <StatsWorkspace /> }]
         : []),
-      ...(!isGuest
+      ...(!isGuest && can(Scopes.OPERATIONS_READ)
         ? [
             { view: "operations" as const, icon: "alarm" as const, label: "nav.operations.label" as const, hint: "nav.operations.hint" as const, render: () => <OperationsWorkspace onOpenPlanning={() => openTool("planning")} /> },
           ]

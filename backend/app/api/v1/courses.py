@@ -15,13 +15,13 @@ from app.models.course import ClanCourse
 from app.schemas.course import ClanCourseList, ClanCourseOrder, ClanCourseRead, ClanCourseWrite
 
 router = APIRouter(prefix="/clan/courses", tags=["clan"])
-CanEdit = [Depends(PermissionChecker([Scopes.CLAN_CONTENT]))]
+CanEdit = [Depends(PermissionChecker([Scopes.CLAN_TRAINING]))]
 
 MAX_COURSES = 50
 
 
 def _can_edit(principal: Principal) -> bool:
-    return principal.subject_type != "guest" and principal.can(Scopes.CLAN_CONTENT)
+    return principal.subject_type != "guest" and principal.can(Scopes.CLAN_TRAINING)
 
 
 async def _get(session: DbDep, course_id: uuid.UUID) -> ClanCourse:

@@ -110,7 +110,7 @@ async def order_action(session: AsyncSession, data: dict[str, Any], user_id: str
         return reply(t.t("report.discord.not_member", url=discord_bot.site_url(report.id)))
 
     if action == "take":
-        if not principal.can(Scopes.REPORTS_READ):
+        if not principal.can(Scopes.REPORTS_TAKE):
             return reply(t.t("report.discord.forbidden"))
         if report.status in discord_bot.CLOSED:
             return reply(t.t("report.discord.closed"))

@@ -366,7 +366,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
           {picked.size ? (
             <div className="hq-bulk">
               <b className="text-sm">{t("hq.bulk.selected", { n: picked.size })}</b>
-              {can(Scopes.REPORTS_STATUS) ? (
+              {can(Scopes.REPORTS_ASSIGN) ? (
                 <>
                   <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulk(async (r) => reportApi.setTask(r.id, { assignees: [...new Set([...r.assignees.map((a) => a.user_id), e.target.value])] }))}>
                     <option value="">{t("hq.bulk.assign")}</option>
@@ -381,11 +381,13 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                     <option value="none">{t("hq.noOperation")}</option>
                     {ops.filter((o) => o.date >= today()).map((o) => <option key={o.id} value={o.id}>{o.title} · {o.date}</option>)}
                   </select>
-                  <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulkStatus(e.target.value as ReportStatus)}>
-                    <option value="">{t("hq.bulk.status")}</option>
-                    {(["open", "in_progress", "done", "cancelled"] as ReportStatus[]).map((st) => <option key={st} value={st}>{t(REPORT_STATUS_LABEL[st])}</option>)}
-                  </select>
                 </>
+              ) : null}
+              {can(Scopes.REPORTS_STATUS) ? (
+                <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulkStatus(e.target.value as ReportStatus)}>
+                  <option value="">{t("hq.bulk.status")}</option>
+                  {(["open", "in_progress", "done", "cancelled"] as ReportStatus[]).map((st) => <option key={st} value={st}>{t(REPORT_STATUS_LABEL[st])}</option>)}
+                </select>
               ) : null}
               <button type="button" className="btn h-8 min-h-0 px-2.5 text-sm" onClick={() => setPicked(new Set())}><Icon name="close" size={13} />{t("hq.bulk.clear")}</button>
             </div>

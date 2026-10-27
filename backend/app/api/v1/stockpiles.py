@@ -47,11 +47,14 @@ ServiceDep = Annotated[StockpileService, Depends(get_stockpile_service)]
 
 
 def _read(
-    stockpile: Stockpile, agg: tuple[int, int] | None = None
+    stockpile: Stockpile, agg: tuple[int, int] | None = None, *, codes: bool = True
 ) -> StockpileRead:
     read = StockpileRead.model_validate(stockpile)
     if agg is not None:
         read = read.model_copy(update={"items_count": agg[0], "total_quantity": agg[1]})
+    if not codes:
+        # пароль склада — только с правом stockpiles:codes
+        read = read.model_copy(update={"access_code": None})
     return read
 
 
@@ -67,6 +70,7 @@ async def _detail(
     ]
     read = StockpileDetailRead.model_validate(stockpile)
     return read.model_copy(update={
+        **({} if service.principal.can(Scopes.STOCKPILES_CODES) else {"access_code": None}),
         "items": item_reads,
         "items_count": len(item_reads),
         "total_quantity": sum(i.quantity for i in item_reads),
@@ -87,7 +91,7 @@ async def list_stockpiles(
 ) -> Page[StockpileRead]:
     rows, total, aggs = await service.list_stockpiles(limit=limit, offset=offset)
     return Page[StockpileRead](
-        items=[_read(r, aggs.get(r.id)) for r in rows],
+        items=[_read(r, aggs.get(r.id), codes=service.principal.can(Scopes.STOCKPILES_CODES)) for r in rows],
         total=total, limit=limit, offset=offset,
     )
 
@@ -101,7 +105,7 @@ async def list_stockpiles(
 )
 async def create_stockpile(payload: StockpileCreate, service: ServiceDep) -> StockpileCreated:
     stockpile, message = await service.create_stockpile(payload)
-    return StockpileCreated(stockpile=_read(stockpile), message=message)
+    return StockpileCreated(stockpile=_read(stockpile, codes=service.principal.can(Scopes.STOCKPILES_CODES)), message=message)
 
 
 @router.get(
@@ -124,7 +128,7 @@ async def update_stockpile(
     stockpile_id: uuid.UUID, payload: StockpileUpdate, service: ServiceDep
 ) -> StockpileCreated:
     stockpile, message = await service.update_stockpile(stockpile_id, payload)
-    return StockpileCreated(stockpile=_read(stockpile), message=message)
+    return StockpileCreated(stockpile=_read(stockpile, codes=service.principal.can(Scopes.STOCKPILES_CODES)), message=message)
 
 
 @router.delete(

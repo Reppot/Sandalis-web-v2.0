@@ -14,6 +14,7 @@ from sqlalchemy import func, select, update
 
 from app.api.deps import CurrentPrincipal, DbDep
 from app.core.errors import NotFoundError
+from app.core.permissions import Scopes
 from app.models.mail import ClanMail
 from app.services.mentions import clan_roles
 
@@ -49,7 +50,8 @@ def _member(principal: Any) -> bool:
 async def mention_roles(principal: CurrentPrincipal, session: DbDep) -> list[MentionRole]:
     if not _member(principal):
         return []
-    return [MentionRole(**r) for r in await clan_roles(session)]
+    everyone = principal.can(Scopes.CLAN_EVERYONE)
+    return [MentionRole(**r) for r in await clan_roles(session) if everyone or r["id"] != "everyone"]
 
 
 @router.get("/mail", response_model=MailList, summary="Моя почта на сайте")

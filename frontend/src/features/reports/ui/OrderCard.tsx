@@ -34,7 +34,7 @@ export const OrderCard: React.FC<{
 }> = ({ report, ops, members, can, userId, busy, onClose, onChange, onStatus, onReload, document, actions }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
-  const canEdit = can(Scopes.REPORTS_STATUS);
+  const canEdit = can(Scopes.REPORTS_ASSIGN);
   const canStatus = can(Scopes.REPORTS_STATUS);
   const [tag, setTag] = React.useState("");
   const mine = report.assignees.some((a) => a.user_id === userId);
@@ -116,10 +116,12 @@ export const OrderCard: React.FC<{
                   {members.filter((m) => !ids.includes(m.user_id)).map((m) => <option key={m.user_id} value={m.user_id}>{m.name}</option>)}
                 </select>
               ) : null}
-              <button type="button" className={cn("btn h-8 min-h-0 px-3 text-sm", !mine && "btn-primary")} onClick={() => void take()}>
-                <Icon name={mine ? "close" : "check"} size={14} />
-                {mine ? t("hq.drop") : t("hq.take")}
-              </button>
+              {can(Scopes.REPORTS_TAKE) ? (
+                <button type="button" className={cn("btn h-8 min-h-0 px-3 text-sm", !mine && "btn-primary")} onClick={() => void take()}>
+                  <Icon name={mine ? "close" : "check"} size={14} />
+                  {mine ? t("hq.drop") : t("hq.take")}
+                </button>
+              ) : null}
             </div>
           </div>
 
@@ -187,7 +189,7 @@ export const OrderCard: React.FC<{
         <ReportProgressPanel report={report} can={can} userId={userId} onStatusMaybeChanged={onReload} />
 
         {/* лента событий и обсуждение — обновляется после каждого изменения заказа */}
-        <OrderActivity reportId={report.id} members={members} canComment={Boolean(userId)} refreshKey={`${report.updated_at}|${report.delivered_total}|${report.assignees.length}|${report.status}`} />
+        <OrderActivity reportId={report.id} members={members} canComment={Boolean(userId) && can(Scopes.REPORTS_COMMENT)} refreshKey={`${report.updated_at}|${report.delivered_total}|${report.assignees.length}|${report.status}`} />
 
         <div className="hq-drawer-actions">{actions}</div>
         <details className="hq-doc">

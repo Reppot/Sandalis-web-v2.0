@@ -19,7 +19,9 @@ from app.schemas.operation import MAX_SNAPSHOTS, Attend, OperationCreate, Operat
 from app.services.mentions import clan_roles, deliver, mentioned
 
 router = APIRouter(prefix="/clan/operations", tags=["clan"])
-CanCreate = [Depends(PermissionChecker([Scopes.REPORTS_CREATE]))]
+CanRead = [Depends(PermissionChecker([Scopes.OPERATIONS_READ]))]
+CanCreate = [Depends(PermissionChecker([Scopes.OPERATIONS_CREATE]))]
+CanAttend = [Depends(PermissionChecker([Scopes.OPERATIONS_ATTEND]))]
 
 MAX_OPERATIONS = 500
 
@@ -29,7 +31,7 @@ def _member(principal: Principal) -> bool:
 
 
 def _can_edit(principal: Principal, row: ClanOperation) -> bool:
-    return _member(principal) and (row.author_id == principal.user_id or principal.can(Scopes.CLAN_CONTENT))
+    return _member(principal) and (row.author_id == principal.user_id or principal.can(Scopes.OPERATIONS_MANAGE))
 
 
 def _report_ids(snapshots: list[dict[str, Any]]) -> list[str]:
@@ -44,7 +46,9 @@ def _report_ids(snapshots: list[dict[str, Any]]) -> list[str]:
 
 
 async def _notify(session: DbDep, principal: Principal, row: ClanOperation, roles: list[dict[str, Any]]) -> None:
-    """Письма в почту сайта тем, чьи роли упомянуты в заметке («@роль»)."""
+    """Письма в почту сайта тем, чьи роли упомянуты в заметке («@роль»); @everyone — только с правом."""
+    if not principal.can(Scopes.CLAN_EVERYONE):
+        roles = [r for r in roles if r["id"] != "everyone"]
     await deliver(
         session, clan_id=principal.clan_id, roles=roles, sender_id=principal.user_id,
         sender_name=principal.display_name or principal.user_id, kind="operation_mention",
@@ -67,7 +71,7 @@ async def _get(session: DbDep, operation_id: uuid.UUID) -> ClanOperation:
     return row
 
 
-@router.get("", response_model=OperationList, summary="Операции клана (календарь)")
+@router.get("", response_model=OperationList, summary="Операции клана (календарь)", dependencies=CanRead)
 async def list_operations(
     principal: CurrentPrincipal,
     session: DbDep,
@@ -82,10 +86,10 @@ async def list_operations(
     if end:
         query = query.where(ClanOperation.date <= end)
     rows = (await session.execute(query)).scalars().all()
-    return OperationList(can_create=principal.can(Scopes.REPORTS_CREATE), operations=[_summary(r, principal) for r in rows])
+    return OperationList(can_create=principal.can(Scopes.OPERATIONS_CREATE), operations=[_summary(r, principal) for r in rows])
 
 
-@router.get("/{operation_id}", response_model=OperationRead, summary="Операция со снимком карты")
+@router.get("/{operation_id}", response_model=OperationRead, summary="Операция со снимком карты", dependencies=CanRead)
 async def read_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep) -> OperationRead:
     if not _member(principal):
         raise NotFoundError()
@@ -156,7 +160,8 @@ async def delete_operation(operation_id: uuid.UUID, principal: CurrentPrincipal,
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.post("/{operation_id}/attend", response_model=OperationSummary, summary="Отметиться участником операции")
+@router.post("/{operation_id}/attend", response_model=OperationSummary, summary="Отметиться участником операции",
+             dependencies=CanAttend)
 async def attend_operation(operation_id: uuid.UUID, payload: Attend, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
     if not _member(principal):
         raise NotFoundError()

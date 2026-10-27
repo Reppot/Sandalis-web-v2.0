@@ -75,7 +75,9 @@ const presetLabel = (key: string) => `pyramid.preset.${key}` as MessageKey;
 export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => void }> = ({ can, onOpenConstructor }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
-  const canEdit = can(Scopes.STOCKPILES_PYRAMID);
+  const canCreate = can(Scopes.PYRAMID_CREATE);
+  const canEdit = can(Scopes.PYRAMID_EDIT);
+  const canDelete = can(Scopes.PYRAMID_DELETE);
   const [pyramid, setPyramid] = React.useState<Pyramid | null>(null);
   const [config, setConfig] = React.useState<string>(DEFAULT_CONFIG);
   const [draft, setDraft] = React.useState<Draft | null>(null);
@@ -267,7 +269,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
                 {c.name}
               </button>
             ))}
-            {canEdit ? (
+            {canCreate ? (
               <button type="button" data-guide="pyramid-custom" className={cn("pyramid-config is-custom", draft && !draft.id && "is-active")} disabled={full || Boolean(draft)} onClick={startCustom}
                 title={full ? t("pyramid.limitReached", { n: pyramid.max_configs }) : t("pyramid.customEditHint")}>
                 <Icon name="plus" size={14} className="mr-1 inline" />
@@ -275,21 +277,25 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
               </button>
             ) : null}
           </div>
-          {custom && !draft && canEdit ? (
+          {custom && !draft && (canEdit || canDelete) ? (
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs text-fg-3">{custom.name}{custom.updated_by ? ` · ${t("pyramid.ownBy", { name: custom.updated_by })}` : ""}</span>
-              <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={startEditOwn}>
-                <Icon name="edit" size={14} />
-                {t("pyramid.editConfig")}
-              </button>
-              <button type="button" className={cn("btn btn-ghost h-8 min-h-0 px-3 text-[0.8rem] text-danger", armed === `del-${custom.id}` && "btn-danger")} disabled={busy}
-                onClick={() => confirm(`del-${custom.id}`, () => void removeConfig(custom.id))}>
-                <Icon name="trash" size={14} />
-                {armed === `del-${custom.id}` ? t("common.confirmQ") : t("pyramid.deleteConfig")}
-              </button>
+              {canEdit ? (
+                <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={startEditOwn}>
+                  <Icon name="edit" size={14} />
+                  {t("pyramid.editConfig")}
+                </button>
+              ) : null}
+              {canDelete ? (
+                <button type="button" className={cn("btn btn-ghost h-8 min-h-0 px-3 text-[0.8rem] text-danger", armed === `del-${custom.id}` && "btn-danger")} disabled={busy}
+                  onClick={() => confirm(`del-${custom.id}`, () => void removeConfig(custom.id))}>
+                  <Icon name="trash" size={14} />
+                  {armed === `del-${custom.id}` ? t("common.confirmQ") : t("pyramid.deleteConfig")}
+                </button>
+              ) : null}
             </div>
           ) : null}
-          {full && canEdit && !draft ? <span className="text-xs text-fg-3">{t("pyramid.limitReached", { n: pyramid.max_configs })}</span> : null}
+          {full && canCreate && !draft ? <span className="text-xs text-fg-3">{t("pyramid.limitReached", { n: pyramid.max_configs })}</span> : null}
         </div>
 
         <div className="pyramid-controls">

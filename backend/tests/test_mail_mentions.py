@@ -43,8 +43,11 @@ def test_role_mentions_reach_mailboxes(db):
         await seed()
         boss, tank1, log1 = auth("boss", ClanRole.OWNER, "Boss"), auth("tank1", ClanRole.MEMBER, "Tank One"), auth("log1", ClanRole.MEMBER, "Logi")
         async with client() as c:
-            roles = (await c.get("/api/v1/clan/mentions", headers=tank1)).json()
+            # @everyone в подсказке — только с правом clan:everyone (у командира есть, у участника нет)
+            roles = (await c.get("/api/v1/clan/mentions", headers=boss)).json()
             assert [r["name"] for r in roles] == ["everyone", "Танкисты", "Логисты"]
+            roles = (await c.get("/api/v1/clan/mentions", headers=tank1)).json()
+            assert [r["name"] for r in roles] == ["Танкисты", "Логисты"]
 
             op = (await c.post("/api/v1/clan/operations", headers=boss,
                                json={"title": "Прорыв", "date": "2026-11-02", "note": "@танкисты сбор в 19:00"})).json()

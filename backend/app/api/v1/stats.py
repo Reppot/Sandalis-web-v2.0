@@ -74,7 +74,7 @@ def _later(a: datetime | None, b: datetime | None) -> datetime | None:
     "/stats",
     response_model=ClanStats,
     summary="Статистика участников клана за период",
-    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
+    dependencies=[Depends(PermissionChecker([Scopes.CLAN_STATS]))],
 )
 async def clan_stats(
     principal: CurrentPrincipal,
