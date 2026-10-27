@@ -16,6 +16,7 @@ from app.core.permissions import Scopes
 from app.core.security import Principal
 from app.models.operation import ClanOperation
 from app.schemas.operation import Attend, OperationCreate, OperationList, OperationRead, OperationSummary, OperationWrite
+from app.services.mentions import clan_roles, deliver, mentioned
 
 router = APIRouter(prefix="/clan/operations", tags=["clan"])
 CanCreate = [Depends(PermissionChecker([Scopes.REPORTS_CREATE]))]
@@ -39,6 +40,15 @@ def _report_ids(snapshot: dict[str, Any] | None) -> list[str]:
         if isinstance(rid, str) and rid not in ids:
             ids.append(rid[:64])
     return ids
+
+
+async def _notify(session: DbDep, principal: Principal, row: ClanOperation, roles: list[dict[str, Any]]) -> None:
+    """Письма в почту сайта тем, чьи роли упомянуты в заметке («@роль»)."""
+    await deliver(
+        session, roles=roles, sender_id=principal.user_id,
+        sender_name=principal.display_name or principal.user_id, kind="operation_mention",
+        payload={"operation_id": str(row.id), "title": row.title, "date": row.date.isoformat(), "note": row.note[:500]},
+    )
 
 
 def _summary(row: ClanOperation, principal: Principal) -> OperationSummary:
@@ -97,6 +107,8 @@ async def create_operation(payload: OperationCreate, principal: CurrentPrincipal
         author_id=principal.user_id, author_name=(principal.display_name or principal.user_id)[:120],
     )
     session.add(row)
+    await session.flush()
+    await _notify(session, principal, row, mentioned(row.note, await clan_roles(session)))
     await session.commit()
     await session.refresh(row)
     return _summary(row, principal)
@@ -107,7 +119,11 @@ async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, pri
     row = await _get(session, operation_id)
     if not _can_edit(principal, row):
         raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
+    roles = await clan_roles(session)
+    before = {r["id"] for r in mentioned(row.note, roles)}
     row.title, row.date, row.note = payload.title, payload.date, payload.note
+    # письма — только ролям, которых в заметке раньше не было
+    await _notify(session, principal, row, [r for r in mentioned(row.note, roles) if r["id"] not in before])
     await session.commit()
     await session.refresh(row)
     return _summary(row, principal)

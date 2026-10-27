@@ -66,6 +66,8 @@ class ClanMembership(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     extra_scopes: Mapped[list[str]] = mapped_column(JSONB, default=list, nullable=False)
     revoked_scopes: Mapped[list[str]] = mapped_column(JSONB, default=list, nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
+    # id ролей Discord участника на момент последнего входа — для упоминаний @роль и почты
+    discord_role_ids: Mapped[list[str]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
 
     user: Mapped[User] = relationship(lazy="joined")
 

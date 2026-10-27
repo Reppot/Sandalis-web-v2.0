@@ -7,6 +7,7 @@ import { OperationsCalendar } from "@/features/operations/ui/OperationsCalendar"
 import { useStructureCatalog, type Snapshot } from "@/features/planning/model/plan";
 import { SnapshotViewer } from "@/features/planning/ui/SnapshotViewer";
 import { useSession } from "@/features/cabinet";
+import { MentionText } from "@/features/mail/ui/Mentions";
 import { REPORT_STATUS_LABEL, reportApi, type Report } from "@/entities/report";
 import { EmptyState, Icon, Loading, cn, errorText, useConfirm, useI18n, useNotify } from "@/shared";
 
@@ -160,7 +161,7 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
                       </span>
                     ) : null}
                   </header>
-                  {op.note ? <p className="whitespace-pre-line text-sm text-fg-2">{op.note}</p> : null}
+                  {op.note ? <MentionText text={op.note} className="text-sm text-fg-2" /> : null}
 
                   {op.has_snapshot ? (
                     <button type="button" className="ops-map-btn" onClick={() => void openMap(op)}>

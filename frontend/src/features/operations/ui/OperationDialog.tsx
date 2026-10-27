@@ -3,6 +3,7 @@
 import * as React from "react";
 import { byDate, operationsApi, parseDate, today, type Operation, type OperationSnapshot } from "@/features/operations/model/operations";
 import { OperationsCalendar } from "@/features/operations/ui/OperationsCalendar";
+import { MentionTextarea } from "@/features/mail/ui/Mentions";
 import { Icon, Modal, errorText, useI18n, useNotify } from "@/shared";
 
 /**
@@ -87,10 +88,10 @@ export const OperationDialog: React.FC<{
             <span className="field-label">{t("operations.title")}</span>
             <input className="field" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} placeholder={t("operations.titlePlaceholder")} />
           </label>
-          <label className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1">
             <span className="field-label">{t("operations.note")}</span>
-            <textarea className="field min-h-[5rem]" value={note} maxLength={1000} onChange={(e) => setNote(e.target.value)} placeholder={t("operations.notePlaceholder")} />
-          </label>
+            <MentionTextarea className="min-h-[5rem] w-full" value={note} maxLength={1000} onChange={setNote} placeholder={t("operations.notePlaceholder")} />
+          </div>
           <p className="text-xs text-fg-3">{snapshot ? t("operations.withSnapshot", { n: snapshot.shapes.length }) : t("operations.withoutSnapshot")}</p>
         </div>
       </div>

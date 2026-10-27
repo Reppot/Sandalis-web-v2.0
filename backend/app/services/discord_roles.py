@@ -309,10 +309,15 @@ async def sync_existing_members(
                     )
                 )
             ).scalar_one_or_none()
-            if membership is None or membership.role == ClanRole.OWNER:
+            if membership is None:
                 continue
             member_roles = await fetch_member_roles(access_token, clan.discord_guild_id)
             if member_roles is None:                 # ушёл с сервера или сбой — не трогаем
+                continue
+            # роли запоминаем у всех (и у командира) — по ним доходят упоминания @роль
+            membership.discord_role_ids = list(member_roles)
+            if membership.role == ClanRole.OWNER:
+                await session.flush()
                 continue
             access = access_for(member_roles, cs)
             before = (membership.role, list(membership.extra_scopes), list(membership.revoked_scopes))

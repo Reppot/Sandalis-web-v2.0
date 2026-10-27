@@ -199,3 +199,9 @@
 .palette-foot { display: flex; gap: 1.25rem; border-top: 1px solid var(--border); padding: 0.55rem 1rem; color: var(--fg-3); font-size: var(--text-xs); }
 @media (max-width: 640px) { .palette-layer { padding-top: 1rem; } .palette-foot { display: none; } }
 }
+/* почта на сайте: конверт со счётчиком непрочитанного */
+.topbar-mail { position: relative; display: inline-grid; width: 1.85rem; height: 1.85rem; flex-shrink: 0; place-items: center; border: 1px solid var(--border); border-radius: var(--radius-full); background: var(--surface); color: var(--fg-3); transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease); }
+.topbar-mail:hover { border-color: var(--accent-line); color: var(--fg); }
+.topbar-mail-badge { position: absolute; top: -0.35rem; right: -0.45rem; min-width: 1.05rem; border-radius: 999px; background: var(--accent); padding: 0 0.25rem; color: #111; font-size: 0.62rem; font-weight: 700; line-height: 1.05rem; text-align: center; }
+.topbar-search + .topbar-mail + .topbar-status, .topbar-mail + .topbar-status { margin-left: 0; }
+@media (max-width: 767px) { .topbar-mail { margin-left: auto; } }

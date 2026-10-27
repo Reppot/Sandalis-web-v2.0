@@ -50,7 +50,7 @@ export type ToolModuleKey = (typeof TOOL_MODULES)[number];
 export const isToolModule = (value: string | null): value is ToolModuleKey => TOOL_MODULES.includes(value as ToolModuleKey);
 
 /** Подразделы «Вашего клана»; старые ссылки ?tab=reports / timers / training / management ведут сюда. */
-export const CLAN_VIEWS = ["reports", "stockpiles", "stats", "operations", "training", "management"] as const;
+export const CLAN_VIEWS = ["reports", "stockpiles", "stats", "operations", "mail", "training", "management"] as const;
 export type ClanView = (typeof CLAN_VIEWS)[number];
 const LEGACY_CLAN: Record<string, ClanView> = { reports: "reports", timers: "stockpiles", training: "training", management: "management" };
 export const legacyClanView = (value: string | null): ClanView | null => (value ? LEGACY_CLAN[value] ?? null : null);

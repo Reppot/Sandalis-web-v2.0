@@ -221,6 +221,7 @@ class AuthService:
         )
         with bypass_clan_filter():
             membership.is_active = True
+            membership.discord_role_ids = list(join.get("discord_roles") or [])
             apply_access(membership, access)
             await self.session.flush()
         return membership, clan_name

@@ -8,6 +8,7 @@ import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
 import { CodeBaseWorkspace } from "@/features/codes";
 import { PlanningWorkspace } from "@/features/planning";
 import { OperationsWorkspace } from "@/features/operations";
+import { MailWorkspace, useUnreadMail } from "@/features/mail";
 import { ReportsWorkspace } from "@/features/reports";
 import { StatsWorkspace } from "@/features/stats";
 import { PyramidWorkspace, SupplyWorkspace } from "@/features/supply";
@@ -83,6 +84,8 @@ export default function TerminalPage() {
 
   const isOwner = session?.role === "owner" && session.subjectType === "user";
   const isGuest = session?.subjectType === "guest";
+  // почта на сайте: счётчик непрочитанного в шапке (гостю почты нет)
+  const unreadMail = useUnreadMail(Boolean(session) && !isGuest);
   const tabs = React.useMemo(() => visibleTabs(can, isGuest), [can, isGuest]);
 
   React.useEffect(() => {
@@ -120,14 +123,17 @@ export default function TerminalPage() {
         ? [{ view: "stats" as const, icon: "stats" as const, label: "nav.stats.label" as const, hint: "nav.stats.hint" as const, render: () => <StatsWorkspace /> }]
         : []),
       ...(!isGuest
-        ? [{ view: "operations" as const, icon: "alarm" as const, label: "nav.operations.label" as const, hint: "nav.operations.hint" as const, render: () => <OperationsWorkspace onOpenPlanning={() => openTool("planning")} /> }]
+        ? [
+            { view: "operations" as const, icon: "alarm" as const, label: "nav.operations.label" as const, hint: "nav.operations.hint" as const, render: () => <OperationsWorkspace onOpenPlanning={() => openTool("planning")} /> },
+            { view: "mail" as const, icon: "mail" as const, label: "nav.mail.label" as const, hint: "nav.mail.hint" as const, render: () => <MailWorkspace onOpenOperations={() => openClan("operations")} /> },
+          ]
         : []),
       { view: "training" as const, icon: "training" as const, label: "nav.training.label" as const, hint: "nav.training.hint" as const, render: () => <TrainingWorkspace /> },
       ...(isOwner
         ? [{ view: "management" as const, icon: "map" as const, label: "nav.management.label" as const, hint: "nav.management.hint" as const, render: () => <ManagementWorkspace /> }]
         : []),
     ],
-    [can, isOwner, isGuest, openTool],
+    [can, isOwner, isGuest, openTool, openClan],
   );
 
   if (loading) {
@@ -205,7 +211,7 @@ export default function TerminalPage() {
       <div className="app">
         <Sidebar {...nav} />
         <div className="app-main">
-          <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} onAlerts={clanSections.some((s) => s.view === "stockpiles") ? () => openClan("stockpiles") : undefined} />
+          <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} onAlerts={clanSections.some((s) => s.view === "stockpiles") ? () => openClan("stockpiles") : undefined} mail={isGuest ? undefined : { unread: unreadMail, onOpen: () => openClan("mail") }} />
           <main key={`${current}:${currentTool?.id ?? currentClan?.view ?? ""}`} className={currentTool?.id === "planning" ? "app-content is-full" : "app-content"}>
             {workspace}
           </main>

@@ -832,3 +832,15 @@
 .ops-chip.status-in_progress { border-color: rgb(56 189 248 / 0.5); }
 .ops-chip.status-done { border-color: rgb(163 230 53 / 0.5); }
 .ops-poll { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin-top: auto; border-top: 1px solid var(--border); padding-top: 0.75rem; }
+
+/* ─────────────────────────── УПОМИНАНИЯ И ПОЧТА ─────────────────────────── */
+.mention-box { position: relative; }
+.mention-menu { position: absolute; z-index: 30; left: 0; right: 0; top: calc(100% - 1.4rem); max-height: 15rem; overflow-y: auto; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); padding: 0.25rem; box-shadow: var(--shadow-3); }
+.mention-option { display: flex; width: 100%; align-items: center; gap: 0.5rem; border-radius: 8px; padding: 0.4rem 0.55rem; color: var(--fg-2); font-size: var(--text-sm); text-align: left; }
+.mention-option.is-active { background: var(--surface-hover); color: var(--fg); }
+.mention-dot { width: 0.6rem; height: 0.6rem; flex-shrink: 0; border-radius: 50%; }
+.mention-chip { border: 1px solid; border-radius: 6px; background: rgb(255 255 255 / 0.04); padding: 0 0.3rem; font-weight: 600; }
+.mail-item { display: flex; cursor: default; align-items: flex-start; gap: 0.75rem; padding: 0.85rem 1rem; }
+.mail-item.is-unread { border-color: var(--accent-line); background: rgb(163 230 53 / 0.05); }
+.mail-icon { display: grid; width: 2rem; height: 2rem; flex-shrink: 0; place-items: center; border-radius: 10px; background: var(--surface-2); color: var(--fg-3); }
+.mail-item.is-unread .mail-icon { background: rgb(163 230 53 / 0.15); color: var(--accent); }

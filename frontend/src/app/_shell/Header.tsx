@@ -9,7 +9,15 @@ import { Icon, cn, formatClock, useT } from "@/shared";
  * Верхняя панель: где вы находитесь (раздел › модуль), сводка складов бегущей строкой
  * и состояние связи. На телефоне — компактная шапка с гербом.
  */
-export const Header: React.FC<{ section: string; page?: string | null; onHome: () => void; onSearch: () => void; onAlerts?: () => void }> = ({ section, page, onHome, onSearch, onAlerts }) => {
+export const Header: React.FC<{
+  section: string;
+  page?: string | null;
+  onHome: () => void;
+  onSearch: () => void;
+  onAlerts?: () => void;
+  /** Почта на сайте: непрочитанные и переход в раздел. */
+  mail?: { unread: number; onOpen: () => void };
+}> = ({ section, page, onHome, onSearch, onAlerts, mail }) => {
   const t = useT();
   const { connection, lastSync } = useTerminal();
   const { media } = useContent();
@@ -60,6 +68,13 @@ export const Header: React.FC<{ section: string; page?: string | null; onHome: (
           <span className="topbar-search-label">{t("palette.short")}</span>
           <kbd className="palette-kbd">Ctrl K</kbd>
         </button>
+
+        {mail ? (
+          <button type="button" className="topbar-mail" onClick={mail.onOpen} aria-label={t("mail.title")} title={mail.unread ? t("mail.unreadCount", { n: mail.unread }) : t("mail.title")}>
+            <Icon name="mail" size={16} />
+            {mail.unread ? <span className="topbar-mail-badge">{mail.unread > 99 ? "99+" : mail.unread}</span> : null}
+          </button>
+        ) : null}
 
         <div data-guide="shell-status" className="topbar-status">
           <span className={cn("status-pill", `is-${link.tone}`)} title={t("header.link")}>

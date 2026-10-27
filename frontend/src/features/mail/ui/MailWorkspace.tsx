@@ -1,0 +1,82 @@
+"use client";
+
+import * as React from "react";
+import { mailApi, mailChanged, type Mail } from "@/features/mail/model";
+import { MentionText } from "@/features/mail/ui/Mentions";
+import { EmptyState, Icon, Loading, cn, errorText, formatDateTime, useI18n, useNotify } from "@/shared";
+
+/**
+ * Почта на сайте: письма участнику клана. Сейчас — упоминания его ролей Discord («@роль»)
+ * в заметках операций. Открыть операцию, отметить прочитанным, удалить.
+ */
+export const MailWorkspace: React.FC<{ onOpenOperations: () => void }> = ({ onOpenOperations }) => {
+  const { t, locale } = useI18n();
+  const notify = useNotify();
+  const [items, setItems] = React.useState<Mail[] | null>(null);
+
+  const load = React.useCallback(() => {
+    mailApi.list().then((r) => setItems(r.items)).catch((err) => {
+      setItems([]);
+      notify({ title: t("mail.loadFailed"), message: errorText(err, t("mail.loadFailed")), tone: "danger" });
+    });
+  }, [notify, t]);
+  React.useEffect(() => load(), [load]);
+
+  const markRead = async (m: Mail) => {
+    if (m.read) return;
+    setItems((prev) => (prev ?? []).map((x) => (x.id === m.id ? { ...x, read: true } : x)));
+    await mailApi.read(m.id).catch(() => undefined);
+    mailChanged();
+  };
+  const readAll = async () => {
+    await mailApi.readAll().catch(() => undefined);
+    setItems((prev) => (prev ?? []).map((x) => ({ ...x, read: true })));
+    mailChanged();
+  };
+  const remove = async (m: Mail) => {
+    setItems((prev) => (prev ?? []).filter((x) => x.id !== m.id));
+    await mailApi.remove(m.id).catch(() => undefined);
+    mailChanged();
+  };
+  const day = (iso?: string) => (iso ? new Intl.DateTimeFormat(locale, { weekday: "short", day: "numeric", month: "long" }).format(new Date(`${iso}T00:00:00`)) : "");
+
+  if (!items) return <div className="panel"><Loading label={t("mail.loading")} /></div>;
+  const unread = items.filter((m) => !m.read).length;
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <span className="text-sm text-fg-3">{unread ? t("mail.unreadCount", { n: unread }) : t("mail.allRead")}</span>
+        <button type="button" className="btn h-9 min-h-0" disabled={!unread} onClick={() => void readAll()}>
+          <Icon name="check" size={15} />
+          {t("mail.readAll")}
+        </button>
+      </div>
+      {items.length === 0 ? (
+        <div className="panel"><EmptyState icon="mail" title={t("mail.empty")} hint={t("mail.emptyHint")} /></div>
+      ) : (
+        <ul className="flex flex-col gap-2">
+          {items.map((m) => (
+            <li key={m.id} className={cn("panel mail-item", !m.read && "is-unread")} onClick={() => void markRead(m)}>
+              <span className="mail-icon"><Icon name="mail" size={16} /></span>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm text-fg">
+                  {t("mail.operationMention", { name: m.sender_name, roles: (m.payload.roles ?? []).map((r) => `@${r}`).join(", "), title: m.payload.title ?? "" })}
+                </div>
+                <div className="mt-0.5 text-xs text-fg-3">{day(m.payload.date)} · {formatDateTime(m.created_at)}</div>
+                {m.payload.note ? <MentionText text={m.payload.note} className="mt-2 text-sm text-fg-2" /> : null}
+              </div>
+              <span className="flex shrink-0 flex-col items-end gap-1.5">
+                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); onOpenOperations(); }}>
+                  <Icon name="external" size={14} />
+                  {t("mail.openOperation")}
+                </button>
+                <button type="button" className="icon-btn" onClick={(e) => { e.stopPropagation(); void remove(m); }} aria-label={t("common.delete")} title={t("common.delete")}><Icon name="trash" size={15} /></button>
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
