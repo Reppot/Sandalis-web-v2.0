@@ -206,10 +206,7 @@ COMMANDS: list[dict[str, Any]] = [{
     "name": "my-tasks",
     "type": 1,
     "description": "Your active clan orders",
-    "name_localizations": {
-        "ru": "мои-задачи", "uk": "мої-завдання", "de": "meine-aufgaben", "pl": "moje-zadania", "fr": "mes-tâches",
-        "es-ES": "mis-tareas", "pt-BR": "minhas-tarefas", "cs": "moje-úkoly", "zh-CN": "我的任务",
-    },
+    # имя команды — только английское (одинаково у всех); описание — на языке клиента
     "description_localizations": {
         "ru": "Ваши активные заказы клана", "uk": "Ваші активні замовлення клану", "de": "Deine aktiven Clan-Aufträge",
         "pl": "Twoje aktywne zamówienia klanu", "fr": "Vos commandes actives du clan", "es-ES": "Tus pedidos activos del clan",
