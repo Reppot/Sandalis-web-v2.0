@@ -51,7 +51,7 @@ export const CabinetWorkspace: React.FC = () => {
 
       {section === "language" ? <LanguagePanel persist={session.subjectType === "user"} /> : null}
       {section === "appearance" ? <AppearancePanel /> : null}
-      {section === "developer" && session.siteAdmin ? <DeveloperPanel currentClan={session.clanId} /> : null}
+      {section === "developer" && session.siteAdmin ? <DeveloperPanel currentClan={session.clanId} developer={session.developer || session.role === "owner"} /> : null}
       {section === "profile" ? (
         <>
           <section className="cabinet-hero panel">

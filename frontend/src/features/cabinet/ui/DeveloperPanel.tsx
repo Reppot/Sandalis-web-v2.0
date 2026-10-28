@@ -8,7 +8,7 @@ import { EmptyState, Icon, assetUrl, cn, errorText, useNotify, useT } from "@/sh
  * Разработчик сайта (Discord ID в FEEDBACK_ADMIN_IDS): все кланы и вход в любой с правами
  * командира — «Управление», роли и доступ, интеграции. Вход пишется в журнал сервера.
  */
-export const DeveloperPanel: React.FC<{ currentClan: string }> = ({ currentClan }) => {
+export const DeveloperPanel: React.FC<{ currentClan: string; developer: boolean }> = ({ currentClan, developer }) => {
   const t = useT();
   const notify = useNotify();
   const [clans, setClans] = React.useState<DeveloperClan[] | null>(null);
@@ -47,7 +47,8 @@ export const DeveloperPanel: React.FC<{ currentClan: string }> = ({ currentClan 
         <ul className="mt-4 flex flex-col gap-2">
           {shown.map((c) => {
             const icon = assetUrl(c.icon_url);
-            const here = c.id === currentClan;
+            // свой клан тоже можно открыть с правами командира, если вы в нём обычным участником
+            const here = c.id === currentClan && developer;
             return (
               <li key={c.id} className={cn("dev-clan", here && "is-current")}>
                 {icon ? (
