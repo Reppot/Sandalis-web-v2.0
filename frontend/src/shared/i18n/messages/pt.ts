@@ -861,6 +861,7 @@ export const pt: Record<MessageKey, string> = {
   "reports.statusFailed": "O status não mudou — tente de novo",
   "reports.discordFailed": "O Discord não aceitou a mensagem",
   "reports.deleted": "Pedido “{title}” excluído.",
+  "reports.deleteHint": "Excluir o pedido de vez — com registro, histórico e publicação no Discord",
   "reports.deleteFailed": "O pedido não foi excluído",
   "reports.kicker": "Pedidos do clã",
   "reports.title": "Pedidos atuais do clã",

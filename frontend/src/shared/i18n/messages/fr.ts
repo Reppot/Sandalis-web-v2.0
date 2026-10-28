@@ -861,6 +861,7 @@ export const fr: Record<MessageKey, string> = {
   "reports.statusFailed": "Le statut n'a pas changé — réessayez",
   "reports.discordFailed": "Discord n'a pas accepté le message",
   "reports.deleted": "Commande « {title} » supprimée.",
+  "reports.deleteHint": "Supprimer la commande définitivement — avec journal, fil et publication Discord",
   "reports.deleteFailed": "La commande n'a pas été supprimée",
   "reports.kicker": "Commandes du clan",
   "reports.title": "Commandes en cours du clan",

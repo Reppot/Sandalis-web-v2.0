@@ -108,8 +108,9 @@ export const REPORT_STATUS_LABEL: Record<ReportStatus, MessageKey> = {
 
 /** Зеркало REPORT_TRANSITIONS бэкенда (app/models/report.py). */
 export const REPORT_TRANSITIONS: Record<ReportStatus, ReportStatus[]> = {
-  open: ["in_progress", "done", "cancelled"],
-  in_progress: ["open", "done", "cancelled"],
+  // отменять больше нельзя — ненужный заказ удаляют
+  open: ["in_progress", "done"],
+  in_progress: ["open", "done"],
   done: ["in_progress"],
   cancelled: ["open"],
 };

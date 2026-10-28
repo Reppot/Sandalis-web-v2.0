@@ -59,7 +59,8 @@
       "my_tasks_title": "Moje úkoly — {clan}",
       "my_tasks_empty": "Nemáte žádné aktivní objednávky. Převezměte jednu tlačítkem „Beru si“ pod příspěvkem.",
       "unknown": "Tato akce je zastaralá — otevřete objednávku na webu."
-    }
+    },
+    "delete_not_yours": "Smazat lze jen vlastní objednávku (nebo s právem mazání)."
   },
   "settings": {
     "saved": "Nastavení klanu uloženo.",

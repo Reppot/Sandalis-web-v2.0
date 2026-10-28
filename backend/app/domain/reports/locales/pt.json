@@ -59,7 +59,8 @@
       "my_tasks_title": "Minhas tarefas — {clan}",
       "my_tasks_empty": "Você não tem pedidos ativos. Pegue um com “Eu pego” abaixo da publicação.",
       "unknown": "Esta ação está desatualizada — abra o pedido no site."
-    }
+    },
+    "delete_not_yours": "Só é possível excluir o próprio pedido (ou com o direito de exclusão)."
   },
   "settings": {
     "saved": "Configurações do clã salvas.",

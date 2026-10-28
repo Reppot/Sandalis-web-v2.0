@@ -267,3 +267,10 @@ async def send_to_channel(webhook_url: str, payload: dict[str, Any]) -> bool:
     except httpx.HTTPError:
         return False
     return r.status_code < 400
+
+
+async def delete_post(channel_id: str, message_id: str) -> None:
+    """Пост удалённого заказа убрать из канала (фоном; сбой Discord — только в лог)."""
+    r = await _bot("DELETE", f"/channels/{channel_id}/messages/{message_id}")
+    if r is not None and r.status_code >= 400 and r.status_code != 404:
+        log.warning("discord post %s/%s not deleted: %s", channel_id, message_id, r.status_code)

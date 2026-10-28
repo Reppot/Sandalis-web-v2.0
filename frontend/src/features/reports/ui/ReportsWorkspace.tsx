@@ -57,7 +57,7 @@ interface SavedView {
 }
 const VIEW_LABEL: Record<View, MessageKey> = {
   active: "hq.view.active", mine: "hq.view.mine", overdue: "hq.view.overdue", unassigned: "hq.view.unassigned",
-  operations: "hq.view.operations", done: "hq.view.done", cancelled: "hq.view.cancelled", all: "common.all",
+  operations: "hq.view.operations", done: "hq.view.done", all: "common.all",
 };
 
 interface ReportsWorkspaceProps {
@@ -252,6 +252,24 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
     notify({ title: t("hq.bulk.done"), message: t("hq.bulk.applied", { n: ok, total: pickedReports.length }), tone: ok === pickedReports.length ? "success" : "warning" });
     setPicked(new Set());
   };
+  // удалить: с правом reports:delete — любой заказ, автор — свой
+  const canDelete = (r: Report) => can(Scopes.REPORTS_DELETE) || r.created_by === userId;
+  const bulkDelete = async () => {
+    const targets = pickedReports.filter(canDelete);
+    let ok = 0;
+    for (const r of targets) {
+      try {
+        await reportApi.delete(r.id);
+        ok += 1;
+      } catch {
+        // заказ уже удалён или нет прав — продолжаем
+      }
+    }
+    const gone = new Set(targets.map((r) => r.id));
+    setReports((prev) => prev.filter((r) => !gone.has(r.id)));
+    setPicked(new Set());
+    notify({ title: t("hq.bulk.done"), message: t("hq.bulk.applied", { n: ok, total: pickedReports.length }), tone: ok === pickedReports.length ? "success" : "warning" });
+  };
   const bulkStatus = (status: ReportStatus) =>
     bulk(async (r) => (REPORT_TRANSITIONS[r.status].includes(status) ? (await reportApi.setStatus(r.id, status)).report : null));
 
@@ -358,7 +376,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
           />
         </div>
       ) : layout === "board" ? (
-        <BoardView reports={visible} ops={ops} canStatus={can(Scopes.REPORTS_STATUS)} showClosed={view === "all" || view === "cancelled"} onOpen={(r) => setOpenId(r.id)} onMove={(r, st) => void setStatus(r, st)} />
+        <BoardView reports={visible} ops={ops} canStatus={can(Scopes.REPORTS_STATUS)} showClosed={view === "all" && reports.some((r) => r.status === "cancelled")} onOpen={(r) => setOpenId(r.id)} onMove={(r, st) => void setStatus(r, st)} />
       ) : layout === "calendar" ? (
         <CalendarView reports={visible} ops={ops} onOpen={(r) => setOpenId(r.id)} />
       ) : (
@@ -386,8 +404,15 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
               {can(Scopes.REPORTS_STATUS) ? (
                 <select className="field h-8 w-auto py-0 text-sm" value="" onChange={(e) => e.target.value && void bulkStatus(e.target.value as ReportStatus)}>
                   <option value="">{t("hq.bulk.status")}</option>
-                  {(["open", "in_progress", "done", "cancelled"] as ReportStatus[]).map((st) => <option key={st} value={st}>{t(REPORT_STATUS_LABEL[st])}</option>)}
+                  {(["open", "in_progress", "done"] as ReportStatus[]).map((st) => <option key={st} value={st}>{t(REPORT_STATUS_LABEL[st])}</option>)}
                 </select>
+              ) : null}
+              {pickedReports.some(canDelete) ? (
+                <button type="button" className={`btn h-8 min-h-0 px-2.5 text-sm ${armed === "bulk-delete" ? "btn-danger" : ""}`} disabled={busyId !== null}
+                  onClick={() => confirm("bulk-delete", () => void bulkDelete())}>
+                  <Icon name="trash" size={13} />
+                  {armed === "bulk-delete" ? t("common.confirmQ") : t("common.delete")}
+                </button>
               ) : null}
               <button type="button" className="btn h-8 min-h-0 px-2.5 text-sm" onClick={() => setPicked(new Set())}><Icon name="close" size={13} />{t("hq.bulk.clear")}</button>
             </div>
@@ -449,12 +474,10 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
                   {busy ? <span className="pulse">{t("common.sending")}</span> : <><Icon name="send" size={15} />{t("reports.toDiscord")}</>}
                 </button>
               )}
-              {can(Scopes.REPORTS_STATUS) && current.status !== "cancelled" && current.status !== "done" ? (
-                <button className="btn" disabled={busy} onClick={() => void setStatus(current, "cancelled")}>{t("reports.action.cancelled")}</button>
-              ) : null}
-              {can(Scopes.REPORTS_DELETE) && (
-                <button className={`btn ml-auto ${armed === current.id ? "btn-danger" : "btn-ghost btn-icon text-fg-3"}`} disabled={busy} title={t("common.delete")} aria-label={t("common.delete")} onClick={() => confirm(current.id, () => void remove(current))}>
-                  {armed === current.id ? t("common.confirmQ") : <Icon name="trash" size={16} />}
+              {canDelete(current) && (
+                <button className={`btn ml-auto ${armed === current.id ? "btn-danger" : ""}`} disabled={busy} title={t("reports.deleteHint")} onClick={() => confirm(current.id, () => void remove(current))}>
+                  <Icon name="trash" size={15} />
+                  {armed === current.id ? t("common.confirmQ") : t("common.delete")}
                 </button>
               )}
             </>

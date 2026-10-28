@@ -861,6 +861,7 @@ export const es: Record<MessageKey, string> = {
   "reports.statusFailed": "El estado no cambió; inténtalo de nuevo",
   "reports.discordFailed": "Discord no aceptó el mensaje",
   "reports.deleted": "Pedido «{title}» eliminado.",
+  "reports.deleteHint": "Eliminar el pedido para siempre, con registro, historial y publicación de Discord",
   "reports.deleteFailed": "El pedido no se eliminó",
   "reports.kicker": "Pedidos del clan",
   "reports.title": "Pedidos actuales del clan",

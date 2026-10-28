@@ -860,6 +860,7 @@ export const cs: Record<MessageKey, string> = {
   "reports.statusFailed": "Stav se nezměnil — zkuste to znovu",
   "reports.discordFailed": "Discord zprávu nepřijal",
   "reports.deleted": "Objednávka „{title}“ smazána.",
+  "reports.deleteHint": "Smazat objednávku natrvalo — s deníkem, historií a příspěvkem v Discordu",
   "reports.deleteFailed": "Objednávka nebyla smazána",
   "reports.kicker": "Objednávky klanu",
   "reports.title": "Aktuální objednávky klanu",

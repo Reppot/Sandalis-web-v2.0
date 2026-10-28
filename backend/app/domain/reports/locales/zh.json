@@ -59,7 +59,8 @@
       "my_tasks_title": "我的任务 — {clan}",
       "my_tasks_empty": "你没有进行中的订单。在订单帖子下按“我来接”即可接单。",
       "unknown": "此操作已过期——请在网站上打开订单。"
-    }
+    },
+    "delete_not_yours": "只能删除自己的订单（或拥有删除订单权限）。"
   },
   "settings": {
     "saved": "军团设置已保存。",

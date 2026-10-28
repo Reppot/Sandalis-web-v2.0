@@ -860,6 +860,7 @@ export const en: Record<MessageKey, string> = {
   "reports.statusFailed": "Status didn't change — please try again",
   "reports.discordFailed": "Discord didn't accept the message",
   "reports.deleted": "Order “{title}” deleted.",
+  "reports.deleteHint": "Delete the order for good — with its log, feed and Discord post",
   "reports.deleteFailed": "Order wasn't deleted",
   "reports.kicker": "Clan orders",
   "reports.title": "Current clan orders",

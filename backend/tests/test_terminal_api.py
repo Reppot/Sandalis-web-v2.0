@@ -251,7 +251,8 @@ def test_reports_lifecycle_and_isolation(db):
                                    json={"lines": [{"name": "Бинты", "quantity": 4}]})
             assert edited.json()["report"]["total_quantity"] == 4
 
-            assert (await c.delete(f"{API}/reports/{report['id']}", headers=member)).status_code == 403
+            # чужой заказ участник не удалит (свой — может, см. test_report_delete)
+            assert (await c.delete(f"{API}/reports/{report['id']}", headers=bearer(user_id="user-2", role=ClanRole.MEMBER))).status_code == 403
             assert (await c.delete(f"{API}/reports/{report['id']}",
                                    headers=bearer(role=ClanRole.OFFICER))).status_code == 204
 

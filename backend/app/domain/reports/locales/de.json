@@ -59,7 +59,8 @@
       "my_tasks_title": "Meine Aufgaben – {clan}",
       "my_tasks_empty": "Du hast keine aktiven Aufträge. Übernimm einen mit „Übernehmen“ unter seinem Beitrag.",
       "unknown": "Diese Aktion ist veraltet – öffne den Auftrag auf der Website."
-    }
+    },
+    "delete_not_yours": "Nur eigene Aufträge löschbar (oder mit dem Recht zum Löschen)."
   },
   "settings": {
     "saved": "Clan-Einstellungen gespeichert.",

@@ -59,7 +59,8 @@
       "my_tasks_title": "Mis tareas — {clan}",
       "my_tasks_empty": "No tienes pedidos activos. Toma uno con «Me lo quedo» bajo su publicación.",
       "unknown": "Esta acción está obsoleta: abre el pedido en el sitio."
-    }
+    },
+    "delete_not_yours": "Solo puedes eliminar tu propio pedido (o con el derecho de eliminar)."
   },
   "settings": {
     "saved": "Ajustes del clan guardados.",

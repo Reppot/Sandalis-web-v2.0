@@ -861,6 +861,7 @@ export const zh: Record<MessageKey, string> = {
   "reports.statusFailed": "状态未改变——请重试",
   "reports.discordFailed": "Discord 未接受该消息",
   "reports.deleted": "订单“{title}”已删除。",
+  "reports.deleteHint": "永久删除订单——连同日志、动态和 Discord 帖子",
   "reports.deleteFailed": "订单未删除",
   "reports.kicker": "军团订单",
   "reports.title": "当前军团订单",

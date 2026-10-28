@@ -3,7 +3,7 @@ import { parseDate, today, type Operation } from "@/features/operations/model/op
 
 /* «Штаб» заказов: представления, совмещаемые фильтры, сводка и готовность операций. */
 
-export const VIEWS = ["active", "mine", "overdue", "unassigned", "operations", "done", "cancelled", "all"] as const;
+export const VIEWS = ["active", "mine", "overdue", "unassigned", "operations", "done", "all"] as const;
 export type View = (typeof VIEWS)[number];
 
 export interface Facets {
@@ -53,7 +53,6 @@ export function applyView(list: Report[], view: View, userId: string, ops: Opera
     case "unassigned": return list.filter((r) => isActive(r) && r.assignees.length === 0);
     case "operations": return list.filter((r) => operationsOf(r, ops).some((o) => o.date >= now));
     case "done": return list.filter((r) => r.status === "done");
-    case "cancelled": return list.filter((r) => r.status === "cancelled");
     default: return list;
   }
 }

@@ -59,7 +59,8 @@
       "my_tasks_title": "My tasks — {clan}",
       "my_tasks_empty": "You have no active orders. Take one with the “Take it” button under its post.",
       "unknown": "This action is outdated — open the order on the site."
-    }
+    },
+    "delete_not_yours": "You can only delete your own order (or with the delete-orders right)."
   },
   "settings": {
     "saved": "Clan settings saved.",

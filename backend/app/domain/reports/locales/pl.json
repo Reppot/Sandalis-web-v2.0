@@ -59,7 +59,8 @@
       "my_tasks_title": "Moje zadania — {clan}",
       "my_tasks_empty": "Nie masz aktywnych zamówień. Weź jedno przyciskiem „Biorę” pod jego postem.",
       "unknown": "Ta akcja jest nieaktualna — otwórz zamówienie na stronie."
-    }
+    },
+    "delete_not_yours": "Usunąć można tylko własne zamówienie (lub z prawem usuwania)."
   },
   "settings": {
     "saved": "Zapisano ustawienia klanu.",

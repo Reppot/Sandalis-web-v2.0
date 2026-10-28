@@ -6,7 +6,8 @@ from typing import Sequence
 
 from sqlalchemy import or_, select
 
-from app.core.errors import ConflictError
+from app.core.errors import ConflictError, PermissionDeniedError
+from app.core.permissions import Scopes
 from app.domain.catalog.resolve import CatalogIndex
 from app.models.catalog import CatalogItem
 from app.models.clan_settings import ClanSettings
@@ -177,10 +178,22 @@ class ReportService(ClanScopedService):
         return report, self.t.t("report.status_changed", domain=DOMAIN,
                                 title=report.title, status=status_label)
 
-    async def delete_report(self, report_id: uuid.UUID) -> None:
+    async def delete_report(self, report_id: uuid.UUID) -> tuple[str | None, str | None]:
+        """Удалить заказ из БД (строки, журнал, лента — каскадом) и убрать его из операций.
+        Возвращает (канал, сообщение) поста бота в Discord — его удаляют после ответа."""
+        from app.models.operation import ClanOperation
+
         report = await self.get_report(report_id)
+        if report.created_by != self.principal.user_id and not self.principal.can(Scopes.REPORTS_DELETE):
+            raise PermissionDeniedError(message_key="report.delete_not_yours", domain=DOMAIN, params={})
+        post = (report.discord_channel_id, report.discord_message_id)
+        rid = str(report.id)
+        for op in (await self.session.execute(self._scoped(select(ClanOperation), ClanOperation))).scalars():
+            if rid in (op.report_ids or []):
+                op.report_ids = [x for x in op.report_ids if x != rid]
         await self.session.delete(report)
         await self.session.commit()
+        return post
 
     # ---------------- discord ---------------------------------------------- #
     async def send_to_discord(

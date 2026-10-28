@@ -861,6 +861,7 @@ export const de: Record<MessageKey, string> = {
   "reports.statusFailed": "Der Status hat sich nicht geändert – bitte versuch es noch einmal",
   "reports.discordFailed": "Discord hat die Nachricht nicht angenommen",
   "reports.deleted": "Bestellung „{title}“ gelöscht.",
+  "reports.deleteHint": "Auftrag endgültig löschen – mit Protokoll, Verlauf und Discord-Beitrag",
   "reports.deleteFailed": "Bestellung wurde nicht gelöscht",
   "reports.kicker": "Clan-Bestellungen",
   "reports.title": "Aktuelle Clan-Bestellungen",

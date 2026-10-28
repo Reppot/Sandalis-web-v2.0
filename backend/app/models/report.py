@@ -31,12 +31,9 @@ class ReportStatus(StrEnum):
 
 
 REPORT_TRANSITIONS: dict[ReportStatus, frozenset[ReportStatus]] = {
-    ReportStatus.OPEN: frozenset(
-        {ReportStatus.IN_PROGRESS, ReportStatus.DONE, ReportStatus.CANCELLED}
-    ),
-    ReportStatus.IN_PROGRESS: frozenset(
-        {ReportStatus.OPEN, ReportStatus.DONE, ReportStatus.CANCELLED}
-    ),
+    # отменять заказы больше нельзя — ненужный заказ удаляют; старые отменённые можно вернуть
+    ReportStatus.OPEN: frozenset({ReportStatus.IN_PROGRESS, ReportStatus.DONE}),
+    ReportStatus.IN_PROGRESS: frozenset({ReportStatus.OPEN, ReportStatus.DONE}),
     ReportStatus.DONE: frozenset({ReportStatus.IN_PROGRESS}),
     ReportStatus.CANCELLED: frozenset({ReportStatus.OPEN}),
 }

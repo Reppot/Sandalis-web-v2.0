@@ -861,6 +861,7 @@ export const uk: Record<MessageKey, string> = {
   "reports.statusFailed": "Статус не змінився — спробуйте ще раз",
   "reports.discordFailed": "Discord не прийняв повідомлення",
   "reports.deleted": "Замовлення «{title}» видалено.",
+  "reports.deleteHint": "Видалити замовлення назавжди — разом із журналом, стрічкою й постом у Discord",
   "reports.deleteFailed": "Замовлення не видалено",
   "reports.kicker": "Замовлення клану",
   "reports.title": "Поточні замовлення клану",

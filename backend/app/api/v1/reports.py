@@ -289,10 +289,13 @@ async def change_status(
 @router.delete(
     "/{report_id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_DELETE]))],  # officer+
+    summary="Удалить заказ из БД: с правом reports:delete — любой, автор — свой",
+    dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
-async def delete_report(report_id: uuid.UUID, service: ServiceDep) -> Response:
-    await service.delete_report(report_id)
+async def delete_report(report_id: uuid.UUID, service: ServiceDep, background: BackgroundTasks) -> Response:
+    channel, message = await service.delete_report(report_id)
+    if channel and message:
+        background.add_task(discord_bot.delete_post, channel, message)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 

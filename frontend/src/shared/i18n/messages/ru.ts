@@ -859,6 +859,7 @@ export const ru = {
   "reports.statusFailed": "Статус не изменился — попробуйте ещё раз",
   "reports.discordFailed": "Discord не принял сообщение",
   "reports.deleted": "Заказ «{title}» удалён.",
+  "reports.deleteHint": "Удалить заказ насовсем — вместе с журналом и лентой, и его пост в Discord",
   "reports.deleteFailed": "Заказ не удалён",
   "reports.kicker": "Заказы клана",
   "reports.title": "Текущие заказы клана",

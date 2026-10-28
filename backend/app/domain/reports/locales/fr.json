@@ -59,7 +59,8 @@
       "my_tasks_title": "Mes tâches — {clan}",
       "my_tasks_empty": "Vous n'avez aucune commande active. Prenez-en une avec « Je prends » sous sa publication.",
       "unknown": "Cette action est obsolète — ouvrez la commande sur le site."
-    }
+    },
+    "delete_not_yours": "Vous ne pouvez supprimer que votre commande (ou avec le droit de suppression)."
   },
   "settings": {
     "saved": "Paramètres du clan enregistrés.",

@@ -56,8 +56,7 @@ def test_report_progress_log(db):
 
             bad = await c.post(f"{API}/reports/{report['id']}/progress", headers=bob, json={"lines": [{"line_id": "00000000-0000-0000-0000-000000000001", "quantity": 1}]})
             assert bad.status_code == 409
-            await c.post(f"{API}/reports/{report['id']}/status", headers=officer, json={"status": "cancelled"})
-            closed = await c.post(f"{API}/reports/{report['id']}/progress", headers=bob, json={"lines": [{"line_id": rifle, "quantity": 1}]})
-            assert closed.status_code == 409
+            # отменять заказы больше нельзя — их удаляют
+            assert (await c.post(f"{API}/reports/{report['id']}/status", headers=officer, json={"status": "cancelled"})).status_code == 409
 
     run(main())
