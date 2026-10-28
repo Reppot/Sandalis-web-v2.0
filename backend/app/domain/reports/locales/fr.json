@@ -70,7 +70,9 @@
     "bot_missing": "Le bot du clan ne voit pas le serveur : ajoutez-le avec « Ajouter le bot ».",
     "pulled": "Rôles du serveur récupérés : {n}. Les nouveaux rôles commencent au niveau de base.",
     "saved": "Niveaux d'accès enregistrés. Les membres les recevront à leur prochaine connexion.",
-    "unknown_permission": "Droits inconnus : {permissions}."
+    "unknown_permission": "Droits inconnus : {permissions}.",
+    "hidden": "{n} rôles retirés du site. « Récupérer les rôles » ne les ramènera pas.",
+    "unhidden": "Le rôle reviendra au prochain « Récupérer les rôles »."
   },
   "blacklist": {
     "owner": "Impossible de mettre le commandant ou vous-même en liste noire.",

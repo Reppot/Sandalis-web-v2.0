@@ -21,6 +21,8 @@ export interface DiscordRoles {
   botInviteUrl: string | null;
   syncedAt: string | null;
   roles: DiscordRole[];
+  /** Убранные командиром роли: при «Подтянуть роли» не берутся. */
+  hidden: { id: string; name: string }[];
 }
 
 export const MEMBERS_PAGE = 100;
@@ -56,6 +58,7 @@ interface DiscordRolesDto {
   bot_invite_url: string | null;
   synced_at: string | null;
   roles: DiscordRole[];
+  hidden?: { id: string; name: string }[];
 }
 
 interface MemberDto {
@@ -76,6 +79,7 @@ const toRoles = (d: DiscordRolesDto): DiscordRoles => ({
   botInviteUrl: d.bot_invite_url,
   syncedAt: d.synced_at,
   roles: d.roles,
+  hidden: d.hidden ?? [],
 });
 
 type Saved = { roles: DiscordRolesDto; message: string };
@@ -91,6 +95,16 @@ export const managementApi = {
   },
   async save(levels: Record<string, AccessLevel>, permissions: Record<string, string[]>): Promise<{ roles: DiscordRoles; message: string }> {
     const r = await apiClient.put<Saved>("/api/v1/clan/discord-roles", { levels, permissions });
+    return { roles: toRoles(r.roles), message: r.message };
+  },
+  /** Убрать роли с сайта: при «Подтянуть роли» они больше не берутся. */
+  async hide(roleIds: string[]): Promise<{ roles: DiscordRoles; message: string }> {
+    const r = await apiClient.post<Saved>("/api/v1/clan/discord-roles/hide", { role_ids: roleIds });
+    return { roles: toRoles(r.roles), message: r.message };
+  },
+  /** Вернуть скрытую роль — появится при следующем «Подтянуть роли». */
+  async unhide(roleId: string): Promise<{ roles: DiscordRoles; message: string }> {
+    const r = await apiClient.delete<Saved>(`/api/v1/clan/discord-roles/hide/${roleId}`);
     return { roles: toRoles(r.roles), message: r.message };
   },
   /** Страница участников: after — курсор предыдущей страницы, q — поиск Discord по нику. */

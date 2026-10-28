@@ -317,12 +317,16 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
   const [editing, setEditing] = React.useState<DiscordRole | null>(null);
   const [busy, setBusy] = React.useState(false);
   const [dirty, setDirty] = React.useState(false);
+  // «мусорные» роли: отметить и убрать с сайта (с подтверждением фразой)
+  const [picked, setPicked] = React.useState<Set<string>>(new Set());
+  const [confirming, setConfirming] = React.useState(false);
 
   const apply = (d: DiscordRoles) => {
     setData(d);
     setLevels(Object.fromEntries(d.roles.map((r) => [r.id, r.level])));
     setPerms(Object.fromEntries(d.roles.filter((r) => r.level === "custom").map((r) => [r.id, r.permissions])));
     setDirty(false);
+    setPicked(new Set());
   };
 
   const load = React.useCallback(() => {
@@ -390,7 +394,15 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
                   {rolesPage.items.map((role) => {
                     const level = levels[role.id] ?? "basic";
                     return (
-                      <li key={role.id} className="member-row flex items-center gap-2.5 py-1.5 text-sm">
+                      <li key={role.id} className={cn("member-row flex items-center gap-2.5 py-1.5 text-sm", picked.has(role.id) && "is-picked")}>
+                        <input
+                          type="checkbox"
+                          className="hq-check"
+                          checked={picked.has(role.id)}
+                          aria-label={t("droles.pick", { role: role.name })}
+                          title={t("droles.pick", { role: role.name })}
+                          onChange={(e) => setPicked((prev) => { const next = new Set(prev); if (e.target.checked) next.add(role.id); else next.delete(role.id); return next; })}
+                        />
                         <span className="h-3 w-3 shrink-0 rounded-full" style={{ background: hex(role.color) }} aria-hidden />
                         <span className="min-w-0 flex-1 truncate text-fg">{role.name}</span>
                         <select className="field h-9 min-h-0 w-44 py-0 text-[0.8rem]" data-guide="mgmt-level" value={level} onChange={(e) => setLevel(role, e.target.value as AccessLevel)}>
@@ -412,6 +424,32 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
                 </ul>
               )}
               <PagedMore page={rolesPage} />
+              {picked.size ? (
+                <div className="hq-bulk mt-3">
+                  <b className="text-sm">{t("hq.bulk.selected", { n: picked.size })}</b>
+                  <button type="button" className="btn btn-danger h-8 min-h-0 px-3 text-sm" disabled={busy} onClick={() => setConfirming(true)}>
+                    <Icon name="trash" size={14} />
+                    {t("droles.hide")}
+                  </button>
+                  <button type="button" className="btn h-8 min-h-0 px-2.5 text-sm" onClick={() => setPicked(new Set())}><Icon name="close" size={13} />{t("hq.bulk.clear")}</button>
+                </div>
+              ) : null}
+              {data.hidden.length ? (
+                <details className="mt-3 text-sm">
+                  <summary className="cursor-pointer text-fg-3">{t("droles.hiddenTitle", { n: data.hidden.length })}</summary>
+                  <p className="mt-1 text-xs text-fg-3">{t("droles.hiddenHint")}</p>
+                  <ul className="mt-2 flex flex-wrap gap-2">
+                    {data.hidden.map((h) => (
+                      <li key={h.id} className="hq-saved">
+                        <span className="px-2 text-sm text-fg-2">@{h.name}</span>
+                        <button type="button" className="hq-person-x" title={t("droles.unhide")} aria-label={t("droles.unhide")} disabled={busy} onClick={() => void act(() => managementApi.unhide(h.id))}>
+                          <Icon name="close" size={11} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              ) : null}
               <div className="mt-3 flex items-center justify-end gap-2">
                 {dirty && <span className="text-xs text-warn">{t("mgmt.unsaved")}</span>}
                 <button type="button" className="btn btn-primary" data-guide="mgmt-save" disabled={busy || !dirty} onClick={() => void act(() => managementApi.save(levels, perms))}>
@@ -422,6 +460,15 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
           )}
         </>
       )}
+
+      {confirming && data ? (
+        <HideRolesModal
+          roles={data.roles.filter((r) => picked.has(r.id))}
+          busy={busy}
+          onClose={() => setConfirming(false)}
+          onConfirm={() => void act(() => managementApi.hide([...picked])).then(() => setConfirming(false))}
+        />
+      ) : null}
 
       {editing && catalog && (
         <RolePermissionsModal
@@ -498,6 +545,38 @@ const RolePermissionsModal: React.FC<{
           </fieldset>
         ))}
       </div>
+    </Modal>
+  );
+};
+
+/** Подтверждение: убрать роли с сайта — только после ввода фразы. */
+const HideRolesModal: React.FC<{ roles: DiscordRole[]; busy: boolean; onClose: () => void; onConfirm: () => void }> = ({ roles, busy, onClose, onConfirm }) => {
+  const t = useT();
+  const [typed, setTyped] = React.useState("");
+  const phrase = t("droles.hidePhrase");
+  const ok = typed.trim().toLowerCase() === phrase.toLowerCase();
+  return (
+    <Modal
+      open
+      onClose={onClose}
+      title={t("droles.hideTitle", { n: roles.length })}
+      footer={
+        <>
+          <button type="button" className="btn" onClick={onClose}>{t("common.cancel")}</button>
+          <button type="button" className="btn btn-danger" disabled={!ok || busy} onClick={onConfirm}>{t("droles.hide")}</button>
+        </>
+      }
+    >
+      <p className="text-sm text-fg-2">{t("droles.hideText")}</p>
+      <ul className="mt-3 flex max-h-40 flex-wrap gap-1.5 overflow-y-auto">
+        {roles.map((r) => (
+          <li key={r.id} className="badge badge-neutral" style={{ color: r.color ? hex(r.color) : undefined }}>@{r.name}</li>
+        ))}
+      </ul>
+      <label className="mt-4 flex flex-col gap-1">
+        <span className="text-sm text-fg-2">{t("droles.hideType", { phrase })}</span>
+        <input className="field" autoFocus value={typed} onChange={(e) => setTyped(e.target.value)} onKeyDown={(e) => e.key === "Enter" && ok && !busy && onConfirm()} placeholder={phrase} />
+      </label>
     </Modal>
   );
 };

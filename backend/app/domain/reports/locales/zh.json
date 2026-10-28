@@ -70,7 +70,9 @@
     "bot_missing": "军团机器人看不到服务器：请用“添加机器人”添加它。",
     "pulled": "已获取服务器角色：{n}。新角色默认为基础级别。",
     "saved": "权限级别已保存。成员将在下次登录时获得。",
-    "unknown_permission": "未知权限：{permissions}。"
+    "unknown_permission": "未知权限：{permissions}。",
+    "hidden": "已从网站移除 {n} 个身份组。“拉取身份组”不会再带回它们。",
+    "unhidden": "下次“拉取身份组”时该身份组会恢复。"
   },
   "blacklist": {
     "owner": "不能将指挥官或自己加入黑名单。",

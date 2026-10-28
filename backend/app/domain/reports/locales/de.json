@@ -70,7 +70,9 @@
     "bot_missing": "Der Clan-Bot sieht den Server nicht: Füge ihn mit „Bot hinzufügen“ hinzu.",
     "pulled": "Server-Rollen abgerufen: {n}. Neue Rollen beginnen mit der einfachen Stufe.",
     "saved": "Zugriffsstufen gespeichert. Die Mitglieder erhalten sie bei der nächsten Anmeldung.",
-    "unknown_permission": "Unbekannte Rechte: {permissions}."
+    "unknown_permission": "Unbekannte Rechte: {permissions}.",
+    "hidden": "{n} Rollen entfernt. „Rollen abrufen“ holt sie nicht zurück.",
+    "unhidden": "Die Rolle kommt beim nächsten „Rollen abrufen“ zurück."
   },
   "blacklist": {
     "owner": "Den Kommandanten und dich selbst kannst du nicht sperren.",

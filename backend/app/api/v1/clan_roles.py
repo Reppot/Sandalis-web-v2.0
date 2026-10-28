@@ -26,6 +26,8 @@ from app.schemas.clan_settings import (
     DiscordRolesRead,
     DiscordRolesSaved,
     DiscordRolesUpdate,
+    HiddenRoleRead,
+    RolesHide,
     MemberRoleRead,
     PermissionCatalogRead,
     PermissionGroupRead,
@@ -89,7 +91,17 @@ async def _read(service, *, check_bot: bool = True) -> DiscordRolesRead:  # noqa
         bot_invite_url=bot_invite_url(guild_id),
         synced_at=row.discord_roles_synced_at if row else None,
         roles=[_role_read(r, row) for r in snapshot],
+        hidden=[HiddenRoleRead(id=h["id"], name=h.get("name") or h["id"]) for h in (row.discord_roles_hidden if row else None) or []],
     )
+
+
+def _keep_roles(row: ClanSettings, roles: list[dict]) -> None:
+    """Снимок ролей без скрытых; уровни и права — только у оставшихся ролей."""
+    hidden = {h["id"] for h in row.discord_roles_hidden or []}
+    row.discord_roles = [r for r in roles if r["id"] not in hidden]
+    ids = {r["id"] for r in row.discord_roles}
+    row.discord_role_map = {k: v for k, v in (row.discord_role_map or {}).items() if k in ids}
+    row.discord_role_perms = {k: v for k, v in (row.discord_role_perms or {}).items() if k in ids}
 
 
 @router.get("/permissions", response_model=PermissionCatalogRead,
@@ -116,14 +128,36 @@ async def pull_discord_roles(service: SettingsServiceDep, _: OwnerDep) -> Discor
         raise AppError(message_key="roles.bot_missing", domain="reports", code="bot_missing",
                        status_code=409, params={})
     row = await _row(service)
-    row.discord_roles = roles
+    _keep_roles(row, roles)
     row.discord_roles_synced_at = snapshot_at()
-    ids = {r["id"] for r in roles}
-    row.discord_role_map = {k: v for k, v in (row.discord_role_map or {}).items() if k in ids}
-    row.discord_role_perms = {k: v for k, v in (row.discord_role_perms or {}).items() if k in ids}
     await service.session.commit()
     return DiscordRolesSaved(roles=await _read(service, check_bot=False),
-                             message=service.t.t("roles.pulled", domain="reports", n=len(roles)))
+                             message=service.t.t("roles.pulled", domain="reports", n=len(row.discord_roles)))
+
+
+@router.post("/discord-roles/hide", response_model=DiscordRolesSaved,
+             summary="Убрать роли с сайта: при «Подтянуть роли» они больше не берутся (командир)")
+async def hide_discord_roles(payload: RolesHide, service: SettingsServiceDep, _: OwnerDep) -> DiscordRolesSaved:
+    row = await _row(service)
+    names = {r["id"]: r.get("name") or r["id"] for r in row.discord_roles or []}
+    hidden = {h["id"]: h for h in row.discord_roles_hidden or []}
+    for rid in payload.role_ids:
+        hidden.setdefault(rid, {"id": rid, "name": names.get(rid, rid)})
+    row.discord_roles_hidden = sorted(hidden.values(), key=lambda h: h["name"].lower())
+    _keep_roles(row, list(row.discord_roles or []))
+    await service.session.commit()
+    return DiscordRolesSaved(roles=await _read(service, check_bot=False),
+                             message=service.t.t("roles.hidden", domain="reports", n=len(payload.role_ids)))
+
+
+@router.delete("/discord-roles/hide/{role_id}", response_model=DiscordRolesSaved,
+               summary="Вернуть скрытую роль: появится при следующем «Подтянуть роли» (командир)")
+async def unhide_discord_role(role_id: str, service: SettingsServiceDep, _: OwnerDep) -> DiscordRolesSaved:
+    row = await _row(service)
+    row.discord_roles_hidden = [h for h in row.discord_roles_hidden or [] if h["id"] != role_id]
+    await service.session.commit()
+    return DiscordRolesSaved(roles=await _read(service, check_bot=False),
+                             message=service.t.t("roles.unhidden", domain="reports"))
 
 
 @router.put("/discord-roles", response_model=DiscordRolesSaved,

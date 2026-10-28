@@ -70,7 +70,9 @@
     "bot_missing": "El bot del clan no ve el servidor: añádelo con «Añadir bot».",
     "pulled": "Roles del servidor obtenidos: {n}. Los roles nuevos empiezan en nivel básico.",
     "saved": "Niveles de acceso guardados. Los miembros los recibirán en su próximo inicio de sesión.",
-    "unknown_permission": "Permisos desconocidos: {permissions}."
+    "unknown_permission": "Permisos desconocidos: {permissions}.",
+    "hidden": "Se quitaron {n} roles del sitio. «Traer roles» no los recuperará.",
+    "unhidden": "El rol volverá en el próximo «Traer roles»."
   },
   "blacklist": {
     "owner": "No puedes añadir al comandante ni a ti mismo.",

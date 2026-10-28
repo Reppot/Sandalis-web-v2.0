@@ -60,6 +60,18 @@ class DiscordRolesRead(BaseModel):
     bot_invite_url: str | None
     synced_at: datetime | None      # когда роли подтянуты (null — ещё нет: вступление закрыто)
     roles: list[DiscordRoleRead]
+    hidden: list[HiddenRoleRead] = []   # убранные командиром: при «Подтянуть роли» не берутся
+
+
+class HiddenRoleRead(BaseModel):
+    id: str
+    name: str
+
+
+class RolesHide(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    role_ids: Annotated[list[Annotated[str, Field(pattern=r"^\d+$", max_length=32)]], Field(min_length=1, max_length=500)]
 
 
 class DiscordRolesUpdate(BaseModel):

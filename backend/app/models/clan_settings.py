@@ -24,6 +24,8 @@ class ClanSettings(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     # чёрный список (services/blacklist.py): участники [{id, name, reason, by, at}] и id ролей Discord
     blacklist_users: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
     blacklist_roles: Mapped[list[str]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
+    # «мусорные» роли сервера, которые командир убрал: при «Подтянуть роли» их не берём [{id, name}]
+    discord_roles_hidden: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
     # роли Discord-сервера клана (services/discord_roles.py): снимок ролей, который
     # подтягивает командир, и уровни доступа {id роли: basic|medium|high}
     discord_roles: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)

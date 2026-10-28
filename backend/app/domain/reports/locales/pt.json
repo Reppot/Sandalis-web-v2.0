@@ -70,7 +70,9 @@
     "bot_missing": "O bot do clã não enxerga o servidor: adicione-o com “Adicionar bot”.",
     "pulled": "Cargos do servidor puxados: {n}. Cargos novos começam no nível básico.",
     "saved": "Níveis de acesso salvos. Os membros vão recebê-los no próximo login.",
-    "unknown_permission": "Permissões desconhecidas: {permissions}."
+    "unknown_permission": "Permissões desconhecidas: {permissions}.",
+    "hidden": "{n} cargos removidos do site. “Carregar cargos” não os trará de volta.",
+    "unhidden": "O cargo volta no próximo “Carregar cargos”."
   },
   "blacklist": {
     "owner": "Não é possível adicionar o comandante nem você mesmo.",

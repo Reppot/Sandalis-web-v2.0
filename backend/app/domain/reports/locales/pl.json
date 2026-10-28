@@ -70,7 +70,9 @@
     "bot_missing": "Bot klanu nie widzi serwera: dodaj go przyciskiem „Dodaj bota”.",
     "pulled": "Pobrano role serwera: {n}. Nowe role mają poziom podstawowy.",
     "saved": "Zapisano poziomy dostępu. Członkowie otrzymają je przy następnym logowaniu.",
-    "unknown_permission": "Nieznane uprawnienia: {permissions}."
+    "unknown_permission": "Nieznane uprawnienia: {permissions}.",
+    "hidden": "Usunięto ze strony ról: {n}. „Pobierz role” ich nie przywróci.",
+    "unhidden": "Rola wróci przy następnym „Pobierz role”."
   },
   "blacklist": {
     "owner": "Nie można dodać dowódcy ani siebie.",
