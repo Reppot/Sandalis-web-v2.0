@@ -397,7 +397,7 @@ const RolesView: React.FC<{ catalog: PermissionCatalog | null }> = ({ catalog })
                       <li key={role.id} className={cn("member-row flex items-center gap-2.5 py-1.5 text-sm", picked.has(role.id) && "is-picked")}>
                         <input
                           type="checkbox"
-                          className="hq-check"
+                          className="role-pick"
                           checked={picked.has(role.id)}
                           aria-label={t("droles.pick", { role: role.name })}
                           title={t("droles.pick", { role: role.name })}
