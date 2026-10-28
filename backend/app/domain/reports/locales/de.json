@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "Den Kommandanten und dich selbst kannst du nicht sperren.",
     "saved": "Sperrliste gespeichert. Aus dem Clan entfernt: {n}."
+  },
+  "game": {
+    "league_up": "ist in die Liga {tier} aufgestiegen",
+    "achievement": "Erfolg „{name}“",
+    "congrats_title": "🏅 Neue Versorgungsauszeichnungen",
+    "digest_title": "📊 Versorgungswoche im Rückblick",
+    "digest_top": "**Beste nach Punkten:**",
+    "digest_quiet": "Ruhige Woche – keine Punkte.",
+    "digest_hauler": "🚚 Träger der Woche: **{name}** – {n} Kisten",
+    "digest_keeper": "🛡 Reservewächter: **{name}** – {n} Erneuerungen",
+    "digest_streak": "🔥 Beste Serie: **{name}** – {n} Tage",
+    "digest_leagues": "⬆️ Neue Ligen: {list}",
+    "top_title": "🏆 Wochen-Rangliste – {clan}",
+    "f_league": "Liga",
+    "f_points": "Punkte",
+    "f_streak": "Serie",
+    "streak_days": "{n} Tage (beste {best})",
+    "f_achievements": "Erfolge ({n})",
+    "tier": {
+      "iron": "Eisen",
+      "bronze": "Bronze",
+      "silver": "Silber",
+      "gold": "Gold",
+      "platinum": "Platin",
+      "emerald": "Smaragd",
+      "diamond": "Diamant",
+      "master": "Meister"
+    },
+    "title": {
+      "grandmaster": "Großmeister",
+      "challenger": "Herausforderer"
+    },
+    "ach": {
+      "first_delivery": "Erste Fahrt",
+      "hauler": "Träger",
+      "keeper": "Wächter",
+      "savior": "Retter",
+      "on_time": "Pünktlich",
+      "closer": "Auftrag erledigt",
+      "op_pillar": "Säule der Operation",
+      "veteran": "Veteran",
+      "hot_week": "Starke Woche",
+      "streak": "Serie",
+      "multitasker": "Multitasker",
+      "team_player": "Teamplayer"
+    }
   }
 }

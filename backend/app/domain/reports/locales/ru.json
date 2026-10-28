@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "Командира клана и себя добавить в чёрный список нельзя.",
     "saved": "Чёрный список сохранён. Снято с клана: {n}."
+  },
+  "game": {
+    "league_up": "поднялся в лигу {tier}",
+    "achievement": "достижение «{name}»",
+    "congrats_title": "🏅 Новые награды снабжения",
+    "digest_title": "📊 Итоги недели снабжения",
+    "digest_top": "**Лучшие по очкам:**",
+    "digest_quiet": "Тихая неделя — очков никто не набрал.",
+    "digest_hauler": "🚚 Грузчик недели: **{name}** — {n} ящ.",
+    "digest_keeper": "🛡 Хранитель резервов: **{name}** — {n} обновлений",
+    "digest_streak": "🔥 Лучшая серия: **{name}** — {n} дн.",
+    "digest_leagues": "⬆️ Новые лиги: {list}",
+    "top_title": "🏆 Рейтинг недели — {clan}",
+    "f_league": "Лига",
+    "f_points": "Очки",
+    "f_streak": "Серия",
+    "streak_days": "{n} дн. (лучшая {best})",
+    "f_achievements": "Достижения ({n})",
+    "tier": {
+      "iron": "Железо",
+      "bronze": "Бронза",
+      "silver": "Серебро",
+      "gold": "Золото",
+      "platinum": "Платина",
+      "emerald": "Изумруд",
+      "diamond": "Алмаз",
+      "master": "Мастер"
+    },
+    "title": {
+      "grandmaster": "Грандмастер",
+      "challenger": "Претендент"
+    },
+    "ach": {
+      "first_delivery": "Первая ходка",
+      "hauler": "Грузчик",
+      "keeper": "Хранитель",
+      "savior": "Спаситель",
+      "on_time": "Точно в срок",
+      "closer": "Закрыл заказ",
+      "op_pillar": "Опора операции",
+      "veteran": "Ветеран",
+      "hot_week": "Ударная неделя",
+      "streak": "Серия",
+      "multitasker": "Многостаночник",
+      "team_player": "Командный игрок"
+    }
   }
 }

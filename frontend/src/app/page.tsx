@@ -181,7 +181,7 @@ export default function TerminalPage() {
       case "feedback":
         return <FeedbackWorkspace displayName={session.displayName} />;
       case "mail":
-        return <MailWorkspace onOpenOperations={() => openClan("operations")} onOpenFeedback={() => select("feedback")} onOpenOrders={() => openClan("reports")} onOpenStockpiles={() => openClan("stockpiles")} />;
+        return <MailWorkspace onOpenOperations={() => openClan("operations")} onOpenFeedback={() => select("feedback")} onOpenOrders={() => openClan("reports")} onOpenStockpiles={() => openClan("stockpiles")} onOpenStats={() => openClan("stats")} />;
       case "support":
         return <SupportWorkspace />;
       case "cabinet":

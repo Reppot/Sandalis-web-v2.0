@@ -58,6 +58,8 @@ class Credit:
     due_ok: bool | None = None  # доставка в заказ со сроком: в срок / нет
     title: str = ""
     report_id: str | None = None
+    op_id: str | None = None          # операция, к которой привезено (до её даты)
+    left_sec: int | None = None       # резерв: сколько оставалось при обновлении
 
 
 _cache: dict[str, tuple[float, list[Credit], dict[str, str]]] = {}
@@ -85,15 +87,20 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
 
     reports = {r.id: r for r in (await session.execute(select(OrderReport))).scalars().all()}
     ops = (await session.execute(select(ClanOperation))).scalars().all()
-    op_date: dict[Any, date] = {}
+    # заказ → (дата ближайшей операции, её id)
+    op_date: dict[str, tuple[date, str]] = {}
+
+    def link(rid: str, op: ClanOperation) -> None:
+        if rid not in op_date or op.date < op_date[rid][0]:
+            op_date[rid] = (op.date, str(op.id))
+
     for op in ops:
         for rid in op.report_ids or []:
-            op_date[rid] = min(op_date.get(rid, op.date), op.date)
+            link(rid, op)
     for r in reports.values():
-        if r.operation_id:
-            d = next((o.date for o in ops if o.id == r.operation_id), None)
-            if d:
-                op_date[str(r.id)] = min(op_date.get(str(r.id), d), d)
+        op = next((o for o in ops if o.id == r.operation_id), None) if r.operation_id else None
+        if op:
+            link(str(r.id), op)
 
     out: list[Credit] = []
     remaining = {line.id: line.quantity for r in reports.values() for line in r.lines}
@@ -115,7 +122,7 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
             if due_ok:
                 mult *= MULT["on_time"]
         od = op_date.get(str(report.id))
-        to_op = bool(od and day <= od)
+        to_op = bool(od and day <= od[0])
         if to_op:
             mult *= MULT["operation"]
         if report.priority == "high":
@@ -141,7 +148,8 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
                 closed += 1
         if base:
             out.append(Credit(c.user_id, at, "delivery", round(base * mult, 2), crates=crates, units=units,
-                              to_operation=crates if to_op else 0, due_ok=due_ok, title=report.title, report_id=str(report.id)))
+                              to_operation=crates if to_op else 0, due_ok=due_ok, title=report.title, report_id=str(report.id),
+                              op_id=od[1] if to_op else None))
         if closed:
             own = MULT["own"] if report.created_by == c.user_id else 1.0
             out.append(Credit(c.user_id, at, "line_done", POINTS["line_done"] * closed * own, title=report.title, report_id=str(report.id)))
@@ -162,7 +170,14 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
             continue
         per_day[key] += 1
         save = e.left_sec is not None and e.left_sec < SAVE_WINDOW_SEC
-        out.append(Credit(e.user_id, at, "reserve", POINTS["reserve_save" if save else "reserve"]))
+        out.append(Credit(e.user_id, at, "reserve", POINTS["reserve_save" if save else "reserve"], left_sec=e.left_sec))
+
+    # заказ привезён целиком одним человеком — для достижения «Закрыл заказ»
+    for r in reports.values():
+        if r.lines and all(remaining.get(line.id, 1) == 0 for line in r.lines):
+            who = {c.user_id for c in out if c.kind == "delivery" and c.report_id == str(r.id)}
+            if len(who) == 1:
+                out.append(Credit(next(iter(who)), _aware(r.updated_at), "closer", 0, title=r.title, report_id=str(r.id)))
 
     today = datetime.now(UTC).date()
     for op in ops:
@@ -241,3 +256,109 @@ def badges(items: list[Credit], season_start: datetime | None) -> dict[str, dict
         lg = league(a["points"])
         out[uid] = {"tier": lg["tier"], "division": lg["division"], "title": season.get(uid)}
     return out
+
+
+# ───────────────────────── серии ─────────────────────────
+
+def _active_days(items: list[Credit], user_id: str) -> set[date]:
+    return {c.at.date() for c in items if c.user_id == user_id and c.kind in ("delivery", "reserve")}
+
+
+def _run(days: set[date], end: date) -> int:
+    """Серия, заканчивающаяся днём end: дни подряд с вкладом; один пропуск в неделю (ISO) прощается."""
+    n, d, rested = 0, end, set()
+    while True:
+        if d in days:
+            n += 1
+        else:
+            week = d.isocalendar()[:2]
+            if week in rested or (d - timedelta(days=1)) not in days:
+                break
+            rested.add(week)
+        d -= timedelta(days=1)
+    return n
+
+
+def streak(items: list[Credit], user_id: str) -> dict[str, int]:
+    """Текущая серия (сегодняшний день ещё не обрывает её) и лучшая."""
+    days = _active_days(items, user_id)
+    if not days:
+        return {"current": 0, "best": 0}
+    today = datetime.now(UTC).date()
+    start = today if today in days else today - timedelta(days=1)
+    current = _run(days, start) if (start in days or start - timedelta(days=1) in days) else 0
+    best = max(_run(days, d) for d in days if d + timedelta(days=1) not in days)
+    return {"current": current, "best": max(best, current)}
+
+
+# ───────────────────────── достижения ─────────────────────────
+
+# ключ → пороги ступеней (одна ступень — без бронзы/серебра/золота)
+ACHIEVEMENTS: Final[dict[str, tuple[int, ...]]] = {
+    "first_delivery": (1,),
+    "hauler": (100, 1000, 10000),
+    "keeper": (10, 100, 500),
+    "savior": (1,),
+    "on_time": (10,),
+    "closer": (1,),
+    "op_pillar": (500,),
+    "veteran": (10, 25, 50),
+    "hot_week": (300,),
+    "streak": (7, 30),
+    "multitasker": (1,),
+    "team_player": (1,),
+}
+RARE: Final[frozenset[str]] = frozenset({"savior", "closer", "op_pillar", "hot_week", "team_player"})
+
+
+def metrics(items: list[Credit], user_id: str) -> dict[str, int]:
+    mine = [c for c in items if c.user_id == user_id]
+    deliveries = [c for c in mine if c.kind == "delivery"]
+    by_op: dict[str, int] = defaultdict(int)
+    by_week: dict[tuple[int, int], int] = defaultdict(int)
+    by_day: dict[date, set[str]] = defaultdict(set)
+    for c in deliveries:
+        if c.op_id:
+            by_op[c.op_id] += c.to_operation
+        by_week[c.at.isocalendar()[:2]] += c.crates
+        if c.report_id:
+            by_day[c.at.date()].add(c.report_id)
+    people: dict[str, set[str]] = defaultdict(set)
+    for c in items:
+        if c.kind == "delivery" and c.report_id:
+            people[c.report_id].add(c.user_id)
+    return {
+        "first_delivery": len(deliveries),
+        "hauler": sum(c.crates for c in deliveries),
+        "keeper": sum(1 for c in mine if c.kind == "reserve"),
+        "savior": sum(1 for c in mine if c.kind == "reserve" and c.left_sec is not None and c.left_sec < 1800),
+        "on_time": sum(1 for c in deliveries if c.due_ok),
+        "closer": sum(1 for c in mine if c.kind == "closer"),
+        "op_pillar": max(by_op.values(), default=0),
+        "veteran": sum(1 for c in mine if c.kind == "attend"),
+        "hot_week": max(by_week.values(), default=0),
+        "streak": streak(items, user_id)["best"],
+        "multitasker": sum(1 for ids in by_day.values() if len(ids) >= 5),
+        "team_player": sum(1 for c in deliveries if c.report_id and len(people[c.report_id]) >= 5) and 1,
+    }
+
+
+def achievements(items: list[Credit], user_id: str) -> list[dict[str, Any]]:
+    """Каждое достижение: сколько ступеней получено, текущее значение и следующая цель."""
+    m = metrics(items, user_id)
+    out = []
+    for key, steps in ACHIEVEMENTS.items():
+        value = m.get(key, 0)
+        level = sum(1 for t in steps if value >= t)
+        out.append({"key": key, "level": level, "levels": len(steps), "value": value,
+                    "target": steps[level] if level < len(steps) else steps[-1]})
+    return out
+
+
+def award_keys(items: list[Credit], user_id: str, badge: dict[str, Any] | None) -> set[str]:
+    """Полученные «награды» для уведомлений: ступени достижений и лиги (без ступеней внутри лиги)."""
+    keys = {f"ach:{a['key']}:{lvl}" for a in achievements(items, user_id) for lvl in range(1, a["level"] + 1)}
+    if badge:
+        idx = [t for t, _ in LEAGUES].index(badge["tier"])
+        keys |= {f"league:{t}" for t, _ in LEAGUES[1: idx + 1]}
+    return keys

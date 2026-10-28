@@ -241,6 +241,32 @@ COMMANDS: list[dict[str, Any]] = [{
     },
     "contexts": [0],
     "integration_types": [0],
+}, {
+    "name": "profile",
+    "type": 1,
+    "description": "Your supply league, points, streak and achievements",
+    "description_localizations": {
+        "ru": "Ваша лига снабжения, очки, серия и достижения", "uk": "Ваша ліга постачання, очки, серія й досягнення",
+        "de": "Deine Versorgungsliga, Punkte, Serie und Erfolge", "pl": "Twoja liga zaopatrzenia, punkty, seria i osiągnięcia",
+        "fr": "Votre ligue de ravitaillement, points, série et succès", "es-ES": "Tu liga de suministro, puntos, racha y logros",
+        "pt-BR": "Sua liga de suprimentos, pontos, sequência e conquistas", "cs": "Vaše liga zásobování, body, série a úspěchy",
+        "zh-CN": "你的补给联赛、积分、连续天数和成就",
+    },
+    "contexts": [0],
+    "integration_types": [0],
+}, {
+    "name": "top",
+    "type": 1,
+    "description": "Clan supply leaderboard for the week",
+    "description_localizations": {
+        "ru": "Рейтинг снабжения клана за неделю", "uk": "Рейтинг постачання клану за тиждень",
+        "de": "Versorgungs-Rangliste des Clans der Woche", "pl": "Ranking zaopatrzenia klanu w tym tygodniu",
+        "fr": "Classement du ravitaillement du clan cette semaine", "es-ES": "Clasificación de suministro del clan de la semana",
+        "pt-BR": "Classificação de suprimentos do clã na semana", "cs": "Žebříček zásobování klanu za týden",
+        "zh-CN": "本周战团补给排行榜",
+    },
+    "contexts": [0],
+    "integration_types": [0],
 }]
 
 

@@ -30,6 +30,7 @@ export interface BoardRow {
   value: number;
   league: League;
   title: SeasonTitle | null;
+  streak: number;
 }
 export interface Board {
   period: Period;
@@ -55,6 +56,16 @@ export interface Profile {
   due_total: number;
   weeks: { start: string; points: number }[];
   recent: { kind: string; points: number; title: string; at: string; crates: number; units: number; report_id: string | null }[];
+  streak: { current: number; best: number };
+  achievements: Achievement[];
+}
+export interface Achievement {
+  key: string;
+  level: number;
+  levels: number;
+  value: number;
+  target: number;
+  earned_at: string | null;
 }
 
 export const gameApi = {

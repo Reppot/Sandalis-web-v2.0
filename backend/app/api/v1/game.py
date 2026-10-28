@@ -7,10 +7,12 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
+from sqlalchemy import select
 
 from app.api.deps import CurrentPrincipal, DbDep, PermissionChecker
 from app.core.errors import NotFoundError
 from app.core.permissions import Scopes
+from app.models.game_award import GameAward
 from app.services import gamification as game
 from app.services.war_api import current_war
 
@@ -39,6 +41,7 @@ class BoardRow(BaseModel):
     value: float
     league: LeagueRead
     title: str | None = None
+    streak: int = 0
 
 
 class SeasonRead(BaseModel):
@@ -70,6 +73,20 @@ class WeekRead(BaseModel):
     points: float
 
 
+class AchievementRead(BaseModel):
+    key: str
+    level: int
+    levels: int
+    value: int
+    target: int
+    earned_at: datetime | None = None
+
+
+class StreakRead(BaseModel):
+    current: int
+    best: int
+
+
 class ProfileRead(BaseModel):
     user_id: str
     name: str
@@ -86,6 +103,8 @@ class ProfileRead(BaseModel):
     due_total: int
     weeks: list[WeekRead]
     recent: list[CreditRead]
+    streak: StreakRead
+    achievements: list[AchievementRead]
 
 
 async def _season() -> SeasonRead:
@@ -115,7 +134,8 @@ async def leaderboard(
     ranked = sorted(((u, _value(a, category)) for u, a in agg.items() if _value(a, category) > 0), key=lambda x: -x[1])
     rows = [
         BoardRow(rank=i + 1, user_id=u, name=names.get(u, u), value=v,
-                 league=LeagueRead(**game.league(lifetime[u]["points"])), title=titles.get(u))
+                 league=LeagueRead(**game.league(lifetime[u]["points"])), title=titles.get(u),
+                 streak=game.streak(items, u)["current"])
         for i, (u, v) in enumerate(ranked)
     ]
     me = next((r for r in rows if r.user_id == principal.user_id), None)
@@ -147,7 +167,16 @@ async def member_profile(user_id: str, principal: CurrentPrincipal, session: DbD
         start = (c.at - timedelta(days=c.at.weekday())).date()
         if (week0 - start).days < 7 * 12:
             weeks[start] += c.points
+    got = dict((await session.execute(
+        select(GameAward.key, GameAward.created_at).where(GameAward.user_id == user_id)
+    )).all())
+    achievements = [
+        AchievementRead(**a, earned_at=got.get(f"ach:{a['key']}:{a['level']}") if a["level"] else None)
+        for a in game.achievements(items, user_id)
+    ]
     return ProfileRead(
+        streak=StreakRead(**game.streak(items, user_id)),
+        achievements=achievements,
         user_id=user_id,
         name=names.get(user_id, user_id),
         league=LeagueRead(**game.league(life.get("points", 0))),

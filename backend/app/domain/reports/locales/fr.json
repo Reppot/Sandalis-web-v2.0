@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "Impossible de mettre le commandant ou vous-même en liste noire.",
     "saved": "Liste noire enregistrée. Retirés du clan : {n}."
+  },
+  "game": {
+    "league_up": "a atteint la ligue {tier}",
+    "achievement": "succès « {name} »",
+    "congrats_title": "🏅 Nouvelles récompenses",
+    "digest_title": "📊 Bilan de la semaine",
+    "digest_top": "**Meilleurs en points :**",
+    "digest_quiet": "Semaine calme — aucun point.",
+    "digest_hauler": "🚚 Porteur de la semaine : **{name}** — {n} caisses",
+    "digest_keeper": "🛡 Gardien des réserves : **{name}** — {n} renouvellements",
+    "digest_streak": "🔥 Meilleure série : **{name}** — {n} jours",
+    "digest_leagues": "⬆️ Nouvelles ligues : {list}",
+    "top_title": "🏆 Classement de la semaine — {clan}",
+    "f_league": "Ligue",
+    "f_points": "Points",
+    "f_streak": "Série",
+    "streak_days": "{n} jours (record {best})",
+    "f_achievements": "Succès ({n})",
+    "tier": {
+      "iron": "Fer",
+      "bronze": "Bronze",
+      "silver": "Argent",
+      "gold": "Or",
+      "platinum": "Platine",
+      "emerald": "Émeraude",
+      "diamond": "Diamant",
+      "master": "Maître"
+    },
+    "title": {
+      "grandmaster": "Grand maître",
+      "challenger": "Challenger"
+    },
+    "ach": {
+      "first_delivery": "Première course",
+      "hauler": "Porteur",
+      "keeper": "Gardien",
+      "savior": "Sauveur",
+      "on_time": "Pile à l'heure",
+      "closer": "Commande bouclée",
+      "op_pillar": "Pilier de l'opération",
+      "veteran": "Vétéran",
+      "hot_week": "Semaine de feu",
+      "streak": "Série",
+      "multitasker": "Multitâche",
+      "team_player": "Esprit d'équipe"
+    }
   }
 }

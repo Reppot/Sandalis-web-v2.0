@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "Nie można dodać dowódcy ani siebie.",
     "saved": "Czarna lista zapisana. Usunięto z klanu: {n}."
+  },
+  "game": {
+    "league_up": "awansował do ligi {tier}",
+    "achievement": "osiągnięcie „{name}”",
+    "congrats_title": "🏅 Nowe nagrody zaopatrzenia",
+    "digest_title": "📊 Podsumowanie tygodnia zaopatrzenia",
+    "digest_top": "**Najlepsi według punktów:**",
+    "digest_quiet": "Spokojny tydzień — bez punktów.",
+    "digest_hauler": "🚚 Tragarz tygodnia: **{name}** — {n} skrz.",
+    "digest_keeper": "🛡 Strażnik rezerw: **{name}** — {n} odnowień",
+    "digest_streak": "🔥 Najlepsza seria: **{name}** — {n} dni",
+    "digest_leagues": "⬆️ Nowe ligi: {list}",
+    "top_title": "🏆 Ranking tygodnia — {clan}",
+    "f_league": "Liga",
+    "f_points": "Punkty",
+    "f_streak": "Seria",
+    "streak_days": "{n} dni (najlepsza {best})",
+    "f_achievements": "Osiągnięcia ({n})",
+    "tier": {
+      "iron": "Żelazo",
+      "bronze": "Brąz",
+      "silver": "Srebro",
+      "gold": "Złoto",
+      "platinum": "Platyna",
+      "emerald": "Szmaragd",
+      "diamond": "Diament",
+      "master": "Mistrz"
+    },
+    "title": {
+      "grandmaster": "Arcymistrz",
+      "challenger": "Pretendent"
+    },
+    "ach": {
+      "first_delivery": "Pierwszy kurs",
+      "hauler": "Tragarz",
+      "keeper": "Strażnik",
+      "savior": "Wybawca",
+      "on_time": "Na czas",
+      "closer": "Zamknął zamówienie",
+      "op_pillar": "Filar operacji",
+      "veteran": "Weteran",
+      "hot_week": "Udany tydzień",
+      "streak": "Seria",
+      "multitasker": "Wielozadaniowiec",
+      "team_player": "Gracz zespołowy"
+    }
   }
 }

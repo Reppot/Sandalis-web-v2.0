@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "No puedes añadir al comandante ni a ti mismo.",
     "saved": "Lista negra guardada. Retirados del clan: {n}."
+  },
+  "game": {
+    "league_up": "subió a la liga {tier}",
+    "achievement": "logro «{name}»",
+    "congrats_title": "🏅 Nuevas recompensas de suministro",
+    "digest_title": "📊 Resumen semanal de suministro",
+    "digest_top": "**Mejores por puntos:**",
+    "digest_quiet": "Semana tranquila: nadie sumó puntos.",
+    "digest_hauler": "🚚 Cargador de la semana: **{name}** — {n} cajas",
+    "digest_keeper": "🛡 Guardián de reservas: **{name}** — {n} renovaciones",
+    "digest_streak": "🔥 Mejor racha: **{name}** — {n} días",
+    "digest_leagues": "⬆️ Nuevas ligas: {list}",
+    "top_title": "🏆 Clasificación semanal — {clan}",
+    "f_league": "Liga",
+    "f_points": "Puntos",
+    "f_streak": "Racha",
+    "streak_days": "{n} días (mejor {best})",
+    "f_achievements": "Logros ({n})",
+    "tier": {
+      "iron": "Hierro",
+      "bronze": "Bronce",
+      "silver": "Plata",
+      "gold": "Oro",
+      "platinum": "Platino",
+      "emerald": "Esmeralda",
+      "diamond": "Diamante",
+      "master": "Maestro"
+    },
+    "title": {
+      "grandmaster": "Gran maestro",
+      "challenger": "Aspirante"
+    },
+    "ach": {
+      "first_delivery": "Primer viaje",
+      "hauler": "Cargador",
+      "keeper": "Guardián",
+      "savior": "Salvador",
+      "on_time": "Justo a tiempo",
+      "closer": "Pedido cerrado",
+      "op_pillar": "Pilar de la operación",
+      "veteran": "Veterano",
+      "hot_week": "Semana intensa",
+      "streak": "Racha",
+      "multitasker": "Multitarea",
+      "team_player": "Jugador de equipo"
+    }
   }
 }

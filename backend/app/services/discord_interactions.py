@@ -13,8 +13,9 @@ custom_id:
 """
 from __future__ import annotations
 
+import asyncio
 import uuid
-from datetime import date
+from datetime import UTC, date, datetime, timedelta
 from typing import Any
 
 from fastapi import BackgroundTasks
@@ -78,6 +79,8 @@ async def handle(session: AsyncSession, it: dict[str, Any], background: Backgrou
     try:
         if kind == COMMAND and data.get("name") == "my-tasks":
             return await my_tasks(session, it.get("guild_id"), user_id, t)
+        if kind == COMMAND and data.get("name") in ("profile", "top"):
+            return await game_command(session, data["name"], it.get("guild_id"), user_id, t)
         if kind == COMPONENT and str(data.get("custom_id", "")).startswith("timer:"):
             return await timer_action(session, data, user_id, name, it.get("locale"))
         if kind in (COMPONENT, MODAL_SUBMIT):
@@ -218,6 +221,58 @@ async def timer_action(session: AsyncSession, data: dict[str, Any], user_id: str
     # кнопка — на самом напоминании: заменяем его отметкой «обновлено» (без пинга и кнопок)
     channel_t = Translator(locale=t.locale, default_domain="timers")
     return {"type": 7, "data": timer_alerts.reset_message(timer, name, channel_t)}
+
+
+# ───────────────────────── /profile и /top ─────────────────────────
+
+async def game_command(session: AsyncSession, name: str, guild_id: str | None, user_id: str, t: Translator) -> dict[str, Any]:
+    from app.services import gamification as game
+    from app.services.game_notify import ROMAN, ach_name, season_start
+
+    clan = (await session.execute(select(Clan).where(Clan.discord_guild_id == guild_id))).scalar_one_or_none() if guild_id else None
+    if clan is None:
+        return reply(t.t("report.discord.no_clan"))
+    _bind(session, clan.id)
+    items, names = await game.credits(session, clan.id)
+    try:
+        # ответ Discord ждёт 3 с: холодный War API не должен его сорвать — без сезона, если долго
+        since = await asyncio.wait_for(season_start(), 1.5)
+    except (asyncio.TimeoutError, Exception):  # noqa: BLE001
+        since = None
+    badges = game.badges(items, since)
+    url = f"{settings.FRONTEND_URL.rstrip('/')}/?tab=clan&view=stats"
+
+    def league(uid: str) -> str:
+        b = badges.get(uid)
+        if not b:
+            return t.t("game.tier.iron") + " IV"
+        tier = t.t(f"game.tier.{b['tier']}") + (f" {ROMAN[b['division']]}" if b.get("division") else "")
+        title = b.get("title")
+        return f"{t.t('game.title.' + title)} · {tier}" if title else tier
+
+    if name == "top":
+        agg = game.totals(items, datetime.now(UTC) - timedelta(days=7))
+        ranked = sorted(((u, a["points"]) for u, a in agg.items() if a["points"] > 0), key=lambda x: -x[1])[:10]
+        lines = [f"**{i + 1}.** {names.get(u, u)} — {round(p)} · {league(u)}" for i, (u, p) in enumerate(ranked)]
+        embed = {"title": t.t("game.top_title", clan=clan.name)[:256], "url": url, "color": 0xA3E635,
+                 "description": "\n".join(lines) or t.t("game.digest_quiet")}
+        # рейтинг — для всех в канале (не ephemeral)
+        return {"type": 4, "data": {"embeds": [embed], "allowed_mentions": {"parse": []}}}
+
+    life = game.totals(items, None).get(user_id, {})
+    lg = game.league(life.get("points", 0))
+    st = game.streak(items, user_id)
+    earned = [a for a in game.achievements(items, user_id) if a["level"]]
+    fields = [
+        {"name": t.t("game.f_league"), "value": league(user_id), "inline": True},
+        {"name": t.t("game.f_points"), "value": str(lg["points"]) + (f" (→ {lg['next_at']})" if lg["next_at"] else ""), "inline": True},
+        {"name": t.t("game.f_streak"), "value": t.t("game.streak_days", n=st["current"], best=st["best"]), "inline": True},
+    ]
+    if earned:
+        fields.append({"name": t.t("game.f_achievements", n=len(earned)), "inline": False,
+                       "value": ", ".join(ach_name(a["key"], a["level"], t) for a in earned)[:1024]})
+    embed = {"title": names.get(user_id, user_id)[:256], "url": url, "color": 0xA3E635, "fields": fields}
+    return {"type": 4, "data": {"embeds": [embed], "flags": EPHEMERAL, "allowed_mentions": {"parse": []}}}
 
 
 # ───────────────────────── /мои-задачи ─────────────────────────

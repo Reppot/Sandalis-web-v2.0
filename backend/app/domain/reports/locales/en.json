@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "You can't blacklist the clan commander or yourself.",
     "saved": "Blacklist saved. Removed from the clan: {n}."
+  },
+  "game": {
+    "league_up": "reached the {tier} league",
+    "achievement": "achievement “{name}”",
+    "congrats_title": "🏅 New supply awards",
+    "digest_title": "📊 Supply week in review",
+    "digest_top": "**Top by points:**",
+    "digest_quiet": "A quiet week — nobody scored.",
+    "digest_hauler": "🚚 Hauler of the week: **{name}** — {n} crates",
+    "digest_keeper": "🛡 Reserve keeper: **{name}** — {n} refreshes",
+    "digest_streak": "🔥 Best streak: **{name}** — {n} days",
+    "digest_leagues": "⬆️ New leagues: {list}",
+    "top_title": "🏆 Weekly leaderboard — {clan}",
+    "f_league": "League",
+    "f_points": "Points",
+    "f_streak": "Streak",
+    "streak_days": "{n} days (best {best})",
+    "f_achievements": "Achievements ({n})",
+    "tier": {
+      "iron": "Iron",
+      "bronze": "Bronze",
+      "silver": "Silver",
+      "gold": "Gold",
+      "platinum": "Platinum",
+      "emerald": "Emerald",
+      "diamond": "Diamond",
+      "master": "Master"
+    },
+    "title": {
+      "grandmaster": "Grandmaster",
+      "challenger": "Challenger"
+    },
+    "ach": {
+      "first_delivery": "First run",
+      "hauler": "Hauler",
+      "keeper": "Keeper",
+      "savior": "Savior",
+      "on_time": "Right on time",
+      "closer": "Order closer",
+      "op_pillar": "Operation pillar",
+      "veteran": "Veteran",
+      "hot_week": "Hot week",
+      "streak": "Streak",
+      "multitasker": "Multitasker",
+      "team_player": "Team player"
+    }
   }
 }

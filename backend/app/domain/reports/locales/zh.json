@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "不能将指挥官或自己加入黑名单。",
     "saved": "黑名单已保存。移出战团：{n}。"
+  },
+  "game": {
+    "league_up": "晋升到{tier}联赛",
+    "achievement": "成就“{name}”",
+    "congrats_title": "🏅 新的补给奖励",
+    "digest_title": "📊 本周补给总结",
+    "digest_top": "**积分前三：**",
+    "digest_quiet": "平静的一周——无人得分。",
+    "digest_hauler": "🚚 本周搬运工：**{name}**——{n} 箱",
+    "digest_keeper": "🛡 储备守护者：**{name}**——{n} 次刷新",
+    "digest_streak": "🔥 最长连续：**{name}**——{n} 天",
+    "digest_leagues": "⬆️ 新联赛：{list}",
+    "top_title": "🏆 本周排行榜——{clan}",
+    "f_league": "联赛",
+    "f_points": "积分",
+    "f_streak": "连续",
+    "streak_days": "{n} 天（最长 {best}）",
+    "f_achievements": "成就（{n}）",
+    "tier": {
+      "iron": "黑铁",
+      "bronze": "青铜",
+      "silver": "白银",
+      "gold": "黄金",
+      "platinum": "铂金",
+      "emerald": "翡翠",
+      "diamond": "钻石",
+      "master": "大师"
+    },
+    "title": {
+      "grandmaster": "宗师",
+      "challenger": "王者"
+    },
+    "ach": {
+      "first_delivery": "首次运输",
+      "hauler": "搬运工",
+      "keeper": "守护者",
+      "savior": "救星",
+      "on_time": "分秒不差",
+      "closer": "独立完成订单",
+      "op_pillar": "行动支柱",
+      "veteran": "老兵",
+      "hot_week": "高产一周",
+      "streak": "连续",
+      "multitasker": "多面手",
+      "team_player": "团队玩家"
+    }
   }
 }

@@ -78,5 +78,51 @@
   "blacklist": {
     "owner": "Velitele ani sebe přidat nelze.",
     "saved": "Černá listina uložena. Odebráno z klanu: {n}."
+  },
+  "game": {
+    "league_up": "postoupil do ligy {tier}",
+    "achievement": "úspěch „{name}“",
+    "congrats_title": "🏅 Nová ocenění zásobování",
+    "digest_title": "📊 Shrnutí týdne zásobování",
+    "digest_top": "**Nejlepší podle bodů:**",
+    "digest_quiet": "Klidný týden — nikdo nebodoval.",
+    "digest_hauler": "🚚 Nosič týdne: **{name}** — {n} beden",
+    "digest_keeper": "🛡 Strážce rezerv: **{name}** — {n} obnovení",
+    "digest_streak": "🔥 Nejlepší série: **{name}** — {n} dní",
+    "digest_leagues": "⬆️ Nové ligy: {list}",
+    "top_title": "🏆 Žebříček týdne — {clan}",
+    "f_league": "Liga",
+    "f_points": "Body",
+    "f_streak": "Série",
+    "streak_days": "{n} dní (nejlepší {best})",
+    "f_achievements": "Úspěchy ({n})",
+    "tier": {
+      "iron": "Železo",
+      "bronze": "Bronz",
+      "silver": "Stříbro",
+      "gold": "Zlato",
+      "platinum": "Platina",
+      "emerald": "Smaragd",
+      "diamond": "Diamant",
+      "master": "Mistr"
+    },
+    "title": {
+      "grandmaster": "Velmistr",
+      "challenger": "Vyzyvatel"
+    },
+    "ach": {
+      "first_delivery": "První jízda",
+      "hauler": "Nosič",
+      "keeper": "Strážce",
+      "savior": "Zachránce",
+      "on_time": "Přesně včas",
+      "closer": "Uzavřel objednávku",
+      "op_pillar": "Opora operace",
+      "veteran": "Veterán",
+      "hot_week": "Úderný týden",
+      "streak": "Série",
+      "multitasker": "Multitasker",
+      "team_player": "Týmový hráč"
+    }
   }
 }

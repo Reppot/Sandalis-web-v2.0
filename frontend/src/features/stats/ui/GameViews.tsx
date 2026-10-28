@@ -3,7 +3,7 @@
 import * as React from "react";
 import { CATEGORIES, PERIODS, ROMAN, gameApi, type Board, type Category, type Period, type Profile } from "@/features/stats/model/game";
 import { LeagueBanner } from "@/features/stats/ui/LeagueBanner";
-import { EmptyState, Loading, Segmented, cn, errorText, formatDateTime, useI18n, useNotify, type MessageKey } from "@/shared";
+import { EmptyState, Icon, Loading, Segmented, cn, errorText, formatDateTime, useI18n, useNotify, type IconName, type MessageKey } from "@/shared";
 
 const fmt = (n: number, locale: string, digits = 0) => n.toLocaleString(locale, { maximumFractionDigits: digits });
 
@@ -59,6 +59,7 @@ export const LeaderboardView: React.FC<{ myId: string; onOpen: (userId: string) 
                     {t(`game.tier.${r.league.tier}` as MessageKey)}{r.league.division ? ` ${ROMAN[r.league.division]}` : ""}
                   </span>
                 </span>
+                {r.streak >= 2 ? <span className="game-streak" title={t("game.streakNow", { n: r.streak })}><Icon name="sparkles" size={12} />{r.streak}</span> : null}
                 <span className="game-value tabular">{value(r.value)}</span>
               </button>
             </li>
@@ -107,6 +108,11 @@ export const ProfileView: React.FC<{ userId: string; myId: string; onBack?: () =
             <div className="mt-1 text-xs text-fg-3">
               {lg.next_at ? t("game.toNext", { n: fmt(lg.next_at - lg.points, dateLocale) }) : t("game.maxTier")}
             </div>
+          </div>
+          <div className="game-season">
+            <span className="text-xs text-fg-3">{t("game.streakLabel")}</span>
+            <b className="tabular">{data.streak.current}</b>
+            <span className="text-xs text-fg-3">{t("game.streakBest", { n: data.streak.best })}</span>
           </div>
           <div className="game-season">
             <span className="text-xs text-fg-3">{t("game.period.season")}</span>
@@ -165,7 +171,46 @@ export const ProfileView: React.FC<{ userId: string; myId: string; onBack?: () =
           )}
         </section>
       </div>
+      <section className="panel p-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="panel-title">{t("game.achievements")}</h2>
+          <span className="text-xs text-fg-3">{t("game.achCount", { n: data.achievements.filter((a) => a.level).length, total: data.achievements.length })}</span>
+        </div>
+        <ul className="game-achs mt-4">
+          {data.achievements.map((a) => <AchievementTile key={a.key} a={a} />)}
+        </ul>
+      </section>
       <p className="text-xs text-fg-3">{t("game.rules")}</p>
     </div>
+  );
+};
+
+const ACH_ICON: Record<string, IconName> = {
+  first_delivery: "box", hauler: "box", keeper: "shield", savior: "clock", on_time: "check", closer: "flag",
+  op_pillar: "anchor", veteran: "users", hot_week: "sparkles", streak: "history", multitasker: "grid", team_player: "heart",
+};
+/** Цвет медали: ступени бронза → серебро → золото; одноступенчатые — сразу золото. */
+const medal = (level: number, levels: number) => (level === 0 ? "is-locked" : levels === 1 || level === 3 ? "is-gold" : level === 2 ? "is-silver" : "is-bronze");
+
+const AchievementTile: React.FC<{ a: Profile["achievements"][number] }> = ({ a }) => {
+  const { t, dateLocale } = useI18n();
+  const done = a.level >= a.levels;
+  const name = `${t(`game.ach.${a.key}` as MessageKey)}${a.levels > 1 && a.level ? ` ${ROMAN[a.level]}` : ""}`;
+  return (
+    <li className={cn("game-ach", medal(a.level, a.levels))} title={t(`game.achHint.${a.key}` as MessageKey)}>
+      <span className="game-medal"><Icon name={ACH_ICON[a.key] ?? "sparkles"} size={18} /></span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-semibold text-fg">{name}</span>
+        <span className="block text-xs text-fg-3">{t(`game.achHint.${a.key}` as MessageKey)}</span>
+        {done ? (
+          <span className="block text-xs text-accent">{a.earned_at ? t("game.earnedAt", { date: new Date(a.earned_at).toLocaleDateString(dateLocale) }) : t("game.earned")}</span>
+        ) : (
+          <>
+            <span className="game-progress is-thin mt-1 block"><i style={{ width: `${Math.min(100, (a.value / a.target) * 100)}%` }} /></span>
+            <span className="block text-[0.7rem] text-fg-3">{Math.min(a.value, a.target).toLocaleString(dateLocale)} / {a.target.toLocaleString(dateLocale)}</span>
+          </>
+        )}
+      </span>
+    </li>
   );
 };
