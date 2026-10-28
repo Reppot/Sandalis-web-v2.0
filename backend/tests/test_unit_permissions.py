@@ -124,3 +124,23 @@ def test_previous_token_generation_is_rejected():
     old = _jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALG)
     with pytest.raises(UnauthorizedError):
         decode_access_token(old)
+
+
+def test_basic_level_has_only_its_preset():
+    from app.services.discord_roles import access_for
+
+    class Cs:
+        discord_roles = [{"id": "1", "name": "Боец", "color": 0}, {"id": "2", "name": "Офицеры", "color": 0}]
+        discord_role_map = {"2": "medium"}
+        discord_role_perms: dict = {}
+
+    basic = access_for(["1"], Cs())
+    assert basic["level"] == "basic" and basic["role"] == ClanRole.MEMBER
+    assert set(basic["permissions"]) == {
+        Scopes.STOCKPILES_READ, Scopes.STOCKPILES_CREATE, Scopes.PYRAMID_READ, Scopes.OPERATIONS_ATTEND,
+        Scopes.CATALOG_READ, Scopes.CLAN_STATS, Scopes.CLAN_TRAINING,
+    }
+    # тот же набор получается из JWT: роль участника + дельта extra/revoked
+    assert scopes_for(basic["role"], basic["extra"], basic["revoked"]) == set(basic["permissions"])
+    # «Средний» уровень — как раньше, полный пресет офицера
+    assert set(access_for(["1", "2"], Cs())["permissions"]) == set(scopes_for(ClanRole.OFFICER))

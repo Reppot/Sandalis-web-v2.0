@@ -106,6 +106,13 @@ _OFFICER: FrozenSet[str] = _MEMBER | frozenset({
     Scopes.PYRAMID_DELETE, Scopes.CLAN_EVERYONE,
 })
 
+# Уровень «Базовый» роли Discord (по умолчанию для всех ролей сервера): роль терминала —
+# участник, но права — только этот набор (остальное из пресета участника снимается).
+BASIC_PRESET: Final[FrozenSet[str]] = frozenset({
+    Scopes.STOCKPILES_READ, Scopes.STOCKPILES_CREATE, Scopes.PYRAMID_READ, Scopes.OPERATIONS_ATTEND,
+    Scopes.CATALOG_READ, Scopes.CLAN_STATS, Scopes.CLAN_TRAINING,
+})
+
 ROLE_SCOPES: Final[dict[ClanRole, FrozenSet[str]]] = {
     ClanRole.GUEST: _GUEST,
     ClanRole.MEMBER: _MEMBER,

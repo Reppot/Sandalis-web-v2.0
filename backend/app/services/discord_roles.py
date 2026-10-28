@@ -23,7 +23,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.permissions import ALL_PERMISSIONS, ROLE_SCOPES, ClanRole, Scopes
+from app.core.permissions import ALL_PERMISSIONS, BASIC_PRESET, ROLE_SCOPES, ClanRole, Scopes
 from app.core.tenancy import bypass_clan_filter
 from app.models.clan_settings import ClanSettings
 from app.models.rbac import Clan, ClanMembership
@@ -194,7 +194,8 @@ def bot_invite_url(guild_id: str | None) -> str | None:
 # уровни
 # --------------------------------------------------------------------------- #
 def preset_scopes(level: str) -> frozenset[str]:
-    return ROLE_SCOPES[LEVEL_ROLE[level]]
+    """Права пресета: «Базовый» — свой набор (BASIC_PRESET), остальные — права роли терминала."""
+    return BASIC_PRESET if level == DEFAULT_LEVEL else ROLE_SCOPES[LEVEL_ROLE[level]]
 
 
 def access_for(member_roles: list[str], cs: ClanSettings | None) -> dict[str, Any]:
@@ -216,7 +217,7 @@ def access_for(member_roles: list[str], cs: ClanSettings | None) -> dict[str, An
     if presets:
         top = max(presets, key=LEVELS.index)
         role = LEVEL_ROLE[top]
-        effective = set(ROLE_SCOPES[role]) | custom
+        effective = set(preset_scopes(top)) | custom
     else:                                   # только кастомные роли
         top = CUSTOM
         role = ClanRole.GUEST
