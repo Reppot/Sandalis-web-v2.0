@@ -92,7 +92,7 @@ class TimerService(ClanScopedService):
         )
         self.session.add(timer)
         await self.session.flush()
-        self._log(timer, self.t.t("timer.log.created", domain=DOMAIN, ends=_fmt(ends_at)))
+        self._log(timer, self.t.t("timer.log.created", domain=DOMAIN, ends=_fmt(ends_at)), kind="created")
         await self.session.commit()
         await self.session.refresh(timer)
         return timer, self.t.t("timer.created", domain=DOMAIN, title=timer.title)
@@ -111,6 +111,7 @@ class TimerService(ClanScopedService):
         restart = fields.pop("restart", None)
         restart_duration = fields.pop("duration_seconds", None)
         if restart:
+            left = max(0, int((timer.ends_at - now).total_seconds())) if timer.completed_at is None else None
             duration = restart_duration or timer.duration_seconds
             timer.starts_at = now
             timer.ends_at = now + timedelta(seconds=duration)
@@ -118,7 +119,7 @@ class TimerService(ClanScopedService):
             timer.completed_at = None
             message_key = "timer.restarted"
             self._log(timer, self.t.t("timer.log.restarted", domain=DOMAIN,
-                                      duration=_fmt_duration(duration)))
+                                      duration=_fmt_duration(duration)), kind="restart", left_sec=left)
 
         new_ends = fields.pop("ends_at", None)
         if new_ends is not None:
@@ -166,10 +167,11 @@ class TimerService(ClanScopedService):
         await self.session.commit()
 
     # ---------------- журнал --------------------------------------------- #
-    def _log(self, timer: Timer, message: str) -> None:
-        self.session.add(
-            TimerEvent(timer_id=timer.id, message=message, created_by=self._author())
-        )
+    def _log(self, timer: Timer, message: str, *, kind: str | None = None, left_sec: int | None = None) -> None:
+        self.session.add(TimerEvent(
+            timer_id=timer.id, message=message, created_by=self._author(),
+            kind=kind, user_id=self.principal.user_id if kind else None, left_sec=left_sec,
+        ))
 
     def _author(self) -> str:
         return (self.principal.display_name or self.principal.user_id)[:64]

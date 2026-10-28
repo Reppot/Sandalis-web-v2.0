@@ -1,6 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { LeaderboardView, ProfileView } from "@/features/stats/ui/GameViews";
+import { LeagueMark } from "@/features/stats/ui/LeagueBanner";
 import { EmptyState, Loading, PageHeader, Segmented, SheetHead, apiClient, errorText, formatDateTime, sortRows, useI18n, useNotify, type MessageKey, type SheetSort } from "@/shared";
 
 interface MemberStats {
@@ -37,8 +39,46 @@ const statsApi = {
 const ROLE: Record<string, MessageKey> = { owner: "role.owner", admin: "role.admin", officer: "role.officer", member: "role.member", guest: "role.guest", former: "stats.former" };
 const PERIODS = ["7", "30", "90", "0"] as const;
 
-/** «Статистика»: вклад участников клана — заказы, доставки, таймеры — за выбранный период. */
-export const StatsWorkspace: React.FC = () => {
+type Tab = "overview" | "rating" | "profile";
+
+/** «Статистика»: обзор клана, рейтинг по очкам снабжения и профиль бойца (лига, очки, вклад). */
+export const StatsWorkspace: React.FC<{ userId: string }> = ({ userId }) => {
+  const { t } = useI18n();
+  const [tab, setTab] = React.useState<Tab>("overview");
+  const [profileOf, setProfileOf] = React.useState<string | null>(null);
+  const open = (id: string) => {
+    setProfileOf(id);
+    setTab("profile");
+  };
+  return (
+    <div className="tab-fade flex flex-col gap-4">
+      <Segmented
+        size="lg"
+        label={t("stats.title")}
+        value={tab}
+        onChange={(v) => {
+          setTab(v);
+          if (v === "profile") setProfileOf(null);
+        }}
+        options={[
+          { value: "overview", label: t("stats.tab.overview") },
+          { value: "rating", label: t("stats.tab.rating") },
+          { value: "profile", label: t("stats.tab.profile") },
+        ]}
+      />
+      {tab === "overview" ? (
+        <Overview onOpen={open} />
+      ) : tab === "rating" ? (
+        <LeaderboardView myId={userId} onOpen={open} />
+      ) : (
+        <ProfileView key={profileOf ?? userId} userId={profileOf ?? userId} myId={userId} onBack={profileOf && profileOf !== userId ? () => setTab("rating") : undefined} />
+      )}
+    </div>
+  );
+};
+
+/** Обзор: вклад участников клана — заказы, доставки, таймеры — за выбранный период. */
+const Overview: React.FC<{ onOpen: (userId: string) => void }> = ({ onOpen }) => {
   const { t, dateLocale } = useI18n();
   const notify = useNotify();
   const [days, setDays] = React.useState<(typeof PERIODS)[number]>("30");
@@ -146,7 +186,10 @@ export const StatsWorkspace: React.FC = () => {
                         <tr key={m.user_id}>
                           <td className="px-4 py-2.5 text-xs text-fg-3 tabular">{i + 1}</td>
                           <td className="px-3 py-2.5">
-                            <span className="block font-medium text-fg">{m.name}</span>
+                            <button type="button" className="flex items-center gap-1.5 font-medium text-fg hover:underline" onClick={() => onOpen(m.user_id)}>
+                              <LeagueMark userId={m.user_id} />
+                              {m.name}
+                            </button>
                             <span className="block text-xs text-fg-3">{ROLE[m.role] ? t(ROLE[m.role]) : m.role}</span>
                           </td>
                           <td className="px-3 py-2.5">

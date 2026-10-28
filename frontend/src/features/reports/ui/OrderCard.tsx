@@ -9,6 +9,7 @@ import { progressOf } from "@/features/reports/model/hq";
 import { Avatars, DueLabel, STATUS_BADGE } from "@/features/reports/ui/HqParts";
 import { ReportProgressPanel } from "@/features/reports/ui/ReportProgress";
 import { OrderActivity } from "@/features/reports/ui/OrderActivity";
+import { LeagueMark } from "@/features/stats/ui/LeagueBanner";
 import { Icon, cn, errorText, formatDateTime, useI18n, useNotify, type MessageKey } from "@/shared";
 
 const STEPS: ReportStatus[] = ["open", "in_progress", "done"];
@@ -106,7 +107,7 @@ export const OrderCard: React.FC<{
             <div className="flex flex-wrap items-center gap-1.5">
               {report.assignees.map((a) => (
                 <span key={a.user_id} className="hq-person">
-                  <Avatars people={[a]} max={1} />{a.name}
+                  <Avatars people={[a]} max={1} /><LeagueMark userId={a.user_id} size={14} />{a.name}
                   {canEdit ? <button type="button" className="hq-person-x" aria-label={t("common.delete")} onClick={() => void patch({ assignees: ids.filter((x) => x !== a.user_id) })}><Icon name="close" size={12} /></button> : null}
                 </span>
               ))}

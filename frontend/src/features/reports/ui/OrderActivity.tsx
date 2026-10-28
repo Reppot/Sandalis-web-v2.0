@@ -3,6 +3,7 @@
 import * as React from "react";
 import { REPORT_STATUS_LABEL, reportApi, type Assignee, type ReportEvent, type ReportStatus } from "@/entities/report";
 import { MentionText, MentionTextarea } from "@/features/mail/ui/Mentions";
+import { LeagueMark } from "@/features/stats/ui/LeagueBanner";
 import { Icon, cn, errorText, formatDateTime, useI18n, useNotify, type IconName, type MessageKey } from "@/shared";
 
 const ICON: Record<string, IconName> = {
@@ -82,6 +83,7 @@ export const OrderActivity: React.FC<{ reportId: string; members: Assignee[]; re
               <span className="hq-feed-icon"><Icon name={ICON[e.kind] ?? "info"} size={13} /></span>
               <div className="min-w-0 flex-1">
                 <div className="text-sm">
+                  <LeagueMark userId={e.actor_id} size={14} />
                   <b className="font-semibold text-fg">{e.actor_name}</b>
                   {e.kind === "comment" ? null : <span className="text-fg-2"> {describe(e)}</span>}
                   <span className="ml-2 text-xs text-fg-3">{formatDateTime(e.created_at)}</span>

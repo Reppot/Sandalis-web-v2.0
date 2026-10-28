@@ -54,6 +54,10 @@ class TimerEvent(Base, UUIDPkMixin, ClanScopedMixin):
     )
     message: Mapped[str] = mapped_column(Text, nullable=False)
     created_by: Mapped[str] = mapped_column(String(64), nullable=False)
+    # структурированная часть (для очков снабжения): что произошло, кто (ID), сколько оставалось
+    kind: Mapped[str | None] = mapped_column(String(16), nullable=True)          # created | restart | ...
+    user_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    left_sec: Mapped[int | None] = mapped_column(Integer, nullable=True)        # до конца окна при сбросе
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )

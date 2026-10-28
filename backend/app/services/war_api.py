@@ -175,3 +175,12 @@ async def world_regions() -> dict[str, Any]:
 
 def reset_cache() -> None:
     _cache.entries.clear()
+
+
+async def current_war() -> dict[str, Any] | None:
+    """Текущая война (номер, начало): для сезонов очков снабжения. Сбой War API — None."""
+    try:
+        async with get_http_client() as client:
+            return await _get(client, "/war", MAPS_TTL)
+    except Exception:  # noqa: BLE001 — сезон тогда считается по последним 30 дням
+        return None
