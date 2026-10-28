@@ -136,10 +136,7 @@ def test_basic_level_has_only_its_preset():
 
     basic = access_for(["1"], Cs())
     assert basic["level"] == "basic" and basic["role"] == ClanRole.MEMBER
-    assert set(basic["permissions"]) == {
-        Scopes.STOCKPILES_READ, Scopes.PYRAMID_READ, Scopes.OPERATIONS_ATTEND,
-        Scopes.CATALOG_READ, Scopes.CLAN_STATS, Scopes.CLAN_TRAINING,
-    }
+    assert basic["permissions"] == [] and basic["extra"] == []
     # тот же набор получается из JWT: роль участника + дельта extra/revoked
     assert scopes_for(basic["role"], basic["extra"], basic["revoked"]) == set(basic["permissions"])
     # «Средний» уровень — как раньше, полный пресет офицера
