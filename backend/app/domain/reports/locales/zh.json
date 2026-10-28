@@ -71,5 +71,9 @@
     "pulled": "已获取服务器角色：{n}。新角色默认为基础级别。",
     "saved": "权限级别已保存。成员将在下次登录时获得。",
     "unknown_permission": "未知权限：{permissions}。"
+  },
+  "blacklist": {
+    "owner": "不能将指挥官或自己加入黑名单。",
+    "saved": "黑名单已保存。移出战团：{n}。"
   }
 }

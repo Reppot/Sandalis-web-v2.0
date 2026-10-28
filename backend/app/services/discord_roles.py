@@ -27,6 +27,7 @@ from app.core.permissions import ALL_PERMISSIONS, ROLE_SCOPES, ClanRole, Scopes
 from app.core.tenancy import bypass_clan_filter
 from app.models.clan_settings import ClanSettings
 from app.models.rbac import Clan, ClanMembership
+from app.services import blacklist
 from app.services.discord_oauth import get_http_client
 
 LEVELS: Final[tuple[str, ...]] = ("basic", "medium", "high")       # пресеты (по возрастанию)
@@ -289,6 +290,8 @@ async def joinable_clans(
         if member is not None:
             continue
         member_roles = await fetch_member_roles(access_token, clan.discord_guild_id) or []
+        if blacklist.blocks(cs, user_id, member_roles):
+            continue
         out.append({
             "clan_id": clan.id,
             "name": clan.name,
@@ -323,6 +326,12 @@ async def sync_existing_members(
             # роли запоминаем у всех (и у командира) — по ним доходят упоминания @роль
             membership.discord_role_ids = list(member_roles)
             if membership.role == ClanRole.OWNER:
+                await session.flush()
+                continue
+            if blacklist.blocks(cs, user_id, member_roles):
+                # получил роль из чёрного списка — членство снимается
+                membership.is_active = False
+                blacklist.forget(clan.id)
                 await session.flush()
                 continue
             access = access_for(member_roles, cs)

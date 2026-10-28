@@ -110,7 +110,19 @@ export const managementApi = {
   permissions(): Promise<PermissionCatalog> {
     return apiClient.get<PermissionCatalog>("/api/v1/clan/permissions");
   },
+  blacklist(): Promise<Blacklist> {
+    return apiClient.get<Blacklist>("/api/v1/clan/blacklist");
+  },
+  /** Весь список целиком; у попавших в него снимается членство (removed — сколько). */
+  saveBlacklist(users: { id: string; name?: string | null; reason?: string | null }[], roles: string[]): Promise<{ blacklist: Blacklist; removed: number; message: string }> {
+    return apiClient.put("/api/v1/clan/blacklist", { users, roles });
+  },
 };
+
+export interface Blacklist {
+  users: { id: string; name: string | null; reason: string | null; by: string | null; at: string | null }[];
+  roles: { id: string; name: string; color: number }[];
+}
 
 // --------------------------------------------------------------------------- //
 // Интеграции клана: канал Discord для рапортов и API-токены для ботов

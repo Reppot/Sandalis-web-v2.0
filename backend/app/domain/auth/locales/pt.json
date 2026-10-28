@@ -38,7 +38,8 @@
     "nothing_selected": "Escolha um servidor ou um clã.",
     "clan_created": "O clã “{clan}” foi vinculado ao seu servidor do Discord. Você é o comandante.",
     "signed_in": "Bem-vindo, {name}.",
-    "joined": "Você entrou no terminal do clã “{clan}”."
+    "joined": "Você entrou no terminal do clã “{clan}”.",
+    "blacklisted": "Não é possível entrar: você está na lista negra."
   },
   "guest": {
     "disabled": "O acesso de convidado está desativado.",

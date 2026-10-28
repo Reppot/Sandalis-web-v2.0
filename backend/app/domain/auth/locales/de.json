@@ -38,7 +38,8 @@
     "nothing_selected": "Wähle einen Server oder einen Clan.",
     "clan_created": "Der Clan „{clan}“ ist mit deinem Discord-Server verknüpft. Du bist der Kommandant.",
     "signed_in": "Willkommen, {name}.",
-    "joined": "Du bist dem Terminal des Clans „{clan}“ beigetreten."
+    "joined": "Du bist dem Terminal des Clans „{clan}“ beigetreten.",
+    "blacklisted": "Beitritt nicht möglich: Du stehst auf der Sperrliste."
   },
   "guest": {
     "disabled": "Der Gastzugang ist deaktiviert.",

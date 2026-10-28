@@ -71,5 +71,9 @@
     "pulled": "Server-Rollen abgerufen: {n}. Neue Rollen beginnen mit der einfachen Stufe.",
     "saved": "Zugriffsstufen gespeichert. Die Mitglieder erhalten sie bei der nächsten Anmeldung.",
     "unknown_permission": "Unbekannte Rechte: {permissions}."
+  },
+  "blacklist": {
+    "owner": "Den Kommandanten und dich selbst kannst du nicht sperren.",
+    "saved": "Sperrliste gespeichert. Aus dem Clan entfernt: {n}."
   }
 }

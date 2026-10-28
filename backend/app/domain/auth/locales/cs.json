@@ -38,7 +38,8 @@
     "nothing_selected": "Vyberte server nebo klan.",
     "clan_created": "Klan „{clan}“ je propojen s vaším Discord serverem. Jste velitel.",
     "signed_in": "Vítejte, {name}.",
-    "joined": "Vstoupili jste do terminálu klanu „{clan}“."
+    "joined": "Vstoupili jste do terminálu klanu „{clan}“.",
+    "blacklisted": "Do klanu nelze vstoupit: jste na černé listině."
   },
   "guest": {
     "disabled": "Přístup pro hosty je vypnutý.",

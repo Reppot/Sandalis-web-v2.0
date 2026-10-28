@@ -22,6 +22,7 @@
     "courses_too_many": "The clan already has {n} courses — delete one to add a new one.",
     "operations_too_many": "The clan already has {n} operations — delete old ones to add a new one.",
     "operation_not_yours": "Only the author or an officer with clan content rights can change or delete this operation.",
-    "operation_snapshots_too_many": "The operation already has {n} snapshots — no more can be added."
+    "operation_snapshots_too_many": "The operation already has {n} snapshots — no more can be added.",
+    "clan_blacklisted": "You are blacklisted in this clan."
   }
 }

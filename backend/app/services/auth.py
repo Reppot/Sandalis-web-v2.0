@@ -214,6 +214,10 @@ class AuthService:
         with bypass_clan_filter():
             cs = (await self.session.execute(
                 select(ClanSettings).where(ClanSettings.clan_id == join["clan_id"]))).scalar_one_or_none()
+        from app.services.blacklist import blocks
+
+        if blocks(cs, user_id, list(join.get("discord_roles") or [])):
+            raise PermissionDeniedError(message_key="setup.blacklisted", domain=DOMAIN, params={})
         access = access_for(list(join.get("discord_roles") or []), cs)
         membership, clan_name = await self._upsert_identity(
             clan_id=join["clan_id"], user_id=user_id, display_name=display_name, role=access["role"], locale=self.t.locale,

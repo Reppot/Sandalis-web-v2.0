@@ -13,7 +13,7 @@ from app.core.config import settings
 from app.core.db import AsyncSessionLocal
 from app.core.errors import PermissionDeniedError, UnauthorizedError
 from app.core.i18n import Translator, normalize_locale, parse_accept_language
-from app.core.permissions import scopes_for
+from app.core.permissions import ClanRole, scopes_for
 from app.core.security import Principal, decode_access_token, hash_clan_token
 from app.core.tenancy import bind_session_to_clan, bypass_clan_filter, set_current_clan_id
 from app.models.rbac import ClanApiToken
@@ -106,6 +106,13 @@ async def get_principal(
         principal = await _principal_from_clan_token(session, clan_token)
     else:
         raise UnauthorizedError()
+
+    # чёрный список клана: уже выданная сессия перестаёт действовать (командир и разработчик — нет)
+    if principal.subject_type == "user" and not principal.developer and principal.role != ClanRole.OWNER:
+        from app.services.blacklist import blocked_users
+
+        if principal.user_id in await blocked_users(session, principal.clan_id):
+            raise UnauthorizedError(message_key="errors.clan_blacklisted", code="blacklisted")
 
     # Два независимых канала привязки: ContextVar (для фона/логов) и session.info
     # (для ORM-событий — не зависит от контекста исполнения).

@@ -71,5 +71,9 @@
     "pulled": "Server roles pulled: {n}. New roles start at basic level.",
     "saved": "Access levels saved. Members get them at their next sign-in.",
     "unknown_permission": "Unknown permissions: {permissions}."
+  },
+  "blacklist": {
+    "owner": "You can't blacklist the clan commander or yourself.",
+    "saved": "Blacklist saved. Removed from the clan: {n}."
   }
 }

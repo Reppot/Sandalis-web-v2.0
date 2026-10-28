@@ -21,6 +21,9 @@ class ClanSettings(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     timer_ping_role_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
     timer_warn_minutes: Mapped[int] = mapped_column(Integer, default=120, server_default=text("120"), nullable=False)
     discord_locale: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    # чёрный список (services/blacklist.py): участники [{id, name, reason, by, at}] и id ролей Discord
+    blacklist_users: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
+    blacklist_roles: Mapped[list[str]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
     # роли Discord-сервера клана (services/discord_roles.py): снимок ролей, который
     # подтягивает командир, и уровни доступа {id роли: basic|medium|high}
     discord_roles: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)

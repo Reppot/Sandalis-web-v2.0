@@ -71,5 +71,9 @@
     "pulled": "Rôles du serveur récupérés : {n}. Les nouveaux rôles commencent au niveau de base.",
     "saved": "Niveaux d'accès enregistrés. Les membres les recevront à leur prochaine connexion.",
     "unknown_permission": "Droits inconnus : {permissions}."
+  },
+  "blacklist": {
+    "owner": "Impossible de mettre le commandant ou vous-même en liste noire.",
+    "saved": "Liste noire enregistrée. Retirés du clan : {n}."
   }
 }

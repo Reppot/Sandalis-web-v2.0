@@ -22,6 +22,7 @@
     "courses_too_many": "Klan ma już {n} kursów – usuń jeden, aby dodać nowy.",
     "operations_too_many": "Klan ma już {n} operacji – usuń stare, aby dodać nową.",
     "operation_not_yours": "Zmieniać i usuwać operację może tylko jej autor lub oficer z prawem do treści klanu.",
-    "operation_snapshots_too_many": "Operacja ma już {n} zrzutów — więcej nie można dodać."
+    "operation_snapshots_too_many": "Operacja ma już {n} zrzutów — więcej nie można dodać.",
+    "clan_blacklisted": "Jesteś na czarnej liście tego klanu."
   }
 }

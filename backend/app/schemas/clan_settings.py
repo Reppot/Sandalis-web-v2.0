@@ -70,6 +70,46 @@ class DiscordRolesUpdate(BaseModel):
     permissions: dict[Annotated[str, Field(pattern=r"^\d{5,25}$")], list[Annotated[str, Field(max_length=40)]]] = {}
 
 
+class BlacklistUserIn(BaseModel):
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    id: Annotated[str, Field(min_length=1, max_length=32, pattern=r"^\d+$")]   # Discord ID
+    name: Annotated[str | None, Field(default=None, max_length=120)]
+    reason: Annotated[str | None, Field(default=None, max_length=300)]
+
+
+class BlacklistUpdate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    users: Annotated[list[BlacklistUserIn], Field(max_length=500)]
+    roles: Annotated[list[Annotated[str, Field(pattern=r"^\d+$", max_length=32)]], Field(max_length=200)]
+
+
+class BlacklistUserRead(BaseModel):
+    id: str
+    name: str | None = None
+    reason: str | None = None
+    by: str | None = None
+    at: str | None = None
+
+
+class BlacklistRoleRead(BaseModel):
+    id: str
+    name: str
+    color: int = 0
+
+
+class BlacklistRead(BaseModel):
+    users: list[BlacklistUserRead]
+    roles: list[BlacklistRoleRead]
+
+
+class BlacklistSaved(BaseModel):
+    blacklist: BlacklistRead
+    removed: int
+    message: str
+
+
 class DiscordRolesSaved(BaseModel):
     roles: DiscordRolesRead
     message: str

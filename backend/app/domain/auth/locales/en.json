@@ -38,7 +38,8 @@
     "nothing_selected": "Pick a server or a clan.",
     "clan_created": "Clan “{clan}” is linked to your Discord server. You are the commander.",
     "signed_in": "Welcome, {name}.",
-    "joined": "You joined the terminal of clan “{clan}”."
+    "joined": "You joined the terminal of clan “{clan}”.",
+    "blacklisted": "You can't join this clan: you are blacklisted."
   },
   "guest": {
     "disabled": "Guest access is disabled.",

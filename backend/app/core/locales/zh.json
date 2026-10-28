@@ -22,6 +22,7 @@
     "courses_too_many": "军团已有 {n} 门课程——请删除一门后再添加新的。",
     "operations_too_many": "军团已有 {n} 个作战——请删除旧的再添加新的。",
     "operation_not_yours": "只有作者或拥有军团内容权限的军官可以修改或删除此作战。",
-    "operation_snapshots_too_many": "该作战已有 {n} 张快照——不能再添加。"
+    "operation_snapshots_too_many": "该作战已有 {n} 张快照——不能再添加。",
+    "clan_blacklisted": "你已被列入该战团的黑名单。"
   }
 }

@@ -24,7 +24,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.core.errors import AppError
 from app.core.i18n import Translator, normalize_locale
-from app.core.permissions import Scopes, scopes_for
+from app.core.permissions import ClanRole, Scopes, scopes_for
 from app.core.security import Principal
 from app.core.tenancy import bind_session_to_clan, bypass_clan_filter, set_current_clan_id
 from app.models.operation import ClanOperation
@@ -34,7 +34,7 @@ from app.models.timer import Timer
 from app.schemas.report import ContributionCreate, ContributionLineIn
 from app.domain.timers.calculations import DEFAULT_DURATION_SECONDS
 from app.schemas.timer import TimerKind, TimerUpdate
-from app.services import discord_bot, report_tasks, timer_alerts
+from app.services import blacklist, discord_bot, report_tasks, timer_alerts
 from app.services.report_progress import ReportProgressService
 from app.services.timers import TimerService
 
@@ -62,7 +62,7 @@ async def _principal(session: AsyncSession, clan_id: str, user_id: str, name: st
     m = (await session.execute(
         select(ClanMembership).where(ClanMembership.user_id == user_id, ClanMembership.is_active.is_(True))
     )).scalar_one_or_none()
-    if m is None:
+    if m is None or (m.role != ClanRole.OWNER and user_id in await blacklist.blocked_users(session, clan_id)):
         return None
     return Principal(user_id=user_id, clan_id=clan_id, role=m.role, display_name=name,
                      scopes=scopes_for(m.role, m.extra_scopes, m.revoked_scopes))

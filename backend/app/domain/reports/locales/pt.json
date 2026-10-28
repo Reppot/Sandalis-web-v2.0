@@ -71,5 +71,9 @@
     "pulled": "Cargos do servidor puxados: {n}. Cargos novos começam no nível básico.",
     "saved": "Níveis de acesso salvos. Os membros vão recebê-los no próximo login.",
     "unknown_permission": "Permissões desconhecidas: {permissions}."
+  },
+  "blacklist": {
+    "owner": "Não é possível adicionar o comandante nem você mesmo.",
+    "saved": "Lista negra salva. Removidos do clã: {n}."
   }
 }

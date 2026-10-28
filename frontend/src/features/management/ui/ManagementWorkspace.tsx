@@ -4,6 +4,7 @@ import * as React from "react";
 import { EmptyState, LoadMore, Loading, Modal, PagedMore, cn, errorText, formatDateTime, matchesWords, roleColor, useNotify, usePaged, useT, type MessageKey, Icon, PageHeader, SearchField, Segmented } from "@/shared";
 import { ClanTokenPanel } from "@/features/management/ui/ClanTokenPanel";
 import { DiscordWebhookPanel } from "@/features/management/ui/DiscordWebhookPanel";
+import { BlacklistView } from "@/features/management/ui/BlacklistView";
 import { MEMBERS_PAGE, managementApi, type AccessLevel, type ClanMember, type DiscordRole, type DiscordRoles, type MembersPage, type PermissionCatalog } from "@/features/management/api";
 
 const LEVELS: { value: AccessLevel; label: MessageKey }[] = [
@@ -21,10 +22,11 @@ const LEVEL_BADGE: Record<string, string> = {
 const hex = roleColor;
 const permKey = (p: string) => `perm.${p}` as MessageKey;
 
-type View = "members" | "roles" | "integrations";
+type View = "members" | "roles" | "blacklist" | "integrations";
 const VIEWS: { key: View; label: MessageKey }[] = [
   { key: "members", label: "mgmt.members" },
   { key: "roles", label: "mgmt.roles" },
+  { key: "blacklist", label: "mgmt.blacklist" },
   { key: "integrations", label: "mgmt.integrations" },
 ];
 
@@ -54,6 +56,8 @@ export const ManagementWorkspace: React.FC = () => {
         <MembersView key={revision} catalog={catalog} />
       ) : view === "roles" ? (
         <RolesView key={revision} catalog={catalog} />
+      ) : view === "blacklist" ? (
+        <BlacklistView key={revision} />
       ) : (
         <div data-guide="mgmt-integrations" className="flex flex-col gap-4">
           <DiscordWebhookPanel />

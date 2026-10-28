@@ -22,6 +22,7 @@
     "courses_too_many": "Le clan a déjà {n} cours — supprimez-en un pour en ajouter un nouveau.",
     "operations_too_many": "Le clan a déjà {n} opérations — supprimez-en d'anciennes pour en ajouter une.",
     "operation_not_yours": "Seul l'auteur ou un officier ayant les droits de contenu du clan peut modifier ou supprimer cette opération.",
-    "operation_snapshots_too_many": "L'opération a déjà {n} captures — impossible d'en ajouter."
+    "operation_snapshots_too_many": "L'opération a déjà {n} captures — impossible d'en ajouter.",
+    "clan_blacklisted": "Vous êtes sur la liste noire de ce clan."
   }
 }

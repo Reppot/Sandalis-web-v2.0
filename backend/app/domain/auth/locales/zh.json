@@ -38,7 +38,8 @@
     "nothing_selected": "请选择服务器或军团。",
     "clan_created": "军团“{clan}”已关联到你的 Discord 服务器。你是指挥官。",
     "signed_in": "欢迎，{name}。",
-    "joined": "你已加入军团“{clan}”的终端。"
+    "joined": "你已加入军团“{clan}”的终端。",
+    "blacklisted": "无法加入：你在黑名单中。"
   },
   "guest": {
     "disabled": "访客访问已禁用。",

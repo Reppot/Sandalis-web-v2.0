@@ -17,6 +17,9 @@ from app.core.tenancy import bypass_clan_filter
 from app.models.clan_settings import ClanSettings
 from app.models.rbac import Clan, ClanMembership, User
 from app.schemas.clan_settings import (
+    BlacklistRead,
+    BlacklistSaved,
+    BlacklistUpdate,
     DiscordMemberRead,
     DiscordMembersRead,
     DiscordRoleRead,
@@ -27,6 +30,7 @@ from app.schemas.clan_settings import (
     PermissionCatalogRead,
     PermissionGroupRead,
 )
+from app.services import blacklist
 from app.services.discord_roles import (
     CUSTOM,
     DEFAULT_LEVEL,
@@ -140,6 +144,44 @@ async def update_discord_roles(payload: DiscordRolesUpdate, service: SettingsSer
     await service.session.commit()
     return DiscordRolesSaved(roles=await _read(service, check_bot=False),
                              message=service.t.t("roles.saved", domain="reports"))
+
+
+@router.get("/blacklist", response_model=BlacklistRead, summary="Чёрный список клана: участники и роли (командир)")
+async def read_blacklist(service: SettingsServiceDep, _: OwnerDep) -> BlacklistRead:
+    return BlacklistRead(**blacklist.view(await _row(service)))
+
+
+@router.put("/blacklist", response_model=BlacklistSaved,
+            summary="Сохранить чёрный список: у попавших в него снимается членство (командир)")
+async def update_blacklist(payload: BlacklistUpdate, service: SettingsServiceDep, principal: OwnerDep) -> BlacklistSaved:
+    row = await _row(service)
+    owners = set((await service.session.execute(
+        select(ClanMembership.user_id).where(ClanMembership.role == ClanRole.OWNER)
+    )).scalars().all())
+    if any(u.id in owners or u.id == principal.user_id for u in payload.users):
+        raise AppError(message_key="blacklist.owner", domain="reports", code="validation_error",
+                       status_code=422, params={})
+    before = {u.get("id"): u for u in row.blacklist_users or []}
+    names = dict((await service.session.execute(
+        select(User.id, User.display_name).where(User.id.in_([u.id for u in payload.users]))
+    )).all()) if payload.users else {}
+    stamp = snapshot_at().isoformat()
+    users: list[dict] = []
+    for u in {x.id: x for x in payload.users}.values():
+        old = before.get(u.id) or {}
+        users.append({
+            "id": u.id,
+            "name": u.name or names.get(u.id) or old.get("name"),
+            "reason": u.reason if u.reason is not None else old.get("reason"),
+            "by": old.get("by") or (principal.display_name or principal.user_id),
+            "at": old.get("at") or stamp,
+        })
+    row.blacklist_users = users
+    row.blacklist_roles = sorted(set(payload.roles))
+    removed = await blacklist.apply(service.session, service.clan_id, row)
+    await service.session.commit()
+    return BlacklistSaved(blacklist=BlacklistRead(**blacklist.view(row)), removed=removed,
+                          message=service.t.t("blacklist.saved", domain="reports", n=removed))
 
 
 @router.get("/members", response_model=DiscordMembersRead,
