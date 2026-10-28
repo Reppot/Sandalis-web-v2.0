@@ -9,6 +9,8 @@ import { Icon, assetUrl, cn, useT, type MessageKey } from "@/shared";
 
 const MIN_SCALE = 0.05;
 const MAX_SCALE = 3;
+/** Пауза после жеста, после которой React перерисовывает подписи и толщину линий плана. */
+const COMMIT_MS = 160;
 
 interface View {
   scale: number;
@@ -52,9 +54,22 @@ function draftShape(tool: Tool, start: Point, p: Point, d: Defaults): Shape | nu
   return null;
 }
 
+/** Трансформ мира и CSS-переменные размера маркеров (--m) и подписей (--inv). */
+function worldStyle(v: View): React.CSSProperties {
+  return {
+    transform: `translate(${v.x}px, ${v.y}px) scale(${v.scale})`,
+    ["--m" as string]: String((1 / v.scale) * markerFactor(v.scale)),
+    ["--inv" as string]: String(1 / v.scale),
+  };
+}
+
 /**
  * Карта: гексы War API, постройки войны, план поверх. Панорама — перетаскиванием (или средней
  * кнопкой мыши при любом инструменте), масштаб — колесом, щипком, кнопками.
+ *
+ * Производительность: во время жеста React не перерисовывает карту и меняется только трансформ
+ * слоя мира. Через COMMIT_MS после жеста вид фиксируется: CSS-переменные возвращают маркерам и
+ * подписям экранный размер, обновляются видимость подписей и толщина линий плана.
  */
 export const MapCanvas: React.FC<{
   data: WorldMap;
@@ -65,7 +80,25 @@ export const MapCanvas: React.FC<{
 }> = ({ data, hidden, editor, frame }) => {
   const t = useT();
   const box = React.useRef<HTMLDivElement>(null);
-  const [view, setView] = React.useState<View | null>(null);
+  const world = React.useRef<HTMLDivElement>(null);
+  // view — «зафиксированный» вид для React; viewRef — живой вид во время жеста
+  const [view, setViewState] = React.useState<View | null>(null);
+  const viewRef = React.useRef<View | null>(null);
+  const commitTimer = React.useRef<number | undefined>(undefined);
+  const setView = React.useCallback((next: View | null | ((v: View | null) => View | null), live = false) => {
+    const v = typeof next === "function" ? next(viewRef.current) : next;
+    viewRef.current = v;
+    const el = world.current;
+    if (v && el) {
+      // во время жеста — только трансформ (≈0,1 мс): смена --m / --inv пересчитывает стили
+      // всех ~1500 узлов мира (≈17 мс), поэтому размер маркеров догоняет при фиксации вида
+      el.style.transform = worldStyle(v).transform as string;
+    }
+    window.clearTimeout(commitTimer.current);
+    if (live) commitTimer.current = window.setTimeout(() => setViewState(viewRef.current), COMMIT_MS);
+    else setViewState(v);
+  }, []);
+  React.useEffect(() => () => window.clearTimeout(commitTimer.current), []);
   const [draft, setDraftState] = React.useState<Shape | null>(null);
   // черновик ещё и в ref: быстрый «рывок» мышью отпускает кнопку раньше перерисовки
   const draftRef = React.useRef<Shape | null>(null);
@@ -78,8 +111,6 @@ export const MapCanvas: React.FC<{
   const gesture = React.useRef<Gesture>(null);
   const [frameDraft, setFrameDraft] = React.useState<Rect | null>(null);
   const readOnly = Boolean(frame);
-  const viewRef = React.useRef<View | null>(null);
-  viewRef.current = view;
   const ed = React.useRef(editor);
   ed.current = editor;
 
@@ -99,7 +130,7 @@ export const MapCanvas: React.FC<{
     const { width, height } = el.getBoundingClientRect();
     const scale = Math.min(width / target.w, height / target.h) * (frame ? 0.98 : 0.94);
     setView({ scale, x: (width - target.w * scale) / 2 - target.minX * scale, y: (height - target.h * scale) / 2 - target.minY * scale });
-  }, [target, frame]);
+  }, [target, frame, setView]);
 
   // вписать карту при открытии; при смене размера окна (боковая панель, поворот телефона)
   // масштаб сохраняется, а центр карты остаётся в центре
@@ -116,7 +147,7 @@ export const MapCanvas: React.FC<{
     });
     ro.observe(el);
     return () => ro.disconnect();
-  }, [fit]);
+  }, [fit, setView]);
 
   // масштаб вокруг точки (px внутри окна карты)
   const zoomAt = React.useCallback((factor: number, px: number, py: number) => {
@@ -125,8 +156,8 @@ export const MapCanvas: React.FC<{
       const scale = Math.min(MAX_SCALE, Math.max(MIN_SCALE, v.scale * factor));
       const k = scale / v.scale;
       return { scale, x: px - (px - v.x) * k, y: py - (py - v.y) * k };
-    });
-  }, []);
+    }, true);
+  }, [setView]);
   const zoomCenter = (factor: number) => {
     const r = box.current?.getBoundingClientRect();
     if (r) zoomAt(factor, r.width / 2, r.height / 2);
@@ -222,7 +253,7 @@ export const MapCanvas: React.FC<{
     if (!g) return;
     const { shapes, onUpdate, tool, defaults } = ed.current;
     if (g.type === "pan") {
-      setView((v) => (v ? { ...v, x: v.x + e.clientX - prev.x, y: v.y + e.clientY - prev.y } : v));
+      setView((v) => (v ? { ...v, x: v.x + e.clientX - prev.x, y: v.y + e.clientY - prev.y } : v), true);
     } else if (g.type === "draw") {
       setDraft(draftShape(tool, g.start, toWorld(e.clientX, e.clientY), defaults));
     } else if (g.type === "frame") {
@@ -266,9 +297,12 @@ export const MapCanvas: React.FC<{
   };
 
   const scale = view?.scale ?? 0.1;
-  // маркеры держат экранный размер; на общем плане чуть мельче, чтобы не слипались
-  const marker = (1 / scale) * markerFactor(scale);
+  const live = viewRef.current ?? view;
   const resistance = data.phase === "resistance";
+  const planLabels = React.useMemo(
+    () => ({ arrow: (u: string) => t(`planning.unit.${u}` as MessageKey), status: (st: Report["status"] | null) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")) }),
+    [t],
+  );
   const cursor = readOnly || editor.tool === "select" ? undefined : editor.tool === "eraser" ? "cell" : "crosshair";
 
   return (
@@ -289,9 +323,9 @@ export const MapCanvas: React.FC<{
       }}
     >
       {view ? (
-        <div className="planning-world" style={{ transform: `translate(${view.x}px, ${view.y}px) scale(${view.scale})` }}>
+        <div ref={world} className="planning-world" style={live ? worldStyle(live) : undefined}>
           {data.regions.map((r) => (
-            <Hex key={r.key} region={r} hidden={hidden} marker={marker} scale={scale} showItems={!resistance} />
+            <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance} />
           ))}
           <PlanLayer
             shapes={editor.shapes}
@@ -301,7 +335,7 @@ export const MapCanvas: React.FC<{
             structures={editor.structures}
             orders={editor.orders}
             bounds={bounds}
-            labels={{ arrow: (u) => t(`planning.unit.${u}` as MessageKey), status: (st) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")) }}
+            labels={planLabels}
           />
           {frameDraft ? <div className="planning-frame is-draft" style={{ left: frameDraft.x, top: frameDraft.y, width: frameDraft.w, height: frameDraft.h, borderWidth: 2 / scale }} /> : null}
           {frame ? <FrameMask frame={frame} scale={scale} /> : null}
@@ -316,28 +350,29 @@ export const MapCanvas: React.FC<{
   );
 };
 
-const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; marker: number; scale: number; showItems: boolean }> = React.memo(({ region, hidden, marker, scale, showItems }) => {
+const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; scale: number; showItems: boolean }> = React.memo(({ region, hidden, scale, showItems }) => {
   const t = useT();
   const items = showItems ? region.items.filter((it) => !hidden.has(it.kind)) : [];
   const labels = React.useMemo(() => visibleLabels(region.labels, scale), [region.labels, scale]);
   return (
     <div className="planning-hex" style={{ left: hexLeft(region.col), top: hexTop(region.row), width: HEX_W, height: HEX_H }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- карта региона War API, WebP */}
-      <img src={assetUrl(`/api/v1/assets/maps/hex/${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} />
+      <img src={assetUrl(`/api/v1/assets/maps/hex/${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} decoding="async" />
       {scale > 0.3
         ? labels.map((l) => (
-            <span key={l.text} className={cn("planning-town", !l.major && "is-minor")} style={{ left: l.x * HEX_W, top: l.y * HEX_H, transform: `scale(${1 / scale}) translate(-50%, ${l.major ? "3px" : "-50%"})` }}>{l.text}</span>
+            <span key={l.text} className={cn("planning-town", !l.major && "is-minor")} style={{ left: l.x * HEX_W, top: l.y * HEX_H, transform: `scale(var(--inv)) translate(-50%, ${l.major ? "3px" : "-50%"})` }}>{l.text}</span>
           ))
-        : <span className="planning-region" style={{ left: HEX_W / 2, top: HEX_H / 2, transform: `translate(-50%, -50%) scale(${marker * 1.6})` }}>{region.name}</span>}
+        : <span className="planning-region" style={{ left: HEX_W / 2, top: HEX_H / 2 }}>{region.name}</span>}
       {items.map((it, i) => (
-        <Marker key={i} item={it} region={region.name} scale={marker} t={t} />
+        <Marker key={i} item={it} region={region.name} t={t} />
       ))}
     </div>
   );
 });
 Hex.displayName = "Hex";
 
-const Marker: React.FC<{ item: MapItem; region: string; scale: number; t: ReturnType<typeof useT> }> = ({ item, region, scale, t }) => {
+/** Маркер постройки: экранный размер — через CSS-переменную --m слоя мира (без перерисовки). */
+const Marker: React.FC<{ item: MapItem; region: string; t: ReturnType<typeof useT> }> = React.memo(({ item, region, t }) => {
   const title = [
     t(`planning.kind.${item.kind}` as MessageKey) + (item.tier && item.kind !== "relic" ? ` T${item.tier}` : ""),
     item.team === "neutral" ? t("planning.neutral") : t(item.team === "wardens" ? "world.wardens" : "world.colonials"),
@@ -348,14 +383,15 @@ const Marker: React.FC<{ item: MapItem; region: string; scale: number; t: Return
   return (
     <span
       className={cn("planning-marker", `team-${item.team}`, item.victory && "is-victory", item.scorched && "is-scorched")}
-      style={{ left: item.x * HEX_W, top: item.y * HEX_H, transform: `translate(-50%, -50%) scale(${scale})` }}
+      style={{ left: item.x * HEX_W, top: item.y * HEX_H }}
       title={title}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- иконка War API 48×48 */}
-      <img src={assetUrl(iconOf(item)) ?? ""} alt="" width={20} height={20} draggable={false} />
+      <img src={assetUrl(iconOf(item)) ?? ""} alt="" width={20} height={20} draggable={false} decoding="async" />
     </span>
   );
-};
+});
+Marker.displayName = "Marker";
 
 /** Всё вне кадра снимка затемнено — видно, что это вырезанный кусок карты. */
 const FrameMask: React.FC<{ frame: Rect; scale: number }> = ({ frame, scale }) => {

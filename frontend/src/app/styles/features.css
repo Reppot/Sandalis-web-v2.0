@@ -712,15 +712,15 @@
 /* ─────────────────────────── ПЛАНИРОВАНИЕ (карта войны) ─────────────────────────── */
 .planning { display: flex; min-height: 0; flex: 1; gap: 1rem; }
 .planning-map { position: relative; flex: 1; min-width: 0; overflow: hidden; padding: 0; background: #1f2b31; }
-.planning-canvas { position: absolute; inset: 0; cursor: grab; touch-action: none; user-select: none; }
+.planning-canvas { position: absolute; inset: 0; cursor: grab; touch-action: none; user-select: none; contain: strict; }
 .planning-canvas:active { cursor: grabbing; }
 .planning-world { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
-.planning-hex { position: absolute; }
+.planning-hex { position: absolute; contain: layout style; }
 .planning-hex > img { display: block; width: 100%; height: 100%; pointer-events: none; }
 .planning-region, .planning-town { position: absolute; transform-origin: 50% 50%; pointer-events: none; white-space: nowrap; color: #f4efe2; font-weight: 600; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), 0 0 6px rgba(0, 0, 0, 0.6); }
-.planning-region { font-size: 15px; letter-spacing: 0.02em; }
+.planning-region { font-size: 15px; letter-spacing: 0.02em; transform: translate(-50%, -50%) scale(calc(var(--m, 1) * 1.6)); }
 .planning-town { transform-origin: 0 0; border-radius: 6px; background: rgb(17 20 24 / 0.72); padding: 1px 6px 2px; font-size: 11.5px; line-height: 1.35; text-shadow: none; }
-.planning-marker { position: absolute; display: grid; width: 26px; height: 26px; place-items: center; border: 1.5px solid rgba(255, 255, 255, 0.75); border-radius: 50%; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55); transform-origin: 50% 50%; }
+.planning-marker { position: absolute; display: grid; width: 26px; height: 26px; place-items: center; border: 1.5px solid rgba(255, 255, 255, 0.75); border-radius: 50%; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55); transform: translate(-50%, -50%) scale(var(--m, 1)); transform-origin: 50% 50%; }
 .planning-marker img { width: 19px; height: 19px; pointer-events: none; }
 .planning-marker.team-wardens { background: #245682; }
 .planning-marker.team-colonials { background: #516c4b; }
