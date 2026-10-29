@@ -57,6 +57,8 @@ class Settings(BaseSettings):
     # публичный ключ приложения (Developer Portal → General Information): подпись запросов
     # на /discord/interactions — кнопки на постах заказов и слэш-команды
     DISCORD_PUBLIC_KEY: str = ""
+    # Sentry: ошибки сервера (пусто — выключено). Персональные данные не отправляются.
+    SENTRY_DSN: str = ""
 
     # --- Frontend / session-cookie --------------------------------------
     FRONTEND_URL: str = "http://localhost:3000"

@@ -10,6 +10,7 @@ PyJWT>=2.9
 httpx>=0.27              # исходящие вызовы: Discord OAuth и вебхуки каналов
 python-multipart>=0.0.9  # UploadFile: сканер MapData.sav, PNG-вложения в Discord
 PyNaCl>=1.5              # Ed25519: подпись запросов Discord Interactions
+sentry-sdk[fastapi]>=2.0 # ошибки сервера в Sentry (включается SENTRY_DSN)
 
 # --- dev/test ----------------------------------------------------------------
 pytest>=8.3

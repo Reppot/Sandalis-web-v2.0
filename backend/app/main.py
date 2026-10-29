@@ -23,6 +23,13 @@ from app.services import discord_bot, game_notify, timer_alerts
 logging.basicConfig(level=logging.INFO)
 
 
+if settings.SENTRY_DSN:
+    import sentry_sdk
+
+    # только ошибки (без трассировок и персональных данных); окружение — ENV
+    sentry_sdk.init(dsn=settings.SENTRY_DSN, environment=settings.ENV, traces_sample_rate=0.0, send_default_pii=False)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     load_catalogs()      # поднять все app/domain/*/locales/*.json в память (~КБ)
