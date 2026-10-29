@@ -40,6 +40,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
     }
   }
   const started = progress.lines.filter((l) => l.delivered > 0);
+  const ordered = progress.lines.reduce((n, l) => n + l.ordered, 0);
   const canReport = can(Scopes.REPORTS_PROGRESS) && report.status !== "cancelled" && report.status !== "done";
 
   const remove = async (id: string) => {
@@ -66,9 +67,11 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
         ) : null}
       </div>
 
-      {compact ? null : started.length ? (
+      {/* состав заказа — все строки, и ещё не начатые: что везти и сколько уже привезли */}
+      {compact ? null : progress.lines.length ? (
         <div className="report-progress-lines">
-          {started.map((l) => (
+          <div className="col-span-full text-xs font-semibold text-fg-3">{t("orderSend.summary", { n: progress.lines.length, q: ordered })}</div>
+          {progress.lines.map((l) => (
             <div key={l.line_id} className={`report-progress-line ${l.delivered >= l.ordered ? "is-done" : ""}`}>
               <ItemIcon sources={[assetUrl(l.icon_url)]} size={34} label={l.name} />
               <span className="min-w-0 flex-1">
@@ -81,6 +84,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
               <b className="report-progress-qty">{l.delivered}/{l.ordered} {unitLabel(l.unit, t)}</b>
             </div>
           ))}
+          {!started.length ? <p className="col-span-full text-sm text-fg-3">{t("progress.empty")}</p> : null}
         </div>
       ) : (
         <p className="mt-3 text-sm text-fg-3">{t("progress.empty")}</p>
