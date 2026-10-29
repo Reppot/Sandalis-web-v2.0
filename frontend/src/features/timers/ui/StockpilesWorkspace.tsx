@@ -357,8 +357,8 @@ const StockpileItems: React.FC<{ stockpile: Stockpile }> = ({ stockpile }) => {
   React.useEffect(() => {
     let cancelled = false;
     stockpileApi
-      .get(stockpile.id)
-      .then((full) => !cancelled && setItems(full.items))
+      .items(stockpile.id)
+      .then((list) => !cancelled && setItems(list))
       .catch(() => !cancelled && setItems([]));
     return () => {
       cancelled = true;

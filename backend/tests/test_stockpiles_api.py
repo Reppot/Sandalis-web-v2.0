@@ -125,3 +125,25 @@ def test_replace_contents_keeps_crates_and_loose_apart(db):
 
     run(main())
 
+
+
+def test_contents_batch(db):
+    """Содержимое нескольких складов одним запросом; чужие и битые id игнорируются."""
+    from tests.conftest import bearer, seed_clan, run as _run
+    from httpx import ASGITransport, AsyncClient
+    from app.main import app as _app
+
+    async def main() -> None:
+        await seed_clan("CLAN_A")
+        await seed_clan("CLAN_B")
+        h, other = bearer(), bearer(clan_id="CLAN_B")
+        async with AsyncClient(transport=ASGITransport(app=_app), base_url="http://test") as c:
+            a = (await c.post("/api/v1/stockpiles", headers=h, json={"name": "A", "region": "Onyx"})).json()["stockpile"]
+            b = (await c.post("/api/v1/stockpiles", headers=h, json={"name": "B", "region": "Onyx"})).json()["stockpile"]
+            foreign = (await c.post("/api/v1/stockpiles", headers=other, json={"name": "X", "region": "Onyx"})).json()["stockpile"]
+            r = await c.get("/api/v1/stockpiles/contents", headers=h, params={"ids": f"{a['id']},{b['id']},bad,{foreign['id']}"})
+            assert r.status_code == 200, r.text
+            body = r.json()
+            assert body[a["id"]] == [] and body[b["id"]] == [] and body.get(foreign["id"]) == []
+
+    _run(main())

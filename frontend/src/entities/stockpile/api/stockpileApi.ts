@@ -1,6 +1,6 @@
 import { apiClient } from "@/shared";
 import type { CreatedStockpileEnvelope, Page } from "@/shared";
-import { toStockpile, type Stockpile, type StockpileKind, type StockpileReadDto } from "@/entities/stockpile/model/types";
+import { toStockpile, toStockpileItem, type Stockpile, type StockpileItemReadDto, type StockpileKind, type StockpileReadDto } from "@/entities/stockpile/model/types";
 
 export type SyncSource = "json" | "txt" | "clipboard" | "xlsx" | "scan" | "manual";
 
@@ -21,6 +21,14 @@ export const stockpileApi = {
   async list(): Promise<Stockpile[]> {
     const page = await apiClient.get<Page<StockpileReadDto>>("/api/v1/stockpiles", { params: { limit: 200 } });
     return page.items.map(toStockpile);
+  },
+
+  /** Содержимое склада. Запросы одного кадра склеиваются в один (раскрытые карточки «Складов»). */
+  items(id: string): Promise<Stockpile["items"]> {
+    return new Promise((resolve, reject) => {
+      pendingItems.set(id, [...(pendingItems.get(id) ?? []), { resolve, reject }]);
+      if (pendingItems.size === 1 && pendingItems.get(id)!.length === 1) queueMicrotask(flushItems);
+    });
   },
 
   async get(id: string): Promise<Stockpile> {
@@ -47,3 +55,20 @@ export const stockpileApi = {
     await apiClient.delete<void>(`/api/v1/stockpiles/${id}`);
   },
 };
+
+type ItemsWaiter = { resolve: (items: Stockpile["items"]) => void; reject: (err: unknown) => void };
+const pendingItems = new Map<string, ItemsWaiter[]>();
+
+async function flushItems(): Promise<void> {
+  const batch = new Map(pendingItems);
+  pendingItems.clear();
+  try {
+    const r = await apiClient.get<Record<string, StockpileItemReadDto[]>>("/api/v1/stockpiles/contents", { params: { ids: [...batch.keys()].join(",") } });
+    for (const [id, waiters] of batch) {
+      const items = (r[id] ?? []).map(toStockpileItem);
+      waiters.forEach((w) => w.resolve(items));
+    }
+  } catch (err) {
+    batch.forEach((waiters) => waiters.forEach((w) => w.reject(err)));
+  }
+}

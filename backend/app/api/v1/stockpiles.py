@@ -3,6 +3,7 @@ from __future__ import annotations
 import uuid
 from typing import Annotated, Sequence
 
+from sqlalchemy import select
 from fastapi import APIRouter, Depends, Query, Response, status
 
 from app.api.deps import (
@@ -106,6 +107,37 @@ async def list_stockpiles(
 async def create_stockpile(payload: StockpileCreate, service: ServiceDep) -> StockpileCreated:
     stockpile, message = await service.create_stockpile(payload)
     return StockpileCreated(stockpile=_read(stockpile, codes=service.principal.can(Scopes.STOCKPILES_CODES)), message=message)
+
+
+@router.get(
+    "/contents",
+    response_model=dict[str, list[StockpileItemRead]],
+    summary="Содержимое нескольких складов одним запросом (раскрытые карточки «Складов»)",
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_READ]))],
+)
+async def stockpile_contents(
+    service: ServiceDep, ids: Annotated[str, Query(max_length=8000, description="id складов через запятую")]
+) -> dict[str, list[StockpileItemRead]]:
+    wanted = []
+    for raw in ids.split(","):
+        try:
+            wanted.append(uuid.UUID(raw.strip()))
+        except ValueError:
+            continue
+    if not wanted:
+        return {}
+    items = (await service.session.execute(
+        service._scoped(select(StockpileItem), StockpileItem)
+        .where(StockpileItem.stockpile_id.in_(wanted[:200]))
+        .order_by(StockpileItem.item_code)
+    )).scalars().all()
+    brief = await service.catalog_brief(i.item_code for i in items)
+    out: dict[str, list[StockpileItemRead]] = {str(w): [] for w in wanted[:200]}
+    for i in items:
+        out[str(i.stockpile_id)].append(StockpileItemRead.model_validate(i).model_copy(update=dict(
+            zip(("name", "name_en", "icon_url"), brief.get(i.item_code, (None, None, None)))
+        )))
+    return out
 
 
 @router.get(
