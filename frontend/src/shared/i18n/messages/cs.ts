@@ -1089,6 +1089,7 @@ export const cs: Record<MessageKey, string> = {
   "hq.bulk.applied": "Použito na {n} z {total}",
   "hq.board.empty": "Prázdné — přetáhněte sem objednávku",
   "hq.cal.noDue": "Bez termínu ({n}):",
+  "hq.cal.emptyMonth": "Tento měsíc žádné termíny ani operace.",
   "hq.where": "Kam",
   "hq.tags": "Štítky",
   "hq.tagPlaceholder": "#štítek a Enter",

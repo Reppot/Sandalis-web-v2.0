@@ -1088,6 +1088,7 @@ export const ru = {
   "hq.bulk.applied": "Применено к {n} из {total}",
   "hq.board.empty": "Пусто — перетащите сюда заказ",
   "hq.cal.noDue": "Без срока ({n}):",
+  "hq.cal.emptyMonth": "В этом месяце нет сроков и операций.",
   "hq.where": "Куда",
   "hq.tags": "Теги",
   "hq.tagPlaceholder": "#тег и Enter",

@@ -1090,6 +1090,7 @@ export const uk: Record<MessageKey, string> = {
   "hq.bulk.applied": "Застосовано до {n} з {total}",
   "hq.board.empty": "Порожньо — перетягніть сюди замовлення",
   "hq.cal.noDue": "Без терміну ({n}):",
+  "hq.cal.emptyMonth": "Цього місяця немає термінів і операцій.",
   "hq.where": "Куди",
   "hq.tags": "Теги",
   "hq.tagPlaceholder": "#тег і Enter",

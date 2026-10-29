@@ -28,7 +28,7 @@ export const BoardView: React.FC<{
   const allowed = (s: ReportStatus) => Boolean(drag) && canStatus && drag!.status !== s && REPORT_TRANSITIONS[drag!.status].includes(s);
 
   return (
-    <div className="hq-board" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(15rem, 1fr))` }}>
+    <div className="hq-board" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(15rem, 1fr))`, ["--cols" as string]: columns.length }}>
       {columns.map((col) => {
         const list = reports.filter((r) => r.status === col);
         return (
@@ -100,13 +100,19 @@ export const CalendarView: React.FC<{ reports: Report[]; ops: Operation[]; onOpe
   const weekdays = Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(locale, { weekday: "short" }).format(new Date(2024, 0, 1 + i)));
   const noDue = reports.filter((r) => !r.due_date && (r.status === "open" || r.status === "in_progress"));
 
+  // телефон: вместо сетки месяца — список дней месяца, где есть сроки или операции
+  const agenda = cells
+    .filter((d) => d.getMonth() === month.getMonth())
+    .map((d) => ({ d, key: isoDate(d) }))
+    .filter(({ key }) => (byDue.get(key)?.length ?? 0) + (opsBy.get(key)?.length ?? 0) > 0);
+
   return (
-    <section className="panel p-4">
+    <section className="panel hq-cal p-4">
       <div className="ops-cal-head">
         <button type="button" className="icon-btn" onClick={() => setMonth((m) => new Date(m.getFullYear(), m.getMonth() - 1, 1))} aria-label={t("operations.prevMonth")}><Icon name="chevronLeft" size={16} /></button>
         <span className="ops-cal-title">{new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(month)}</span>
         <button type="button" className="icon-btn" onClick={() => setMonth((m) => new Date(m.getFullYear(), m.getMonth() + 1, 1))} aria-label={t("operations.nextMonth")}><Icon name="chevronRight" size={16} /></button>
-        <span className="ml-auto flex items-center gap-3 text-xs text-fg-3">
+        <span className="ml-auto flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-fg-3">
           <span className="flex items-center gap-1"><i className="hq-legend is-op" />{t("hq.operation")}</span>
           <span className="flex items-center gap-1"><i className="hq-legend is-late" />{t("hq.overdue")}</span>
         </span>
@@ -131,6 +137,19 @@ export const CalendarView: React.FC<{ reports: Report[]; ops: Operation[]; onOpe
           );
         })}
       </div>
+      <ol className="hq-agenda">
+        {agenda.length === 0 ? <li className="text-sm text-fg-3">{t("hq.cal.emptyMonth")}</li> : agenda.map(({ d, key }) => (
+          <li key={key} className={cn("hq-agenda-day", key === now && "is-today", key < now && "is-past")}>
+            <span className="hq-agenda-date first-cap">{new Intl.DateTimeFormat(locale, { weekday: "short", day: "numeric", month: "short" }).format(d)}</span>
+            <span className="flex min-w-0 flex-1 flex-col gap-1">
+              {(opsBy.get(key) ?? []).map((o) => <span key={o.id} className="ops-cal-op" title={o.title}>⚑ {o.title}</span>)}
+              {(byDue.get(key) ?? []).map((r) => (
+                <button key={r.id} type="button" className={cn("hq-cal-task", `prio-${r.priority}`, isOverdue(r) && "is-late", r.status === "done" && "is-done")} onClick={() => onOpen(r)}>{r.title}</button>
+              ))}
+            </span>
+          </li>
+        ))}
+      </ol>
       {noDue.length ? (
         <p className="mt-3 text-xs text-fg-3">
           {t("hq.cal.noDue", { n: noDue.length })}{" "}

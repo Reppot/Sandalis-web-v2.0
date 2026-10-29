@@ -1090,6 +1090,7 @@ export const pl: Record<MessageKey, string> = {
   "hq.bulk.applied": "Zastosowano do {n} z {total}",
   "hq.board.empty": "Pusto — przeciągnij tu zamówienie",
   "hq.cal.noDue": "Bez terminu ({n}):",
+  "hq.cal.emptyMonth": "W tym miesiącu brak terminów i operacji.",
   "hq.where": "Dokąd",
   "hq.tags": "Tagi",
   "hq.tagPlaceholder": "#tag i Enter",

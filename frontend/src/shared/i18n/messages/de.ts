@@ -1090,6 +1090,7 @@ export const de: Record<MessageKey, string> = {
   "hq.bulk.applied": "Auf {n} von {total} angewendet",
   "hq.board.empty": "Leer – Auftrag hierher ziehen",
   "hq.cal.noDue": "Ohne Frist ({n}):",
+  "hq.cal.emptyMonth": "Diesen Monat keine Fristen oder Operationen.",
   "hq.where": "Ziel",
   "hq.tags": "Tags",
   "hq.tagPlaceholder": "#Tag und Enter",

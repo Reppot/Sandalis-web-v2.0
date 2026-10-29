@@ -1090,6 +1090,7 @@ export const zh: Record<MessageKey, string> = {
   "hq.bulk.applied": "已应用于 {n}/{total}",
   "hq.board.empty": "空——把订单拖到这里",
   "hq.cal.noDue": "无截止日期（{n}）：",
+  "hq.cal.emptyMonth": "本月没有截止任务或行动。",
   "hq.where": "目的地",
   "hq.tags": "标签",
   "hq.tagPlaceholder": "#标签 回车",
