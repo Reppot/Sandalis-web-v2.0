@@ -142,5 +142,17 @@
     "reminder": "⏰ L'opération « {title} » commence dans une heure — <t:{stamp}:t>. Rassemblement !",
     "joined": "Vous êtes inscrit à « {title} ».",
     "left": "Vous vous êtes désinscrit de « {title} »."
+  },
+  "notify": {
+    "operation_mention": "{sender} a mentionné votre rôle dans l'opération « {title} »",
+    "feedback_reply": "Le développeur a répondu à votre message",
+    "task_assigned": "{sender} vous a assigné la commande « {title} »",
+    "task_due": "Échéance de « {title} » : {date}",
+    "order_delivered": "La commande « {title} » pour « {operation} » est livrée",
+    "order_comment": "{sender} vous a mentionné dans « {title} »",
+    "timer_warn": "La réserve « {title} » expire bientôt",
+    "timer_expired": "La réserve « {title} » a expiré !",
+    "game_award": "Nouvelle récompense — voyez vos statistiques !",
+    "generic": "Nouveau message SINDARIS"
   }
 }

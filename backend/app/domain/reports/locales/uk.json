@@ -142,5 +142,17 @@
     "reminder": "⏰ За годину починається операція «{title}» — <t:{stamp}:t>. Збір!",
     "joined": "Ви записані на «{title}».",
     "left": "Ви відмовилися від «{title}»."
+  },
+  "notify": {
+    "operation_mention": "{sender} згадав(ла) вашу роль в операції «{title}»",
+    "feedback_reply": "Розробник відповів на ваше повідомлення",
+    "task_assigned": "{sender} призначив(ла) вам замовлення «{title}»",
+    "task_due": "Термін замовлення «{title}» — {date}",
+    "order_delivered": "Замовлення «{title}» до операції «{operation}» доставлено повністю",
+    "order_comment": "{sender} згадав(ла) вас у замовленні «{title}»",
+    "timer_warn": "Резерв «{title}» скоро спливе — оновіть його",
+    "timer_expired": "Резерв «{title}» сплив!",
+    "game_award": "Нова нагорода постачання — зазирніть у статистику!",
+    "generic": "Новий лист у пошті SINDARIS"
   }
 }

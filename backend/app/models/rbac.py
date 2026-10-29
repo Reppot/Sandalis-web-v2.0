@@ -10,6 +10,7 @@ from sqlalchemy import (
     Index,
     String,
     UniqueConstraint,
+    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -47,6 +48,8 @@ class User(Base, TimestampMixin):
     display_name: Mapped[str] = mapped_column(String(120), nullable=False)
     preferred_locale: Mapped[str | None] = mapped_column(String(8), nullable=True)
     avatar_url: Mapped[str | None] = mapped_column(String(512), nullable=True)
+    # уведомления вне сайта: дублировать почту сайта в личные сообщения Discord (по согласию)
+    notify_dm: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
 
 
 class ClanMembership(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):

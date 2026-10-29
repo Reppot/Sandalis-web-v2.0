@@ -142,5 +142,17 @@
     "reminder": "⏰ 行动“{title}”将在一小时后开始——<t:{stamp}:t>。集合！",
     "joined": "你已报名“{title}”。",
     "left": "你已退出“{title}”。"
+  },
+  "notify": {
+    "operation_mention": "{sender} 在行动“{title}”中提到了你的身份组",
+    "feedback_reply": "开发者回复了你的消息",
+    "task_assigned": "{sender} 给你分配了订单“{title}”",
+    "task_due": "订单“{title}”截止：{date}",
+    "order_delivered": "作战“{operation}”的订单“{title}”已全部送达",
+    "order_comment": "{sender} 在订单“{title}”中提到了你",
+    "timer_warn": "储备“{title}”即将到期——请刷新",
+    "timer_expired": "储备“{title}”已到期！",
+    "game_award": "新的补给奖励——去看看统计吧！",
+    "generic": "SINDARIS 新消息"
   }
 }

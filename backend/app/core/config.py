@@ -59,6 +59,10 @@ class Settings(BaseSettings):
     DISCORD_PUBLIC_KEY: str = ""
     # Sentry: ошибки сервера (пусто — выключено). Персональные данные не отправляются.
     SENTRY_DSN: str = ""
+    # Web Push (уведомления в браузере): ключи VAPID; пусто — push выключен
+    VAPID_PUBLIC_KEY: str = ""
+    VAPID_PRIVATE_KEY: str = ""
+    VAPID_SUBJECT: str = "mailto:admin@sindaris.app"
 
     # --- Frontend / session-cookie --------------------------------------
     FRONTEND_URL: str = "http://localhost:3000"

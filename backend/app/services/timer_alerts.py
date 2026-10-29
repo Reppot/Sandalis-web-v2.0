@@ -162,4 +162,11 @@ async def watch() -> None:
             await discord_ops.remind()
         except Exception:  # noqa: BLE001
             log.warning("operation reminders pass failed", exc_info=True)
+        try:
+            # почта сайта → ЛС Discord и push в браузер (по согласию)
+            from app.services import notify_dispatch
+
+            await notify_dispatch.dispatch()
+        except Exception:  # noqa: BLE001
+            log.warning("notification dispatch failed", exc_info=True)
         await asyncio.sleep(INTERVAL_SEC)

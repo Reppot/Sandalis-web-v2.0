@@ -142,5 +142,17 @@
     "reminder": "⏰ Za godzinę operacja „{title}” — <t:{stamp}:t>. Zbiórka!",
     "joined": "Jesteś zapisany na „{title}”.",
     "left": "Zrezygnowałeś z „{title}”."
+  },
+  "notify": {
+    "operation_mention": "{sender} wspomniał(a) twoją rolę w operacji „{title}”",
+    "feedback_reply": "Deweloper odpowiedział na twoją wiadomość",
+    "task_assigned": "{sender} przypisał(a) ci zamówienie „{title}”",
+    "task_due": "Termin zamówienia „{title}”: {date}",
+    "order_delivered": "Zamówienie „{title}” do „{operation}” dostarczone w całości",
+    "order_comment": "{sender} wspomniał(a) cię w zamówieniu „{title}”",
+    "timer_warn": "Rezerwa „{title}” wkrótce wygaśnie — odnów ją",
+    "timer_expired": "Rezerwa „{title}” wygasła!",
+    "game_award": "Nowa nagroda zaopatrzenia — zajrzyj do statystyk!",
+    "generic": "Nowa wiadomość w SINDARIS"
   }
 }

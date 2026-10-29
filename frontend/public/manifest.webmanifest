@@ -1,0 +1,12 @@
+{
+  "name": "SINDARIS Терминал",
+  "short_name": "SINDARIS",
+  "description": "Склады, заказы и логистика клана Foxhole",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f1216",
+  "theme_color": "#0f1216",
+  "icons": [
+    { "src": "/api/v1/assets/brand/clan-logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+  ]
+}

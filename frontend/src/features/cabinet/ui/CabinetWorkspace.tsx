@@ -6,6 +6,7 @@ import { Icon, PageHeader, Segmented, ThemeIcon, assetUrl, useT, useTheme, type 
 import { useSession } from "@/features/cabinet/model/session-context";
 import { LanguagePanel } from "@/features/cabinet/ui/LanguageSwitch";
 import { DeveloperPanel } from "@/features/cabinet/ui/DeveloperPanel";
+import { NotifyPanel } from "@/features/cabinet/ui/NotifyPanel";
 
 const ROLE_LABEL: Record<string, MessageKey> = {
   owner: "role.owner",
@@ -15,7 +16,7 @@ const ROLE_LABEL: Record<string, MessageKey> = {
   guest: "role.guest",
 };
 
-type Section = "profile" | "language" | "appearance" | "developer";
+type Section = "profile" | "language" | "appearance" | "notify" | "developer";
 
 /** «Настройки»: профиль участника, язык интерфейса и внешний вид. */
 export const CabinetWorkspace: React.FC = () => {
@@ -43,6 +44,7 @@ export const CabinetWorkspace: React.FC = () => {
               { value: "profile", label: t("settings.profile"), title: t("settings.profileHint") },
               { value: "language", label: t("settings.language"), title: t("settings.languageHint") },
               { value: "appearance", label: t("settings.appearance"), title: t("settings.appearanceHint") },
+              ...(session.subjectType === "user" ? [{ value: "notify" as const, label: t("settings.notify"), title: t("settings.notifyHint") }] : []),
               ...(session.siteAdmin ? [{ value: "developer" as const, label: t("settings.developer"), title: t("settings.developerHint") }] : []),
             ]}
           />
@@ -51,6 +53,7 @@ export const CabinetWorkspace: React.FC = () => {
 
       {section === "language" ? <LanguagePanel persist={session.subjectType === "user"} /> : null}
       {section === "appearance" ? <AppearancePanel /> : null}
+      {section === "notify" && session.subjectType === "user" ? <NotifyPanel /> : null}
       {section === "developer" && session.siteAdmin ? <DeveloperPanel currentClan={session.clanId} developer={session.developer || session.role === "owner"} /> : null}
       {section === "profile" ? (
         <>

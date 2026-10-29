@@ -142,5 +142,17 @@
     "reminder": "⏰ Operation “{title}” starts in an hour — <t:{stamp}:t>. Assemble!",
     "joined": "You're in for “{title}”.",
     "left": "You're out of “{title}”."
+  },
+  "notify": {
+    "operation_mention": "{sender} mentioned your role in the operation “{title}”",
+    "feedback_reply": "The developer replied to your message",
+    "task_assigned": "{sender} assigned you the order “{title}”",
+    "task_due": "The order “{title}” is due {date}",
+    "order_delivered": "The order “{title}” for “{operation}” is fully delivered",
+    "order_comment": "{sender} mentioned you on the order “{title}”",
+    "timer_warn": "Reserve “{title}” expires soon — refresh it",
+    "timer_expired": "Reserve “{title}” has expired!",
+    "game_award": "New supply award — check your statistics!",
+    "generic": "New message in SINDARIS mail"
   }
 }

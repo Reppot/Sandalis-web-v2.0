@@ -142,5 +142,17 @@
     "reminder": "⏰ Za hodinu začíná operace „{title}“ — <t:{stamp}:t>. Sraz!",
     "joined": "Jste přihlášen(a) na „{title}“.",
     "left": "Odhlásil(a) jste se z „{title}“."
+  },
+  "notify": {
+    "operation_mention": "{sender} zmínil(a) vaši roli v operaci „{title}“",
+    "feedback_reply": "Vývojář odpověděl na vaši zprávu",
+    "task_assigned": "{sender} vám přidělil(a) objednávku „{title}“",
+    "task_due": "Termín objednávky „{title}“: {date}",
+    "order_delivered": "Objednávka „{title}“ pro „{operation}“ je dodána",
+    "order_comment": "{sender} vás zmínil(a) v objednávce „{title}“",
+    "timer_warn": "Rezerva „{title}“ brzy vyprší",
+    "timer_expired": "Rezerva „{title}“ vypršela!",
+    "game_award": "Nové ocenění — mrkněte do statistik!",
+    "generic": "Nová zpráva v SINDARIS"
   }
 }

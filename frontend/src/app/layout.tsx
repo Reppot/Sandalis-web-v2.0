@@ -41,6 +41,7 @@ export const metadata: Metadata = {
     yandex: process.env.YANDEX_VERIFICATION || undefined,
   },
   icons: { icon: "/api/v1/assets/brand/clan-logo.png" },
+  manifest: "/manifest.webmanifest",
   authors: [{ name: "Reppot / SINDARIS" }],
   creator: "Reppot / SINDARIS",
   other: { copyright: "© 2026 Reppot / SINDARIS. All rights reserved." },
