@@ -130,5 +130,17 @@
     "role_prefix": "Liga:",
     "digest_goal": "🎯 Meta semanal: {n} / {target} caixas",
     "digest_squad": "⚔️ Melhor esquadrão: **{name}** — {n} pontos por membro"
+  },
+  "ops": {
+    "when": "Quando",
+    "going": "Vão ({n})",
+    "orders": "Pedidos para a operação ({n})",
+    "author": "Criada por {name}",
+    "btn_go": "Vou",
+    "btn_no": "Não posso",
+    "btn_open": "Abrir no site",
+    "reminder": "⏰ A operação “{title}” começa em uma hora — <t:{stamp}:t>. Reunir!",
+    "joined": "Você está em “{title}”.",
+    "left": "Você saiu de “{title}”."
   }
 }

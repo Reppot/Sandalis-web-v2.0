@@ -130,5 +130,17 @@
     "role_prefix": "联赛：",
     "digest_goal": "🎯 周目标：{n}/{target} 箱",
     "digest_squad": "⚔️ 最佳小队：**{name}**——人均 {n} 分"
+  },
+  "ops": {
+    "when": "时间",
+    "going": "参加（{n}）",
+    "orders": "行动订单（{n}）",
+    "author": "创建者：{name}",
+    "btn_go": "参加",
+    "btn_no": "无法参加",
+    "btn_open": "在网站打开",
+    "reminder": "⏰ 行动“{title}”将在一小时后开始——<t:{stamp}:t>。集合！",
+    "joined": "你已报名“{title}”。",
+    "left": "你已退出“{title}”。"
   }
 }

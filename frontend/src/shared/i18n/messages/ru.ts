@@ -500,6 +500,8 @@ export const ru = {
   "operations.title": "Название операции",
   "operations.titlePlaceholder": "Например: Прорыв на Callahan's Gate",
   "operations.note": "Заметка",
+  "operations.time": "Время начала",
+  "operations.timeHint": "Необязательно. По нему — событие в Discord и напоминание за час.",
   "operations.notePlaceholder": "Сбор, роли, что взять с собой",
   "operations.withoutSnapshot": "Без карты — её можно приложить из «Планирования»",
   "operations.withSnapshots": "В операцию уйдут снимки карты: {n}",

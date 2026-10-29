@@ -502,6 +502,8 @@ export const zh: Record<MessageKey, string> = {
   "operations.title": "作战名称",
   "operations.titlePlaceholder": "例如：进攻 Callahan's Gate",
   "operations.note": "备注",
+  "operations.time": "开始时间",
+  "operations.timeHint": "可选。用于 Discord 活动和提前 1 小时提醒。",
   "operations.notePlaceholder": "集合、分工、需要携带的物品",
   "operations.withoutSnapshot": "没有地图——可以从“作战规划”附加",
   "operations.withSnapshots": "将转入作战的地图快照：{n}",

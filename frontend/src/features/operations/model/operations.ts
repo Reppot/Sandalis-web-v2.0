@@ -16,6 +16,8 @@ export interface Operation {
   /** YYYY-MM-DD */
   date: string;
   note: string;
+  /** Время начала (ISO с поясом) — для события и напоминания в Discord. */
+  starts_at?: string | null;
   report_ids: string[];
   participants: Participant[];
   /** Названия снимков карты (пусто — операция без карты). */
@@ -39,7 +41,17 @@ export interface OperationInput {
   title: string;
   date: string;
   note: string;
+  starts_at?: string | null;
 }
+
+/** «ЧЧ:ММ» в часовом поясе браузера → момент начала (ISO) для дня date. */
+export const startsAt = (date: string, hhmm: string): string | null => (hhmm ? new Date(`${date}T${hhmm}`).toISOString() : null);
+/** Время начала операции «ЧЧ:ММ» в часовом поясе браузера (или ""). */
+export const startTime = (op: Pick<Operation, "starts_at">): string => {
+  if (!op.starts_at) return "";
+  const d = new Date(op.starts_at);
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+};
 
 const BASE = "/api/v1/clan/operations";
 

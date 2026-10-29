@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { byDate, operationsApi, parseDate, today, type Operation, type OperationSnapshot } from "@/features/operations/model/operations";
+import { byDate, operationsApi, parseDate, today, type Operation, type OperationSnapshot, startsAt } from "@/features/operations/model/operations";
 import { OperationsCalendar } from "@/features/operations/ui/OperationsCalendar";
 import { MentionTextarea } from "@/features/mail/ui/Mentions";
 import { Icon, Modal, errorText, useI18n, useNotify } from "@/shared";
@@ -25,6 +25,7 @@ export const OperationDialog: React.FC<{
   const [date, setDate] = React.useState<string>(today());
   const [title, setTitle] = React.useState("");
   const [note, setNote] = React.useState("");
+  const [time, setTime] = React.useState("");
   const [busy, setBusy] = React.useState(false);
   // куда переносим: новая операция или уже созданная в этот день (свою можно дополнить)
   const [target, setTarget] = React.useState<string>("new");
@@ -34,6 +35,7 @@ export const OperationDialog: React.FC<{
     if (!open) return;
     setTitle(initialTitle);
     setNote("");
+    setTime("");
     setDate(initialDate && initialDate >= today() ? initialDate : today());
     setTarget("new");
     operationsApi.list().then((r) => setOps(r.operations)).catch(() => setOps([]));
@@ -49,7 +51,7 @@ export const OperationDialog: React.FC<{
     setBusy(true);
     try {
       const op = target === "new"
-        ? await operationsApi.create({ title: title.trim(), date, note, snapshots })
+        ? await operationsApi.create({ title: title.trim(), date, note, snapshots, starts_at: startsAt(date, time) })
         : await operationsApi.addSnapshots(target, snapshots);
       notify({ title: t("operations.created"), message: `${op.title} · ${pretty}`, tone: "success" });
       onCreated?.(op);
@@ -109,6 +111,11 @@ export const OperationDialog: React.FC<{
           <label className="flex flex-col gap-1">
             <span className="field-label">{t("operations.title")}</span>
             <input className="field" value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} placeholder={t("operations.titlePlaceholder")} />
+          </label>
+          <label className="flex flex-col gap-1">
+            <span className="field-label">{t("operations.time")}</span>
+            <input className="field w-32" type="time" value={time} onChange={(e) => setTime(e.target.value)} />
+            <span className="text-xs text-fg-3">{t("operations.timeHint")}</span>
           </label>
           <div className="flex flex-col gap-1">
             <span className="field-label">{t("operations.note")}</span>

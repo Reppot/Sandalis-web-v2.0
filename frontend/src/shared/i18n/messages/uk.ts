@@ -502,6 +502,8 @@ export const uk: Record<MessageKey, string> = {
   "operations.title": "Назва операції",
   "operations.titlePlaceholder": "Наприклад: Прорив на Callahan's Gate",
   "operations.note": "Нотатка",
+  "operations.time": "Час початку",
+  "operations.timeHint": "Необов'язково. За ним — подія в Discord і нагадування за годину.",
   "operations.notePlaceholder": "Збір, ролі, що взяти з собою",
   "operations.withoutSnapshot": "Без карти — її можна додати з «Планування»",
   "operations.withSnapshots": "До операції підуть знімки карти: {n}",

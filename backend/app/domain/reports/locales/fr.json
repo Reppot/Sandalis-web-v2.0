@@ -130,5 +130,17 @@
     "role_prefix": "Ligue :",
     "digest_goal": "🎯 Objectif hebdo : {n} / {target} caisses",
     "digest_squad": "⚔️ Meilleure escouade : **{name}** — {n} points par membre"
+  },
+  "ops": {
+    "when": "Quand",
+    "going": "Présents ({n})",
+    "orders": "Commandes pour l'opération ({n})",
+    "author": "Créée par {name}",
+    "btn_go": "Présent",
+    "btn_no": "Indisponible",
+    "btn_open": "Ouvrir sur le site",
+    "reminder": "⏰ L'opération « {title} » commence dans une heure — <t:{stamp}:t>. Rassemblement !",
+    "joined": "Vous êtes inscrit à « {title} ».",
+    "left": "Vous vous êtes désinscrit de « {title} »."
   }
 }

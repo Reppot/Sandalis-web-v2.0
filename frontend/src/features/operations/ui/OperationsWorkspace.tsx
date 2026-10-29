@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { operationsApi, parseDate, today, toViewerSnapshot, type Operation, type OperationSnapshot } from "@/features/operations/model/operations";
+import { operationsApi, parseDate, today, toViewerSnapshot, type Operation, type OperationSnapshot, startsAt, startTime } from "@/features/operations/model/operations";
 import { OperationDialog } from "@/features/operations/ui/OperationDialog";
 import { OperationsCalendar } from "@/features/operations/ui/OperationsCalendar";
 import { useStructureCatalog, type Snapshot } from "@/features/planning/model/plan";
@@ -71,7 +71,8 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
   const reschedule = async (op: Operation, date: string) => {
     if (!date) return;
     try {
-      replace(await operationsApi.update(op.id, { title: op.title, date, note: op.note }));
+      // перенос дня сохраняет время начала
+      replace(await operationsApi.update(op.id, { title: op.title, date, note: op.note, starts_at: startsAt(date, startTime(op)) }));
     } catch (err) {
       notify({ title: t("operations.saveFailed"), message: errorText(err, t("operations.saveFailed")), tone: "danger" });
     }
@@ -154,7 +155,7 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
                 <article key={op.id} className={cn("panel ops-card", op.date === day && "is-picked")}>
                   <header className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <div className="page-eyebrow first-cap">{fmt(op.date, { weekday: "short", day: "numeric", month: "long" })}</div>
+                      <div className="page-eyebrow first-cap">{fmt(op.date, { weekday: "short", day: "numeric", month: "long" })}{op.starts_at ? ` · ${startTime(op)}` : ""}</div>
                       <h3 className="ops-card-title">{op.title}</h3>
                       <div className="text-xs text-fg-3">{t("operations.by", { name: op.author_name })}</div>
                     </div>

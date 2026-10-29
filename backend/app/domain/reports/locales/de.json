@@ -130,5 +130,17 @@
     "role_prefix": "Liga:",
     "digest_goal": "🎯 Wochenziel: {n} / {target} Kisten",
     "digest_squad": "⚔️ Bester Trupp: **{name}** – {n} Punkte pro Mitglied"
+  },
+  "ops": {
+    "when": "Wann",
+    "going": "Dabei ({n})",
+    "orders": "Aufträge für die Operation ({n})",
+    "author": "Erstellt von {name}",
+    "btn_go": "Bin dabei",
+    "btn_no": "Kann nicht",
+    "btn_open": "Auf der Website öffnen",
+    "reminder": "⏰ Operation „{title}“ startet in einer Stunde – <t:{stamp}:t>. Sammeln!",
+    "joined": "Du bist bei „{title}“ dabei.",
+    "left": "Du bist bei „{title}“ raus."
   }
 }

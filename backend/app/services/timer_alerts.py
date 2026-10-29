@@ -155,4 +155,11 @@ async def watch() -> None:
             await check()
         except Exception:  # noqa: BLE001
             log.warning("timer alerts pass failed", exc_info=True)
+        try:
+            # тот же минутный цикл: напоминание о скорой операции
+            from app.services import discord_ops
+
+            await discord_ops.remind()
+        except Exception:  # noqa: BLE001
+            log.warning("operation reminders pass failed", exc_info=True)
         await asyncio.sleep(INTERVAL_SEC)

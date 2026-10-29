@@ -7,7 +7,7 @@ import uuid
 from datetime import UTC, date, datetime
 from typing import Any
 
-from fastapi import APIRouter, Depends, Query, Response, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, Response, status
 from sqlalchemy import select
 
 from app.api.deps import CurrentPrincipal, DbDep, PermissionChecker
@@ -16,6 +16,7 @@ from app.core.permissions import Scopes
 from app.core.security import Principal
 from app.models.operation import ClanOperation
 from app.schemas.operation import MAX_SNAPSHOTS, Attend, OperationCreate, OperationList, OperationRead, OperationSummary, OperationWrite, SnapshotsAdd
+from app.services import discord_ops
 from app.services.mentions import clan_roles, deliver, mentioned
 
 router = APIRouter(prefix="/clan/operations", tags=["clan"])
@@ -58,7 +59,7 @@ async def _notify(session: DbDep, principal: Principal, row: ClanOperation, role
 
 def _summary(row: ClanOperation, principal: Principal) -> OperationSummary:
     return OperationSummary(
-        id=row.id, title=row.title, date=row.date, note=row.note, report_ids=row.report_ids or [],
+        id=row.id, title=row.title, date=row.date, note=row.note, starts_at=row.starts_at, report_ids=row.report_ids or [],
         participants=row.participants or [], snapshot_names=[s.get("name") or "" for s in row.snapshots or []], author_id=row.author_id,
         author_name=row.author_name, created_at=row.created_at, can_edit=_can_edit(principal, row),
     )
@@ -99,7 +100,8 @@ async def read_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, s
 
 @router.post("", response_model=OperationSummary, status_code=status.HTTP_201_CREATED, dependencies=CanCreate,
              summary="Новая операция (из снимка «Планирования» или просто дата)")
-async def create_operation(payload: OperationCreate, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+async def create_operation(payload: OperationCreate, principal: CurrentPrincipal, session: DbDep,
+                           background: BackgroundTasks) -> OperationSummary:
     if not _member(principal):
         raise NotFoundError()
     count = len((await session.execute(select(ClanOperation.id))).all())
@@ -107,7 +109,7 @@ async def create_operation(payload: OperationCreate, principal: CurrentPrincipal
         raise AppError(message_key="errors.operations_too_many", code="validation_error", status_code=422,
                        params={"n": MAX_OPERATIONS})
     row = ClanOperation(
-        title=payload.title, date=payload.date, note=payload.note, snapshots=payload.snapshots,
+        title=payload.title, date=payload.date, note=payload.note, snapshots=payload.snapshots, starts_at=payload.starts_at,
         report_ids=_report_ids(payload.snapshots), participants=[],
         author_id=principal.user_id, author_name=(principal.display_name or principal.user_id)[:120],
     )
@@ -116,21 +118,27 @@ async def create_operation(payload: OperationCreate, principal: CurrentPrincipal
     await _notify(session, principal, row, mentioned(row.note, await clan_roles(session)))
     await session.commit()
     await session.refresh(row)
+    background.add_task(discord_ops.sync, row.id)
     return _summary(row, principal)
 
 
 @router.put("/{operation_id}", response_model=OperationSummary, summary="Переименовать / перенести операцию")
-async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, principal: CurrentPrincipal, session: DbDep,
+                           background: BackgroundTasks) -> OperationSummary:
     row = await _get(session, operation_id)
     if not _can_edit(principal, row):
         raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
     roles = await clan_roles(session)
     before = {r["id"] for r in mentioned(row.note, roles)}
     row.title, row.date, row.note = payload.title, payload.date, payload.note
+    if row.starts_at != payload.starts_at:
+        row.reminded = False          # новое время — напомним заново
+    row.starts_at = payload.starts_at
     # письма — только ролям, которых в заметке раньше не было
     await _notify(session, principal, row, [r for r in mentioned(row.note, roles) if r["id"] not in before])
     await session.commit()
     await session.refresh(row)
+    background.add_task(discord_ops.sync, row.id)
     return _summary(row, principal)
 
 
@@ -151,18 +159,22 @@ async def add_snapshots(operation_id: uuid.UUID, payload: SnapshotsAdd, principa
 
 
 @router.delete("/{operation_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Удалить операцию")
-async def delete_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep) -> Response:
+async def delete_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep,
+                           background: BackgroundTasks) -> Response:
     row = await _get(session, operation_id)
     if not _can_edit(principal, row):
         raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
+    posted = discord_ops.ids_of(row)
     await session.delete(row)
     await session.commit()
+    background.add_task(discord_ops.remove, row.clan_id, posted)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.post("/{operation_id}/attend", response_model=OperationSummary, summary="Отметиться участником операции",
              dependencies=CanAttend)
-async def attend_operation(operation_id: uuid.UUID, payload: Attend, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+async def attend_operation(operation_id: uuid.UUID, payload: Attend, principal: CurrentPrincipal, session: DbDep,
+                           background: BackgroundTasks) -> OperationSummary:
     if not _member(principal):
         raise NotFoundError()
     row = await _get(session, operation_id)
@@ -173,4 +185,5 @@ async def attend_operation(operation_id: uuid.UUID, payload: Attend, principal: 
     row.participants = people  # новый список — JSONB помечается изменённым
     await session.commit()
     await session.refresh(row)
+    background.add_task(discord_ops.sync, row.id)
     return _summary(row, principal)

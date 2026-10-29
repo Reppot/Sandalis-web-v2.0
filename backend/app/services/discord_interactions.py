@@ -83,6 +83,8 @@ async def handle(session: AsyncSession, it: dict[str, Any], background: Backgrou
             return await game_command(session, data["name"], it.get("guild_id"), user_id, t)
         if kind == COMPONENT and str(data.get("custom_id", "")).startswith("timer:"):
             return await timer_action(session, data, user_id, name, it.get("locale"))
+        if kind == COMPONENT and str(data.get("custom_id", "")).startswith("op:"):
+            return await operation_action(session, data, user_id, name, t, background)
         if kind in (COMPONENT, MODAL_SUBMIT):
             return await order_action(session, data, user_id, name, t, background)
     except AppError as err:
@@ -192,6 +194,40 @@ def _qty_modal(report: OrderReport, line: Any, name: str, delivered: dict[uuid.U
             }]},
         ],
     }}
+
+
+# ───────────────────────── явка на операцию ─────────────────────────
+
+async def operation_action(session: AsyncSession, data: dict[str, Any], user_id: str, name: str, t: Translator,
+                           background: BackgroundTasks) -> dict[str, Any]:
+    from app.models.operation import ClanOperation
+    from app.services import discord_ops
+
+    parts = str(data.get("custom_id", "")).split(":")
+    try:
+        op_id = uuid.UUID(parts[2]) if len(parts) == 3 and parts[1] in ("go", "no") else None
+    except ValueError:
+        op_id = None
+    if op_id is None:
+        return reply(t.t("report.discord.unknown"))
+    with bypass_clan_filter():
+        op = (await session.execute(select(ClanOperation).where(ClanOperation.id == op_id))).scalar_one_or_none()
+    if op is None:
+        return reply(t.t("report.discord.unknown"))
+    _bind(session, op.clan_id)
+    principal = await _principal(session, op.clan_id, user_id, name)
+    if principal is None:
+        return reply(t.t("report.discord.not_member", url=discord_ops.site_url()))
+    if not principal.can(Scopes.OPERATIONS_ATTEND):
+        return reply(t.t("report.discord.forbidden"))
+    going = parts[1] == "go"
+    people = [p for p in (op.participants or []) if p.get("user_id") != user_id]
+    if going:
+        people.append({"user_id": user_id, "name": name[:120], "at": datetime.now(UTC).isoformat()})
+    op.participants = people
+    await session.commit()
+    background.add_task(discord_ops.sync, op.id)
+    return reply(t.t("ops.joined" if going else "ops.left", title=op.title))
 
 
 # ───────────────────────── «Обновил резерв» ─────────────────────────

@@ -130,5 +130,17 @@
     "role_prefix": "Liga:",
     "digest_goal": "🎯 Týdenní cíl: {n} / {target} beden",
     "digest_squad": "⚔️ Nejlepší oddíl: **{name}** — {n} bodů na člena"
+  },
+  "ops": {
+    "when": "Kdy",
+    "going": "Jdou ({n})",
+    "orders": "Objednávky k operaci ({n})",
+    "author": "Vytvořil(a): {name}",
+    "btn_go": "Budu",
+    "btn_no": "Nemůžu",
+    "btn_open": "Otevřít na webu",
+    "reminder": "⏰ Za hodinu začíná operace „{title}“ — <t:{stamp}:t>. Sraz!",
+    "joined": "Jste přihlášen(a) na „{title}“.",
+    "left": "Odhlásil(a) jste se z „{title}“."
   }
 }

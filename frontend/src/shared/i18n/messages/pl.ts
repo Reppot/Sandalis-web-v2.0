@@ -502,6 +502,8 @@ export const pl: Record<MessageKey, string> = {
   "operations.title": "Nazwa operacji",
   "operations.titlePlaceholder": "Np. Natarcie na Callahan's Gate",
   "operations.note": "Notatka",
+  "operations.time": "Godzina rozpoczęcia",
+  "operations.timeHint": "Opcjonalnie. Do wydarzenia w Discordzie i przypomnienia na godzinę przed.",
   "operations.notePlaceholder": "Zbiórka, role, co zabrać",
   "operations.withoutSnapshot": "Bez mapy – można ją dołączyć z „Planowania”",
   "operations.withSnapshots": "Do operacji trafią zrzuty mapy: {n}",

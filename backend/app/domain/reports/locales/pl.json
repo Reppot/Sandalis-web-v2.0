@@ -130,5 +130,17 @@
     "role_prefix": "Liga:",
     "digest_goal": "🎯 Cel tygodnia: {n} / {target} skrz.",
     "digest_squad": "⚔️ Najlepszy oddział: **{name}** — {n} pkt na osobę"
+  },
+  "ops": {
+    "when": "Kiedy",
+    "going": "Idą ({n})",
+    "orders": "Zamówienia do operacji ({n})",
+    "author": "Utworzył(a): {name}",
+    "btn_go": "Będę",
+    "btn_no": "Nie mogę",
+    "btn_open": "Otwórz na stronie",
+    "reminder": "⏰ Za godzinę operacja „{title}” — <t:{stamp}:t>. Zbiórka!",
+    "joined": "Jesteś zapisany na „{title}”.",
+    "left": "Zrezygnowałeś z „{title}”."
   }
 }

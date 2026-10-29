@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, datetime
 from typing import Any
 
-from sqlalchemy import Date, Index, String
+from sqlalchemy import Boolean, Date, DateTime, Index, String, text
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -26,3 +26,11 @@ class ClanOperation(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     participants: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, nullable=False, default=list)
     author_id: Mapped[str] = mapped_column(String(64), nullable=False)
     author_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    # время начала (с часовым поясом автора); нет — событие в Discord на 18:00 UTC
+    starts_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # пост бота в канале клана, его ветка и событие сервера Discord; напоминание за час — одно
+    discord_channel_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    discord_message_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    discord_thread_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    discord_event_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    reminded: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)

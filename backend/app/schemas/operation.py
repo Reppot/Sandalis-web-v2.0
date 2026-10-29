@@ -30,6 +30,7 @@ class OperationWrite(BaseModel):
     title: Annotated[str, Field(min_length=1, max_length=120)]
     date: date
     note: Annotated[str, Field(max_length=1000)] = ""
+    starts_at: datetime | None = None      # время начала с часовым поясом автора
 
     @field_validator("title")
     @classmethod
@@ -79,6 +80,7 @@ class OperationSummary(BaseModel):
     title: str
     date: date
     note: str
+    starts_at: datetime | None = None
     report_ids: list[str]
     participants: list[Participant]
     snapshot_names: list[str]          # названия снимков карты (пусто — операция без карты)

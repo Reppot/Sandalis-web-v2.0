@@ -501,6 +501,8 @@ export const cs: Record<MessageKey, string> = {
   "operations.title": "Název operace",
   "operations.titlePlaceholder": "Např. Útok na Callahan's Gate",
   "operations.note": "Poznámka",
+  "operations.time": "Čas začátku",
+  "operations.timeHint": "Nepovinné. Pro událost v Discordu a připomínku hodinu předem.",
   "operations.notePlaceholder": "Sraz, role, co s sebou",
   "operations.withoutSnapshot": "Bez mapy — lze ji přiložit z „Plánování“",
   "operations.withSnapshots": "Do operace půjdou snímky mapy: {n}",

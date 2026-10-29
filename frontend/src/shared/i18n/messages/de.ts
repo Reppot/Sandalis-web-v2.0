@@ -502,6 +502,8 @@ export const de: Record<MessageKey, string> = {
   "operations.title": "Name der Operation",
   "operations.titlePlaceholder": "Z. B. Vorstoß auf Callahan's Gate",
   "operations.note": "Notiz",
+  "operations.time": "Startzeit",
+  "operations.timeHint": "Optional. Für das Discord-Event und die Erinnerung 1 Std. vorher.",
   "operations.notePlaceholder": "Treffpunkt, Rollen, Ausrüstung",
   "operations.withoutSnapshot": "Ohne Karte – du kannst sie aus der Planung anhängen",
   "operations.withSnapshots": "Karten-Schnappschüsse für die Operation: {n}",

@@ -130,5 +130,17 @@
     "role_prefix": "League:",
     "digest_goal": "🎯 Weekly goal: {n} / {target} crates",
     "digest_squad": "⚔️ Best squad: **{name}** — {n} points per member"
+  },
+  "ops": {
+    "when": "When",
+    "going": "Going ({n})",
+    "orders": "Orders for the operation ({n})",
+    "author": "Created by {name}",
+    "btn_go": "I'm in",
+    "btn_no": "Can't make it",
+    "btn_open": "Open on the site",
+    "reminder": "⏰ Operation “{title}” starts in an hour — <t:{stamp}:t>. Assemble!",
+    "joined": "You're in for “{title}”.",
+    "left": "You're out of “{title}”."
   }
 }
