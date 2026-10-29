@@ -26,6 +26,9 @@
     "clan_blacklisted": "Você está na lista negra deste clã.",
     "operation_role_unknown": "Essa função não está no plano da operação.",
     "operation_role_full": "Todas as vagas de “{role}” estão ocupadas.",
-    "operation_squad_unknown": "Esse esquadrão não está no plano."
+    "operation_squad_unknown": "Esse esquadrão não está no plano.",
+    "plan_forbidden": "Só quem cria operações pode editar o plano do clã.",
+    "plan_invalid": "Um objeto do plano é inválido — recarregue a página.",
+    "plan_too_large": "O plano do clã tem mais de {n} objetos — remova alguns."
   }
 }

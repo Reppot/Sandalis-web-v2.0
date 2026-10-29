@@ -178,6 +178,7 @@
     "timer_warn": "储备“{title}”即将到期——请刷新",
     "timer_expired": "储备“{title}”已到期！",
     "game_award": "新的补给奖励——去看看统计吧！",
-    "generic": "SINDARIS 新消息"
+    "generic": "SINDARIS 新消息",
+    "operation_rsvp": "你还没回复是否参加「{title}」（{date}）。请在网站上回复。"
   }
 }

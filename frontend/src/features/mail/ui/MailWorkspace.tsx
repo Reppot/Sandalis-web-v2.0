@@ -101,6 +101,11 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
                   </div>
                   <div className="mt-0.5 text-xs text-fg-3">{m.payload.stockpile ? `${m.payload.stockpile} · ` : ""}{formatDateTime(m.created_at)}</div>
                 </div>
+              ) : m.kind === "operation_rsvp" ? (
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-fg">{t("mail.operationRsvp", { title: m.payload.title ?? "" })}</div>
+                  <div className="mt-0.5 text-xs text-fg-3">{m.payload.starts_at ? formatDateTime(m.payload.starts_at) : day(m.payload.date)} · {t("mail.operationRsvpHint")}</div>
+                </div>
               ) : m.kind === "feedback_reply" ? (
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-semibold text-fg">{t("mail.feedbackReply", { name: m.sender_name })}</div>

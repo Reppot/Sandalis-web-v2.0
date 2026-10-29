@@ -26,6 +26,9 @@
     "clan_blacklisted": "Jste na černé listině tohoto klanu.",
     "operation_role_unknown": "Tato role v plánu operace není.",
     "operation_role_full": "Všechna místa role „{role}“ jsou obsazena.",
-    "operation_squad_unknown": "Tento oddíl v plánu není."
+    "operation_squad_unknown": "Tento oddíl v plánu není.",
+    "plan_forbidden": "Plán klanu upravují ti, kdo vytvářejí operace.",
+    "plan_invalid": "Objekt plánu je poškozený — obnovte stránku.",
+    "plan_too_large": "Plán klanu má přes {n} objektů — odeberte některé."
   }
 }

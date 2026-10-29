@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 
 MAX_AGE = timedelta(days=2)       # письма старше — уже не актуальны для уведомления
 SECTION = {
-    "operation_mention": "?tab=clan&view=operations", "task_assigned": "?tab=clan&view=reports", "task_due": "?tab=clan&view=reports",
+    "operation_mention": "?tab=clan&view=operations", "operation_rsvp": "?tab=clan&view=operations", "task_assigned": "?tab=clan&view=reports", "task_due": "?tab=clan&view=reports",
     "order_delivered": "?tab=clan&view=reports", "order_comment": "?tab=clan&view=reports", "timer_warn": "?tab=clan&view=stockpiles",
     "timer_expired": "?tab=clan&view=stockpiles", "game_award": "?tab=clan&view=stats", "feedback_reply": "?tab=feedback",
 }

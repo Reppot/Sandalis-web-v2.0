@@ -189,6 +189,50 @@ async def remind(now: datetime | None = None) -> int:
     return sent
 
 
+RSVP_BEFORE = timedelta(hours=24)
+RSVP_GRACE = timedelta(hours=1)
+
+
+async def ask_silent(now: datetime | None = None) -> int:
+    """За сутки до начала — письмо участникам терминала, не ответившим на опрос явки (один раз).
+    Письмо уходит в почту сайта; дальше notify_dispatch дублирует его в ЛС Discord и push тем,
+    кто это включил. Возвращает число писем."""
+    from app.models.mail import ClanMail
+    from app.models.rbac import ClanMembership
+    from app.services import blacklist
+
+    now = now or datetime.now(UTC)
+    sent = 0
+    async with AsyncSessionLocal() as session:
+        with bypass_clan_filter():
+            ops = (await session.execute(select(ClanOperation).where(
+                ClanOperation.rsvp_asked.is_(False),
+                ClanOperation.date >= (now - timedelta(days=1)).date(), ClanOperation.date <= (now + timedelta(days=2)).date(),
+            ))).scalars().all()
+        # только что созданной операции даём час — пусть ответят сами
+        due = [op.id for op in ops if now < start_of(op) <= now + RSVP_BEFORE and op.created_at <= now - RSVP_GRACE]
+    for op_id in due:
+        async with AsyncSessionLocal() as session:
+            op, _, _ = await _load(session, op_id)
+            if op is None or op.rsvp_asked:
+                continue
+            answered = {p.get("user_id") for p in op.participants or []}
+            members = (await session.execute(
+                select(ClanMembership.user_id).where(ClanMembership.is_active.is_(True))
+            )).scalars().all()
+            blocked = await blacklist.blocked_users(session, op.clan_id)
+            for uid in members:
+                if uid in answered or uid in blocked or uid.startswith(("token:", "guest:")):
+                    continue
+                session.add(ClanMail(recipient_id=uid, sender_id="system", sender_name=op.author_name, kind="operation_rsvp",
+                                     payload={"operation_id": str(op.id), "title": op.title, "date": op.date.isoformat(),
+                                              "starts_at": start_of(op).isoformat()}))
+                sent += 1
+            op.rsvp_asked = True
+            await session.commit()
+    return sent
+
+
 async def post_brief(session: Any, op: ClanOperation, images: list[tuple[str, bytes]] | None = None) -> bool:
     """Брифинг (без скрытого) — в ветку операции, а нет ветки — в канал клана; снимки карты —
     отдельным сообщением с картинками. False — Discord не настроен."""

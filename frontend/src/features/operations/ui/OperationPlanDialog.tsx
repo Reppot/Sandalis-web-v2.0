@@ -9,6 +9,7 @@ import {
   parseDate,
   planId,
   planInput,
+  shortages,
   today,
   toViewerSnapshot,
   type AttendStatus,
@@ -21,9 +22,11 @@ import {
   type PlanStage,
 } from "@/features/operations/model/operations";
 import { useSession } from "@/features/cabinet";
+import { Scopes } from "@/entities/session";
 import { useStructureCatalog } from "@/features/planning/model/plan";
 import { SnapshotImage } from "@/features/planning/ui/SnapshotImage";
-import type { Report } from "@/entities/report";
+import { reportApi, type Report } from "@/entities/report";
+import { SendOrderDialog, type SendOrderLine } from "@/entities/report/ui/SendOrderDialog";
 import { MentionText } from "@/features/mail/ui/Mentions";
 import { REPORT_STATUS_LABEL } from "@/entities/report";
 import { Icon, Loading, Modal, cn, errorText, useI18n, useNotify } from "@/shared";
@@ -66,7 +69,8 @@ export const OperationPlanDialog: React.FC<{
 }> = ({ op, onClose, onChange, onOpenMap, orders }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
-  const { session } = useSession();
+  const { session, can } = useSession();
+  const canOrder = can(Scopes.REPORTS_CREATE);
   const me = session?.userId;
   const [tab, setTab] = React.useState<Tab>("brief");
   const [full, setFull] = React.useState<OperationFull | null>(null);
@@ -74,6 +78,9 @@ export const OperationPlanDialog: React.FC<{
   const [dirty, setDirty] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
   const [debriefText, setDebriefText] = React.useState("");
+  // «Заказ на нехватку»: выбранные предметы → окно отправки заказа
+  const [picked, setPicked] = React.useState<Set<string> | null>(null);
+  const [orderLines, setOrderLines] = React.useState<SendOrderLine[] | null>(null);
   const briefRef = React.useRef<HTMLDivElement>(null);
   const { structures } = useStructureCatalog();
   // PNG снимков карты (для отправки брифинга в Discord): номер снимка → картинка
@@ -85,6 +92,8 @@ export const OperationPlanDialog: React.FC<{
     setTab("brief");
     setFull(null);
     setDirty(false);
+    setPicked(null);
+    setOrderLines(null);
     shots.current.clear();
     operationsApi.get(opId).then(setFull).catch(() => setFull(null));
   }, [opId]);
@@ -514,8 +523,72 @@ export const OperationPlanDialog: React.FC<{
           ))}
         </ul>
         <p className="text-xs text-fg-3">{t("opsPlan.supplyHint")}</p>
+        {shortageBlock()}
       </div>
     );
+  };
+
+  const iconOf = (code: string | null) => (code ? orders.flatMap((o) => o.lines).find((l) => l.item_code === code)?.icon_url ?? null : null);
+  const shortageBlock = () => {
+    const list = full ? shortages(full.supply) : [];
+    if (!list.length) return null;
+    const chosen = picked ?? new Set<string>();
+    const startOrder = () => {
+      const lines = list.filter((s) => chosen.has(s.key)).map((s) => ({ name: s.name, item_code: s.item_code, quantity: s.missing, unit: s.unit, icon_url: iconOf(s.item_code) }));
+      if (lines.length) setOrderLines(lines);
+    };
+    return (
+      <section className="ops-brief">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h4 className="field-label">{t("opsPlan.shortage", { n: list.length })}</h4>
+          {canOrder && !picked ? (
+            <button type="button" className="btn h-8 min-h-0 text-sm" onClick={() => setPicked(new Set(list.filter((s) => s.closed > 0).map((s) => s.key).concat(list.some((s) => s.closed > 0) ? [] : list.map((s) => s.key))))}>
+              <Icon name="plus" size={14} />
+              {t("opsPlan.orderShortage")}
+            </button>
+          ) : null}
+        </div>
+        <ul className="flex flex-col gap-1">
+          {list.map((s) => (
+            <li key={s.key} className="flex items-center gap-2 text-sm">
+              {picked ? (
+                <input type="checkbox" checked={chosen.has(s.key)} aria-label={s.name}
+                  onChange={(e) => setPicked((prev) => { const next = new Set(prev); if (e.target.checked) next.add(s.key); else next.delete(s.key); return next; })} />
+              ) : null}
+              <span className="min-w-0 flex-1 truncate text-fg">{s.name}</span>
+              <b className="tabular-nums">{s.missing}</b>
+              <span className="w-[11rem] shrink-0 text-right text-xs text-fg-3">
+                {[s.open ? t("opsPlan.shortOpen", { n: s.open }) : "", s.closed ? t("opsPlan.shortClosed", { n: s.closed }) : ""].filter(Boolean).join(" · ")}
+              </span>
+            </li>
+          ))}
+        </ul>
+        {picked ? (
+          <>
+            <p className="text-xs text-fg-3">{t("opsPlan.shortageHint")}</p>
+            <div className="flex flex-wrap justify-end gap-2">
+              <button type="button" className="btn h-8 min-h-0 text-sm" onClick={() => setPicked(null)}>{t("common.cancel")}</button>
+              <button type="button" className="btn btn-primary h-8 min-h-0 text-sm" disabled={!chosen.size} onClick={startOrder}>
+                <Icon name="send" size={14} />
+                {t("opsPlan.orderPicked", { n: chosen.size })}
+              </button>
+            </div>
+          </>
+        ) : null}
+      </section>
+    );
+  };
+  const orderSent = async (report: Report) => {
+    setOrderLines(null);
+    setPicked(null);
+    try {
+      // заказ — к этой операции, срок — день операции, приоритет высокий
+      await reportApi.setTask(report.id, { operation_id: op.id, due_date: op.date, priority: "high" });
+      setFull(await operationsApi.get(op.id));
+      notify({ title: t("opsPlan.title"), message: t("opsPlan.orderLinked", { title: report.title }), tone: "success" });
+    } catch (err) {
+      fail(err);
+    }
   };
 
   const debriefTab = () => {
@@ -618,6 +691,7 @@ export const OperationPlanDialog: React.FC<{
           ))}
         </div>
 
+        <SendOrderDialog open={!!orderLines} lines={orderLines ?? []} defaultKind="stockpile" onClose={() => setOrderLines(null)} onSent={(r) => void orderSent(r)} />
         {tab === "brief" ? briefTab() : tab === "people" ? peopleTab() : tab === "plan" ? planTab() : tab === "supply" ? supplyTab() : debriefTab()}
       </div>
     </Modal>

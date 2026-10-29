@@ -178,6 +178,7 @@
     "timer_warn": "Reserve „{title}“ läuft bald ab – erneuern",
     "timer_expired": "Reserve „{title}“ ist abgelaufen!",
     "game_award": "Neue Versorgungsauszeichnung – schau in die Statistik!",
-    "generic": "Neue Nachricht in SINDARIS"
+    "generic": "Neue Nachricht in SINDARIS",
+    "operation_rsvp": "Du hast noch nicht geantwortet, ob du bei „{title}“ ({date}) dabei bist. Antworte auf der Seite."
   }
 }

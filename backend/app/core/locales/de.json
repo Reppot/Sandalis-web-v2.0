@@ -26,6 +26,9 @@
     "clan_blacklisted": "Du stehst auf der Sperrliste dieses Clans.",
     "operation_role_unknown": "Diese Rolle gibt es im Operationsplan nicht.",
     "operation_role_full": "Alle Plätze für „{role}“ sind belegt.",
-    "operation_squad_unknown": "Diesen Trupp gibt es im Operationsplan nicht."
+    "operation_squad_unknown": "Diesen Trupp gibt es im Operationsplan nicht.",
+    "plan_forbidden": "Den Clan-Plan dürfen nur Mitglieder bearbeiten, die Operationen erstellen.",
+    "plan_invalid": "Ein Planobjekt ist fehlerhaft — Seite neu laden.",
+    "plan_too_large": "Der Clan-Plan hat mehr als {n} Objekte — entferne einige."
   }
 }

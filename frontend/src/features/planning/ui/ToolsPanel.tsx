@@ -32,12 +32,24 @@ export const ToolsPanel: React.FC<{
   onDeleteSnapshot: (id: string) => void;
   /** «Перенести в операции» — все снимки сессии; нет — нет права создавать операции. */
   onMoveSnapshots?: () => void;
-}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots }) => {
+  /** План клана без права правки: инструменты скрыты. */
+  locked?: boolean;
+  /** Подпись «где хранится план». */
+  savedLabel?: string;
+}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots, locked, savedLabel }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
   const set = <K extends keyof Defaults>(key: K, value: Defaults[K]) => onDefaults({ ...defaults, [key]: value });
   const drawing = tool === "line" || tool === "arrow" || tool === "radius" || tool === "ruler";
 
+  if (locked) {
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-sm text-fg-2">{t("planning.clanLocked")}</p>
+        <div className="mt-auto border-t border-[var(--border)] pt-3 text-xs text-fg-3">{t("planning.objects", { n: count })} · {savedLabel}</div>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-col gap-4">
       <div className="planning-tools" role="toolbar" aria-label={t("planning.tools")}>
@@ -89,7 +101,7 @@ export const ToolsPanel: React.FC<{
       {tool === "order" && !selected ? <OrderPicker orders={orders} member={member} value={defaults.order} onChange={(id) => set("order", id)} /> : null}
 
       <div className="mt-auto flex items-center justify-between gap-2 border-t border-[var(--border)] pt-3 text-xs text-fg-3">
-        <span>{t("planning.objects", { n: count })} · {t("planning.savedLocal")}</span>
+        <span>{t("planning.objects", { n: count })} · {savedLabel ?? t("planning.savedLocal")}</span>
         <button type="button" className={cn("btn h-8 min-h-0 px-2.5 text-xs", armed === "clear" && "text-danger")} disabled={!count} onClick={() => confirm("clear", onClear)}>
           <Icon name="trash" size={14} />
           {armed === "clear" ? t("common.confirmQ") : t("planning.clear")}

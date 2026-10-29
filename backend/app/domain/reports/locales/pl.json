@@ -178,6 +178,7 @@
     "timer_warn": "Rezerwa „{title}” wkrótce wygaśnie — odnów ją",
     "timer_expired": "Rezerwa „{title}” wygasła!",
     "game_award": "Nowa nagroda zaopatrzenia — zajrzyj do statystyk!",
-    "generic": "Nowa wiadomość w SINDARIS"
+    "generic": "Nowa wiadomość w SINDARIS",
+    "operation_rsvp": "Nie odpowiedziałeś jeszcze, czy idziesz na „{title}” ({date}). Odpowiedz na stronie."
   }
 }

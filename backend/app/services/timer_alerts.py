@@ -160,6 +160,7 @@ async def watch() -> None:
             from app.services import discord_ops
 
             await discord_ops.remind()
+            await discord_ops.ask_silent()
         except Exception:  # noqa: BLE001
             log.warning("operation reminders pass failed", exc_info=True)
         try:

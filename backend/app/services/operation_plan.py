@@ -128,12 +128,17 @@ async def supply(session: Any, op: ClanOperation) -> list[dict[str, Any]]:
                if str(r.id) in ids or r.operation_id == op.id]
     if not reports:
         return []
+    from app.services.discord_bot import delivered_by_line
+
     delivered, _ = await progress_for(session, reports)
     out = []
     for r in reports:
         ordered = sum(line.quantity for line in r.lines)
+        per_line = await delivered_by_line(session, r.id)
+        lines = [{"name": ln.name, "item_code": ln.item_code, "unit": ln.unit, "quantity": ln.quantity,
+                  "delivered": min(per_line.get(ln.id, 0), ln.quantity)} for ln in sorted(r.lines, key=lambda x: x.position)]
         out.append({"report_id": str(r.id), "title": r.title, "status": r.status,
-                    "delivered": min(delivered.get(r.id, 0), ordered), "ordered": ordered})
+                    "delivered": min(delivered.get(r.id, 0), ordered), "ordered": ordered, "lines": lines})
     return out
 
 

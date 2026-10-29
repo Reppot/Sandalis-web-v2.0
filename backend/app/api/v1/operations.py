@@ -155,9 +155,11 @@ async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, pri
         raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
     roles = await clan_roles(session)
     before = {r["id"] for r in mentioned(row.note, roles)}
+    moved = row.date != payload.date
     row.title, row.date, row.note = payload.title, payload.date, payload.note
-    if row.starts_at != payload.starts_at:
+    if row.starts_at != payload.starts_at or moved:
         row.reminded = False          # новое время — напомним заново
+        row.rsvp_asked = False
     row.starts_at = payload.starts_at
     # письма — только ролям, которых в заметке раньше не было
     await _notify(session, principal, row, [r for r in mentioned(row.note, roles) if r["id"] not in before])

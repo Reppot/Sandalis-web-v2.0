@@ -40,7 +40,28 @@ export interface OperationPlan {
 }
 export type PlanInput = Omit<OperationPlan, "debrief">;
 
-export interface SupplyRow { report_id: string; title: string; status: string; delivered: number; ordered: number }
+export interface SupplyLine { name: string; item_code: string | null; unit: "crate" | "unit"; quantity: number; delivered: number }
+export interface SupplyRow { report_id: string; title: string; status: string; delivered: number; ordered: number; lines: SupplyLine[] }
+
+/** Нехватка по предметам во всех заказах операции: сколько не довезено и в скольких заказах (открытых / закрытых). */
+export interface Shortage { key: string; name: string; item_code: string | null; unit: "crate" | "unit"; missing: number; open: number; closed: number }
+export function shortages(rows: SupplyRow[]): Shortage[] {
+  const map = new Map<string, Shortage>();
+  for (const r of rows) {
+    const closed = r.status === "done" || r.status === "cancelled";
+    for (const l of r.lines ?? []) {
+      const missing = l.quantity - l.delivered;
+      if (missing <= 0) continue;
+      const key = `${l.item_code ?? l.name}|${l.unit}`;
+      const cur = map.get(key) ?? { key, name: l.name, item_code: l.item_code, unit: l.unit, missing: 0, open: 0, closed: 0 };
+      cur.missing += missing;
+      if (closed) cur.closed += missing;
+      else cur.open += missing;
+      map.set(key, cur);
+    }
+  }
+  return [...map.values()].sort((a, b) => b.missing - a.missing);
+}
 
 export interface Operation {
   id: string;

@@ -36,4 +36,6 @@ class ClanOperation(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     # план: {roles: [{id, name, slots}], squads: [{id, name, leader_id}], stages: [{id, time, title, note,
     # owner_id, done, brief}], points: [{id, kind, label, note, brief}], hidden: [раздел], debrief: {outcome, text}}
     plan: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb"))
+    # за сутки до начала не ответившим на опрос ушло письмо (и ЛС/push по их согласию) — один раз
+    rsvp_asked: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)
     reminded: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)

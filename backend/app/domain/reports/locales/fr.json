@@ -178,6 +178,7 @@
     "timer_warn": "La réserve « {title} » expire bientôt",
     "timer_expired": "La réserve « {title} » a expiré !",
     "game_award": "Nouvelle récompense — voyez vos statistiques !",
-    "generic": "Nouveau message SINDARIS"
+    "generic": "Nouveau message SINDARIS",
+    "operation_rsvp": "Vous n’avez pas encore dit si vous venez à « {title} » ({date}). Répondez sur le site."
   }
 }

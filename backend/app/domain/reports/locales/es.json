@@ -178,6 +178,7 @@
     "timer_warn": "La reserva «{title}» caduca pronto",
     "timer_expired": "¡La reserva «{title}» caducó!",
     "game_award": "¡Nueva recompensa de suministro: mira tus estadísticas!",
-    "generic": "Nuevo mensaje en SINDARIS"
+    "generic": "Nuevo mensaje en SINDARIS",
+    "operation_rsvp": "Aún no has dicho si vas a «{title}» ({date}). Responde en el sitio."
   }
 }

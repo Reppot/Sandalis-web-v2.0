@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.v1 import auth, clan, clan_roles, codes, content, courses, discord, feedback, game, health, items, mail, notify, operations, orders, pyramid, reports, stats, stockpiles, timers, world
+from app.api.v1 import auth, clan, clan_plan, clan_roles, codes, content, courses, discord, feedback, game, health, items, mail, notify, operations, orders, pyramid, reports, stats, stockpiles, timers, world
 
 api_router = APIRouter()
 api_router.include_router(health.router)   # публичный
@@ -19,6 +19,7 @@ api_router.include_router(pyramid.router)   # /clan/pyramid
 api_router.include_router(stats.router)     # /clan/stats
 api_router.include_router(game.router)      # /clan/game — очки снабжения, лиги, рейтинги
 api_router.include_router(courses.router)   # /clan/courses — курсы клана в «Обучении»
+api_router.include_router(clan_plan.router)  # /clan/plan — общий план клана в «Планировании»
 api_router.include_router(operations.router)  # /clan/operations — операции клана: календарь, снимки карты, опрос
 api_router.include_router(mail.router)        # /mail — почта на сайте, /clan/mentions — роли для «@»
 api_router.include_router(world.router)    # регионы и города (War API)

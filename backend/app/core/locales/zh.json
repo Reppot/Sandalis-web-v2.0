@@ -26,6 +26,9 @@
     "clan_blacklisted": "你已被列入该战团的黑名单。",
     "operation_role_unknown": "行动计划中没有该职责。",
     "operation_role_full": "「{role}」的名额已满。",
-    "operation_squad_unknown": "行动计划中没有该小队。"
+    "operation_squad_unknown": "行动计划中没有该小队。",
+    "plan_forbidden": "只有能创建行动的成员可以编辑战队计划。",
+    "plan_invalid": "计划对象无效——请刷新页面。",
+    "plan_too_large": "战队计划超过 {n} 个对象——请删除一些。"
   }
 }

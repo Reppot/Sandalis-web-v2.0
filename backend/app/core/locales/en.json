@@ -26,6 +26,9 @@
     "clan_blacklisted": "You are blacklisted in this clan.",
     "operation_role_unknown": "That role is not in the operation plan.",
     "operation_role_full": "All “{role}” slots are taken.",
-    "operation_squad_unknown": "That squad is not in the operation plan."
+    "operation_squad_unknown": "That squad is not in the operation plan.",
+    "plan_forbidden": "Only members who can create operations can edit the clan plan.",
+    "plan_invalid": "A plan object is malformed — reload the page.",
+    "plan_too_large": "The clan plan has more than {n} objects — remove some."
   }
 }

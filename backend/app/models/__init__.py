@@ -1,6 +1,7 @@
 """Все модели импортированы здесь, чтобы метаданные и мапперы были полными."""
 from app.models.base import Base, ClanScopedMixin, TimestampMixin, UUIDPkMixin
 from app.models.catalog import CatalogItem
+from app.models.clan_plan import ClanPlan
 from app.models.clan_settings import ClanSettings
 from app.models.code import ClanInviteCode
 from app.models.content import AppContent
@@ -22,7 +23,7 @@ from app.models.timer import Timer, TimerEvent
 
 __all__ = [
     "Base", "ClanScopedMixin", "TimestampMixin", "UUIDPkMixin",
-    "AppContent", "CatalogItem", "ClanCourse", "ClanMail", "ReportEvent",
+    "AppContent", "CatalogItem", "ClanPlan", "ClanCourse", "ClanMail", "ReportEvent",
     "GameAward", "AuditEntry", "PushSubscription", "ClanOperation", "Feedback", "Order", "OrderStatus",
     "Clan", "ClanApiToken", "DiscordSetup", "ClanInviteCode", "ClanMembership", "ClanSettings", "User",
     "OrderReport", "OrderReportLine", "ReportContribution", "ReportContributionLine", "ProductionRecipe", "ReportStatus",

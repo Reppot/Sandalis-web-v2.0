@@ -178,6 +178,7 @@
     "timer_warn": "Rezerva „{title}“ brzy vyprší",
     "timer_expired": "Rezerva „{title}“ vypršela!",
     "game_award": "Nové ocenění — mrkněte do statistik!",
-    "generic": "Nová zpráva v SINDARIS"
+    "generic": "Nová zpráva v SINDARIS",
+    "operation_rsvp": "Ještě jste neodpověděli, zda jdete na „{title}“ ({date}). Odpovězte na webu."
   }
 }

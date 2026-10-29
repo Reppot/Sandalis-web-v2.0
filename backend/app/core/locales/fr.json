@@ -26,6 +26,9 @@
     "clan_blacklisted": "Vous êtes sur la liste noire de ce clan.",
     "operation_role_unknown": "Ce rôle n’existe pas dans le plan.",
     "operation_role_full": "Toutes les places « {role} » sont prises.",
-    "operation_squad_unknown": "Cette escouade n’existe pas dans le plan."
+    "operation_squad_unknown": "Cette escouade n’existe pas dans le plan.",
+    "plan_forbidden": "Seuls les membres pouvant créer des opérations modifient le plan du clan.",
+    "plan_invalid": "Un objet du plan est invalide — rechargez la page.",
+    "plan_too_large": "Le plan du clan dépasse {n} objets — supprimez-en."
   }
 }

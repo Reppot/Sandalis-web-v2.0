@@ -154,12 +154,21 @@ class Plan(PlanWrite):
     debrief: Debrief = Field(default_factory=Debrief)
 
 
+class SupplyLine(BaseModel):
+    name: str
+    item_code: str | None = None
+    unit: str = "crate"
+    quantity: int
+    delivered: int
+
+
 class SupplyRow(BaseModel):
     report_id: str
     title: str
     status: str
     delivered: int
     ordered: int
+    lines: list[SupplyLine] = Field(default_factory=list)
 
 
 class Member(BaseModel):

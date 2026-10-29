@@ -4,6 +4,7 @@ import * as React from "react";
 import { FILTER_ICON, MAP_KINDS, planningApi, regionsIn, type MapKind, type WorldMap } from "@/features/planning/model/map";
 import { DEFAULTS, STRUCTURES_URL, loadDefaults, loadPlan, loadSnapshots, newId, saveDefaults, savePlan, saveSnapshots, type Defaults, type Rect, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { SnapshotViewer } from "@/features/planning/ui/SnapshotViewer";
+import { useClanPlan } from "@/features/planning/model/clanPlan";
 import { OperationDialog } from "@/features/operations/ui/OperationDialog";
 import { toOperationSnapshot } from "@/features/operations/model/operations";
 import { Scopes } from "@/entities/session";
@@ -11,20 +12,24 @@ import { MapCanvas } from "@/features/planning/ui/MapCanvas";
 import { ToolsPanel } from "@/features/planning/ui/ToolsPanel";
 import { useSession } from "@/features/cabinet";
 import { reportApi, type Report } from "@/entities/report";
-import { EmptyState, Icon, Loading, assetUrl, cn, errorText, formatDateTime, readStorage, useT, writeStorage, type MessageKey } from "@/shared";
+import { EmptyState, Icon, Loading, assetUrl, cn, errorText, formatDateTime, readStorage, useNotify, useT, writeStorage, type MessageKey } from "@/shared";
 
 const FILTERS_KEY = "sindaris-planning-hidden";
 const SIDE_KEY = "sindaris-planning-side";
+const MODE_KEY = "sindaris-planning-mode";
+type PlanMode = "mine" | "clan";
 
 /**
  * «Планирование»: карта текущей войны (гексы War API) с ключевыми постройками — ратуши,
  * реликвии, склады, порты, береговые орудия, аэродромы; каждый вид скрывается фильтром.
  * Справа по кнопке открывается панель инструментов: линии, линейка, стрелки войск, радиусы,
- * постройки меню строительства и ластик. План хранится в этом браузере.
+ * постройки меню строительства и ластик. План — свой (в этом браузере) или общий план клана,
+ * который офицеры рисуют вместе (сервер, правки видны всем через несколько секунд).
  * Между войнами (сопротивление) — только гексы и города и предупреждение.
  */
 export const PlanningWorkspace: React.FC = () => {
   const t = useT();
+  const notify = useNotify();
   const [data, setData] = React.useState<WorldMap | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [hidden, setHidden] = React.useState<Set<MapKind>>(new Set());
@@ -51,6 +56,11 @@ export const PlanningWorkspace: React.FC = () => {
   const { session, can } = useSession();
   const member = Boolean(session) && session?.subjectType !== "guest";
   const canMove = member && can(Scopes.OPERATIONS_CREATE);
+  const canClan = member && can(Scopes.OPERATIONS_READ);
+  const [mode, setMode] = React.useState<PlanMode>("mine");
+  React.useEffect(() => setMode(readStorage<PlanMode>(MODE_KEY, "mine")), []);
+  const clanMode = canClan && mode === "clan";
+  const clan = useClanPlan(clanMode, (err) => notify({ title: t("planning.clanPlan"), message: errorText(err, t("planning.clanSaveFailed")), tone: "danger" }));
   const [orders, setOrders] = React.useState<Report[] | null>(null);
   React.useEffect(() => {
     if (!member) return setOrders([]);
@@ -72,17 +82,27 @@ export const PlanningWorkspace: React.FC = () => {
   }, []);
   const structures = React.useMemo(() => new Map<string, StructureDef>((catalog?.items ?? []).map((i) => [i.id, i])), [catalog]);
 
-  const commit = React.useCallback((fn: (prev: Shape[]) => Shape[]) => {
+  const commitMine = React.useCallback((fn: (prev: Shape[]) => Shape[]) => {
     setShapes((prev) => {
       const next = fn(prev);
       savePlan(next);
       return next;
     });
   }, []);
+  // план клана без права правки — только смотреть
+  const locked = clanMode && !clan.canEdit;
+  const plan = clanMode ? clan.shapes : shapes;
+  const commit = React.useMemo(() => (clanMode ? (locked ? () => undefined : clan.commit) : commitMine), [clanMode, locked, clan.commit, commitMine]);
+  const switchMode = (next: PlanMode) => {
+    setMode(next);
+    writeStorage(MODE_KEY, next);
+    setSelected(null);
+    setTool("select");
+  };
   const editor = React.useMemo(
     () => ({
-      tool,
-      shapes,
+      tool: locked ? ("select" as Tool) : tool,
+      shapes: plan,
       selected,
       defaults,
       structures,
@@ -109,14 +129,14 @@ export const PlanningWorkspace: React.FC = () => {
           war: data.war_number,
           phase: data.phase,
           regions: regionsIn(data.regions, rect),
-          shapes: structuredClone(shapes),
+          shapes: structuredClone(plan),
         };
         changeSnapshots((prev) => [snap, ...prev]);
         setTool("select");
         setViewing(snap);
       },
     }),
-    [tool, shapes, selected, defaults, structures, orders, commit, data, snapshots.length, changeSnapshots, t],
+    [tool, locked, plan, selected, defaults, structures, orders, commit, data, snapshots.length, changeSnapshots, t],
   );
 
   // Delete — удалить выбранное, Esc — снять выбор и вернуться к курсору
@@ -168,7 +188,7 @@ export const PlanningWorkspace: React.FC = () => {
     return c;
   }, [data]);
   const resistance = data?.phase === "resistance";
-  const selectedShape = shapes.find((s) => s.id === selected) ?? null;
+  const selectedShape = locked ? null : plan.find((s) => s.id === selected) ?? null;
 
   // карта занимает всё место до низа окна (на телефоне — до нижней панели навигации)
   const page = React.useRef<HTMLDivElement>(null);
@@ -242,7 +262,39 @@ export const PlanningWorkspace: React.FC = () => {
                 <Icon name="close" size={16} />
               </button>
             </div>
+            {canClan ? (
+              <div className="mb-3 flex flex-col gap-2">
+                <div className="segmented self-start" role="group" aria-label={t("planning.planMode")}>
+                  <button type="button" className={cn("segmented-item", !clanMode && "is-active")} onClick={() => switchMode("mine")}>{t("planning.myPlan")}</button>
+                  <button type="button" className={cn("segmented-item", clanMode && "is-active")} onClick={() => switchMode("clan")}>
+                    <Icon name="users" size={14} />
+                    {t("planning.clanPlan")}
+                  </button>
+                </div>
+                {clanMode ? (
+                  <p className="text-xs text-fg-3">
+                    {!clan.ready ? t("planning.loading")
+                      : clan.saving ? t("planning.clanSaving")
+                      : clan.updatedAt ? t("planning.clanUpdated", { name: clan.updatedBy || "—", at: formatDateTime(clan.updatedAt) })
+                      : t("planning.clanEmpty")}
+                    {locked ? ` · ${t("planning.clanReadOnly")}` : ""}
+                  </p>
+                ) : null}
+                {clanMode && clan.canEdit && shapes.length ? (
+                  <button type="button" className="btn h-8 min-h-0 self-start text-xs" onClick={() => {
+                    const have = new Set(clan.shapes.map((s) => s.id));
+                    commit((prev) => [...prev, ...shapes.filter((s) => !have.has(s.id))]);
+                    notify({ title: t("planning.clanPlan"), message: t("planning.clanCopied", { n: shapes.filter((s) => !have.has(s.id)).length }), tone: "success" });
+                  }}>
+                    <Icon name="upload" size={14} />
+                    {t("planning.copyMine", { n: shapes.length })}
+                  </button>
+                ) : null}
+              </div>
+            ) : null}
             <ToolsPanel
+              locked={locked}
+              savedLabel={clanMode ? t("planning.savedClan") : t("planning.savedLocal")}
               tool={tool}
               onTool={pickTool}
               defaults={defaults}
@@ -254,7 +306,7 @@ export const PlanningWorkspace: React.FC = () => {
                 commit(() => []);
                 setSelected(null);
               }}
-              count={shapes.length}
+              count={plan.length}
               catalog={catalog}
               structures={structures}
               orders={orders}
