@@ -84,6 +84,7 @@ class OrderReport(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     discord_channel_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
     discord_message_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
     discord_locale: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    discord_thread_id: Mapped[str | None] = mapped_column(String(32), nullable=True)   # ветка обсуждения под постом
 
     lines: Mapped[list[OrderReportLine]] = relationship(
         back_populates="report",

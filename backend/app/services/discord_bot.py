@@ -198,6 +198,10 @@ async def post_order(session: AsyncSession, report: OrderReport, t: Translator, 
     report.discord_channel_id = channel
     report.discord_message_id = str(r.json()["id"])
     report.discord_locale = t.locale
+    # ветка под постом: туда же уходят комментарии из ленты заказа на сайте
+    th = await _bot("POST", f"/channels/{channel}/messages/{report.discord_message_id}/threads",
+                    json={"name": report.title[:100], "auto_archive_duration": 4320})
+    report.discord_thread_id = str(th.json()["id"]) if th is not None and th.status_code < 400 else None
     return True
 
 
@@ -319,3 +323,11 @@ async def add_role(guild_id: str, user_id: str, role_id: str) -> bool:
 async def remove_role(guild_id: str, user_id: str, role_id: str) -> bool:
     r = await _bot("DELETE", f"/guilds/{guild_id}/members/{user_id}/roles/{role_id}")
     return r is not None and r.status_code < 400
+
+
+async def post_comment(thread_id: str, author: str, text: str) -> None:
+    """Комментарий из ленты заказа на сайте — в ветку под постом заказа (фон)."""
+    r = await _bot("POST", f"/channels/{thread_id}/messages",
+                   json={"content": f"**{author}**: {text}"[:2000], "allowed_mentions": {"parse": []}})
+    if r is not None and r.status_code >= 400:
+        log.warning("comment not mirrored to thread %s: %s", thread_id, r.status_code)

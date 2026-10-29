@@ -139,6 +139,7 @@ def test_bot_posts_order_with_buttons_and_refreshes_it(db, monkeypatch):
             with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
                 mock.get(WEBHOOK).respond(200, json={"id": "123", "channel_id": "C1", "guild_id": "G1"})
                 post = mock.post(f"{BOT_API}/channels/C1/messages").respond(200, json={"id": "M1"})
+                mock.post(f"{BOT_API}/channels/C1/messages/M1/threads").respond(201, json={"id": "T1"})
                 hook = mock.post(WEBHOOK).respond(204)
                 assert (await c.post(f"{API}/reports/{rid}/discord", headers=boss)).status_code == 200
                 assert post.called and not hook.called
@@ -159,6 +160,12 @@ def test_bot_posts_order_with_buttons_and_refreshes_it(db, monkeypatch):
                 assert edit.called
                 embed = json.loads(edit.calls.last.request.content)["embeds"][0]
                 assert any("<@boss>" in f["value"] for f in embed["fields"])
+
+            # комментарий на сайте — в ветку под постом заказа
+            with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:
+                to_thread = mock.post(f"{BOT_API}/channels/T1/messages").respond(200, json={"id": "X"})
+                assert (await c.post(f"{API}/reports/{rid}/comments", headers=boss, json={"text": "везём к 18:00"})).status_code == 201
+                assert to_thread.called and "везём к 18:00" in json.loads(to_thread.calls.last.request.content)["content"]
 
             # нет доступа к каналу — заказ уходит старым путём, через вебхук
             with respx.mock(assert_all_mocked=False, assert_all_called=False) as mock:

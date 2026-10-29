@@ -196,7 +196,8 @@ async def report_events(report_id: uuid.UUID, service: ServiceDep) -> list[Repor
     summary="Комментарий к заказу; @роль и @участник получают письмо в почту сайта",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_COMMENT]))],
 )
-async def add_comment(report_id: uuid.UUID, payload: ReportComment, service: ServiceDep, principal: CurrentPrincipal) -> ReportEventRead:
+async def add_comment(report_id: uuid.UUID, payload: ReportComment, service: ServiceDep, principal: CurrentPrincipal,
+                      background: BackgroundTasks) -> ReportEventRead:
     if principal.subject_type != "user":
         raise NotFoundError()
     report = await service.get_report(report_id)
@@ -207,6 +208,8 @@ async def add_comment(report_id: uuid.UUID, payload: ReportComment, service: Ser
     report_tasks.mail(service.session, clan_id=principal.clan_id, recipients=recipients, sender_id=actor, sender_name=actor_name,
                       kind="order_comment", payload={"report_id": str(report.id), "title": report.title, "text": payload.text[:500]})
     await service.session.commit()
+    if report.discord_thread_id:
+        background.add_task(discord_bot.post_comment, report.discord_thread_id, actor_name, payload.text)
     [latest] = await report_tasks.events(service.session, report.id, limit=1)
     return ReportEventRead.model_validate(latest)
 
