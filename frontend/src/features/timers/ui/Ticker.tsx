@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useContent } from "@/entities/content";
 import { DAY, HOUR, cn, formatCountdown, secondsLeft, timeUnits, useT } from "@/shared";
 import { timerPlace, useClock, useTerminal } from "@/features/timers/model";
 
@@ -13,38 +12,16 @@ interface Segment {
 
 const SPEED_PX_S = 45;
 const GAP_PX = 40;              // расстояние между копиями ленты
-const PHRASE_CHANCE = 0.1;      // 10% в секунду — «радиоперехват» штаба
-const PHRASE_HOLD_SECONDS = 12;
 
 /**
- * Лента предупреждений в верхней панели: склады, которым осталось меньше суток, затем
- * фразы штаба из реестра контента. Помещается — стоит на месте; не помещается — плавно
+ * Лента предупреждений в верхней панели: склады, которым осталось меньше суток. Помещается — стоит на месте; не помещается — плавно
  * прокручивается (пауза при наведении, без анимации при prefers-reduced-motion).
  * Есть тревоги и onOpen — клик ведёт к складам клана.
  */
 export const Ticker: React.FC<{ onOpen?: () => void }> = ({ onOpen }) => {
   const t = useT();
   const { timers, loading, connection, enabled } = useTerminal();
-  const { list } = useContent();
   const now = useClock();
-  const [phrase, setPhrase] = React.useState("");
-  const phraseState = React.useRef({ hold: 0, lastTick: 0 });
-  const phrases = React.useMemo(() => list<{ text: string }>("ticker_phrase").map((p) => p.payload.text), [list]);
-
-  React.useEffect(() => {
-    if (!now) return;
-    const st = phraseState.current;
-    const tick = Math.floor(now / 1000);
-    if (tick === st.lastTick) return;
-    st.lastTick = tick;
-    if (st.hold > 0) {
-      st.hold -= 1;
-      if (st.hold === 0) setPhrase("");
-    } else if (phrases.length && Math.random() < PHRASE_CHANCE) {
-      st.hold = PHRASE_HOLD_SECONDS;
-      setPhrase(phrases[Math.floor(Math.random() * phrases.length)]);
-    }
-  }, [now, phrases]);
 
   const segments = React.useMemo<Segment[]>(() => {
     const units = timeUnits(t);
@@ -62,11 +39,10 @@ export const Ticker: React.FC<{ onOpen?: () => void }> = ({ onOpen }) => {
     const out: Segment[] = alerts.sort((a, b) => a.left - b.left).map(({ key, text, tone }) => ({ key, text, tone }));
     if (loading) out.push({ key: "loading", text: t("ticker.loading"), tone: "info" });
     else if (connection === "offline") out.unshift({ key: "offline", text: t("ticker.offline"), tone: "critical" });
-    if (phrase) out.push({ key: "phrase", text: phrase, tone: "info" });
     // «все склады в безопасности» — только тем, кто видит склады клана
     if (!out.length) out.push({ key: "safe", text: enabled ? t("ticker.allSafe") : t("ticker.guest"), tone: "safe" });
     return out;
-  }, [timers, now, phrase, loading, connection, enabled, t]);
+  }, [timers, now, loading, connection, enabled, t]);
 
   const alarm = segments.some((s) => s.tone === "critical" || s.tone === "warning");
   const containerRef = React.useRef<HTMLDivElement>(null);

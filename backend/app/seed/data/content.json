@@ -190,38 +190,6 @@
   }
  },
  {
-  "kind": "ticker_phrase",
-  "key": "phrase-1",
-  "sort": 0,
-  "payload": {
-   "text": "Работай сука"
-  }
- },
- {
-  "kind": "ticker_phrase",
-  "key": "phrase-2",
-  "sort": 1,
-  "payload": {
-   "text": "Сделай САНДАЛИС снова великим!"
-  }
- },
- {
-  "kind": "ticker_phrase",
-  "key": "phrase-3",
-  "sort": 2,
-  "payload": {
-   "text": "💀ЦЫГАНИС на связи. Спутниковый мониторинг шейкелей колонистов..."
-  }
- },
- {
-  "kind": "ticker_phrase",
-  "key": "phrase-4",
-  "sort": 3,
-  "payload": {
-   "text": "Розыгрыш карвалола"
-  }
- },
- {
   "kind": "region",
   "key": "acrithia",
   "sort": 0,
