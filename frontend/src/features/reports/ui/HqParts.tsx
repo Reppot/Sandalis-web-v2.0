@@ -1,10 +1,12 @@
 "use client";
 
 import * as React from "react";
-import { REPORT_STATUS_LABEL, type Priority, type Report, type ReportStatus } from "@/entities/report";
+import { REPORT_STATUS_LABEL, lineName, type Priority, type Report, type ReportStatus } from "@/entities/report";
 import { daysLeft, isOverdue, operationsOf, progressOf, readiness, type Summary, type View } from "@/features/reports/model/hq";
 import { parseDate, type Operation } from "@/features/operations/model/operations";
-import { Icon, cn, useI18n, type IconName, type MessageKey } from "@/shared";
+import { Icon, ItemIcon, assetUrl, cn, useI18n, type IconName, type MessageKey } from "@/shared";
+
+const ROW_LINES = 6;
 
 export const PRIORITY_ICON: Record<Priority, IconName> = { high: "chevronDown", normal: "minus", low: "chevronDown" };
 export const STATUS_BADGE: Record<ReportStatus, string> = { open: "badge-accent", in_progress: "badge-info", done: "badge-accent", cancelled: "badge-danger" };
@@ -115,6 +117,19 @@ export const TaskRow: React.FC<{
               <span key={o.id} className="report-op-chip"><Icon name="flag" size={11} />{o.title} · {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(parseDate(o.date))}</span>
             ))}
           </span>
+          {/* состав заказа прямо в строке: первые позиции и «ещё N» */}
+          {report.lines.length ? (
+            <span className="hq-lines">
+              {report.lines.slice(0, ROW_LINES).map((l) => (
+                <span key={l.id} className="report-log-item" title={`${lineName(l, locale)} ×${l.quantity}`}>
+                  <ItemIcon sources={[assetUrl(l.icon_url)]} size={18} label={lineName(l, locale)} />
+                  <span className="max-w-[9rem] truncate">{lineName(l, locale)}</span>
+                  <b>×{l.quantity}</b>
+                </span>
+              ))}
+              {report.lines.length > ROW_LINES ? <span className="text-xs text-fg-3">{t("common.more", { n: report.lines.length - ROW_LINES })}</span> : null}
+            </span>
+          ) : null}
         </span>
         <span className="hq-cell">{report.assignees.length ? <Avatars people={report.assignees} /> : <span className="text-xs text-warn">{t("hq.noAssignee")}</span>}</span>
         <span className="hq-cell text-sm"><DueLabel report={report} /></span>

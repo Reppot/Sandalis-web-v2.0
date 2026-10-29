@@ -1050,3 +1050,4 @@
 .ops-shot-btn img { display: block; width: 100%; height: auto; transition: transform var(--dur) var(--ease); }
 .ops-shot-btn:hover img { transform: scale(1.02); }
 .ops-shot-empty { display: grid; min-height: 8rem; place-items: center; border-radius: var(--radius); background: var(--surface-3); color: var(--fg-3); font-size: var(--text-xs); }
+.hq-lines { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-top: 0.4rem; }
