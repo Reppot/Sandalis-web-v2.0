@@ -123,6 +123,12 @@
       "streak": "Racha",
       "multitasker": "Multitarea",
       "team_player": "Jugador de equipo"
-    }
+    },
+    "hall_title": "🏆 Resultados de la guerra n.º {war} — Salón de la fama",
+    "goal_done_title": "🎯 ¡Objetivo semanal cumplido!",
+    "goal_done": "Entregadas {n} de {target} cajas. Gracias: {list}",
+    "role_prefix": "Liga:",
+    "digest_goal": "🎯 Objetivo semanal: {n} / {target} cajas",
+    "digest_squad": "⚔️ Mejor escuadra: **{name}** — {n} puntos por miembro"
   }
 }

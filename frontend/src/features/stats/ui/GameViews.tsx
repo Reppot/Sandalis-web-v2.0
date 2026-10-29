@@ -108,6 +108,14 @@ export const ProfileView: React.FC<{ userId: string; myId: string; onBack?: () =
             <div className="mt-1 text-xs text-fg-3">
               {lg.next_at ? t("game.toNext", { n: fmt(lg.next_at - lg.points, dateLocale) }) : t("game.maxTier")}
             </div>
+            {data.goals || data.trophies.length ? (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {data.goals ? <span className="badge badge-accent">{t("game.goalsDone", { n: data.goals })}</span> : null}
+                {data.trophies.map((tr) => (
+                  <span key={tr.war} className={cn("badge", tr.place === 1 ? "badge-warn" : "badge-neutral")}>{t("game.trophy", { place: tr.place, war: tr.war })}</span>
+                ))}
+              </div>
+            ) : null}
           </div>
           <div className="game-season">
             <span className="text-xs text-fg-3">{t("game.streakLabel")}</span>

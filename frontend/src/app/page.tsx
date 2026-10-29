@@ -120,7 +120,7 @@ export default function TerminalPage() {
           }]
         : []),
       ...(can(Scopes.CLAN_STATS)
-        ? [{ view: "stats" as const, icon: "stats" as const, label: "nav.stats.label" as const, hint: "nav.stats.hint" as const, render: () => <StatsWorkspace userId={session?.userId ?? ""} /> }]
+        ? [{ view: "stats" as const, icon: "stats" as const, label: "nav.stats.label" as const, hint: "nav.stats.hint" as const, render: () => <StatsWorkspace userId={session?.userId ?? ""} isOwner={isOwner} /> }]
         : []),
       ...(!isGuest && can(Scopes.OPERATIONS_READ)
         ? [

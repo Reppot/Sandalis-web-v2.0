@@ -123,6 +123,12 @@
       "streak": "连续",
       "multitasker": "多面手",
       "team_player": "团队玩家"
-    }
+    },
+    "hall_title": "🏆 第 {war} 场战争结果——名人堂",
+    "goal_done_title": "🎯 周目标达成！",
+    "goal_done": "已送达 {n}/{target} 箱。感谢：{list}",
+    "role_prefix": "联赛：",
+    "digest_goal": "🎯 周目标：{n}/{target} 箱",
+    "digest_squad": "⚔️ 最佳小队：**{name}**——人均 {n} 分"
   }
 }

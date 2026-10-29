@@ -123,6 +123,12 @@
       "streak": "Serie",
       "multitasker": "Multitasker",
       "team_player": "Teamplayer"
-    }
+    },
+    "hall_title": "🏆 Ergebnis Krieg Nr. {war} – Ruhmeshalle",
+    "goal_done_title": "🎯 Wochenziel erreicht!",
+    "goal_done": "{n} von {target} Kisten geliefert. Danke: {list}",
+    "role_prefix": "Liga:",
+    "digest_goal": "🎯 Wochenziel: {n} / {target} Kisten",
+    "digest_squad": "⚔️ Bester Trupp: **{name}** – {n} Punkte pro Mitglied"
   }
 }

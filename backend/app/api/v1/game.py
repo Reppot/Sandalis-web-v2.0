@@ -3,16 +3,18 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from sqlalchemy import select
 
 from app.api.deps import CurrentPrincipal, DbDep, PermissionChecker
 from app.core.errors import NotFoundError
 from app.core.permissions import Scopes
+from app.models.clan_settings import ClanSettings
 from app.models.game_award import GameAward
+from app.models.rbac import ClanMembership
 from app.services import gamification as game
 from app.services.war_api import current_war
 
@@ -105,6 +107,19 @@ class ProfileRead(BaseModel):
     recent: list[CreditRead]
     streak: StreakRead
     achievements: list[AchievementRead]
+    goals: int = 0                                  # недель с выполненной целью клана, где вы возили
+    trophies: list[dict[str, int]] = []             # места в Зале славы: [{war, place}]
+
+
+async def _cfg(session: Any) -> tuple[ClanSettings | None, dict[str, Any]]:
+    cs = (await session.execute(select(ClanSettings))).scalar_one_or_none()
+    return cs, game.settings_of(cs)
+
+
+async def _enabled(session: Any) -> None:
+    """Командир выключил геймификацию — рейтинг и профили не отдаём."""
+    if not (await _cfg(session))[1]["enabled"]:
+        raise NotFoundError()
 
 
 async def _season() -> SeasonRead:
@@ -126,6 +141,7 @@ async def leaderboard(
     category: Annotated[str, Query(pattern="^(points|crates|reserves|ontime|operations)$")] = "points",
     limit: Annotated[int, Query(ge=1, le=100)] = 10,
 ) -> BoardRead:
+    await _enabled(session)
     items, names = await game.credits(session, principal.clan_id)
     season = await _season()
     agg = game.totals(items, game.since(period, season.since))
@@ -145,6 +161,8 @@ async def leaderboard(
 @router.get("/badges", response_model=dict[str, BadgeRead], dependencies=CanRead,
             summary="Лиги и титулы участников — значки у ников")
 async def league_badges(principal: CurrentPrincipal, session: DbDep) -> dict[str, BadgeRead]:
+    if not (await _cfg(session))[1]["enabled"]:
+        return {}
     items, _ = await game.credits(session, principal.clan_id)
     season = await _season()
     return {u: BadgeRead(**b) for u, b in game.badges(items, season.since).items()}
@@ -152,6 +170,7 @@ async def league_badges(principal: CurrentPrincipal, session: DbDep) -> dict[str
 
 @router.get("/members/{user_id}", response_model=ProfileRead, dependencies=CanRead, summary="Профиль бойца")
 async def member_profile(user_id: str, principal: CurrentPrincipal, session: DbDep) -> ProfileRead:
+    await _enabled(session)
     items, names = await game.credits(session, principal.clan_id)
     mine = [c for c in items if c.user_id == user_id]
     if not mine and user_id not in names:
@@ -174,7 +193,11 @@ async def member_profile(user_id: str, principal: CurrentPrincipal, session: DbD
         AchievementRead(**a, earned_at=got.get(f"ach:{a['key']}:{a['level']}") if a["level"] else None)
         for a in game.achievements(items, user_id)
     ]
+    trophies = sorted(({"war": int(k.split(":")[1]), "place": int(k.split(":")[2])} for k in got if k.startswith("season:")),
+                      key=lambda x: -x["war"])
     return ProfileRead(
+        goals=sum(1 for k in got if k.startswith("goal:")),
+        trophies=trophies,
         streak=StreakRead(**game.streak(items, user_id)),
         achievements=achievements,
         user_id=user_id,
@@ -194,3 +217,126 @@ async def member_profile(user_id: str, principal: CurrentPrincipal, session: DbD
         recent=[CreditRead(kind=c.kind, points=c.points, title=c.title, at=c.at, crates=c.crates, units=c.units, report_id=c.report_id)
                 for c in sorted(mine, key=lambda c: c.at, reverse=True)[:15]],
     )
+
+
+
+# ───────────────────────── цель недели, отряды, Зал славы ─────────────────────────
+
+class GoalRead(BaseModel):
+    target: int
+    progress: int
+    done: bool
+    week: str
+    contributors: list[tuple[str, int]]
+
+
+class SquadRead(BaseModel):
+    rank: int
+    role_id: str
+    name: str
+    color: int
+    members: int
+    active: int
+    points: float
+    per_active: float
+
+
+class HallEntry(BaseModel):
+    war: int | None
+    since: str | None
+    until: str | None
+    top: list[dict[str, Any]]
+
+
+class SummaryRead(BaseModel):
+    enabled: bool
+    season: SeasonRead
+    goal: GoalRead | None
+    squads: list[SquadRead]
+    hall: list[HallEntry]
+    names: dict[str, str]
+
+
+@router.get("/summary", response_model=SummaryRead, dependencies=CanRead, summary="Цель недели, отряды и Зал славы")
+async def summary(principal: CurrentPrincipal, session: DbDep) -> SummaryRead:
+    cs, cfg = await _cfg(session)
+    season = await _season()
+    if not cfg["enabled"]:
+        return SummaryRead(enabled=False, season=season, goal=None, squads=[], hall=[], names={})
+    items, names = await game.credits(session, principal.clan_id)
+    now = datetime.now(UTC)
+    member_roles = dict((await session.execute(select(ClanMembership.user_id, ClanMembership.discord_role_ids))).all())
+    g = game.goal(items, cfg, now)
+    return SummaryRead(
+        enabled=True, season=season,
+        goal=GoalRead(**g) if g else None,
+        squads=[SquadRead(**x) for x in game.squads(items, cfg, list(cs.discord_roles or []) if cs else [], member_roles, now)],
+        hall=[HallEntry(**h) for h in (cs.game_hall if cs else None) or []],
+        names={u: names.get(u, u) for u, _ in (g["contributors"] if g else [])},
+    )
+
+
+# ───────────────────────── настройки командира ─────────────────────────
+
+class RoleOption(BaseModel):
+    id: str
+    name: str
+    color: int = 0
+
+
+class GameSettings(BaseModel):
+    enabled: bool = True
+    weights: dict[str, Annotated[float, Field(ge=0, le=1000)]] = {}
+    excluded_roles: Annotated[list[str], Field(max_length=100)] = []
+    squads: Annotated[list[str], Field(max_length=20)] = []
+    weekly_goal: Annotated[int, Field(ge=0, le=10_000_000)] = 0
+    league_roles: bool = False
+
+
+class GameSettingsRead(GameSettings):
+    defaults: dict[str, float]
+    roles: list[RoleOption]
+    bot: bool
+
+
+def _owner(principal: CurrentPrincipal) -> None:
+    from app.api.v1.clan_roles import owner_only
+
+    owner_only(principal)
+
+
+def _settings_read(cs: ClanSettings | None) -> GameSettingsRead:
+    from app.services import discord_bot
+
+    cfg = game.settings_of(cs)
+    return GameSettingsRead(
+        **{**cfg, "weights": game.weights_of(cfg)},
+        defaults=dict(game.POINTS),
+        roles=[RoleOption(id=r["id"], name=r.get("name") or r["id"], color=int(r.get("color") or 0))
+               for r in (cs.discord_roles if cs else None) or [] if r.get("name") != "@everyone"],
+        bot=discord_bot.enabled(),
+    )
+
+
+@router.get("/settings", response_model=GameSettingsRead, summary="Настройки очков снабжения (командир)")
+async def read_settings(principal: CurrentPrincipal, session: DbDep) -> GameSettingsRead:
+    _owner(principal)
+    return _settings_read((await _cfg(session))[0])
+
+
+@router.put("/settings", response_model=GameSettingsRead, summary="Сохранить настройки очков снабжения (командир)")
+async def save_settings(payload: GameSettings, principal: CurrentPrincipal, session: DbDep) -> GameSettingsRead:
+    _owner(principal)
+    cs, _ = await _cfg(session)
+    if cs is None:
+        cs = ClanSettings()
+        session.add(cs)
+    known = {r["id"] for r in cs.discord_roles or []}
+    data = payload.model_dump()
+    data["weights"] = {k: v for k, v in data["weights"].items() if k in game.POINTS and v != game.POINTS[k]}
+    data["excluded_roles"] = [r for r in dict.fromkeys(data["excluded_roles"]) if r in known]
+    data["squads"] = [r for r in dict.fromkeys(data["squads"]) if r in known]
+    cs.game_settings = data
+    await session.commit()
+    game.forget(principal.clan_id)
+    return _settings_read(cs)

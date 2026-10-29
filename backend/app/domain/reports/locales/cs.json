@@ -123,6 +123,12 @@
       "streak": "Série",
       "multitasker": "Multitasker",
       "team_player": "Týmový hráč"
-    }
+    },
+    "hall_title": "🏆 Výsledky války č. {war} — Síň slávy",
+    "goal_done_title": "🎯 Týdenní cíl splněn!",
+    "goal_done": "Dovezeno {n} z {target} beden. Díky: {list}",
+    "role_prefix": "Liga:",
+    "digest_goal": "🎯 Týdenní cíl: {n} / {target} beden",
+    "digest_squad": "⚔️ Nejlepší oddíl: **{name}** — {n} bodů na člena"
   }
 }

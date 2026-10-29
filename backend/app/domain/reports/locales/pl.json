@@ -123,6 +123,12 @@
       "streak": "Seria",
       "multitasker": "Wielozadaniowiec",
       "team_player": "Gracz zespołowy"
-    }
+    },
+    "hall_title": "🏆 Wyniki wojny nr {war} — Galeria sław",
+    "goal_done_title": "🎯 Cel tygodnia osiągnięty!",
+    "goal_done": "Dowieziono {n} z {target} skrz. Dzięki: {list}",
+    "role_prefix": "Liga:",
+    "digest_goal": "🎯 Cel tygodnia: {n} / {target} skrz.",
+    "digest_squad": "⚔️ Najlepszy oddział: **{name}** — {n} pkt na osobę"
   }
 }

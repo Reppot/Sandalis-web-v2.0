@@ -58,6 +58,8 @@ export interface Profile {
   recent: { kind: string; points: number; title: string; at: string; crates: number; units: number; report_id: string | null }[];
   streak: { current: number; best: number };
   achievements: Achievement[];
+  goals: number;
+  trophies: { war: number; place: number }[];
 }
 export interface Achievement {
   key: string;
@@ -111,3 +113,48 @@ export function useBadge(userId: string | null | undefined): Badge | undefined {
   }, []);
   return userId ? badges[userId] : undefined;
 }
+
+export interface Squad {
+  rank: number;
+  role_id: string;
+  name: string;
+  color: number;
+  members: number;
+  active: number;
+  points: number;
+  per_active: number;
+}
+export interface HallEntry {
+  war: number | null;
+  since: string | null;
+  until: string | null;
+  top: { user_id: string; name: string; points: number; tier: Tier }[];
+}
+export interface Summary {
+  enabled: boolean;
+  season: { war: number | null; since: string | null };
+  goal: { target: number; progress: number; done: boolean; week: string; contributors: [string, number][] } | null;
+  squads: Squad[];
+  hall: HallEntry[];
+  names: Record<string, string>;
+}
+export const WEIGHT_KEYS = ["crate", "unit", "line_done", "reserve", "reserve_save", "attend", "order_done"] as const;
+export interface GameSettings {
+  enabled: boolean;
+  weights: Record<string, number>;
+  excluded_roles: string[];
+  squads: string[];
+  weekly_goal: number;
+  league_roles: boolean;
+}
+export interface GameSettingsRead extends GameSettings {
+  defaults: Record<string, number>;
+  roles: { id: string; name: string; color: number }[];
+  bot: boolean;
+}
+
+export const gameClanApi = {
+  summary: () => apiClient.get<Summary>("/api/v1/clan/game/summary"),
+  settings: () => apiClient.get<GameSettingsRead>("/api/v1/clan/game/settings"),
+  save: (s: GameSettings) => apiClient.put<GameSettingsRead>("/api/v1/clan/game/settings", s),
+};

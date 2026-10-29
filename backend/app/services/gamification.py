@@ -64,6 +64,25 @@ class Credit:
 
 _cache: dict[str, tuple[float, list[Credit], dict[str, str]]] = {}
 
+# настройки командира (ClanSettings.game_settings); пустые поля — значения по умолчанию
+DEFAULT_SETTINGS: Final[dict[str, Any]] = {
+    "enabled": True,          # геймификация в клане включена
+    "weights": {},            # свои веса очков: {crate, unit, line_done, reserve, reserve_save, attend, order_done}
+    "excluded_roles": [],     # роли Discord, чьи носители не участвуют (боты, гости)
+    "squads": [],             # роли Discord — отряды для соревнования
+    "weekly_goal": 0,         # цель недели в ящиках (0 — без цели)
+    "league_roles": False,    # бот выдаёт роли «Лига: …» по лиге участника
+}
+
+
+def settings_of(cs: Any) -> dict[str, Any]:
+    raw = (getattr(cs, "game_settings", None) or {}) if cs is not None else {}
+    return {**DEFAULT_SETTINGS, **{k: v for k, v in raw.items() if k in DEFAULT_SETTINGS}}
+
+
+def weights_of(cfg: dict[str, Any]) -> dict[str, float]:
+    return {**POINTS, **{k: float(v) for k, v in (cfg.get("weights") or {}).items() if k in POINTS}}
+
 
 def forget(clan_id: str) -> None:
     _cache.pop(clan_id, None)
@@ -79,11 +98,20 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
     if hit and hit[0] > time.monotonic():
         return hit[1], hit[2]
 
+    from app.models.clan_settings import ClanSettings
+
+    cfg = settings_of((await session.execute(select(ClanSettings))).scalar_one_or_none())
+    W = weights_of(cfg)
+    excluded_roles = set(cfg["excluded_roles"])
     names: dict[str, str] = {}
+    excluded: set[str] = set()
     rows = (await session.execute(
-        select(ClanMembership.user_id, User.display_name).join(User, User.id == ClanMembership.user_id)
+        select(ClanMembership.user_id, User.display_name, ClanMembership.discord_role_ids).join(User, User.id == ClanMembership.user_id)
     )).all()
-    names.update({uid: name or uid for uid, name in rows})
+    for uid, name, role_ids in rows:
+        names[uid] = name or uid
+        if excluded_roles & set(role_ids or []):
+            excluded.add(uid)
 
     reports = {r.id: r for r in (await session.execute(select(OrderReport))).scalars().all()}
     ops = (await session.execute(select(ClanOperation))).scalars().all()
@@ -140,10 +168,10 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
             remaining[cl.line_id] = left - got
             if unit_of.get(cl.line_id) == "unit":
                 units += got
-                base += got * POINTS["unit"]
+                base += got * W["unit"]
             else:
                 crates += got
-                base += got * POINTS["crate"]
+                base += got * W["crate"]
             if remaining[cl.line_id] == 0:
                 closed += 1
         if base:
@@ -152,11 +180,11 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
                               op_id=od[1] if to_op else None))
         if closed:
             own = MULT["own"] if report.created_by == c.user_id else 1.0
-            out.append(Credit(c.user_id, at, "line_done", POINTS["line_done"] * closed * own, title=report.title, report_id=str(report.id)))
+            out.append(Credit(c.user_id, at, "line_done", W["line_done"] * closed * own, title=report.title, report_id=str(report.id)))
 
     for r in reports.values():
         if r.status == ReportStatus.DONE.value and not r.created_by.startswith(("token:", "guest:")):
-            out.append(Credit(r.created_by, _aware(r.updated_at), "order_done", POINTS["order_done"], title=r.title, report_id=str(r.id)))
+            out.append(Credit(r.created_by, _aware(r.updated_at), "order_done", W["order_done"], title=r.title, report_id=str(r.id)))
 
     events = (await session.execute(
         select(TimerEvent).where(TimerEvent.kind == "restart", TimerEvent.user_id.is_not(None))
@@ -170,7 +198,7 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
             continue
         per_day[key] += 1
         save = e.left_sec is not None and e.left_sec < SAVE_WINDOW_SEC
-        out.append(Credit(e.user_id, at, "reserve", POINTS["reserve_save" if save else "reserve"], left_sec=e.left_sec))
+        out.append(Credit(e.user_id, at, "reserve", W["reserve_save" if save else "reserve"], left_sec=e.left_sec))
 
     # заказ привезён целиком одним человеком — для достижения «Закрыл заказ»
     for r in reports.values():
@@ -188,8 +216,10 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
             uid = p.get("user_id")
             if uid:
                 names.setdefault(uid, p.get("name") or uid)
-                out.append(Credit(uid, at, "attend", POINTS["attend"], title=op.title))
+                out.append(Credit(uid, at, "attend", W["attend"], title=op.title))
 
+    if excluded:
+        out = [c for c in out if c.user_id not in excluded]
     _cache[clan_id] = (time.monotonic() + CACHE_SEC, out, names)
     return out, names
 
@@ -362,3 +392,55 @@ def award_keys(items: list[Credit], user_id: str, badge: dict[str, Any] | None) 
         idx = [t for t, _ in LEAGUES].index(badge["tier"])
         keys |= {f"league:{t}" for t, _ in LEAGUES[1: idx + 1]}
     return keys
+
+
+# ───────────────────────── цель недели, отряды ─────────────────────────
+
+def week_start(now: datetime) -> datetime:
+    day = now.astimezone(UTC).date()
+    return datetime.combine(day - timedelta(days=day.weekday()), dtime(0), tzinfo=UTC)
+
+
+def week_key(now: datetime) -> str:
+    y, w, _ = now.isocalendar()
+    return f"{y}-W{w:02d}"
+
+
+def goal(items: list[Credit], cfg: dict[str, Any], now: datetime) -> dict[str, Any] | None:
+    target = int(cfg.get("weekly_goal") or 0)
+    if target <= 0:
+        return None
+    start = week_start(now)
+    week = [c for c in items if c.at >= start and c.crates]
+    progress = sum(c.crates for c in week)
+    by_user: dict[str, int] = defaultdict(int)
+    for c in week:
+        by_user[c.user_id] += c.crates
+    return {"target": target, "progress": progress, "done": progress >= target, "week": week_key(now),
+            "contributors": sorted(by_user.items(), key=lambda x: -x[1])}
+
+
+def squads(items: list[Credit], cfg: dict[str, Any], roles: list[dict[str, Any]], member_roles: dict[str, list[str]],
+           now: datetime) -> list[dict[str, Any]]:
+    """Отряды (роли Discord): очки за неделю на одного активного участника отряда."""
+    agg = totals(items, week_start(now))
+    by_id = {r["id"]: r for r in roles}
+    out = []
+    for rid in cfg.get("squads") or []:
+        members = [u for u, ids in member_roles.items() if rid in (ids or [])]
+        active = [u for u in members if agg.get(u, {}).get("points", 0) > 0]
+        points = sum(agg[u]["points"] for u in active)
+        out.append({"role_id": rid, "name": by_id.get(rid, {}).get("name") or rid, "color": by_id.get(rid, {}).get("color", 0),
+                    "members": len(members), "active": len(active), "points": round(points, 1),
+                    "per_active": round(points / len(active), 1) if active else 0.0})
+    out.sort(key=lambda x: -x["per_active"])
+    for i, sq in enumerate(out):
+        sq["rank"] = i + 1
+    return out
+
+
+def season_top(items: list[Credit], since: datetime | None, until: datetime, names: dict[str, str], n: int = 3) -> list[dict[str, Any]]:
+    agg = totals([c for c in items if c.at < until], since)
+    lifetime = totals(items, None)
+    ranked = sorted(((u, a["points"]) for u, a in agg.items() if a["points"] > 0), key=lambda x: -x[1])[:n]
+    return [{"user_id": u, "name": names.get(u, u), "points": round(p, 1), "tier": league(lifetime[u]["points"])["tier"]} for u, p in ranked]

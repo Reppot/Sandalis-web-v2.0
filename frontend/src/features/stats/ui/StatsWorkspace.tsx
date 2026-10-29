@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
+import { ClanStrip, GameSettingsView, HallOfFame } from "@/features/stats/ui/ClanGame";
 import { LeaderboardView, ProfileView } from "@/features/stats/ui/GameViews";
+import { gameClanApi, type Summary } from "@/features/stats/model/game";
 import { LeagueMark } from "@/features/stats/ui/LeagueBanner";
 import { EmptyState, Loading, PageHeader, Segmented, SheetHead, apiClient, errorText, formatDateTime, sortRows, useI18n, useNotify, type MessageKey, type SheetSort } from "@/shared";
 
@@ -39,13 +41,19 @@ const statsApi = {
 const ROLE: Record<string, MessageKey> = { owner: "role.owner", admin: "role.admin", officer: "role.officer", member: "role.member", guest: "role.guest", former: "stats.former" };
 const PERIODS = ["7", "30", "90", "0"] as const;
 
-type Tab = "overview" | "rating" | "profile";
+type Tab = "overview" | "rating" | "profile" | "settings";
 
 /** «Статистика»: обзор клана, рейтинг по очкам снабжения и профиль бойца (лига, очки, вклад). */
-export const StatsWorkspace: React.FC<{ userId: string }> = ({ userId }) => {
+export const StatsWorkspace: React.FC<{ userId: string; isOwner: boolean }> = ({ userId, isOwner }) => {
   const { t } = useI18n();
   const [tab, setTab] = React.useState<Tab>("overview");
   const [profileOf, setProfileOf] = React.useState<string | null>(null);
+  const [summary, setSummary] = React.useState<Summary | null>(null);
+  const loadSummary = React.useCallback(() => {
+    gameClanApi.summary().then(setSummary).catch(() => setSummary(null));
+  }, []);
+  React.useEffect(loadSummary, [loadSummary]);
+  const game = summary?.enabled !== false;
   const open = (id: string) => {
     setProfileOf(id);
     setTab("profile");
@@ -61,15 +69,21 @@ export const StatsWorkspace: React.FC<{ userId: string }> = ({ userId }) => {
           if (v === "profile") setProfileOf(null);
         }}
         options={[
-          { value: "overview", label: t("stats.tab.overview") },
-          { value: "rating", label: t("stats.tab.rating") },
-          { value: "profile", label: t("stats.tab.profile") },
+          { value: "overview" as Tab, label: t("stats.tab.overview") },
+          ...(game ? [{ value: "rating" as Tab, label: t("stats.tab.rating") }, { value: "profile" as Tab, label: t("stats.tab.profile") }] : []),
+          ...(isOwner ? [{ value: "settings" as Tab, label: t("stats.tab.settings") }] : []),
         ]}
       />
-      {tab === "overview" ? (
+      {tab === "overview" || (!game && (tab === "rating" || tab === "profile")) ? (
         <Overview onOpen={open} />
+      ) : tab === "settings" ? (
+        <GameSettingsView onSaved={loadSummary} />
       ) : tab === "rating" ? (
-        <LeaderboardView myId={userId} onOpen={open} />
+        <>
+          {summary ? <ClanStrip summary={summary} /> : null}
+          <LeaderboardView myId={userId} onOpen={open} />
+          {summary ? <HallOfFame summary={summary} onOpen={open} /> : null}
+        </>
       ) : (
         <ProfileView key={profileOf ?? userId} userId={profileOf ?? userId} myId={userId} onBack={profileOf && profileOf !== userId ? () => setTab("rating") : undefined} />
       )}

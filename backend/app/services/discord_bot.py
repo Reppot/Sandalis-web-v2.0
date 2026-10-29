@@ -300,3 +300,22 @@ async def delete_post(channel_id: str, message_id: str) -> None:
     r = await _bot("DELETE", f"/channels/{channel_id}/messages/{message_id}")
     if r is not None and r.status_code >= 400 and r.status_code != 404:
         log.warning("discord post %s/%s not deleted: %s", channel_id, message_id, r.status_code)
+
+
+async def create_role(guild_id: str, name: str, color: int) -> str | None:
+    """Новая роль на сервере (нужно право «Управлять ролями»). None — не вышло."""
+    r = await _bot("POST", f"/guilds/{guild_id}/roles", json={"name": name[:100], "color": color, "mentionable": False, "hoist": False})
+    if r is None or r.status_code >= 400:
+        log.warning("discord role %r not created in %s: %s", name, guild_id, r.status_code if r is not None else "error")
+        return None
+    return str(r.json().get("id"))
+
+
+async def add_role(guild_id: str, user_id: str, role_id: str) -> bool:
+    r = await _bot("PUT", f"/guilds/{guild_id}/members/{user_id}/roles/{role_id}")
+    return r is not None and r.status_code < 400
+
+
+async def remove_role(guild_id: str, user_id: str, role_id: str) -> bool:
+    r = await _bot("DELETE", f"/guilds/{guild_id}/members/{user_id}/roles/{role_id}")
+    return r is not None and r.status_code < 400

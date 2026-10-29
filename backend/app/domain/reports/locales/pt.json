@@ -123,6 +123,12 @@
       "streak": "Sequência",
       "multitasker": "Multitarefa",
       "team_player": "Jogador de equipe"
-    }
+    },
+    "hall_title": "🏆 Resultados da guerra nº {war} — Hall da fama",
+    "goal_done_title": "🎯 Meta semanal cumprida!",
+    "goal_done": "{n} de {target} caixas entregues. Obrigado: {list}",
+    "role_prefix": "Liga:",
+    "digest_goal": "🎯 Meta semanal: {n} / {target} caixas",
+    "digest_squad": "⚔️ Melhor esquadrão: **{name}** — {n} pontos por membro"
   }
 }

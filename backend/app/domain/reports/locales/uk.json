@@ -123,6 +123,12 @@
       "streak": "Серія",
       "multitasker": "Багатоверстатник",
       "team_player": "Командний гравець"
-    }
+    },
+    "hall_title": "🏆 Підсумки війни №{war} — Зала слави",
+    "goal_done_title": "🎯 Мету тижня виконано!",
+    "goal_done": "Привезено {n} з {target} ящ. Дякуємо: {list}",
+    "role_prefix": "Ліга:",
+    "digest_goal": "🎯 Мета тижня: {n} / {target} ящ.",
+    "digest_squad": "⚔️ Найкращий загін: **{name}** — {n} очок на бійця"
   }
 }

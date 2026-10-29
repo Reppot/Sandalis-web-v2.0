@@ -28,6 +28,12 @@ class ClanSettings(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     discord_roles_hidden: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
     # очки снабжения: за какую неделю (ISO «2026-W44») уже отправлена сводка в Discord
     game_digest_week: Mapped[str | None] = mapped_column(String(10), nullable=True)
+    # настройки командира (services/gamification.DEFAULT_SETTINGS), Зал славы сезонов
+    # [{war, since, until, top: [{user_id, name, points, tier}]}] и служебное состояние
+    # (сезон, неделя выполненной цели, роли лиг в Discord)
+    game_settings: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}", nullable=False)
+    game_hall: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)
+    game_state: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}", nullable=False)
     # роли Discord-сервера клана (services/discord_roles.py): снимок ролей, который
     # подтягивает командир, и уровни доступа {id роли: basic|medium|high}
     discord_roles: Mapped[list[dict]] = mapped_column(JSONB, default=list, server_default="[]", nullable=False)

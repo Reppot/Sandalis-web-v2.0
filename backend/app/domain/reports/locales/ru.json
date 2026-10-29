@@ -123,6 +123,12 @@
       "streak": "Серия",
       "multitasker": "Многостаночник",
       "team_player": "Командный игрок"
-    }
+    },
+    "hall_title": "🏆 Итоги войны №{war} — Зал славы",
+    "goal_done_title": "🎯 Цель недели выполнена!",
+    "goal_done": "Привезено {n} из {target} ящ. Спасибо: {list}",
+    "role_prefix": "Лига:",
+    "digest_goal": "🎯 Цель недели: {n} / {target} ящ.",
+    "digest_squad": "⚔️ Лучший отряд: **{name}** — {n} очков на бойца"
   }
 }

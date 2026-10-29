@@ -123,6 +123,12 @@
       "streak": "Streak",
       "multitasker": "Multitasker",
       "team_player": "Team player"
-    }
+    },
+    "hall_title": "🏆 War #{war} results — Hall of Fame",
+    "goal_done_title": "🎯 Weekly goal reached!",
+    "goal_done": "{n} of {target} crates delivered. Thanks: {list}",
+    "role_prefix": "League:",
+    "digest_goal": "🎯 Weekly goal: {n} / {target} crates",
+    "digest_squad": "⚔️ Best squad: **{name}** — {n} points per member"
   }
 }

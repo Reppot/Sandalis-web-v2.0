@@ -123,6 +123,12 @@
       "streak": "Série",
       "multitasker": "Multitâche",
       "team_player": "Esprit d'équipe"
-    }
+    },
+    "hall_title": "🏆 Bilan de la guerre n° {war} — Panthéon",
+    "goal_done_title": "🎯 Objectif hebdo atteint !",
+    "goal_done": "{n} caisses sur {target} livrées. Merci : {list}",
+    "role_prefix": "Ligue :",
+    "digest_goal": "🎯 Objectif hebdo : {n} / {target} caisses",
+    "digest_squad": "⚔️ Meilleure escouade : **{name}** — {n} points par membre"
   }
 }
