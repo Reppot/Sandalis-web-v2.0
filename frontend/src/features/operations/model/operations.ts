@@ -1,17 +1,16 @@
 import { apiClient } from "@/shared";
-import type { Snapshot } from "@/features/planning/model/plan";
+import { POINT_ICON, POINT_KINDS, type PointKind, type Snapshot } from "@/features/planning/model/plan";
+
+export { POINT_ICON, POINT_KINDS, type PointKind };
 
 /** Снимок карты в операции — то же, что снимок «Планирования», без своего id. */
 export type OperationSnapshot = Pick<Snapshot, "name" | "rect" | "war" | "phase" | "regions" | "shapes">;
 
 export type AttendStatus = "go" | "maybe" | "no";
 export type Outcome = "success" | "partial" | "fail";
-export type PointKind = "target" | "rally" | "supply" | "retreat" | "other";
 /** Разделы брифинга, которые командир может скрыть. */
 export type BriefSection = "note" | "stages" | "points" | "roles" | "squads" | "people" | "supply" | "maps";
 export const BRIEF_SECTIONS: BriefSection[] = ["note", "stages", "points", "roles", "squads", "people", "supply", "maps"];
-export const POINT_KINDS: PointKind[] = ["target", "rally", "supply", "retreat", "other"];
-export const POINT_ICON: Record<PointKind, string> = { target: "🎯", rally: "🚩", supply: "📦", retreat: "↩️", other: "📍" };
 
 export interface Participant {
   user_id: string;
@@ -27,7 +26,8 @@ export interface Participant {
 export interface PlanRole { id: string; name: string; slots: number }
 export interface PlanSquad { id: string; name: string; leader_id: string | null }
 export interface PlanStage { id: string; time: string; title: string; note: string; owner_id: string | null; done: boolean; brief: boolean }
-export interface PlanPoint { id: string; kind: PointKind; label: string; note: string; brief: boolean }
+/** Точка из «Планирования» (метка «Точка» на снимке); snapshot — номер снимка операции. */
+export interface PlanPoint { id: string; kind: PointKind; label: string; note: string; brief: boolean; snapshot: number | null }
 export interface Debrief { outcome: Outcome | null; text: string }
 
 export interface OperationPlan {
@@ -106,7 +106,12 @@ export const operationsApi = {
   assign: (id: string, body: { user_id: string; role?: string | null; squad?: string | null; attended?: boolean | null }) =>
     apiClient.post<Operation>(`${BASE}/${id}/assign`, body),
   stageDone: (id: string, stage: string, done: boolean) => apiClient.post<Operation>(`${BASE}/${id}/stages/${stage}`, { done }),
-  postBrief: (id: string) => apiClient.post<{ posted: boolean }>(`${BASE}/${id}/brief`, {}),
+  /** Брифинг в Discord; images — PNG снимков карты. */
+  postBrief: (id: string, images: Blob[] = []) => {
+    const form = new FormData();
+    images.forEach((b, i) => form.append("images", b, `map-${i + 1}.png`));
+    return apiClient.postForm<{ posted: boolean }>(`${BASE}/${id}/brief`, form);
+  },
 };
 
 /** Снимок «Планирования» → то, что хранится в операции. */

@@ -27,6 +27,31 @@ def plan_of(op: ClanOperation) -> Plan:
         return Plan()
 
 
+POINT_KINDS = frozenset(POINT_ICON)
+
+
+def sync_points(op: ClanOperation, brief: dict[str, bool] | None = None) -> None:
+    """Точки плана — из меток «Точка» на снимках карты. Флажок «в брифинге» сохраняется
+    (или берётся из brief — правка командира); точки, которых на снимках нет, уходят."""
+    plan = op.plan or {}
+    keep = {p.get("id"): bool(p.get("brief", True)) for p in plan.get("points") or [] if isinstance(p, dict)}
+    keep.update(brief or {})
+    points: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for i, snap in enumerate(op.snapshots or []):
+        for shape in snap.get("shapes") or []:
+            if not isinstance(shape, dict) or shape.get("kind") != "point":
+                continue
+            pid = str(shape.get("id") or "")[:24]
+            if not pid or pid in seen or len(points) >= 30:
+                continue
+            seen.add(pid)
+            kind = shape.get("point") if shape.get("point") in POINT_KINDS else "other"
+            points.append({"id": pid, "kind": kind, "label": str(shape.get("label") or "")[:80],
+                           "note": str(shape.get("note") or "")[:300], "brief": keep.get(pid, True), "snapshot": i})
+    op.plan = {**plan, "points": points}
+
+
 def people(op: ClanOperation) -> list[dict[str, Any]]:
     """Участники с полями по умолчанию (старые записи — «иду»)."""
     return [{"status": "go", "role": None, "squad": None, "attended": None, **p} for p in op.participants or []]
@@ -140,8 +165,8 @@ def brief_text(op: ClanOperation, t: Translator, rows: list[dict[str, Any]], nam
     points = [p for p in plan.points if p.brief]
     if "points" not in hidden and points:
         lines += ["", f"### {t.t('ops.brief.points')}"]
-        lines += [f"- {POINT_ICON.get(p.kind, '📍')} **{t.t('ops.point.' + p.kind)}:** {p.label}" + (f" — {p.note}" if p.note else "")
-                  for p in points]
+        lines += [f"- {POINT_ICON.get(p.kind, '📍')} **{t.t('ops.point.' + p.kind)}**" + (f": {p.label}" if p.label else "")
+                  + (f" — {p.note}" if p.note else "") for p in points]
     go = going(op)
     if "roles" not in hidden and plan.roles:
         lines += ["", f"### {t.t('ops.brief.roles')}"]

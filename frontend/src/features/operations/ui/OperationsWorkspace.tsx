@@ -239,7 +239,7 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
       </section>
 
       <OperationDialog open={creating} onClose={() => setCreating(false)} initialDate={day} onCreated={(op) => setList((prev) => [...(prev ?? []), op].sort((a, b) => a.date.localeCompare(b.date)))} />
-      <OperationPlanDialog op={list.find((o) => o.id === planOf) ?? null} onClose={() => setPlanOf(null)} onChange={replace} onOpenMap={(op, i) => void openMap(op, i)} />
+      <OperationPlanDialog op={list.find((o) => o.id === planOf) ?? null} onClose={() => setPlanOf(null)} onChange={replace} onOpenMap={(op, i) => void openMap(op, i)} orders={reports} />
       <SnapshotViewer
         snapshot={viewing?.snap ?? null}
         onClose={() => setViewing(null)}

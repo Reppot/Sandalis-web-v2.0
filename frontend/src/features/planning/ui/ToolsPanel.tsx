@@ -1,11 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { COLORS, FACTIONS, FACTION_COLOR, TOOLS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
+import { COLORS, FACTIONS, FACTION_COLOR, POINT_COLOR, POINT_ICON, POINT_KINDS, TOOLS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type PointKind, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, formatDateTime, useConfirm, useT, type IconName, type MessageKey } from "@/shared";
 
-const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", frame: "crop", eraser: "eraser" };
+const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", point: "flag", frame: "crop", eraser: "eraser" };
 
 /**
  * Правая панель «Планирования»: инструменты, настройки новых объектов, свойства выбранного
@@ -76,6 +76,15 @@ export const ToolsPanel: React.FC<{
           <StructurePicker catalog={catalog} value={defaults.structure} onChange={(id) => set("structure", id)} />
         </>
       ) : null}
+      {tool === "point" && !selected ? (
+        <section className="planning-props">
+          <h3 className="planning-props-title">{t("planning.newObject")}</h3>
+          <PointPicker value={defaults.point} onChange={(p) => set("point", p)} />
+          <Field label={t("planning.prop.pointLabel")}>
+            <input className="field h-9" value={defaults.pointLabel} maxLength={80} placeholder={t("planning.prop.pointLabelPh")} onChange={(e) => set("pointLabel", e.target.value)} />
+          </Field>
+        </section>
+      ) : null}
       {tool === "frame" || snapshots.length ? <SnapshotList list={snapshots} onOpen={onOpenSnapshot} onRename={onRenameSnapshot} onDelete={onDeleteSnapshot} onMove={onMoveSnapshots} /> : null}
       {tool === "order" && !selected ? <OrderPicker orders={orders} member={member} value={defaults.order} onChange={(id) => set("order", id)} /> : null}
 
@@ -99,6 +108,7 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
   const title =
     s.kind === "structure" ? structures.get(s.ref)?.name ?? t("planning.tool.structure")
     : s.kind === "order" ? order?.title ?? s.title
+    : s.kind === "point" ? `${POINT_ICON[s.point]} ${t(`opsPlan.point.${s.point}` as MessageKey)}`
     : t(`planning.tool.${s.kind}` as MessageKey);
   return (
     <section className="planning-props">
@@ -116,7 +126,18 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
         </>
       ) : null}
 
-      {s.kind === "order" ? (
+      {s.kind === "point" ? (
+        <>
+          <PointPicker value={s.point} onChange={(point) => onUpdate({ ...s, point })} />
+          <Field label={t("planning.prop.pointLabel")}>
+            <input className="field h-9" value={s.label} maxLength={80} placeholder={t("planning.prop.pointLabelPh")} onChange={(e) => onUpdate({ ...s, label: e.target.value })} />
+          </Field>
+          <Field label={t("planning.prop.pointNote")}>
+            <input className="field h-9" value={s.note} maxLength={300} placeholder={t("planning.prop.pointNotePh")} onChange={(e) => onUpdate({ ...s, note: e.target.value })} />
+          </Field>
+          <p className="text-xs text-fg-3">{t("planning.pointToOps")}</p>
+        </>
+      ) : s.kind === "order" ? (
         <>
           <p className="text-sm text-fg-2">{order ? `${t(REPORT_STATUS_LABEL[order.status])} · ${t("planning.orderLines", { n: order.lines_count })}` : t("planning.orderGone")}</p>
           <a className="btn h-9 min-h-0 justify-center text-sm" href="/?tab=clan&view=reports">
@@ -139,7 +160,7 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
       ) : null}
       {s.kind === "line" || s.kind === "arrow" ? <Range label={t("planning.prop.width")} value={s.width} min={1} max={12} unit="px" onChange={(v) => onUpdate({ ...s, width: v })} /> : null}
       {s.kind === "structure" ? <FactionPicker value={s.team ?? null} onChange={(team) => onUpdate({ ...s, team })} /> : null}
-      {s.kind === "structure" || s.kind === "order" ? <Range label={t("planning.prop.size")} value={s.size} min={50} max={300} step={10} unit="%" onChange={(v) => onUpdate({ ...s, size: v })} /> : null}
+      {s.kind === "structure" || s.kind === "order" || s.kind === "point" ? <Range label={t("planning.prop.size")} value={s.size} min={50} max={300} step={10} unit="%" onChange={(v) => onUpdate({ ...s, size: v })} /> : null}
       {s.kind === "line" || s.kind === "ruler" || s.kind === "radius" ? <ColorPicker value={s.color} onChange={(color) => onUpdate({ ...s, color })} /> : null}
     </section>
   );
@@ -321,5 +342,23 @@ const SnapshotList: React.FC<{ list: Snapshot[]; onOpen: (s: Snapshot) => void; 
         </button>
       ) : null}
     </section>
+  );
+};
+
+/** Тип точки плана: цель, сбор, склад, отход, другое. */
+const PointPicker: React.FC<{ value: PointKind; onChange: (p: PointKind) => void }> = ({ value, onChange }) => {
+  const t = useT();
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="field-label">{t("planning.prop.pointKind")}</span>
+      <div className="grid grid-cols-2 gap-1.5">
+        {POINT_KINDS.map((p) => (
+          <button key={p} type="button" className={cn("planning-unit", value === p && "is-active")} onClick={() => onChange(p)} aria-pressed={value === p}>
+            <span aria-hidden style={{ color: POINT_COLOR[p] }}>{POINT_ICON[p]}</span>
+            {t(`opsPlan.point.${p}` as MessageKey)}
+          </button>
+        ))}
+      </div>
+    </div>
   );
 };

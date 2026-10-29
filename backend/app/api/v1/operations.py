@@ -5,9 +5,9 @@ from __future__ import annotations
 
 import uuid
 from datetime import date
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Query, Response, status
+from fastapi import APIRouter, BackgroundTasks, Depends, File, Query, Response, UploadFile, status
 from sqlalchemy import select
 
 from app.api.deps import CurrentPrincipal, DbDep, PermissionChecker
@@ -39,6 +39,8 @@ CanCreate = [Depends(PermissionChecker([Scopes.OPERATIONS_CREATE]))]
 CanAttend = [Depends(PermissionChecker([Scopes.OPERATIONS_ATTEND]))]
 
 MAX_OPERATIONS = 500
+MAX_BRIEF_IMAGES = 6
+MAX_IMAGE_BYTES = 8 * 1024 * 1024     # лимит вложения Discord без Nitro
 
 
 def _member(principal: Principal) -> bool:
@@ -135,6 +137,7 @@ async def create_operation(payload: OperationCreate, principal: CurrentPrincipal
         report_ids=_report_ids(payload.snapshots), participants=[],
         author_id=principal.user_id, author_name=(principal.display_name or principal.user_id)[:120],
     )
+    operation_plan.sync_points(row)
     session.add(row)
     await session.flush()
     await _notify(session, principal, row, mentioned(row.note, await clan_roles(session)))
@@ -175,6 +178,7 @@ async def add_snapshots(operation_id: uuid.UUID, payload: SnapshotsAdd, principa
                        params={"n": MAX_SNAPSHOTS})
     row.snapshots = snapshots
     row.report_ids = _report_ids(snapshots)
+    operation_plan.sync_points(row)
     await session.commit()
     await session.refresh(row)
     return _summary(row, principal)
@@ -219,7 +223,10 @@ async def save_plan(operation_id: uuid.UUID, payload: PlanWrite, principal: Curr
     row = await _get(session, operation_id)
     _editor(principal, row)
     plan = operation_plan.plan_of(row)
-    row.plan = {**payload.model_dump(mode="json"), "debrief": plan.debrief.model_dump(mode="json")}
+    row.plan = {**payload.model_dump(mode="json", exclude={"points"}), "points": (row.plan or {}).get("points") or [],
+                "debrief": plan.debrief.model_dump(mode="json")}
+    # точки — со снимков «Планирования»; из плана берём только «в брифинге»
+    operation_plan.sync_points(row, {p.id: p.brief for p in payload.points})
     operation_plan.clean_refs(row, operation_plan.plan_of(row))
     await session.commit()
     await session.refresh(row)
@@ -269,8 +276,22 @@ async def stage_done(operation_id: uuid.UUID, stage_id: str, payload: StageDone,
     return _summary(row, principal)
 
 
-@router.post("/{operation_id}/brief", summary="Отправить брифинг в ветку операции в Discord")
-async def post_brief(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep) -> dict[str, bool]:
+@router.post("/{operation_id}/brief", summary="Отправить брифинг в ветку операции в Discord",
+             description="Текст брифинга (без скрытого) и, по желанию, PNG снимков карты (сформированы клиентом).")
+async def post_brief(
+    operation_id: uuid.UUID,
+    principal: CurrentPrincipal,
+    session: DbDep,
+    images: Annotated[list[UploadFile] | None, File(description="PNG снимков карты операции")] = None,
+) -> dict[str, bool]:
     row = await _get(session, operation_id)
     _editor(principal, row)
-    return {"posted": await discord_ops.post_brief(session, row)}
+    files: list[tuple[str, bytes]] = []
+    for i, image in enumerate((images or [])[:MAX_BRIEF_IMAGES]):
+        data = await image.read(MAX_IMAGE_BYTES + 1)
+        if len(data) > MAX_IMAGE_BYTES:
+            raise AppError(message_key="report.image_too_large", domain="reports", code="too_large", status_code=413,
+                           params={"limit_mb": 8})
+        if data:
+            files.append((f"map-{i + 1}.png", data))
+    return {"posted": await discord_ops.post_brief(session, row, files)}

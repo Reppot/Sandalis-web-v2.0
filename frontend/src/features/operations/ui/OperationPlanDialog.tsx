@@ -4,13 +4,13 @@ import * as React from "react";
 import {
   BRIEF_SECTIONS,
   POINT_ICON,
-  POINT_KINDS,
   going,
   operationsApi,
   parseDate,
   planId,
   planInput,
   today,
+  toViewerSnapshot,
   type AttendStatus,
   type BriefSection,
   type Operation,
@@ -21,6 +21,9 @@ import {
   type PlanStage,
 } from "@/features/operations/model/operations";
 import { useSession } from "@/features/cabinet";
+import { useStructureCatalog } from "@/features/planning/model/plan";
+import { SnapshotImage } from "@/features/planning/ui/SnapshotImage";
+import type { Report } from "@/entities/report";
 import { MentionText } from "@/features/mail/ui/Mentions";
 import { REPORT_STATUS_LABEL } from "@/entities/report";
 import { Icon, Loading, Modal, cn, errorText, useI18n, useNotify } from "@/shared";
@@ -58,7 +61,9 @@ export const OperationPlanDialog: React.FC<{
   onClose: () => void;
   onChange: (op: Operation) => void;
   onOpenMap: (op: Operation, i: number) => void;
-}> = ({ op, onClose, onChange, onOpenMap }) => {
+  /** Заказы клана — для меток заказов на снимках. */
+  orders: Report[];
+}> = ({ op, onClose, onChange, onOpenMap, orders }) => {
   const { t, locale } = useI18n();
   const notify = useNotify();
   const { session } = useSession();
@@ -70,6 +75,9 @@ export const OperationPlanDialog: React.FC<{
   const [busy, setBusy] = React.useState(false);
   const [debriefText, setDebriefText] = React.useState("");
   const briefRef = React.useRef<HTMLDivElement>(null);
+  const { structures } = useStructureCatalog();
+  // PNG снимков карты (для отправки брифинга в Discord): номер снимка → картинка
+  const shots = React.useRef(new Map<number, Blob>());
   const opId = op?.id;
 
   React.useEffect(() => {
@@ -77,6 +85,7 @@ export const OperationPlanDialog: React.FC<{
     setTab("brief");
     setFull(null);
     setDirty(false);
+    shots.current.clear();
     operationsApi.get(opId).then(setFull).catch(() => setFull(null));
   }, [opId]);
   // план и итоги с сервера — в черновик, пока командир ничего не правит
@@ -147,7 +156,9 @@ export const OperationPlanDialog: React.FC<{
 
   const postBrief = () =>
     run(async () => {
-      const r = await operationsApi.postBrief(op.id);
+      // снимки карты — картинками, если раздел «Карты» не скрыт
+      const images = hidden.has("maps") ? [] : [...shots.current.entries()].sort((a, b) => a[0] - b[0]).map(([, b]) => b);
+      const r = await operationsApi.postBrief(op.id, images);
       notify(r.posted
         ? { title: t("opsPlan.brief"), message: t("opsPlan.briefPosted"), tone: "success" }
         : { title: t("opsPlan.brief"), message: t("opsPlan.briefNoDiscord"), tone: "warning" });
@@ -215,7 +226,7 @@ export const OperationPlanDialog: React.FC<{
               <h4 className="field-label">{t("opsPlan.points")}</h4>
               <ul className="flex flex-col gap-1 text-sm">
                 {points.map((p) => (
-                  <li key={p.id}>{POINT_ICON[p.kind]} <b>{t(`opsPlan.point.${p.kind}`)}:</b> {p.label}{p.note ? <span className="text-fg-3"> — {p.note}</span> : null}</li>
+                  <li key={p.id}>{POINT_ICON[p.kind]} <b>{t(`opsPlan.point.${p.kind}`)}</b>{p.label ? `: ${p.label}` : ""}{p.note ? <span className="text-fg-3"> — {p.note}</span> : null}</li>
                 ))}
               </ul>
             </section>
@@ -223,14 +234,15 @@ export const OperationPlanDialog: React.FC<{
           {!hidden.has("maps") && op.snapshot_names.length ? (
             <section>
               <h4 className="field-label">{t("opsPlan.maps")}</h4>
-              <div className="ops-maps">
-                {op.snapshot_names.map((name, i) => (
-                  <button key={i} type="button" className="ops-map-btn" onClick={() => onOpenMap(op, i)}>
-                    <Icon name="map" size={18} />
-                    <span className="min-w-0 truncate">{name || t("operations.openMap")}</span>
-                  </button>
-                ))}
-              </div>
+              {full ? (
+                <div className="ops-shots">
+                  {full.snapshots.map((snap, i) => (
+                    <SnapshotImage key={i} snapshot={toViewerSnapshot(op, snap, i)} structures={structures} orders={orders}
+                      onOpen={() => onOpenMap(op, i)}
+                      onBlob={(blob) => (blob ? shots.current.set(i, blob) : shots.current.delete(i))} />
+                  ))}
+                </div>
+              ) : <Loading />}
             </section>
           ) : null}
           {!hidden.has("roles") && plan.roles.length ? (
@@ -410,27 +422,23 @@ export const OperationPlanDialog: React.FC<{
 
         <section>
           <h4 className="field-label">{t("opsPlan.points")}</h4>
-          <ul className="flex flex-col gap-2">
-            {draft.points.map((p, i) => {
-              const set = (patch: Partial<typeof p>) => edit((d) => ({ ...d, points: d.points.map((x, j) => (j === i ? { ...x, ...patch } : x)) }));
-              return (
-                <li key={p.id} className={cn("ops-edit-row", !p.brief && "is-hidden")}>
-                  <select className="field h-8 w-auto py-0 text-sm" value={p.kind} onChange={(e) => set({ kind: e.target.value as typeof p.kind })} aria-label={t("opsPlan.pointKind")}>
-                    {POINT_KINDS.map((k) => <option key={k} value={k}>{POINT_ICON[k]} {t(`opsPlan.point.${k}`)}</option>)}
-                  </select>
-                  <input className="field h-8 min-w-[10rem] flex-1 py-0 text-sm" value={p.label} maxLength={80} placeholder={t("opsPlan.pointLabel")} onChange={(e) => set({ label: e.target.value })} />
-                  <input className="field h-8 min-w-[8rem] flex-1 py-0 text-sm" value={p.note} maxLength={300} placeholder={t("opsPlan.stageNote")} onChange={(e) => set({ note: e.target.value })} />
-                  <BriefToggle on={p.brief} onChange={(brief) => set({ brief })} />
-                  <button type="button" className="icon-btn" onClick={() => edit((d) => ({ ...d, points: d.points.filter((_, j) => j !== i) }))} aria-label={t("common.delete")}><Icon name="trash" size={15} /></button>
+          <p className="mb-2 text-xs text-fg-3">{t("opsPlan.pointsHint")}</p>
+          {draft.points.length ? (
+            <ul className="flex flex-col gap-1.5">
+              {draft.points.map((p, i) => (
+                <li key={p.id} className={cn("ops-person", !p.brief && "opacity-60")}>
+                  <span className="min-w-0 flex-1 text-sm">
+                    {POINT_ICON[p.kind]} <b>{t(`opsPlan.point.${p.kind}`)}</b>{p.label ? `: ${p.label}` : ""}
+                    {p.note ? <span className="block text-xs text-fg-3">{p.note}</span> : null}
+                  </span>
+                  {p.snapshot !== null && op.snapshot_names[p.snapshot] !== undefined ? (
+                    <button type="button" className="icon-btn" onClick={() => onOpenMap(op, p.snapshot!)} title={t("operations.openMap")} aria-label={t("operations.openMap")}><Icon name="map" size={15} /></button>
+                  ) : null}
+                  <BriefToggle on={p.brief} onChange={(brief) => edit((d) => ({ ...d, points: d.points.map((x, j) => (j === i ? { ...x, brief } : x)) }))} />
                 </li>
-              );
-            })}
-          </ul>
-          <button type="button" className="btn mt-2 h-8 min-h-0 text-sm" disabled={draft.points.length >= 30}
-            onClick={() => edit((d) => ({ ...d, points: [...d.points, { id: planId(), kind: "target", label: "", note: "", brief: true }] }))}>
-            <Icon name="plus" size={14} />
-            {t("opsPlan.addPoint")}
-          </button>
+              ))}
+            </ul>
+          ) : <p className="text-sm text-fg-3">{t("opsPlan.noPoints")}</p>}
         </section>
 
         <div className="grid gap-5 md:grid-cols-2">
@@ -567,7 +575,7 @@ export const OperationPlanDialog: React.FC<{
         <div className="flex w-full items-center justify-end gap-2">
           <span className="mr-auto text-xs text-warn">{t("opsPlan.unsaved")}</span>
           <button type="button" className="btn" disabled={busy} onClick={() => { setDirty(false); setDraft(planInput(op.plan)); }}>{t("common.cancel")}</button>
-          <button type="button" className="btn btn-primary" disabled={busy || !draft || [...draft.stages, ...draft.roles, ...draft.squads].some((x) => !("title" in x ? x.title : x.name).trim()) || draft.points.some((p) => !p.label.trim())} onClick={() => void savePlan()}>
+          <button type="button" className="btn btn-primary" disabled={busy || !draft || [...draft.stages, ...draft.roles, ...draft.squads].some((x) => !("title" in x ? x.title : x.name).trim())} onClick={() => void savePlan()}>
             <Icon name="check" size={15} />
             {t("common.save")}
           </button>

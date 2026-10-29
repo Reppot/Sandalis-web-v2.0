@@ -6,6 +6,7 @@ op:go:<id> / op:no:<id> обрабатывает discord_interactions. Сбои 
 """
 from __future__ import annotations
 
+import json
 import logging
 import uuid
 from datetime import UTC, datetime, time, timedelta
@@ -188,8 +189,9 @@ async def remind(now: datetime | None = None) -> int:
     return sent
 
 
-async def post_brief(session: Any, op: ClanOperation) -> bool:
-    """Брифинг (без скрытого) — в ветку операции, а нет ветки — в канал клана. False — Discord не настроен."""
+async def post_brief(session: Any, op: ClanOperation, images: list[tuple[str, bytes]] | None = None) -> bool:
+    """Брифинг (без скрытого) — в ветку операции, а нет ветки — в канал клана; снимки карты —
+    отдельным сообщением с картинками. False — Discord не настроен."""
     if not discord_bot.enabled():
         return False
     cs = (await session.execute(select(ClanSettings))).scalar_one_or_none()
@@ -202,6 +204,13 @@ async def post_brief(session: Any, op: ClanOperation) -> bool:
     text = operation_plan.brief_text(op, t, await operation_plan.supply(session, op), {})
     for part in operation_plan.chunks(text):
         r = await discord_bot._bot("POST", f"/channels/{channel}/messages", json={"content": part, "allowed_mentions": {"parse": []}})
+        if r is None or r.status_code >= 400:
+            return False
+    if images:
+        payload = {"attachments": [{"id": i, "filename": name} for i, (name, _) in enumerate(images)], "allowed_mentions": {"parse": []}}
+        r = await discord_bot._bot("POST", f"/channels/{channel}/messages",
+                                   data={"payload_json": json.dumps(payload, ensure_ascii=False)},
+                                   files={f"files[{i}]": (name, data, "image/png") for i, (name, data) in enumerate(images)})
         if r is None or r.status_code >= 400:
             return False
     return True

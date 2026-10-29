@@ -113,11 +113,14 @@ class PlanStage(_Item):
 
 
 class PlanPoint(_Item):
+    """Точка из «Планирования»: приходит со снимком карты (метка «Точка»); командир решает только,
+    показывать ли её в брифинге."""
     id: Key
     kind: PointKind = "target"
-    label: Annotated[str, Field(min_length=1, max_length=80)]
+    label: Annotated[str, Field(max_length=80)] = ""
     note: Short = ""
     brief: bool = True
+    snapshot: int | None = None          # номер снимка операции, где стоит точка
 
 
 class Debrief(BaseModel):

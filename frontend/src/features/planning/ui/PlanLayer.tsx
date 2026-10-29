@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FACTION_COLOR, M_PER_PX_X, M_PER_PX_Y, UNIT_COLOR, endPoint, fmtMeters, structureIcon, type Shape, type StructureDef, type Unit } from "@/features/planning/model/plan";
+import { FACTION_COLOR, M_PER_PX_X, M_PER_PX_Y, POINT_COLOR, POINT_ICON, UNIT_COLOR, endPoint, fmtMeters, structureIcon, type Shape, type StructureDef, type Unit } from "@/features/planning/model/plan";
 import type { Report, ReportStatus } from "@/entities/report";
 import { assetUrl } from "@/shared";
 
@@ -47,7 +47,7 @@ const Label: React.FC<{ x: number; y: number; px: number; children: React.ReactN
 /** Конец отрезка-объекта и его «ручка» для изменения угла и размера. */
 function tip(s: Shape) {
   if (s.kind === "radius") return endPoint(s.x, s.y, s.angle, s.radius);
-  if (s.kind === "structure" || s.kind === "order") return null;
+  if (s.kind === "structure" || s.kind === "order" || s.kind === "point") return null;
   return endPoint(s.x, s.y, s.angle, s.length);
 }
 
@@ -168,6 +168,21 @@ const ShapeView: React.FC<{ s: Shape; px: number; selected: boolean; draft?: boo
         <Label x={0} y={9 * px} px={px} size={11.5}>{order?.title ?? s.title}</Label>
         <Label x={0} y={23 * px} px={px} size={10} color={color}>{labels.status(order?.status ?? null)}</Label>
         {selected ? <circle cx={0} cy={-h + r * 0.2} r={r + 6 * px} fill="none" stroke="#fff" strokeWidth={1.5 * px} strokeDasharray={`${4 * px} ${3 * px}`} pointerEvents="none" /> : null}
+      </g>
+    );
+  }
+  if (s.kind === "point") {
+    // флажок-точка: кружок цвета типа со значком, подпись снизу; экранный размер
+    const r = Math.max(9, 14 * (s.size / 100)) * px;
+    const color = POINT_COLOR[s.point];
+    return (
+      <g data-shape={draft ? undefined : s.id} transform={`translate(${s.x} ${s.y})`}>
+        <circle r={r + 3 * px} fill="rgba(0,0,0,0.55)" />
+        <circle r={r} fill="#15181c" stroke={color} strokeWidth={2.5 * px} />
+        <text x={0} y={0} fontSize={r * 1.15} textAnchor="middle" dominantBaseline="central" pointerEvents="none">{POINT_ICON[s.point]}</text>
+        <circle r={r + 4 * px} fill="transparent" pointerEvents="all" />
+        {s.label ? <Label x={0} y={r + 11 * px} px={px} size={12} color={color}>{s.label}</Label> : null}
+        {selected ? <circle r={r + 7 * px} fill="none" stroke="#fff" strokeWidth={1.5 * px} strokeDasharray={`${4 * px} ${3 * px}`} pointerEvents="none" /> : null}
       </g>
     );
   }

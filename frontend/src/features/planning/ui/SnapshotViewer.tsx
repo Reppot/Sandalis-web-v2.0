@@ -130,7 +130,7 @@ const toDataUrl = async (url: string) => {
 };
 
 /** Гексы, постройки войны, подписи городов и план — в одну картинку кадра. */
-async function renderPng(snap: Snapshot, k: number, s: number, svg: SVGSVGElement | null | undefined, caption: string): Promise<Blob> {
+export async function renderPng(snap: Snapshot, k: number, s: number, svg: SVGSVGElement | null | undefined, caption: string): Promise<Blob> {
   const { rect } = snap;
   const W = Math.round(rect.w * k), H = Math.round(rect.h * k);
   const canvas = document.createElement("canvas");

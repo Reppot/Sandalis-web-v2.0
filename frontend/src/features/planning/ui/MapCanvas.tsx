@@ -229,6 +229,9 @@ export const MapCanvas: React.FC<{
         onAdd({ id: newId(), kind: "order", x: p.x, y: p.y, angle: 0, size: 100, report: report.id, title: report.title });
         gesture.current = null;
       } else gesture.current = { type: "pan" };
+    } else if (tool === "point") {
+      onAdd({ id: newId(), kind: "point", x: p.x, y: p.y, angle: 0, size: 100, point: defaults.point, label: defaults.pointLabel.trim(), note: "" });
+      gesture.current = null;
     } else {
       gesture.current = { type: "draw", start: p };
     }
@@ -267,7 +270,7 @@ export const MapCanvas: React.FC<{
       gesture.current = { ...g, last: p };
     } else if (g.type === "handle") {
       const s = shapes.find((x) => x.id === g.id);
-      if (!s || s.kind === "structure" || s.kind === "order") return;
+      if (!s || s.kind === "structure" || s.kind === "order" || s.kind === "point") return;
       const { angle, meters } = measure(s, toWorld(e.clientX, e.clientY));
       const size = Math.max(1, Math.round(meters));
       onUpdate(s.kind === "radius" ? { ...s, angle, radius: size } : { ...s, angle, length: size });

@@ -9,7 +9,7 @@ import { HEX_H, HEX_W, type MapRegion } from "@/features/planning/model/map";
 export const M_PER_PX_X = 2184 / HEX_W;
 export const M_PER_PX_Y = 1890 / HEX_H;
 
-export const TOOLS = ["select", "line", "ruler", "arrow", "radius", "structure", "order", "frame", "eraser"] as const;
+export const TOOLS = ["select", "line", "ruler", "arrow", "radius", "structure", "order", "point", "frame", "eraser"] as const;
 export type Tool = (typeof TOOLS)[number];
 export const UNITS = ["infantry", "tanks", "artillery", "ships"] as const;
 export type Unit = (typeof UNITS)[number];
@@ -18,6 +18,11 @@ export const FACTIONS = ["wardens", "colonials"] as const;
 export type Faction = (typeof FACTIONS)[number];
 /** Цвета фракций, рекомендованные README War API (Map Icon Colours, sRGB). */
 export const FACTION_COLOR: Record<Faction, string> = { wardens: "#245682", colonials: "#516c4b" };
+/** Точки плана — попадают в операцию вместе со снимком (цель, сбор, склад, отход). */
+export const POINT_KINDS = ["target", "rally", "supply", "retreat", "other"] as const;
+export type PointKind = (typeof POINT_KINDS)[number];
+export const POINT_ICON: Record<PointKind, string> = { target: "🎯", rally: "🚩", supply: "📦", retreat: "↩️", other: "📍" };
+export const POINT_COLOR: Record<PointKind, string> = { target: "#e5484d", rally: "#a3e635", supply: "#f5a524", retreat: "#38bdf8", other: "#f4f4f5" };
 export const COLORS = ["#e5484d", "#f5a524", "#facc15", "#a3e635", "#38bdf8", "#a855f7", "#f4f4f5", "#18181b"] as const;
 
 interface Base {
@@ -36,7 +41,9 @@ export interface RadiusShape extends Base { kind: "radius"; radius: number; swee
 export interface StructureShape extends Base { kind: "structure"; ref: string; size: number; team?: Faction }
 /** Метка заказа клана: report — id заказа, title — название на момент установки (если заказ удалят). */
 export interface OrderShape extends Base { kind: "order"; report: string; title: string; size: number }
-export type Shape = LineShape | RulerShape | ArrowShape | RadiusShape | StructureShape | OrderShape;
+/** Точка плана: тип, подпись (где), подробности; size — масштаб значка, %. */
+export interface PointShape extends Base { kind: "point"; point: PointKind; label: string; note: string; size: number }
+export type Shape = LineShape | RulerShape | ArrowShape | RadiusShape | StructureShape | OrderShape | PointShape;
 
 /** Настройки для новых объектов (панель инструментов). */
 export interface Defaults {
@@ -48,8 +55,10 @@ export interface Defaults {
   structure: string | null;
   team: Faction;
   order: string | null;
+  point: PointKind;
+  pointLabel: string;
 }
-export const DEFAULTS: Defaults = { color: "#f5a524", width: 4, unit: "infantry", name: "", sweep: 360, structure: null, team: "wardens", order: null };
+export const DEFAULTS: Defaults = { color: "#f5a524", width: 4, unit: "infantry", name: "", sweep: 360, structure: null, team: "wardens", order: null, point: "target", pointLabel: "" };
 
 const PLAN_KEY = "sindaris-planning-plan";
 const DEFAULTS_KEY = "sindaris-planning-defaults";

@@ -31,20 +31,32 @@ def test_plan_roles_answers_brief(db, monkeypatch):
         await seed_clan("CLAN_A")
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
             day = (date.today() + timedelta(days=2)).isoformat()
-            op = (await c.post(API, headers=boss, json={"title": "Штурм", "date": day, "note": "секрет"})).json()
+            # точки ставятся в «Планировании» и приходят в операцию со снимком
+            snap = {"name": "Мост", "rect": {"x": 0, "y": 0, "w": 100, "h": 100}, "regions": [], "shapes": [
+                {"id": "p1", "kind": "point", "point": "rally", "label": "Бункер у моста", "note": "", "x": 1, "y": 1, "angle": 0, "size": 100},
+                {"id": "p2", "kind": "point", "point": "retreat", "label": "Северный КПП", "note": "", "x": 2, "y": 2, "angle": 0, "size": 100},
+                {"id": "l1", "kind": "line", "x": 0, "y": 0, "angle": 0, "length": 10, "width": 2, "color": "#fff"},
+            ]}
+            op = (await c.post(API, headers=boss, json={"title": "Штурм", "date": day, "note": "секрет", "snapshots": [snap]})).json()
+            assert [(p["id"], p["kind"], p["snapshot"]) for p in op["plan"]["points"]] == [("p1", "rally", 0), ("p2", "retreat", 0)]
             assert op["plan"]["stages"] == [] and op["plan"]["debrief"] == {"outcome": None, "text": ""}
             plan = {
                 "roles": [{"id": "tank", "name": "Танк", "slots": 1}, {"id": "inf", "name": "Пехота", "slots": 0}],
                 "squads": [{"id": "a", "name": "Отряд A", "leader_id": "ann"}],
                 "stages": [{"id": "s1", "time": "17:30", "title": "Сбор", "owner_id": "ann"},
                            {"id": "s2", "time": "18:00", "title": "Обход с фланга", "brief": False}],
-                "points": [{"id": "p1", "kind": "rally", "label": "Бункер у моста"}],
+                # командир правит только «в брифинге»; подпись и тип берутся со снимка
+                "points": [{"id": "p1", "kind": "other", "label": "подмена"}, {"id": "p2", "label": "", "brief": False},
+                           {"id": "zz", "label": "лишняя"}],
                 "hidden": ["note"],
             }
             r = await c.put(f"{API}/{op['id']}/plan", headers=ann, json=plan)
             assert r.status_code == 403
             assert (await c.put(f"{API}/{op['id']}/plan", headers=boss, json={**plan, "stages": [{"id": "s1", "time": "25:00", "title": "x"}]})).status_code == 422
-            assert (await c.put(f"{API}/{op['id']}/plan", headers=boss, json=plan)).json()["plan"]["stages"][1]["brief"] is False
+            saved = (await c.put(f"{API}/{op['id']}/plan", headers=boss, json=plan)).json()["plan"]
+            assert saved["stages"][1]["brief"] is False
+            assert [(p["id"], p["kind"], p["label"], p["brief"]) for p in saved["points"]] == [
+                ("p1", "rally", "Бункер у моста", True), ("p2", "retreat", "Северный КПП", False)]
 
             # слот танка один: Ann занимает, Bob получает ошибку; «возможно» без проверки слота
             assert (await c.post(f"{API}/{op['id']}/attend", headers=ann, json={"status": "go", "role": "tank"})).status_code == 200
@@ -80,10 +92,13 @@ def test_plan_roles_answers_brief(db, monkeypatch):
                 mock.get(WEBHOOK).respond(200, json={"channel_id": "C1"})
                 sent = mock.post(f"{BOT}/channels/C1/messages").respond(200, json={"id": "M2"})
                 assert (await c.post(f"{API}/{op['id']}/brief", headers=ann)).status_code == 403
-                assert (await c.post(f"{API}/{op['id']}/brief", headers=boss)).json() == {"posted": True}
-            text = "".join(json.loads(call.request.content)["content"] for call in sent.calls)
+                r = await c.post(f"{API}/{op['id']}/brief", headers=boss, files=[("images", ("map-1.png", b"\x89PNG-fake", "image/png"))])
+                assert r.json() == {"posted": True}
+            *texts, pics = sent.calls
+            text = "".join(json.loads(call.request.content)["content"] for call in texts)
+            assert b'filename="map-1.png"' in pics.request.content and b"\x89PNG-fake" in pics.request.content
             assert "Сбор" in text and "Ann" in text and "Бункер у моста" in text and "Взяли город" in text
-            assert "Обход с фланга" not in text and "секрет" not in text
+            assert "Обход с фланга" not in text and "секрет" not in text and "Северный КПП" not in text
             assert "Танк** (1/1): Ann" in text and "Отряд A** (старший: Ann): Ann" in text
 
     run(main())
