@@ -339,4 +339,8 @@ async def save_settings(payload: GameSettings, principal: CurrentPrincipal, sess
     cs.game_settings = data
     await session.commit()
     game.forget(principal.clan_id)
+    from app.services import audit
+
+    await audit.record(principal.clan_id, principal, "game.settings", enabled=data["enabled"], weekly_goal=data["weekly_goal"],
+                       league_roles=data["league_roles"], weights=data["weights"] or None)
     return _settings_read(cs)

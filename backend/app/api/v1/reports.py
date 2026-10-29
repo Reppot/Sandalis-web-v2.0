@@ -38,7 +38,7 @@ from app.schemas.report import (
 )
 from app.services.clan_settings import ClanSettingsService, to_read
 from app.services.report_progress import ReportProgressService
-from app.services import discord_bot, report_tasks
+from app.services import audit, discord_bot, report_tasks
 from app.services.reports import CatalogNames, ReportService, line_icon, line_names
 
 router = APIRouter(prefix="/reports", tags=["reports"])
@@ -292,8 +292,11 @@ async def change_status(
     summary="Удалить заказ из БД: с правом reports:delete — любой, автор — свой",
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
-async def delete_report(report_id: uuid.UUID, service: ServiceDep, background: BackgroundTasks) -> Response:
+async def delete_report(report_id: uuid.UUID, service: ServiceDep, background: BackgroundTasks,
+                        principal: CurrentPrincipal) -> Response:
+    title = (await service.get_report(report_id)).title
     channel, message = await service.delete_report(report_id)
+    await audit.record(principal.clan_id, principal, "orders.delete", title=title)
     if channel and message:
         background.add_task(discord_bot.delete_post, channel, message)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -394,7 +397,12 @@ async def read_settings(service: SettingsServiceDep) -> ClanSettingsRead:
     dependencies=[Depends(PermissionChecker([Scopes.CLAN_WEBHOOK]))],
 )
 async def update_settings(
-    payload: ClanSettingsUpdate, service: SettingsServiceDep
+    payload: ClanSettingsUpdate, service: SettingsServiceDep, principal: CurrentPrincipal
 ) -> ClanSettingsSaved:
     row, message = await service.update(payload)
+    fields = payload.model_fields_set
+    await audit.record(principal.clan_id, principal, "settings.update",
+                       webhook=("set" if payload.discord_webhook_url else "removed") if "discord_webhook_url" in fields else None,
+                       timer_role=payload.timer_ping_role_id if "timer_ping_role_id" in fields else None,
+                       timer_minutes=payload.timer_warn_minutes if "timer_warn_minutes" in fields else None)
     return ClanSettingsSaved(settings=to_read(row), message=message)

@@ -5,6 +5,7 @@ import { EmptyState, LoadMore, Loading, Modal, PagedMore, cn, errorText, formatD
 import { ClanTokenPanel } from "@/features/management/ui/ClanTokenPanel";
 import { DiscordWebhookPanel } from "@/features/management/ui/DiscordWebhookPanel";
 import { BlacklistView } from "@/features/management/ui/BlacklistView";
+import { AuditView } from "@/features/management/ui/AuditView";
 import { MEMBERS_PAGE, managementApi, type AccessLevel, type ClanMember, type DiscordRole, type DiscordRoles, type MembersPage, type PermissionCatalog } from "@/features/management/api";
 
 const LEVELS: { value: AccessLevel; label: MessageKey }[] = [
@@ -22,12 +23,13 @@ const LEVEL_BADGE: Record<string, string> = {
 const hex = roleColor;
 const permKey = (p: string) => `perm.${p}` as MessageKey;
 
-type View = "members" | "roles" | "blacklist" | "integrations";
+type View = "members" | "roles" | "blacklist" | "integrations" | "audit";
 const VIEWS: { key: View; label: MessageKey }[] = [
   { key: "members", label: "mgmt.members" },
   { key: "roles", label: "mgmt.roles" },
   { key: "blacklist", label: "mgmt.blacklist" },
   { key: "integrations", label: "mgmt.integrations" },
+  { key: "audit", label: "audit.tab" },
 ];
 
 /** «Управление» (только командир): участники клана и роли Discord с уровнями и правами. */
@@ -58,6 +60,8 @@ export const ManagementWorkspace: React.FC = () => {
         <RolesView key={revision} catalog={catalog} />
       ) : view === "blacklist" ? (
         <BlacklistView key={revision} />
+      ) : view === "audit" ? (
+        <AuditView />
       ) : (
         <div data-guide="mgmt-integrations" className="flex flex-col gap-4">
           <DiscordWebhookPanel />

@@ -32,7 +32,7 @@ from app.schemas.clan_settings import (
     PermissionCatalogRead,
     PermissionGroupRead,
 )
-from app.services import blacklist
+from app.services import audit, blacklist
 from app.services.discord_roles import (
     CUSTOM,
     DEFAULT_LEVEL,
@@ -121,7 +121,7 @@ async def read_discord_roles(service: SettingsServiceDep, _: OwnerDep) -> Discor
 
 @router.post("/discord-roles/pull", response_model=DiscordRolesSaved,
              summary="Подтянуть роли сервера через бота (командир)")
-async def pull_discord_roles(service: SettingsServiceDep, _: OwnerDep) -> DiscordRolesSaved:
+async def pull_discord_roles(service: SettingsServiceDep, principal: OwnerDep) -> DiscordRolesSaved:
     guild_id = await _guild_id(service)
     roles = await fetch_guild_roles(guild_id) if guild_id else None
     if roles is None:
@@ -131,13 +131,14 @@ async def pull_discord_roles(service: SettingsServiceDep, _: OwnerDep) -> Discor
     _keep_roles(row, roles)
     row.discord_roles_synced_at = snapshot_at()
     await service.session.commit()
+    await audit.record(service.clan_id, principal, "roles.pull", n=len(row.discord_roles))
     return DiscordRolesSaved(roles=await _read(service, check_bot=False),
                              message=service.t.t("roles.pulled", domain="reports", n=len(row.discord_roles)))
 
 
 @router.post("/discord-roles/hide", response_model=DiscordRolesSaved,
              summary="Убрать роли с сайта: при «Подтянуть роли» они больше не берутся (командир)")
-async def hide_discord_roles(payload: RolesHide, service: SettingsServiceDep, _: OwnerDep) -> DiscordRolesSaved:
+async def hide_discord_roles(payload: RolesHide, service: SettingsServiceDep, principal: OwnerDep) -> DiscordRolesSaved:
     row = await _row(service)
     names = {r["id"]: r.get("name") or r["id"] for r in row.discord_roles or []}
     hidden = {h["id"]: h for h in row.discord_roles_hidden or []}
@@ -146,23 +147,26 @@ async def hide_discord_roles(payload: RolesHide, service: SettingsServiceDep, _:
     row.discord_roles_hidden = sorted(hidden.values(), key=lambda h: h["name"].lower())
     _keep_roles(row, list(row.discord_roles or []))
     await service.session.commit()
+    await audit.record(service.clan_id, principal, "roles.hide", roles=[names.get(r, r) for r in payload.role_ids])
     return DiscordRolesSaved(roles=await _read(service, check_bot=False),
                              message=service.t.t("roles.hidden", domain="reports", n=len(payload.role_ids)))
 
 
 @router.delete("/discord-roles/hide/{role_id}", response_model=DiscordRolesSaved,
                summary="Вернуть скрытую роль: появится при следующем «Подтянуть роли» (командир)")
-async def unhide_discord_role(role_id: str, service: SettingsServiceDep, _: OwnerDep) -> DiscordRolesSaved:
+async def unhide_discord_role(role_id: str, service: SettingsServiceDep, principal: OwnerDep) -> DiscordRolesSaved:
     row = await _row(service)
+    gone = next((h.get("name") for h in row.discord_roles_hidden or [] if h["id"] == role_id), role_id)
     row.discord_roles_hidden = [h for h in row.discord_roles_hidden or [] if h["id"] != role_id]
     await service.session.commit()
+    await audit.record(service.clan_id, principal, "roles.unhide", roles=[gone])
     return DiscordRolesSaved(roles=await _read(service, check_bot=False),
                              message=service.t.t("roles.unhidden", domain="reports"))
 
 
 @router.put("/discord-roles", response_model=DiscordRolesSaved,
             summary="Уровни ролей: basic | medium | high | custom (+ права custom) (командир)")
-async def update_discord_roles(payload: DiscordRolesUpdate, service: SettingsServiceDep, _: OwnerDep) -> DiscordRolesSaved:
+async def update_discord_roles(payload: DiscordRolesUpdate, service: SettingsServiceDep, principal: OwnerDep) -> DiscordRolesSaved:
     unknown = {p for perms in payload.permissions.values() for p in perms} - ALL_PERMISSIONS
     if unknown:
         raise AppError(message_key="roles.unknown_permission", domain="reports", code="validation_error",
@@ -175,9 +179,23 @@ async def update_discord_roles(payload: DiscordRolesUpdate, service: SettingsSer
         k: sorted(set(payload.permissions.get(k, [])))
         for k, v in row.discord_role_map.items() if v == CUSTOM
     }
+    names = {r["id"]: r.get("name") or r["id"] for r in row.discord_roles or []}
     await service.session.commit()
+    await audit.record(service.clan_id, principal, "roles.levels",
+                       levels={names.get(k, k): v for k, v in sorted(row.discord_role_map.items())})
     return DiscordRolesSaved(roles=await _read(service, check_bot=False),
                              message=service.t.t("roles.saved", domain="reports"))
+
+
+@router.get("/audit", summary="Журнал чувствительных действий клана (командир)")
+async def read_audit(service: SettingsServiceDep, _: OwnerDep, limit: Annotated[int, Query(ge=1, le=500)] = 200) -> list[dict]:
+    from app.models.audit import AuditEntry
+
+    rows = (await service.session.execute(
+        select(AuditEntry).order_by(AuditEntry.created_at.desc()).limit(limit)
+    )).scalars().all()
+    return [{"id": str(r.id), "at": r.created_at.isoformat(), "actor_id": r.actor_id, "actor_name": r.actor_name,
+             "developer": r.developer, "action": r.action, "details": r.details} for r in rows]
 
 
 @router.get("/blacklist", response_model=BlacklistRead, summary="Чёрный список клана: участники и роли (командир)")
@@ -214,6 +232,8 @@ async def update_blacklist(payload: BlacklistUpdate, service: SettingsServiceDep
     row.blacklist_roles = sorted(set(payload.roles))
     removed = await blacklist.apply(service.session, service.clan_id, row)
     await service.session.commit()
+    await audit.record(service.clan_id, principal, "blacklist.save", users=[u.get("name") or u["id"] for u in users],
+                       roles=len(row.blacklist_roles), removed=removed)
     return BlacklistSaved(blacklist=BlacklistRead(**blacklist.view(row)), removed=removed,
                           message=service.t.t("blacklist.saved", domain="reports", n=removed))
 

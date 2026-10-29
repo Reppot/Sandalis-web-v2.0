@@ -79,3 +79,21 @@ def test_blocks_by_id_or_role():
 
     assert blocks(Cs(), "1", []) and blocks(Cs(), "2", ["5", "9"])
     assert not blocks(Cs(), "2", ["5"]) and not blocks(None, "1", ["9"])
+
+
+def test_audit_log_records_sensitive_actions(db):
+    async def main() -> None:
+        await seed()
+        boss = auth("111", ClanRole.OWNER)
+        async with client() as c:
+            await c.put(f"{API}/clan/blacklist", headers=boss, json={"users": [{"id": "222", "reason": "x"}], "roles": []})
+            await c.put(f"{API}/clan/settings", headers=boss, json={"timer_warn_minutes": 60})
+            r = await c.post(f"{API}/reports", headers=boss, json={"title": "Лишний", "lines": [{"name": "Rifle", "quantity": 1}]})
+            await c.delete(f"{API}/reports/{r.json()['report']['id']}", headers=boss)
+            assert (await c.get(f"{API}/clan/audit", headers=auth("333", ClanRole.MEMBER))).status_code in (401, 403)
+            log = (await c.get(f"{API}/clan/audit", headers=boss)).json()
+            assert [e["action"] for e in log] == ["orders.delete", "settings.update", "blacklist.save"]
+            assert log[0]["details"] == {"title": "Лишний"} and log[1]["details"] == {"timer_minutes": 60}
+            assert log[2]["details"]["users"] == ["Tank"] and log[2]["actor_id"] == "111"
+
+    run(main())

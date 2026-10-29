@@ -9,6 +9,7 @@ from app.models.operation import ClanOperation
 from app.models.mail import ClanMail
 from app.models.report_event import ReportEvent
 from app.models.game_award import GameAward
+from app.models.audit import AuditEntry
 from app.models.feedback import Feedback
 from app.models.order import Order, OrderStatus
 from app.models.rbac import Clan, ClanApiToken, ClanMembership, User
@@ -21,7 +22,7 @@ from app.models.timer import Timer, TimerEvent
 __all__ = [
     "Base", "ClanScopedMixin", "TimestampMixin", "UUIDPkMixin",
     "AppContent", "CatalogItem", "ClanCourse", "ClanMail", "ReportEvent",
-    "GameAward", "ClanOperation", "Feedback", "Order", "OrderStatus",
+    "GameAward", "AuditEntry", "ClanOperation", "Feedback", "Order", "OrderStatus",
     "Clan", "ClanApiToken", "DiscordSetup", "ClanInviteCode", "ClanMembership", "ClanSettings", "User",
     "OrderReport", "OrderReportLine", "ReportContribution", "ReportContributionLine", "ProductionRecipe", "ReportStatus",
     "Stockpile", "StockpileItem", "Timer", "TimerEvent",

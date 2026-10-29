@@ -230,7 +230,11 @@ async def create_clan_token(
     service: AuthServiceDep,
     principal: Annotated[Principal, Depends(PermissionChecker([Scopes.CLAN_TOKENS]))],
 ) -> ClanApiTokenCreated:
-    return await service.create_clan_api_token(principal, payload)
+    created = await service.create_clan_api_token(principal, payload)
+    from app.services import audit
+
+    await audit.record(principal.clan_id, principal, "tokens.create", label=created.label, role=created.role.value)
+    return created
 
 
 # ---------------- Discord OAuth (stateless JWT) ------------------------------- #
@@ -492,6 +496,9 @@ async def developer_enter(payload: DeveloperEnter, response: Response, principal
     token = issue_access_token(user_id=principal.user_id, clan_id=clan.id, role=ClanRole.OWNER,
                                display_name=name, developer=True)
     log.warning("developer %s entered clan %s (%s)", principal.user_id, clan.id, clan.name)
+    from app.services import audit
+
+    await audit.record(clan.id, principal.model_copy(update={"developer": True}), "developer.enter")
     me = MeRead(subject_type="user", user_id=principal.user_id, clan_id=clan.id, role=ClanRole.OWNER,
                 scopes=sorted(scopes_for(ClanRole.OWNER)), display_name=name, site_admin=True, developer=True)
     _set_session_cookie(response, token)
