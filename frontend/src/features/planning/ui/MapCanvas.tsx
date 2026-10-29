@@ -11,6 +11,8 @@ const MIN_SCALE = 0.05;
 const MAX_SCALE = 3;
 /** Пауза после жеста, после которой React перерисовывает подписи и толщину линий плана. */
 const COMMIT_MS = 160;
+/** Ниже этого масштаба гекс рисуется из уменьшенной копии (256 px вместо 1024). */
+const SMALL_HEX_BELOW = 0.24;
 
 interface View {
   scale: number;
@@ -357,7 +359,8 @@ const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; scale: number; sh
   return (
     <div className="planning-hex" style={{ left: hexLeft(region.col), top: hexTop(region.row), width: HEX_W, height: HEX_H }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- карта региона War API, WebP */}
-      <img src={assetUrl(`/api/v1/assets/maps/hex/${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} decoding="async" />
+      {/* на общем плане — копия 256 px (в памяти видеокарты в 16 раз меньше), ближе — полная */}
+      <img src={assetUrl(`/api/v1/assets/maps/hex/${scale < SMALL_HEX_BELOW ? "sm/" : ""}${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} decoding="async" />
       {scale > 0.3
         ? labels.map((l) => (
             <span key={l.text} className={cn("planning-town", !l.major && "is-minor")} style={{ left: l.x * HEX_W, top: l.y * HEX_H, transform: `scale(var(--inv)) translate(-50%, ${l.major ? "3px" : "-50%"})` }}>{l.text}</span>
