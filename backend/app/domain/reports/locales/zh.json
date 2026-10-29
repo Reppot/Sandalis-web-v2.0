@@ -141,7 +141,32 @@
     "btn_open": "在网站打开",
     "reminder": "⏰ 行动“{title}”将在一小时后开始——<t:{stamp}:t>。集合！",
     "joined": "你已报名“{title}”。",
-    "left": "你已退出“{title}”。"
+    "left": "你已退出“{title}”。",
+    "btn_maybe": "也许",
+    "maybe": "你已将「{title}」标记为「也许」。",
+    "maybe_n": "也许（{n}）",
+    "brief": {
+      "title": "简报：{title}",
+      "stages": "阶段",
+      "points": "地图标点",
+      "roles": "职责",
+      "squads": "小队",
+      "leader": "队长：{name}",
+      "supply": "补给 — {pct}%",
+      "debrief": "总结"
+    },
+    "point": {
+      "target": "目标",
+      "rally": "集合点",
+      "supply": "补给站",
+      "retreat": "撤退点",
+      "other": "标点"
+    },
+    "outcome": {
+      "success": "成功",
+      "partial": "部分成功",
+      "fail": "失败"
+    }
   },
   "notify": {
     "operation_mention": "{sender} 在行动“{title}”中提到了你的身份组",

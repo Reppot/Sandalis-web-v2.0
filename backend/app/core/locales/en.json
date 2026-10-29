@@ -23,6 +23,9 @@
     "operations_too_many": "The clan already has {n} operations — delete old ones to add a new one.",
     "operation_not_yours": "Only the author or an officer with clan content rights can change or delete this operation.",
     "operation_snapshots_too_many": "The operation already has {n} snapshots — no more can be added.",
-    "clan_blacklisted": "You are blacklisted in this clan."
+    "clan_blacklisted": "You are blacklisted in this clan.",
+    "operation_role_unknown": "That role is not in the operation plan.",
+    "operation_role_full": "All “{role}” slots are taken.",
+    "operation_squad_unknown": "That squad is not in the operation plan."
   }
 }

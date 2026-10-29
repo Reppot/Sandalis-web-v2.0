@@ -141,7 +141,32 @@
     "btn_open": "Otevřít na webu",
     "reminder": "⏰ Za hodinu začíná operace „{title}“ — <t:{stamp}:t>. Sraz!",
     "joined": "Jste přihlášen(a) na „{title}“.",
-    "left": "Odhlásil(a) jste se z „{title}“."
+    "left": "Odhlásil(a) jste se z „{title}“.",
+    "btn_maybe": "Možná",
+    "maybe": "Označili jste „možná“ u „{title}“.",
+    "maybe_n": "Možná ({n})",
+    "brief": {
+      "title": "Briefing: {title}",
+      "stages": "Fáze",
+      "points": "Body na mapě",
+      "roles": "Role",
+      "squads": "Oddíly",
+      "leader": "velí: {name}",
+      "supply": "Zásobování — {pct}%",
+      "debrief": "Shrnutí"
+    },
+    "point": {
+      "target": "Cíl",
+      "rally": "Shromaždiště",
+      "supply": "Zásobovací sklad",
+      "retreat": "Ústup",
+      "other": "Bod"
+    },
+    "outcome": {
+      "success": "Úspěch",
+      "partial": "Částečně",
+      "fail": "Neúspěch"
+    }
   },
   "notify": {
     "operation_mention": "{sender} zmínil(a) vaši roli v operaci „{title}“",

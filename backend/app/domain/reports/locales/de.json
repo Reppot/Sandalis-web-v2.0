@@ -141,7 +141,32 @@
     "btn_open": "Auf der Website öffnen",
     "reminder": "⏰ Operation „{title}“ startet in einer Stunde – <t:{stamp}:t>. Sammeln!",
     "joined": "Du bist bei „{title}“ dabei.",
-    "left": "Du bist bei „{title}“ raus."
+    "left": "Du bist bei „{title}“ raus.",
+    "btn_maybe": "Vielleicht",
+    "maybe": "Du hast „vielleicht“ für „{title}“ gewählt.",
+    "maybe_n": "Vielleicht ({n})",
+    "brief": {
+      "title": "Briefing: {title}",
+      "stages": "Phasen",
+      "points": "Kartenpunkte",
+      "roles": "Rollen",
+      "squads": "Trupps",
+      "leader": "Führung: {name}",
+      "supply": "Nachschub — {pct}%",
+      "debrief": "Nachbesprechung"
+    },
+    "point": {
+      "target": "Ziel",
+      "rally": "Sammelpunkt",
+      "supply": "Nachschublager",
+      "retreat": "Rückzug",
+      "other": "Punkt"
+    },
+    "outcome": {
+      "success": "Erfolg",
+      "partial": "Teilweise",
+      "fail": "Fehlschlag"
+    }
   },
   "notify": {
     "operation_mention": "{sender} hat deine Rolle in der Operation „{title}“ erwähnt",

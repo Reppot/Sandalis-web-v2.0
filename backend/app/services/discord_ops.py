@@ -20,7 +20,7 @@ from app.core.tenancy import bind_session_to_clan, bypass_clan_filter, set_curre
 from app.models.clan_settings import ClanSettings
 from app.models.operation import ClanOperation
 from app.models.rbac import Clan
-from app.services import discord_bot
+from app.services import discord_bot, operation_plan
 from app.services.report_tasks import progress_for
 
 log = logging.getLogger(__name__)
@@ -60,12 +60,20 @@ async def _readiness(session: Any, op: ClanOperation) -> tuple[int, int, int]:
 
 async def message(session: Any, op: ClanOperation, t: Translator) -> dict[str, Any]:
     stamp = int(start_of(op).timestamp())
-    people = op.participants or []
+    people = operation_plan.going(op)
+    maybe = [p for p in operation_plan.people(op) if p["status"] == "maybe"]
     n, done, total = await _readiness(session, op)
     fields = [
         {"name": t.t("ops.when"), "value": f"<t:{stamp}:F> · <t:{stamp}:R>", "inline": False},
         {"name": t.t("ops.going", n=len(people)), "value": (", ".join(p.get("name") or "?" for p in people[:30]) or "—")[:1024], "inline": False},
     ]
+    if maybe:
+        fields.append({"name": t.t("ops.maybe_n", n=len(maybe)), "value": ", ".join(p["name"] for p in maybe[:30])[:1024], "inline": False})
+    plan = operation_plan.plan_of(op)
+    if plan.roles and "roles" not in plan.hidden:
+        fill = [f"{r.name} {sum(1 for p in people if p['role'] == r.id)}/{r.slots}" if r.slots
+                else f"{r.name} {sum(1 for p in people if p['role'] == r.id)}" for r in plan.roles]
+        fields.append({"name": t.t("ops.brief.roles"), "value": " · ".join(fill)[:1024], "inline": False})
     if n:
         fields.append({"name": t.t("ops.orders", n=n), "value": f"{round(100 * done / total) if total else 0}% ({done}/{total})", "inline": True})
     return {
@@ -73,6 +81,7 @@ async def message(session: Any, op: ClanOperation, t: Translator) -> dict[str, A
                     "color": COLOR, "fields": fields, "footer": {"text": t.t("ops.author", name=op.author_name)}}],
         "components": [{"type": 1, "components": [
             {"type": 2, "style": 3, "label": t.t("ops.btn_go"), "emoji": {"name": "✅"}, "custom_id": f"op:go:{op.id}"},
+            {"type": 2, "style": 1, "label": t.t("ops.btn_maybe"), "emoji": {"name": "❔"}, "custom_id": f"op:maybe:{op.id}"},
             {"type": 2, "style": 2, "label": t.t("ops.btn_no"), "custom_id": f"op:no:{op.id}"},
             {"type": 2, "style": 5, "label": t.t("ops.btn_open"), "url": site_url()},
         ]}],
@@ -177,3 +186,22 @@ async def remind(now: datetime | None = None) -> int:
             await session.commit()
             sent += 1 if r is not None and r.status_code < 400 else 0
     return sent
+
+
+async def post_brief(session: Any, op: ClanOperation) -> bool:
+    """Брифинг (без скрытого) — в ветку операции, а нет ветки — в канал клана. False — Discord не настроен."""
+    if not discord_bot.enabled():
+        return False
+    cs = (await session.execute(select(ClanSettings))).scalar_one_or_none()
+    if not cs or not cs.discord_webhook_url:
+        return False
+    channel = op.discord_thread_id or await discord_bot.webhook_channel(cs.discord_webhook_url)
+    if not channel:
+        return False
+    t = Translator(locale=cs.discord_locale or settings.DEFAULT_LOCALE, default_domain="reports")
+    text = operation_plan.brief_text(op, t, await operation_plan.supply(session, op), {})
+    for part in operation_plan.chunks(text):
+        r = await discord_bot._bot("POST", f"/channels/{channel}/messages", json={"content": part, "allowed_mentions": {"parse": []}})
+        if r is None or r.status_code >= 400:
+            return False
+    return True

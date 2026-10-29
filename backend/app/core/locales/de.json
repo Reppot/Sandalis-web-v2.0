@@ -23,6 +23,9 @@
     "operations_too_many": "Der Clan hat bereits {n} Operationen – lösche alte, um eine neue anzulegen.",
     "operation_not_yours": "Nur der Autor oder ein Offizier mit Clan-Inhaltsrechten kann diese Operation ändern oder löschen.",
     "operation_snapshots_too_many": "Die Operation hat bereits {n} Schnappschüsse – mehr geht nicht.",
-    "clan_blacklisted": "Du stehst auf der Sperrliste dieses Clans."
+    "clan_blacklisted": "Du stehst auf der Sperrliste dieses Clans.",
+    "operation_role_unknown": "Diese Rolle gibt es im Operationsplan nicht.",
+    "operation_role_full": "Alle Plätze für „{role}“ sind belegt.",
+    "operation_squad_unknown": "Diesen Trupp gibt es im Operationsplan nicht."
   }
 }

@@ -141,7 +141,32 @@
     "btn_open": "Відкрити на сайті",
     "reminder": "⏰ За годину починається операція «{title}» — <t:{stamp}:t>. Збір!",
     "joined": "Ви записані на «{title}».",
-    "left": "Ви відмовилися від «{title}»."
+    "left": "Ви відмовилися від «{title}».",
+    "btn_maybe": "Можливо",
+    "maybe": "Ви відмітили «можливо» для «{title}».",
+    "maybe_n": "Можливо ({n})",
+    "brief": {
+      "title": "Брифінг: {title}",
+      "stages": "Етапи",
+      "points": "Точки на мапі",
+      "roles": "Ролі",
+      "squads": "Загони",
+      "leader": "старший: {name}",
+      "supply": "Постачання — {pct}%",
+      "debrief": "Підсумки"
+    },
+    "point": {
+      "target": "Ціль",
+      "rally": "Точка збору",
+      "supply": "Склад постачання",
+      "retreat": "Відхід",
+      "other": "Точка"
+    },
+    "outcome": {
+      "success": "Успіх",
+      "partial": "Частково",
+      "fail": "Провал"
+    }
   },
   "notify": {
     "operation_mention": "{sender} згадав(ла) вашу роль в операції «{title}»",

@@ -4,11 +4,43 @@ import type { Snapshot } from "@/features/planning/model/plan";
 /** Снимок карты в операции — то же, что снимок «Планирования», без своего id. */
 export type OperationSnapshot = Pick<Snapshot, "name" | "rect" | "war" | "phase" | "regions" | "shapes">;
 
+export type AttendStatus = "go" | "maybe" | "no";
+export type Outcome = "success" | "partial" | "fail";
+export type PointKind = "target" | "rally" | "supply" | "retreat" | "other";
+/** Разделы брифинга, которые командир может скрыть. */
+export type BriefSection = "note" | "stages" | "points" | "roles" | "squads" | "people" | "supply" | "maps";
+export const BRIEF_SECTIONS: BriefSection[] = ["note", "stages", "points", "roles", "squads", "people", "supply", "maps"];
+export const POINT_KINDS: PointKind[] = ["target", "rally", "supply", "retreat", "other"];
+export const POINT_ICON: Record<PointKind, string> = { target: "🎯", rally: "🚩", supply: "📦", retreat: "↩️", other: "📍" };
+
 export interface Participant {
   user_id: string;
   name: string;
   at: string;
+  status: AttendStatus;
+  role: string | null;
+  squad: string | null;
+  /** Явка после операции: null — не отмечали. */
+  attended: boolean | null;
 }
+
+export interface PlanRole { id: string; name: string; slots: number }
+export interface PlanSquad { id: string; name: string; leader_id: string | null }
+export interface PlanStage { id: string; time: string; title: string; note: string; owner_id: string | null; done: boolean; brief: boolean }
+export interface PlanPoint { id: string; kind: PointKind; label: string; note: string; brief: boolean }
+export interface Debrief { outcome: Outcome | null; text: string }
+
+export interface OperationPlan {
+  roles: PlanRole[];
+  squads: PlanSquad[];
+  stages: PlanStage[];
+  points: PlanPoint[];
+  hidden: BriefSection[];
+  debrief: Debrief;
+}
+export type PlanInput = Omit<OperationPlan, "debrief">;
+
+export interface SupplyRow { report_id: string; title: string; status: string; delivered: number; ordered: number }
 
 export interface Operation {
   id: string;
@@ -20,6 +52,7 @@ export interface Operation {
   starts_at?: string | null;
   report_ids: string[];
   participants: Participant[];
+  plan: OperationPlan;
   /** Названия снимков карты (пусто — операция без карты). */
   snapshot_names: string[];
   author_id: string;
@@ -30,6 +63,10 @@ export interface Operation {
 
 export interface OperationFull extends Operation {
   snapshots: OperationSnapshot[];
+  /** Заказы к операции: привезено / заказано ящиков. */
+  supply: SupplyRow[];
+  /** Участники терминала, не ответившие на опрос. */
+  silent: { user_id: string; name: string }[];
 }
 
 export interface OperationList {
@@ -62,7 +99,14 @@ export const operationsApi = {
   addSnapshots: (id: string, snapshots: OperationSnapshot[]) => apiClient.post<Operation>(`${BASE}/${id}/snapshots`, { snapshots }),
   update: (id: string, body: OperationInput) => apiClient.put<Operation>(`${BASE}/${id}`, body),
   remove: (id: string) => apiClient.delete<void>(`${BASE}/${id}`),
-  attend: (id: string, going: boolean) => apiClient.post<Operation>(`${BASE}/${id}/attend`, { going }),
+  /** Ответ на опрос; status null — снять ответ. */
+  attend: (id: string, status: AttendStatus | null, role?: string | null) => apiClient.post<Operation>(`${BASE}/${id}/attend`, { status, role: role ?? null }),
+  savePlan: (id: string, plan: PlanInput) => apiClient.put<Operation>(`${BASE}/${id}/plan`, plan),
+  saveDebrief: (id: string, debrief: Debrief) => apiClient.put<Operation>(`${BASE}/${id}/debrief`, debrief),
+  assign: (id: string, body: { user_id: string; role?: string | null; squad?: string | null; attended?: boolean | null }) =>
+    apiClient.post<Operation>(`${BASE}/${id}/assign`, body),
+  stageDone: (id: string, stage: string, done: boolean) => apiClient.post<Operation>(`${BASE}/${id}/stages/${stage}`, { done }),
+  postBrief: (id: string) => apiClient.post<{ posted: boolean }>(`${BASE}/${id}/brief`, {}),
 };
 
 /** Снимок «Планирования» → то, что хранится в операции. */
@@ -91,3 +135,11 @@ export function byDate(list: Operation[]) {
   for (const op of list) map.set(op.date, [...(map.get(op.date) ?? []), op]);
   return map;
 }
+
+/** Новый короткий id для пункта плана. */
+export const planId = () => Math.random().toString(36).slice(2, 10);
+/** План без итогов — то, что уходит в PUT /plan. */
+export const planInput = ({ debrief: _d, ...rest }: OperationPlan): PlanInput => rest;
+export const going = (op: Pick<Operation, "participants">) => op.participants.filter((p) => p.status === "go");
+/** Ближайший невыполненный этап. */
+export const nextStage = (op: Pick<Operation, "plan">) => op.plan.stages.find((s) => !s.done) ?? null;

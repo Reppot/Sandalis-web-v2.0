@@ -141,7 +141,32 @@
     "btn_open": "Abrir no site",
     "reminder": "⏰ A operação “{title}” começa em uma hora — <t:{stamp}:t>. Reunir!",
     "joined": "Você está em “{title}”.",
-    "left": "Você saiu de “{title}”."
+    "left": "Você saiu de “{title}”.",
+    "btn_maybe": "Talvez",
+    "maybe": "Você marcou “talvez” para “{title}”.",
+    "maybe_n": "Talvez ({n})",
+    "brief": {
+      "title": "Briefing: {title}",
+      "stages": "Etapas",
+      "points": "Pontos no mapa",
+      "roles": "Funções",
+      "squads": "Esquadrões",
+      "leader": "líder: {name}",
+      "supply": "Suprimentos — {pct}%",
+      "debrief": "Balanço"
+    },
+    "point": {
+      "target": "Alvo",
+      "rally": "Ponto de encontro",
+      "supply": "Depósito de suprimentos",
+      "retreat": "Recuo",
+      "other": "Ponto"
+    },
+    "outcome": {
+      "success": "Sucesso",
+      "partial": "Parcial",
+      "fail": "Fracasso"
+    }
   },
   "notify": {
     "operation_mention": "{sender} mencionou seu cargo na operação “{title}”",

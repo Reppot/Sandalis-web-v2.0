@@ -141,7 +141,32 @@
     "btn_open": "Otwórz na stronie",
     "reminder": "⏰ Za godzinę operacja „{title}” — <t:{stamp}:t>. Zbiórka!",
     "joined": "Jesteś zapisany na „{title}”.",
-    "left": "Zrezygnowałeś z „{title}”."
+    "left": "Zrezygnowałeś z „{title}”.",
+    "btn_maybe": "Może",
+    "maybe": "Zaznaczono „może” dla „{title}”.",
+    "maybe_n": "Może ({n})",
+    "brief": {
+      "title": "Odprawa: {title}",
+      "stages": "Etapy",
+      "points": "Punkty na mapie",
+      "roles": "Role",
+      "squads": "Oddziały",
+      "leader": "dowódca: {name}",
+      "supply": "Zaopatrzenie — {pct}%",
+      "debrief": "Podsumowanie"
+    },
+    "point": {
+      "target": "Cel",
+      "rally": "Punkt zbiórki",
+      "supply": "Skład zaopatrzenia",
+      "retreat": "Odwrót",
+      "other": "Punkt"
+    },
+    "outcome": {
+      "success": "Sukces",
+      "partial": "Częściowo",
+      "fail": "Porażka"
+    }
   },
   "notify": {
     "operation_mention": "{sender} wspomniał(a) twoją rolę w operacji „{title}”",

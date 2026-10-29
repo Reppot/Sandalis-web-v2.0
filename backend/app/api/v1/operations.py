@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import uuid
-from datetime import UTC, date, datetime
+from datetime import date
 from typing import Any
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Query, Response, status
@@ -15,8 +15,22 @@ from app.core.errors import AppError, NotFoundError
 from app.core.permissions import Scopes
 from app.core.security import Principal
 from app.models.operation import ClanOperation
-from app.schemas.operation import MAX_SNAPSHOTS, Attend, OperationCreate, OperationList, OperationRead, OperationSummary, OperationWrite, SnapshotsAdd
-from app.services import discord_ops
+from app.models.rbac import ClanMembership, User
+from app.schemas.operation import (
+    MAX_SNAPSHOTS,
+    Assign,
+    Attend,
+    Debrief,
+    OperationCreate,
+    OperationList,
+    OperationRead,
+    OperationSummary,
+    OperationWrite,
+    PlanWrite,
+    SnapshotsAdd,
+    StageDone,
+)
+from app.services import discord_ops, operation_plan
 from app.services.mentions import clan_roles, deliver, mentioned
 
 router = APIRouter(prefix="/clan/operations", tags=["clan"])
@@ -60,7 +74,7 @@ async def _notify(session: DbDep, principal: Principal, row: ClanOperation, role
 def _summary(row: ClanOperation, principal: Principal) -> OperationSummary:
     return OperationSummary(
         id=row.id, title=row.title, date=row.date, note=row.note, starts_at=row.starts_at, report_ids=row.report_ids or [],
-        participants=row.participants or [], snapshot_names=[s.get("name") or "" for s in row.snapshots or []], author_id=row.author_id,
+        participants=operation_plan.people(row), plan=operation_plan.plan_of(row), snapshot_names=[s.get("name") or "" for s in row.snapshots or []], author_id=row.author_id,
         author_name=row.author_name, created_at=row.created_at, can_edit=_can_edit(principal, row),
     )
 
@@ -95,7 +109,15 @@ async def read_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, s
     if not _member(principal):
         raise NotFoundError()
     row = await _get(session, operation_id)
-    return OperationRead(**_summary(row, principal).model_dump(), snapshots=row.snapshots or [])
+    answered = {p["user_id"] for p in operation_plan.people(row)}
+    members = (await session.execute(
+        select(ClanMembership.user_id, User.display_name).join(User, User.id == ClanMembership.user_id)
+        .where(ClanMembership.is_active.is_(True)).limit(500)
+    )).all()
+    silent = sorted(({"user_id": uid, "name": name or uid} for uid, name in members if uid not in answered),
+                    key=lambda m: m["name"].lower())[:200]
+    return OperationRead(**_summary(row, principal).model_dump(), snapshots=row.snapshots or [],
+                         supply=await operation_plan.supply(session, row), silent=silent)
 
 
 @router.post("", response_model=OperationSummary, status_code=status.HTTP_201_CREATED, dependencies=CanCreate,
@@ -178,12 +200,77 @@ async def attend_operation(operation_id: uuid.UUID, payload: Attend, principal: 
     if not _member(principal):
         raise NotFoundError()
     row = await _get(session, operation_id)
-    people = [p for p in (row.participants or []) if p.get("user_id") != principal.user_id]
-    if payload.going:
-        people.append({"user_id": principal.user_id, "name": (principal.display_name or principal.user_id)[:120],
-                       "at": datetime.now(UTC).isoformat()})
-    row.participants = people  # новый список — JSONB помечается изменённым
+    # новый список участников — JSONB помечается изменённым
+    operation_plan.answer(row, principal.user_id, principal.display_name or principal.user_id, payload.resolved(), payload.role)
     await session.commit()
     await session.refresh(row)
     background.add_task(discord_ops.sync, row.id)
     return _summary(row, principal)
+
+
+def _editor(principal: Principal, row: ClanOperation) -> None:
+    if not _can_edit(principal, row):
+        raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
+
+
+@router.put("/{operation_id}/plan", response_model=OperationSummary, summary="План операции: роли, отряды, этапы, точки")
+async def save_plan(operation_id: uuid.UUID, payload: PlanWrite, principal: CurrentPrincipal, session: DbDep,
+                    background: BackgroundTasks) -> OperationSummary:
+    row = await _get(session, operation_id)
+    _editor(principal, row)
+    plan = operation_plan.plan_of(row)
+    row.plan = {**payload.model_dump(mode="json"), "debrief": plan.debrief.model_dump(mode="json")}
+    operation_plan.clean_refs(row, operation_plan.plan_of(row))
+    await session.commit()
+    await session.refresh(row)
+    background.add_task(discord_ops.sync, row.id)
+    return _summary(row, principal)
+
+
+@router.put("/{operation_id}/debrief", response_model=OperationSummary, summary="Итоги операции")
+async def save_debrief(operation_id: uuid.UUID, payload: Debrief, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
+    row = await _get(session, operation_id)
+    _editor(principal, row)
+    row.plan = {**(row.plan or {}), "debrief": payload.model_dump(mode="json")}
+    await session.commit()
+    await session.refresh(row)
+    return _summary(row, principal)
+
+
+@router.post("/{operation_id}/assign", response_model=OperationSummary, summary="Роль, отряд и явка участника")
+async def assign_member(operation_id: uuid.UUID, payload: Assign, principal: CurrentPrincipal, session: DbDep,
+                        background: BackgroundTasks) -> OperationSummary:
+    row = await _get(session, operation_id)
+    _editor(principal, row)
+    fields = payload.model_dump(include=payload.model_fields_set - {"user_id"})
+    if not operation_plan.assign(row, payload.user_id, fields):
+        raise NotFoundError()
+    await session.commit()
+    await session.refresh(row)
+    background.add_task(discord_ops.sync, row.id)
+    return _summary(row, principal)
+
+
+@router.post("/{operation_id}/stages/{stage_id}", response_model=OperationSummary, summary="Отметить этап выполненным")
+async def stage_done(operation_id: uuid.UUID, stage_id: str, payload: StageDone, principal: CurrentPrincipal,
+                     session: DbDep) -> OperationSummary:
+    row = await _get(session, operation_id)
+    plan = operation_plan.plan_of(row)
+    stage = next((st for st in plan.stages if st.id == stage_id), None)
+    if stage is None:
+        raise NotFoundError()
+    # этап отмечает командир операции или ответственный за этап
+    if not (_can_edit(principal, row) or (_member(principal) and stage.owner_id == principal.user_id)):
+        raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
+    stage.done = payload.done
+    row.plan = plan.model_dump(mode="json")
+    await session.commit()
+    await session.refresh(row)
+    return _summary(row, principal)
+
+
+@router.post("/{operation_id}/brief", summary="Отправить брифинг в ветку операции в Discord")
+async def post_brief(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep) -> dict[str, bool]:
+    row = await _get(session, operation_id)
+    _editor(principal, row)
+    return {"posted": await discord_ops.post_brief(session, row)}

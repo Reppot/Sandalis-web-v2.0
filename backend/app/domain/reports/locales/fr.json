@@ -141,7 +141,32 @@
     "btn_open": "Ouvrir sur le site",
     "reminder": "⏰ L'opération « {title} » commence dans une heure — <t:{stamp}:t>. Rassemblement !",
     "joined": "Vous êtes inscrit à « {title} ».",
-    "left": "Vous vous êtes désinscrit de « {title} »."
+    "left": "Vous vous êtes désinscrit de « {title} ».",
+    "btn_maybe": "Peut-être",
+    "maybe": "Vous avez répondu « peut-être » pour « {title} ».",
+    "maybe_n": "Peut-être ({n})",
+    "brief": {
+      "title": "Briefing : {title}",
+      "stages": "Étapes",
+      "points": "Points sur la carte",
+      "roles": "Rôles",
+      "squads": "Escouades",
+      "leader": "chef : {name}",
+      "supply": "Ravitaillement — {pct}%",
+      "debrief": "Bilan"
+    },
+    "point": {
+      "target": "Objectif",
+      "rally": "Point de ralliement",
+      "supply": "Dépôt",
+      "retreat": "Repli",
+      "other": "Point"
+    },
+    "outcome": {
+      "success": "Succès",
+      "partial": "Partiel",
+      "fail": "Échec"
+    }
   },
   "notify": {
     "operation_mention": "{sender} a mentionné votre rôle dans l'opération « {title} »",

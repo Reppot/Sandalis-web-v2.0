@@ -22,7 +22,7 @@ class ClanOperation(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     # снимки карты из «Планирования»: [{name, rect, war, phase, regions, shapes}], может быть пусто
     snapshots: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, nullable=False, default=list)
     report_ids: Mapped[list[str]] = mapped_column(JSONB, nullable=False, default=list)
-    # [{user_id, name, at}] — отметившиеся участники
+    # [{user_id, name, at, status: go|maybe|no, role, squad, attended}] — ответившие на опрос явки
     participants: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, nullable=False, default=list)
     author_id: Mapped[str] = mapped_column(String(64), nullable=False)
     author_name: Mapped[str] = mapped_column(String(120), nullable=False)
@@ -33,4 +33,7 @@ class ClanOperation(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     discord_message_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
     discord_thread_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
     discord_event_id: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    # план: {roles: [{id, name, slots}], squads: [{id, name, leader_id}], stages: [{id, time, title, note,
+    # owner_id, done, brief}], points: [{id, kind, label, note, brief}], hidden: [раздел], debrief: {outcome, text}}
+    plan: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict, server_default=text("'{}'::jsonb"))
     reminded: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"), nullable=False)

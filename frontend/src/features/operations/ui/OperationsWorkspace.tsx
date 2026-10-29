@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { operationsApi, parseDate, today, toViewerSnapshot, type Operation, type OperationSnapshot, startsAt, startTime } from "@/features/operations/model/operations";
+import { going, nextStage, operationsApi, parseDate, today, toViewerSnapshot, type AttendStatus, type Operation, type OperationSnapshot, startsAt, startTime } from "@/features/operations/model/operations";
 import { OperationDialog } from "@/features/operations/ui/OperationDialog";
+import { OperationPlanDialog } from "@/features/operations/ui/OperationPlanDialog";
 import { OperationsCalendar } from "@/features/operations/ui/OperationsCalendar";
 import { useStructureCatalog, type Snapshot } from "@/features/planning/model/plan";
 import { SnapshotViewer } from "@/features/planning/ui/SnapshotViewer";
@@ -30,6 +31,7 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
   // снимки открытой операции грузим один раз
   const fullCache = React.useRef(new Map<string, OperationSnapshot[]>());
   const [showPast, setShowPast] = React.useState(false);
+  const [planOf, setPlanOf] = React.useState<string | null>(null);
   const { structures } = useStructureCatalog();
   const [armed, confirm] = useConfirm();
 
@@ -61,9 +63,10 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
   const past = list.filter((o) => o.date < now).reverse();
   const shown = showPast ? past : upcoming;
 
-  const attend = async (op: Operation, going: boolean) => {
+  const attend = async (op: Operation, status: AttendStatus | null) => {
     try {
-      replace(await operationsApi.attend(op.id, going));
+      // роль, выбранная в плане, сохраняется
+      replace(await operationsApi.attend(op.id, status, op.participants.find((p) => p.user_id === session?.userId)?.role ?? null));
     } catch (err) {
       notify({ title: t("operations.saveFailed"), message: errorText(err, t("operations.saveFailed")), tone: "danger" });
     }
@@ -150,7 +153,11 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
         ) : (
           <div className="ops-grid">
             {shown.map((op) => {
-              const going = op.participants.some((p) => p.user_id === session?.userId);
+              const my = op.participants.find((p) => p.user_id === session?.userId)?.status;
+              const goers = going(op);
+              const maybe = op.participants.filter((p) => p.status === "maybe").length;
+              const no = op.participants.filter((p) => p.status === "no").length;
+              const next = nextStage(op);
               return (
                 <article key={op.id} className={cn("panel ops-card", op.date === day && "is-picked")}>
                   <header className="flex items-start justify-between gap-2">
@@ -191,19 +198,39 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
                     </div>
                   ) : null}
 
+                  {next ? (
+                    <div className="ops-next text-sm">
+                      <Icon name="clock" size={14} />
+                      <span className="text-fg-3">{t("opsPlan.next")}:</span>
+                      <span className="min-w-0 truncate text-fg">{next.time ? `${next.time} · ` : ""}{next.title}</span>
+                    </div>
+                  ) : null}
+
                   {/* опрос активности */}
                   <footer className="ops-poll">
-                    <div className="min-w-0">
-                      <div className="text-sm font-semibold text-fg">{t("operations.participants", { n: op.participants.length })}</div>
-                      <div className="truncate text-xs text-fg-3">{op.participants.map((p) => p.name).join(", ") || t("operations.nobody")}</div>
-                    </div>
+                    <button type="button" className="ops-poll-who" onClick={() => setPlanOf(op.id)} title={t("opsPlan.open")}>
+                      <span className="text-sm font-semibold text-fg">
+                        {t("opsPlan.status.go")}: {goers.length}
+                        {maybe ? <span className="font-normal text-fg-2"> · {t("opsPlan.status.maybe")}: {maybe}</span> : null}
+                        {no ? <span className="font-normal text-fg-3"> · {t("opsPlan.status.no")}: {no}</span> : null}
+                      </span>
+                      <span className="block truncate text-xs text-fg-3">{goers.map((p) => p.name).join(", ") || t("operations.nobody")}</span>
+                    </button>
                     {op.date >= now ? (
-                      <button type="button" className={cn("btn h-9 min-h-0", going ? "" : "btn-primary")} onClick={() => void attend(op, !going)}>
-                        <Icon name={going ? "close" : "check"} size={15} />
-                        {going ? t("operations.leave") : t("operations.join")}
-                      </button>
+                      <div className="segmented" role="group" aria-label={t("opsPlan.myAnswer")}>
+                        {(["go", "maybe", "no"] as const).map((st) => (
+                          <button key={st} type="button" className={cn("segmented-item", my === st && "is-active")} onClick={() => void attend(op, my === st ? null : st)}>
+                            {t(`opsPlan.answer.${st}`)}
+                          </button>
+                        ))}
+                      </div>
                     ) : null}
                   </footer>
+                  <button type="button" className="btn h-9 min-h-0" onClick={() => setPlanOf(op.id)}>
+                    <Icon name="list" size={15} />
+                    {t("opsPlan.open")}
+                    {op.plan.stages.length ? <span className="text-xs text-fg-3">· {t("opsPlan.stagesN", { n: op.plan.stages.length })}</span> : null}
+                  </button>
                 </article>
               );
             })}
@@ -212,6 +239,7 @@ export const OperationsWorkspace: React.FC<{ onOpenPlanning: () => void }> = ({ 
       </section>
 
       <OperationDialog open={creating} onClose={() => setCreating(false)} initialDate={day} onCreated={(op) => setList((prev) => [...(prev ?? []), op].sort((a, b) => a.date.localeCompare(b.date)))} />
+      <OperationPlanDialog op={list.find((o) => o.id === planOf) ?? null} onClose={() => setPlanOf(null)} onChange={replace} onOpenMap={(op, i) => void openMap(op, i)} />
       <SnapshotViewer
         snapshot={viewing?.snap ?? null}
         onClose={() => setViewing(null)}

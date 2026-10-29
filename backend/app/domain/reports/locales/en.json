@@ -141,7 +141,32 @@
     "btn_open": "Open on the site",
     "reminder": "⏰ Operation “{title}” starts in an hour — <t:{stamp}:t>. Assemble!",
     "joined": "You're in for “{title}”.",
-    "left": "You're out of “{title}”."
+    "left": "You're out of “{title}”.",
+    "btn_maybe": "Maybe",
+    "maybe": "You marked “maybe” for “{title}”.",
+    "maybe_n": "Maybe ({n})",
+    "brief": {
+      "title": "Briefing: {title}",
+      "stages": "Stages",
+      "points": "Map points",
+      "roles": "Roles",
+      "squads": "Squads",
+      "leader": "lead: {name}",
+      "supply": "Supply — {pct}%",
+      "debrief": "Debrief"
+    },
+    "point": {
+      "target": "Target",
+      "rally": "Rally point",
+      "supply": "Supply depot",
+      "retreat": "Fallback",
+      "other": "Point"
+    },
+    "outcome": {
+      "success": "Success",
+      "partial": "Partial",
+      "fail": "Failure"
+    }
   },
   "notify": {
     "operation_mention": "{sender} mentioned your role in the operation “{title}”",

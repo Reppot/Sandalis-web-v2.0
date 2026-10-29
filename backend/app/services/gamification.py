@@ -214,7 +214,9 @@ async def credits(session: AsyncSession, clan_id: str) -> tuple[list[Credit], di
         at = datetime.combine(op.date, dtime(12), tzinfo=UTC)
         for p in op.participants or []:
             uid = p.get("user_id")
-            if uid:
+            # явка: отмеченные «был» — всегда; иначе «иду», если командир не отметил «не был»
+            came = p.get("attended")
+            if uid and (came is True or (came is None and p.get("status", "go") == "go")):
                 names.setdefault(uid, p.get("name") or uid)
                 out.append(Credit(uid, at, "attend", W["attend"], title=op.title))
 

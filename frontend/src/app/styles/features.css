@@ -1017,3 +1017,30 @@
   .hq-agenda-date { width: 5.5rem; flex-shrink: 0; color: var(--fg-2); font-size: var(--text-sm); font-weight: 600; }
   .hq-bulk { position: sticky; bottom: 0.5rem; z-index: 5; flex-wrap: wrap; }
 }
+
+/* План операции: брифинг, состав, этапы (каждый можно скрыть из брифинга), снабжение */
+.ops-next { display: flex; align-items: center; gap: 0.4rem; color: var(--fg-2); }
+.ops-poll { flex-wrap: wrap; }
+.ops-poll-who { min-width: 0; flex: 1 1 10rem; text-align: left; border-radius: var(--radius); }
+.ops-poll-who:hover .text-fg { color: var(--accent); }
+.ops-rsvp { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.ops-brief { display: flex; flex-direction: column; gap: 0.9rem; border-radius: var(--radius); background: var(--surface-2); padding: 1rem 1.1rem; box-shadow: inset 0 0 0 1px var(--border); }
+.ops-brief .field-label { margin-bottom: 0.35rem; }
+.ops-stage { display: flex; align-items: flex-start; gap: 0.6rem; font-size: var(--text-sm); }
+.ops-stage input { margin-top: 0.2rem; }
+.ops-stage-time { width: 3rem; flex-shrink: 0; font-family: var(--font-mono); color: var(--fg-2); }
+.ops-stage-title { color: var(--fg); font-weight: 600; }
+.ops-stage.is-done .ops-stage-title { color: var(--fg-3); text-decoration: line-through; }
+.ops-person { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; border-radius: var(--radius); background: var(--surface-2); padding: 0.5rem 0.75rem; }
+.ops-roles { display: grid; gap: 0.5rem; grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr)); }
+.ops-role { display: flex; flex-direction: column; gap: 0.35rem; border-radius: var(--radius); background: var(--surface-2); padding: 0.6rem 0.75rem; }
+.ops-bar { height: 6px; overflow: hidden; border-radius: 999px; background: var(--surface-3); }
+.ops-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width var(--dur) var(--ease); }
+.ops-edit-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+.ops-edit-row.is-hidden > .field { opacity: 0.55; }
+.ops-eye.is-off { color: var(--fg-3); opacity: 0.6; }
+.ops-eye.is-off::after { content: ""; position: absolute; width: 18px; height: 2px; background: currentColor; transform: rotate(-45deg); }
+.ops-eye { position: relative; }
+.ops-section { display: inline-flex; align-items: center; gap: 0.3rem; cursor: pointer; }
+.ops-section[aria-pressed="true"] { border-color: var(--accent-line); color: var(--fg); }
+.ops-section.is-off { color: var(--fg-3); text-decoration: line-through; }

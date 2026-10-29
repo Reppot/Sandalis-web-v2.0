@@ -23,6 +23,9 @@
     "operations_too_many": "El clan ya tiene {n} operaciones: borra las antiguas para añadir una nueva.",
     "operation_not_yours": "Solo el autor o un oficial con permisos de contenido del clan puede cambiar o borrar esta operación.",
     "operation_snapshots_too_many": "La operación ya tiene {n} capturas: no se pueden añadir más.",
-    "clan_blacklisted": "Estás en la lista negra de este clan."
+    "clan_blacklisted": "Estás en la lista negra de este clan.",
+    "operation_role_unknown": "Ese rol no está en el plan de la operación.",
+    "operation_role_full": "Todas las plazas de «{role}» están ocupadas.",
+    "operation_squad_unknown": "Esa escuadra no está en el plan."
   }
 }

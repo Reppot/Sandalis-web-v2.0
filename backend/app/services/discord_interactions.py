@@ -201,11 +201,11 @@ def _qty_modal(report: OrderReport, line: Any, name: str, delivered: dict[uuid.U
 async def operation_action(session: AsyncSession, data: dict[str, Any], user_id: str, name: str, t: Translator,
                            background: BackgroundTasks) -> dict[str, Any]:
     from app.models.operation import ClanOperation
-    from app.services import discord_ops
+    from app.services import discord_ops, operation_plan
 
     parts = str(data.get("custom_id", "")).split(":")
     try:
-        op_id = uuid.UUID(parts[2]) if len(parts) == 3 and parts[1] in ("go", "no") else None
+        op_id = uuid.UUID(parts[2]) if len(parts) == 3 and parts[1] in ("go", "maybe", "no") else None
     except ValueError:
         op_id = None
     if op_id is None:
@@ -220,14 +220,11 @@ async def operation_action(session: AsyncSession, data: dict[str, Any], user_id:
         return reply(t.t("report.discord.not_member", url=discord_ops.site_url()))
     if not principal.can(Scopes.OPERATIONS_ATTEND):
         return reply(t.t("report.discord.forbidden"))
-    going = parts[1] == "go"
-    people = [p for p in (op.participants or []) if p.get("user_id") != user_id]
-    if going:
-        people.append({"user_id": user_id, "name": name[:120], "at": datetime.now(UTC).isoformat()})
-    op.participants = people
+    # роль, выбранная на сайте, сохраняется; занятый слот роли — ошибка с текстом
+    operation_plan.answer(op, user_id, name, parts[1], keep_role=True)
     await session.commit()
     background.add_task(discord_ops.sync, op.id)
-    return reply(t.t("ops.joined" if going else "ops.left", title=op.title))
+    return reply(t.t({"go": "ops.joined", "maybe": "ops.maybe", "no": "ops.left"}[parts[1]], title=op.title))
 
 
 # ───────────────────────── «Обновил резерв» ─────────────────────────

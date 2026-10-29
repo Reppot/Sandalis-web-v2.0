@@ -52,7 +52,7 @@ def test_operation_post_buttons_reminder_delete(db, monkeypatch):
                     "title": "Штурм", "date": start.date().isoformat(), "note": "сбор у базы", "starts_at": start.isoformat()})).json()
                 assert op["starts_at"] and post.called and thread.called and event.called
                 sent = json.loads(post.calls.last.request.content)
-                assert [b.get("custom_id") for b in sent["components"][0]["components"]][:2] == [f"op:go:{op['id']}", f"op:no:{op['id']}"]
+                assert [b.get("custom_id") for b in sent["components"][0]["components"]][:3] == [f"op:go:{op['id']}", f"op:maybe:{op['id']}", f"op:no:{op['id']}"]
 
             # кнопка «Буду» → явка на сайте и обновлённый пост
             body = json.dumps({"type": 3, "guild_id": "G1", "locale": "ru", "member": {"user": {"id": "bob", "global_name": "Bob"}},

@@ -23,6 +23,9 @@
     "operations_too_many": "Le clan a déjà {n} opérations — supprimez-en d'anciennes pour en ajouter une.",
     "operation_not_yours": "Seul l'auteur ou un officier ayant les droits de contenu du clan peut modifier ou supprimer cette opération.",
     "operation_snapshots_too_many": "L'opération a déjà {n} captures — impossible d'en ajouter.",
-    "clan_blacklisted": "Vous êtes sur la liste noire de ce clan."
+    "clan_blacklisted": "Vous êtes sur la liste noire de ce clan.",
+    "operation_role_unknown": "Ce rôle n’existe pas dans le plan.",
+    "operation_role_full": "Toutes les places « {role} » sont prises.",
+    "operation_squad_unknown": "Cette escouade n’existe pas dans le plan."
   }
 }
