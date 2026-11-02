@@ -1367,7 +1367,7 @@
  },
  "Neville Anti-Tank Rifle": {
   "amount": 3,
-  "seconds": 370,
+  "seconds": 375,
   "resources": [
    "Basic Materials"
   ],

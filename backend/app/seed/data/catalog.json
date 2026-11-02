@@ -1519,7 +1519,7 @@
   "icon_url": "/api/v1/assets/items/EmplacedAircraftC.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": false
+  "needs_review": true
  },
  {
   "code": "EmplacedAircraftW",
@@ -1531,7 +1531,7 @@
   "icon_url": "/api/v1/assets/items/EmplacedAircraftW.png",
   "crate_size": 3,
   "aliases": [],
-  "needs_review": false
+  "needs_review": true
  },
  {
   "code": "EmplacedATLargeW",
@@ -5081,8 +5081,8 @@
  },
  {
   "code": "TankMine",
-  "name": "Abisme AT-99",
-  "english_name": "Abisme AT-99",
+  "name": "Abisme AT-99 Mine",
+  "english_name": "Abisme AT-99 Mine",
   "category": "weapons",
   "faction": "neutral",
   "origin": "item",

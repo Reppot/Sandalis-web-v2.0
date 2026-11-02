@@ -399,9 +399,9 @@
     "version": ""
    },
    {
-    "page": "Abisme AT-99",
+    "page": "Abisme AT-99 Mine",
     "codename": "TankMine",
-    "name": "Abisme AT-99",
+    "name": "Abisme AT-99 Mine",
     "image": "AntiTankMineItemIcon.png",
     "imageOverride": "",
     "faction": "Both",
@@ -4990,9 +4990,9 @@
     "version": ""
    },
    {
-    "page": "Abisme AT-99",
+    "page": "Abisme AT-99 Mine",
     "codename": "TankMineProxy",
-    "name": "Deployed Abisme AT-99",
+    "name": "Deployed Abisme AT-99 Mine",
     "image": "DeployedATMine.jpg",
     "imageOverride": "AntiTankMineItemIcon.png",
     "faction": "Both",
@@ -5222,7 +5222,7 @@
    },
    {
     "page": "Barbed Wire (Structure)",
-    "codename": "BarbedWireWallSpline",
+    "codename": "BarbedWireSpline",
     "name": "Barbed Wire",
     "image": "BarbedWireStructureIcon.png",
     "imageOverride": "",
@@ -5662,7 +5662,7 @@
    },
    {
     "page": "Cutler Foebreaker",
-    "codename": "DeployedATRPGTW",
+    "codename": "DeployedRPGTW",
     "name": "Deployed Cutler Foebreaker",
     "image": "Deployed Foebreaker.jpg",
     "imageOverride": "ATRPGTWIcon.png",
@@ -5717,7 +5717,7 @@
    },
    {
     "page": "DAE 5b “Zeal”",
-    "codename": "EmplacedAircraftC",
+    "codename": "EmplacedAAC",
     "name": "DAE 5b “Zeal”",
     "image": "EmplacedAircraftCIcon.png",
     "imageOverride": "",
@@ -5981,8 +5981,8 @@
    },
    {
     "page": "Fire Suppression Room",
-    "codename": "FlameRoomT3",
-    "name": "Fire Suppression Room (Tier 3)",
+    "codename": "FortFlameT2",
+    "name": "Fire Suppression Room (Tier 2)",
     "image": "FortFlameStructureIcon.png",
     "imageOverride": "",
     "faction": "Both",
@@ -5992,8 +5992,8 @@
    },
    {
     "page": "Fire Suppression Room",
-    "codename": "FortFlameT2",
-    "name": "Fire Suppression Room (Tier 2)",
+    "codename": "FortFlameT3",
+    "name": "Fire Suppression Room (Tier 3)",
     "image": "FortFlameStructureIcon.png",
     "imageOverride": "",
     "faction": "Both",
@@ -6476,7 +6476,7 @@
    },
    {
     "page": "Leary AA-70 Bolas",
-    "codename": "EmplacedAircraftW",
+    "codename": "EmplacedAAW",
     "name": "Leary AA-70 Bolas",
     "image": "EmplacedAircraftWIcon.png",
     "imageOverride": "",
@@ -6630,7 +6630,7 @@
    },
    {
     "page": "Magic Box",
-    "codename": "",
+    "codename": "MagicBox",
     "name": "Magic Box",
     "image": "StorageItemIcon.png",
     "imageOverride": "",
@@ -7092,7 +7092,7 @@
    },
    {
     "page": "Radar Bunker",
-    "codename": "",
+    "codename": "FortRadarT1",
     "name": "Radar Bunker (Tier 1)",
     "image": "FortRadarT1ItemIcon.png",
     "imageOverride": "",
@@ -7103,7 +7103,7 @@
    },
    {
     "page": "Radar Bunker",
-    "codename": "",
+    "codename": "FortRadarT2",
     "name": "Radar Bunker (Tier 2)",
     "image": "FortRadarT2ItemIcon.png",
     "imageOverride": "",
@@ -7114,7 +7114,7 @@
    },
    {
     "page": "Radar Bunker",
-    "codename": "",
+    "codename": "FortRadarT3",
     "name": "Radar Bunker (Tier 3)",
     "image": "FortRadarT3ItemIcon.png",
     "imageOverride": "",
@@ -7192,17 +7192,17 @@
    {
     "page": "Relic Base",
     "codename": "RelicBase1",
-    "name": "Relic Base (Large)",
-    "image": "Relic Base Large Squared.png",
+    "name": "Relic Base (Small)",
+    "image": "Relic Base Small Squared.png",
     "imageOverride": "",
     "faction": "Both",
     "type": "Home Base",
-    "aliases": "",
+    "aliases": "relic base,relicbase",
     "version": "None"
    },
    {
     "page": "Relic Base",
-    "codename": "RelicBase1",
+    "codename": "RelicBase2",
     "name": "Relic Base (Medium)",
     "image": "Relic Base Medium Squared.jpg",
     "imageOverride": "",
@@ -7213,13 +7213,13 @@
    },
    {
     "page": "Relic Base",
-    "codename": "RelicBase1",
-    "name": "Relic Base (Small)",
-    "image": "Relic Base Small Squared.png",
+    "codename": "RelicBase3",
+    "name": "Relic Base (Large)",
+    "image": "Relic Base Large Squared.png",
     "imageOverride": "",
     "faction": "Both",
     "type": "Home Base",
-    "aliases": "relic base,relicbase",
+    "aliases": "",
     "version": "None"
    },
    {
@@ -7786,8 +7786,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase1",
-    "name": "School (Tier 1)",
-    "image": "TownBaseSchoolSquared.png",
+    "name": "Post Office (Tier 2)",
+    "image": "TownBasePostOfficeSquared.png",
     "imageOverride": "",
     "faction": "Both",
     "type": "Home Base",
@@ -7797,8 +7797,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase1",
-    "name": "Town Center (Tier 1)",
-    "image": "TownBaseSquared.png",
+    "name": "Post Office (Tier 3)",
+    "image": "TownBasePostOfficeSquared.png",
     "imageOverride": "",
     "faction": "Both",
     "type": "Home Base",
@@ -7808,8 +7808,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase2",
-    "name": "Post Office (Tier 2)",
-    "image": "TownBasePostOfficeSquared.png",
+    "name": "School (Tier 1)",
+    "image": "TownBaseSchoolSquared.png",
     "imageOverride": "",
     "faction": "Both",
     "type": "Home Base",
@@ -7830,7 +7830,18 @@
    {
     "page": "Town Base",
     "codename": "TownBase2",
-    "name": "Town Center (Tier 2)",
+    "name": "School (Tier 3)",
+    "image": "TownBaseSchoolSquared.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Home Base",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Town Base",
+    "codename": "TownBase3",
+    "name": "Town Center (Tier 1)",
     "image": "TownBaseSquared.png",
     "imageOverride": "",
     "faction": "Both",
@@ -7841,19 +7852,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase3",
-    "name": "Post Office (Tier 3)",
-    "image": "TownBasePostOfficeSquared.png",
-    "imageOverride": "",
-    "faction": "Both",
-    "type": "Home Base",
-    "aliases": "",
-    "version": "None"
-   },
-   {
-    "page": "Town Base",
-    "codename": "TownBase3",
-    "name": "School (Tier 3)",
-    "image": "TownBaseSchoolSquared.png",
+    "name": "Town Center (Tier 2)",
+    "image": "TownBaseSquared.png",
     "imageOverride": "",
     "faction": "Both",
     "type": "Home Base",
@@ -8916,9 +8916,9 @@
     "version": ""
    },
    {
-    "page": "Abisme AT-99",
+    "page": "Abisme AT-99 Mine",
     "codename": "TankMine",
-    "name": "Abisme AT-99",
+    "name": "Abisme AT-99 Mine",
     "image": "AntiTankMineItemIcon.png",
     "imageOverride": "",
     "origin": "item",
@@ -8926,9 +8926,9 @@
     "version": ""
    },
    {
-    "page": "Abisme AT-99",
+    "page": "Abisme AT-99 Mine",
     "codename": "TankMineProxy",
-    "name": "Deployed Abisme AT-99",
+    "name": "Deployed Abisme AT-99 Mine",
     "image": "DeployedATMine.jpg",
     "imageOverride": "AntiTankMineItemIcon.png",
     "origin": "structure",
@@ -9537,7 +9537,7 @@
    },
    {
     "page": "Barbed Wire (Structure)",
-    "codename": "BarbedWireWallSpline",
+    "codename": "BarbedWireSpline",
     "name": "Barbed Wire",
     "image": "BarbedWireStructureIcon.png",
     "imageOverride": "",
@@ -11027,7 +11027,7 @@
    },
    {
     "page": "Cutler Foebreaker",
-    "codename": "DeployedATRPGTW",
+    "codename": "DeployedRPGTW",
     "name": "Deployed Cutler Foebreaker",
     "image": "Deployed Foebreaker.jpg",
     "imageOverride": "ATRPGTWIcon.png",
@@ -11097,7 +11097,7 @@
    },
    {
     "page": "DAE 5b “Zeal”",
-    "codename": "EmplacedAircraftC",
+    "codename": "EmplacedAAC",
     "name": "DAE 5b “Zeal”",
     "image": "EmplacedAircraftCIcon.png",
     "imageOverride": "",
@@ -12017,8 +12017,8 @@
    },
    {
     "page": "Fire Suppression Room",
-    "codename": "FlameRoomT3",
-    "name": "Fire Suppression Room (Tier 3)",
+    "codename": "FortFlameT2",
+    "name": "Fire Suppression Room (Tier 2)",
     "image": "FortFlameStructureIcon.png",
     "imageOverride": "",
     "origin": "structure",
@@ -12027,8 +12027,8 @@
    },
    {
     "page": "Fire Suppression Room",
-    "codename": "FortFlameT2",
-    "name": "Fire Suppression Room (Tier 2)",
+    "codename": "FortFlameT3",
+    "name": "Fire Suppression Room (Tier 3)",
     "image": "FortFlameStructureIcon.png",
     "imageOverride": "",
     "origin": "structure",
@@ -13317,7 +13317,7 @@
    },
    {
     "page": "Leary AA-70 Bolas",
-    "codename": "EmplacedAircraftW",
+    "codename": "EmplacedAAW",
     "name": "Leary AA-70 Bolas",
     "image": "EmplacedAircraftWIcon.png",
     "imageOverride": "",
@@ -13617,7 +13617,7 @@
    },
    {
     "page": "Magic Box",
-    "codename": "",
+    "codename": "MagicBox",
     "name": "Magic Box",
     "image": "StorageItemIcon.png",
     "imageOverride": "",
@@ -14787,7 +14787,7 @@
    },
    {
     "page": "Radar Bunker",
-    "codename": "",
+    "codename": "FortRadarT1",
     "name": "Radar Bunker (Tier 1)",
     "image": "FortRadarT1ItemIcon.png",
     "imageOverride": "",
@@ -14797,7 +14797,7 @@
    },
    {
     "page": "Radar Bunker",
-    "codename": "",
+    "codename": "FortRadarT2",
     "name": "Radar Bunker (Tier 2)",
     "image": "FortRadarT2ItemIcon.png",
     "imageOverride": "",
@@ -14807,7 +14807,7 @@
    },
    {
     "page": "Radar Bunker",
-    "codename": "",
+    "codename": "FortRadarT3",
     "name": "Radar Bunker (Tier 3)",
     "image": "FortRadarT3ItemIcon.png",
     "imageOverride": "",
@@ -14978,16 +14978,16 @@
    {
     "page": "Relic Base",
     "codename": "RelicBase1",
-    "name": "Relic Base (Large)",
-    "image": "Relic Base Large Squared.png",
+    "name": "Relic Base (Small)",
+    "image": "Relic Base Small Squared.png",
     "imageOverride": "",
     "origin": "structure",
-    "aliases": "",
+    "aliases": "relic base,relicbase",
     "version": "None"
    },
    {
     "page": "Relic Base",
-    "codename": "RelicBase1",
+    "codename": "RelicBase2",
     "name": "Relic Base (Medium)",
     "image": "Relic Base Medium Squared.jpg",
     "imageOverride": "",
@@ -14997,12 +14997,12 @@
    },
    {
     "page": "Relic Base",
-    "codename": "RelicBase1",
-    "name": "Relic Base (Small)",
-    "image": "Relic Base Small Squared.png",
+    "codename": "RelicBase3",
+    "name": "Relic Base (Large)",
+    "image": "Relic Base Large Squared.png",
     "imageOverride": "",
     "origin": "structure",
-    "aliases": "relic base,relicbase",
+    "aliases": "",
     "version": "None"
    },
    {
@@ -16608,8 +16608,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase1",
-    "name": "School (Tier 1)",
-    "image": "TownBaseSchoolSquared.png",
+    "name": "Post Office (Tier 2)",
+    "image": "TownBasePostOfficeSquared.png",
     "imageOverride": "",
     "origin": "structure",
     "aliases": "",
@@ -16618,8 +16618,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase1",
-    "name": "Town Center (Tier 1)",
-    "image": "TownBaseSquared.png",
+    "name": "Post Office (Tier 3)",
+    "image": "TownBasePostOfficeSquared.png",
     "imageOverride": "",
     "origin": "structure",
     "aliases": "",
@@ -16628,8 +16628,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase2",
-    "name": "Post Office (Tier 2)",
-    "image": "TownBasePostOfficeSquared.png",
+    "name": "School (Tier 1)",
+    "image": "TownBaseSchoolSquared.png",
     "imageOverride": "",
     "origin": "structure",
     "aliases": "",
@@ -16648,7 +16648,17 @@
    {
     "page": "Town Base",
     "codename": "TownBase2",
-    "name": "Town Center (Tier 2)",
+    "name": "School (Tier 3)",
+    "image": "TownBaseSchoolSquared.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Town Base",
+    "codename": "TownBase3",
+    "name": "Town Center (Tier 1)",
     "image": "TownBaseSquared.png",
     "imageOverride": "",
     "origin": "structure",
@@ -16658,18 +16668,8 @@
    {
     "page": "Town Base",
     "codename": "TownBase3",
-    "name": "Post Office (Tier 3)",
-    "image": "TownBasePostOfficeSquared.png",
-    "imageOverride": "",
-    "origin": "structure",
-    "aliases": "",
-    "version": "None"
-   },
-   {
-    "page": "Town Base",
-    "codename": "TownBase3",
-    "name": "School (Tier 3)",
-    "image": "TownBaseSchoolSquared.png",
+    "name": "Town Center (Tier 2)",
+    "image": "TownBaseSquared.png",
     "imageOverride": "",
     "origin": "structure",
     "aliases": "",

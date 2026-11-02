@@ -1959,82 +1959,6 @@
   "sort": 37
  },
  {
-  "id": "facility-a0e-9-rocket-body-small-assembly-station-advanced-stru-3180530c",
-  "kind": "facility",
-  "name": "A0E-9 Rocket Body",
-  "name_en": "A0E-9 Rocket Body",
-  "item_code": "RocketPartCenter",
-  "category": "small-assembly-station",
-  "item_class": "Advanced Structure Manufactory",
-  "description": null,
-  "factions": [
-   "neutral"
-  ],
-  "facilities": [
-   "small-assembly-station"
-  ],
-  "icon_url": "/api/v1/assets/items/RocketPartCenter.png",
-  "output_quantity": 1,
-  "cost": {
-   "Steel Construction Materials": 20,
-   "Thermal Shielding": 75,
-   "Assembly Materials I": 65,
-   "Rare Alloys": 125,
-   "Assembly Materials V": 25
-  },
-  "data": {
-   "source": "Small Assembly Station",
-   "module": "Advanced Structure Manufactory",
-   "inputs": [
-    {
-     "name": "Steel Construction Materials",
-     "amount": 20,
-     "unit": null,
-     "code": "FacilityMaterials3",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials3.png"
-    },
-    {
-     "name": "Thermal Shielding",
-     "amount": 75,
-     "unit": null,
-     "code": "FacilityMaterials11",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials11.png"
-    },
-    {
-     "name": "Assembly Materials I",
-     "amount": 65,
-     "unit": null,
-     "code": "FacilityMaterials4",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials4.png"
-    },
-    {
-     "name": "Rare Alloys",
-     "amount": 125,
-     "unit": null,
-     "code": "FacilityMaterials9",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials9.png"
-    },
-    {
-     "name": "Assembly Materials V",
-     "amount": 25,
-     "unit": null,
-     "code": "FacilityMaterials8",
-     "icon_url": "/api/v1/assets/items/FacilityMaterials8.png"
-    }
-   ],
-   "vehicle": null,
-   "power_mw": 2,
-   "seconds": 86400,
-   "output_unit": null,
-   "byproducts": [],
-   "crate": false,
-   "page": "A0E-9 Rocket Parts",
-   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
-   "source_ru": "Малая сборочная станция"
-  },
-  "sort": 38
- },
- {
   "id": "facility-a0e-9-rocket-booster-small-assembly-station-advanced-s-c12ade36",
   "kind": "facility",
   "name": "A0E-9 Rocket Booster",
@@ -2086,6 +2010,82 @@
     {
      "name": "Rare Alloys",
      "amount": 150,
+     "unit": null,
+     "code": "FacilityMaterials9",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials9.png"
+    },
+    {
+     "name": "Assembly Materials V",
+     "amount": 25,
+     "unit": null,
+     "code": "FacilityMaterials8",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials8.png"
+    }
+   ],
+   "vehicle": null,
+   "power_mw": 2,
+   "seconds": 86400,
+   "output_unit": null,
+   "byproducts": [],
+   "crate": false,
+   "page": "A0E-9 Rocket Parts",
+   "source_icon": "/api/v1/assets/items/facilities/small-assembly-station.png",
+   "source_ru": "Малая сборочная станция"
+  },
+  "sort": 38
+ },
+ {
+  "id": "facility-a0e-9-rocket-body-small-assembly-station-advanced-stru-3180530c",
+  "kind": "facility",
+  "name": "A0E-9 Rocket Body",
+  "name_en": "A0E-9 Rocket Body",
+  "item_code": "RocketPartCenter",
+  "category": "small-assembly-station",
+  "item_class": "Advanced Structure Manufactory",
+  "description": null,
+  "factions": [
+   "neutral"
+  ],
+  "facilities": [
+   "small-assembly-station"
+  ],
+  "icon_url": "/api/v1/assets/items/RocketPartCenter.png",
+  "output_quantity": 1,
+  "cost": {
+   "Steel Construction Materials": 20,
+   "Thermal Shielding": 75,
+   "Assembly Materials I": 65,
+   "Rare Alloys": 125,
+   "Assembly Materials V": 25
+  },
+  "data": {
+   "source": "Small Assembly Station",
+   "module": "Advanced Structure Manufactory",
+   "inputs": [
+    {
+     "name": "Steel Construction Materials",
+     "amount": 20,
+     "unit": null,
+     "code": "FacilityMaterials3",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials3.png"
+    },
+    {
+     "name": "Thermal Shielding",
+     "amount": 75,
+     "unit": null,
+     "code": "FacilityMaterials11",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials11.png"
+    },
+    {
+     "name": "Assembly Materials I",
+     "amount": 65,
+     "unit": null,
+     "code": "FacilityMaterials4",
+     "icon_url": "/api/v1/assets/items/FacilityMaterials4.png"
+    },
+    {
+     "name": "Rare Alloys",
+     "amount": 125,
      "unit": null,
      "code": "FacilityMaterials9",
      "icon_url": "/api/v1/assets/items/FacilityMaterials9.png"
@@ -2403,10 +2403,10 @@
   "sort": 45
  },
  {
-  "id": "facility-abisme-at-99-ammunition-factory",
+  "id": "facility-abisme-at-99-mine-ammunition-factory",
   "kind": "facility",
-  "name": "Abisme AT-99",
-  "name_en": "Abisme AT-99",
+  "name": "Abisme AT-99 Mine",
+  "name_en": "Abisme AT-99 Mine",
   "item_code": "TankMine",
   "category": "ammunition-factory",
   "item_class": null,
@@ -2449,7 +2449,7 @@
    "output_unit": null,
    "byproducts": [],
    "crate": false,
-   "page": "Abisme AT-99",
+   "page": "Abisme AT-99 Mine",
    "source_icon": "/api/v1/assets/items/facilities/ammunition-factory.png",
    "source_ru": "Завод боеприпасов"
   },

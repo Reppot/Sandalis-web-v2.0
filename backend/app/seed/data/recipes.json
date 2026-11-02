@@ -1469,7 +1469,7 @@
    "is_teched": true,
    "is_mpf_craftable": true,
    "mpf": {
-    "seconds": 370,
+    "seconds": 375,
     "amount": 3,
     "cost": {
      "bmat": 150
