@@ -65,6 +65,12 @@ jobs:
         run: npm run typecheck --prefix desktop
       - name: Test local catalog and security policy
         run: npm test --prefix desktop
+      - name: Install Electron runtime for integration test
+        timeout-minutes: 2
+        run: node desktop/node_modules/electron/install.js
+      - name: Test real Electron auth cookie transport
+        timeout-minutes: 1
+        run: ./desktop/node_modules/.bin/electron.cmd desktop/tests/electron-auth.cjs
       - name: Build Windows installer
         run: npm run dist:win --prefix desktop
       - name: Upload installer and dependency lock
