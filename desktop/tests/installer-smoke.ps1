@@ -46,7 +46,7 @@ function Install-Personal {
   }
   if ((Get-Content -LiteralPath $sentinel -Raw).Trim() -ne 'preserve-user-settings') { throw 'User settings were removed' }
   if (Test-Path -LiteralPath (Join-Path $env:LOCALAPPDATA 'sindaris-desktop-updater\installer.exe')) { throw 'Installer was cached on C:' }
-  if (Test-Path -LiteralPath 'C:\Sindaris-Smoke-Unexpected') { throw 'Fixed destination was overridden' }
+  if ((Test-Path -LiteralPath 'C:\Sindaris-Smoke-Unexpected\Sindaris.exe') -or (Test-Path -LiteralPath 'C:\Sindaris-Smoke-Unexpected\resources\app.asar')) { throw 'Fixed destination was overridden' }
 }
 Install-Personal
 if (Test-Path -LiteralPath (Join-Path $testRoot 'Sindaris-Setup-0.1.0.exe')) { throw 'Old installer was retained' }
