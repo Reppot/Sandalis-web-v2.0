@@ -73,6 +73,10 @@ jobs:
         run: ./desktop/node_modules/.bin/electron.cmd desktop/tests/electron-auth.cjs
       - name: Build Windows installer
         run: npm run dist:win --prefix desktop
+      - name: Test personal installer and repeated upgrade
+        timeout-minutes: 5
+        shell: pwsh
+        run: ./desktop/tests/installer-smoke.ps1
       - name: Upload installer and dependency lock
         uses: actions/upload-artifact@v4
         with:
