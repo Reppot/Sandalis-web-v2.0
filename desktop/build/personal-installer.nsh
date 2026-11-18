@@ -6,8 +6,7 @@
   !ifndef BUILD_UNINSTALLER
     !include "${PROJECT_DIR}\release\personal-payload.nsh"
   !endif
-  ; Non-solid compression streams File /r directly into the destination.
-  SetCompressor /FINAL zlib
+  ; electron-builder selects non-solid zlib before the template adds resources.
 !macroend
 
 !macro customInit
