@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useContent } from "@/entities/content";
 import type { UserSession } from "@/entities/session";
-import { CopyrightNotice, Icon, env, errorText, roleColor, useT, type MessageKey } from "@/shared";
+import { ApiError, CopyrightNotice, Icon, env, errorText, roleColor, useT, type MessageKey } from "@/shared";
 import { authApi, type AccessLevel, type DiscordSetup, type SetupChoice } from "@/features/cabinet/api/authApi";
 import { LanguageSwitch } from "@/features/cabinet/ui/LanguageSwitch";
 
@@ -63,9 +63,14 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
     authApi
       .getSetup()
       .then(setSetup)
-      .catch(() => {
+      .catch((err: unknown) => {
         setSetupMode(false);
-        setOauthError("setup_expired");
+        if (err instanceof ApiError && err.code === "setup_expired") {
+          setOauthError("setup_expired");
+        } else {
+          setOauthError("");
+          setError(errorText(err, t("login.noLink")));
+        }
       });
   }, [setupMode]);
 
