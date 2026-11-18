@@ -2,7 +2,7 @@ import { app, BrowserWindow, dialog, protocol, session, shell } from 'electron';
 import { readFile, writeFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { APP_URL, SERVER_URL, isAppUrl, safeFile, isAuthNavigation, externalUrl, trustedRequest, sessionRequestPolicy, rendererAuthResponse } from './policy.mjs';
+import { APP_URL, SERVER_URL, isAppUrl, safeFile, isAuthNavigation, externalUrl, trustedRequest, sessionRequestPolicy, rendererAuthResponse, createNativeAuthSession } from './policy.mjs';
 import { createCatalog } from './catalog-client.mjs';
 import { guestProfile } from './local-api.mjs';
 
@@ -16,6 +16,7 @@ let mainWindow;
 let authWindow;
 let catalog;
 let offlineGuest = false;
+const nativeAuth = createNativeAuthSession();
 let preferencesFile;
 const json = (value, status = 200) => new Response(JSON.stringify(value), {
   status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' },
@@ -32,6 +33,7 @@ function openExternal(value) {
 }
 
 function openLogin(ses) {
+  nativeAuth.clear();
   if (authWindow && !authWindow.isDestroyed()) { authWindow.focus(); return; }
   authWindow = new BrowserWindow({
     title: 'Sindaris — вход через Discord', width: 760, height: 840, autoHideMenuBar: true,
@@ -115,11 +117,13 @@ if (locked) app.whenReady().then(async () => {
         return await fileResponse(ses, path.join(resources, 'public'), u.pathname);
       }
       if (request.method === 'POST' && u.pathname === '/api/v1/auth/guest') {
+        nativeAuth.clear();
         await persistGuest(true);
         return json({ me: guestProfile, message: 'Локальный гостевой доступ' });
       }
       if (u.pathname === '/api/v1/auth/me' && offlineGuest && request.method === 'GET') return json(guestProfile);
       if (request.method === 'POST' && u.pathname === '/api/v1/auth/logout') {
+        nativeAuth.clear();
         await persistGuest(false);
         for (const cookie of await ses.cookies.get({ url: SERVER_URL })) {
           await ses.cookies.remove(SERVER_URL + cookie.path, cookie.name);
@@ -133,13 +137,14 @@ if (locked) app.whenReady().then(async () => {
       // Local guest is deliberately incapable of sending privileged server requests.
       if (offlineGuest) return error('Для данных клана войдите через Discord и подключитесь к интернету.', 403);
       const headers = new Headers();
-      const policy = sessionRequestPolicy(u.pathname, await ses.cookies.get({ url: SERVER_URL }));
-      if (policy.localUnauthorized) return error('Войдите через Discord или выберите гостевой режим.', 401);
+      const policy = sessionRequestPolicy(u.pathname);
       for (const name of ['accept', 'content-type', 'x-locale', 'accept-language', 'range']) {
         const value = request.headers.get(name); if (value) headers.set(name, value);
       }
       const body = ['GET', 'HEAD'].includes(request.method) ? undefined : new Uint8Array(await request.arrayBuffer());
       if (body && body.byteLength > 65 * 1024 * 1024) return error('Слишком большой файл', 413);
+      const authorization = nativeAuth.authorization(SERVER_URL + u.pathname + u.search);
+      if (authorization) headers.set('Authorization', authorization);
       const upstream = await ses.fetch(SERVER_URL + u.pathname + u.search, {
         method: request.method, headers, body, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(policy.timeout),
       });
@@ -151,7 +156,9 @@ if (locked) app.whenReady().then(async () => {
       responseHeaders.set('Cache-Control', 'no-store');
       if (upstream.headers.get('content-type')?.includes('application/json') &&
           ['/api/v1/auth/discord/setup', '/api/v1/auth/developer/enter', '/api/v1/auth/dev-token'].includes(u.pathname)) {
-        return json(rendererAuthResponse(u.pathname, await upstream.json()), upstream.status);
+        const payload = await upstream.json();
+        nativeAuth.capture(u.pathname, request.method, upstream.status, payload);
+        return json(rendererAuthResponse(u.pathname, payload), upstream.status);
       }
       return new Response(upstream.body, { status: upstream.status, headers: responseHeaders });
     } catch (e) {
