@@ -29,6 +29,10 @@
     SetErrorLevel 2
     Quit
   ${EndIf}
+  ; Child uninstallers may stage the previous version. Keep that work on D: too.
+  CreateDirectory "D:\Games\Sindaris-Install-Temp"
+  System::Call 'kernel32::SetEnvironmentVariableW(w "TEMP", w "D:\Games\Sindaris-Install-Temp") i.r0'
+  System::Call 'kernel32::SetEnvironmentVariableW(w "TMP", w "D:\Games\Sindaris-Install-Temp") i.r0'
   CreateDirectory "$INSTDIR"
   ClearErrors
   FileOpen $0 "$INSTDIR\.sindaris-write-check" w
@@ -68,6 +72,7 @@
   Delete "$LOCALAPPDATA\sindaris-desktop-updater\pending\Sindaris-Setup-*.exe"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater\pending"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater"
+  RMDir "D:\Games\Sindaris-Install-Temp"
   ; Remove older sibling installers only after the new installed files pass validation.
   FindFirst $R6 $R7 "$EXEDIR\Sindaris-Setup-*.exe"
   ${DoWhile} $R7 != ""
