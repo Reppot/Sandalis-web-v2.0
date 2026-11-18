@@ -29,7 +29,7 @@ function Install-Personal {
   $deadline = [DateTime]::UtcNow.AddSeconds(120)
   while (-not $process.HasExited) {
     foreach ($tempDir in Get-ChildItem -LiteralPath $env:TEMP -Directory -Filter 'ns*.tmp' -ErrorAction SilentlyContinue) {
-      if ((Test-Path -LiteralPath (Join-Path $tempDir.FullName 'app-64.7z')) -or (Test-Path -LiteralPath (Join-Path $tempDir.FullName '7z-out'))) {
+      if ((Test-Path -LiteralPath (Join-Path $tempDir.FullName 'app-64.7z')) -or (Test-Path -LiteralPath (Join-Path $tempDir.FullName '7z-out')) -or (Test-Path -LiteralPath (Join-Path $tempDir.FullName 'old-install'))) {
         throw 'Large application payload was staged in the system temporary folder'
       }
     }
