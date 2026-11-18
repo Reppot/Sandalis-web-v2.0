@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { safeFile, isAppUrl, isAuthNavigation, externalUrl, sessionRequestPolicy, rendererAuthResponse } from '../src/policy.mjs';
+import { safeFile, isAppUrl, isAuthNavigation, externalUrl, sessionRequestPolicy, rendererAuthResponse, createNativeAuthSession } from '../src/policy.mjs';
 import { localApi, guestProfile } from '../src/local-api.mjs';
 
 const catalog = [
@@ -68,11 +68,30 @@ test('missing local item returns 404 without falling through to remote API', () 
   assert.throws(() => localApi('/api/v1/items/missing', data), { status: 404 });
 });
 
-test('fresh offline launch skips remote session lookup and returning login has a short timeout', () => {
-  assert.deepEqual(sessionRequestPolicy('/api/v1/auth/me', []), { localUnauthorized: true, timeout: 8000 });
-  assert.equal(sessionRequestPolicy('/api/v1/auth/me', [{ name: 'sandalis_session' }]).localUnauthorized, false);
-  assert.equal(sessionRequestPolicy('/api/v1/auth/me', [{ name: 'csrf' }]).localUnauthorized, true);
-  assert.equal(sessionRequestPolicy('/api/v1/orders', []).timeout, 120000);
+test('session lookup reaches the server even when a named cookie is absent', () => {
+  assert.deepEqual(sessionRequestPolicy('/api/v1/auth/me'), { timeout: 8000 });
+  assert.equal(sessionRequestPolicy('/api/v1/orders').timeout, 120000);
+});
+test('native session survives missing cookies, expires and never reaches another host', () => {
+  let clock = 1000;
+  const auth = createNativeAuthSession(() => clock);
+  const url = 'https://sandalis-web-v2-0.onrender.com/api/v1/auth/me';
+  const payload = { access_token: 'fixture.jwt.signature', token_type: 'bearer', expires_in: 60, me: { role: 'member' } };
+  auth.capture('/api/v1/auth/discord/setup', 'POST', 200, payload);
+  assert.equal(auth.authorization(url), 'Bearer fixture.jwt.signature');
+  assert.equal(auth.authorization('https://discord.com/api/users/@me'), null);
+  assert.equal(auth.authorization('https://sandalis-web-v2-0.onrender.com.evil/api'), null);
+  assert.equal(auth.authorization('http://sandalis-web-v2-0.onrender.com/api'), null);
+  assert.deepEqual(rendererAuthResponse('/api/v1/auth/discord/setup', payload), { expires_in: 60, me: { role: 'member' } });
+  clock += 60000;
+  assert.equal(auth.authorization(url), null);
+  auth.capture('/api/v1/auth/discord/setup', 'POST', 200, payload);
+  auth.clear();
+  assert.equal(auth.authorization(url), null);
+  for (const [route, method, status] of [['/api/v1/items','POST',200], ['/api/v1/auth/discord/setup','GET',200], ['/api/v1/auth/discord/setup','POST',401]]) {
+    auth.capture(route, method, status, payload);
+    assert.equal(auth.authorization(url), null);
+  }
 });
 
 test('session establishment does not expose bearer tokens to the renderer', () => {
