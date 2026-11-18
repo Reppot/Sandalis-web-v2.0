@@ -1,0 +1,19 @@
+{
+  "name": "sindaris-desktop", "productName": "Sindaris", "version": "0.1.0", "private": true,
+  "license": "UNLICENSED", "type": "module", "main": "src/main.mjs",
+  "scripts": {
+    "prepare:assets": "node scripts/prepare.mjs", "build": "npm run prepare:assets && vite build",
+    "start": "electron .", "dev": "npm run build && electron .", "test": "npm run prepare:assets && node --test tests/*.test.mjs",
+    "typecheck": "node ../frontend/node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "dist:win": "npm run build && electron-builder --win nsis --x64"
+  },
+  "engines": { "node": ">=22.12.0" },
+  "devDependencies": { "electron": "44.9.3", "electron-builder": "26.18.0", "vite": "8.3.5" },
+  "build": {
+    "appId": "com.sindaris.terminal", "productName": "Sindaris", "asar": true,
+    "directories": { "output": "release" },
+    "files": ["src/**/*.mjs", "dist/**/*", "resources/**/*", "package.json"],
+    "win": { "target": "nsis", "artifactName": "Sindaris-Setup-${version}.${ext}" },
+    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true }
+  }
+}
