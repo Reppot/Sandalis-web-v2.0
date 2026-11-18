@@ -1,0 +1,11 @@
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import TerminalPage from '@/app/page';
+import { AppProviders } from '@/app/providers';
+import '@/app/globals.css';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/inter-tight';
+import '@fontsource-variable/jetbrains-mono';
+import '@fontsource/russo-one/cyrillic-400.css';
+import '@fontsource/russo-one/latin-400.css';
+createRoot(document.getElementById('root')!).render(<React.StrictMode><AppProviders><TerminalPage /></AppProviders></React.StrictMode>);
