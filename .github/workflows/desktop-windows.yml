@@ -1,0 +1,78 @@
+name: Build Sindaris Desktop for Windows
+
+on:
+  push:
+    branches: ['desktop/windows-client']
+    paths:
+      - 'desktop/**'
+      - 'frontend/**'
+      - 'backend/app/seed/data/**'
+      - 'backend/static/**'
+      - '.github/workflows/desktop-windows.yml'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'desktop/**'
+      - 'frontend/**'
+      - 'backend/app/seed/data/**'
+      - 'backend/static/**'
+      - '.github/workflows/desktop-windows.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install shared frontend dependencies
+        run: npm ci --prefix frontend
+      - name: Install desktop dependencies
+        shell: pwsh
+        run: |
+          if (Test-Path desktop/package-lock.json) {
+            npm ci --prefix desktop
+          } else {
+            npm install --prefix desktop --no-audit --no-fund
+          }
+          exit $LASTEXITCODE
+      - name: Check shared frontend types
+        run: npm run typecheck --prefix frontend
+      - name: Record dependency security report
+        working-directory: desktop
+        shell: pwsh
+        run: |
+          npm audit --json | Out-File -Encoding utf8 npm-audit.json
+          exit 0
+      - name: Upload dependency security report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sindaris-dependency-audit
+          path: desktop/npm-audit.json
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Check desktop renderer types
+        run: npm run typecheck --prefix desktop
+      - name: Test local catalog and security policy
+        run: npm test --prefix desktop
+      - name: Build Windows installer
+        run: npm run dist:win --prefix desktop
+      - name: Upload installer and dependency lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sindaris-Windows-x64
+          path: |
+            desktop/release/Sindaris-Setup-*.exe
+            desktop/package-lock.json
+          if-no-files-found: error
+          retention-days: 14
