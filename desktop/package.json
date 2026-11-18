@@ -1,5 +1,5 @@
 {
-  "name": "sindaris-desktop", "productName": "Sindaris", "version": "0.1.0", "private": true,
+  "name": "sindaris-desktop", "productName": "Sindaris", "version": "0.1.1", "private": true,
   "license": "UNLICENSED", "type": "module", "main": "src/main.mjs",
   "scripts": {
     "prepare:assets": "node scripts/prepare.mjs", "build": "npm run prepare:assets && vite build",
