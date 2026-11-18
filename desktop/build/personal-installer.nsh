@@ -3,6 +3,7 @@
 !include "WordFunc.nsh"
 
 !macro customHeader
+  InstallDir "D:\Games\Sindaris"
   !ifndef BUILD_UNINSTALLER
     !include "${PROJECT_DIR}\release\personal-payload.nsh"
   !endif
