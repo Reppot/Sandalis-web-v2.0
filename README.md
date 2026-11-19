@@ -1,5 +1,5 @@
 # SINDARIS Terminal v2.0
-
+https://sandalis-web-v2-0.onrender.com
 > Клановый инструмент логистики и управления для игры Foxhole.
 > Версия 2.0: Полная пересборка из монолита в FSD-монорепозиторий (Next.js 15 + FastAPI + PostgreSQL).
 
