@@ -344,6 +344,17 @@
     "version": ""
    },
    {
+    "page": "921 Ogre Rocket",
+    "codename": "BattleTankAAAmmo",
+    "name": "921 Ogre Rocket",
+    "image": "AARocketAmmoIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "HeavyAmmo",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "94.5mm",
     "codename": "ATLargeAmmo",
     "name": "94.5mm",
@@ -443,7 +454,29 @@
     "version": ""
    },
    {
+    "page": "Air Raid Siren/zh",
+    "codename": "AirSirenT",
+    "name": "Air Raid Siren",
+    "image": "AirSirenTIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Airy Runestone",
+    "codename": "In04KItem",
+    "name": "Airy Runestone",
+    "image": "RunestoneGIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Airy Runestone/zh",
     "codename": "In04KItem",
     "name": "Airy Runestone",
     "image": "RunestoneGIcon.png",
@@ -484,6 +517,28 @@
     "faction": "Both",
     "ItemCategory": "Supplies",
     "aliases": "alua,aalloy,aluminium alloy,aluminiumalloy,aluminumalloy",
+    "version": ""
+   },
+   {
+    "page": "Aluminum Alloy/zh",
+    "codename": "AluminumA",
+    "name": "Aluminum Alloy",
+    "image": "ResouceAluminumRefinedIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "alua,aalloy,aluminium alloy,aluminiumalloy,aluminumalloy",
+    "version": ""
+   },
+   {
+    "page": "Aluminum/zh",
+    "codename": "Aluminum",
+    "name": "Aluminum",
+    "image": "ResouceAluminumIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "alu,aluminium",
     "version": ""
    },
    {
@@ -531,7 +586,29 @@
     "version": ""
    },
    {
+    "page": "Argenti r.II Rifle/zh",
+    "codename": "RifleC",
+    "name": "Argenti r.II Rifle",
+    "image": "RifleCItemIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "SmallArms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Assembly Materials I",
+    "codename": "FacilityMaterials4",
+    "name": "Assembly Materials I",
+    "image": "AssemblyMaterials1Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "amat1,amats1,a1,a1s",
+    "version": ""
+   },
+   {
+    "page": "Assembly Materials I/zh",
     "codename": "FacilityMaterials4",
     "name": "Assembly Materials I",
     "image": "AssemblyMaterials1Icon.png",
@@ -553,7 +630,29 @@
     "version": ""
    },
    {
+    "page": "Assembly Materials II/zh",
+    "codename": "FacilityMaterials5",
+    "name": "Assembly Materials II",
+    "image": "AssemblyMaterials2Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "amat2,amats2,a2,a2s",
+    "version": ""
+   },
+   {
     "page": "Assembly Materials III",
+    "codename": "FacilityMaterials6",
+    "name": "Assembly Materials III",
+    "image": "AssemblyMaterials3Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "amat3,amats3,a3,a3s",
+    "version": ""
+   },
+   {
+    "page": "Assembly Materials III/zh",
     "codename": "FacilityMaterials6",
     "name": "Assembly Materials III",
     "image": "AssemblyMaterials3Icon.png",
@@ -575,7 +674,29 @@
     "version": ""
    },
    {
+    "page": "Assembly Materials IV/zh",
+    "codename": "FacilityMaterials7",
+    "name": "Assembly Materials IV",
+    "image": "AssemblyMaterials4Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "amat4,amats4,a4,a4s,am4",
+    "version": ""
+   },
+   {
     "page": "Assembly Materials V",
+    "codename": "FacilityMaterials8",
+    "name": "Assembly Materials V",
+    "image": "AssemblyMaterials5Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "amat5,amats5,a5,a5s",
+    "version": ""
+   },
+   {
+    "page": "Assembly Materials V/zh",
     "codename": "FacilityMaterials8",
     "name": "Assembly Materials V",
     "image": "AssemblyMaterials5Icon.png",
@@ -597,7 +718,29 @@
     "version": ""
    },
    {
+    "page": "Auster's Harness/zh",
+    "codename": "ParatrooperUniformC",
+    "name": "Auster's Harness",
+    "image": "ParatrooperUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Aviator's Raiment",
+    "codename": "PilotUniformW",
+    "name": "Aviator's Raiment",
+    "image": "PilotUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Aviator's Raiment/zh",
     "codename": "PilotUniformW",
     "name": "Aviator's Raiment",
     "image": "PilotUniformWIcon.png",
@@ -630,6 +773,17 @@
     "version": ""
    },
    {
+    "page": "Bandages/zh",
+    "codename": "Bandages",
+    "name": "Bandages",
+    "image": "BandagesItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Medical",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Bane 45",
     "codename": "ATRPGHeavyC",
     "name": "Bane 45",
@@ -652,7 +806,29 @@
     "version": ""
    },
    {
+    "page": "Barbed Wire (Material)/zh",
+    "codename": "BarbedWireMaterials",
+    "name": "Barbed Wire",
+    "image": "BarbedWireMaterialItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "barbedwire",
+    "version": ""
+   },
+   {
     "page": "Basic Materials",
+    "codename": "Cloth",
+    "name": "Basic Materials",
+    "image": "BasicMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "bmat,bmats",
+    "version": ""
+   },
+   {
+    "page": "Basic Materials/zh",
     "codename": "Cloth",
     "name": "Basic Materials",
     "image": "BasicMaterialsIcon.png",
@@ -685,7 +861,29 @@
     "version": ""
    },
    {
+    "page": "Binoculars/zh",
+    "codename": "Binoculars",
+    "name": "Binoculars",
+    "image": "BinocularsItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Blackened Runestone",
+    "codename": "In06KItem",
+    "name": "Blackened Runestone",
+    "image": "RunestoneSIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Blackened Runestone/zh",
     "codename": "In06KItem",
     "name": "Blackened Runestone",
     "image": "RunestoneSIcon.png",
@@ -718,6 +916,17 @@
     "version": ""
    },
    {
+    "page": "Blood Plasma/zh",
+    "codename": "BloodPlasma",
+    "name": "Blood Plasma",
+    "image": "BloodPlasmaItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Medical",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Bloodied Rifle",
     "codename": "Lore9",
     "name": "Bloodied Rifle",
@@ -727,6 +936,28 @@
     "ItemCategory": "",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Bloodied Rifle/zh",
+    "codename": "Lore9",
+    "name": "Bloodied Rifle",
+    "image": "RifleItemIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Bolt of Zeus",
+    "codename": "ATRPGShortC",
+    "name": "Bolt of Zeus",
+    "image": "ATRPGShortCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "HeavyArms",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Bomastone Grenade",
@@ -795,6 +1026,17 @@
     "version": ""
    },
    {
+    "page": "Buckhorn CCQ-18/zh",
+    "codename": "Bayonet",
+    "name": "Buckhorn CCQ-18",
+    "image": "BayonetIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Buckshot",
     "codename": "ShotgunAmmo",
     "name": "Buckshot",
@@ -828,7 +1070,29 @@
     "version": ""
    },
    {
+    "page": "Burning Runestone/zh",
+    "codename": "In07KItem",
+    "name": "Burning Runestone",
+    "image": "RunestoneAIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Caoivish Parka",
+    "codename": "SnowUniformW",
+    "name": "Caoivish Parka",
+    "image": "SnowUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Caoivish Parka/zh",
     "codename": "SnowUniformW",
     "name": "Caoivish Parka",
     "image": "SnowUniformWIcon.png",
@@ -916,7 +1180,29 @@
     "version": ""
    },
    {
+    "page": "Cloudrunner's Vesture/zh",
+    "codename": "ParatrooperUniformW",
+    "name": "Cloudrunner's Vesture",
+    "image": "ParatrooperUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Coal",
+    "codename": "Coal",
+    "name": "Coal",
+    "image": "CoalIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Coal/zh",
     "codename": "Coal",
     "name": "Coal",
     "image": "CoalIcon.png",
@@ -938,7 +1224,29 @@
     "version": ""
    },
    {
+    "page": "Coke/zh",
+    "codename": "FacilityCoal1",
+    "name": "Coke",
+    "image": "CokeIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Colonial Aircraft Engine (Large)",
+    "codename": "AircraftPartLargeEngineC",
+    "name": "Colonial Aircraft Engine (Large)",
+    "image": "AircraftEngineIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Colonial Aircraft Engine (Large)/zh",
     "codename": "AircraftPartLargeEngineC",
     "name": "Colonial Aircraft Engine (Large)",
     "image": "AircraftEngineIcon.png",
@@ -960,6 +1268,17 @@
     "version": ""
    },
    {
+    "page": "Colonial Aircraft Engine (Small)/zh",
+    "codename": "AircraftPartSmallEngineC",
+    "name": "Colonial Aircraft Engine (Small)",
+    "image": "AircraftPartSmallEngineCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Colonial Aircraft Mechanical Parts (Large)",
     "codename": "AircraftPartLargeMechanicalC",
     "name": "Colonial Aircraft Mechanical Parts (Large)",
@@ -971,7 +1290,29 @@
     "version": ""
    },
    {
+    "page": "Colonial Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalC",
+    "name": "Colonial Aircraft Mechanical Parts (Large)",
+    "image": "AircraftFuselageIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Colonial Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalC",
+    "name": "Colonial Aircraft Mechanical Parts (Small)",
+    "image": "AircraftPartSmallMechanicalCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Colonial Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalC",
     "name": "Colonial Aircraft Mechanical Parts (Small)",
     "image": "AircraftPartSmallMechanicalCIcon.png",
@@ -1004,6 +1345,17 @@
     "version": ""
    },
    {
+    "page": "Components/zh",
+    "codename": "Components",
+    "name": "Components",
+    "image": "ComponentsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "comps",
+    "version": ""
+   },
+   {
     "page": "Concrete Materials",
     "codename": "Concrete",
     "name": "Concrete Materials",
@@ -1015,7 +1367,29 @@
     "version": ""
    },
    {
+    "page": "Concrete Materials/zh",
+    "codename": "Concrete",
+    "name": "Concrete Materials",
+    "image": "ConcreteBagIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "concretematerials",
+    "version": ""
+   },
+   {
     "page": "Construction Materials",
+    "codename": "FacilityMaterials1",
+    "name": "Construction Materials",
+    "image": "ConstructionMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "conmat,conmats",
+    "version": ""
+   },
+   {
+    "page": "Construction Materials/zh",
     "codename": "FacilityMaterials1",
     "name": "Construction Materials",
     "image": "ConstructionMaterialsIcon.png",
@@ -1048,7 +1422,40 @@
     "version": ""
    },
    {
+    "page": "Copper Alloy/zh",
+    "codename": "CopperA",
+    "name": "Copper Alloy",
+    "image": "ResourceCopperRefinedIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "copperalloy,copa,calloy",
+    "version": ""
+   },
+   {
+    "page": "Copper/zh",
+    "codename": "Copper",
+    "name": "Copper",
+    "image": "ResourceCopperIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Crate",
+    "codename": "Crate",
+    "name": "Crate",
+    "image": "CrateItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Crate/zh",
     "codename": "Crate",
     "name": "Crate",
     "image": "CrateItemIcon.png",
@@ -1071,6 +1478,17 @@
    },
    {
     "page": "Critically Wounded Soldier",
+    "codename": "CriticalSoldier",
+    "name": "Critically Wounded Soldier",
+    "image": "CriticallyWoundedIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Medical",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Critically Wounded Soldier/zh",
     "codename": "CriticalSoldier",
     "name": "Critically Wounded Soldier",
     "image": "CriticallyWoundedIcon.png",
@@ -1136,7 +1554,29 @@
     "version": ""
    },
    {
+    "page": "Damaged Colonial Aircraft Engine (Large)/zh",
+    "codename": "AircraftPartLargeEngineWreckedC",
+    "name": "Damaged Colonial Aircraft Engine (Large)",
+    "image": "DamagedAircraftEngineIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Colonial Aircraft Engine (Small)",
+    "codename": "AircraftPartSmallEngineWreckedC",
+    "name": "Damaged Colonial Aircraft Engine (Small)",
+    "image": "DamagedAircraftPartSmallEngineCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Colonial Aircraft Engine (Small)/zh",
     "codename": "AircraftPartSmallEngineWreckedC",
     "name": "Damaged Colonial Aircraft Engine (Small)",
     "image": "DamagedAircraftPartSmallEngineCIcon.png",
@@ -1158,7 +1598,29 @@
     "version": ""
    },
    {
+    "page": "Damaged Colonial Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalWreckedC",
+    "name": "Damaged Colonial Aircraft Mechanical Parts (Large)",
+    "image": "DamagedAircraftFuselageIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Colonial Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalWreckedC",
+    "name": "Damaged Colonial Aircraft Mechanical Parts (Small)",
+    "image": "DamagedAircraftPartSmallMechanicalCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Colonial Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalWreckedC",
     "name": "Damaged Colonial Aircraft Mechanical Parts (Small)",
     "image": "DamagedAircraftPartSmallMechanicalCIcon.png",
@@ -1180,7 +1642,29 @@
     "version": ""
    },
    {
+    "page": "Damaged Components/zh",
+    "codename": "FacilityComponents1",
+    "name": "Damaged Components",
+    "image": "ComponentsDamagedIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "dcomponents,dcomps",
+    "version": ""
+   },
+   {
     "page": "Damaged Warden Aircraft Engine (Large)",
+    "codename": "AircraftPartLargeEngineWreckedW",
+    "name": "Damaged Warden Aircraft Engine (Large)",
+    "image": "DamagedAircraftPartLargeEngineWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Warden Aircraft Engine (Large)/zh",
     "codename": "AircraftPartLargeEngineWreckedW",
     "name": "Damaged Warden Aircraft Engine (Large)",
     "image": "DamagedAircraftPartLargeEngineWIcon.png",
@@ -1202,6 +1686,17 @@
     "version": ""
    },
    {
+    "page": "Damaged Warden Aircraft Engine (Small)/zh",
+    "codename": "AircraftPartSmallEngineWreckedW",
+    "name": "Damaged Warden Aircraft Engine (Small)",
+    "image": "DamagedAircraftSmallEngineWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Warden Aircraft Mechanical Parts (Large)",
     "codename": "AircraftPartLargeMechanicalWreckedW",
     "name": "Damaged Warden Aircraft Mechanical Parts (Large)",
@@ -1213,7 +1708,29 @@
     "version": ""
    },
    {
+    "page": "Damaged Warden Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalWreckedW",
+    "name": "Damaged Warden Aircraft Mechanical Parts (Large)",
+    "image": "DamagedAircraftPartLargeMechanicalWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Warden Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalWreckedW",
+    "name": "Damaged Warden Aircraft Mechanical Parts (Small)",
+    "image": "DamagedAircraftWingsIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Warden Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalWreckedW",
     "name": "Damaged Warden Aircraft Mechanical Parts (Small)",
     "image": "DamagedAircraftWingsIcon.png",
@@ -1257,6 +1774,17 @@
     "version": ""
    },
    {
+    "page": "Diesel/zh",
+    "codename": "Diesel",
+    "name": "Diesel",
+    "image": "ResourceFuelIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "E680-S Rudder Lock",
     "codename": "WaterMine",
     "name": "E680-S Rudder Lock",
@@ -1290,7 +1818,29 @@
     "version": ""
    },
    {
+    "page": "Eleos Infantry Dagger/zh",
+    "codename": "SwordC",
+    "name": "Eleos Infantry Dagger",
+    "image": "StilSwordCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Enriched Oil",
+    "codename": "FacilityOil2",
+    "name": "Enriched Oil",
+    "image": "EnrichedOilIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "enrichedoil",
+    "version": ""
+   },
+   {
+    "page": "Enriched Oil/zh",
     "codename": "FacilityOil2",
     "name": "Enriched Oil",
     "image": "EnrichedOilIcon.png",
@@ -1312,7 +1862,29 @@
     "version": ""
    },
    {
+    "page": "Explosive Powder/zh",
+    "codename": "Explosive",
+    "name": "Explosive Powder",
+    "image": "ExplosiveMaterialIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "emat,emats",
+    "version": ""
+   },
+   {
     "page": "Fabri Rucksack",
+    "codename": "EngineerUniformC",
+    "name": "Fabri Rucksack",
+    "image": "EngineerUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Fabri Rucksack/zh",
     "codename": "EngineerUniformC",
     "name": "Fabri Rucksack",
     "image": "EngineerUniformCIcon.png",
@@ -1334,7 +1906,29 @@
     "version": ""
    },
    {
+    "page": "Facility Power/zh",
+    "codename": "FacilityPower",
+    "name": "Facility Power",
+    "image": "IconFilterPower.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Falias Raiding Club",
+    "codename": "MaceW",
+    "name": "Falias Raiding Club",
+    "image": "TrenchMaceWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Falias Raiding Club/zh",
     "codename": "MaceW",
     "name": "Falias Raiding Club",
     "image": "TrenchMaceWIcon.png",
@@ -1368,6 +1962,17 @@
    },
    {
     "page": "First Aid Kit",
+    "codename": "FirstAidKit",
+    "name": "First Aid Kit",
+    "image": "FirstAidKitItem.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Medical",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "First Aid Kit/zh",
     "codename": "FirstAidKit",
     "name": "First Aid Kit",
     "image": "FirstAidKitItem.png",
@@ -1422,7 +2027,29 @@
     "version": ""
    },
    {
+    "page": "Flask (Lore)/zh",
+    "codename": "Lore12",
+    "name": "Flask",
+    "image": "MaintenanceSuppliesIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Flight Mask",
+    "codename": "PilotMask",
+    "name": "Flight Mask",
+    "image": "PilotMaskIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Flight Mask/zh",
     "codename": "PilotMask",
     "name": "Flight Mask",
     "image": "PilotMaskIcon.png",
@@ -1466,6 +2093,28 @@
     "version": "None"
    },
    {
+    "page": "Gas Mask/zh",
+    "codename": "GasMask",
+    "name": "Gas Mask",
+    "image": "GasmaskIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Gas Mask/zh",
+    "codename": "GasMaskFilter",
+    "name": "Gas Mask Filter",
+    "image": "GasMaskFilterIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Gentleman's Peacoat",
     "codename": "NavalUniformW",
     "name": "Gentleman's Peacoat",
@@ -1477,7 +2126,29 @@
     "version": ""
    },
    {
+    "page": "Gentleman's Peacoat/zh",
+    "codename": "NavalUniformW",
+    "name": "Gentleman's Peacoat",
+    "image": "NavalUniformW.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Gravel",
+    "codename": "GroundMaterials",
+    "name": "Gravel",
+    "image": "GroundMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Gravel/zh",
     "codename": "GroundMaterials",
     "name": "Gravel",
     "image": "GroundMaterialsIcon.png",
@@ -1510,6 +2181,17 @@
     "version": ""
    },
    {
+    "page": "Grenadier's Baldric/zh",
+    "codename": "GrenadeUniformC",
+    "name": "Grenadier's Baldric",
+    "image": "GrenadeUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Gunner's Breastplate",
     "codename": "ArmourUniformW",
     "name": "Gunner's Breastplate",
@@ -1521,7 +2203,29 @@
     "version": ""
    },
    {
+    "page": "Gunner's Breastplate/zh",
+    "codename": "ArmourUniformW",
+    "name": "Gunner's Breastplate",
+    "image": "ArmourUniformW.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Hammer",
+    "codename": "WorkHammer",
+    "name": "Hammer",
+    "image": "HammerIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Hammer/zh",
     "codename": "WorkHammer",
     "name": "Hammer",
     "image": "HammerIcon.png",
@@ -1565,6 +2269,17 @@
     "version": ""
    },
    {
+    "page": "Heavy Explosive Powder/zh",
+    "codename": "HeavyExplosive",
+    "name": "Heavy Explosive Powder",
+    "image": "HeavyExplosiveMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "hemat,hemats",
+    "version": ""
+   },
+   {
     "page": "Heavy Oil",
     "codename": "FacilityOil1",
     "name": "Heavy Oil",
@@ -1576,7 +2291,29 @@
     "version": ""
    },
    {
+    "page": "Heavy Oil/zh",
+    "codename": "FacilityOil1",
+    "name": "Heavy Oil",
+    "image": "HeavyOilIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "heavyoil",
+    "version": ""
+   },
+   {
     "page": "Heavy Topcoat",
+    "codename": "SnowUniformC",
+    "name": "Heavy Topcoat",
+    "image": "SnowUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Heavy Topcoat/zh",
     "codename": "SnowUniformC",
     "name": "Heavy Topcoat",
     "image": "SnowUniformCIcon.png",
@@ -1631,6 +2368,17 @@
     "version": ""
    },
    {
+    "page": "Infantry Battledress/zh",
+    "codename": "SoldierUniformW",
+    "name": "Infantry Battledress",
+    "image": "SoldierUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Iron",
     "codename": "Iron",
     "name": "Iron",
@@ -1650,6 +2398,28 @@
     "faction": "Both",
     "ItemCategory": "Supplies",
     "aliases": "ironalloy,irona,ialloy",
+    "version": ""
+   },
+   {
+    "page": "Iron Alloy/zh",
+    "codename": "IronA",
+    "name": "Iron Alloy",
+    "image": "ResouceIronRefinedIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "ironalloy,irona,ialloy",
+    "version": ""
+   },
+   {
+    "page": "Iron/zh",
+    "codename": "Iron",
+    "name": "Iron",
+    "image": "ResouceIronIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
     "version": ""
    },
    {
@@ -1730,7 +2500,29 @@
     "version": ""
    },
    {
+    "page": "Legion Vexillum/zh",
+    "codename": "BannerTC",
+    "name": "Legion Vexillum",
+    "image": "BannerTCItemIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Legionary Fatigues",
+    "codename": "SoldierUniformC",
+    "name": "Legionary Fatigues",
+    "image": "SoldierUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Legionary Fatigues/zh",
     "codename": "SoldierUniformC",
     "name": "Legionary Fatigues",
     "image": "SoldierUniformCIcon.png",
@@ -1752,7 +2544,29 @@
     "version": ""
    },
    {
+    "page": "Legionary's Oilcoat/zh",
+    "codename": "RainUniformC",
+    "name": "Legionary's Oilcoat",
+    "image": "RainUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Liaison Transmitter",
+    "codename": "RadioAircraft",
+    "name": "Liaison Transmitter",
+    "image": "RadioAircraftItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": "deprecated"
+   },
+   {
+    "page": "Liaison Transmitter/zh",
     "codename": "RadioAircraft",
     "name": "Liaison Transmitter",
     "image": "RadioAircraftItemIcon.png",
@@ -1774,6 +2588,17 @@
     "version": ""
    },
    {
+    "page": "Listening Kit/zh",
+    "codename": "ListeningKit",
+    "name": "Listening Kit",
+    "image": "ListeningKitIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Lodesman's Lorica",
     "codename": "PilotUniformC",
     "name": "Lodesman's Lorica",
@@ -1785,7 +2610,29 @@
     "version": ""
    },
    {
+    "page": "Lodesman's Lorica/zh",
+    "codename": "PilotUniformC",
+    "name": "Lodesman's Lorica",
+    "image": "PilotUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Maintenance Supplies",
+    "codename": "MaintenanceSupplies",
+    "name": "Maintenance Supplies",
+    "image": "MaintenanceSuppliesIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Maintenance Supplies/zh",
     "codename": "MaintenanceSupplies",
     "name": "Maintenance Supplies",
     "image": "MaintenanceSuppliesIcon.png",
@@ -1829,6 +2676,28 @@
     "version": ""
    },
    {
+    "page": "Manticore Ammo",
+    "codename": "MortarAmmoAT",
+    "name": "Manticore Ammo",
+    "image": "MortarATAmmoIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "HeavyArms",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
+    "page": "Manticore Mortar",
+    "codename": "MortarAT",
+    "name": "Manticore Mortar",
+    "image": "MortarATItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "HeavyArms",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Mark II Raidbreaker",
     "codename": "BomberAmmo",
     "name": "Mark II Raidbreaker",
@@ -1851,7 +2720,40 @@
     "version": ""
    },
    {
+    "page": "Medic Fatigues/zh",
+    "codename": "MedicUniformC",
+    "name": "Medic Fatigues",
+    "image": "MedicUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Medicus Apron",
+    "codename": "ArmourMedicUniformC",
+    "name": "Medicus Apron",
+    "image": "ArmourMedicUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Metal Beam",
+    "codename": "MetalBeamMaterials",
+    "name": "Metal Beam",
+    "image": "MetalBeamMaterialItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "metalbeam",
+    "version": ""
+   },
+   {
+    "page": "Metal Beam/zh",
     "codename": "MetalBeamMaterials",
     "name": "Metal Beam",
     "image": "MetalBeamMaterialItemIcon.png",
@@ -1871,6 +2773,17 @@
     "ItemCategory": "HeavyAmmo",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Model-8 “Kappa”",
+    "codename": "MiniDepthChargeAmmo",
+    "name": "Model-8 “Kappa”",
+    "image": "MiniDepthChargeAmmoIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "HeavyAmmo",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Moray Torpedo",
@@ -1928,6 +2841,17 @@
     "version": ""
    },
    {
+    "page": "Naval Buoy/zh",
+    "codename": "WaterWallMaterials",
+    "name": "Naval Buoy",
+    "image": "WaterWallItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "HeavyAmmo",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Neville Anti-Tank Rifle",
     "codename": "ATRifleW",
     "name": "Neville Anti-Tank Rifle",
@@ -1951,6 +2875,17 @@
    },
    {
     "page": "No.2 Loughcaster",
+    "codename": "RifleW",
+    "name": "No.2 Loughcaster",
+    "image": "RifleW.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "SmallArms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "No.2 Loughcaster/zh",
     "codename": "RifleW",
     "name": "No.2 Loughcaster",
     "image": "RifleW.png",
@@ -1994,7 +2929,29 @@
     "version": ""
    },
    {
+    "page": "Officer's Regalia/zh",
+    "codename": "OfficerUniformW",
+    "name": "Officer's Regalia",
+    "image": "OfficerUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Officialis' Attire",
+    "codename": "OfficerUniformC",
+    "name": "Officialis' Attire",
+    "image": "OfficerUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Officialis' Attire/zh",
     "codename": "OfficerUniformC",
     "name": "Officialis' Attire",
     "image": "OfficerUniformCIcon.png",
@@ -2016,7 +2973,29 @@
     "version": ""
    },
    {
+    "page": "Oil/zh",
+    "codename": "Oil",
+    "name": "Oil",
+    "image": "OilIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Outrider's Mantle",
+    "codename": "ScoutUniformW",
+    "name": "Outrider's Mantle",
+    "image": "ScoutUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Outrider's Mantle/zh",
     "codename": "ScoutUniformW",
     "name": "Outrider's Mantle",
     "image": "ScoutUniformWIcon.png",
@@ -2038,7 +3017,29 @@
     "version": ""
    },
    {
+    "page": "Padded Boiler Suit/zh",
+    "codename": "TankUniformW",
+    "name": "Padded Boiler Suit",
+    "image": "TankUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Pale Skull",
+    "codename": "LoreSkull",
+    "name": "Pale Skull",
+    "image": "LoreSkull.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Pale Skull/zh",
     "codename": "LoreSkull",
     "name": "Pale Skull",
     "image": "LoreSkull.png",
@@ -2060,7 +3061,29 @@
     "version": ""
    },
    {
+    "page": "Paratrooper's Ruck/zh",
+    "codename": "ParatrooperBackpack",
+    "name": "Paratrooper's Ruck",
+    "image": "ParatrooperBackpackItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Peculiar Book",
+    "codename": "Lore4",
+    "name": "Peculiar Book",
+    "image": "LoreIcon3.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Peculiar Book/zh",
     "codename": "Lore4",
     "name": "Peculiar Book",
     "image": "LoreIcon3.png",
@@ -2082,6 +3105,28 @@
     "version": ""
    },
    {
+    "page": "Petrol/zh",
+    "codename": "Petrol",
+    "name": "Petrol",
+    "image": "RefinedFuelIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Physic's Cuirass",
+    "codename": "ArmourMedicUniformW",
+    "name": "Physic's Cuirass",
+    "image": "ArmourMedicUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Physician's Jacket",
     "codename": "MedicUniformW",
     "name": "Physician's Jacket",
@@ -2091,6 +3136,17 @@
     "ItemCategory": "Uniforms",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Physician's Jacket/zh",
+    "codename": "MedicUniformW",
+    "name": "Physician's Jacket",
+    "image": "MedicUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": "None"
    },
    {
     "page": "Pipe",
@@ -2104,7 +3160,29 @@
     "version": ""
    },
    {
+    "page": "Pipe/zh",
+    "codename": "PipeMaterials",
+    "name": "Pipe",
+    "image": "EngineRoomPipeIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Processed Construction Materials",
+    "codename": "FacilityMaterials2",
+    "name": "Processed Construction Materials",
+    "image": "ProcessedConstructionMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "pcmat,pcmats,pcm",
+    "version": ""
+   },
+   {
+    "page": "Processed Construction Materials/zh",
     "codename": "FacilityMaterials2",
     "name": "Processed Construction Materials",
     "image": "ProcessedConstructionMaterialsIcon.png",
@@ -2124,6 +3202,17 @@
     "ItemCategory": "",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Prototype Kit/zh",
+    "codename": "PrototypeKit",
+    "name": "Prototype Kit",
+    "image": "PrototypeKitIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": "None"
    },
    {
     "page": "PT-815 Smoke Grenade",
@@ -2170,7 +3259,29 @@
     "version": ""
    },
    {
+    "page": "Radio/zh",
+    "codename": "Radio",
+    "name": "Radio",
+    "image": "RadioItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Rare Alloys",
+    "codename": "FacilityMaterials9",
+    "name": "Rare Alloys",
+    "image": "FacilityMaterials09Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "rarealloy,rarealloys,ralloy,ralloys,rarea",
+    "version": ""
+   },
+   {
+    "page": "Rare Alloys/zh",
     "codename": "FacilityMaterials9",
     "name": "Rare Alloys",
     "image": "FacilityMaterials09Icon.png",
@@ -2192,7 +3303,29 @@
     "version": ""
    },
    {
+    "page": "Rare Materials/zh",
+    "codename": "FacilityMaterials12",
+    "name": "Rare Materials",
+    "image": "FacilityMaterials12Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Rare Metal",
+    "codename": "RareMetal",
+    "name": "Rare Metal",
+    "image": "RareMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "rmetal,rarem",
+    "version": ""
+   },
+   {
+    "page": "Rare Metal/zh",
     "codename": "RareMetal",
     "name": "Rare Metal",
     "image": "RareMaterialsIcon.png",
@@ -2214,6 +3347,17 @@
     "version": ""
    },
    {
+    "page": "Recon Camo/zh",
+    "codename": "ScoutUniformC",
+    "name": "Recon Camo",
+    "image": "ScoutUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Refined Materials",
     "codename": "Wood",
     "name": "Refined Materials",
@@ -2225,7 +3369,29 @@
     "version": ""
    },
    {
+    "page": "Refined Materials/zh",
+    "codename": "Wood",
+    "name": "Refined Materials",
+    "image": "RefinedMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "rmat,rmats",
+    "version": ""
+   },
+   {
     "page": "Relic Materials",
+    "codename": "RelicMaterials",
+    "name": "Relic Materials",
+    "image": "RelicMaterialItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "relicmat,relicmats",
+    "version": "special"
+   },
+   {
+    "page": "Relic Materials/zh",
     "codename": "RelicMaterials",
     "name": "Relic Materials",
     "image": "RelicMaterialItemIcon.png",
@@ -2269,6 +3435,17 @@
     "version": ""
    },
    {
+    "page": "Remex Garb/zh",
+    "codename": "NavalUniformC",
+    "name": "Remex Garb",
+    "image": "NavalUniformC.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Research Part",
     "codename": "",
     "name": "Research Part",
@@ -2281,6 +3458,17 @@
    },
    {
     "page": "Reserve Power",
+    "codename": "ReservePower",
+    "name": "Reserve Power",
+    "image": "ReservePower.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Reserve Power/zh",
     "codename": "ReservePower",
     "name": "Reserve Power",
     "image": "ReservePower.png",
@@ -2324,6 +3512,17 @@
     "version": ""
    },
    {
+    "page": "Rusty Shovel/zh",
+    "codename": "Lore13",
+    "name": "Rusty Shovel",
+    "image": "LoreShovelIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Salvage",
     "codename": "Metal",
     "name": "Salvage",
@@ -2341,7 +3540,7 @@
     "image": "SalvageIcon.png",
     "imageOverride": "",
     "faction": "Both",
-    "ItemCategory": "",
+    "ItemCategory": "Supplies",
     "aliases": "scrap",
     "version": ""
    },
@@ -2368,6 +3567,17 @@
     "version": ""
    },
    {
+    "page": "Sandbag/zh",
+    "codename": "SandbagMaterials",
+    "name": "Sandbag",
+    "image": "SandbagMaterialItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "sandbags",
+    "version": ""
+   },
+   {
     "page": "Sapper Gear",
     "codename": "EngineerUniformW",
     "name": "Sapper Gear",
@@ -2379,7 +3589,29 @@
     "version": ""
    },
    {
+    "page": "Sapper Gear/zh",
+    "codename": "EngineerUniformW",
+    "name": "Sapper Gear",
+    "image": "EngineerUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Sharp Runestone",
+    "codename": "In03KItem",
+    "name": "Sharp Runestone",
+    "image": "RunestoneEIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Sharp Runestone/zh",
     "codename": "In03KItem",
     "name": "Sharp Runestone",
     "image": "RunestoneEIcon.png",
@@ -2412,7 +3644,29 @@
     "version": ""
    },
    {
+    "page": "Shimmering Runestone/zh",
+    "codename": "In05KItem",
+    "name": "Shimmering Runestone",
+    "image": "RunestoneWIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Shovel",
+    "codename": "Shovel",
+    "name": "Shovel",
+    "image": "ShovelIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Shovel/zh",
     "codename": "Shovel",
     "name": "Shovel",
     "image": "ShovelIcon.png",
@@ -2456,7 +3710,29 @@
     "version": ""
    },
    {
+    "page": "Sledge Hammer/zh",
+    "codename": "SledgeHammer",
+    "name": "Sledge Hammer",
+    "image": "SledgeHammerItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Slick Runestone",
+    "codename": "In02KItem",
+    "name": "Slick Runestone",
+    "image": "RunestoneBIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Slick Runestone/zh",
     "codename": "In02KItem",
     "name": "Slick Runestone",
     "image": "RunestoneBIcon.png",
@@ -2478,7 +3754,29 @@
     "version": ""
    },
    {
+    "page": "Small key/zh",
+    "codename": "In01KItem",
+    "name": "Small key",
+    "image": "Key01Icon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Soldier Supplies",
+    "codename": "SoldierSupplies",
+    "name": "Soldier Supplies",
+    "image": "ClothItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Medical",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Soldier Supplies/zh",
     "codename": "SoldierSupplies",
     "name": "Soldier Supplies",
     "image": "ClothItemIcon.png",
@@ -2511,6 +3809,17 @@
     "version": ""
    },
    {
+    "page": "Specialist's Overcoat/zh",
+    "codename": "AmmoUniformW",
+    "name": "Specialist's Overcoat",
+    "image": "AmmoUniformWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Steel Construction Materials",
     "codename": "FacilityMaterials3",
     "name": "Steel Construction Materials",
@@ -2520,6 +3829,17 @@
     "ItemCategory": "Supplies",
     "aliases": "scmat,scmats",
     "version": ""
+   },
+   {
+    "page": "Steel Construction Materials/zh",
+    "codename": "FacilityMaterials3",
+    "name": "Steel Construction Materials",
+    "image": "SteelConstructionMaterialsIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "scmat,scmats",
+    "version": "None"
    },
    {
     "page": "Strong Materials",
@@ -2544,7 +3864,29 @@
     "version": ""
    },
    {
+    "page": "Sulfur/zh",
+    "codename": "Sulfur",
+    "name": "Sulfur",
+    "image": "SulfurIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Tankman's Coveralls",
+    "codename": "TankUniformC",
+    "name": "Tankman's Coveralls",
+    "image": "TankUniformCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Tankman's Coveralls/zh",
     "codename": "TankUniformC",
     "name": "Tankman's Coveralls",
     "image": "TankUniformCIcon.png",
@@ -2599,6 +3941,17 @@
     "version": ""
    },
    {
+    "page": "The P-A-C \"Bastard\" Burst Launcher",
+    "codename": "ATRPGUtilityW",
+    "name": "The P-A-C \"Bastard\" Burst Launcher",
+    "image": "ATRPGUtilityWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "HeavyArms",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Thermal Shielding",
     "codename": "FacilityMaterials11",
     "name": "Thermal Shielding",
@@ -2608,6 +3961,17 @@
     "ItemCategory": "Supplies",
     "aliases": "thermalshielding",
     "version": ""
+   },
+   {
+    "page": "Thermal Shielding/zh",
+    "codename": "FacilityMaterials11",
+    "name": "Thermal Shielding",
+    "image": "FacilityMaterials11Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "thermalshielding",
+    "version": "None"
    },
    {
     "page": "Tin Case",
@@ -2621,7 +3985,29 @@
     "version": ""
    },
    {
+    "page": "Tin Case/zh",
+    "codename": "Lore1",
+    "name": "Tin Case",
+    "image": "TobaccoPickupIcon.png",
+    "imageOverride": "",
+    "faction": "Lore",
+    "ItemCategory": "",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Trauma Kit",
+    "codename": "TraumaKit",
+    "name": "Trauma Kit",
+    "image": "TraumaKitItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Medical",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Trauma Kit/zh",
     "codename": "TraumaKit",
     "name": "Trauma Kit",
     "image": "TraumaKitItemIcon.png",
@@ -2676,6 +4062,17 @@
     "version": ""
    },
    {
+    "page": "Unstable Substances/zh",
+    "codename": "FacilityMaterials10",
+    "name": "Unstable Substances",
+    "image": "FacilityMaterials10Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "unstablesubstance,unstablesubstances",
+    "version": "None"
+   },
+   {
     "page": "Upgrade Part",
     "codename": "",
     "name": "Upgrade Part",
@@ -2688,6 +4085,17 @@
    },
    {
     "page": "Velian Flak Vest",
+    "codename": "ArmourUniformC",
+    "name": "Velian Flak Vest",
+    "image": "ArmourUniformC.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "ItemCategory": "Uniforms",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Velian Flak Vest/zh",
     "codename": "ArmourUniformC",
     "name": "Velian Flak Vest",
     "image": "ArmourUniformC.png",
@@ -2731,7 +4139,29 @@
     "version": ""
    },
    {
+    "page": "War Ensign/zh",
+    "codename": "BannerTW",
+    "name": "War Ensign",
+    "image": "BannerTWItemIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Warden Aircraft Engine (Large)",
+    "codename": "AircraftPartLargeEngineW",
+    "name": "Warden Aircraft Engine (Large)",
+    "image": "AircraftPartLargeEngineWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Warden Aircraft Engine (Large)/zh",
     "codename": "AircraftPartLargeEngineW",
     "name": "Warden Aircraft Engine (Large)",
     "image": "AircraftPartLargeEngineWIcon.png",
@@ -2753,6 +4183,17 @@
     "version": ""
    },
    {
+    "page": "Warden Aircraft Engine (Small)/zh",
+    "codename": "AircraftPartSmallEngineW",
+    "name": "Warden Aircraft Engine (Small)",
+    "image": "AircraftSmallEngineWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Warden Aircraft Mechanical Parts (Large)",
     "codename": "AircraftPartLargeMechanicalW",
     "name": "Warden Aircraft Mechanical Parts (Large)",
@@ -2764,7 +4205,29 @@
     "version": ""
    },
    {
+    "page": "Warden Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalW",
+    "name": "Warden Aircraft Mechanical Parts (Large)",
+    "image": "AircraftPartLargeMechanicalWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Warden Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalW",
+    "name": "Warden Aircraft Mechanical Parts (Small)",
+    "image": "AircraftWingsIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "ItemCategory": "Parts",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Warden Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalW",
     "name": "Warden Aircraft Mechanical Parts (Small)",
     "image": "AircraftWingsIcon.png",
@@ -2808,6 +4271,28 @@
     "version": ""
    },
    {
+    "page": "Water Bucket/zh",
+    "codename": "WaterBucket",
+    "name": "Water Bucket",
+    "image": "LoreBucket.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Water/zh",
+    "codename": "Water",
+    "name": "Water",
+    "image": "WaterIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Willow's Bane Ammo",
     "codename": "FlameBackpackW",
     "name": "Willow's Bane Ammo",
@@ -2841,7 +4326,29 @@
     "version": ""
    },
    {
+    "page": "Wind Sock/zh",
+    "codename": "WindsockT",
+    "name": "Wind Sock",
+    "image": "WindsockItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Wounded Player",
+    "codename": "WoundedCarriedPlayer",
+    "name": "Wounded Player",
+    "image": "WoundedIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Medical",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Wounded Player/zh",
     "codename": "WoundedCarriedPlayer",
     "name": "Wounded Player",
     "image": "WoundedIcon.png",
@@ -2863,7 +4370,29 @@
     "version": ""
    },
    {
+    "page": "Wreckage/zh",
+    "codename": "Wreckage",
+    "name": "Wreckage",
+    "image": "Salvage02Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Supplies",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Wrench",
+    "codename": "WorkWrench",
+    "name": "Wrench",
+    "image": "WorkWrench.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "ItemCategory": "Utility",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Wrench/zh",
     "codename": "WorkWrench",
     "name": "Wrench",
     "image": "WorkWrench.png",
@@ -3085,9 +4614,9 @@
     "version": ""
    },
    {
-    "page": "AA-2 Battering Ram",
+    "page": "AA-2 “Battering Ram”",
     "codename": "FieldATC",
-    "name": "AA-2 Battering Ram",
+    "name": "AA-2 “Battering Ram”",
     "image": "FieldAntiTankColVehicleIcon.png",
     "imageOverride": "",
     "faction": "Col",
@@ -3138,6 +4667,17 @@
     "type": "Combat Car",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "AF-e “Palaemon”",
+    "codename": "SubmarineLightC",
+    "name": "AF-e “Palaemon”",
+    "image": "SubmarineLightCItemIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "type": "Light Submarine",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Armoured Fighting Tractor",
@@ -3360,6 +4900,17 @@
     "version": ""
    },
    {
+    "page": "BMS - Stone Camel",
+    "codename": "FlatbedTruckConcrete",
+    "name": "BMS - Stone Camel",
+    "image": "FlatbedTruckConcreteItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Concrete Truck",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "BMS - Universal Assembly Rig",
     "codename": "Construction",
     "name": "BMS - Universal Assembly Rig",
@@ -3503,7 +5054,7 @@
     "version": ""
    },
    {
-    "page": "Callahan (Battleship)",
+    "page": "Callahan",
     "codename": "LargeShipBattleshipW",
     "name": "Callahan",
     "image": "LargeShipBattleshipWIcon.png",
@@ -3570,7 +5121,7 @@
    },
    {
     "page": "Daimon aK-5 “Harpy”",
-    "codename": "",
+    "codename": "AircraftFighter2C",
     "name": "Daimon aK-5 “Harpy”",
     "image": "AircraftFighter2CIcon.png",
     "imageOverride": "",
@@ -3578,6 +5129,17 @@
     "type": "Fighter Aircraft",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Daimon eO-1 “Siren”",
+    "codename": "AircraftTorpedoC",
+    "name": "Daimon eO-1 “Siren”",
+    "image": "AircraftTorpedoCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "type": "Torpedo Bomber Aircraft",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Das Krokodil by VAC",
@@ -3756,6 +5318,17 @@
     "version": ""
    },
    {
+    "page": "Faden & Co. Augur Relay Bike",
+    "codename": "Motorcycle2IntelW",
+    "name": "Faden & Co. Augur Relay Bike",
+    "image": "Motorcycle2IntelWVehicleIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "type": "Motorcycle",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Flood Ascension Mk. V",
     "codename": "",
     "name": "Flood Ascension Mk. V",
@@ -3798,6 +5371,17 @@
     "type": "Battle Tank",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Flood Veilcleave Mk. X",
+    "codename": "BattleTankAAW",
+    "name": "Flood Veilcleave Mk. X",
+    "image": "BattleTankAAw.png",
+    "imageOverride": "",
+    "faction": "War",
+    "type": "Battle Tank",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "G40 “Sagittarii”",
@@ -3998,6 +5582,17 @@
     "version": ""
    },
    {
+    "page": "Hodari",
+    "codename": "SubmarineLightW",
+    "name": "Hodari",
+    "image": "SubmarineLightWItemIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "type": "Light Submarine",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Interceptor PA-12",
     "codename": "LandingShipC",
     "name": "Interceptor PA-12",
@@ -4018,6 +5613,17 @@
     "type": "Infantry Boat",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Kb-12 “Oracle”",
+    "codename": "Motorcycle2IntelC",
+    "name": "Kb-12 “Oracle”",
+    "image": "Motorcycle2IntelCVehicleIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "type": "Motorcycle",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "King Gallant Mk. II",
@@ -4106,6 +5712,17 @@
     "type": "Battle Tank",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Lance-50 “Lampades”",
+    "codename": "BattleTankAAC",
+    "name": "Lance-50 “Lampades”",
+    "image": "BattleTankAAC.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "type": "Battle Tank",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Luminary Mk. II Harbinger",
@@ -4526,6 +6143,17 @@
     "version": ""
    },
    {
+    "page": "Rinnspeir Reefward Patrol Boat",
+    "codename": "LightBoatSonarW",
+    "name": "Rinnspeir Reefward Patrol Boat",
+    "image": "LightBoatSonarWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "type": "Light Boat",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Rooster - Junkwagon",
     "codename": "TrailerResource",
     "name": "Rooster - Junkwagon",
@@ -4801,8 +6429,19 @@
     "version": ""
    },
    {
+    "page": "Tulka S2 Wyvern",
+    "codename": "AircraftRocketW",
+    "name": "Tulka S2 Wyvern",
+    "image": "AircraftRocketWIcon.png",
+    "imageOverride": "",
+    "faction": "War",
+    "type": "Rocket-Armed Aircraft",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Tümmler by VAC",
-    "codename": "",
+    "codename": "LargeShipLiquidShip",
     "name": "Tümmler by VAC",
     "image": "LargeShipLiquidShipIcon.png",
     "imageOverride": "",
@@ -4832,6 +6471,17 @@
     "type": "Gunboat",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Type F - “Abyss Trawler”",
+    "codename": "LightBoatSonarC",
+    "name": "Type F - “Abyss Trawler”",
+    "image": "LightBoatSonarCIcon.png",
+    "imageOverride": "",
+    "faction": "Col",
+    "type": "Light Boat",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "UV-05 “Collector”",
@@ -5024,6 +6674,17 @@
    },
    {
     "page": "Air Raid Siren",
+    "codename": "DeployedAirSirenT",
+    "name": "Deployed Air Raid Siren",
+    "image": "Air_Raid_Siren.jpg",
+    "imageOverride": "AirSirenTIcon.png",
+    "faction": "Both",
+    "type": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Air Raid Siren/zh",
     "codename": "DeployedAirSirenT",
     "name": "Deployed Air Raid Siren",
     "image": "Air_Raid_Siren.jpg",
@@ -5507,6 +7168,17 @@
     "version": ""
    },
    {
+    "page": "Coal Field/zh",
+    "codename": "CoalField",
+    "name": "Coal Field",
+    "image": "Coal Field Image.jpg",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Field",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Coal Refinery",
     "codename": "FacilityRefineryCoal",
     "name": "Coal Refinery",
@@ -5540,7 +7212,29 @@
     "version": ""
    },
    {
+    "page": "Component Field/zh",
+    "codename": "ComponentsField",
+    "name": "Component Field",
+    "image": "Components Field Image.jpg",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Field",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Component Mine",
+    "codename": "ComponentMine",
+    "name": "Component Mine",
+    "image": "ComponentMineIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Harvester",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Component Mine/zh",
     "codename": "ComponentMine",
     "name": "Component Mine",
     "image": "ComponentMineIcon.png",
@@ -6431,6 +8125,39 @@
     "version": ""
    },
    {
+    "page": "ISG Overwatch Garrison",
+    "codename": "FortISGAIT1",
+    "name": "ISG Overwatch Garrison (Tier 1)",
+    "image": "FortISGAIT1Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Automated Defense",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "ISG Overwatch Garrison",
+    "codename": "FortISGAIT2",
+    "name": "ISG Overwatch Garrison (Tier 2)",
+    "image": "FortISGAIT2Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Automated Defense",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "ISG Overwatch Garrison",
+    "codename": "FortISGAIT3",
+    "name": "ISG Overwatch Garrison (Tier 3)",
+    "image": "FortISGAIT3Icon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Automated Defense",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Keep",
     "codename": "Keep",
     "name": "Keep",
@@ -6519,6 +8246,17 @@
     "version": "None"
    },
    {
+    "page": "Legion Vexillum/zh",
+    "codename": "DeployedBannerTC",
+    "name": "Deployed Legion Vexillum",
+    "image": "DeployedLegionVexillum.jpg",
+    "imageOverride": "BannerTCItemIcon.png",
+    "faction": "Col",
+    "type": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Light Pillbox",
     "codename": "",
     "name": "Light Pillbox",
@@ -6564,6 +8302,17 @@
    },
    {
     "page": "Listening Kit",
+    "codename": "DeployedListeningKit",
+    "name": "Deployed Listening Kit",
+    "image": "Listening_Kit.jpg",
+    "imageOverride": "ListeningKitIcon.png",
+    "faction": "Both",
+    "type": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Listening Kit/zh",
     "codename": "DeployedListeningKit",
     "name": "Deployed Listening Kit",
     "image": "Listening_Kit.jpg",
@@ -6685,6 +8434,17 @@
    },
    {
     "page": "Material Pallet",
+    "codename": "MaterialPlatform",
+    "name": "Material Pallet",
+    "image": "MaterialPlatformItemIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Storage",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Material Pallet/zh",
     "codename": "MaterialPlatform",
     "name": "Material Pallet",
     "image": "MaterialPlatformItemIcon.png",
@@ -6915,6 +8675,17 @@
     "version": ""
    },
    {
+    "page": "Oil Field/zh",
+    "codename": "OilField",
+    "name": "Oil Field",
+    "image": "Crude Oil Field.jpg",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Field",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Oil Refinery",
     "codename": "FacilityRefineryOil",
     "name": "Oil Refinery",
@@ -6960,7 +8731,7 @@
    },
    {
     "page": "Pipe (Transfer Point)",
-    "codename": "",
+    "codename": "FacilityPipeTransfer",
     "name": "Pipe (Transfer Point)",
     "image": "LargeConnectorIcon.png",
     "imageOverride": "",
@@ -7125,17 +8896,6 @@
    },
    {
     "page": "Railway Track",
-    "codename": "",
-    "name": "Railway Track (Town)",
-    "image": "TownRailTrackIcon.png",
-    "imageOverride": "",
-    "faction": "Both",
-    "type": "Utility",
-    "aliases": "",
-    "version": "None"
-   },
-   {
-    "page": "Railway Track",
     "codename": "RailTrackSpline",
     "name": "Railway Track",
     "image": "RailTrackIcon.png",
@@ -7161,6 +8921,17 @@
     "codename": "RailTrackSplineFoundation",
     "name": "Railway Track (Foundation)",
     "image": "FoundationRailTrackIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Railway Track",
+    "codename": "RailTrackSplineTown",
+    "name": "Railway Track (Town)",
+    "image": "TownRailTrackIcon.png",
     "imageOverride": "",
     "faction": "Both",
     "type": "Utility",
@@ -7235,6 +9006,17 @@
    },
    {
     "page": "Resource Container",
+    "codename": "ResourceContainer",
+    "name": "Resource Container",
+    "image": "ResourceContainerIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Storage",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Resource Container/zh",
     "codename": "ResourceContainer",
     "name": "Resource Container",
     "image": "ResourceContainerIcon.png",
@@ -7355,7 +9137,29 @@
     "version": ""
    },
    {
+    "page": "Salvage Field/zh",
+    "codename": "SalvageField",
+    "name": "Salvage Field",
+    "image": "Salvage_Field_Squared.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Field",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Salvage Mine",
+    "codename": "ScrapMine",
+    "name": "Salvage Mine",
+    "image": "ScrapMineIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Harvester",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Salvage Mine/zh",
     "codename": "ScrapMine",
     "name": "Salvage Mine",
     "image": "ScrapMineIcon.png",
@@ -7444,6 +9248,17 @@
    },
    {
     "page": "Shipping Container",
+    "codename": "ShippingContainer",
+    "name": "Shipping Container",
+    "image": "ShippingContainerStructureIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Storage",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Shipping Container/zh",
     "codename": "ShippingContainer",
     "name": "Shipping Container",
     "image": "ShippingContainerStructureIcon.png",
@@ -7707,7 +9522,29 @@
     "version": ""
    },
    {
+    "page": "Sulfur Field/zh",
+    "codename": "SulfurField",
+    "name": "Sulfur Field",
+    "image": "Sulfur Field Image.jpg",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Field",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Sulfur Mine",
+    "codename": "SulfurMine",
+    "name": "Sulfur Mine",
+    "image": "SulfurMineStructureIcon.png",
+    "imageOverride": "",
+    "faction": "Both",
+    "type": "Resource Harvester",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Sulfur Mine/zh",
     "codename": "SulfurMine",
     "name": "Sulfur Mine",
     "image": "SulfurMineStructureIcon.png",
@@ -8125,6 +9962,17 @@
     "version": "None"
    },
    {
+    "page": "War Ensign/zh",
+    "codename": "DeployedBannerTW",
+    "name": "Deployed War Ensign",
+    "image": "DeployedWarEnsign.jpg",
+    "imageOverride": "BannerTWItemIcon.png",
+    "faction": "War",
+    "type": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Watch Tower",
     "codename": "WatchTower",
     "name": "Watch Tower",
@@ -8181,6 +10029,17 @@
    },
    {
     "page": "Wind Sock",
+    "codename": "DeployedWindsockT",
+    "name": "Deployed Wind Sock",
+    "image": "DeployedWindSock.jpg",
+    "imageOverride": "WindsockItemIcon.png",
+    "faction": "Both",
+    "type": "Utility",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Wind Sock/zh",
     "codename": "DeployedWindsockT",
     "name": "Deployed Wind Sock",
     "image": "DeployedWindSock.jpg",
@@ -8746,6 +10605,16 @@
     "version": ""
    },
    {
+    "page": "921 Ogre Rocket",
+    "codename": "BattleTankAAAmmo",
+    "name": "921 Ogre Rocket",
+    "image": "AARocketAmmoIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "94.5mm",
     "codename": "ATLargeAmmo",
     "name": "94.5mm",
@@ -8866,9 +10735,9 @@
     "version": ""
    },
    {
-    "page": "AA-2 Battering Ram",
+    "page": "AA-2 “Battering Ram”",
     "codename": "FieldATC",
-    "name": "AA-2 Battering Ram",
+    "name": "AA-2 “Battering Ram”",
     "image": "FieldAntiTankColVehicleIcon.png",
     "imageOverride": "",
     "origin": "vehicle",
@@ -8996,6 +10865,16 @@
     "version": ""
    },
    {
+    "page": "AF-e “Palaemon”",
+    "codename": "SubmarineLightC",
+    "name": "AF-e “Palaemon”",
+    "image": "SubmarineLightCItemIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Ahti Model 2",
     "codename": "PistolW",
     "name": "Ahti Model 2",
@@ -9017,6 +10896,26 @@
    },
    {
     "page": "Air Raid Siren",
+    "codename": "DeployedAirSirenT",
+    "name": "Deployed Air Raid Siren",
+    "image": "Air_Raid_Siren.jpg",
+    "imageOverride": "AirSirenTIcon.png",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Air Raid Siren/zh",
+    "codename": "AirSirenT",
+    "name": "Air Raid Siren",
+    "image": "AirSirenTIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Air Raid Siren/zh",
     "codename": "DeployedAirSirenT",
     "name": "Deployed Air Raid Siren",
     "image": "Air_Raid_Siren.jpg",
@@ -9096,6 +10995,16 @@
     "version": ""
    },
    {
+    "page": "Airy Runestone/zh",
+    "codename": "In04KItem",
+    "name": "Airy Runestone",
+    "image": "RunestoneGIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Alligator Charge",
     "codename": "",
     "name": "Deployed Alligator Charge",
@@ -9143,6 +11052,26 @@
     "imageOverride": "",
     "origin": "item",
     "aliases": "alua,aalloy,aluminium alloy,aluminiumalloy,aluminumalloy",
+    "version": ""
+   },
+   {
+    "page": "Aluminum Alloy/zh",
+    "codename": "AluminumA",
+    "name": "Aluminum Alloy",
+    "image": "ResouceAluminumRefinedIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "alua,aalloy,aluminium alloy,aluminiumalloy,aluminumalloy",
+    "version": ""
+   },
+   {
+    "page": "Aluminum/zh",
+    "codename": "Aluminum",
+    "name": "Aluminum",
+    "image": "ResouceAluminumIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "alu,aluminium",
     "version": ""
    },
    {
@@ -9227,6 +11156,16 @@
    },
    {
     "page": "Argenti r.II Rifle",
+    "codename": "RifleC",
+    "name": "Argenti r.II Rifle",
+    "image": "RifleCItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Argenti r.II Rifle/zh",
     "codename": "RifleC",
     "name": "Argenti r.II Rifle",
     "image": "RifleCItemIcon.png",
@@ -9336,7 +11275,27 @@
     "version": ""
    },
    {
+    "page": "Assembly Materials I/zh",
+    "codename": "FacilityMaterials4",
+    "name": "Assembly Materials I",
+    "image": "AssemblyMaterials1Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "amat1,amats1,a1,a1s",
+    "version": ""
+   },
+   {
     "page": "Assembly Materials II",
+    "codename": "FacilityMaterials5",
+    "name": "Assembly Materials II",
+    "image": "AssemblyMaterials2Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "amat2,amats2,a2,a2s",
+    "version": ""
+   },
+   {
+    "page": "Assembly Materials II/zh",
     "codename": "FacilityMaterials5",
     "name": "Assembly Materials II",
     "image": "AssemblyMaterials2Icon.png",
@@ -9356,6 +11315,16 @@
     "version": ""
    },
    {
+    "page": "Assembly Materials III/zh",
+    "codename": "FacilityMaterials6",
+    "name": "Assembly Materials III",
+    "image": "AssemblyMaterials3Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "amat3,amats3,a3,a3s",
+    "version": ""
+   },
+   {
     "page": "Assembly Materials IV",
     "codename": "FacilityMaterials7",
     "name": "Assembly Materials IV",
@@ -9366,7 +11335,27 @@
     "version": ""
    },
    {
+    "page": "Assembly Materials IV/zh",
+    "codename": "FacilityMaterials7",
+    "name": "Assembly Materials IV",
+    "image": "AssemblyMaterials4Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "amat4,amats4,a4,a4s,am4",
+    "version": ""
+   },
+   {
     "page": "Assembly Materials V",
+    "codename": "FacilityMaterials8",
+    "name": "Assembly Materials V",
+    "image": "AssemblyMaterials5Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "amat5,amats5,a5,a5s",
+    "version": ""
+   },
+   {
+    "page": "Assembly Materials V/zh",
     "codename": "FacilityMaterials8",
     "name": "Assembly Materials V",
     "image": "AssemblyMaterials5Icon.png",
@@ -9426,7 +11415,27 @@
     "version": ""
    },
    {
+    "page": "Auster's Harness/zh",
+    "codename": "ParatrooperUniformC",
+    "name": "Auster's Harness",
+    "image": "ParatrooperUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Aviator's Raiment",
+    "codename": "PilotUniformW",
+    "name": "Aviator's Raiment",
+    "image": "PilotUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Aviator's Raiment/zh",
     "codename": "PilotUniformW",
     "name": "Aviator's Raiment",
     "image": "PilotUniformWIcon.png",
@@ -9516,6 +11525,16 @@
     "version": ""
    },
    {
+    "page": "Bandages/zh",
+    "codename": "Bandages",
+    "name": "Bandages",
+    "image": "BandagesItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Bane 45",
     "codename": "ATRPGHeavyC",
     "name": "Bane 45",
@@ -9527,6 +11546,16 @@
    },
    {
     "page": "Barbed Wire (Material)",
+    "codename": "BarbedWireMaterials",
+    "name": "Barbed Wire",
+    "image": "BarbedWireMaterialItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "barbedwire",
+    "version": ""
+   },
+   {
+    "page": "Barbed Wire (Material)/zh",
     "codename": "BarbedWireMaterials",
     "name": "Barbed Wire",
     "image": "BarbedWireMaterialItemIcon.png",
@@ -9577,6 +11606,16 @@
    },
    {
     "page": "Basic Materials",
+    "codename": "Cloth",
+    "name": "Basic Materials",
+    "image": "BasicMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "bmat,bmats",
+    "version": ""
+   },
+   {
+    "page": "Basic Materials/zh",
     "codename": "Cloth",
     "name": "Basic Materials",
     "image": "BasicMaterialsIcon.png",
@@ -9656,7 +11695,27 @@
     "version": ""
    },
    {
+    "page": "Binoculars/zh",
+    "codename": "Binoculars",
+    "name": "Binoculars",
+    "image": "BinocularsItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Blackened Runestone",
+    "codename": "In06KItem",
+    "name": "Blackened Runestone",
+    "image": "RunestoneSIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Blackened Runestone/zh",
     "codename": "In06KItem",
     "name": "Blackened Runestone",
     "image": "RunestoneSIcon.png",
@@ -9706,7 +11765,27 @@
     "version": ""
    },
    {
+    "page": "Blood Plasma/zh",
+    "codename": "BloodPlasma",
+    "name": "Blood Plasma",
+    "image": "BloodPlasmaItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Bloodied Rifle",
+    "codename": "Lore9",
+    "name": "Bloodied Rifle",
+    "image": "RifleItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Bloodied Rifle/zh",
     "codename": "Lore9",
     "name": "Bloodied Rifle",
     "image": "RifleItemIcon.png",
@@ -9896,6 +11975,16 @@
     "version": ""
    },
    {
+    "page": "BMS - Longhook/zh",
+    "codename": "",
+    "name": "Base Ship",
+    "image": "LargeShipBaseShipIcon.png",
+    "imageOverride": "",
+    "origin": "VehicleClass",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "BMS - Overseer Sky-Hauler",
     "codename": "",
     "name": "Large Crane",
@@ -9954,6 +12043,26 @@
     "origin": "vehicle",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "BMS - Stone Camel",
+    "codename": "",
+    "name": "Concrete Truck",
+    "image": "FlatbedTruckConcreteItemIcon.png",
+    "imageOverride": "",
+    "origin": "VehicleClass",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "BMS - Stone Camel",
+    "codename": "FlatbedTruckConcrete",
+    "name": "BMS - Stone Camel",
+    "image": "FlatbedTruckConcreteItemIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "BMS - Universal Assembly Rig",
@@ -10216,6 +12325,16 @@
     "version": ""
    },
    {
+    "page": "Bolt of Zeus",
+    "codename": "ATRPGShortC",
+    "name": "Bolt of Zeus",
+    "image": "ATRPGShortCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Bomastone Grenade",
     "codename": "GrenadeC",
     "name": "Bomastone Grenade",
@@ -10277,6 +12396,16 @@
    },
    {
     "page": "Buckhorn CCQ-18",
+    "codename": "Bayonet",
+    "name": "Buckhorn CCQ-18",
+    "image": "BayonetIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Buckhorn CCQ-18/zh",
     "codename": "Bayonet",
     "name": "Buckhorn CCQ-18",
     "image": "BayonetIcon.png",
@@ -10466,7 +12595,17 @@
     "version": ""
    },
    {
-    "page": "Callahan (Battleship)",
+    "page": "Burning Runestone/zh",
+    "codename": "In07KItem",
+    "name": "Burning Runestone",
+    "image": "RunestoneAIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Callahan",
     "codename": "LargeShipBattleshipW",
     "name": "Callahan",
     "image": "LargeShipBattleshipWIcon.png",
@@ -10507,6 +12646,16 @@
    },
    {
     "page": "Caoivish Parka",
+    "codename": "SnowUniformW",
+    "name": "Caoivish Parka",
+    "image": "SnowUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Caoivish Parka/zh",
     "codename": "SnowUniformW",
     "name": "Caoivish Parka",
     "image": "SnowUniformWIcon.png",
@@ -10636,6 +12785,16 @@
     "version": ""
    },
    {
+    "page": "Cloudrunner's Vesture/zh",
+    "codename": "ParatrooperUniformW",
+    "name": "Cloudrunner's Vesture",
+    "image": "ParatrooperUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Cnute Cliffwrest",
     "codename": "HeavyTruckW",
     "name": "Cnute Cliffwrest",
@@ -10666,12 +12825,32 @@
     "version": ""
    },
    {
+    "page": "Coal Field/zh",
+    "codename": "CoalField",
+    "name": "Coal Field",
+    "image": "Coal Field Image.jpg",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Coal Refinery",
     "codename": "FacilityRefineryCoal",
     "name": "Coal Refinery",
     "image": "FacilitiesCoolRefineryBaseIcon.png",
     "imageOverride": "",
     "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Coal/zh",
+    "codename": "Coal",
+    "name": "Coal",
+    "image": "CoalIcon.png",
+    "imageOverride": "",
+    "origin": "item",
     "aliases": "",
     "version": ""
    },
@@ -10687,6 +12866,16 @@
    },
    {
     "page": "Coke",
+    "codename": "FacilityCoal1",
+    "name": "Coke",
+    "image": "CokeIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Coke/zh",
     "codename": "FacilityCoal1",
     "name": "Coke",
     "image": "CokeIcon.png",
@@ -10716,7 +12905,27 @@
     "version": ""
    },
    {
+    "page": "Colonial Aircraft Engine (Large)/zh",
+    "codename": "AircraftPartLargeEngineC",
+    "name": "Colonial Aircraft Engine (Large)",
+    "image": "AircraftEngineIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Colonial Aircraft Engine (Small)",
+    "codename": "AircraftPartSmallEngineC",
+    "name": "Colonial Aircraft Engine (Small)",
+    "image": "AircraftPartSmallEngineCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Colonial Aircraft Engine (Small)/zh",
     "codename": "AircraftPartSmallEngineC",
     "name": "Colonial Aircraft Engine (Small)",
     "image": "AircraftPartSmallEngineCIcon.png",
@@ -10736,7 +12945,27 @@
     "version": ""
    },
    {
+    "page": "Colonial Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalC",
+    "name": "Colonial Aircraft Mechanical Parts (Large)",
+    "image": "AircraftFuselageIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Colonial Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalC",
+    "name": "Colonial Aircraft Mechanical Parts (Small)",
+    "image": "AircraftPartSmallMechanicalCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Colonial Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalC",
     "name": "Colonial Aircraft Mechanical Parts (Small)",
     "image": "AircraftPartSmallMechanicalCIcon.png",
@@ -10776,6 +13005,16 @@
     "version": ""
    },
    {
+    "page": "Component Field/zh",
+    "codename": "ComponentsField",
+    "name": "Component Field",
+    "image": "Components Field Image.jpg",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Component Mine",
     "codename": "ComponentMine",
     "name": "Component Mine",
@@ -10786,7 +13025,27 @@
     "version": ""
    },
    {
+    "page": "Component Mine/zh",
+    "codename": "ComponentMine",
+    "name": "Component Mine",
+    "image": "ComponentMineIcon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Components",
+    "codename": "Components",
+    "name": "Components",
+    "image": "ComponentsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "comps",
+    "version": ""
+   },
+   {
+    "page": "Components/zh",
     "codename": "Components",
     "name": "Components",
     "image": "ComponentsIcon.png",
@@ -10807,6 +13066,16 @@
    },
    {
     "page": "Concrete Materials",
+    "codename": "Concrete",
+    "name": "Concrete Materials",
+    "image": "ConcreteBagIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "concretematerials",
+    "version": ""
+   },
+   {
+    "page": "Concrete Materials/zh",
     "codename": "Concrete",
     "name": "Concrete Materials",
     "image": "ConcreteBagIcon.png",
@@ -10866,6 +13135,16 @@
     "version": ""
    },
    {
+    "page": "Construction Materials/zh",
+    "codename": "FacilityMaterials1",
+    "name": "Construction Materials",
+    "image": "ConstructionMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "conmat,conmats",
+    "version": ""
+   },
+   {
     "page": "Construction Parts",
     "codename": "FortConstructionPart",
     "name": "Construction Parts",
@@ -10906,6 +13185,26 @@
     "version": ""
    },
    {
+    "page": "Copper Alloy/zh",
+    "codename": "CopperA",
+    "name": "Copper Alloy",
+    "image": "ResourceCopperRefinedIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "copperalloy,copa,calloy",
+    "version": ""
+   },
+   {
+    "page": "Copper/zh",
+    "codename": "Copper",
+    "name": "Copper",
+    "image": "ResourceCopperIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Crane Railway Track",
     "codename": "CraneRailTrackSpline",
     "name": "Crane Railway Track",
@@ -10936,6 +13235,16 @@
     "version": ""
    },
    {
+    "page": "Crate/zh",
+    "codename": "Crate",
+    "name": "Crate",
+    "image": "CrateItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Cremari Mortar",
     "codename": "Mortar",
     "name": "Cremari Mortar",
@@ -10957,6 +13266,16 @@
    },
    {
     "page": "Critically Wounded Soldier",
+    "codename": "CriticalSoldier",
+    "name": "Critically Wounded Soldier",
+    "image": "CriticallyWoundedIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Critically Wounded Soldier/zh",
     "codename": "CriticalSoldier",
     "name": "Critically Wounded Soldier",
     "image": "CriticallyWoundedIcon.png",
@@ -11107,13 +13426,23 @@
    },
    {
     "page": "Daimon aK-5 “Harpy”",
-    "codename": "",
+    "codename": "AircraftFighter2C",
     "name": "Daimon aK-5 “Harpy”",
     "image": "AircraftFighter2CIcon.png",
     "imageOverride": "",
     "origin": "vehicle",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Daimon eO-1 “Siren”",
+    "codename": "AircraftTorpedoC",
+    "name": "Daimon eO-1 “Siren”",
+    "image": "AircraftTorpedoCIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Damage Types",
@@ -11306,7 +13635,27 @@
     "version": ""
    },
    {
+    "page": "Damaged Colonial Aircraft Engine (Large)/zh",
+    "codename": "AircraftPartLargeEngineWreckedC",
+    "name": "Damaged Colonial Aircraft Engine (Large)",
+    "image": "DamagedAircraftEngineIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Colonial Aircraft Engine (Small)",
+    "codename": "AircraftPartSmallEngineWreckedC",
+    "name": "Damaged Colonial Aircraft Engine (Small)",
+    "image": "DamagedAircraftPartSmallEngineCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Colonial Aircraft Engine (Small)/zh",
     "codename": "AircraftPartSmallEngineWreckedC",
     "name": "Damaged Colonial Aircraft Engine (Small)",
     "image": "DamagedAircraftPartSmallEngineCIcon.png",
@@ -11326,7 +13675,27 @@
     "version": ""
    },
    {
+    "page": "Damaged Colonial Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalWreckedC",
+    "name": "Damaged Colonial Aircraft Mechanical Parts (Large)",
+    "image": "DamagedAircraftFuselageIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Colonial Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalWreckedC",
+    "name": "Damaged Colonial Aircraft Mechanical Parts (Small)",
+    "image": "DamagedAircraftPartSmallMechanicalCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Colonial Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalWreckedC",
     "name": "Damaged Colonial Aircraft Mechanical Parts (Small)",
     "image": "DamagedAircraftPartSmallMechanicalCIcon.png",
@@ -11346,7 +13715,27 @@
     "version": ""
    },
    {
+    "page": "Damaged Components/zh",
+    "codename": "FacilityComponents1",
+    "name": "Damaged Components",
+    "image": "ComponentsDamagedIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "dcomponents,dcomps",
+    "version": ""
+   },
+   {
     "page": "Damaged Warden Aircraft Engine (Large)",
+    "codename": "AircraftPartLargeEngineWreckedW",
+    "name": "Damaged Warden Aircraft Engine (Large)",
+    "image": "DamagedAircraftPartLargeEngineWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Warden Aircraft Engine (Large)/zh",
     "codename": "AircraftPartLargeEngineWreckedW",
     "name": "Damaged Warden Aircraft Engine (Large)",
     "image": "DamagedAircraftPartLargeEngineWIcon.png",
@@ -11366,6 +13755,16 @@
     "version": ""
    },
    {
+    "page": "Damaged Warden Aircraft Engine (Small)/zh",
+    "codename": "AircraftPartSmallEngineWreckedW",
+    "name": "Damaged Warden Aircraft Engine (Small)",
+    "image": "DamagedAircraftSmallEngineWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Warden Aircraft Mechanical Parts (Large)",
     "codename": "AircraftPartLargeMechanicalWreckedW",
     "name": "Damaged Warden Aircraft Mechanical Parts (Large)",
@@ -11376,7 +13775,27 @@
     "version": ""
    },
    {
+    "page": "Damaged Warden Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalWreckedW",
+    "name": "Damaged Warden Aircraft Mechanical Parts (Large)",
+    "image": "DamagedAircraftPartLargeMechanicalWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Damaged Warden Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalWreckedW",
+    "name": "Damaged Warden Aircraft Mechanical Parts (Small)",
+    "image": "DamagedAircraftWingsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Damaged Warden Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalWreckedW",
     "name": "Damaged Warden Aircraft Mechanical Parts (Small)",
     "image": "DamagedAircraftWingsIcon.png",
@@ -11512,6 +13931,16 @@
     "image": "DiesePowerPlanetBaseIcon.png",
     "imageOverride": "",
     "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Diesel/zh",
+    "codename": "Diesel",
+    "name": "Diesel",
+    "image": "ResourceFuelIcon.png",
+    "imageOverride": "",
+    "origin": "item",
     "aliases": "",
     "version": ""
    },
@@ -11746,6 +14175,16 @@
     "version": ""
    },
    {
+    "page": "Eleos Infantry Dagger/zh",
+    "codename": "SwordC",
+    "name": "Eleos Infantry Dagger",
+    "image": "StilSwordCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Emplacement House",
     "codename": "TownWSmall1",
     "name": "Emplacement House",
@@ -11816,7 +14255,27 @@
     "version": ""
    },
    {
+    "page": "Enriched Oil/zh",
+    "codename": "FacilityOil2",
+    "name": "Enriched Oil",
+    "image": "EnrichedOilIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "enrichedoil",
+    "version": ""
+   },
+   {
     "page": "Explosive Powder",
+    "codename": "Explosive",
+    "name": "Explosive Powder",
+    "image": "ExplosiveMaterialIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "emat,emats",
+    "version": ""
+   },
+   {
+    "page": "Explosive Powder/zh",
     "codename": "Explosive",
     "name": "Explosive Powder",
     "image": "ExplosiveMaterialIcon.png",
@@ -11836,7 +14295,27 @@
     "version": ""
    },
    {
+    "page": "Fabri Rucksack/zh",
+    "codename": "EngineerUniformC",
+    "name": "Fabri Rucksack",
+    "image": "EngineerUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Facility Power",
+    "codename": "FacilityPower",
+    "name": "Facility Power",
+    "image": "IconFilterPower.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Facility Power/zh",
     "codename": "FacilityPower",
     "name": "Facility Power",
     "image": "IconFilterPower.png",
@@ -11856,7 +14335,27 @@
     "version": ""
    },
    {
+    "page": "Faden & Co. Augur Relay Bike",
+    "codename": "Motorcycle2IntelW",
+    "name": "Faden & Co. Augur Relay Bike",
+    "image": "Motorcycle2IntelWVehicleIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Falias Raiding Club",
+    "codename": "MaceW",
+    "name": "Falias Raiding Club",
+    "image": "TrenchMaceWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Falias Raiding Club/zh",
     "codename": "MaceW",
     "name": "Falias Raiding Club",
     "image": "TrenchMaceWIcon.png",
@@ -12046,6 +14545,16 @@
     "version": ""
    },
    {
+    "page": "First Aid Kit/zh",
+    "codename": "FirstAidKit",
+    "name": "First Aid Kit",
+    "image": "FirstAidKitItem.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Fisherman's Row",
     "codename": "FishermansRowHex",
     "name": "Fisherman's Row",
@@ -12096,7 +14605,27 @@
     "version": ""
    },
    {
+    "page": "Flask (Lore)/zh",
+    "codename": "Lore12",
+    "name": "Flask",
+    "image": "MaintenanceSuppliesIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Flight Mask",
+    "codename": "PilotMask",
+    "name": "Flight Mask",
+    "image": "PilotMaskIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Flight Mask/zh",
     "codename": "PilotMask",
     "name": "Flight Mask",
     "image": "PilotMaskIcon.png",
@@ -12144,6 +14673,16 @@
     "origin": "vehicle",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Flood Veilcleave Mk. X",
+    "codename": "BattleTankAAW",
+    "name": "Flood Veilcleave Mk. X",
+    "image": "BattleTankAAw.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Font of Balor",
@@ -12466,6 +15005,26 @@
     "version": "None"
    },
    {
+    "page": "Gas Mask/zh",
+    "codename": "GasMask",
+    "name": "Gas Mask",
+    "image": "GasmaskIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Gas Mask/zh",
+    "codename": "GasMaskFilter",
+    "name": "Gas Mask Filter",
+    "image": "GasMaskFilterIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Gate",
     "codename": "GateT1",
     "name": "Gate (Tier 1)",
@@ -12506,6 +15065,16 @@
     "version": ""
    },
    {
+    "page": "Gentleman's Peacoat/zh",
+    "codename": "NavalUniformW",
+    "name": "Gentleman's Peacoat",
+    "image": "NavalUniformW.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Godcrofts",
     "codename": "GodcroftsHex",
     "name": "Godcrofts",
@@ -12517,6 +15086,16 @@
    },
    {
     "page": "Gravel",
+    "codename": "GroundMaterials",
+    "name": "Gravel",
+    "image": "GroundMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Gravel/zh",
     "codename": "GroundMaterials",
     "name": "Gravel",
     "image": "GroundMaterialsIcon.png",
@@ -12547,6 +15126,16 @@
    },
    {
     "page": "Grenadier's Baldric",
+    "codename": "GrenadeUniformC",
+    "name": "Grenadier's Baldric",
+    "image": "GrenadeUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Grenadier's Baldric/zh",
     "codename": "GrenadeUniformC",
     "name": "Grenadier's Baldric",
     "image": "GrenadeUniformCIcon.png",
@@ -12587,6 +15176,16 @@
    },
    {
     "page": "Gunner's Breastplate",
+    "codename": "ArmourUniformW",
+    "name": "Gunner's Breastplate",
+    "image": "ArmourUniformW.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Gunner's Breastplate/zh",
     "codename": "ArmourUniformW",
     "name": "Gunner's Breastplate",
     "image": "ArmourUniformW.png",
@@ -12667,6 +15266,16 @@
    },
    {
     "page": "Hammer",
+    "codename": "WorkHammer",
+    "name": "Hammer",
+    "image": "HammerIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Hammer/zh",
     "codename": "WorkHammer",
     "name": "Hammer",
     "image": "HammerIcon.png",
@@ -12776,6 +15385,16 @@
     "version": ""
    },
    {
+    "page": "Heavy Explosive Powder/zh",
+    "codename": "HeavyExplosive",
+    "name": "Heavy Explosive Powder",
+    "image": "HeavyExplosiveMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "hemat,hemats",
+    "version": ""
+   },
+   {
     "page": "Heavy Infantry Carrier",
     "codename": "RelicAPC",
     "name": "Heavy Infantry Carrier",
@@ -12796,7 +15415,27 @@
     "version": ""
    },
    {
+    "page": "Heavy Oil/zh",
+    "codename": "FacilityOil1",
+    "name": "Heavy Oil",
+    "image": "HeavyOilIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "heavyoil",
+    "version": ""
+   },
+   {
     "page": "Heavy Topcoat",
+    "codename": "SnowUniformC",
+    "name": "Heavy Topcoat",
+    "image": "SnowUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Heavy Topcoat/zh",
     "codename": "SnowUniformC",
     "name": "Heavy Topcoat",
     "image": "SnowUniformCIcon.png",
@@ -12854,6 +15493,16 @@
     "origin": "vehicle",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Hodari",
+    "codename": "SubmarineLightW",
+    "name": "Hodari",
+    "image": "SubmarineLightWItemIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Home Region",
@@ -12986,6 +15635,16 @@
     "version": ""
    },
    {
+    "page": "Infantry Battledress/zh",
+    "codename": "SoldierUniformW",
+    "name": "Infantry Battledress",
+    "image": "SoldierUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Infantry Boat",
     "codename": "",
     "name": "Infantry Boat",
@@ -13066,6 +15725,56 @@
     "version": ""
    },
    {
+    "page": "Iron Alloy/zh",
+    "codename": "IronA",
+    "name": "Iron Alloy",
+    "image": "ResouceIronRefinedIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "ironalloy,irona,ialloy",
+    "version": ""
+   },
+   {
+    "page": "Iron/zh",
+    "codename": "Iron",
+    "name": "Iron",
+    "image": "ResouceIronIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "ISG Overwatch Garrison",
+    "codename": "FortISGAIT1",
+    "name": "ISG Overwatch Garrison (Tier 1)",
+    "image": "FortISGAIT1Icon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "ISG Overwatch Garrison",
+    "codename": "FortISGAIT2",
+    "name": "ISG Overwatch Garrison (Tier 2)",
+    "image": "FortISGAIT2Icon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "ISG Overwatch Garrison",
+    "codename": "FortISGAIT3",
+    "name": "ISG Overwatch Garrison (Tier 3)",
+    "image": "FortISGAIT3Icon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "K-81e “Sombre”",
     "codename": "LightBoatInfantryC",
     "name": "K-81e “Sombre”",
@@ -13084,6 +15793,16 @@
     "origin": "map",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Kb-12 “Oracle”",
+    "codename": "Motorcycle2IntelC",
+    "name": "Kb-12 “Oracle”",
+    "image": "Motorcycle2IntelCVehicleIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Keep",
@@ -13266,6 +15985,16 @@
     "version": ""
    },
    {
+    "page": "Lance-50 “Lampades”",
+    "codename": "BattleTankAAC",
+    "name": "Lance-50 “Lampades”",
+    "image": "BattleTankAAC.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Landing APC",
     "codename": "",
     "name": "Landing APC",
@@ -13366,7 +16095,37 @@
     "version": "None"
    },
    {
+    "page": "Legion Vexillum/zh",
+    "codename": "BannerTC",
+    "name": "Legion Vexillum",
+    "image": "BannerTCItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Legion Vexillum/zh",
+    "codename": "DeployedBannerTC",
+    "name": "Deployed Legion Vexillum",
+    "image": "DeployedLegionVexillum.jpg",
+    "imageOverride": "BannerTCItemIcon.png",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Legionary Fatigues",
+    "codename": "SoldierUniformC",
+    "name": "Legionary Fatigues",
+    "image": "SoldierUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Legionary Fatigues/zh",
     "codename": "SoldierUniformC",
     "name": "Legionary Fatigues",
     "image": "SoldierUniformCIcon.png",
@@ -13386,6 +16145,16 @@
     "version": ""
    },
    {
+    "page": "Legionary's Oilcoat/zh",
+    "codename": "RainUniformC",
+    "name": "Legionary's Oilcoat",
+    "image": "RainUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Liaison Transmitter",
     "codename": "RadioAircraft",
     "name": "Liaison Transmitter",
@@ -13394,6 +16163,26 @@
     "origin": "item",
     "aliases": "",
     "version": "deprecated"
+   },
+   {
+    "page": "Liaison Transmitter/zh",
+    "codename": "RadioAircraft",
+    "name": "Liaison Transmitter",
+    "image": "RadioAircraftItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "deprecated"
+   },
+   {
+    "page": "Light Boat",
+    "codename": "",
+    "name": "Light Boat",
+    "image": "TempIcon.png",
+    "imageOverride": "",
+    "origin": "VehicleClass",
+    "aliases": "",
+    "version": ""
    },
    {
     "page": "Light Pillbox",
@@ -13476,6 +16265,26 @@
     "version": ""
    },
    {
+    "page": "Listening Kit/zh",
+    "codename": "DeployedListeningKit",
+    "name": "Deployed Listening Kit",
+    "image": "Listening_Kit.jpg",
+    "imageOverride": "ListeningKitIcon.png",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Listening Kit/zh",
+    "codename": "ListeningKit",
+    "name": "Listening Kit",
+    "image": "ListeningKitIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Loch Mór",
     "codename": "LochMorHex",
     "name": "Loch Mór",
@@ -13494,6 +16303,16 @@
     "origin": "item",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Lodesman's Lorica/zh",
+    "codename": "PilotUniformC",
+    "name": "Lodesman's Lorica",
+    "image": "PilotUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
    },
    {
     "page": "Long Bridge",
@@ -13542,16 +16361,6 @@
     "image": "MapLykosIsleHex.png",
     "imageOverride": "",
     "origin": "map",
-    "aliases": "",
-    "version": ""
-   },
-   {
-    "page": "M925 Austringer Man-O-War",
-    "codename": "",
-    "name": "Torpedo Bomber Aircraft",
-    "image": "AircraftTorpedoWIcon.png",
-    "imageOverride": "",
-    "origin": "VehicleClass",
     "aliases": "",
     "version": ""
    },
@@ -13636,6 +16445,16 @@
     "version": ""
    },
    {
+    "page": "Maintenance Supplies/zh",
+    "codename": "MaintenanceSupplies",
+    "name": "Maintenance Supplies",
+    "image": "MaintenanceSuppliesIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Maintenance Tunnel",
     "codename": "MaintenanceTunnel",
     "name": "Maintenance Tunnel",
@@ -13696,6 +16515,26 @@
     "version": "deprecated"
    },
    {
+    "page": "Manticore Ammo",
+    "codename": "MortarAmmoAT",
+    "name": "Manticore Ammo",
+    "image": "MortarATAmmoIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
+    "page": "Manticore Mortar",
+    "codename": "MortarAT",
+    "name": "Manticore Mortar",
+    "image": "MortarATItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Marban Hollow",
     "codename": "MarbanHollow",
     "name": "Marban Hollow",
@@ -13727,6 +16566,16 @@
    },
    {
     "page": "Material Pallet",
+    "codename": "MaterialPlatform",
+    "name": "Material Pallet",
+    "image": "MaterialPlatformItemIcon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Material Pallet/zh",
     "codename": "MaterialPlatform",
     "name": "Material Pallet",
     "image": "MaterialPlatformItemIcon.png",
@@ -13776,6 +16625,16 @@
     "version": ""
    },
    {
+    "page": "Medic Fatigues/zh",
+    "codename": "MedicUniformC",
+    "name": "Medic Fatigues",
+    "image": "MedicUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Medical Lab",
     "codename": "",
     "name": "Medical Lab",
@@ -13814,6 +16673,16 @@
     "origin": "structure",
     "aliases": "",
     "version": "None"
+   },
+   {
+    "page": "Medicus Apron",
+    "codename": "ArmourMedicUniformC",
+    "name": "Medicus Apron",
+    "image": "ArmourMedicUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Mercy",
@@ -13866,6 +16735,16 @@
     "version": "deprecated"
    },
    {
+    "page": "Metal Beam/zh",
+    "codename": "MetalBeamMaterials",
+    "name": "Metal Beam",
+    "image": "MetalBeamMaterialItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "metalbeam",
+    "version": ""
+   },
+   {
     "page": "Metalworks Factory",
     "codename": "FacilityRefinery2",
     "name": "Metalworks Factory",
@@ -13884,6 +16763,16 @@
     "origin": "item",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Model-8 “Kappa”",
+    "codename": "MiniDepthChargeAmmo",
+    "name": "Model-8 “Kappa”",
+    "image": "MiniDepthChargeAmmoIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Moray Torpedo",
@@ -14006,6 +16895,16 @@
     "version": ""
    },
    {
+    "page": "Naval Buoy/zh",
+    "codename": "WaterWallMaterials",
+    "name": "Naval Buoy",
+    "image": "WaterWallItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Naval Hull Segments",
     "codename": "ShipPart1",
     "name": "Naval Hull Segments",
@@ -14117,6 +17016,16 @@
    },
    {
     "page": "No.2 Loughcaster",
+    "codename": "RifleW",
+    "name": "No.2 Loughcaster",
+    "image": "RifleW.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "No.2 Loughcaster/zh",
     "codename": "RifleW",
     "name": "No.2 Loughcaster",
     "image": "RifleW.png",
@@ -14306,7 +17215,27 @@
     "version": ""
    },
    {
+    "page": "Officer's Regalia/zh",
+    "codename": "OfficerUniformW",
+    "name": "Officer's Regalia",
+    "image": "OfficerUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Officialis' Attire",
+    "codename": "OfficerUniformC",
+    "name": "Officialis' Attire",
+    "image": "OfficerUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Officialis' Attire/zh",
     "codename": "OfficerUniformC",
     "name": "Officialis' Attire",
     "image": "OfficerUniformCIcon.png",
@@ -14346,6 +17275,16 @@
     "version": ""
    },
    {
+    "page": "Oil Field/zh",
+    "codename": "OilField",
+    "name": "Oil Field",
+    "image": "Crude Oil Field.jpg",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Oil Refinery",
     "codename": "FacilityRefineryOil",
     "name": "Oil Refinery",
@@ -14362,6 +17301,16 @@
     "image": "OilWellMineIcon.png",
     "imageOverride": "",
     "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Oil/zh",
+    "codename": "Oil",
+    "name": "Oil",
+    "image": "OilIcon.png",
+    "imageOverride": "",
+    "origin": "item",
     "aliases": "",
     "version": ""
    },
@@ -14426,7 +17375,27 @@
     "version": ""
    },
    {
+    "page": "Outrider's Mantle/zh",
+    "codename": "ScoutUniformW",
+    "name": "Outrider's Mantle",
+    "image": "ScoutUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Padded Boiler Suit",
+    "codename": "TankUniformW",
+    "name": "Padded Boiler Suit",
+    "image": "TankUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Padded Boiler Suit/zh",
     "codename": "TankUniformW",
     "name": "Padded Boiler Suit",
     "image": "TankUniformWIcon.png",
@@ -14456,7 +17425,27 @@
     "version": ""
    },
    {
+    "page": "Pale Skull/zh",
+    "codename": "LoreSkull",
+    "name": "Pale Skull",
+    "image": "LoreSkull.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Paratrooper's Ruck",
+    "codename": "ParatrooperBackpack",
+    "name": "Paratrooper's Ruck",
+    "image": "ParatrooperBackpackItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Paratrooper's Ruck/zh",
     "codename": "ParatrooperBackpack",
     "name": "Paratrooper's Ruck",
     "image": "ParatrooperBackpackItemIcon.png",
@@ -14486,6 +17475,16 @@
     "version": ""
    },
    {
+    "page": "Peculiar Book/zh",
+    "codename": "Lore4",
+    "name": "Peculiar Book",
+    "image": "LoreIcon3.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Petrol",
     "codename": "Petrol",
     "name": "Petrol",
@@ -14496,6 +17495,26 @@
     "version": ""
    },
    {
+    "page": "Petrol/zh",
+    "codename": "Petrol",
+    "name": "Petrol",
+    "image": "RefinedFuelIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Physic's Cuirass",
+    "codename": "ArmourMedicUniformW",
+    "name": "Physic's Cuirass",
+    "image": "ArmourMedicUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Physician's Jacket",
     "codename": "MedicUniformW",
     "name": "Physician's Jacket",
@@ -14504,6 +17523,16 @@
     "origin": "item",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Physician's Jacket/zh",
+    "codename": "MedicUniformW",
+    "name": "Physician's Jacket",
+    "image": "MedicUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
    },
    {
     "page": "Pipe",
@@ -14517,13 +17546,23 @@
    },
    {
     "page": "Pipe (Transfer Point)",
-    "codename": "",
+    "codename": "FacilityPipeTransfer",
     "name": "Pipe (Transfer Point)",
     "image": "LargeConnectorIcon.png",
     "imageOverride": "",
     "origin": "structure",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Pipe/zh",
+    "codename": "PipeMaterials",
+    "name": "Pipe",
+    "image": "EngineRoomPipeIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
    },
    {
     "page": "Pipeline",
@@ -14666,6 +17705,16 @@
     "version": ""
    },
    {
+    "page": "Processed Construction Materials/zh",
+    "codename": "FacilityMaterials2",
+    "name": "Processed Construction Materials",
+    "image": "ProcessedConstructionMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "pcmat,pcmats,pcm",
+    "version": ""
+   },
+   {
     "page": "Prototype Kit",
     "codename": "PrototypeKit",
     "name": "Prototype Kit",
@@ -14674,6 +17723,16 @@
     "origin": "item",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Prototype Kit/zh",
+    "codename": "PrototypeKit",
+    "name": "Prototype Kit",
+    "image": "PrototypeKitIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "None"
    },
    {
     "page": "Provisional Road",
@@ -14836,14 +17895,14 @@
     "version": ""
    },
    {
-    "page": "Railway Track",
-    "codename": "",
-    "name": "Railway Track (Town)",
-    "image": "TownRailTrackIcon.png",
+    "page": "Radio/zh",
+    "codename": "Radio",
+    "name": "Radio",
+    "image": "RadioItemIcon.png",
     "imageOverride": "",
-    "origin": "structure",
+    "origin": "item",
     "aliases": "",
-    "version": "None"
+    "version": ""
    },
    {
     "page": "Railway Track",
@@ -14876,7 +17935,27 @@
     "version": "None"
    },
    {
+    "page": "Railway Track",
+    "codename": "RailTrackSplineTown",
+    "name": "Railway Track (Town)",
+    "image": "TownRailTrackIcon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Rare Alloys",
+    "codename": "FacilityMaterials9",
+    "name": "Rare Alloys",
+    "image": "FacilityMaterials09Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "rarealloy,rarealloys,ralloy,ralloys,rarea",
+    "version": ""
+   },
+   {
+    "page": "Rare Alloys/zh",
     "codename": "FacilityMaterials9",
     "name": "Rare Alloys",
     "image": "FacilityMaterials09Icon.png",
@@ -14896,7 +17975,27 @@
     "version": ""
    },
    {
+    "page": "Rare Materials/zh",
+    "codename": "FacilityMaterials12",
+    "name": "Rare Materials",
+    "image": "FacilityMaterials12Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Rare Metal",
+    "codename": "RareMetal",
+    "name": "Rare Metal",
+    "image": "RareMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "rmetal,rarem",
+    "version": ""
+   },
+   {
+    "page": "Rare Metal/zh",
     "codename": "RareMetal",
     "name": "Rare Metal",
     "image": "RareMaterialsIcon.png",
@@ -14936,6 +18035,16 @@
     "version": ""
    },
    {
+    "page": "Recon Camo/zh",
+    "codename": "ScoutUniformC",
+    "name": "Recon Camo",
+    "image": "ScoutUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Red River",
     "codename": "RedRiverHex",
     "name": "Red River",
@@ -14947,6 +18056,16 @@
    },
    {
     "page": "Refined Materials",
+    "codename": "Wood",
+    "name": "Refined Materials",
+    "image": "RefinedMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "rmat,rmats",
+    "version": ""
+   },
+   {
+    "page": "Refined Materials/zh",
     "codename": "Wood",
     "name": "Refined Materials",
     "image": "RefinedMaterialsIcon.png",
@@ -15016,6 +18135,16 @@
     "version": "special"
    },
    {
+    "page": "Relic Materials/zh",
+    "codename": "RelicMaterials",
+    "name": "Relic Materials",
+    "image": "RelicMaterialItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "relicmat,relicmats",
+    "version": "special"
+   },
+   {
     "page": "Relic Parts",
     "codename": "",
     "name": "Relic Parts",
@@ -15056,6 +18185,16 @@
     "version": ""
    },
    {
+    "page": "Remex Garb/zh",
+    "codename": "NavalUniformC",
+    "name": "Remex Garb",
+    "image": "NavalUniformC.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Repurposed Truck",
     "codename": "RelicTruck",
     "name": "Repurposed Truck",
@@ -15086,6 +18225,16 @@
     "version": ""
    },
    {
+    "page": "Reserve Power/zh",
+    "codename": "ReservePower",
+    "name": "Reserve Power",
+    "image": "ReservePower.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Resistance Camp",
     "codename": "",
     "name": "Resistance Camp",
@@ -15097,6 +18246,16 @@
    },
    {
     "page": "Resource Container",
+    "codename": "ResourceContainer",
+    "name": "Resource Container",
+    "image": "ResourceContainerIcon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Resource Container/zh",
     "codename": "ResourceContainer",
     "name": "Resource Container",
     "image": "ResourceContainerIcon.png",
@@ -15176,6 +18335,16 @@
     "version": ""
    },
    {
+    "page": "Rinnspeir Reefward Patrol Boat",
+    "codename": "LightBoatSonarW",
+    "name": "Rinnspeir Reefward Patrol Boat",
+    "image": "LightBoatSonarWIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Rocket Booster",
     "codename": "",
     "name": "Rocket Booster",
@@ -15247,6 +18416,16 @@
    },
    {
     "page": "Rusty Shovel",
+    "codename": "Lore13",
+    "name": "Rusty Shovel",
+    "image": "LoreShovelIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Rusty Shovel/zh",
     "codename": "Lore13",
     "name": "Rusty Shovel",
     "image": "LoreShovelIcon.png",
@@ -15336,7 +18515,27 @@
     "version": ""
    },
    {
+    "page": "Salvage Field/zh",
+    "codename": "SalvageField",
+    "name": "Salvage Field",
+    "image": "Salvage_Field_Squared.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Salvage Mine",
+    "codename": "ScrapMine",
+    "name": "Salvage Mine",
+    "image": "ScrapMineIcon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Salvage Mine/zh",
     "codename": "ScrapMine",
     "name": "Salvage Mine",
     "image": "ScrapMineIcon.png",
@@ -15406,7 +18605,27 @@
     "version": "deprecated"
    },
    {
+    "page": "Sandbag/zh",
+    "codename": "SandbagMaterials",
+    "name": "Sandbag",
+    "image": "SandbagMaterialItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "sandbags",
+    "version": ""
+   },
+   {
     "page": "Sapper Gear",
+    "codename": "EngineerUniformW",
+    "name": "Sapper Gear",
+    "image": "EngineerUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Sapper Gear/zh",
     "codename": "EngineerUniformW",
     "name": "Sapper Gear",
     "image": "EngineerUniformWIcon.png",
@@ -15496,6 +18715,16 @@
     "version": ""
    },
    {
+    "page": "Sharp Runestone/zh",
+    "codename": "In03KItem",
+    "name": "Sharp Runestone",
+    "image": "RunestoneEIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Shatter Missile",
     "codename": "DemolitionRocketAmmo",
     "name": "Shatter Missile",
@@ -15507,6 +18736,16 @@
    },
    {
     "page": "Shimmering Runestone",
+    "codename": "In05KItem",
+    "name": "Shimmering Runestone",
+    "image": "RunestoneWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Shimmering Runestone/zh",
     "codename": "In05KItem",
     "name": "Shimmering Runestone",
     "image": "RunestoneWIcon.png",
@@ -15536,6 +18775,16 @@
     "version": ""
    },
    {
+    "page": "Shipping Container/zh",
+    "codename": "ShippingContainer",
+    "name": "Shipping Container",
+    "image": "ShippingContainerStructureIcon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Shipyard",
     "codename": "Shipyard",
     "name": "Shipyard",
@@ -15547,6 +18796,16 @@
    },
    {
     "page": "Shovel",
+    "codename": "Shovel",
+    "name": "Shovel",
+    "image": "ShovelIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Shovel/zh",
     "codename": "Shovel",
     "name": "Shovel",
     "image": "ShovelIcon.png",
@@ -15636,7 +18895,27 @@
     "version": ""
    },
    {
+    "page": "Sledge Hammer/zh",
+    "codename": "SledgeHammer",
+    "name": "Sledge Hammer",
+    "image": "SledgeHammerItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Slick Runestone",
+    "codename": "In02KItem",
+    "name": "Slick Runestone",
+    "image": "RunestoneBIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Slick Runestone/zh",
     "codename": "In02KItem",
     "name": "Slick Runestone",
     "image": "RunestoneBIcon.png",
@@ -15696,6 +18975,16 @@
     "version": ""
    },
    {
+    "page": "Small key/zh",
+    "codename": "In01KItem",
+    "name": "Small key",
+    "image": "Key01Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Small Shipping Container",
     "codename": "",
     "name": "Small Shipping Container",
@@ -15707,6 +18996,16 @@
    },
    {
     "page": "Soldier Supplies",
+    "codename": "SoldierSupplies",
+    "name": "Soldier Supplies",
+    "image": "ClothItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Soldier Supplies/zh",
     "codename": "SoldierSupplies",
     "name": "Soldier Supplies",
     "image": "ClothItemIcon.png",
@@ -15737,6 +19036,16 @@
    },
    {
     "page": "Specialist's Overcoat",
+    "codename": "AmmoUniformW",
+    "name": "Specialist's Overcoat",
+    "image": "AmmoUniformWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Specialist's Overcoat/zh",
     "codename": "AmmoUniformW",
     "name": "Specialist's Overcoat",
     "image": "AmmoUniformWIcon.png",
@@ -16066,6 +19375,236 @@
     "version": ""
    },
    {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Bleeding",
+    "image": "Bleeding UI Icon.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Broadcasting Intel",
+    "image": "IconStatusBroadcast.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Cold",
+    "image": "IconStatusFreezingState.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Disabled Turret",
+    "image": "IconStatusTurret.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Empty Gas Mask",
+    "image": "Gas Mask0 UI Icon.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Encumbered",
+    "image": "IconStatusEncumbered.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Freezing",
+    "image": "IconStatusCriticalFreezingState.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Full Gas Mask",
+    "image": "IconStatusGasMask.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Hidden",
+    "image": "IconStatusHidden.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Impacted By Storm",
+    "image": "IconStatusStorm.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Increased Fuel Efficiency",
+    "image": "IconStatusFuelBonus.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Intel Blocked",
+    "image": "IconIntelBlocked.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Low Gas Mask",
+    "image": "Gas Mask2 UI Icon.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Muddy",
+    "image": "IconStatusMuddy.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Muddy Vehicle",
+    "image": "IconStatusVehicleMuddy.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Normalizing",
+    "image": "IconStatusNormalizingState.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Not Broadcasting Intel",
+    "image": "IconStatusBroadcastOff.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "On Fire",
+    "image": "IconStatusFireState.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Overencumbered",
+    "image": "Encumbered Red.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Ruptured Fuel Tank",
+    "image": "IconStatusFuelTank.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Slow Warming",
+    "image": "IconStatusSlowWarmingState.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Tracked",
+    "image": "IconStatusTrack.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Status Effects/zh",
+    "codename": "",
+    "name": "Warming",
+    "image": "IconStatusWarmingState.png",
+    "imageOverride": "",
+    "origin": "statuseffects",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Steel Construction Materials",
     "codename": "FacilityMaterials3",
     "name": "Steel Construction Materials",
@@ -16074,6 +19613,16 @@
     "origin": "item",
     "aliases": "scmat,scmats",
     "version": ""
+   },
+   {
+    "page": "Steel Construction Materials/zh",
+    "codename": "FacilityMaterials3",
+    "name": "Steel Construction Materials",
+    "image": "SteelConstructionMaterialsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "scmat,scmats",
+    "version": "None"
    },
    {
     "page": "Stema Landing",
@@ -16208,6 +19757,16 @@
    {
     "page": "Submarine",
     "codename": "",
+    "name": "Light Submarine",
+    "image": "SubmarineLightItemIcon.png",
+    "imageOverride": "",
+    "origin": "VehicleClass",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Submarine",
+    "codename": "",
     "name": "Submarine",
     "image": "Submarine Vehicle Icon.png",
     "imageOverride": "",
@@ -16236,12 +19795,42 @@
     "version": ""
    },
    {
+    "page": "Sulfur Field/zh",
+    "codename": "SulfurField",
+    "name": "Sulfur Field",
+    "image": "Sulfur Field Image.jpg",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Sulfur Mine",
     "codename": "SulfurMine",
     "name": "Sulfur Mine",
     "image": "SulfurMineStructureIcon.png",
     "imageOverride": "",
     "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Sulfur Mine/zh",
+    "codename": "SulfurMine",
+    "name": "Sulfur Mine",
+    "image": "SulfurMineStructureIcon.png",
+    "imageOverride": "",
+    "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Sulfur/zh",
+    "codename": "Sulfur",
+    "name": "Sulfur",
+    "image": "SulfurIcon.png",
+    "imageOverride": "",
+    "origin": "item",
     "aliases": "",
     "version": ""
    },
@@ -16387,6 +19976,16 @@
    },
    {
     "page": "Tankman's Coveralls",
+    "codename": "TankUniformC",
+    "name": "Tankman's Coveralls",
+    "image": "TankUniformCIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Tankman's Coveralls/zh",
     "codename": "TankUniformC",
     "name": "Tankman's Coveralls",
     "image": "TankUniformCIcon.png",
@@ -16566,6 +20165,16 @@
     "version": ""
    },
    {
+    "page": "The P-A-C \"Bastard\" Burst Launcher",
+    "codename": "ATRPGUtilityW",
+    "name": "The P-A-C \"Bastard\" Burst Launcher",
+    "image": "ATRPGUtilityWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Thermal Shielding",
     "codename": "FacilityMaterials11",
     "name": "Thermal Shielding",
@@ -16576,7 +20185,27 @@
     "version": ""
    },
    {
+    "page": "Thermal Shielding/zh",
+    "codename": "FacilityMaterials11",
+    "name": "Thermal Shielding",
+    "image": "FacilityMaterials11Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "thermalshielding",
+    "version": "None"
+   },
+   {
     "page": "Tin Case",
+    "codename": "Lore1",
+    "name": "Tin Case",
+    "image": "TobaccoPickupIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Tin Case/zh",
     "codename": "Lore1",
     "name": "Tin Case",
     "image": "TobaccoPickupIcon.png",
@@ -16592,6 +20221,16 @@
     "image": "LargeShipBattleshipCIcon.png",
     "imageOverride": "",
     "origin": "vehicle",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Torpedo Bomber Aircraft",
+    "codename": "",
+    "name": "Torpedo Bomber Aircraft",
+    "image": "AircraftTorpedoIcon.png",
+    "imageOverride": "",
+    "origin": "VehicleClass",
     "aliases": "",
     "version": ""
    },
@@ -16747,6 +20386,16 @@
    },
    {
     "page": "Trauma Kit",
+    "codename": "TraumaKit",
+    "name": "Trauma Kit",
+    "image": "TraumaKitItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Trauma Kit/zh",
     "codename": "TraumaKit",
     "name": "Trauma Kit",
     "image": "TraumaKitItemIcon.png",
@@ -16946,6 +20595,26 @@
     "version": ""
    },
    {
+    "page": "Tulka S2 Wyvern",
+    "codename": "",
+    "name": "Rocket-Armed Aircraft",
+    "image": "AircraftRocketWIcon.png",
+    "imageOverride": "",
+    "origin": "VehicleClass",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Tulka S2 Wyvern",
+    "codename": "AircraftRocketW",
+    "name": "Tulka S2 Wyvern",
+    "image": "AircraftRocketWIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
+   },
+   {
     "page": "Tümmler by VAC",
     "codename": "",
     "name": "Liquid Transport Ship",
@@ -16957,7 +20626,7 @@
    },
    {
     "page": "Tümmler by VAC",
-    "codename": "",
+    "codename": "LargeShipLiquidShip",
     "name": "Tümmler by VAC",
     "image": "LargeShipLiquidShipIcon.png",
     "imageOverride": "",
@@ -17004,6 +20673,16 @@
     "origin": "vehicle",
     "aliases": "",
     "version": ""
+   },
+   {
+    "page": "Type F - “Abyss Trawler”",
+    "codename": "LightBoatSonarC",
+    "name": "Type F - “Abyss Trawler”",
+    "image": "LightBoatSonarCIcon.png",
+    "imageOverride": "",
+    "origin": "vehicle",
+    "aliases": "",
+    "version": "devbranch"
    },
    {
     "page": "Tyrant Foothills",
@@ -17064,6 +20743,16 @@
     "origin": "item",
     "aliases": "unstablesubstance,unstablesubstances",
     "version": ""
+   },
+   {
+    "page": "Unstable Substances/zh",
+    "codename": "FacilityMaterials10",
+    "name": "Unstable Substances",
+    "image": "FacilityMaterials10Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "unstablesubstance,unstablesubstances",
+    "version": "None"
    },
    {
     "page": "Upgrade Part",
@@ -17137,6 +20826,16 @@
    },
    {
     "page": "Velian Flak Vest",
+    "codename": "ArmourUniformC",
+    "name": "Velian Flak Vest",
+    "image": "ArmourUniformC.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Velian Flak Vest/zh",
     "codename": "ArmourUniformC",
     "name": "Velian Flak Vest",
     "image": "ArmourUniformC.png",
@@ -17226,7 +20925,37 @@
     "version": "None"
    },
    {
+    "page": "War Ensign/zh",
+    "codename": "BannerTW",
+    "name": "War Ensign",
+    "image": "BannerTWItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "War Ensign/zh",
+    "codename": "DeployedBannerTW",
+    "name": "Deployed War Ensign",
+    "image": "DeployedWarEnsign.jpg",
+    "imageOverride": "BannerTWItemIcon.png",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
     "page": "Warden Aircraft Engine (Large)",
+    "codename": "AircraftPartLargeEngineW",
+    "name": "Warden Aircraft Engine (Large)",
+    "image": "AircraftPartLargeEngineWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Warden Aircraft Engine (Large)/zh",
     "codename": "AircraftPartLargeEngineW",
     "name": "Warden Aircraft Engine (Large)",
     "image": "AircraftPartLargeEngineWIcon.png",
@@ -17246,6 +20975,16 @@
     "version": ""
    },
    {
+    "page": "Warden Aircraft Engine (Small)/zh",
+    "codename": "AircraftPartSmallEngineW",
+    "name": "Warden Aircraft Engine (Small)",
+    "image": "AircraftSmallEngineWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Warden Aircraft Mechanical Parts (Large)",
     "codename": "AircraftPartLargeMechanicalW",
     "name": "Warden Aircraft Mechanical Parts (Large)",
@@ -17256,7 +20995,27 @@
     "version": ""
    },
    {
+    "page": "Warden Aircraft Mechanical Parts (Large)/zh",
+    "codename": "AircraftPartLargeMechanicalW",
+    "name": "Warden Aircraft Mechanical Parts (Large)",
+    "image": "AircraftPartLargeMechanicalWIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Warden Aircraft Mechanical Parts (Small)",
+    "codename": "AircraftPartSmallMechanicalW",
+    "name": "Warden Aircraft Mechanical Parts (Small)",
+    "image": "AircraftWingsIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Warden Aircraft Mechanical Parts (Small)/zh",
     "codename": "AircraftPartSmallMechanicalW",
     "name": "Warden Aircraft Mechanical Parts (Small)",
     "image": "AircraftWingsIcon.png",
@@ -17306,12 +21065,32 @@
     "version": ""
    },
    {
+    "page": "Water Bucket/zh",
+    "codename": "WaterBucket",
+    "name": "Water Bucket",
+    "image": "LoreBucket.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Water Pump",
     "codename": "FacilityMineWater",
     "name": "Water Pump",
     "image": "FacilityMineWaterIcon.png",
     "imageOverride": "",
     "origin": "structure",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Water/zh",
+    "codename": "Water",
+    "name": "Water",
+    "image": "WaterIcon.png",
+    "imageOverride": "",
+    "origin": "item",
     "aliases": "",
     "version": ""
    },
@@ -17406,6 +21185,26 @@
     "version": ""
    },
    {
+    "page": "Wind Sock/zh",
+    "codename": "DeployedWindsockT",
+    "name": "Deployed Wind Sock",
+    "image": "DeployedWindSock.jpg",
+    "imageOverride": "WindsockItemIcon.png",
+    "origin": "structure",
+    "aliases": "",
+    "version": "None"
+   },
+   {
+    "page": "Wind Sock/zh",
+    "codename": "WindsockT",
+    "name": "Wind Sock",
+    "image": "WindsockItemIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Wooden Bridge",
     "codename": "",
     "name": "Wooden Bridge",
@@ -17446,6 +21245,16 @@
     "version": ""
    },
    {
+    "page": "Wounded Player/zh",
+    "codename": "WoundedCarriedPlayer",
+    "name": "Wounded Player",
+    "image": "WoundedIcon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Wreckage",
     "codename": "Wreckage",
     "name": "Wreckage",
@@ -17456,7 +21265,27 @@
     "version": ""
    },
    {
+    "page": "Wreckage/zh",
+    "codename": "Wreckage",
+    "name": "Wreckage",
+    "image": "Salvage02Icon.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
     "page": "Wrench",
+    "codename": "WorkWrench",
+    "name": "Wrench",
+    "image": "WorkWrench.png",
+    "imageOverride": "",
+    "origin": "item",
+    "aliases": "",
+    "version": ""
+   },
+   {
+    "page": "Wrench/zh",
     "codename": "WorkWrench",
     "name": "Wrench",
     "image": "WorkWrench.png",
@@ -17480,6 +21309,7 @@
  "images": {
   "74c-2 Ronan Meteora Gunship Vehicle Icon.png": "https://foxhole.wiki.gg/images/74c-2_Ronan_Meteora_Gunship_Vehicle_Icon.png?5d3aa4",
   "AAAmmoIcon.png": "https://foxhole.wiki.gg/images/AAAmmoIcon.png?ba1e25",
+  "AARocketAmmoIcon.png": "https://foxhole.wiki.gg/images/AARocketAmmoIcon.png?396008",
   "ATAmmoIcon.png": "https://foxhole.wiki.gg/images/ATAmmoIcon.png?996336",
   "ATGrenadeWIcon.png": "https://foxhole.wiki.gg/images/ATGrenadeWIcon.png?656e1c",
   "ATLargeAmmoIcon.png": "https://foxhole.wiki.gg/images/ATLargeAmmoIcon.png?53ed83",
@@ -17491,7 +21321,9 @@
   "ATRPGCItemIcon.png": "https://foxhole.wiki.gg/images/ATRPGCItemIcon.png?d1e77c",
   "ATRPGHeavyWIcon.png": "https://foxhole.wiki.gg/images/ATRPGHeavyWIcon.png?1c5289",
   "ATRPGLightCItemIcon.png": "https://foxhole.wiki.gg/images/ATRPGLightCItemIcon.png?3307d3",
+  "ATRPGShortCIcon.png": "https://foxhole.wiki.gg/images/ATRPGShortCIcon.png?a2b5fa",
   "ATRPGTWIcon.png": "https://foxhole.wiki.gg/images/ATRPGTWIcon.png?1fed2f",
+  "ATRPGUtilityWIcon.png": "https://foxhole.wiki.gg/images/ATRPGUtilityWIcon.png?6e0292",
   "ATRifleAmmoItemIcon.png": "https://foxhole.wiki.gg/images/ATRifleAmmoItemIcon.png?48a8d6",
   "ATRifleAssaultWIcontga.png": "https://foxhole.wiki.gg/images/ATRifleAssaultWIcontga.png?8f2968",
   "ATRifleAutomaticWItemIcon.png": "https://foxhole.wiki.gg/images/ATRifleAutomaticWItemIcon.png?1da780",
@@ -17522,6 +21354,7 @@
   "AircraftPartLargeMechanicalWIcon.png": "https://foxhole.wiki.gg/images/AircraftPartLargeMechanicalWIcon.png?805b78",
   "AircraftPartSmallEngineCIcon.png": "https://foxhole.wiki.gg/images/AircraftPartSmallEngineCIcon.png?d22a99",
   "AircraftPartSmallMechanicalCIcon.png": "https://foxhole.wiki.gg/images/AircraftPartSmallMechanicalCIcon.png?cb417c",
+  "AircraftRocketWIcon.png": "https://foxhole.wiki.gg/images/AircraftRocketWIcon.png?2c525e",
   "AircraftRunwayTier1Squared.png": "https://foxhole.wiki.gg/images/AircraftRunwayTier1Squared.png?3185ae",
   "AircraftRunwayTier2Squared.png": "https://foxhole.wiki.gg/images/AircraftRunwayTier2Squared.png?37da3e",
   "AircraftScout2CIcon.png": "https://foxhole.wiki.gg/images/AircraftScout2CIcon.png?4ca9a2",
@@ -17531,6 +21364,8 @@
   "AircraftScoutWIcon.png": "https://foxhole.wiki.gg/images/AircraftScoutWIcon.png?11cb5e",
   "AircraftSmallEngineWIcon.png": "https://foxhole.wiki.gg/images/AircraftSmallEngineWIcon.png?84590e",
   "AircraftTorpedoAmmoIcon.png": "https://foxhole.wiki.gg/images/AircraftTorpedoAmmoIcon.png?5026fc",
+  "AircraftTorpedoCIcon.png": "https://foxhole.wiki.gg/images/AircraftTorpedoCIcon.png?75896a",
+  "AircraftTorpedoIcon.png": "https://foxhole.wiki.gg/images/AircraftTorpedoIcon.png?5cf616",
   "AircraftTorpedoWIcon.png": "https://foxhole.wiki.gg/images/AircraftTorpedoWIcon.png?46c909",
   "AircraftWaterWIcon.png": "https://foxhole.wiki.gg/images/AircraftWaterWIcon.png?192fb2",
   "AircraftWingsIcon.png": "https://foxhole.wiki.gg/images/AircraftWingsIcon.png?8c9512",
@@ -17557,6 +21392,8 @@
   "ArmoredCarTwinWIcon.png": "https://foxhole.wiki.gg/images/ArmoredCarTwinWIcon.png?babc40",
   "ArmoredCarVehicleIcon.png": "https://foxhole.wiki.gg/images/ArmoredCarVehicleIcon.png?308725",
   "ArmoredCarWarVehicleIcon.png": "https://foxhole.wiki.gg/images/ArmoredCarWarVehicleIcon.png?4d72dc",
+  "ArmourMedicUniformCIcon.png": "https://foxhole.wiki.gg/images/ArmourMedicUniformCIcon.png?80dd82",
+  "ArmourMedicUniformWIcon.png": "https://foxhole.wiki.gg/images/ArmourMedicUniformWIcon.png?954a18",
   "ArmourUniformC.png": "https://foxhole.wiki.gg/images/ArmourUniformC.png?347b74",
   "ArmourUniformW.png": "https://foxhole.wiki.gg/images/ArmourUniformW.png?d249dc",
   "AssaultRifleAmmoItemIcon.png": "https://foxhole.wiki.gg/images/AssaultRifleAmmoItemIcon.png?e79005",
@@ -17582,6 +21419,8 @@
   "Barracks.png": "https://foxhole.wiki.gg/images/Barracks.png?942840",
   "BasicMaterialsIcon.png": "https://foxhole.wiki.gg/images/BasicMaterialsIcon.png?b246f1",
   "BattleTank.png": "https://foxhole.wiki.gg/images/BattleTank.png?d19941",
+  "BattleTankAAC.png": "https://foxhole.wiki.gg/images/BattleTankAAC.png?615d66",
+  "BattleTankAAw.png": "https://foxhole.wiki.gg/images/BattleTankAAw.png?4425bf",
   "BattleTankATCIcon.png": "https://foxhole.wiki.gg/images/BattleTankATCIcon.png?bc71bd",
   "BattleTankAmmoItemIcon.png": "https://foxhole.wiki.gg/images/BattleTankAmmoItemIcon.png?e87a58",
   "BattleTankHeavyArtilleryCIcon.png": "https://foxhole.wiki.gg/images/BattleTankHeavyArtilleryCIcon.png?22e2ca",
@@ -17617,8 +21456,8 @@
   "Combat_Car_Vehicle_Icon.png": "https://foxhole.wiki.gg/images/Combat_Car_Vehicle_Icon.png?edb87a",
   "ComponentMineIcon.png": "https://foxhole.wiki.gg/images/ComponentMineIcon.png?479488",
   "ComponentsDamagedIcon.png": "https://foxhole.wiki.gg/images/ComponentsDamagedIcon.png?19ab24",
-  "ComponentsIcon.png": "https://foxhole.wiki.gg/images/ComponentsIcon.png?ff5836",
   "Components Field Image.jpg": "https://foxhole.wiki.gg/images/Components_Field_Image.jpg?9cce3c",
+  "ComponentsIcon.png": "https://foxhole.wiki.gg/images/ComponentsIcon.png?ff5836",
   "ConcreteBagIcon.png": "https://foxhole.wiki.gg/images/ConcreteBagIcon.png?a37cdc",
   "ConcreteBridgeIcon.png": "https://foxhole.wiki.gg/images/ConcreteBridgeIcon.png?b2346d",
   "ConcreteFoundation01Icon.png": "https://foxhole.wiki.gg/images/ConcreteFoundation01Icon.png?9ede6e",
@@ -17627,11 +21466,11 @@
   "ConcreteFoundation04Icon.png": "https://foxhole.wiki.gg/images/ConcreteFoundation04Icon.png?8aa302",
   "ConcreteMixerIcon.png": "https://foxhole.wiki.gg/images/ConcreteMixerIcon.png?2f97ee",
   "Concrete_Materials_Icon.png": "https://foxhole.wiki.gg/images/Concrete_Materials_Icon.png?effecc",
-  "Construction Yard Image.jpg": "https://foxhole.wiki.gg/images/Construction_Yard_Image.jpg?d2b1f0",
   "ConstructionEquipment.png": "https://foxhole.wiki.gg/images/ConstructionEquipment.png?8a1295",
   "ConstructionMaterialsIcon.png": "https://foxhole.wiki.gg/images/ConstructionMaterialsIcon.png?571daa",
   "ConstructionPartsShippableIcon.png": "https://foxhole.wiki.gg/images/ConstructionPartsShippableIcon.png?876d60",
   "ConstructionVehicleIcon.png": "https://foxhole.wiki.gg/images/ConstructionVehicleIcon.png?17ea46",
+  "Construction Yard Image.jpg": "https://foxhole.wiki.gg/images/Construction_Yard_Image.jpg?d2b1f0",
   "CraneRailTrackIcon.png": "https://foxhole.wiki.gg/images/CraneRailTrackIcon.png?78f02d",
   "CraneVehicleIcon.png": "https://foxhole.wiki.gg/images/CraneVehicleIcon.png?b08a43",
   "CrateItemIcon.png": "https://foxhole.wiki.gg/images/CrateItemIcon.png?9d3eda",
@@ -17714,6 +21553,10 @@
   "FieldAntiTankColVehicleIcon.png": "https://foxhole.wiki.gg/images/FieldAntiTankColVehicleIcon.png?6448f9",
   "FieldAntiTankWarVehicleIcon.png": "https://foxhole.wiki.gg/images/FieldAntiTankWarVehicleIcon.png?a945d3",
   "FieldArtilleryColVehicleIcon.png": "https://foxhole.wiki.gg/images/FieldArtilleryColVehicleIcon.png?fc3da1",
+  "Field AT Gun Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_AT_Gun_Vehicle_Icon.png?816e29",
+  "Field AT Rifle Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_AT_Rifle_Vehicle_Icon.png?c571e4",
+  "Field Machine Gun Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_Machine_Gun_Vehicle_Icon.png?e41840",
+  "Field Mortar Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_Mortar_Vehicle_Icon.png?9072e5",
   "FieldBridgeItemIcon.png": "https://foxhole.wiki.gg/images/FieldBridgeItemIcon.png?7a49c7",
   "FieldCannonHeavyWIcon.png": "https://foxhole.wiki.gg/images/FieldCannonHeavyWIcon.png?2d4ad5",
   "FieldCannonOffensiveWIcon.png": "https://foxhole.wiki.gg/images/FieldCannonOffensiveWIcon.png?430b0d",
@@ -17724,10 +21567,6 @@
   "FieldMachineGun.png": "https://foxhole.wiki.gg/images/FieldMachineGun.png?81becc",
   "FieldMachineGunWar.png": "https://foxhole.wiki.gg/images/FieldMachineGunWar.png?27b5b8",
   "FieldMortarCIcon.png": "https://foxhole.wiki.gg/images/FieldMortarCIcon.png?d24698",
-  "Field AT Gun Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_AT_Gun_Vehicle_Icon.png?816e29",
-  "Field AT Rifle Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_AT_Rifle_Vehicle_Icon.png?c571e4",
-  "Field Machine Gun Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_Machine_Gun_Vehicle_Icon.png?e41840",
-  "Field Mortar Vehicle Icon.png": "https://foxhole.wiki.gg/images/Field_Mortar_Vehicle_Icon.png?9072e5",
   "FieldMortarWIcon.png": "https://foxhole.wiki.gg/images/FieldMortarWIcon.png?56a820",
   "FieldMultiWItemIcon.png": "https://foxhole.wiki.gg/images/FieldMultiWItemIcon.png?ab32ea",
   "FieldPierIcon.png": "https://foxhole.wiki.gg/images/FieldPierIcon.png?5e10d9",
@@ -17742,12 +21581,16 @@
   "FlameRocketAmmoIcon.png": "https://foxhole.wiki.gg/images/FlameRocketAmmoIcon.png?935eac",
   "FlamegunCICon.png": "https://foxhole.wiki.gg/images/FlamegunCICon.png?7fc955",
   "FlamegunWICon.png": "https://foxhole.wiki.gg/images/FlamegunWICon.png?ef2f59",
+  "FlatbedTruckConcreteItemIcon.png": "https://foxhole.wiki.gg/images/FlatbedTruckConcreteItemIcon.png?4b28c4",
   "FlatbedTruckVehicleIcon.png": "https://foxhole.wiki.gg/images/FlatbedTruckVehicleIcon.png?d7c701",
   "Flood Ascension Mk. V Vehicle Icon.png": "https://foxhole.wiki.gg/images/Flood_Ascension_Mk._V_Vehicle_Icon.png?2d8241",
   "FortArtilleryShelterIcon.png": "https://foxhole.wiki.gg/images/FortArtilleryShelterIcon.png?b2873e",
   "FortFirePitIcon.png": "https://foxhole.wiki.gg/images/FortFirePitIcon.png?619565",
   "FortFlameStructureIcon.png": "https://foxhole.wiki.gg/images/FortFlameStructureIcon.png?e738c4",
   "FortGarrisonStationIcon.png": "https://foxhole.wiki.gg/images/FortGarrisonStationIcon.png?7811a6",
+  "FortISGAIT1Icon.png": "https://foxhole.wiki.gg/images/FortISGAIT1Icon.png?18eee8",
+  "FortISGAIT2Icon.png": "https://foxhole.wiki.gg/images/FortISGAIT2Icon.png?fb1d2a",
+  "FortISGAIT3Icon.png": "https://foxhole.wiki.gg/images/FortISGAIT3Icon.png?85c6ed",
   "FortLargeRadarIcon.png": "https://foxhole.wiki.gg/images/FortLargeRadarIcon.png?3fdf4e",
   "FortLargeRadarShippbleIcon.png": "https://foxhole.wiki.gg/images/FortLargeRadarShippbleIcon.png?6d4047",
   "FortRadarT1ItemIcon.png": "https://foxhole.wiki.gg/images/FortRadarT1ItemIcon.png?3f5586",
@@ -17877,8 +21720,8 @@
   "LandingCraftWarVehicleIcon.png": "https://foxhole.wiki.gg/images/LandingCraftWarVehicleIcon.png?3ebfb5",
   "LandingDockSquared.jpg": "https://foxhole.wiki.gg/images/LandingDockSquared.jpg?31b970",
   "LandingShipCIcon.png": "https://foxhole.wiki.gg/images/LandingShipCIcon.png?ce0426",
-  "Landing Ship Vehicle Icon.png": "https://foxhole.wiki.gg/images/Landing_Ship_Vehicle_Icon.png?acb1fc",
   "LandingShipWIcon.png": "https://foxhole.wiki.gg/images/LandingShipWIcon.png?ff214f",
+  "Landing Ship Vehicle Icon.png": "https://foxhole.wiki.gg/images/Landing_Ship_Vehicle_Icon.png?acb1fc",
   "LargeAssemblyStationIcon.png": "https://foxhole.wiki.gg/images/LargeAssemblyStationIcon.png?a8f94f",
   "LargeConnectorIcon.png": "https://foxhole.wiki.gg/images/LargeConnectorIcon.png?4959ea",
   "LargeCraneItemIcon.png": "https://foxhole.wiki.gg/images/LargeCraneItemIcon.png?576657",
@@ -17900,6 +21743,8 @@
   "LightArtilleryAmmoItemIcon.png": "https://foxhole.wiki.gg/images/LightArtilleryAmmoItemIcon.png?c00707",
   "LightBoatInfantryCIcon.png": "https://foxhole.wiki.gg/images/LightBoatInfantryCIcon.png?a30257",
   "LightBoatInfantryWVehicleIcon.png": "https://foxhole.wiki.gg/images/LightBoatInfantryWVehicleIcon.png?cb1db8",
+  "LightBoatSonarCIcon.png": "https://foxhole.wiki.gg/images/LightBoatSonarCIcon.png?471bc8",
+  "LightBoatSonarWIcon.png": "https://foxhole.wiki.gg/images/LightBoatSonarWIcon.png?78688f",
   "LightFreighterVehicleIcon.png": "https://foxhole.wiki.gg/images/LightFreighterVehicleIcon.png?9b7e4e",
   "LightMachineGunIcon.png": "https://foxhole.wiki.gg/images/LightMachineGunIcon.png?7de463",
   "LightTank2InfantryCVehicleIcon.png": "https://foxhole.wiki.gg/images/LightTank2InfantryCVehicleIcon.png?b9105d",
@@ -17909,14 +21754,14 @@
   "LightTankArtilleryWar.png": "https://foxhole.wiki.gg/images/LightTankArtilleryWar.png?61dff8",
   "LightTankColMobilityVehicleIcon.png": "https://foxhole.wiki.gg/images/LightTankColMobilityVehicleIcon.png?f99b53",
   "LightTankColVehicleIcon.png": "https://foxhole.wiki.gg/images/LightTankColVehicleIcon.png?152e6f",
+  "Light Artillery Ammo.png": "https://foxhole.wiki.gg/images/Light_Artillery_Ammo.png?5cbb2a",
+  "Light Pillbox Icon.png": "https://foxhole.wiki.gg/images/Light_Pillbox_Icon.png?fe4bd5",
+  "Light Tank Icon.png": "https://foxhole.wiki.gg/images/Light_Tank_Icon.png?fa84d8",
   "LightTankFlameCIcon.png": "https://foxhole.wiki.gg/images/LightTankFlameCIcon.png?fa969b",
   "LightTankOffensiveCVehicleIcon.png": "https://foxhole.wiki.gg/images/LightTankOffensiveCVehicleIcon.png?51cad6",
   "LightTankWarDefensiveVehicleIcon.png": "https://foxhole.wiki.gg/images/LightTankWarDefensiveVehicleIcon.png?7c2839",
   "LightTankWarVehicleIcon.png": "https://foxhole.wiki.gg/images/LightTankWarVehicleIcon.png?700327",
   "LightUtilityVehicles.png": "https://foxhole.wiki.gg/images/LightUtilityVehicles.png?3be885",
-  "Light Artillery Ammo.png": "https://foxhole.wiki.gg/images/Light_Artillery_Ammo.png?5cbb2a",
-  "Light Pillbox Icon.png": "https://foxhole.wiki.gg/images/Light_Pillbox_Icon.png?fe4bd5",
-  "Light Tank Icon.png": "https://foxhole.wiki.gg/images/Light_Tank_Icon.png?fa84d8",
   "Lightboats.png": "https://foxhole.wiki.gg/images/Lightboats.png?edd243",
   "ListeningKitIcon.png": "https://foxhole.wiki.gg/images/ListeningKitIcon.png?914257",
   "LongRangedArtilleryIcon.png": "https://foxhole.wiki.gg/images/LongRangedArtilleryIcon.png?baa77a",
@@ -18013,8 +21858,11 @@
   "MetalworksFactoryBase.png": "https://foxhole.wiki.gg/images/MetalworksFactoryBase.png?a96879",
   "MineHolesSplineIcon.png": "https://foxhole.wiki.gg/images/MineHolesSplineIcon.png?79d4bc",
   "MineboatIcon.png": "https://foxhole.wiki.gg/images/MineboatIcon.png?6f61d6",
+  "MiniDepthChargeAmmoIcon.png": "https://foxhole.wiki.gg/images/MiniDepthChargeAmmoIcon.png?52d857",
   "MiniTankAmmoItemIcon.png": "https://foxhole.wiki.gg/images/MiniTankAmmoItemIcon.png?9e6416",
   "MiniTorpedoAmmoIcon.png": "https://foxhole.wiki.gg/images/MiniTorpedoAmmoIcon.png?a2023e",
+  "MortarATAmmoIcon.png": "https://foxhole.wiki.gg/images/MortarATAmmoIcon.png?4a8da4",
+  "MortarATItemIcon.png": "https://foxhole.wiki.gg/images/MortarATItemIcon.png?76d7ea",
   "MortarAmmoIcon.png": "https://foxhole.wiki.gg/images/MortarAmmoIcon.png?683a3e",
   "MortarAmmoIconFlame.png": "https://foxhole.wiki.gg/images/MortarAmmoIconFlame.png?c4727b",
   "MortarAmmoIconFlare.png": "https://foxhole.wiki.gg/images/MortarAmmoIconFlare.png?f47f7e",
@@ -18024,6 +21872,8 @@
   "MortarTankIcon.png": "https://foxhole.wiki.gg/images/MortarTankIcon.png?b9d9a6",
   "MortarTankVehicleIcon.png": "https://foxhole.wiki.gg/images/MortarTankVehicleIcon.png?c8328f",
   "Motorboat.png": "https://foxhole.wiki.gg/images/Motorboat.png?9fe98d",
+  "Motorcycle2IntelCVehicleIcon.png": "https://foxhole.wiki.gg/images/Motorcycle2IntelCVehicleIcon.png?a73ba7",
+  "Motorcycle2IntelWVehicleIcon.png": "https://foxhole.wiki.gg/images/Motorcycle2IntelWVehicleIcon.png?af5185",
   "MotorcycleOffensiveVehicleIcon.png": "https://foxhole.wiki.gg/images/MotorcycleOffensiveVehicleIcon.png?d856a2",
   "MotorcycleVehicleIcon.png": "https://foxhole.wiki.gg/images/MotorcycleVehicleIcon.png?c4e3e3",
   "MotorcycleWIcon.png": "https://foxhole.wiki.gg/images/MotorcycleWIcon.png?9a7e7d",
@@ -18075,9 +21925,6 @@
   "RefinedMaterialsIcon.png": "https://foxhole.wiki.gg/images/RefinedMaterialsIcon.png?9656f0",
   "RefinerySquared.png": "https://foxhole.wiki.gg/images/RefinerySquared.png?84bbd0",
   "Reinforced Drawbridge Squared.png": "https://foxhole.wiki.gg/images/Reinforced_Drawbridge_Squared.png?e97da2",
-  "Relic Base Large Squared.png": "https://foxhole.wiki.gg/images/Relic_Base_Large_Squared.png?272a97",
-  "Relic Base Medium Squared.jpg": "https://foxhole.wiki.gg/images/Relic_Base_Medium_Squared.jpg?315cb9",
-  "Relic Base Small Squared.png": "https://foxhole.wiki.gg/images/Relic_Base_Small_Squared.png?ddeed4",
   "RelicApc.png": "https://foxhole.wiki.gg/images/RelicApc.png?1df736",
   "RelicArmouredCarVehicleIcon.png": "https://foxhole.wiki.gg/images/RelicArmouredCarVehicleIcon.png?296ab4",
   "RelicBicycleVehicleIcon.png": "https://foxhole.wiki.gg/images/RelicBicycleVehicleIcon.png?dad6dc",
@@ -18086,6 +21933,9 @@
   "RelicMaterialItemIcon.png": "https://foxhole.wiki.gg/images/RelicMaterialItemIcon.png?3e0244",
   "RelicTruckVehicleIcon.png": "https://foxhole.wiki.gg/images/RelicTruckVehicleIcon.png?ba21ae",
   "RelicVehicleIcon.png": "https://foxhole.wiki.gg/images/RelicVehicleIcon.png?8c690f",
+  "Relic Base Large Squared.png": "https://foxhole.wiki.gg/images/Relic_Base_Large_Squared.png?272a97",
+  "Relic Base Medium Squared.jpg": "https://foxhole.wiki.gg/images/Relic_Base_Medium_Squared.jpg?315cb9",
+  "Relic Base Small Squared.png": "https://foxhole.wiki.gg/images/Relic_Base_Small_Squared.png?ddeed4",
   "Relic Bunker Squared.png": "https://foxhole.wiki.gg/images/Relic_Bunker_Squared.png?e6f64e",
   "ReservePower.png": "https://foxhole.wiki.gg/images/ReservePower.png?43beab",
   "ResouceAluminumIcon.png": "https://foxhole.wiki.gg/images/ResouceAluminumIcon.png?64400c",
@@ -18199,6 +22049,9 @@
   "StructureEquipmentShippableIcon.png": "https://foxhole.wiki.gg/images/StructureEquipmentShippableIcon.png?d8b26b",
   "SubMachineGunAmmoIcon.png": "https://foxhole.wiki.gg/images/SubMachineGunAmmoIcon.png?823243",
   "SubMachineGunIcon.png": "https://foxhole.wiki.gg/images/SubMachineGunIcon.png?2748f2",
+  "SubmarineLightCItemIcon.png": "https://foxhole.wiki.gg/images/SubmarineLightCItemIcon.png?4939b5",
+  "SubmarineLightItemIcon.png": "https://foxhole.wiki.gg/images/SubmarineLightItemIcon.png?d2a99b",
+  "SubmarineLightWItemIcon.png": "https://foxhole.wiki.gg/images/SubmarineLightWItemIcon.png?22f743",
   "Submarine Vehicle Icon.png": "https://foxhole.wiki.gg/images/Submarine_Vehicle_Icon.png?88742a",
   "SubtypeAPIcon.png": "https://foxhole.wiki.gg/images/SubtypeAPIcon.png?d8bd50",
   "SubtypeATIcon.png": "https://foxhole.wiki.gg/images/SubtypeATIcon.png?d76303",
@@ -18254,6 +22107,7 @@
   "TrainEngineVehicleIcon.png": "https://foxhole.wiki.gg/images/TrainEngineVehicleIcon.png?2269b2",
   "TrainHospitalItemIcon.png": "https://foxhole.wiki.gg/images/TrainHospitalItemIcon.png?fa0b30",
   "TrainLRArtilleryVehicleIcon.png": "https://foxhole.wiki.gg/images/TrainLRArtilleryVehicleIcon.png?fb4ead",
+  "townhallSquared.jpg": "https://foxhole.wiki.gg/images/TownhallSquared.jpg?8b575c",
   "Transport_Bus_Icon.png": "https://foxhole.wiki.gg/images/Transport_Bus_Icon.png?adfda9",
   "Transport Truck.png": "https://foxhole.wiki.gg/images/Transport_Truck.png?541f75",
   "TraumaKitItemIcon.png": "https://foxhole.wiki.gg/images/TraumaKitItemIcon.png?c81ea0",
@@ -18278,7 +22132,6 @@
   "TruckOffensiveVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckOffensiveVehicleIcon.png?4e6408",
   "TruckUtilityVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckUtilityVehicleIcon.png?b3a828",
   "TruckUtilityWarVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckUtilityWarVehicleIcon.png?956603",
-  "townhallSquared.jpg": "https://foxhole.wiki.gg/images/TownhallSquared.jpg?8b575c",
   "TruckVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckVehicleIcon.png?bdbe71",
   "TruckWarVehicleIcon.png": "https://foxhole.wiki.gg/images/TruckWarVehicleIcon.png?9f870b",
   "TunnelNetworkStructureIcon.png": "https://foxhole.wiki.gg/images/TunnelNetworkStructureIcon.png?221b4d",

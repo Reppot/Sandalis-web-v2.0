@@ -4899,8 +4899,8 @@
  {
   "id": "factory-aa-2-battering-ram",
   "kind": "factory",
-  "name": "AA-2 Battering Ram",
-  "name_en": "AA-2 Battering Ram",
+  "name": "AA-2 “Battering Ram”",
+  "name_en": "AA-2 “Battering Ram”",
   "item_code": "FieldATC",
   "category": "vehicles",
   "item_class": "Field AT Gun",
@@ -7790,5 +7790,149 @@
    }
   },
   "sort": 207
+ },
+ {
+  "id": "factory-hodari",
+  "kind": "factory",
+  "name": "Hodari",
+  "name_en": "Hodari",
+  "item_code": "SubmarineLightW",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SubmarineLightW.png",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 375
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6250,
+    "amount": 3,
+    "cost": {
+     "rmat": 375
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 208
+ },
+ {
+  "id": "factory-rinnspeir-reefward-patrol-boat",
+  "kind": "factory",
+  "name": "Rinnspeir Reefward Patrol Boat",
+  "name_en": "Rinnspeir Reefward Patrol Boat",
+  "item_code": "LightBoatSonarW",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "warden"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightBoatSonarW.png",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 900
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 15000,
+    "amount": 3,
+    "cost": {
+     "bmat": 900
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 209
+ },
+ {
+  "id": "factory-af-e-palaemon",
+  "kind": "factory",
+  "name": "AF-e “Palaemon”",
+  "name_en": "AF-e “Palaemon”",
+  "item_code": "SubmarineLightC",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/SubmarineLightC.png",
+  "output_quantity": 3,
+  "cost": {
+   "rmat": 375
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 6250,
+    "amount": 3,
+    "cost": {
+     "rmat": 375
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 210
+ },
+ {
+  "id": "factory-type-f-abyss-trawler",
+  "kind": "factory",
+  "name": "Type F - “Abyss Trawler”",
+  "name_en": "Type F - “Abyss Trawler”",
+  "item_code": "LightBoatSonarC",
+  "category": "vehicles",
+  "item_class": null,
+  "description": null,
+  "factions": [
+   "neutral",
+   "colonial"
+  ],
+  "facilities": [
+   "mpf"
+  ],
+  "icon_url": "/api/v1/assets/items/LightBoatSonarC.png",
+  "output_quantity": 3,
+  "cost": {
+   "bmat": 900
+  },
+  "data": {
+   "number_produced_bonus": null,
+   "is_teched": false,
+   "is_mpf_craftable": true,
+   "mpf": {
+    "seconds": 15000,
+    "amount": 3,
+    "cost": {
+     "bmat": 900
+    },
+    "max_crates": 5
+   }
+  },
+  "sort": 211
  }
 ]

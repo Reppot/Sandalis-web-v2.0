@@ -102,6 +102,18 @@
   "needs_review": false
  },
  {
+  "code": "AircraftFighter2C",
+  "name": "Daimon aK-5 “Harpy”",
+  "english_name": "Daimon aK-5 “Harpy”",
+  "category": "vehicles",
+  "faction": "colonial",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/AircraftFighter2C.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
   "code": "AircraftFighterC",
   "name": "Toxot-902 “Blind Silver”",
   "english_name": "Toxot-902 “Blind Silver”",
@@ -342,6 +354,18 @@
   "needs_review": false
  },
  {
+  "code": "AircraftRocketW",
+  "name": "Tulka S2 Wyvern",
+  "english_name": "Tulka S2 Wyvern",
+  "category": "vehicles",
+  "faction": "warden",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/AircraftRocketW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
   "code": "AircraftScout2C",
   "name": "A59 Venti “Perdix”",
   "english_name": "A59 Venti “Perdix”",
@@ -397,6 +421,18 @@
   "faction": "neutral",
   "origin": "item",
   "icon_url": "/api/v1/assets/items/AircraftTorpedoAmmo.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "AircraftTorpedoC",
+  "name": "Daimon eO-1 “Siren”",
+  "english_name": "Daimon eO-1 “Siren”",
+  "category": "vehicles",
+  "faction": "colonial",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/AircraftTorpedoC.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -656,6 +692,30 @@
   "origin": "vehicle",
   "icon_url": "/api/v1/assets/items/ArmoredCarW.png",
   "crate_size": 3,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "ArmourMedicUniformC",
+  "name": "Medicus Apron",
+  "english_name": "Medicus Apron",
+  "category": "uniforms",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/ArmourMedicUniformC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "ArmourMedicUniformW",
+  "name": "Physic's Cuirass",
+  "english_name": "Physic's Cuirass",
+  "category": "uniforms",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/ArmourMedicUniformW.png",
+  "crate_size": 1,
   "aliases": [],
   "needs_review": false
  },
@@ -976,6 +1036,18 @@
   "needs_review": false
  },
  {
+  "code": "ATRPGShortC",
+  "name": "Bolt of Zeus",
+  "english_name": "Bolt of Zeus",
+  "category": "weapons",
+  "faction": "colonial",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/ATRPGShortC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
   "code": "ATRPGTW",
   "name": "Станковый Bonesaw MK.3",
   "english_name": "Mounted Bonesaw MK.3",
@@ -988,6 +1060,18 @@
    "Станковый Bonesaw MK.3",
    "Противотанковый РПГ (станковый)"
   ],
+  "needs_review": false
+ },
+ {
+  "code": "ATRPGUtilityW",
+  "name": "The P-A-C \"Bastard\" Burst Launcher",
+  "english_name": "The P-A-C \"Bastard\" Burst Launcher",
+  "category": "weapons",
+  "faction": "warden",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/ATRPGUtilityW.png",
+  "crate_size": 1,
+  "aliases": [],
   "needs_review": false
  },
  {
@@ -1068,6 +1152,42 @@
   "aliases": [
    "баржа"
   ],
+  "needs_review": false
+ },
+ {
+  "code": "BattleTankAAAmmo",
+  "name": "921 Ogre Rocket",
+  "english_name": "921 Ogre Rocket",
+  "category": "ammo",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/BattleTankAAAmmo.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "BattleTankAAC",
+  "name": "Lance-50 “Lampades”",
+  "english_name": "Lance-50 “Lampades”",
+  "category": "vehicles",
+  "faction": "colonial",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/BattleTankAAC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "BattleTankAAW",
+  "name": "Flood Veilcleave Mk. X",
+  "english_name": "Flood Veilcleave Mk. X",
+  "category": "vehicles",
+  "faction": "warden",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/BattleTankAAW.png",
+  "crate_size": 1,
+  "aliases": [],
   "needs_review": false
  },
  {
@@ -1980,8 +2100,8 @@
  },
  {
   "code": "FieldATC",
-  "name": "AA-2 Battering Ram",
-  "english_name": "AA-2 Battering Ram",
+  "name": "AA-2 “Battering Ram”",
+  "english_name": "AA-2 “Battering Ram”",
   "category": "vehicles",
   "faction": "colonial",
   "origin": "vehicle",
@@ -2216,6 +2336,18 @@
    "Флэтбед (пакмул)",
    "Бортовой грузовик BMS - Packmule"
   ],
+  "needs_review": false
+ },
+ {
+  "code": "FlatbedTruckConcrete",
+  "name": "BMS - Stone Camel",
+  "english_name": "BMS - Stone Camel",
+  "category": "vehicles",
+  "faction": "neutral",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/FlatbedTruckConcrete.png",
+  "crate_size": 1,
+  "aliases": [],
   "needs_review": false
  },
  {
@@ -3041,6 +3173,30 @@
   "needs_review": false
  },
  {
+  "code": "LightBoatSonarC",
+  "name": "Type F - “Abyss Trawler”",
+  "english_name": "Type F - “Abyss Trawler”",
+  "category": "vehicles",
+  "faction": "colonial",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/LightBoatSonarC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "LightBoatSonarW",
+  "name": "Rinnspeir Reefward Patrol Boat",
+  "english_name": "Rinnspeir Reefward Patrol Boat",
+  "category": "vehicles",
+  "faction": "warden",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/LightBoatSonarW.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
   "code": "LightTank2InfantryC",
   "name": "HC-2 “Scorpion”",
   "english_name": "HC-2 “Scorpion”",
@@ -3613,6 +3769,18 @@
   "needs_review": false
  },
  {
+  "code": "MiniDepthChargeAmmo",
+  "name": "Model-8 “Kappa”",
+  "english_name": "Model-8 “Kappa”",
+  "category": "ammo",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/MiniDepthChargeAmmo.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
   "code": "MiniTankAmmo",
   "name": "30мм",
   "english_name": "30mm",
@@ -3673,6 +3841,18 @@
   "needs_review": false
  },
  {
+  "code": "MortarAmmoAT",
+  "name": "Manticore Ammo",
+  "english_name": "Manticore Ammo",
+  "category": "weapons",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/MortarAmmoAT.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
   "code": "MortarAmmoFL",
   "name": "Осветительный Минометный Снаряд",
   "english_name": "Flare Mortar Shell",
@@ -3715,6 +3895,18 @@
    "Осколочный миномётный снаряд",
    "Осколочный минометный снаряд"
   ],
+  "needs_review": false
+ },
+ {
+  "code": "MortarAT",
+  "name": "Manticore Mortar",
+  "english_name": "Manticore Mortar",
+  "category": "weapons",
+  "faction": "neutral",
+  "origin": "item",
+  "icon_url": "/api/v1/assets/items/MortarAT.png",
+  "crate_size": 1,
+  "aliases": [],
   "needs_review": false
  },
  {
@@ -3765,6 +3957,30 @@
   "faction": "neutral",
   "origin": "vehicle",
   "icon_url": "/api/v1/assets/items/Motorboat.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "Motorcycle2IntelC",
+  "name": "Kb-12 “Oracle”",
+  "english_name": "Kb-12 “Oracle”",
+  "category": "vehicles",
+  "faction": "colonial",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/Motorcycle2IntelC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "Motorcycle2IntelW",
+  "name": "Faden & Co. Augur Relay Bike",
+  "english_name": "Faden & Co. Augur Relay Bike",
+  "category": "vehicles",
+  "faction": "warden",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/Motorcycle2IntelW.png",
   "crate_size": 1,
   "aliases": [],
   "needs_review": false
@@ -4965,6 +5181,30 @@
   "aliases": [
    "Ящик с сооружениями"
   ],
+  "needs_review": false
+ },
+ {
+  "code": "SubmarineLightC",
+  "name": "AF-e “Palaemon”",
+  "english_name": "AF-e “Palaemon”",
+  "category": "vehicles",
+  "faction": "colonial",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/SubmarineLightC.png",
+  "crate_size": 1,
+  "aliases": [],
+  "needs_review": false
+ },
+ {
+  "code": "SubmarineLightW",
+  "name": "Hodari",
+  "english_name": "Hodari",
+  "category": "vehicles",
+  "faction": "warden",
+  "origin": "vehicle",
+  "icon_url": "/api/v1/assets/items/SubmarineLightW.png",
+  "crate_size": 1,
+  "aliases": [],
   "needs_review": false
  },
  {

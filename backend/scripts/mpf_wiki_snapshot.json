@@ -2703,6 +2703,24 @@
    ]
   }
  },
+ "Hodari": {
+  "amount": 3,
+  "seconds": 6250,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    899
+   ],
+   "4": [
+    1124
+   ],
+   "5": [
+    1311
+   ]
+  }
+ },
  "King Spire Mk. I": {
   "amount": 3,
   "seconds": 3500,
@@ -2844,6 +2862,24 @@
    ],
    "5": [
     4725
+   ]
+  }
+ },
+ "Rinnspeir Reefward Patrol Boat": {
+  "amount": 3,
+  "seconds": 15000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    2160
+   ],
+   "4": [
+    2700
+   ],
+   "5": [
+    3150
    ]
   }
  },
@@ -4271,7 +4307,7 @@
    ]
   }
  },
- "AA-2 Battering Ram": {
+ "AA-2 “Battering Ram”": {
   "amount": 3,
   "seconds": 1000,
   "resources": [
@@ -4304,6 +4340,24 @@
    ],
    "5": [
     210
+   ]
+  }
+ },
+ "AF-e “Palaemon”": {
+  "amount": 3,
+  "seconds": 6250,
+  "resources": [
+   "Refined Materials"
+  ],
+  "totals": {
+   "3": [
+    899
+   ],
+   "4": [
+    1124
+   ],
+   "5": [
+    1311
    ]
   }
  },
@@ -4592,6 +4646,24 @@
    ],
    "5": [
     1470
+   ]
+  }
+ },
+ "Type F - “Abyss Trawler”": {
+  "amount": 3,
+  "seconds": 15000,
+  "resources": [
+   "Basic Materials"
+  ],
+  "totals": {
+   "3": [
+    2160
+   ],
+   "4": [
+    2700
+   ],
+   "5": [
+    3150
    ]
   }
  },
