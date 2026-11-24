@@ -47,7 +47,7 @@ const Label: React.FC<{ x: number; y: number; px: number; children: React.ReactN
 /** Конец отрезка-объекта и его «ручка» для изменения угла и размера. */
 function tip(s: Shape) {
   if (s.kind === "radius") return endPoint(s.x, s.y, s.angle, s.radius);
-  if (s.kind === "structure" || s.kind === "order" || s.kind === "point") return null;
+  if (s.kind === "structure" || s.kind === "order" || s.kind === "point" || s.kind === "freehand") return null;
   return endPoint(s.x, s.y, s.angle, s.length);
 }
 
@@ -59,6 +59,17 @@ const ShapeView: React.FC<{ s: Shape; px: number; selected: boolean; draft?: boo
   const end = tip(s);
   const hit = { stroke: "transparent", strokeWidth: 16 * px, fill: "none", pointerEvents: "stroke" } as const;
   const sel = selected ? <SelectionRing s={s} px={px} end={end} /> : null;
+
+  if (s.kind === "freehand") {
+    const points = s.points.map((p) => `${p.x},${p.y}`).join(" ");
+    return (
+      <g data-shape={draft ? undefined : s.id} opacity={draft ? 0.72 : 1}>
+        <polyline points={points} fill="none" stroke={s.color} strokeWidth={s.width * px} strokeLinecap="round" strokeLinejoin="round" />
+        <polyline points={points} stroke="transparent" strokeWidth={16 * px} fill="none" pointerEvents="stroke" />
+        {sel}
+      </g>
+    );
+  }
 
   if (s.kind === "line" && end) {
     return (

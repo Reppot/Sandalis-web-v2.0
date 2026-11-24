@@ -3,6 +3,7 @@
 // mode: "viewport" — весь экран; { clip: "<css>" } — только элемент.
 
 const L = (ru, en, cs) => ({ ru, en, cs });
+const RE = (ru, en) => ({ ru, en });
 const g = (id) => `[data-guide="${id}"]`;
 
 export const CHAPTERS = [
@@ -267,6 +268,51 @@ export const CHAPTERS = [
           { sel: g("tool-remove"), note: L("Убрать позицию из очереди.", "Remove the item from the queue.", "Odebrat položku z fronty.") },
           { sel: g("tool-totals"), note: L("Итог: ресурсы со скидкой MPF, ящики, время и процент экономии.", "Totals: resources with the MPF discount, crates, time and the saving.", "Souhrn: suroviny se slevou MPF, bedny, čas a úspora.") },
           { sel: `aside ${g("export-formats")}`, note: L("Выгрузить расчёт или скопировать его кнопкой «Поделиться планом».", "Export the calculation or copy it with “Share plan”.", "Exportovat výpočet nebo ho zkopírovat tlačítkem „Sdílet plán“.") },
+        ],
+      },
+    ],
+  },
+  {
+    key: "planning",
+    icon: "map",
+    title: RE("Планирование операций", "Operation planning"),
+    summary: RE(
+      "Выберите нужные гексы: карта остаётся обзором, а постройки загружаются только для выбранных регионов. Инструменты сгруппированы по задаче; свободную линию можно перемещать и настраивать.",
+      "Select the hexes you need. The map stays an overview, and buildings load only for selected regions. Tools are grouped by task; freehand lines can be moved and styled.",
+    ),
+    shots: [
+      {
+        id: "planning-regions",
+        path: "/?tab=tools&tool=planning",
+        mode: { clip: g("planning-map") },
+        prepare: "openPlanning",
+        caption: RE("Выбор гексов", "Selecting hexes"),
+        markers: [
+          { sel: g("planning-regions"), note: RE("Нажмите, чтобы включить выбор. Отметьте несколько гексов и завершите выбор.", "Turn on selection, choose multiple hexes, then finish." ) },
+          { sel: g("planning-selection-empty"), note: RE("До выбора здесь нет маркеров построек. Подробности карты запрашиваются только для выбранных гексов.", "No building markers appear before selection. Map details are requested only for selected hexes.") },
+          { sel: g("planning-frontline-toggle"), note: RE("Линия рассчитывается отдельно по расположению ратуш; она не включает маркеры построек карты.", "The frontline is calculated separately from town hall positions; it does not load map building markers.") },
+        ],
+      },
+      {
+        id: "planning-selected",
+        path: "/?tab=tools&tool=planning",
+        mode: { clip: g("planning-map") },
+        prepare: "selectPlanningHex",
+        caption: RE("Постройки выбранного гекса", "Buildings in a selected hex"),
+        markers: [
+          { sel: g("planning-regions"), note: RE("Число показывает, сколько гексов включено в план.", "The count shows how many hexes are included in the plan.") },
+          { sel: ".planning-marker", note: RE("Маркеры с контрастным фоном показывают постройки, владельца и состояние города.", "High-contrast markers show structures, faction ownership, and town state.") },
+        ],
+      },
+      {
+        id: "planning-tools",
+        path: "/?tab=tools&tool=planning",
+        mode: { clip: g("planning-tools-panel") },
+        prepare: "openPlanningTools",
+        caption: RE("Сгруппированные инструменты", "Grouped planning tools"),
+        markers: [
+          { sel: g("planning-tool-tabs"), note: RE("Переключайте группы рисования, размещения объектов и правки.", "Switch between drawing, placing objects, and editing tools.") },
+          { sel: g("planning-tool-freehand"), note: RE("Свободная линия рисуется мышью или касанием и сохраняется как редактируемый объект.", "Draw a freehand line with mouse or touch; it is saved as an editable object.") },
         ],
       },
     ],

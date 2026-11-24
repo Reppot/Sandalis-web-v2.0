@@ -76,3 +76,12 @@ class WorldMapRead(BaseModel):
     next_update_at: str
     regions: list[MapRegionRead]
     source: str
+
+
+class FrontlinePointRead(BaseModel):
+    x: float
+    y: float
+
+
+class FrontlineRead(BaseModel):
+    points: list[FrontlinePointRead]

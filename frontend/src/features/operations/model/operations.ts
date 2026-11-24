@@ -4,7 +4,7 @@ import { POINT_ICON, POINT_KINDS, type PointKind, type Snapshot } from "@/featur
 export { POINT_ICON, POINT_KINDS, type PointKind };
 
 /** Снимок карты в операции — то же, что снимок «Планирования», без своего id. */
-export type OperationSnapshot = Pick<Snapshot, "name" | "rect" | "war" | "phase" | "regions" | "shapes">;
+export type OperationSnapshot = Pick<Snapshot, "name" | "rect" | "war" | "phase" | "regions" | "frontline" | "shapes">;
 
 export type AttendStatus = "go" | "maybe" | "no";
 export type Outcome = "success" | "partial" | "fail";
@@ -136,7 +136,7 @@ export const operationsApi = {
 };
 
 /** Снимок «Планирования» → то, что хранится в операции. */
-export const toOperationSnapshot = (s: Snapshot): OperationSnapshot => ({ name: s.name, rect: s.rect, war: s.war, phase: s.phase, regions: s.regions, shapes: s.shapes });
+export const toOperationSnapshot = (s: Snapshot): OperationSnapshot => ({ name: s.name, rect: s.rect, war: s.war, phase: s.phase, regions: s.regions, frontline: s.frontline, shapes: s.shapes });
 
 /** Снимок операции → снимок для просмотрщика «Планирования». */
 export const toViewerSnapshot = (op: Operation, snap: OperationSnapshot, i: number): Snapshot => ({

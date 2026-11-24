@@ -1,6 +1,6 @@
 import * as React from "react";
 import { assetUrl, readStorage, writeStorage } from "@/shared";
-import { HEX_H, HEX_W, type MapRegion } from "@/features/planning/model/map";
+import { HEX_H, HEX_W, type FrontlinePoint, type MapRegion } from "@/features/planning/model/map";
 
 /* План на карте: линии, линейки, стрелки, радиусы и постройки. Координаты — «мировые»
  * пиксели карты (гекс 1024×888), размеры — в метрах игры, углы — азимут (0° — север, по часовой). */
@@ -9,7 +9,7 @@ import { HEX_H, HEX_W, type MapRegion } from "@/features/planning/model/map";
 export const M_PER_PX_X = 2184 / HEX_W;
 export const M_PER_PX_Y = 1890 / HEX_H;
 
-export const TOOLS = ["select", "line", "ruler", "arrow", "radius", "structure", "order", "point", "frame", "eraser"] as const;
+export const TOOLS = ["select", "line", "freehand", "ruler", "arrow", "radius", "structure", "order", "point", "frame", "eraser"] as const;
 export type Tool = (typeof TOOLS)[number];
 export const UNITS = ["infantry", "tanks", "artillery", "ships"] as const;
 export type Unit = (typeof UNITS)[number];
@@ -33,6 +33,7 @@ interface Base {
   angle: number;
 }
 export interface LineShape extends Base { kind: "line"; length: number; width: number; color: string }
+export interface FreehandShape extends Base { kind: "freehand"; points: { x: number; y: number }[]; width: number; color: string }
 export interface RulerShape extends Base { kind: "ruler"; length: number; color: string }
 export interface ArrowShape extends Base { kind: "arrow"; length: number; width: number; unit: Unit; name: string; color: string }
 /** Радиус: сектор шириной sweep° вокруг азимута angle (360 — полный круг). */
@@ -43,7 +44,7 @@ export interface StructureShape extends Base { kind: "structure"; ref: string; s
 export interface OrderShape extends Base { kind: "order"; report: string; title: string; size: number }
 /** Точка плана: тип, подпись (где), подробности; size — масштаб значка, %. */
 export interface PointShape extends Base { kind: "point"; point: PointKind; label: string; note: string; size: number }
-export type Shape = LineShape | RulerShape | ArrowShape | RadiusShape | StructureShape | OrderShape | PointShape;
+export type Shape = LineShape | FreehandShape | RulerShape | ArrowShape | RadiusShape | StructureShape | OrderShape | PointShape;
 
 /** Настройки для новых объектов (панель инструментов). */
 export interface Defaults {
@@ -88,7 +89,10 @@ export function measure(a: { x: number; y: number }, b: { x: number; y: number }
 export const fmtMeters = (m: number) => (m >= 1000 ? `${(m / 1000).toFixed(2)} km` : `${Math.round(m)} m`);
 
 /** Сдвиг объекта (перетаскивание). */
-export const moveShape = <S extends Shape>(s: S, dx: number, dy: number): S => ({ ...s, x: s.x + dx, y: s.y + dy });
+export const moveShape = <S extends Shape>(s: S, dx: number, dy: number): S => {
+  if (s.kind === "freehand") return { ...s, x: s.x + dx, y: s.y + dy, points: s.points.map((p) => ({ x: p.x + dx, y: p.y + dy })) } as S;
+  return { ...s, x: s.x + dx, y: s.y + dy };
+};
 
 /** Каталог построек меню строительства (backend/static/maps/structures.json). */
 export interface StructureDef {
@@ -126,6 +130,7 @@ export interface Snapshot {
   war: number | null;
   phase: "conquest" | "resistance";
   regions: MapRegion[];
+  frontline?: FrontlinePoint[];
   shapes: Shape[];
 }
 

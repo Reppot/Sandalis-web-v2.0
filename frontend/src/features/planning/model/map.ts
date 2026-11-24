@@ -39,8 +39,12 @@ export interface WorldMap {
   source: string;
 }
 
+export interface FrontlinePoint { x: number; y: number }
+
 export const planningApi = {
-  map: () => apiClient.get<WorldMap>("/api/v1/world/map"),
+  overview: () => apiClient.get<WorldMap>("/api/v1/world/map/overview"),
+  regions: (keys: string[]) => apiClient.get<WorldMap>("/api/v1/world/map/regions", { params: { regions: keys } }),
+  frontline: () => apiClient.get<{ points: FrontlinePoint[] }>("/api/v1/world/map/frontline"),
 };
 
 /** Размер картинки гекса War API (1024×888) — единица «мировых» координат карты. */
@@ -74,7 +78,7 @@ export const FILTER_ICON: Record<MapKind, string> = {
 };
 
 /** Маркеры держат экранный размер; на общем плане чуть мельче, чтобы не слипались. */
-export const markerFactor = (scale: number) => Math.min(1, Math.max(0.4, scale * 5));
+export const markerFactor = (scale: number) => Math.min(1.1, Math.max(0.7, scale * 7));
 
 /**
  * Подписи без каши: только города (Major) — с середины масштаба; малые отметки местности

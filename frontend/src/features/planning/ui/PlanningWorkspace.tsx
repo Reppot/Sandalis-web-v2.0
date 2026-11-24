@@ -35,6 +35,10 @@ export const PlanningWorkspace: React.FC = () => {
   const [error, setError] = React.useState<string | null>(null);
   const [hidden, setHidden] = React.useState<Set<MapKind>>(new Set());
   const [regionSelection, setRegionSelection] = React.useState<Set<string> | null>(null);
+  const [detailsLoading, setDetailsLoading] = React.useState(false);
+  const [showFrontline, setShowFrontline] = React.useState(false);
+  const [frontlinePoints, setFrontlinePoints] = React.useState<Awaited<ReturnType<typeof planningApi.frontline>>["points"] | null>(null);
+  const [frontlineLoading, setFrontlineLoading] = React.useState(false);
   const [selectingRegions, setSelectingRegions] = React.useState(false);
   const [side, setSide] = React.useState(false);
   const [tool, setTool] = React.useState<Tool>("select");
@@ -77,20 +81,60 @@ export const PlanningWorkspace: React.FC = () => {
     setDefaults(loadDefaults());
   }, []);
   React.useEffect(() => {
-    planningApi.map().then(setData).catch((err) => setError(errorText(err, t("planning.loadFailed"))));
+    planningApi.overview().then(setData).catch((err) => setError(errorText(err, t("planning.loadFailed"))));
   }, [t]);
   React.useEffect(() => {
     if (!data || regionSelection) return;
     const saved = readStorage<string[] | null>(REGIONS_KEY, null);
     const valid = new Set(data.regions.map((r) => r.key));
-    setRegionSelection(saved ? new Set(saved.filter((key) => valid.has(key))) : valid);
+    setRegionSelection(new Set((saved ?? []).filter((key) => valid.has(key))));
   }, [data, regionSelection]);
   const toggleRegion = (key: string) => setRegionSelection((prev) => {
-    const next = new Set(prev ?? data?.regions.map((r) => r.key) ?? []);
+    const next = new Set(prev ?? []);
     next.has(key) ? next.delete(key) : next.add(key);
     writeStorage(REGIONS_KEY, [...next]);
     return next;
   });
+  const toggleFrontline = async () => {
+    if (showFrontline) {
+      setShowFrontline(false);
+      return;
+    }
+    setShowFrontline(true);
+    if (frontlinePoints !== null || frontlineLoading) return;
+    setFrontlineLoading(true);
+    try {
+      const result = await planningApi.frontline();
+      setFrontlinePoints(result.points);
+    } catch (err) {
+      setShowFrontline(false);
+      notify({ title: t("planning.frontline"), message: errorText(err, t("planning.loadFailed")), tone: "danger" });
+    } finally {
+      setFrontlineLoading(false);
+    }
+  };
+  const selectedKeys = React.useMemo(() => [...(regionSelection ?? [])].sort(), [regionSelection]);
+  React.useEffect(() => {
+    if (!data || regionSelection === null) return;
+    let cancelled = false;
+    setDetailsLoading(selectedKeys.length > 0);
+    const timer = window.setTimeout(() => {
+      planningApi.regions(selectedKeys).then((details) => {
+        if (cancelled) return;
+        const byKey = new Map(details.regions.map((region) => [region.key, region.items]));
+        setData((current) => current ? {
+          ...current,
+          updated_at: details.updated_at,
+          regions: current.regions.map((region) => ({ ...region, items: byKey.get(region.key) ?? [] })),
+        } : current);
+      }).catch((err) => {
+        if (!cancelled) notify({ title: t("planning.regions", { n: selectedKeys.length }), message: errorText(err, t("planning.loadFailed")), tone: "danger" });
+      }).finally(() => {
+        if (!cancelled) setDetailsLoading(false);
+      });
+    }, 180);
+    return () => { cancelled = true; window.clearTimeout(timer); };
+  }, [data?.war_number, regionSelection, selectedKeys, t, notify]);
   // каталог построек нужен и панели, и подписям на карте
   React.useEffect(() => {
     fetch(assetUrl(STRUCTURES_URL) ?? STRUCTURES_URL).then((r) => (r.ok ? r.json() : null)).then(setCatalog).catch(() => setCatalog(null));
@@ -144,6 +188,7 @@ export const PlanningWorkspace: React.FC = () => {
           war: data.war_number,
           phase: data.phase,
           regions: regionsIn(data.regions, rect),
+          frontline: showFrontline ? frontlinePoints ?? [] : [],
           shapes: structuredClone(plan),
         };
         changeSnapshots((prev) => [snap, ...prev]);
@@ -240,13 +285,13 @@ export const PlanningWorkspace: React.FC = () => {
       ) : null}
 
       <div className={cn("planning", side && "has-side")}>
-        <div className="planning-map panel">
+        <div data-guide="planning-map" className="planning-map panel">
           {error ? (
             <EmptyState icon="map" title={t("planning.loadFailed")} hint={error} />
           ) : !data ? (
             <Loading label={t("planning.loading")} />
           ) : (
-            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection ?? new Set(data.regions.map((r) => r.key))} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} />
+            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection ?? new Set()} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} frontlinePoints={showFrontline ? frontlinePoints : null} />
           )}
 
           {data && !resistance ? (
@@ -254,12 +299,18 @@ export const PlanningWorkspace: React.FC = () => {
               <FilterPanel counts={counts} hidden={hidden} onToggle={toggle} onAll={setAll} />
             </div>
           ) : null}
+          {data && !resistance && regionSelection?.size === 0 ? (
+            <div data-guide="planning-selection-empty" className="planning-selection-empty" role="status">
+              <span>{t("planning.selectRegionsPrompt")}</span>
+              <button type="button" className="btn btn-primary h-8 min-h-0 px-3 text-xs" onClick={() => setSelectingRegions(true)}>{t("planning.selectRegionsAction")}</button>
+            </div>
+          ) : null}
           {data && !resistance ? (
             <div className="planning-overlay is-regions">
-              <button type="button" className={cn("btn planning-side-btn", selectingRegions && "is-active")} onClick={() => setSelectingRegions((v) => !v)} aria-pressed={selectingRegions}>
+              <button data-guide="planning-regions" type="button" className={cn("btn planning-side-btn", selectingRegions && "is-active")} onClick={() => setSelectingRegions((v) => !v)} aria-pressed={selectingRegions}>
                 <Icon name="map" size={15} /> {t("planning.regions", { n: regionSelection?.size ?? data.regions.length })}
               </button>
-              {selectingRegions ? <div className="planning-region-actions">
+              {selectingRegions ? <div data-guide="planning-region-actions" className="planning-region-actions">
                 <span>{t("planning.regionsHint")}</span>
                 <button type="button" onClick={() => { const all = new Set(data.regions.map((r) => r.key)); setRegionSelection(all); writeStorage(REGIONS_KEY, [...all]); }}>{t("planning.regionsAll")}</button>
                 <button type="button" onClick={() => { setRegionSelection(new Set()); writeStorage(REGIONS_KEY, []); }}>{t("planning.regionsNone")}</button>
@@ -268,14 +319,17 @@ export const PlanningWorkspace: React.FC = () => {
             </div>
           ) : null}
           <div className="planning-overlay is-right">
-            <button type="button" className={cn("btn planning-side-btn", side && "is-active")} onClick={toggleSide} aria-expanded={side} aria-controls="planning-side">
+            {!resistance ? <button data-guide="planning-frontline-toggle" type="button" className={cn("btn planning-side-btn", showFrontline && "is-active")} onClick={() => void toggleFrontline()} aria-pressed={showFrontline} disabled={frontlineLoading} title={t("planning.frontline")}>
+              <Icon name="map" size={15} /><span>{frontlineLoading ? t("planning.frontlineLoading") : t("planning.frontlineToggle")}</span>
+            </button> : null}
+            <button data-guide="planning-tools-toggle" type="button" className={cn("btn planning-side-btn", side && "is-active")} onClick={toggleSide} aria-expanded={side} aria-controls="planning-side">
               <Icon name="grid" size={16} />
               <span className="max-sm:sr-only">{t("planning.tools")}</span>
             </button>
           </div>
           {data ? (
             <div className="planning-overlay is-bottom">
-              <span>{t("planning.updated", { war: data.war_number ?? "—", at: formatDateTime(data.updated_at) })}</span>
+              <span>{detailsLoading ? t("planning.regionLoading") : t("planning.updated", { war: data.war_number ?? "—", at: formatDateTime(data.updated_at) })}</span>
               <span className="text-fg-3 max-sm:hidden">{t(resistance ? "planning.hourly" : "planning.daily")}</span>
               <a href="https://github.com/clapfoot/warapi" target="_blank" rel="noreferrer noopener" className="text-fg-3 underline-offset-2 hover:underline max-sm:hidden">{t("planning.source")}</a>
             </div>
@@ -283,7 +337,7 @@ export const PlanningWorkspace: React.FC = () => {
         </div>
 
         {side ? (
-          <aside id="planning-side" className="planning-side panel" aria-label={t("planning.tools")}>
+          <aside id="planning-side" data-guide="planning-tools-panel" className="planning-side panel" aria-label={t("planning.tools")}>
             <div className="mb-3 flex items-center justify-between gap-2">
               <h2 className="section-title">{t("planning.tools")}</h2>
               <button type="button" className="icon-btn" onClick={toggleSide} aria-label={t("planning.toolsClose")} title={t("planning.toolsClose")}>

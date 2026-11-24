@@ -97,7 +97,7 @@ export const SnapshotViewer: React.FC<{
             </span>
           </div>
           <div className="planning-snapshot-view">
-            <MapCanvas data={data} hidden={NOTHING_HIDDEN} editor={editor} selectedRegions={new Set(data.regions.map((r) => r.key))} onToggleRegion={() => {}} selectingRegions={false} frame={snapshot.rect} />
+            <MapCanvas data={data} hidden={NOTHING_HIDDEN} editor={editor} selectedRegions={new Set(data.regions.map((r) => r.key))} onToggleRegion={() => {}} selectingRegions={false} frontlinePoints={snapshot.frontline ?? null} frame={snapshot.rect} />
           </div>
           <p className="text-xs text-fg-3">{t("planning.snapshotHint")}</p>
           {/* план в масштабе картинки — источник SVG для PNG */}
@@ -186,6 +186,23 @@ export async function renderPng(snap: Snapshot, k: number, s: number, svg: SVGSV
       ctx.fillStyle = l.major ? "#f4efe2" : "#e4ded0";
       ctx.fillText(l.text, x, top + (h - size) / 2);
     }
+  }
+
+  if (snap.frontline && snap.frontline.length > 1) {
+    const path = snap.frontline.map((p) => at(p.x, p.y));
+    const stroke = (color: string, width: number, dash: number[] = []) => {
+      ctx.beginPath();
+      path.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+      ctx.strokeStyle = color;
+      ctx.lineWidth = width * px;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.setLineDash(dash.map((n) => n * px));
+      ctx.stroke();
+    };
+    stroke("#111", 12);
+    stroke("#f34f55", 5, [16, 10]);
+    ctx.setLineDash([]);
   }
 
   // план: SVG с картинками построек, встроенными как data: (иначе браузер их не нарисует)

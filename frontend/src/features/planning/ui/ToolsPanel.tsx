@@ -1,11 +1,17 @@
 "use client";
 
 import * as React from "react";
-import { COLORS, FACTIONS, FACTION_COLOR, POINT_COLOR, POINT_ICON, POINT_KINDS, TOOLS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type PointKind, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
+import { COLORS, FACTIONS, FACTION_COLOR, POINT_COLOR, POINT_ICON, POINT_KINDS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type PointKind, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, formatDateTime, useConfirm, useT, type IconName, type MessageKey } from "@/shared";
 
-const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", point: "flag", frame: "crop", eraser: "eraser" };
+const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", freehand: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", point: "flag", frame: "crop", eraser: "eraser" };
+const TOOL_GROUPS = {
+  draw: ["line", "freehand", "ruler", "arrow", "radius"],
+  place: ["structure", "order", "point"],
+  edit: ["select", "frame", "eraser"],
+} as const;
+type ToolGroup = keyof typeof TOOL_GROUPS;
 
 /**
  * Правая панель «Планирования»: инструменты, настройки новых объектов, свойства выбранного
@@ -39,8 +45,14 @@ export const ToolsPanel: React.FC<{
 }> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots, locked, savedLabel }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
+  const [toolGroup, setToolGroup] = React.useState<ToolGroup>("edit");
   const set = <K extends keyof Defaults>(key: K, value: Defaults[K]) => onDefaults({ ...defaults, [key]: value });
-  const drawing = tool === "line" || tool === "arrow" || tool === "radius" || tool === "ruler";
+  const pickTool = (next: Tool) => {
+    const group = (Object.keys(TOOL_GROUPS) as ToolGroup[]).find((key) => (TOOL_GROUPS[key] as readonly Tool[]).includes(next));
+    if (group) setToolGroup(group);
+    onTool(next);
+  };
+  const drawing = tool === "line" || tool === "freehand" || tool === "arrow" || tool === "radius" || tool === "ruler";
 
   if (locked) {
     return (
@@ -52,13 +64,22 @@ export const ToolsPanel: React.FC<{
   }
   return (
     <div className="flex flex-col gap-4">
-      <div className="planning-tools" role="toolbar" aria-label={t("planning.tools")}>
-        {TOOLS.map((id) => (
-          <button key={id} type="button" className={cn("planning-tool", tool === id && "is-active")} onClick={() => onTool(id)} aria-pressed={tool === id} title={t(`planning.tool.${id}Hint` as MessageKey)}>
+      <div className="planning-tool-groups">
+        <div data-guide="planning-tool-tabs" className="planning-tool-tabs" role="tablist" aria-label={t("planning.tools")}>
+          {(Object.keys(TOOL_GROUPS) as ToolGroup[]).map((group) => (
+            <button key={group} type="button" role="tab" aria-selected={toolGroup === group} className={cn("planning-tool-tab", toolGroup === group && "is-active")} onClick={() => setToolGroup(group)}>
+              {t(`planning.toolGroup.${group}` as MessageKey)}
+            </button>
+          ))}
+        </div>
+        <div data-guide="planning-tool-list" className="planning-tools" role="toolbar" aria-label={t("planning.toolGroup." + toolGroup as MessageKey)}>
+        {TOOL_GROUPS[toolGroup].map((id) => (
+          <button key={id} data-guide={`planning-tool-${id}`} type="button" className={cn("planning-tool", tool === id && "is-active")} onClick={() => pickTool(id)} aria-pressed={tool === id} title={t(`planning.tool.${id}Hint` as MessageKey)}>
             <Icon name={TOOL_ICON[id]} size={18} />
             <span>{t(`planning.tool.${id}` as MessageKey)}</span>
           </button>
         ))}
+        </div>
       </div>
       <p className="text-xs text-fg-3">{t(`planning.tool.${tool}Hint` as MessageKey)}</p>
 
@@ -77,7 +98,7 @@ export const ToolsPanel: React.FC<{
           ) : (
             <ColorPicker value={defaults.color} onChange={(c) => set("color", c)} />
           )}
-          {tool === "line" || tool === "arrow" ? <Range label={t("planning.prop.width")} value={defaults.width} min={1} max={12} unit="px" onChange={(v) => set("width", v)} /> : null}
+          {tool === "line" || tool === "freehand" || tool === "arrow" ? <Range label={t("planning.prop.width")} value={defaults.width} min={1} max={12} unit="px" onChange={(v) => set("width", v)} /> : null}
           {tool === "radius" ? <Range label={t("planning.prop.sweep")} value={defaults.sweep} min={10} max={360} unit="°" onChange={(v) => set("sweep", v)} /> : null}
         </section>
       ) : null}
@@ -157,7 +178,7 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
             {t("planning.openOrders")}
           </a>
         </>
-      ) : (
+      ) : s.kind === "freehand" ? null : (
         <Range label={s.kind === "structure" ? t("planning.prop.rotation") : t("planning.prop.angle")} value={s.angle} min={0} max={359} unit="°" onChange={(v) => onUpdate({ ...s, angle: normAngle(v) })} />
       )}
 
@@ -170,10 +191,10 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
           <Range label={t("planning.prop.sweep")} value={s.sweep} min={10} max={360} unit="°" onChange={(v) => onUpdate({ ...s, sweep: v })} />
         </>
       ) : null}
-      {s.kind === "line" || s.kind === "arrow" ? <Range label={t("planning.prop.width")} value={s.width} min={1} max={12} unit="px" onChange={(v) => onUpdate({ ...s, width: v })} /> : null}
+      {s.kind === "line" || s.kind === "freehand" || s.kind === "arrow" ? <Range label={t("planning.prop.width")} value={s.width} min={1} max={12} unit="px" onChange={(v) => onUpdate({ ...s, width: v })} /> : null}
       {s.kind === "structure" ? <FactionPicker value={s.team ?? null} onChange={(team) => onUpdate({ ...s, team })} /> : null}
       {s.kind === "structure" || s.kind === "order" || s.kind === "point" ? <Range label={t("planning.prop.size")} value={s.size} min={50} max={300} step={10} unit="%" onChange={(v) => onUpdate({ ...s, size: v })} /> : null}
-      {s.kind === "line" || s.kind === "ruler" || s.kind === "radius" ? <ColorPicker value={s.color} onChange={(color) => onUpdate({ ...s, color })} /> : null}
+      {s.kind === "line" || s.kind === "freehand" || s.kind === "ruler" || s.kind === "radius" ? <ColorPicker value={s.color} onChange={(color) => onUpdate({ ...s, color })} /> : null}
     </section>
   );
 };

@@ -71,6 +71,7 @@ class _Snapshot:
 
 
 _snap = _Snapshot()
+_overview_snap = _Snapshot()
 _lock = asyncio.Lock()
 
 
@@ -141,6 +142,120 @@ async def _build() -> dict[str, Any]:
     }
 
 
+async def _build_overview() -> dict[str, Any]:
+    """Карта-контекст без объектов: динамику регионов загружаем только по запросу выбора."""
+    async with get_http_client() as client:
+        war = await _get(client, "/war", MAPS_TTL)
+        maps = await _get(client, "/maps", MAPS_TTL)
+        resistance = is_resistance(war, int(time.time() * 1000))
+        sem = asyncio.Semaphore(8)
+
+        async def one(key: str) -> dict[str, Any] | None:
+            async with sem:
+                try:
+                    static = await _get(client, f"/maps/{key}/static", STATIC_TTL)
+                except (httpx.HTTPError, ValueError):
+                    return None
+            return _region(key, static, {}, True)
+
+        regions = [r for r in await asyncio.gather(*(one(k) for k in maps or [])) if r]
+    if not regions:
+        raise ValueError("War API: нет ни одного региона")
+    now = datetime.now(UTC)
+    return {
+        "war_number": war.get("warNumber"),
+        "phase": "resistance" if resistance else "conquest",
+        "winner": TEAMS.get(str(war.get("winner"))),
+        "updated_at": now.isoformat(),
+        "next_update_at": (now + timedelta(seconds=RESISTANCE_TTL if resistance else SNAPSHOT_TTL)).isoformat(),
+        "regions": sorted(regions, key=lambda r: (r["row"], r["col"])),
+        "source": "https://war-service-live.foxholeservices.com",
+    }
+
+
+async def world_map_overview() -> dict[str, Any]:
+    """Overview содержит только геометрию и подписи; динамические объекты не загружаются."""
+    async with _lock:
+        now = time.monotonic()
+        ttl = RESISTANCE_TTL if _overview_snap.data is not None and _overview_snap.data["phase"] == "resistance" else SNAPSHOT_TTL
+        if _overview_snap.data is not None and (
+            now - _overview_snap.built < ttl or (_overview_snap.failed is not None and now - _overview_snap.failed < RETRY_AFTER)
+        ):
+            return _overview_snap.data
+        try:
+            _overview_snap.data, _overview_snap.built, _overview_snap.failed = await _build_overview(), now, None
+        except (httpx.HTTPError, ValueError):
+            if _overview_snap.data is None:
+                raise
+            _overview_snap.failed = now
+        return _overview_snap.data
+
+
+async def world_map_regions(keys: list[str]) -> dict[str, Any]:
+    """Возвращает постройки только для запрошенных гексов; остальные не опрашиваются."""
+    overview = await world_map_overview()
+    wanted = set(keys)
+    available = {region["key"]: region for region in overview["regions"] if region["key"] in wanted}
+    if not available or overview["phase"] == "resistance":
+        return {**overview, "regions": list(available.values())}
+
+    async with get_http_client() as client:
+        sem = asyncio.Semaphore(8)
+
+        async def load(key: str) -> dict[str, Any]:
+            async with sem:
+                dynamic = await _get(client, f"/maps/{key}/dynamic/public", DYNAMIC_TTL)
+            base = available[key]
+            items = []
+            for it in dynamic.get("mapItems") or []:
+                kind = KINDS.get(int(it.get("iconType") or 0))
+                if not kind:
+                    continue
+                flags = int(it.get("flags") or 0)
+                items.append({
+                    "kind": kind[0], "tier": kind[1],
+                    "team": TEAMS.get(str(it.get("teamId")), "neutral"),
+                    "x": _clamp(it.get("x")), "y": _clamp(it.get("y")),
+                    "victory": bool(flags & FLAG_VICTORY), "scorched": bool(flags & FLAG_SCORCHED),
+                })
+            return {**base, "items": items}
+
+        details = await asyncio.gather(*(load(key) for key in available))
+    return {**overview, "regions": details}
+
+
+async def world_frontline() -> list[dict[str, float]]:
+    """Агрегирует позицию фронта и отдаёт только координаты линии, без маркеров построек."""
+    snapshot = await world_map()
+    points = [
+        {
+            "team": item["team"],
+            "x": region["col"] * 1024 * 0.75 + item["x"] * 1024,
+            "y": region["row"] * 888 / 2 + item["y"] * 888,
+        }
+        for region in snapshot["regions"]
+        for item in region["items"]
+        if item["kind"] == "town_hall" and item["team"] != "neutral"
+    ]
+    wardens = [p for p in points if p["team"] == "wardens"]
+    colonials = [p for p in points if p["team"] == "colonials"]
+    if not wardens or not colonials:
+        return []
+
+    midpoints = []
+    for warden in wardens:
+        colonial = min(colonials, key=lambda p: (p["x"] - warden["x"]) ** 2 + (p["y"] - warden["y"]) ** 2)
+        midpoints.append({"x": (warden["x"] + colonial["x"]) / 2, "y": (warden["y"] + colonial["y"]) / 2})
+    cx = sum(p["x"] for p in points) / len(points)
+    cy = sum(p["y"] for p in points) / len(points)
+    wx = sum(p["x"] for p in wardens) / len(wardens)
+    wy = sum(p["y"] for p in wardens) / len(wardens)
+    ox = sum(p["x"] for p in colonials) / len(colonials) - wx
+    oy = sum(p["y"] for p in colonials) / len(colonials) - wy
+    midpoints.sort(key=lambda p: (p["x"] - cx) * -oy + (p["y"] - cy) * ox)
+    return midpoints
+
+
 async def world_map() -> dict[str, Any]:
     """Суточный снимок карты; при сбое War API — прошлый снимок, если он есть."""
     async with _lock:
@@ -161,3 +276,4 @@ async def world_map() -> dict[str, Any]:
 
 def reset_snapshot() -> None:
     _snap.data, _snap.built, _snap.failed = None, 0.0, None
+    _overview_snap.data, _overview_snap.built, _overview_snap.failed = None, 0.0, None

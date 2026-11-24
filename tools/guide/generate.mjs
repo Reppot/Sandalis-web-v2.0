@@ -1,7 +1,7 @@
 // Генератор руководства «Навигация»: демо-клан -> скриншоты интерфейса на ru/en/cs ->
 // координаты меток из DOM -> backend/static/guide/<locale>/*.webp + seed/data/guide.json.
 // Запуск и подготовка окружения — README.md рядом.
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { CHAPTERS } from "./chapters.mjs";
@@ -10,7 +10,7 @@ import { COMMANDER, seedDemo } from "./demo.mjs";
 const FRONTEND = process.env.GUIDE_FRONTEND ?? "http://127.0.0.1:3300";
 const BACKEND = process.env.GUIDE_BACKEND ?? "http://127.0.0.1:8020";
 const BROWSER = process.env.GUIDE_BROWSER ?? "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
-const LOCALES = ["ru", "en", "cs"];
+const LOCALES = ["ru", "en"];
 const VIEWPORT = { width: 1440, height: 960 };
 const STATIC = new URL("../../backend/static/guide/", import.meta.url);
 const SEED = new URL("../../backend/app/seed/data/guide.json", import.meta.url);
@@ -62,6 +62,24 @@ const PREPARE = {
     const tabs = await page.$$('[data-guide="tools-tabs"] [role=tab]');
     await tabs[1].click();
     await page.waitForSelector(".factory-item-card");
+  },
+  async openPlanning(page) {
+    await page.waitForSelector('[data-guide="planning-regions"]', { timeout: 30000 });
+  },
+  async selectPlanningHex(page) {
+    await page.waitForSelector('[data-guide="planning-regions"]', { timeout: 30000 });
+    await page.click('[data-guide="planning-regions"]');
+    await page.waitForSelector('[data-region="DeadLandsHex"]', { timeout: 30000 });
+    await page.click('[data-region="DeadLandsHex"]');
+    await page.waitForSelector(".planning-marker", { timeout: 30000 });
+    await page.click('[data-guide="planning-regions"]');
+  },
+  async openPlanningTools(page) {
+    const toggle = await page.$('[data-guide="planning-tools-toggle"]');
+    if (await toggle.evaluate((el) => el.getAttribute("aria-expanded") !== "true")) await toggle.click();
+    await page.waitForSelector('[data-guide="planning-tool-tabs"]', { timeout: 30000 });
+    const draw = await page.$('[data-guide="planning-tool-tabs"] [role="tab"]');
+    await draw.click();
   },
   async expandMember(page) {
     await page.waitForSelector('[data-guide="mgmt-members"] li button', { timeout: 30000 });
@@ -159,7 +177,15 @@ async function shoot(page, locale, shot) {
     const x = ((p.x - clip.x) / clip.width) * 100;
     const y = ((p.y - clip.y) / clip.height) * 100;
     if (x < -1 || x > 101 || y < -1 || y > 101) throw new Error(`[${locale}] ${shot.id}: marker ${m.sel} outside the shot`);
-    markers.push({ x: +Math.min(98.5, Math.max(1.5, x)).toFixed(2), y: +Math.min(98, Math.max(2, y)).toFixed(2) });
+    const bx = Math.max(0, ((r.x - clip.x) / clip.width) * 100);
+    const by = Math.max(0, ((r.y - clip.y) / clip.height) * 100);
+    const bw = Math.max(0, Math.min(100 - bx, (r.w / clip.width) * 100));
+    const bh = Math.max(0, Math.min(100 - by, (r.h / clip.height) * 100));
+    markers.push({
+      x: +Math.min(98.5, Math.max(1.5, x)).toFixed(2),
+      y: +Math.min(98, Math.max(2, y)).toFixed(2),
+      box: { x: +bx.toFixed(2), y: +by.toFixed(2), w: +bw.toFixed(2), h: +bh.toFixed(2) },
+    });
   }
 
   mkdirSync(new URL(`${locale}/`, STATIC), { recursive: true });
@@ -216,24 +242,32 @@ async function main() {
   }
   await browser.close();
 
-  const rows = CHAPTERS.map((chapter, sort) => ({
+  const previous = JSON.parse(readFileSync(fileURLToPath(SEED), "utf8"));
+  const oldChapters = new Map(previous.map((row) => [row.key, row.payload]));
+  const mergeLocales = (oldValue, newValue) => ({ ...(oldValue ?? {}), ru: newValue.ru, en: newValue.en });
+  const rows = CHAPTERS.map((chapter, sort) => {
+    const oldChapter = oldChapters.get(chapter.key) ?? {};
+    const oldShots = new Map((oldChapter.shots ?? []).map((shot) => [shot.id, shot]));
+    return {
     kind: "guide_chapter",
     key: chapter.key,
     sort,
     payload: {
       icon: chapter.icon,
-      title: chapter.title,
-      summary: chapter.summary,
-      shots: chapter.shots.map((shot) => ({
+      title: mergeLocales(oldChapter.title, chapter.title),
+      summary: mergeLocales(oldChapter.summary, chapter.summary),
+      shots: chapter.shots.map((shot) => {
+        const old = oldShots.get(shot.id) ?? {};
+        return {
         id: shot.id,
-        caption: shot.caption,
-        images: Object.fromEntries(LOCALES.map((l) => [l, `/api/v1/assets/guide/${l}/${shot.id}.webp`])),
-        size: Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].size])),
-        markers: Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].markers])),
-        notes: Object.fromEntries(LOCALES.map((l) => [l, shot.markers.map((m) => m.note[l])])),
-      })),
+        caption: mergeLocales(old.caption, shot.caption),
+        images: { ...(old.images ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, `/api/v1/assets/guide/${l}/${shot.id}.webp`])) },
+        size: { ...(old.size ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].size])) },
+        markers: { ...(old.markers ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].markers])) },
+        notes: { ...(old.notes ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, shot.markers.map((m) => m.note[l])])) },
+      }; }),
     },
-  }));
+  }; });
   writeFileSync(SEED, `${JSON.stringify(rows, null, 1)}\n`, "utf8");
   console.log(`guide.json: ${rows.length} chapters`);
 }

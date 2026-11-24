@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { HEX_H, HEX_W, hexLeft, hexTop, frontline, iconOf, markerFactor, visibleLabels, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
+import { HEX_H, HEX_W, hexLeft, hexTop, iconOf, markerFactor, visibleLabels, type FrontlinePoint, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
 import { M_PER_PX_X, UNIT_COLOR, measure, moveShape, newId, rectFrom, type Defaults, type Rect, type Shape, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { PlanLayer } from "@/features/planning/ui/PlanLayer";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
@@ -21,6 +21,7 @@ type Point = { x: number; y: number };
 type Gesture =
   | { type: "pan" }
   | { type: "draw"; start: Point }
+  | { type: "freehand"; points: Point[] }
   | { type: "move"; id: string; last: Point }
   | { type: "handle"; id: string }
   | { type: "frame"; start: Point }
@@ -54,6 +55,11 @@ function draftShape(tool: Tool, start: Point, p: Point, d: Defaults): Shape | nu
   return null;
 }
 
+const freehandShape = (points: Point[], d: Defaults, id = "draft"): Shape => ({
+  id, kind: "freehand", x: points[0].x, y: points[0].y, angle: 0,
+  points, width: d.width, color: d.color,
+});
+
 /** Трансформ мира и CSS-переменные размера маркеров (--m) и подписей (--inv). */
 function worldStyle(v: View): React.CSSProperties {
   return {
@@ -78,9 +84,10 @@ export const MapCanvas: React.FC<{
   selectedRegions: Set<string>;
   onToggleRegion: (key: string) => void;
   selectingRegions: boolean;
+  frontlinePoints?: FrontlinePoint[] | null;
   /** Просмотр снимка: только этот кусок карты, без правки — панорама, масштаб и подсказки. */
   frame?: Rect | null;
-}> = ({ data, hidden, editor, selectedRegions, onToggleRegion, selectingRegions, frame }) => {
+}> = ({ data, hidden, editor, selectedRegions, onToggleRegion, selectingRegions, frontlinePoints, frame }) => {
   const t = useT();
   const box = React.useRef<HTMLDivElement>(null);
   const world = React.useRef<HTMLDivElement>(null);
@@ -243,6 +250,9 @@ export const MapCanvas: React.FC<{
     } else if (tool === "point") {
       onAdd({ id: newId(), kind: "point", x: p.x, y: p.y, angle: 0, size: 100, point: defaults.point, label: defaults.pointLabel.trim(), note: "" });
       gesture.current = null;
+    } else if (tool === "freehand") {
+      gesture.current = { type: "freehand", points: [p] };
+      setDraft(freehandShape([p], defaults));
     } else {
       gesture.current = { type: "draw", start: p };
     }
@@ -272,6 +282,14 @@ export const MapCanvas: React.FC<{
       setView((v) => (v ? { ...v, x: v.x + e.clientX - prev.x, y: v.y + e.clientY - prev.y } : v), true);
     } else if (g.type === "draw") {
       setDraft(draftShape(tool, g.start, toWorld(e.clientX, e.clientY), defaults));
+    } else if (g.type === "freehand") {
+      const p = toWorld(e.clientX, e.clientY);
+      const last = g.points[g.points.length - 1];
+      if (Math.hypot(p.x - last.x, p.y - last.y) >= 5 && g.points.length < 1200) {
+        const points = [...g.points, p];
+        gesture.current = { ...g, points };
+        setDraft(freehandShape(points, defaults));
+      }
     } else if (g.type === "frame") {
       setFrameDraft(rectFrom(g.start, toWorld(e.clientX, e.clientY)));
     } else if (g.type === "move") {
@@ -281,7 +299,7 @@ export const MapCanvas: React.FC<{
       gesture.current = { ...g, last: p };
     } else if (g.type === "handle") {
       const s = shapes.find((x) => x.id === g.id);
-      if (!s || s.kind === "structure" || s.kind === "order" || s.kind === "point") return;
+      if (!s || s.kind === "structure" || s.kind === "order" || s.kind === "point" || s.kind === "freehand") return;
       const { angle, meters } = measure(s, toWorld(e.clientX, e.clientY));
       const size = Math.max(1, Math.round(meters));
       onUpdate(s.kind === "radius" ? { ...s, angle, radius: size } : { ...s, angle, length: size });
@@ -293,6 +311,12 @@ export const MapCanvas: React.FC<{
     pointers.current.delete(e.pointerId);
     if (pointers.current.size < 2) pinch.current = null;
     const g = gesture.current;
+    if (g?.type === "freehand" && e.type === "pointerup") {
+      const end = toWorld(e.clientX, e.clientY);
+      const points = [...g.points, end];
+      const length = points.slice(1).reduce((sum, point, i) => sum + Math.hypot(point.x - points[i].x, point.y - points[i].y), 0);
+      if (length * (viewRef.current?.scale ?? 1) > 12 && points.length > 2) ed.current.onAdd(freehandShape(points, ed.current.defaults, newId()));
+    }
     if (g?.type === "draw" && e.type === "pointerup") {
       // точка отпускания — последняя точка черновика
       const draft = draftShape(ed.current.tool, g.start, toWorld(e.clientX, e.clientY), ed.current.defaults) ?? draftRef.current;
@@ -315,7 +339,6 @@ export const MapCanvas: React.FC<{
   const scale = view?.scale ?? 0.1;
   const live = viewRef.current ?? view;
   const resistance = data.phase === "resistance";
-  const front = React.useMemo(() => frontline(data.regions), [data.regions]);
   const isInSelectedRegion = React.useCallback((p: Point) => data.regions.some((region) => {
     if (!selectedRegions.has(region.key)) return false;
     const x = (p.x - hexLeft(region.col)) / HEX_W;
@@ -348,11 +371,11 @@ export const MapCanvas: React.FC<{
       {view ? (
         <div ref={world} className="planning-world" style={live ? worldStyle(live) : undefined}>
           {data.regions.map((r) => (
-            <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance} selected={selectedRegions.has(r.key)} selecting={selectingRegions} />
+            <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance && selectedRegions.has(r.key)} selected={selectedRegions.has(r.key)} selecting={selectingRegions} />
           ))}
-          {!resistance && front.length > 1 ? <svg className="planning-frontline" viewBox={`${bounds.minX} ${bounds.minY} ${bounds.w} ${bounds.h}`} aria-label={t("planning.frontline")}>
-            <polyline points={front.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
-            <polyline points={front.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#f34f55" strokeWidth={5} strokeDasharray="16 10" strokeLinejoin="round" strokeLinecap="round" />
+          {!resistance && frontlinePoints && frontlinePoints.length > 1 ? <svg className="planning-frontline" viewBox={`${bounds.minX} ${bounds.minY} ${bounds.w} ${bounds.h}`} aria-label={t("planning.frontline")}>
+            <polyline points={frontlinePoints.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
+            <polyline points={frontlinePoints.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#f34f55" strokeWidth={5} strokeDasharray="16 10" strokeLinejoin="round" strokeLinecap="round" />
           </svg> : null}
           <PlanLayer
             shapes={editor.shapes.filter((shape) => isInSelectedRegion(shape))}
@@ -382,7 +405,7 @@ const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; scale: number; sh
   const items = showItems ? region.items.filter((it) => !hidden.has(it.kind)) : [];
   const labels = React.useMemo(() => visibleLabels(region.labels, scale), [region.labels, scale]);
   return (
-    <div data-region={region.key} className={cn("planning-hex", selected && "is-region-selected", !selected && "is-unselected", selecting && "is-selecting")} style={{ left: hexLeft(region.col), top: hexTop(region.row), width: HEX_W, height: HEX_H }}>
+    <div data-region={region.key} className={cn("planning-hex", selected && "is-region-selected", selecting && !selected && "is-unselected", selecting && "is-selecting")} style={{ left: hexLeft(region.col), top: hexTop(region.row), width: HEX_W, height: HEX_H }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- карта региона War API, WebP */}
       {/* на общем плане — копия 256 px (в памяти видеокарты в 16 раз меньше), ближе — полная */}
       <img src={assetUrl(`/api/v1/assets/maps/hex/${selected ? "" : "sm/"}${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} decoding="async" />
@@ -416,6 +439,7 @@ const Marker: React.FC<{ item: MapItem; region: string; t: ReturnType<typeof use
       data-tooltip={title}
       role="img"
       aria-label={title}
+      tabIndex={0}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- иконка War API 48×48 */}
       <img src={assetUrl(iconOf(item)) ?? ""} alt="" width={20} height={20} draggable={false} decoding="async" />

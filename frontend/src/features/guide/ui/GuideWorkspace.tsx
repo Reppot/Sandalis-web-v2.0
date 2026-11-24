@@ -9,6 +9,8 @@ interface GuideMarker {
   /** Центр метки в процентах ширины/высоты скриншота. */
   x: number;
   y: number;
+  /** Bounds of the exact UI target, relative to the screenshot. */
+  box?: { x: number; y: number; w: number; h: number };
 }
 
 interface GuideShot {
@@ -134,20 +136,23 @@ const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; active?: number | n
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={pick(shot.caption, locale)} width={size.w} height={size.h} />
       {markers.map((m, i) => (
-        <button
-          key={i}
-          type="button"
-          className={cn("guide-marker", active === i && "is-active")}
-          style={{ left: `${m.x}%`, top: `${m.y}%` }}
-          onClick={(e) => {
-            e.stopPropagation();
-            onMarker?.(i);
-          }}
-          onMouseEnter={() => onMarker?.(i)}
-          aria-label={`${i + 1}`}
-        >
-          {i + 1}
-        </button>
+        <React.Fragment key={i}>
+          {m.box && active === i ? <span className="guide-focus-target" style={{ left: `${m.box.x}%`, top: `${m.box.y}%`, width: `${m.box.w}%`, height: `${m.box.h}%` }} aria-hidden="true" /> : null}
+          <button
+            type="button"
+            className={cn("guide-marker", active === i && "is-active")}
+            style={{ left: `${m.x}%`, top: `${m.y}%` }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onMarker?.(i);
+            }}
+            onMouseEnter={() => onMarker?.(i)}
+            onFocus={() => onMarker?.(i)}
+            aria-label={`${i + 1}`}
+          >
+            {i + 1}
+          </button>
+        </React.Fragment>
       ))}
     </div>
   );
