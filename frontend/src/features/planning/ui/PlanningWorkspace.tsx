@@ -17,7 +17,6 @@ import { EmptyState, Icon, Loading, assetUrl, cn, errorText, formatDateTime, rea
 const FILTERS_KEY = "sindaris-planning-hidden";
 const SIDE_KEY = "sindaris-planning-side";
 const MODE_KEY = "sindaris-planning-mode";
-const REGIONS_KEY = "sindaris-planning-regions";
 type PlanMode = "mine" | "clan";
 
 /**
@@ -34,7 +33,7 @@ export const PlanningWorkspace: React.FC = () => {
   const [data, setData] = React.useState<WorldMap | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [hidden, setHidden] = React.useState<Set<MapKind>>(new Set());
-  const [regionSelection, setRegionSelection] = React.useState<Set<string> | null>(null);
+  const [regionSelection, setRegionSelection] = React.useState<Set<string>>(() => new Set());
   const [detailsLoading, setDetailsLoading] = React.useState(false);
   const [showFrontline, setShowFrontline] = React.useState(false);
   const [frontlinePoints, setFrontlinePoints] = React.useState<Awaited<ReturnType<typeof planningApi.frontline>>["points"] | null>(null);
@@ -83,16 +82,9 @@ export const PlanningWorkspace: React.FC = () => {
   React.useEffect(() => {
     planningApi.overview().then(setData).catch((err) => setError(errorText(err, t("planning.loadFailed"))));
   }, [t]);
-  React.useEffect(() => {
-    if (!data || regionSelection) return;
-    const saved = readStorage<string[] | null>(REGIONS_KEY, null);
-    const valid = new Set(data.regions.map((r) => r.key));
-    setRegionSelection(new Set((saved ?? []).filter((key) => valid.has(key))));
-  }, [data, regionSelection]);
   const toggleRegion = (key: string) => setRegionSelection((prev) => {
-    const next = new Set(prev ?? []);
+    const next = new Set(prev);
     next.has(key) ? next.delete(key) : next.add(key);
-    writeStorage(REGIONS_KEY, [...next]);
     return next;
   });
   const toggleFrontline = async () => {
@@ -113,9 +105,14 @@ export const PlanningWorkspace: React.FC = () => {
       setFrontlineLoading(false);
     }
   };
-  const selectedKeys = React.useMemo(() => [...(regionSelection ?? [])].sort(), [regionSelection]);
+  const selectedKeys = React.useMemo(() => [...regionSelection].sort(), [regionSelection]);
   React.useEffect(() => {
-    if (!data || regionSelection === null) return;
+    if (!data) return;
+    if (selectedKeys.length === 0) {
+      setDetailsLoading(false);
+      setData((current) => current ? { ...current, regions: current.regions.map((region) => ({ ...region, items: [] })) } : current);
+      return;
+    }
     let cancelled = false;
     setDetailsLoading(selectedKeys.length > 0);
     const timer = window.setTimeout(() => {
@@ -291,7 +288,7 @@ export const PlanningWorkspace: React.FC = () => {
           ) : !data ? (
             <Loading label={t("planning.loading")} />
           ) : (
-            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection ?? new Set()} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} frontlinePoints={showFrontline ? frontlinePoints : null} />
+            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} frontlinePoints={showFrontline ? frontlinePoints : null} />
           )}
 
           {data && !resistance ? (
@@ -299,21 +296,15 @@ export const PlanningWorkspace: React.FC = () => {
               <FilterPanel counts={counts} hidden={hidden} onToggle={toggle} onAll={setAll} />
             </div>
           ) : null}
-          {data && !resistance && regionSelection?.size === 0 ? (
-            <div data-guide="planning-selection-empty" className="planning-selection-empty" role="status">
-              <span>{t("planning.selectRegionsPrompt")}</span>
-              <button type="button" className="btn btn-primary h-8 min-h-0 px-3 text-xs" onClick={() => setSelectingRegions(true)}>{t("planning.selectRegionsAction")}</button>
-            </div>
-          ) : null}
           {data && !resistance ? (
             <div className="planning-overlay is-regions">
               <button data-guide="planning-regions" type="button" className={cn("btn planning-side-btn", selectingRegions && "is-active")} onClick={() => setSelectingRegions((v) => !v)} aria-pressed={selectingRegions}>
-                <Icon name="map" size={15} /> {t("planning.regions", { n: regionSelection?.size ?? data.regions.length })}
+                <Icon name="map" size={15} /> {t("planning.regions", { n: regionSelection.size })}
               </button>
               {selectingRegions ? <div data-guide="planning-region-actions" className="planning-region-actions">
                 <span>{t("planning.regionsHint")}</span>
-                <button type="button" onClick={() => { const all = new Set(data.regions.map((r) => r.key)); setRegionSelection(all); writeStorage(REGIONS_KEY, [...all]); }}>{t("planning.regionsAll")}</button>
-                <button type="button" onClick={() => { setRegionSelection(new Set()); writeStorage(REGIONS_KEY, []); }}>{t("planning.regionsNone")}</button>
+                <button type="button" onClick={() => setRegionSelection(new Set(data.regions.map((r) => r.key)))}>{t("planning.regionsAll")}</button>
+                <button type="button" onClick={() => setRegionSelection(new Set())}>{t("planning.regionsNone")}</button>
                 <button type="button" onClick={() => setSelectingRegions(false)}>{t("planning.regionsDone")}</button>
               </div> : null}
             </div>

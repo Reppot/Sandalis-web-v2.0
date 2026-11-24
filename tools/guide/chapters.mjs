@@ -289,7 +289,7 @@ export const CHAPTERS = [
         caption: RE("Выбор гексов", "Selecting hexes"),
         markers: [
           { sel: g("planning-regions"), note: RE("Нажмите, чтобы включить выбор. Отметьте несколько гексов и завершите выбор.", "Turn on selection, choose multiple hexes, then finish." ) },
-          { sel: g("planning-selection-empty"), note: RE("До выбора здесь нет маркеров построек. Подробности карты запрашиваются только для выбранных гексов.", "No building markers appear before selection. Map details are requested only for selected hexes.") },
+          { sel: g("planning-map"), at: "start", note: RE("До выбора здесь нет маркеров построек. Подробности карты запрашиваются только для выбранных гексов.", "No building markers appear before selection. Map details are requested only for selected hexes.") },
           { sel: g("planning-frontline-toggle"), note: RE("Линия рассчитывается отдельно по расположению ратуш; она не включает маркеры построек карты.", "The frontline is calculated separately from town hall positions; it does not load map building markers.") },
         ],
       },

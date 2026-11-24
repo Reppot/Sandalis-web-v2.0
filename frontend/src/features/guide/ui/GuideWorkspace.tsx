@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { EmptyState, Loading, Modal, UiGlyph, apiClient, assetUrl, cn, useI18n, type Locale, type UiIcon, Icon, PageHeader } from "@/shared";
 
 type L = Partial<Record<Locale, string>>;
@@ -28,6 +29,7 @@ interface GuideChapter {
   title: L;
   summary: L;
   shots: GuideShot[];
+  steps?: Array<{ title: L; body: L }>;
 }
 
 interface GuideEntry {
@@ -39,6 +41,40 @@ interface GuideEntry {
 /** Скриншоты сняты на ru/en/cs: для остальных языков — английский кадр с его метками. */
 const shotLocale = (shot: GuideShot, locale: Locale): Locale => (shot.images[locale] ? locale : shot.images.en ? "en" : "ru");
 const pick = (value: L | undefined, locale: Locale) => value?.[locale] ?? (locale === "ru" ? "" : value?.en) ?? value?.ru ?? "";
+const guideSection = (key: string) => (["start", "layout"].includes(key) ? "basics" : ["management", "cabinet"].includes(key) ? "admin" : "work");
+const sectionLabel = (section: string, locale: Locale) => ({
+  basics: locale === "ru" ? "Основы" : "Basics",
+  work: locale === "ru" ? "Рабочие разделы" : "Workspace",
+  admin: locale === "ru" ? "Управление" : "Administration",
+}[section] ?? section);
+
+const planningGuide: GuideEntry = {
+  key: "planning",
+  sort: 7,
+  payload: {
+    icon: "map",
+    title: { ru: "Планирование операций", en: "Operation planning" },
+    summary: {
+      ru: "Карта открывается обзором без маркеров построек. Выберите нужные регионы, чтобы загрузить детали и редактировать план.",
+      en: "The map opens as an overview without building markers. Select the regions you need to load details and edit your plan.",
+    },
+    shots: [],
+    steps: [
+      {
+        title: { ru: "Выберите регионы", en: "Select regions" },
+        body: { ru: "Нажмите «Регионы», отметьте один или несколько гексов на карте и нажмите «Готово». Выбранные гексы обведены границей.", en: "Click Regions, select one or more hexes on the map, then click Done. Selected hexes are outlined." },
+      },
+      {
+        title: { ru: "Работайте с выбранными гексами", en: "Work with selected hexes" },
+        body: { ru: "Данные построек загружаются только для выбранных регионов. Добавляйте маркеры, размещайте объекты и рисуйте линии в сгруппированной панели инструментов.", en: "Building data loads only for selected regions. Add markers, place objects, and draw lines from the grouped tools panel." },
+      },
+      {
+        title: { ru: "Оцените линию фронта", en: "Review the frontline" },
+        body: { ru: "Кнопка «Фронт» показывает расчётную линию по взаимному расположению ратуш Варденов и Колонистов.", en: "The Frontline control shows an estimated line based on the positions of Warden and Colonial town halls." },
+      },
+    ],
+  },
+};
 
 /**
  * «Навигация»: руководство по терминалу. Главы, скриншоты (на языке интерфейса),
@@ -55,11 +91,18 @@ export const GuideWorkspace: React.FC = () => {
     apiClient
       .get<GuideEntry[]>("/api/v1/content", { params: { kind: "guide_chapter" } })
       .then((rows) => {
-        const sorted = [...rows].sort((a, b) => a.sort - b.sort);
+        const storedPlanning = rows.find((row) => row.key === planningGuide.key);
+        const currentPlanning = storedPlanning
+          ? { ...storedPlanning, payload: { ...storedPlanning.payload, ...planningGuide.payload, shots: storedPlanning.payload.shots } }
+          : planningGuide;
+        const sorted = [...rows.filter((row) => row.key !== planningGuide.key), currentPlanning].sort((a, b) => a.sort - b.sort);
         setChapters(sorted);
         setActive((prev) => prev ?? sorted[0]?.key ?? null);
       })
-      .catch(() => setChapters([]));
+      .catch(() => {
+        setChapters([planningGuide]);
+        setActive((prev) => prev ?? planningGuide.key);
+      });
   }, []);
 
   const chapter = chapters?.find((c) => c.key === active)?.payload ?? null;
@@ -83,15 +126,20 @@ export const GuideWorkspace: React.FC = () => {
           <nav className="panel guide-toc min-w-0 p-2.5" aria-label={t("guide.toc")}>
             <div className="px-2 pt-1 pb-2 text-xs font-semibold text-fg-3">{t("guide.toc")}</div>
             <ol className="flex gap-1.5 overflow-x-auto lg:flex-col lg:overflow-visible">
-              {chapters.map((c, i) => (
-                <li key={c.key} className="shrink-0">
-                  <button type="button" className={cn("guide-toc-item", c.key === active && "is-active")} onClick={() => go(c.key)} aria-current={c.key === active ? "page" : undefined}>
-                    <span className="guide-toc-num">{i + 1}</span>
-                    <UiGlyph icon={c.payload.icon} size={18} className="text-current" />
-                    <span className="truncate">{pick(c.payload.title, locale)}</span>
-                  </button>
-                </li>
-              ))}
+              {chapters.map((c, i) => {
+                const section = guideSection(c.key);
+                const previousSection = i > 0 ? guideSection(chapters[i - 1].key) : null;
+                return <React.Fragment key={c.key}>
+                  {section !== previousSection ? <li className="guide-toc-section" aria-hidden="true">{sectionLabel(section, locale)}</li> : null}
+                  <li className="shrink-0">
+                    <button type="button" className={cn("guide-toc-item", c.key === active && "is-active")} onClick={() => go(c.key)} aria-current={c.key === active ? "page" : undefined}>
+                      <span className="guide-toc-num">{String(i + 1).padStart(2, "0")}</span>
+                      <UiGlyph icon={c.payload.icon} size={18} className="text-current" />
+                      <span className="truncate">{pick(c.payload.title, locale)}</span>
+                    </button>
+                  </li>
+                </React.Fragment>;
+              })}
             </ol>
           </nav>
 
@@ -104,6 +152,26 @@ export const GuideWorkspace: React.FC = () => {
                 </h2>
                 <p className="mt-2 max-w-3xl text-[0.95rem] leading-relaxed text-fg-2">{pick(chapter.summary, locale)}</p>
               </header>
+
+              {chapter.steps?.length ? (
+                <section className="panel p-5" aria-label={locale === "ru" ? "Как пользоваться планированием" : "How to use planning"}>
+                  <h3 className="text-base font-semibold">{locale === "ru" ? "Рабочий порядок" : "Workflow"}</h3>
+                  <ol className="guide-steps mt-4">
+                    {chapter.steps.map((step, i) => (
+                      <li key={i}>
+                        <span className="guide-step-index" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                        <div>
+                          <h4 className="font-semibold">{pick(step.title, locale)}</h4>
+                          <p className="mt-1 text-sm leading-relaxed text-fg-2">{pick(step.body, locale)}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                  <Link className="btn btn-primary btn-lg mt-5" href="/?tab=tools&tool=planning">
+                    <UiGlyph icon="map" size={16} />{locale === "ru" ? "Открыть планирование" : "Open planning"}
+                  </Link>
+                </section>
+              ) : null}
 
               {chapter.shots.map((shot) => (
                 <GuideFigure key={shot.id} shot={shot} locale={locale} onZoom={() => setZoom(shot)} zoomLabel={t("guide.zoom")} />
@@ -128,6 +196,7 @@ export const GuideWorkspace: React.FC = () => {
 const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; active?: number | null; onMarker?: (i: number) => void }> = ({ shot, locale, active, onMarker }) => {
   const at = shotLocale(shot, locale);
   const markers = shot.markers[at] ?? [];
+  const notes = shot.notes[locale] ?? (locale === "ru" ? undefined : shot.notes.en) ?? shot.notes.ru ?? [];
   const src = assetUrl(shot.images[at]) ?? "";
   const size = shot.size[at] ?? { w: 1440, h: 900 };
   return (
@@ -148,7 +217,7 @@ const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; active?: number | n
             }}
             onMouseEnter={() => onMarker?.(i)}
             onFocus={() => onMarker?.(i)}
-            aria-label={`${i + 1}`}
+            aria-label={`${i + 1}: ${notes[i] ?? pick(shot.caption, locale)}`}
           >
             {i + 1}
           </button>
