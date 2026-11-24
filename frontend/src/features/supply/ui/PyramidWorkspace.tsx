@@ -231,8 +231,6 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
 
   if (!pyramid) return <div className="panel"><Loading label={t("pyramid.loading")} /></div>;
 
-  const totalMissing = levels.reduce((n, l) => n + l.missing, 0);
-  const done = levels.filter((l) => l.done).length;
   const picked = [...selected].sort((a, b) => a - b);
   const pickedMissing = levels.filter((l) => selected.has(l.index)).reduce((n, l) => n + l.missing, 0);
 
@@ -378,46 +376,6 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
         onSave={(name) => void save(name)}
       />
 
-      {!draft ? (
-        <section data-guide="pyramid-now" className={cn("panel pyramid-now p-5", now < 0 && "is-done")}>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="min-w-0">
-              {now < 0 ? (
-                <div className="panel-title text-safe">{t("pyramid.allDone")}</div>
-              ) : (
-                <>
-                  <div className="text-xs font-semibold text-warn">{t("pyramid.bringNow")}</div>
-                  <div className="mt-1 text-[1.15rem] font-semibold tracking-[-0.015em]">
-                    {t("pyramid.level", { n: now + 1 })}{levels[now].title ? ` • ${levels[now].title}` : ""} — {t("pyramid.missingCrates", { n: levels[now].missing })}
-                  </div>
-                </>
-              )}
-              <div className="mt-1 text-xs text-fg-3">{t("pyramid.progress", { done, total: levels.length, n: totalMissing })}</div>
-            </div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs text-fg-3">
-                {picked.length ? t("pyramid.selectedLevels", { list: picked.map((i) => i + 1).join(", "), n: pickedMissing }) : t("pyramid.selectedNone")}
-              </span>
-              <button type="button" className="btn btn-primary" data-guide="pyramid-order" disabled={!picked.length} onClick={() => toConstructor(picked)}>
-                {t("pyramid.toBuilderSelected")}
-              </button>
-              <button type="button" className="btn" onClick={() => setSelected(new Set(levels.filter((l) => !l.done).map((l) => l.index)))}>{t("pyramid.selectAllMissing")}</button>
-            </div>
-          </div>
-          {now >= 0 ? (
-            <div className="pyramid-now-list">
-              {levels[now].cells.filter((c) => c.missing > 0).map((c) => (
-                <span key={c.code} className="pyramid-chip">
-                  <ItemIcon sources={[assetUrl(catalog.get(c.code)?.iconUrl)]} size={26} label={label(c.code)} />
-                  <span className="truncate">{label(c.code)}</span>
-                  <b>+{c.missing}</b>
-                </span>
-              ))}
-            </div>
-          ) : null}
-        </section>
-      ) : null}
-
       <section data-guide="pyramid-tiers" className="panel p-5">
         <div className="pyramid">
           {/* уровень 1 — самое необходимое — сверху, дальше по убыванию */}
@@ -444,6 +402,15 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
             />
           ))}
         </div>
+        {!draft ? <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border)] pt-4">
+          <span className="text-xs text-fg-3">
+            {picked.length ? t("pyramid.selectedLevels", { list: picked.map((i) => i + 1).join(", "), n: pickedMissing }) : t("pyramid.selectedNone")}
+          </span>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" className="btn" onClick={() => setSelected(new Set(levels.filter((l) => !l.done).map((l) => l.index)))}>{t("pyramid.selectAllMissing")}</button>
+            <button type="button" className="btn btn-primary" data-guide="pyramid-order" disabled={!picked.length} onClick={() => toConstructor(picked)}>{t("pyramid.toBuilderSelected")}</button>
+          </div>
+        </div> : null}
         {draft ? (
           <button type="button" className="btn mt-4 h-11 w-full border-dashed" onClick={() => editTiers((tiers) => [...tiers, { title: "", items: [] }])}>
             <Icon name="plus" size={16} />
