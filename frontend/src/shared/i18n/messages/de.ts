@@ -1,7 +1,7 @@
 import type { MessageKey } from "@/shared/i18n/messages/ru";
 
 /** Deutsch. Spielbegriffe (Gegenstände, Gebäude, Fraktionen) bleiben wie im Spiel auf Englisch. */
-export const de: Record<MessageKey, string> = {
+export const de: Partial<Record<MessageKey, string>> = {
   "common.sending": "Wird gesendet…",
   "common.loading": "Wird geladen…",
   "common.noIcon": "Kein Symbol: {name}",

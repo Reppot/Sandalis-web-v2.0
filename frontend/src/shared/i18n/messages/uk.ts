@@ -1,7 +1,7 @@
 import type { MessageKey } from "@/shared/i18n/messages/ru";
 
 /** Українська. Назви предметів, будівель і фракцій — англійською, як у грі. */
-export const uk: Record<MessageKey, string> = {
+export const uk: Partial<Record<MessageKey, string>> = {
   "common.sending": "Надсилаємо…",
   "common.loading": "Завантажуємо…",
   "common.noIcon": "Немає іконки: {name}",

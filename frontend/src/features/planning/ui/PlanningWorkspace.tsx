@@ -17,6 +17,7 @@ import { EmptyState, Icon, Loading, assetUrl, cn, errorText, formatDateTime, rea
 const FILTERS_KEY = "sindaris-planning-hidden";
 const SIDE_KEY = "sindaris-planning-side";
 const MODE_KEY = "sindaris-planning-mode";
+const REGIONS_KEY = "sindaris-planning-regions";
 type PlanMode = "mine" | "clan";
 
 /**
@@ -33,6 +34,8 @@ export const PlanningWorkspace: React.FC = () => {
   const [data, setData] = React.useState<WorldMap | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [hidden, setHidden] = React.useState<Set<MapKind>>(new Set());
+  const [regionSelection, setRegionSelection] = React.useState<Set<string> | null>(null);
+  const [selectingRegions, setSelectingRegions] = React.useState(false);
   const [side, setSide] = React.useState(false);
   const [tool, setTool] = React.useState<Tool>("select");
   const [shapes, setShapes] = React.useState<Shape[]>([]);
@@ -76,6 +79,18 @@ export const PlanningWorkspace: React.FC = () => {
   React.useEffect(() => {
     planningApi.map().then(setData).catch((err) => setError(errorText(err, t("planning.loadFailed"))));
   }, [t]);
+  React.useEffect(() => {
+    if (!data || regionSelection) return;
+    const saved = readStorage<string[] | null>(REGIONS_KEY, null);
+    const valid = new Set(data.regions.map((r) => r.key));
+    setRegionSelection(saved ? new Set(saved.filter((key) => valid.has(key))) : valid);
+  }, [data, regionSelection]);
+  const toggleRegion = (key: string) => setRegionSelection((prev) => {
+    const next = new Set(prev ?? data?.regions.map((r) => r.key) ?? []);
+    next.has(key) ? next.delete(key) : next.add(key);
+    writeStorage(REGIONS_KEY, [...next]);
+    return next;
+  });
   // каталог построек нужен и панели, и подписям на карте
   React.useEffect(() => {
     fetch(assetUrl(STRUCTURES_URL) ?? STRUCTURES_URL).then((r) => (r.ok ? r.json() : null)).then(setCatalog).catch(() => setCatalog(null));
@@ -231,12 +246,25 @@ export const PlanningWorkspace: React.FC = () => {
           ) : !data ? (
             <Loading label={t("planning.loading")} />
           ) : (
-            <MapCanvas data={data} hidden={hidden} editor={editor} />
+            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection ?? new Set(data.regions.map((r) => r.key))} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} />
           )}
 
           {data && !resistance ? (
             <div className="planning-overlay is-left">
               <FilterPanel counts={counts} hidden={hidden} onToggle={toggle} onAll={setAll} />
+            </div>
+          ) : null}
+          {data && !resistance ? (
+            <div className="planning-overlay is-regions">
+              <button type="button" className={cn("btn planning-side-btn", selectingRegions && "is-active")} onClick={() => setSelectingRegions((v) => !v)} aria-pressed={selectingRegions}>
+                <Icon name="map" size={15} /> {t("planning.regions", { n: regionSelection?.size ?? data.regions.length })}
+              </button>
+              {selectingRegions ? <div className="planning-region-actions">
+                <span>{t("planning.regionsHint")}</span>
+                <button type="button" onClick={() => { const all = new Set(data.regions.map((r) => r.key)); setRegionSelection(all); writeStorage(REGIONS_KEY, [...all]); }}>{t("planning.regionsAll")}</button>
+                <button type="button" onClick={() => { setRegionSelection(new Set()); writeStorage(REGIONS_KEY, []); }}>{t("planning.regionsNone")}</button>
+                <button type="button" onClick={() => setSelectingRegions(false)}>{t("planning.regionsDone")}</button>
+              </div> : null}
             </div>
           ) : null}
           <div className="planning-overlay is-right">

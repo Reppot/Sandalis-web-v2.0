@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { HEX_H, HEX_W, hexLeft, hexTop, iconOf, markerFactor, visibleLabels, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
+import { HEX_H, HEX_W, hexLeft, hexTop, frontline, iconOf, markerFactor, visibleLabels, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
 import { M_PER_PX_X, UNIT_COLOR, measure, moveShape, newId, rectFrom, type Defaults, type Rect, type Shape, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { PlanLayer } from "@/features/planning/ui/PlanLayer";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
@@ -11,8 +11,6 @@ const MIN_SCALE = 0.05;
 const MAX_SCALE = 3;
 /** Пауза после жеста, после которой React перерисовывает подписи и толщину линий плана. */
 const COMMIT_MS = 160;
-/** Ниже этого масштаба гекс рисуется из уменьшенной копии (256 px вместо 1024). */
-const SMALL_HEX_BELOW = 0.24;
 
 interface View {
   scale: number;
@@ -77,9 +75,12 @@ export const MapCanvas: React.FC<{
   data: WorldMap;
   hidden: Set<MapKind>;
   editor: Editor;
+  selectedRegions: Set<string>;
+  onToggleRegion: (key: string) => void;
+  selectingRegions: boolean;
   /** Просмотр снимка: только этот кусок карты, без правки — панорама, масштаб и подсказки. */
   frame?: Rect | null;
-}> = ({ data, hidden, editor, frame }) => {
+}> = ({ data, hidden, editor, selectedRegions, onToggleRegion, selectingRegions, frame }) => {
   const t = useT();
   const box = React.useRef<HTMLDivElement>(null);
   const world = React.useRef<HTMLDivElement>(null);
@@ -201,6 +202,16 @@ export const MapCanvas: React.FC<{
     const { tool, selected, defaults, onSelect, onAdd, onDelete } = ed.current;
     const shapeId = target.closest<SVGElement>("[data-shape]")?.dataset.shape ?? null;
     const p = toWorld(e.clientX, e.clientY);
+    if (selectingRegions) {
+      const regionKey = target.closest<HTMLElement>("[data-region]")?.dataset.region;
+      if (regionKey) onToggleRegion(regionKey);
+      gesture.current = { type: "pan" };
+      return;
+    }
+    if (!isInSelectedRegion(p)) {
+      gesture.current = { type: "pan" };
+      return;
+    }
     if (readOnly || e.button === 1 || e.button === 2) {
       gesture.current = { type: "pan" };
     } else if (tool === "frame") {
@@ -304,6 +315,13 @@ export const MapCanvas: React.FC<{
   const scale = view?.scale ?? 0.1;
   const live = viewRef.current ?? view;
   const resistance = data.phase === "resistance";
+  const front = React.useMemo(() => frontline(data.regions), [data.regions]);
+  const isInSelectedRegion = React.useCallback((p: Point) => data.regions.some((region) => {
+    if (!selectedRegions.has(region.key)) return false;
+    const x = (p.x - hexLeft(region.col)) / HEX_W;
+    const y = (p.y - hexTop(region.row)) / HEX_H;
+    return x >= 0 && x <= 1 && y >= 0 && y <= 1 && Math.abs(x - 0.5) + Math.abs(y - 0.5) / 2 <= 0.5;
+  }), [data.regions, selectedRegions]);
   const planLabels = React.useMemo(
     () => ({ arrow: (u: string) => t(`planning.unit.${u}` as MessageKey), status: (st: Report["status"] | null) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")) }),
     [t],
@@ -330,10 +348,14 @@ export const MapCanvas: React.FC<{
       {view ? (
         <div ref={world} className="planning-world" style={live ? worldStyle(live) : undefined}>
           {data.regions.map((r) => (
-            <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance} />
+            <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance} selected={selectedRegions.has(r.key)} selecting={selectingRegions} />
           ))}
+          {!resistance && front.length > 1 ? <svg className="planning-frontline" viewBox={`${bounds.minX} ${bounds.minY} ${bounds.w} ${bounds.h}`} aria-label={t("planning.frontline")}>
+            <polyline points={front.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
+            <polyline points={front.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#f34f55" strokeWidth={5} strokeDasharray="16 10" strokeLinejoin="round" strokeLinecap="round" />
+          </svg> : null}
           <PlanLayer
-            shapes={editor.shapes}
+            shapes={editor.shapes.filter((shape) => isInSelectedRegion(shape))}
             draft={draft}
             selected={editor.selected}
             scale={scale}
@@ -355,15 +377,16 @@ export const MapCanvas: React.FC<{
   );
 };
 
-const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; scale: number; showItems: boolean }> = React.memo(({ region, hidden, scale, showItems }) => {
+const Hex: React.FC<{ region: MapRegion; hidden: Set<MapKind>; scale: number; showItems: boolean; selected: boolean; selecting: boolean }> = React.memo(({ region, hidden, scale, showItems, selected, selecting }) => {
   const t = useT();
   const items = showItems ? region.items.filter((it) => !hidden.has(it.kind)) : [];
   const labels = React.useMemo(() => visibleLabels(region.labels, scale), [region.labels, scale]);
   return (
-    <div className="planning-hex" style={{ left: hexLeft(region.col), top: hexTop(region.row), width: HEX_W, height: HEX_H }}>
+    <div data-region={region.key} className={cn("planning-hex", selected && "is-region-selected", !selected && "is-unselected", selecting && "is-selecting")} style={{ left: hexLeft(region.col), top: hexTop(region.row), width: HEX_W, height: HEX_H }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- карта региона War API, WebP */}
       {/* на общем плане — копия 256 px (в памяти видеокарты в 16 раз меньше), ближе — полная */}
-      <img src={assetUrl(`/api/v1/assets/maps/hex/${scale < SMALL_HEX_BELOW ? "sm/" : ""}${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} decoding="async" />
+      <img src={assetUrl(`/api/v1/assets/maps/hex/${selected ? "" : "sm/"}${region.slug}.webp`) ?? ""} alt={region.name} width={HEX_W} height={HEX_H} draggable={false} decoding="async" />
+      {selecting ? <span className="planning-hex-select-label">{region.name}</span> : null}
       {scale > 0.3
         ? labels.map((l) => (
             <span key={l.text} className={cn("planning-town", !l.major && "is-minor")} style={{ left: l.x * HEX_W, top: l.y * HEX_H, transform: `scale(var(--inv)) translate(-50%, ${l.major ? "3px" : "-50%"})` }}>{l.text}</span>
@@ -390,7 +413,9 @@ const Marker: React.FC<{ item: MapItem; region: string; t: ReturnType<typeof use
     <span
       className={cn("planning-marker", `team-${item.team}`, item.victory && "is-victory", item.scorched && "is-scorched")}
       style={{ left: item.x * HEX_W, top: item.y * HEX_H }}
-      title={title}
+      data-tooltip={title}
+      role="img"
+      aria-label={title}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- иконка War API 48×48 */}
       <img src={assetUrl(iconOf(item)) ?? ""} alt="" width={20} height={20} draggable={false} decoding="async" />

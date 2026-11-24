@@ -1,7 +1,7 @@
 import type { MessageKey } from "@/shared/i18n/messages/ru";
 
 /** 简体中文。游戏内物品名称保持英文（与游戏和维基一致）。 */
-export const zh: Record<MessageKey, string> = {
+export const zh: Partial<Record<MessageKey, string>> = {
   "common.sending": "正在发送…",
   "common.loading": "正在加载…",
   "common.noIcon": "无图标：{name}",

@@ -1,7 +1,7 @@
 import type { MessageKey } from "@/shared/i18n/messages/ru";
 
 /** Polski. Nazwy przedmiotów, budynków i frakcji zostają po angielsku, jak w grze. */
-export const pl: Record<MessageKey, string> = {
+export const pl: Partial<Record<MessageKey, string>> = {
   "common.sending": "Wysyłanie…",
   "common.loading": "Ładowanie…",
   "common.noIcon": "Brak ikony: {name}",

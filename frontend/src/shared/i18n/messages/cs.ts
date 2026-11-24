@@ -1,6 +1,6 @@
 import type { MessageKey } from "@/shared/i18n/messages/ru";
 
-export const cs: Record<MessageKey, string> = {
+export const cs: Partial<Record<MessageKey, string>> = {
   "common.sending": "Odesíláme…",
   "common.loading": "Načítáme…",
   "common.noIcon": "Bez ikony: {name}",

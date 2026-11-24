@@ -32,7 +32,7 @@ export const LOCALES: { code: Locale; label: string; flag: string }[] = [
   { code: "zh", label: "简体中文", flag: "中文" },
 ];
 
-const DICTIONARIES: Record<Locale, Record<MessageKey, string>> = { ru, en, uk, de, pl, fr, es, pt, cs, zh };
+const DICTIONARIES: Record<Locale, Partial<Record<MessageKey, string>>> = { ru, en, uk, de, pl, fr, es, pt, cs, zh };
 const DATE_LOCALE: Record<Locale, string> = {
   ru: "ru-RU", en: "en-GB", uk: "uk-UA", de: "de-DE", pl: "pl-PL", fr: "fr-FR", es: "es-ES", pt: "pt-BR", cs: "cs-CZ", zh: "zh-CN",
 };
