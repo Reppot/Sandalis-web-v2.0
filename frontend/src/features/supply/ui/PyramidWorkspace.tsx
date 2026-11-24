@@ -132,9 +132,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   // конфигурация на экране: черновик правки, своя пирамида клана или готовая
   const preset = pyramid?.presets.find((p) => p.key === config) ?? null;
   const custom = config.startsWith(CUSTOM_PREFIX) ? pyramid?.configs.find((c) => CUSTOM_PREFIX + c.id === config) ?? null : null;
-  // Верхняя ступень больше не входит в планирование: скрываем её у готовых и клановых схем,
-  // а при сохранении черновика в API уже уйдёт отредактированный набор без этой ступени.
-  const shown = draft ?? (pyramid ? { faction: viewFaction, tiers: (custom?.tiers ?? preset?.tiers ?? pyramid.tiers).slice(1) } : null);
+  const shown = draft ?? (pyramid ? { faction: viewFaction, tiers: custom?.tiers ?? preset?.tiers ?? pyramid.tiers } : null);
 
   const unit = units[source];
   const raw: { code: string; count: number }[] =
@@ -222,7 +220,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
   };
   /** «Кастомная»: новая своя пирамида на основе того, что на экране. */
   const startCustom = () => shown && setDraft({ id: null, name: "", faction: viewFaction, tiers: cloneTiers(shown.tiers) });
-  const startEditOwn = () => custom && setDraft({ id: custom.id, name: custom.name, faction: custom.faction, tiers: cloneTiers(custom.tiers.slice(1)) });
+  const startEditOwn = () => custom && setDraft({ id: custom.id, name: custom.name, faction: custom.faction, tiers: cloneTiers(custom.tiers) });
   const fillFrom = (key: string) => {
     const from = pyramid?.presets.find((p) => p.key === key) ?? pyramid?.configs.find((c) => c.id === key);
     if (from && draft) setDraft({ ...draft, tiers: cloneTiers(from.tiers) });
