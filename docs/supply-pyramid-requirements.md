@@ -44,4 +44,3 @@ Do not include the removed Bunker Supplies item. Maintenance Supplies are the cu
 - Exact target crate counts for every item and profile.
 - Which situational profiles ship as built-in presets versus clan-customized configurations.
 - Whether the pyramid should directly compute a truck manifest or remain a visual priority guide.
-
