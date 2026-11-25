@@ -110,13 +110,13 @@ const PREPARE = {
     const toggle = '[data-guide="planning-frontline-toggle"]';
     await page.waitForSelector(toggle, { timeout: 30000 });
     await page.click(toggle);
-    await page.waitForSelector(".planning-frontline polyline", { timeout: 30000 });
+    await page.waitForSelector(".planning-frontline path", { timeout: 30000 });
     const state = await page.evaluate(() => ({
       pressed: document.querySelector('[data-guide="planning-frontline-toggle"]').getAttribute("aria-pressed"),
       svg: (() => { const { width, height } = document.querySelector(".planning-frontline")?.getBoundingClientRect() ?? {}; return { width, height }; })(),
-      line: (() => { const { left, top, right, bottom } = document.querySelector(".planning-frontline polyline")?.getBoundingClientRect() ?? {}; return { left, top, right, bottom }; })(),
+      line: (() => { const { left, top, right, bottom } = document.querySelector(".planning-frontline path")?.getBoundingClientRect() ?? {}; return { left, top, right, bottom }; })(),
       canvas: (() => { const { left, top, right, bottom } = document.querySelector(".planning-canvas").getBoundingClientRect(); return { left, top, right, bottom }; })(),
-      points: document.querySelector(".planning-frontline polyline")?.getAttribute("points")?.trim().split(/\s+/).length ?? 0,
+      points: (document.querySelector(".planning-frontline path")?.getAttribute("d")?.match(/\bC\b/g)?.length ?? 0) + 1,
       markers: document.querySelectorAll(".planning-marker").length,
       selected: document.querySelectorAll(".planning-hex.is-region-selected").length,
       detailRequests: performance.getEntriesByType("resource").map((entry) => new URL(entry.name).pathname).filter((path) => path.includes("/api/v1/world/map/regions")),
@@ -186,10 +186,10 @@ const PREPARE = {
 
     const frontlineToggle = '[data-guide="planning-frontline-toggle"]';
     await page.click(frontlineToggle);
-    await page.waitForSelector(".planning-frontline polyline", { timeout: 30000 });
+    await page.waitForSelector(".planning-frontline path", { timeout: 30000 });
     const selectedFrontline = await page.evaluate(() => {
       const svg = document.querySelector(".planning-frontline").getBoundingClientRect();
-      const line = document.querySelector(".planning-frontline polyline").getBoundingClientRect();
+      const line = document.querySelector(".planning-frontline path").getBoundingClientRect();
       const canvas = document.querySelector(".planning-canvas").getBoundingClientRect();
       return {
         regions: document.querySelectorAll("[data-region]").length,

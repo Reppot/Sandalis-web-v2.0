@@ -103,25 +103,3 @@ export function visibleLabels(all: MapRegion["labels"], scale: number) {
 /** Гексы, которые задевает прямоугольник (для снимков). */
 export const regionsIn = (regions: MapRegion[], r: { x: number; y: number; w: number; h: number }) =>
   regions.filter((g) => hexLeft(g.col) < r.x + r.w && hexLeft(g.col) + HEX_W > r.x && hexTop(g.row) < r.y + r.h && hexTop(g.row) + HEX_H > r.y);
-
-/** Approximate front: joins midpoints between each faction's town hall and its nearest enemy hall. */
-export function frontline(regions: MapRegion[]) {
-  const points = regions.flatMap((region) => region.items
-    .filter((item) => item.kind === "town_hall" && item.team !== "neutral")
-    .map((item) => ({ team: item.team, x: hexLeft(region.col) + item.x * HEX_W, y: hexTop(region.row) + item.y * HEX_H })));
-  const wardens = points.filter((point) => point.team === "wardens");
-  const colonials = points.filter((point) => point.team === "colonials");
-  if (!wardens.length || !colonials.length) return [];
-  const midpoints = wardens.map((w) => {
-    const c = colonials.reduce((best, p) => Math.hypot(p.x - w.x, p.y - w.y) < Math.hypot(best.x - w.x, best.y - w.y) ? p : best);
-    return { x: (w.x + c.x) / 2, y: (w.y + c.y) / 2 };
-  });
-  const cx = [...wardens, ...colonials].reduce((sum, p) => sum + p.x, 0) / points.length;
-  const cy = [...wardens, ...colonials].reduce((sum, p) => sum + p.y, 0) / points.length;
-  const wx = wardens.reduce((sum, p) => sum + p.x, 0) / wardens.length;
-  const wy = wardens.reduce((sum, p) => sum + p.y, 0) / wardens.length;
-  const ox = colonials.reduce((sum, p) => sum + p.x, 0) / colonials.length - wx;
-  const oy = colonials.reduce((sum, p) => sum + p.y, 0) / colonials.length - wy;
-  midpoints.sort((a, b) => (a.x - cx) * -oy + (a.y - cy) * ox - ((b.x - cx) * -oy + (b.y - cy) * ox));
-  return midpoints;
-}

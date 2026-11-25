@@ -12,6 +12,25 @@ const MAX_SCALE = 3;
 /** Пауза после жеста, после которой React перерисовывает подписи и толщину линий плана. */
 const COMMIT_MS = 160;
 
+function frontlinePath(points: FrontlinePoint[]) {
+  const unique = points.filter((point, index) => index === 0 || Math.hypot(point.x - points[index - 1].x, point.y - points[index - 1].y) > 0.5);
+  if (unique.length < 2) return "";
+  const [first, ...rest] = unique;
+  let path = `M ${first.x} ${first.y}`;
+  for (let index = 0; index < rest.length; index += 1) {
+    const start = unique[index];
+    const end = unique[index + 1];
+    const before = unique[Math.max(0, index - 1)];
+    const after = unique[Math.min(unique.length - 1, index + 2)];
+    const c1x = start.x + (end.x - before.x) / 6;
+    const c1y = start.y + (end.y - before.y) / 6;
+    const c2x = end.x - (after.x - start.x) / 6;
+    const c2y = end.y - (after.y - start.y) / 6;
+    path += ` C ${c1x} ${c1y}, ${c2x} ${c2y}, ${end.x} ${end.y}`;
+  }
+  return path;
+}
+
 interface View {
   scale: number;
   x: number;
@@ -462,8 +481,8 @@ export const MapCanvas: React.FC<{
             <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance && selectedRegions.has(r.key)} selected={selectedRegions.has(r.key)} selecting={selectingRegions} onToggleRegion={onToggleRegion} />
           ))}
           {!resistance && frontlinePoints && frontlinePoints.length > 1 ? <svg className="planning-frontline" style={{ left: mapBounds.minX, top: mapBounds.minY, width: mapBounds.w, height: mapBounds.h }} viewBox={`${mapBounds.minX} ${mapBounds.minY} ${mapBounds.w} ${mapBounds.h}`} aria-label={t("planning.frontline")}>
-            <polyline points={frontlinePoints.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
-            <polyline points={frontlinePoints.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#f34f55" strokeWidth={5} strokeDasharray="16 10" strokeLinejoin="round" strokeLinecap="round" />
+            <path d={frontlinePath(frontlinePoints)} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
+            <path d={frontlinePath(frontlinePoints)} fill="none" stroke="#f34f55" strokeWidth={5} strokeLinejoin="round" strokeLinecap="round" />
           </svg> : null}
           <PlanLayer
             shapes={editor.shapes.filter((shape) => isInSelectedRegion(shape))}

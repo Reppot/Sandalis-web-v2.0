@@ -200,7 +200,21 @@ export async function renderPng(snap: Snapshot, k: number, s: number, svg: SVGSV
     const path = snap.frontline.map((p) => at(p.x, p.y));
     const stroke = (color: string, width: number, dash: number[] = []) => {
       ctx.beginPath();
-      path.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+      ctx.moveTo(path[0][0], path[0][1]);
+      for (let index = 0; index < path.length - 1; index += 1) {
+        const start = path[index];
+        const end = path[index + 1];
+        const before = path[Math.max(0, index - 1)];
+        const after = path[Math.min(path.length - 1, index + 2)];
+        ctx.bezierCurveTo(
+          start[0] + (end[0] - before[0]) / 6,
+          start[1] + (end[1] - before[1]) / 6,
+          end[0] - (after[0] - start[0]) / 6,
+          end[1] - (after[1] - start[1]) / 6,
+          end[0],
+          end[1],
+        );
+      }
       ctx.strokeStyle = color;
       ctx.lineWidth = width * px;
       ctx.lineCap = "round";
@@ -209,7 +223,7 @@ export async function renderPng(snap: Snapshot, k: number, s: number, svg: SVGSV
       ctx.stroke();
     };
     stroke("#111", 12);
-    stroke("#f34f55", 5, [16, 10]);
+    stroke("#f34f55", 5);
     ctx.setLineDash([]);
   }
 

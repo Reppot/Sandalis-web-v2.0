@@ -111,6 +111,7 @@ export const GuideWorkspace: React.FC = () => {
   const { t, locale } = useI18n();
   const [chapters, setChapters] = React.useState<GuideEntry[] | null>(null);
   const [active, setActive] = React.useState<string | null>(null);
+  const [shotIndex, setShotIndex] = React.useState(0);
   const [zoom, setZoom] = React.useState<GuideShot | null>(null);
 
   React.useEffect(() => {
@@ -133,6 +134,7 @@ export const GuideWorkspace: React.FC = () => {
   }, []);
 
   const chapter = chapters?.find((c) => c.key === active)?.payload ?? null;
+  const activeShot = chapter?.shots[Math.min(shotIndex, Math.max(0, chapter.shots.length - 1))] ?? null;
   const index = chapters?.findIndex((c) => c.key === active) ?? -1;
   const guideGroups = React.useMemo(() => {
     const groups = new Map<string, GuideEntry[]>();
@@ -145,6 +147,7 @@ export const GuideWorkspace: React.FC = () => {
 
   const go = (key: string) => {
     setActive(key);
+    setShotIndex(0);
     window.scrollTo({ top: 0 });
   };
 
@@ -224,9 +227,19 @@ export const GuideWorkspace: React.FC = () => {
                 </section>
               ) : null}
 
-              {chapter.shots.map((shot) => (
-                <GuideFigure key={shot.id} shot={shot} locale={locale} onZoom={() => setZoom(shot)} zoomLabel={t("guide.zoom")} />
-              ))}
+              {activeShot ? (
+                <GuideFigure
+                  key={activeShot.id}
+                  shot={activeShot}
+                  locale={locale}
+                  onZoom={() => setZoom(activeShot)}
+                  zoomLabel={t("guide.zoom")}
+                  shotIndex={Math.min(shotIndex, chapter.shots.length - 1)}
+                  shotCount={chapter.shots.length}
+                  onPrevious={() => setShotIndex((current) => Math.max(0, current - 1))}
+                  onNext={() => setShotIndex((current) => Math.min(chapter.shots.length - 1, current + 1))}
+                />
+              ) : null}
 
               <div className="flex justify-between gap-2">
                 <button type="button" className="btn btn-lg" disabled={index <= 0} onClick={() => go(chapters[index - 1].key)}><Icon name="chevronLeft" size={16} />{t("guide.prev")}</button>
@@ -238,31 +251,55 @@ export const GuideWorkspace: React.FC = () => {
       )}
 
       <Modal open={Boolean(zoom)} onClose={() => setZoom(null)} title={zoom ? pick(zoom.caption, locale) : ""} icon="guide" widthClass="max-w-[min(1500px,96vw)]">
-        {zoom && <ShotImage shot={zoom} locale={locale} />}
+        {zoom && <ShotImage shot={zoom} locale={locale} zoomed />}
       </Modal>
     </div>
   );
 };
 
-const ShotImage: React.FC<{ shot: GuideShot; locale: Locale }> = ({ shot, locale }) => {
+const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; zoomed?: boolean }> = ({ shot, locale, zoomed = false }) => {
   const at = shotLocale(shot, locale);
   const src = assetUrl(shot.images[at]) ?? "";
   const size = shot.size[at] ?? { w: 1440, h: 900 };
   return (
-    <div className="guide-shot" style={{ aspectRatio: `${size.w} / ${size.h}` }}>
+    <div className={cn("guide-shot", zoomed && "is-zoomed")}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={pick(shot.caption, locale)} width={size.w} height={size.h} />
     </div>
   );
 };
 
-const GuideFigure: React.FC<{ shot: GuideShot; locale: Locale; onZoom: () => void; zoomLabel: string }> = ({ shot, locale, onZoom, zoomLabel }) => {
+const GuideFigure: React.FC<{
+  shot: GuideShot;
+  locale: Locale;
+  onZoom: () => void;
+  zoomLabel: string;
+  shotIndex: number;
+  shotCount: number;
+  onPrevious: () => void;
+  onNext: () => void;
+}> = ({ shot, locale, onZoom, zoomLabel, shotIndex, shotCount, onPrevious, onNext }) => {
   const notes = shot.notes[locale] ?? (locale === "ru" ? undefined : shot.notes.en) ?? shot.notes.ru ?? [];
   return (
     <figure className="panel p-4 md:p-5">
       <figcaption className="mb-4 flex items-center justify-between gap-2">
-        <span className="panel-title">{pick(shot.caption, locale)}</span>
-        <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={onZoom}><Icon name="eye" size={14} />{zoomLabel}</button>
+        <span className="panel-title min-w-0 flex-1">{pick(shot.caption, locale)}</span>
+        <div className="flex shrink-0 items-center gap-2">
+          {shotCount > 1 ? (
+            <div className="guide-shot-pagination" role="group" aria-label={locale === "ru" ? "Кадры главы" : "Chapter screenshots"}>
+              <button type="button" className="btn h-8 min-h-0 px-2" onClick={onPrevious} disabled={shotIndex <= 0} data-guide-prev-shot aria-label={locale === "ru" ? "Предыдущий экран" : "Previous screen"}>
+                <Icon name="chevronLeft" size={14} />
+              </button>
+              <span className="guide-shot-count" data-guide-shot-index aria-live="polite">
+                {locale === "ru" ? "Экран" : "Screen"} {shotIndex + 1} / {shotCount}
+              </span>
+              <button type="button" className="btn h-8 min-h-0 px-2" onClick={onNext} disabled={shotIndex >= shotCount - 1} data-guide-next-shot aria-label={locale === "ru" ? "Следующий экран" : "Next screen"}>
+                <Icon name="chevronRight" size={14} />
+              </button>
+            </div>
+          ) : null}
+          <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={onZoom} data-guide-zoom><Icon name="eye" size={14} />{zoomLabel}</button>
+        </div>
       </figcaption>
       <div className="guide-figure-layout">
         <ShotImage shot={shot} locale={locale} />

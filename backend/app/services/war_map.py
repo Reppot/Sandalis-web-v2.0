@@ -18,6 +18,7 @@ import asyncio
 import time
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from statistics import median
 from typing import Any, Final
 
 import httpx
@@ -85,6 +86,118 @@ def is_resistance(war: dict[str, Any], now_ms: int) -> bool:
 
 def _clamp(v: Any) -> float:
     return round(min(1.0, max(0.0, float(v or 0))), 4)
+
+
+def _frontline_from_town_halls(points: list[dict[str, Any]]) -> list[dict[str, float]]:
+    """Собирает линию из взаимных пар ратуш и сглаживает изолированные выбросы."""
+    wardens = [point for point in points if point["team"] == "wardens"]
+    colonials = [point for point in points if point["team"] == "colonials"]
+    if not wardens or not colonials:
+        return []
+
+    def distance_sq(left: dict[str, Any], right: dict[str, Any]) -> float:
+        return (left["x"] - right["x"]) ** 2 + (left["y"] - right["y"]) ** 2
+
+    nearest_colonial = [
+        min(range(len(colonials)), key=lambda index: distance_sq(warden, colonials[index]))
+        for warden in wardens
+    ]
+    nearest_warden = [
+        min(range(len(wardens)), key=lambda index: distance_sq(colonial, wardens[index]))
+        for colonial in colonials
+    ]
+    pairs = [
+        (warden_index, colonial_index)
+        for warden_index, colonial_index in enumerate(nearest_colonial)
+        if nearest_warden[colonial_index] == warden_index
+    ]
+    if len(pairs) < 2:
+        # При редких или перекошенных данных строим взаимно-однозначные ближайшие пары.
+        candidates = sorted(
+            (distance_sq(warden, colonial), warden_index, colonial_index)
+            for warden_index, warden in enumerate(wardens)
+            for colonial_index, colonial in enumerate(colonials)
+        )
+        pairs = []
+        used_wardens: set[int] = set()
+        used_colonials: set[int] = set()
+        for _, warden_index, colonial_index in candidates:
+            if warden_index in used_wardens or colonial_index in used_colonials:
+                continue
+            pairs.append((warden_index, colonial_index))
+            used_wardens.add(warden_index)
+            used_colonials.add(colonial_index)
+    if not pairs:
+        return []
+
+    midpoints = [
+        {
+            "x": (wardens[warden_index]["x"] + colonials[colonial_index]["x"]) / 2,
+            "y": (wardens[warden_index]["y"] + colonials[colonial_index]["y"]) / 2,
+        }
+        for warden_index, colonial_index in pairs
+    ]
+    warden_center = (
+        sum(point["x"] for point in wardens) / len(wardens),
+        sum(point["y"] for point in wardens) / len(wardens),
+    )
+    colonial_center = (
+        sum(point["x"] for point in colonials) / len(colonials),
+        sum(point["y"] for point in colonials) / len(colonials),
+    )
+    normal_x = colonial_center[0] - warden_center[0]
+    normal_y = colonial_center[1] - warden_center[1]
+    normal_length = (normal_x**2 + normal_y**2) ** 0.5
+    if normal_length < 1e-6:
+        return []
+    normal_x, normal_y = normal_x / normal_length, normal_y / normal_length
+    tangent_x, tangent_y = -normal_y, normal_x
+
+    projected = [
+        (
+            point["x"] * tangent_x + point["y"] * tangent_y,
+            point["x"] * normal_x + point["y"] * normal_y,
+        )
+        for point in midpoints
+    ]
+    projected.sort(key=lambda pair: pair[0])
+
+    if len(projected) > 2:
+        gaps = [
+            right[0] - left[0]
+            for left, right in zip(projected, projected[1:])
+            if right[0] - left[0] > 1e-6
+        ]
+        spacing = median(gaps) if gaps else 1024.0
+        outlier_limit = max(spacing * 1.5, 1024 * 0.18)
+        normals = [pair[1] for pair in projected]
+        filtered_normals = []
+        for index, value in enumerate(normals):
+            nearby = normals[max(0, index - 2):min(len(normals), index + 3)]
+            local_median = median(nearby)
+            filtered_normals.append(
+                local_median if abs(value - local_median) > outlier_limit else value
+            )
+        smoothed_normals = [
+            (
+                filtered_normals[max(0, index - 1)]
+                + 2 * value
+                + filtered_normals[min(len(filtered_normals) - 1, index + 1)]
+            ) / 4
+            for index, value in enumerate(filtered_normals)
+        ]
+        projected = [
+            (pair[0], smoothed_normals[index])
+            for index, pair in enumerate(projected)
+        ]
+
+    return [
+        {
+            "x": tangent_x * along + normal_x * across,
+            "y": tangent_y * along + normal_y * across,
+        }
+        for along, across in projected
+    ]
 
 
 def _region(key: str, static: dict[str, Any], dynamic: dict[str, Any], resistance: bool) -> dict[str, Any] | None:
@@ -237,23 +350,7 @@ async def world_frontline() -> list[dict[str, float]]:
         for item in region["items"]
         if item["kind"] == "town_hall" and item["team"] != "neutral"
     ]
-    wardens = [p for p in points if p["team"] == "wardens"]
-    colonials = [p for p in points if p["team"] == "colonials"]
-    if not wardens or not colonials:
-        return []
-
-    midpoints = []
-    for warden in wardens:
-        colonial = min(colonials, key=lambda p: (p["x"] - warden["x"]) ** 2 + (p["y"] - warden["y"]) ** 2)
-        midpoints.append({"x": (warden["x"] + colonial["x"]) / 2, "y": (warden["y"] + colonial["y"]) / 2})
-    cx = sum(p["x"] for p in points) / len(points)
-    cy = sum(p["y"] for p in points) / len(points)
-    wx = sum(p["x"] for p in wardens) / len(wardens)
-    wy = sum(p["y"] for p in wardens) / len(wardens)
-    ox = sum(p["x"] for p in colonials) / len(colonials) - wx
-    oy = sum(p["y"] for p in colonials) / len(colonials) - wy
-    midpoints.sort(key=lambda p: (p["x"] - cx) * -oy + (p["y"] - cy) * ox)
-    return midpoints
+    return _frontline_from_town_halls(points)
 
 
 async def world_map() -> dict[str, Any]:

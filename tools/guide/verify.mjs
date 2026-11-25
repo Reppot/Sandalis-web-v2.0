@@ -31,15 +31,57 @@ async function verifyChapters(page, locale) {
 
     const state = await page.evaluate(() => ({
       images: [...document.querySelectorAll(".guide-shot img")].map((image) => image.currentSrc),
+      imageSizes: [...document.querySelectorAll(".guide-shot img")].map((image) => {
+        const rect = image.getBoundingClientRect();
+        return { width: rect.width, height: rect.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight };
+      }),
       notes: document.querySelectorAll(".guide-note").length,
       notePanels: document.querySelectorAll(".guide-note-panel").length,
       legacyMarkers: document.querySelectorAll(".guide-marker, .guide-focus-target").length,
+      shotPager: document.querySelector("[data-guide-shot-index]")?.textContent?.trim() ?? null,
     }));
-    assert(state.images.length > 0, `${locale}: chapter “${title}” has no screenshot`);
-    assert(state.notes > 0 && state.notePanels === state.images.length, `${locale}: chapter “${title}” has missing screen notes`);
+    assert(state.images.length === 1, `${locale}: chapter “${title}” should show one active screenshot, found ${state.images.length}`);
+    assert(state.imageSizes.every((image) => image.width <= image.naturalWidth + 1 && image.height <= image.naturalHeight + 1), `${locale}: chapter “${title}” enlarges a screenshot past its source size: ${JSON.stringify(state.imageSizes)}`);
+    assert(state.notes === 0 || state.notePanels === 1, `${locale}: chapter “${title}” has missing screen notes`);
+    assert(state.shotPager === null || /\d+\s*\/\s*\d+/.test(state.shotPager), `${locale}: chapter “${title}” has an invalid screenshot counter: ${state.shotPager}`);
     assert(state.legacyMarkers === 0, `${locale}: chapter “${title}” still overlays numbered markers`);
     assert(state.images.every((src) => src.includes(`/guide/${locale}/`)), `${locale}: chapter “${title}” uses a wrong-locale screenshot`);
     assert(state.images.every((src) => new URL(src).pathname.match(/\/guide\/(ru|en)\/[a-z0-9-]+\.[a-f0-9]{16}\.webp$/)), `${locale}: chapter “${title}” has an unversioned screenshot URL`);
+    if (index === 3) {
+      await page.click("[data-guide-zoom]");
+      await page.waitForSelector(".modal-panel .guide-shot.is-zoomed img", { timeout: 5000 });
+      const zoom = await page.$eval(".modal-panel .guide-shot.is-zoomed img", (image) => {
+        const rect = image.getBoundingClientRect();
+        const frame = image.closest(".guide-shot");
+        return {
+          width: rect.width,
+          height: rect.height,
+          naturalWidth: image.naturalWidth,
+          naturalHeight: image.naturalHeight,
+          frameHeight: frame.clientHeight,
+          frameScrollHeight: frame.scrollHeight,
+          overflowY: getComputedStyle(frame).overflowY,
+        };
+      });
+      assert(zoom.width <= zoom.naturalWidth + 1 && zoom.height <= zoom.naturalHeight + 1, `${locale}: zoom enlarges the source screenshot: ${JSON.stringify(zoom)}`);
+      if (zoom.naturalHeight > zoom.frameHeight + 1) assert(zoom.overflowY === "auto" && zoom.frameScrollHeight > zoom.frameHeight, `${locale}: tall zoomed screenshot cannot scroll: ${JSON.stringify(zoom)}`);
+      await page.keyboard.press("Escape");
+      await page.waitForFunction(() => !document.querySelector(".modal-panel"), { timeout: 5000 });
+    }
+
+    const nextShot = await page.$("[data-guide-next-shot]");
+    if (nextShot) {
+      const before = state.shotPager;
+      await nextShot.click();
+      await page.waitForFunction((counter) => document.querySelector("[data-guide-shot-index]")?.textContent?.trim() !== counter, { timeout: 5000 }, before);
+      const nextState = await page.evaluate(() => ({
+        src: document.querySelector(".guide-shot img")?.currentSrc,
+        counter: document.querySelector("[data-guide-shot-index]")?.textContent?.trim(),
+      }));
+      assert(/\d+\s*\/\s*\d+/.test(nextState.counter ?? "") && nextState.counter !== before, `${locale}: chapter “${title}” screenshot navigation did not advance`);
+      await page.click("[data-guide-prev-shot]");
+      await page.waitForFunction((counter) => document.querySelector("[data-guide-shot-index]")?.textContent?.trim() === counter, { timeout: 5000 }, before);
+    }
   }
 
   return buttons.length;
@@ -107,6 +149,16 @@ async function main() {
     assert(mobile.width <= mobile.viewport + 1, `Guide has horizontal overflow on mobile: ${JSON.stringify(mobile)}`);
     await page.select("#guide-mobile-jump", "planning");
     await page.waitForFunction(() => document.querySelector("article h2")?.textContent?.includes("Operation planning"), { timeout: 15000 });
+    await page.waitForSelector(".guide-shot img", { timeout: 15000 });
+    await page.waitForFunction(() => {
+      const image = document.querySelector(".guide-shot img");
+      return image?.complete && image.naturalWidth > 0;
+    }, { timeout: 15000 });
+    const mobileGuideShot = await page.$eval(".guide-shot img", (image) => {
+      const rect = image.getBoundingClientRect();
+      return { width: rect.width, height: rect.height, naturalWidth: image.naturalWidth, naturalHeight: image.naturalHeight };
+    });
+    assert(mobileGuideShot.width <= mobileGuideShot.naturalWidth + 1 && mobileGuideShot.height <= mobileGuideShot.naturalHeight + 1, `Mobile guide enlarges its screenshot: ${JSON.stringify(mobileGuideShot)}`);
 
     await page.goto(`${FRONTEND}/?tab=tools&tool=planning`, { waitUntil: "domcontentloaded" });
     await page.waitForSelector(".planning-canvas [data-region]", { timeout: 60000 });
@@ -160,10 +212,34 @@ async function main() {
     assert(selectedPlanning.details.some((keys) => keys?.split(",").sort().join(",") === selectedPlanning.expected), `Mobile map requested details outside the selected hexes: ${JSON.stringify(selectedPlanning)}`);
     assert(selectedPlanning.markers > 0 && selectedPlanning.markerRegions.every((region) => region === "DeadLandsHex" || region === secondRegion), `Mobile map showed buildings outside selected hexes: ${JSON.stringify(selectedPlanning)}`);
     assert(selectedPlanning.tooltipWidths.every((width) => width <= 320), `Mobile building tooltip is oversized: ${JSON.stringify(selectedPlanning)}`);
+
+    await page.click('[data-guide="planning-frontline-toggle"]');
+    await page.waitForSelector(".planning-frontline path", { timeout: 30000 });
+    const frontline = await page.evaluate(() => [...document.querySelectorAll(".planning-frontline path")].map((path) => {
+      const d = path.getAttribute("d") ?? "";
+      const start = d.match(/^M\s*(-?[\d.eE]+)\s+(-?[\d.eE]+)/);
+      const segments = [...d.matchAll(/C\s*(-?[\d.eE]+)\s+(-?[\d.eE]+),\s*(-?[\d.eE]+)\s+(-?[\d.eE]+),\s*(-?[\d.eE]+)\s+(-?[\d.eE]+)/g)];
+      let previous = start ? [Number(start[1]), Number(start[2])] : null;
+      let maxJump = 0;
+      for (const segment of segments) {
+        const end = [Number(segment[5]), Number(segment[6])];
+        if (previous) maxJump = Math.max(maxJump, Math.hypot(end[0] - previous[0], end[1] - previous[1]));
+        previous = end;
+      }
+      return {
+        stroke: path.getAttribute("stroke"),
+        dash: path.getAttribute("stroke-dasharray"),
+        curve: d.includes(" C "),
+        segments: segments.length,
+        maxJump,
+      };
+    }));
+    assert(frontline.length === 2 && frontline.every((line) => line.dash === null && line.curve), `Frontline is not drawn as a continuous smooth stroke: ${JSON.stringify(frontline)}`);
+    assert(frontline.every((line) => line.maxJump <= 3072), `Frontline contains a long jump between town-hall pairs: ${JSON.stringify(frontline)}`);
     verifyGeneratedAssets();
     assert(pageErrors.length === 0, `Browser runtime errors: ${pageErrors.join("; ")}`);
 
-    console.log(JSON.stringify({ result: "PASS", ruChapters, enChapters, mobileOptions: mobile.options, mobileWidth: `${mobile.width}/${mobile.viewport}`, planningOverview: "empty / overview only", planningSelection: "2 selected / details scoped / map fits", legacyMarkers: 0 }, null, 2));
+    console.log(JSON.stringify({ result: "PASS", ruChapters, enChapters, mobileOptions: mobile.options, mobileWidth: `${mobile.width}/${mobile.viewport}`, planningOverview: "empty / overview only", planningSelection: "2 selected / details scoped / map fits", frontline, legacyMarkers: 0 }, null, 2));
   } finally {
     await browser.close();
   }
