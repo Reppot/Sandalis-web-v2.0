@@ -1,7 +1,7 @@
 {
   "name": "sindaris-desktop",
   "productName": "Sindaris",
-  "version": "0.1.3",
+  "version": "0.1.9",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",

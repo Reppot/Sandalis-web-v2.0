@@ -48,3 +48,8 @@ venv/
 .mypy_cache/
 tools/guide/node_modules
 tools/guide/debug-*.png
+desktop/node_modules/
+desktop/dist/
+desktop/resources/
+desktop/release/
+desktop/npm-audit.json

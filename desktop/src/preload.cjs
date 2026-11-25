@@ -3,6 +3,10 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('sindarisDesktop', {
   chooseSaveFile: () => ipcRenderer.invoke('companion:choose-save-file'),
   getCompanionStatus: () => ipcRenderer.invoke('companion:get-status'),
+  getCompanionProfile: () => ipcRenderer.invoke('companion:get-profile'),
+  getLastScanReport: () => ipcRenderer.invoke('companion:get-last-report'),
+  getDiscordSetup: () => ipcRenderer.invoke('companion:get-discord-setup'),
+  completeDiscordSetup: (selection) => ipcRenderer.invoke('companion:complete-discord-setup', selection),
   openDiscordLogin: () => ipcRenderer.invoke('companion:discord-login'),
   onCompanionStatus: (callback) => {
     const listener = (_event, status) => callback(status);

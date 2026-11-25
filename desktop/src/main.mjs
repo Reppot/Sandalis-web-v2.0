@@ -28,6 +28,8 @@ let lastSaveSignature = null;
 let scanInProgress = false;
 let scanChild = null;
 let companionStatus = { state: 'waiting', folder: null, fileName: null, stockpiles: [], incompleteCount: 0, message: 'Ищу MapData.sav в папке сохранений Foxhole…' };
+let lastScanReport = null;
+let reportFile = null;
 let offlineGuest = false;
 const nativeAuth = createNativeAuthSession();
 let preferencesFile;
@@ -49,6 +51,110 @@ function publishCompanionStatus(patch) {
 }
 function trustedIpc(event) {
   return isAppUrl(event.senderFrame.url);
+}
+
+function discordImage(value, directory) {
+  if (typeof value !== 'string') return null;
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && url.hostname === 'cdn.discordapp.com' && url.pathname.startsWith(`/${directory}/`) ? url.href : null;
+  } catch { return null; }
+}
+
+async function companionProfile(ses) {
+  if (offlineGuest) return null;
+  try {
+    const headers = new Headers();
+    const authorization = nativeAuth.authorization(SERVER_URL + '/api/v1/auth/me');
+    if (authorization) headers.set('Authorization', authorization);
+    const response = await ses.fetch(SERVER_URL + '/api/v1/auth/me', {
+      headers, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(8000),
+    });
+    if (response.status === 401 || response.status === 403) return null;
+    if (!response.ok) return undefined;
+    const me = await response.json();
+    if (me.subject_type !== 'user') return null;
+    const level = me.role === 'owner' ? 'owner'
+      : me.role === 'admin' ? 'high'
+        : me.role === 'officer' ? 'medium'
+          : me.role === 'member' ? 'basic'
+            : (Array.isArray(me.scopes) && me.scopes.some((scope) => scope !== 'catalog:read')) ? 'custom' : 'guest';
+    let clanName = typeof me.clan_id === 'string' ? me.clan_id : '';
+    let clanAvatarUrl = null;
+    try {
+      const clanHeaders = new Headers();
+      if (authorization) clanHeaders.set('Authorization', authorization);
+      const clanResponse = await ses.fetch(SERVER_URL + '/api/v1/clan/profile', {
+        headers: clanHeaders, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(8000),
+      });
+      if (clanResponse.ok) {
+        const clan = await clanResponse.json();
+        clanName = typeof clan.name === 'string' ? clan.name : clanName;
+        clanAvatarUrl = discordImage(clan.icon_url, 'icons');
+      }
+    } catch { /* Keep the clan ID when the profile endpoint is temporarily offline. */ }
+    return {
+      displayName: typeof me.display_name === 'string' ? me.display_name : me.user_id,
+      avatarUrl: discordImage(me.avatar_url, 'avatars'),
+      clanId: typeof me.clan_id === 'string' ? me.clan_id : '',
+      clanName,
+      clanAvatarUrl,
+      level,
+    };
+  } catch { return undefined; }
+}
+
+async function getDiscordSetup(ses) {
+  if (offlineGuest) return null;
+  try {
+    const response = await ses.fetch(SERVER_URL + '/api/v1/auth/discord/setup', {
+      headers: { Accept: 'application/json' }, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(10000),
+    });
+    if (!response.ok) return null;
+    const setup = await response.json();
+    const text = (value, max = 120) => typeof value === 'string' ? value.slice(0, max) : '';
+    return {
+      displayName: text(setup.display_name),
+      guilds: Array.isArray(setup.guilds) ? setup.guilds.slice(0, 100).map((guild) => ({
+        id: text(guild.id, 32), name: text(guild.name), iconUrl: discordImage(guild.icon_url, 'icons'),
+        clanId: text(guild.clan_id, 64), clanName: text(guild.clan_name),
+      })) : [],
+      joins: Array.isArray(setup.joins) ? setup.joins.slice(0, 100).map((join) => ({
+        clanId: text(join.clan_id, 64), name: text(join.name), iconUrl: discordImage(join.icon_url, 'icons'),
+        level: ['basic', 'medium', 'high'].includes(join.level) ? join.level : 'basic',
+        roles: Array.isArray(join.roles) ? join.roles.slice(0, 24).map((role) => text(role.name, 64)) : [],
+      })) : [],
+      memberships: Array.isArray(setup.memberships) ? setup.memberships.slice(0, 100).map((membership) => ({
+        clanId: text(membership.clan_id, 64), clanName: text(membership.clan_name), role: text(membership.role, 32),
+      })) : [],
+    };
+  } catch { return null; }
+}
+
+async function completeDiscordSetup(ses, selection) {
+  const keys = ['guildId', 'clanId', 'joinClanId'].filter((key) => Object.hasOwn(selection ?? {}, key));
+  if (keys.length !== 1) return { ok: false, error: 'Выберите один сервер или клан из списка.' };
+  const key = keys[0];
+  const value = selection[key];
+  if (typeof value !== 'string' || value.length < 1 || value.length > 64 || !/^[A-Za-z0-9_-]+$/.test(value)) {
+    return { ok: false, error: 'Вариант выбора сервера некорректен. Обновите список и попробуйте снова.' };
+  }
+  const fields = { guildId: 'guild_id', clanId: 'clan_id', joinClanId: 'join_clan_id' };
+  const endpoint = SERVER_URL + '/api/v1/auth/discord/setup';
+  try {
+    const headers = new Headers({ 'Content-Type': 'application/json', Accept: 'application/json' });
+    const authorization = nativeAuth.authorization(endpoint);
+    if (authorization) headers.set('Authorization', authorization);
+    const response = await ses.fetch(endpoint, {
+      method: 'POST', headers, body: JSON.stringify({ [fields[key]]: value }),
+      credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(12000),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) return { ok: false, error: 'Сервер не применил этот выбор. Обновите список и попробуйте ещё раз.' };
+    nativeAuth.capture('/api/v1/auth/discord/setup', 'POST', response.status, payload);
+    await persistGuest(false);
+    return { ok: true };
+  } catch { return { ok: false, error: 'Не удалось связаться с Sindaris. Проверьте подключение и повторите выбор.' }; }
 }
 
 async function findSaveFile(folder) {
@@ -94,13 +200,18 @@ async function processSaveFile(file, signature) {
     }
     const incompleteCount = [...logs.matchAll(/skipped: the game had no details for it/gi)].length;
     lastSaveSignature = signature;
+    lastScanReport = {
+      processedAt: new Date().toISOString(), fileName: path.basename(file),
+      stockpiles, incompleteCount, total: stockpiles.length + incompleteCount,
+    };
+    await writeFile(reportFile, JSON.stringify(lastScanReport), 'utf8');
     publishCompanionStatus({
       state: incompleteCount ? 'partial' : 'ready', folder: saveFolder, fileName: path.basename(file),
       stockpiles, incompleteCount,
       message: incompleteCount
         ? `Распознано складов: ${stockpiles.length}. Ещё ${incompleteCount} закреплённых объектов без доступных деталей — они не считаются пустыми.`
         : `Обработка завершена. Найдено складов: ${stockpiles.length}.`,
-      processedAt: new Date().toISOString(),
+      processedAt: lastScanReport.processedAt,
     });
   } catch (error) {
     publishCompanionStatus({ state: 'error', folder: saveFolder, fileName: path.basename(file), message: error.code === 'ENOENT' ? 'Локальный обработчик fs.exe не найден. Пересоберите приложение.' : `Не удалось прочитать сохранение: ${error.message}` });
@@ -242,6 +353,13 @@ if (locked) app.whenReady().then(async () => {
   const resources = path.join(root, 'resources');
   catalog = createCatalog(path.join(resources, 'snapshot.json'));
   const ses = session.fromPartition('persist:sindaris-desktop');
+  reportFile = path.join(app.getPath('userData'), 'last-scan-report.json');
+  try {
+    const report = JSON.parse(await readFile(reportFile, 'utf8'));
+    lastScanReport = typeof report?.processedAt === 'string' && typeof report?.fileName === 'string'
+      && Array.isArray(report?.stockpiles) && Number.isInteger(report?.incompleteCount) && Number.isInteger(report?.total)
+      ? report : null;
+  } catch { lastScanReport = null; }
   ipcMain.handle('companion:choose-save-file', async (event) => {
     if (!trustedIpc(event)) return companionStatus;
     const result = await dialog.showOpenDialog(mainWindow, {
@@ -252,13 +370,17 @@ if (locked) app.whenReady().then(async () => {
     return setSaveFile(result.filePaths[0]);
   });
   ipcMain.handle('companion:get-status', (event) => trustedIpc(event) ? companionStatus : null);
+  ipcMain.handle('companion:get-profile', (event) => trustedIpc(event) ? companionProfile(ses) : null);
+  ipcMain.handle('companion:get-last-report', (event) => trustedIpc(event) ? lastScanReport : null);
+  ipcMain.handle('companion:get-discord-setup', (event) => trustedIpc(event) ? getDiscordSetup(ses) : null);
+  ipcMain.handle('companion:complete-discord-setup', (event, selection) => trustedIpc(event) ? completeDiscordSetup(ses, selection) : { ok: false, error: 'Недопустимый источник запроса.' });
   ipcMain.handle('companion:discord-login', (event) => {
     if (!trustedIpc(event)) return false;
     openLogin(ses);
     return true;
   });
   // Closing the window keeps the local companion process alive. Quit is explicit in the tray.
-  const traySvg = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#101513"/><path d="M22 10H13a4 4 0 0 0 0 8h6a4 4 0 0 1 0 8H9" fill="none" stroke="#55d6a2" stroke-width="3" stroke-linecap="round"/></svg>';
+  const traySvg = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="1" y="1" width="30" height="30" rx="8" fill="#100c0d"/><path d="m9 8-3-3m17 3 3-3M12 5h8" fill="none" stroke="#ff6878" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="18" r="10" fill="#f43f52"/><circle cx="16" cy="18" r="7.6" fill="#f2eded"/><path d="M16 13v5l3.5 2" fill="none" stroke="#c52e40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="18" r="1.2" fill="#c52e40"/></svg>';
   const trayImage = nativeImage.createFromDataURL(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(traySvg)}`);
   tray = new Tray(trayImage);
   tray.setToolTip('Sindaris — компаньон работает');
