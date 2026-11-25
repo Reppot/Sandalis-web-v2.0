@@ -24,8 +24,8 @@
       "cs": "Přihlašovací obrazovka"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/login.webp",
-      "en": "/api/v1/assets/guide/en/login.webp",
+      "ru": "/api/v1/assets/guide/ru/login.2519bae8c3a342ac.webp",
+      "en": "/api/v1/assets/guide/en/login.345dd3700e7ce817.webp",
       "cs": "/api/v1/assets/guide/cs/login.webp"
      },
      "size": {
@@ -71,8 +71,8 @@
       "cs": "Po přihlášení: vstoupit do klanu nebo založit vlastní"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/setup.webp",
-      "en": "/api/v1/assets/guide/en/setup.webp",
+      "ru": "/api/v1/assets/guide/ru/setup.4ee08471cb12e783.webp",
+      "en": "/api/v1/assets/guide/en/setup.e2dafc4017bf047f.webp",
       "cs": "/api/v1/assets/guide/cs/setup.webp"
      },
      "size": {
@@ -141,8 +141,8 @@
       "cs": "Hlavní obrazovka"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/shell.webp",
-      "en": "/api/v1/assets/guide/en/shell.webp",
+      "ru": "/api/v1/assets/guide/ru/shell.d7452a52eaed89df.webp",
+      "en": "/api/v1/assets/guide/en/shell.904680458e61195c.webp",
       "cs": "/api/v1/assets/guide/cs/shell.webp"
      },
      "size": {
@@ -194,8 +194,8 @@
       "cs": "Menu sekcí"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/menu.webp",
-      "en": "/api/v1/assets/guide/en/menu.webp",
+      "ru": "/api/v1/assets/guide/ru/menu.63227a5724d4fbf7.webp",
+      "en": "/api/v1/assets/guide/en/menu.7579ce1b64f278f4.webp",
       "cs": "/api/v1/assets/guide/cs/menu.webp"
      },
      "size": {
@@ -255,8 +255,8 @@
       "cs": "Obsah připnutého skladu"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/stockpile.webp",
-      "en": "/api/v1/assets/guide/en/stockpile.webp",
+      "ru": "/api/v1/assets/guide/ru/stockpile.590011e0c9d0f639.webp",
+      "en": "/api/v1/assets/guide/en/stockpile.d9b9529e16228057.webp",
       "cs": "/api/v1/assets/guide/cs/stockpile.webp"
      },
      "size": {
@@ -320,8 +320,8 @@
       "cs": "Konstruktor objednávky"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/builder.webp",
-      "en": "/api/v1/assets/guide/en/builder.webp",
+      "ru": "/api/v1/assets/guide/ru/builder.81464e82e82e8867.webp",
+      "en": "/api/v1/assets/guide/en/builder.ddada802955891df.webp",
       "cs": "/api/v1/assets/guide/cs/builder.webp"
      },
      "size": {
@@ -405,8 +405,8 @@
       "cs": "Hlášení štábu"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/reports.webp",
-      "en": "/api/v1/assets/guide/en/reports.webp",
+      "ru": "/api/v1/assets/guide/ru/reports.f89d2753925af88b.webp",
+      "en": "/api/v1/assets/guide/en/reports.485fb9f7e7762ce1.webp",
       "cs": "/api/v1/assets/guide/cs/reports.webp"
      },
      "size": {
@@ -453,8 +453,8 @@
       "en": "Task details"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/report-detail.webp",
-      "en": "/api/v1/assets/guide/en/report-detail.webp"
+      "ru": "/api/v1/assets/guide/ru/report-detail.1d403156d84d7ede.webp",
+      "en": "/api/v1/assets/guide/en/report-detail.3cc8aea02eb7d97a.webp"
      },
      "size": {
       "ru": {
@@ -509,8 +509,8 @@
       "cs": "Matice časovačů"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/timers.webp",
-      "en": "/api/v1/assets/guide/en/timers.webp",
+      "ru": "/api/v1/assets/guide/ru/timers.88344487d9e13987.webp",
+      "en": "/api/v1/assets/guide/en/timers.4daa5699e542e815.webp",
       "cs": "/api/v1/assets/guide/cs/timers.webp"
      },
      "size": {
@@ -562,8 +562,8 @@
       "cs": "Komunikační kanál skladu"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/timer-modal.webp",
-      "en": "/api/v1/assets/guide/en/timer-modal.webp",
+      "ru": "/api/v1/assets/guide/ru/timer-modal.0355427efbc8c8ae.webp",
+      "en": "/api/v1/assets/guide/en/timer-modal.b4c35a4c387de810.webp",
       "cs": "/api/v1/assets/guide/cs/timer-modal.webp"
      },
      "size": {
@@ -638,8 +638,8 @@
       "cs": "Registr kódů"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/codes.webp",
-      "en": "/api/v1/assets/guide/en/codes.webp",
+      "ru": "/api/v1/assets/guide/ru/codes.20146470a5b82423.webp",
+      "en": "/api/v1/assets/guide/en/codes.553077c00647c81e.webp",
       "cs": "/api/v1/assets/guide/cs/codes.webp"
      },
      "size": {
@@ -711,8 +711,8 @@
       "en": "Tools catalog"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/tools-home.webp",
-      "en": "/api/v1/assets/guide/en/tools-home.webp"
+      "ru": "/api/v1/assets/guide/ru/tools-home.9ffc16b66804557e.webp",
+      "en": "/api/v1/assets/guide/en/tools-home.6060b8c4f8749118.webp"
      },
      "size": {
       "ru": {
@@ -741,8 +741,8 @@
       "cs": "Výběr kalkulačky"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/tools-tabs.webp",
-      "en": "/api/v1/assets/guide/en/tools-tabs.webp",
+      "ru": "/api/v1/assets/guide/ru/tools-tabs.0031153dfb5fb7a7.webp",
+      "en": "/api/v1/assets/guide/en/tools-tabs.288a1cc419aac56f.webp",
       "cs": "/api/v1/assets/guide/cs/tools-tabs.webp"
      },
      "size": {
@@ -783,8 +783,8 @@
       "cs": "Kalkulačka MPF"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/mpf.webp",
-      "en": "/api/v1/assets/guide/en/mpf.webp",
+      "ru": "/api/v1/assets/guide/ru/mpf.c5178fc0bd5add2a.webp",
+      "en": "/api/v1/assets/guide/en/mpf.f3432f6788fffb5e.webp",
       "cs": "/api/v1/assets/guide/cs/mpf.webp"
      },
      "size": {
@@ -859,8 +859,8 @@
       "en": "Empty map overview"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-overview.webp",
-      "en": "/api/v1/assets/guide/en/planning-overview.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-overview.8650bdc2f455153b.webp",
+      "en": "/api/v1/assets/guide/en/planning-overview.d9c349993ae434bf.webp"
      },
      "size": {
       "ru": {
@@ -890,8 +890,8 @@
       "en": "Selecting hexes"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-regions.webp",
-      "en": "/api/v1/assets/guide/en/planning-regions.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-regions.41bf1b31d3a33bb8.webp",
+      "en": "/api/v1/assets/guide/en/planning-regions.b232ed42417c02c4.webp"
      },
      "size": {
       "ru": {
@@ -925,8 +925,8 @@
       "en": "Estimated frontline"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-frontline.webp",
-      "en": "/api/v1/assets/guide/en/planning-frontline.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-frontline.7c3f46cfd3d24815.webp",
+      "en": "/api/v1/assets/guide/en/planning-frontline.b932995617789059.webp"
      },
      "size": {
       "ru": {
@@ -956,8 +956,8 @@
       "en": "Buildings in a selected hex"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-selected.webp",
-      "en": "/api/v1/assets/guide/en/planning-selected.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-selected.c4767c3568157098.webp",
+      "en": "/api/v1/assets/guide/en/planning-selected.ec308cd5663f1b6b.webp"
      },
      "size": {
       "ru": {
@@ -987,8 +987,8 @@
       "en": "Grouped planning tools"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-tools.webp",
-      "en": "/api/v1/assets/guide/en/planning-tools.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-tools.68441e016d17c1ac.webp",
+      "en": "/api/v1/assets/guide/en/planning-tools.a070bb8129fd214d.webp"
      },
      "size": {
       "ru": {
@@ -1041,8 +1041,8 @@
       "cs": "Výcvikové centrum"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/training.webp",
-      "en": "/api/v1/assets/guide/en/training.webp",
+      "ru": "/api/v1/assets/guide/ru/training.82aa80b70fa32813.webp",
+      "en": "/api/v1/assets/guide/en/training.caef2efeedaf7fa4.webp",
       "cs": "/api/v1/assets/guide/cs/training.webp"
      },
      "size": {
@@ -1101,8 +1101,8 @@
       "cs": "Bot klanu na Discord serveru"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/mgmt-bot.webp",
-      "en": "/api/v1/assets/guide/en/mgmt-bot.webp",
+      "ru": "/api/v1/assets/guide/ru/mgmt-bot.f11771a6dc566d78.webp",
+      "en": "/api/v1/assets/guide/en/mgmt-bot.0f6ccee4e6732a9a.webp",
       "cs": "/api/v1/assets/guide/cs/mgmt-bot.webp"
      },
      "size": {
@@ -1143,8 +1143,8 @@
       "cs": "Členové klanu"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/mgmt-members.webp",
-      "en": "/api/v1/assets/guide/en/mgmt-members.webp",
+      "ru": "/api/v1/assets/guide/ru/mgmt-members.d1d641c1087622fe.webp",
+      "en": "/api/v1/assets/guide/en/mgmt-members.623cd54f3424749b.webp",
       "cs": "/api/v1/assets/guide/cs/mgmt-members.webp"
      },
      "size": {
@@ -1187,8 +1187,8 @@
       "cs": "Role a úrovně přístupu"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/mgmt-roles.webp",
-      "en": "/api/v1/assets/guide/en/mgmt-roles.webp",
+      "ru": "/api/v1/assets/guide/ru/mgmt-roles.d4c6ae0031e416b0.webp",
+      "en": "/api/v1/assets/guide/en/mgmt-roles.20b6734dc1b62b1e.webp",
       "cs": "/api/v1/assets/guide/cs/mgmt-roles.webp"
      },
      "size": {
@@ -1229,8 +1229,8 @@
       "cs": "Integrace: kanál Discord pro hlášení"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/webhook.webp",
-      "en": "/api/v1/assets/guide/en/webhook.webp",
+      "ru": "/api/v1/assets/guide/ru/webhook.1c1923f1ee83bb27.webp",
+      "en": "/api/v1/assets/guide/en/webhook.e751819a6becbe11.webp",
       "cs": "/api/v1/assets/guide/cs/webhook.webp"
      },
      "size": {
@@ -1270,8 +1270,8 @@
       "cs": "Integrace: API token pro bota"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/token.webp",
-      "en": "/api/v1/assets/guide/en/token.webp",
+      "ru": "/api/v1/assets/guide/ru/token.c5e9f30ea4a52495.webp",
+      "en": "/api/v1/assets/guide/en/token.13962c7f2ae521e3.webp",
       "cs": "/api/v1/assets/guide/cs/token.webp"
      },
      "size": {
@@ -1337,8 +1337,8 @@
       "cs": "Profil člena"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/profile.webp",
-      "en": "/api/v1/assets/guide/en/profile.webp",
+      "ru": "/api/v1/assets/guide/ru/profile.4a6a8fc6d8e0576c.webp",
+      "en": "/api/v1/assets/guide/en/profile.86d828fd3b1c5e95.webp",
       "cs": "/api/v1/assets/guide/cs/profile.webp"
      },
      "size": {
@@ -1387,8 +1387,8 @@
       "cs": "Jazyk rozhraní"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/language.webp",
-      "en": "/api/v1/assets/guide/en/language.webp",
+      "ru": "/api/v1/assets/guide/ru/language.12634139aa4dc513.webp",
+      "en": "/api/v1/assets/guide/en/language.754733aa1596f3cc.webp",
       "cs": "/api/v1/assets/guide/cs/language.webp"
      },
      "size": {
@@ -1425,8 +1425,8 @@
       "cs": "Vzhled"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/appearance.webp",
-      "en": "/api/v1/assets/guide/en/appearance.webp",
+      "ru": "/api/v1/assets/guide/ru/appearance.a262da9b19660b3e.webp",
+      "en": "/api/v1/assets/guide/en/appearance.0c151c7c145e14e9.webp",
       "cs": "/api/v1/assets/guide/cs/appearance.webp"
      },
      "size": {
@@ -1480,8 +1480,8 @@
       "en": "Supply profile"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/pyramid-config.webp",
-      "en": "/api/v1/assets/guide/en/pyramid-config.webp"
+      "ru": "/api/v1/assets/guide/ru/pyramid-config.4f0886650d53a4a8.webp",
+      "en": "/api/v1/assets/guide/en/pyramid-config.290eb7b83a97efee.webp"
      },
      "size": {
       "ru": {
@@ -1509,8 +1509,8 @@
       "en": "Base tiers and supply needs"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/pyramid-tiers.webp",
-      "en": "/api/v1/assets/guide/en/pyramid-tiers.webp"
+      "ru": "/api/v1/assets/guide/ru/pyramid-tiers.f2709f4b8de3b7e7.webp",
+      "en": "/api/v1/assets/guide/en/pyramid-tiers.aba7d349988e5b51.webp"
      },
      "size": {
       "ru": {
@@ -1558,8 +1558,8 @@
       "en": "Facility production plan"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/facility.webp",
-      "en": "/api/v1/assets/guide/en/facility.webp"
+      "ru": "/api/v1/assets/guide/ru/facility.17113db805a8e18c.webp",
+      "en": "/api/v1/assets/guide/en/facility.46164e6658feecb1.webp"
      },
      "size": {
       "ru": {
@@ -1589,8 +1589,8 @@
       "en": "Buildings in the production chain"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/facility-power.webp",
-      "en": "/api/v1/assets/guide/en/facility-power.webp"
+      "ru": "/api/v1/assets/guide/ru/facility-power.f63ae2a0cf0d7cd7.webp",
+      "en": "/api/v1/assets/guide/en/facility-power.f01fde900178f321.webp"
      },
      "size": {
       "ru": {
@@ -1618,8 +1618,8 @@
       "en": "Factory queue"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/factory.webp",
-      "en": "/api/v1/assets/guide/en/factory.webp"
+      "ru": "/api/v1/assets/guide/ru/factory.713b9086f2a15f7a.webp",
+      "en": "/api/v1/assets/guide/en/factory.4e752ee0a5f1a716.webp"
      },
      "size": {
       "ru": {
@@ -1649,8 +1649,8 @@
       "en": "Resource refining"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/refinery.webp",
-      "en": "/api/v1/assets/guide/en/refinery.webp"
+      "ru": "/api/v1/assets/guide/ru/refinery.5464f94fcdcd0358.webp",
+      "en": "/api/v1/assets/guide/en/refinery.bb864b3e584e0294.webp"
      },
      "size": {
       "ru": {
@@ -1698,8 +1698,8 @@
       "en": "Activity and goals overview"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/statistics.webp",
-      "en": "/api/v1/assets/guide/en/statistics.webp"
+      "ru": "/api/v1/assets/guide/ru/statistics.777a27f2d56dd448.webp",
+      "en": "/api/v1/assets/guide/en/statistics.50f93bc279d6837e.webp"
      },
      "size": {
       "ru": {
@@ -1747,8 +1747,8 @@
       "en": "Operation plans and participants"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/operations.webp",
-      "en": "/api/v1/assets/guide/en/operations.webp"
+      "ru": "/api/v1/assets/guide/ru/operations.ce974e359fed3dc7.webp",
+      "en": "/api/v1/assets/guide/en/operations.a7acc09120a1d7d6.webp"
      },
      "size": {
       "ru": {
@@ -1794,8 +1794,8 @@
       "en": "Feedback form and history"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/feedback.webp",
-      "en": "/api/v1/assets/guide/en/feedback.webp"
+      "ru": "/api/v1/assets/guide/ru/feedback.0d55caeceb93d532.webp",
+      "en": "/api/v1/assets/guide/en/feedback.ef60ce1ea35f5b42.webp"
      },
      "size": {
       "ru": {
@@ -1841,8 +1841,8 @@
       "en": "Inbox"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/mail.webp",
-      "en": "/api/v1/assets/guide/en/mail.webp"
+      "ru": "/api/v1/assets/guide/ru/mail.2212e703c8dfb8f9.webp",
+      "en": "/api/v1/assets/guide/en/mail.0774d4e85c241b32.webp"
      },
      "size": {
       "ru": {
@@ -1888,8 +1888,8 @@
       "en": "Support Sandalis"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/support.webp",
-      "en": "/api/v1/assets/guide/en/support.webp"
+      "ru": "/api/v1/assets/guide/ru/support.4637e763bc7e02b2.webp",
+      "en": "/api/v1/assets/guide/en/support.fd575eda5251bd27.webp"
      },
      "size": {
       "ru": {

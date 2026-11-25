@@ -1,11 +1,15 @@
 // Проверка опубликованного руководства: главы и снимки RU/EN, маркеры, мобильное оглавление.
 import puppeteer from "puppeteer-core";
+import { readFileSync, readdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { COMMANDER, seedDemo } from "./demo.mjs";
 
 const FRONTEND = process.env.GUIDE_FRONTEND ?? "http://127.0.0.1:3300";
 const BACKEND = process.env.GUIDE_BACKEND ?? "http://127.0.0.1:8020";
 const BROWSER = process.env.GUIDE_BROWSER ?? "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe";
 const EXPECTED_CHAPTERS = 18;
+const GUIDE_DATA = new URL("../../backend/app/seed/data/guide.json", import.meta.url);
+const GUIDE_STATIC = new URL("../../backend/static/guide/", import.meta.url);
 
 const assert = (condition, message) => {
   if (!condition) throw new Error(message);
@@ -35,9 +39,22 @@ async function verifyChapters(page, locale) {
     assert(state.notes > 0 && state.notePanels === state.images.length, `${locale}: chapter “${title}” has missing screen notes`);
     assert(state.legacyMarkers === 0, `${locale}: chapter “${title}” still overlays numbered markers`);
     assert(state.images.every((src) => src.includes(`/guide/${locale}/`)), `${locale}: chapter “${title}” uses a wrong-locale screenshot`);
+    assert(state.images.every((src) => new URL(src).pathname.match(/\/guide\/(ru|en)\/[a-z0-9-]+\.[a-f0-9]{16}\.webp$/)), `${locale}: chapter “${title}” has an unversioned screenshot URL`);
   }
 
   return buttons.length;
+}
+
+function verifyGeneratedAssets() {
+  const rows = JSON.parse(readFileSync(fileURLToPath(GUIDE_DATA), "utf8"));
+  for (const locale of ["ru", "en"]) {
+    const expected = new Set(rows.flatMap((row) => row.payload.shots.map((shot) => shot.images[locale].split("/").at(-1))));
+    const directory = fileURLToPath(new URL(`${locale}/`, GUIDE_STATIC));
+    const actual = new Set(readdirSync(directory).filter((filename) => filename.endsWith(".webp")));
+    const stale = [...actual].filter((filename) => !expected.has(filename));
+    const missing = [...expected].filter((filename) => !actual.has(filename));
+    assert(stale.length === 0 && missing.length === 0, `${locale}: screenshot directory differs from current guide manifest (stale ${stale.length}, missing ${missing.length})`);
+  }
 }
 
 async function main() {
@@ -62,7 +79,7 @@ async function main() {
     }, COMMANDER);
 
     await page.goto(`${FRONTEND}/?tab=guide`, { waitUntil: "domcontentloaded" });
-    await page.waitForSelector(".guide-toc-list button", { timeout: 60000 });
+    await page.waitForFunction((count) => document.querySelectorAll(".guide-toc-list button").length === count, { timeout: 60000 }, EXPECTED_CHAPTERS);
     const desktop = await page.evaluate(() => ({
       mobileToc: getComputedStyle(document.querySelector(".guide-toc-mobile")).display,
       desktopToc: getComputedStyle(document.querySelector(".guide-toc-list")).display,
@@ -72,12 +89,12 @@ async function main() {
     const ruChapters = await verifyChapters(page, "ru");
     await page.evaluate(() => localStorage.setItem("sindaris-locale", "en"));
     await page.reload({ waitUntil: "domcontentloaded" });
-    await page.waitForSelector(".guide-toc-list button", { timeout: 60000 });
+    await page.waitForFunction((count) => document.querySelectorAll(".guide-toc-list button").length === count, { timeout: 60000 }, EXPECTED_CHAPTERS);
     const enChapters = await verifyChapters(page, "en");
 
     await page.setViewport({ width: 390, height: 844 });
     await page.reload({ waitUntil: "domcontentloaded" });
-    await page.waitForSelector("#guide-mobile-jump", { timeout: 60000 });
+    await page.waitForFunction((count) => document.querySelectorAll("#guide-mobile-jump option").length === count, { timeout: 60000 }, EXPECTED_CHAPTERS);
     const mobile = await page.evaluate(() => ({
       selector: getComputedStyle(document.querySelector(".guide-toc-mobile")).display,
       desktopList: getComputedStyle(document.querySelector(".guide-toc-list")).display,
@@ -143,6 +160,7 @@ async function main() {
     assert(selectedPlanning.details.some((keys) => keys?.split(",").sort().join(",") === selectedPlanning.expected), `Mobile map requested details outside the selected hexes: ${JSON.stringify(selectedPlanning)}`);
     assert(selectedPlanning.markers > 0 && selectedPlanning.markerRegions.every((region) => region === "DeadLandsHex" || region === secondRegion), `Mobile map showed buildings outside selected hexes: ${JSON.stringify(selectedPlanning)}`);
     assert(selectedPlanning.tooltipWidths.every((width) => width <= 320), `Mobile building tooltip is oversized: ${JSON.stringify(selectedPlanning)}`);
+    verifyGeneratedAssets();
     assert(pageErrors.length === 0, `Browser runtime errors: ${pageErrors.join("; ")}`);
 
     console.log(JSON.stringify({ result: "PASS", ruChapters, enChapters, mobileOptions: mobile.options, mobileWidth: `${mobile.width}/${mobile.viewport}`, planningOverview: "empty / overview only", planningSelection: "2 selected / details scoped / map fits", legacyMarkers: 0 }, null, 2));

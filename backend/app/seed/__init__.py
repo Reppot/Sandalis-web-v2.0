@@ -6,7 +6,8 @@
 * app_content — только добавляются недостающие записи: правки, сделанные через
   API (например, новый URL видео входа), сид не затирает. Исключение — переводы
   en/cs (content_i18n.json → payload.i18n) и руководство «Навигация» (guide.json,
-  генерирует backend/scripts/guide): системные данные, обновляются всегда.
+  генерирует tools/guide): системные данные, обновляются всегда; отсутствующие в
+  актуальном манифесте главы деактивируются.
 
 Запуск: `python -m app.seed` (Render делает это после `alembic upgrade head`).
 """
@@ -145,6 +146,16 @@ async def seed_content_i18n(conn: AsyncConnection, i18n: dict[str, dict[str, Any
 
 async def seed_guide(conn: AsyncConnection, rows: list[dict[str, Any]]) -> int:
     """Главы руководства перезаписываются целиком: скриншоты и метки — артефакт сборки."""
+    current_keys = [row["key"] for row in rows]
+    await conn.execute(
+        update(AppContent)
+        .where(
+            AppContent.kind == "guide_chapter",
+            AppContent.key.not_in(current_keys),
+            AppContent.is_active.is_(True),
+        )
+        .values(is_active=False, updated_at=func.now())
+    )
     for chunk in _chunks(rows):
         stmt = insert(AppContent).values(chunk)
         await conn.execute(stmt.on_conflict_do_update(

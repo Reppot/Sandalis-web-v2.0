@@ -1,7 +1,8 @@
 // Генератор руководства «Навигация»: демо-клан -> чистые скриншоты на ru/en ->
 // пояснения к разделам -> backend/static/guide/<locale>/*.webp + seed/data/guide.json.
 // Запуск и подготовка окружения — README.md рядом.
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { CHAPTERS } from "./chapters.mjs";
@@ -311,8 +312,14 @@ async function shoot(page, locale, shot) {
   }
 
   mkdirSync(new URL(`${locale}/`, STATIC), { recursive: true });
-  await page.screenshot({ path: fileURLToPath(new URL(`${locale}/${shot.id}.webp`, STATIC)), type: "webp", quality: 82, clip, captureBeyondViewport: true });
-  return { size: { w: clip.width, h: clip.height } };
+  const image = await page.screenshot({ type: "webp", quality: 92, clip, captureBeyondViewport: true });
+  const hash = createHash("sha256").update(image).digest("hex").slice(0, 16);
+  const filename = `${shot.id}.${hash}.webp`;
+  writeFileSync(fileURLToPath(new URL(`${locale}/${filename}`, STATIC)), image);
+  return {
+    size: { w: clip.width, h: clip.height },
+    image: `/api/v1/assets/guide/${locale}/${filename}`,
+  };
 }
 
 async function main() {
@@ -386,13 +393,24 @@ async function main() {
         return {
         id: shot.id,
         caption: mergeLocales(old.caption, shot.caption),
-        images: { ...(old.images ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, `/api/v1/assets/guide/${l}/${shot.id}.webp`])) },
+        images: { ...(old.images ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].image])) },
         size: { ...(old.size ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].size])) },
         notes: { ...(old.notes ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, shot.notes.map((note) => note.note[l])])) },
       }; }),
     },
   }; });
   writeFileSync(SEED, `${JSON.stringify(rows, null, 1)}\n`, "utf8");
+
+  // Remove only obsolete RU/EN screenshot assets after every new capture and the manifest succeeded.
+  for (const locale of LOCALES) {
+    const directory = fileURLToPath(new URL(`${locale}/`, STATIC));
+    const retained = new Set(rows.flatMap((row) => row.payload.shots.map((shot) => shot.images[locale].split("/").at(-1))));
+    for (const filename of readdirSync(directory)) {
+      if (filename.endsWith(".webp") && !retained.has(filename)) {
+        unlinkSync(fileURLToPath(new URL(`${locale}/${filename}`, STATIC)));
+      }
+    }
+  }
   console.log(`guide.json: ${rows.length} chapters`);
 }
 

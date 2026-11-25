@@ -117,11 +117,12 @@ export const GuideWorkspace: React.FC = () => {
     apiClient
       .get<GuideEntry[]>("/api/v1/content", { params: { kind: "guide_chapter" } })
       .then((rows) => {
-        const storedPlanning = rows.find((row) => row.key === planningGuide.key);
+        const currentRows = rows.filter((row) => GUIDE_ORDER.includes(row.key));
+        const storedPlanning = currentRows.find((row) => row.key === planningGuide.key);
         const currentPlanning = storedPlanning
           ? { ...storedPlanning, payload: { ...storedPlanning.payload, ...planningGuide.payload, shots: storedPlanning.payload.shots } }
           : planningGuide;
-        const sorted = [...rows.filter((row) => row.key !== planningGuide.key), currentPlanning].sort((a, b) => guideRank(a.key) - guideRank(b.key) || a.sort - b.sort);
+        const sorted = [...currentRows.filter((row) => row.key !== planningGuide.key), currentPlanning].sort((a, b) => guideRank(a.key) - guideRank(b.key) || a.sort - b.sort);
         setChapters(sorted);
         setActive((prev) => prev ?? sorted[0]?.key ?? null);
       })
