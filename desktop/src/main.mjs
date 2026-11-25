@@ -47,7 +47,7 @@ function publishCompanionStatus(patch) {
   mainWindow?.webContents.send('companion:status', companionStatus);
 }
 function trustedIpc(event) {
-  try { return new URL(event.senderFrame.url).origin === 'app://sindaris'; } catch { return false; }
+  return isAppUrl(event.senderFrame.url);
 }
 
 async function findSaveFile(folder) {

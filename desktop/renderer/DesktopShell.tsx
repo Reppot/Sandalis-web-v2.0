@@ -41,7 +41,7 @@ export default function DesktopShell() {
   React.useEffect(() => {
     const api = getApi();
     if (!api) return;
-    api.getCompanionStatus().then(setStatus).catch(() => {});
+    api.getCompanionStatus().then((next) => { if (next?.state) setStatus(next); }).catch(() => {});
     return api.onCompanionStatus(setStatus);
   }, []);
 
@@ -71,7 +71,7 @@ export default function DesktopShell() {
     setOpenTabs(next);
     if (active === tab) setActive(next[Math.max(0, openTabs.indexOf(tab) - 1)] ?? 'companion');
   };
-  const chooseFolder = async () => { const api = getApi(); if (api) setStatus(await api.chooseSaveFolder()); };
+  const chooseFolder = async () => { const api = getApi(); if (api) { const next = await api.chooseSaveFolder(); if (next?.state) setStatus(next); } };
   const login = async () => { await getApi()?.openDiscordLogin(); };
 
   return <main className="desktop-shell">
