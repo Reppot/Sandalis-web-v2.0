@@ -141,8 +141,8 @@
       "cs": "Hlavní obrazovka"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/shell.d7452a52eaed89df.webp",
-      "en": "/api/v1/assets/guide/en/shell.904680458e61195c.webp",
+      "ru": "/api/v1/assets/guide/ru/shell.b6794e6f284eff2f.webp",
+      "en": "/api/v1/assets/guide/en/shell.29133db10402b1dd.webp",
       "cs": "/api/v1/assets/guide/cs/shell.webp"
      },
      "size": {
@@ -320,7 +320,7 @@
       "cs": "Konstruktor objednávky"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/builder.81464e82e82e8867.webp",
+      "ru": "/api/v1/assets/guide/ru/builder.4f367fa502b282ae.webp",
       "en": "/api/v1/assets/guide/en/builder.ddada802955891df.webp",
       "cs": "/api/v1/assets/guide/cs/builder.webp"
      },
@@ -509,8 +509,8 @@
       "cs": "Matice časovačů"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/timers.88344487d9e13987.webp",
-      "en": "/api/v1/assets/guide/en/timers.4daa5699e542e815.webp",
+      "ru": "/api/v1/assets/guide/ru/timers.8cd9d2de06d73cc2.webp",
+      "en": "/api/v1/assets/guide/en/timers.ecc3d59ae0a07b7d.webp",
       "cs": "/api/v1/assets/guide/cs/timers.webp"
      },
      "size": {
@@ -638,8 +638,8 @@
       "cs": "Registr kódů"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/codes.20146470a5b82423.webp",
-      "en": "/api/v1/assets/guide/en/codes.553077c00647c81e.webp",
+      "ru": "/api/v1/assets/guide/ru/codes.83e3d0c8b3583836.webp",
+      "en": "/api/v1/assets/guide/en/codes.4592cb2957b41cb2.webp",
       "cs": "/api/v1/assets/guide/cs/codes.webp"
      },
      "size": {
@@ -711,8 +711,8 @@
       "en": "Tools catalog"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/tools-home.9ffc16b66804557e.webp",
-      "en": "/api/v1/assets/guide/en/tools-home.6060b8c4f8749118.webp"
+      "ru": "/api/v1/assets/guide/ru/tools-home.a417358608396898.webp",
+      "en": "/api/v1/assets/guide/en/tools-home.6b6b1e30046dd20d.webp"
      },
      "size": {
       "ru": {
@@ -783,8 +783,8 @@
       "cs": "Kalkulačka MPF"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/mpf.c5178fc0bd5add2a.webp",
-      "en": "/api/v1/assets/guide/en/mpf.f3432f6788fffb5e.webp",
+      "ru": "/api/v1/assets/guide/ru/mpf.fef538615cf817fc.webp",
+      "en": "/api/v1/assets/guide/en/mpf.cf7f83b65ec8bbc8.webp",
       "cs": "/api/v1/assets/guide/cs/mpf.webp"
      },
      "size": {
@@ -848,8 +848,8 @@
     "en": "Operation planning"
    },
    "summary": {
-    "ru": "Найдите регион поиском, выберите только нужные гексы: постройки загружаются по запросу. На карте можно рисовать, ставить редактируемые точки маршрута и оценивать время по заданной скорости.",
-    "en": "Search for a region and select only the hexes you need; building details load on demand. Draw on the map, place editable route waypoints, and estimate travel time at a chosen speed."
+    "ru": "Найдите регион поиском, выберите только нужные гексы: постройки загружаются по запросу. На карте можно рисовать линии, измерять расстояния и размещать метки плана.",
+    "en": "Search for a region and select only the hexes you need; building details load on demand. Draw lines, measure distances, and place plan markers on the map."
    },
    "shots": [
     {
@@ -859,8 +859,8 @@
       "en": "Empty map overview"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-overview.8650bdc2f455153b.webp",
-      "en": "/api/v1/assets/guide/en/planning-overview.d9c349993ae434bf.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-overview.f4457bcf9a55a06f.webp",
+      "en": "/api/v1/assets/guide/en/planning-overview.294de29e6536d008.webp"
      },
      "size": {
       "ru": {
@@ -925,8 +925,8 @@
       "en": "Estimated frontline"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-frontline.7c3f46cfd3d24815.webp",
-      "en": "/api/v1/assets/guide/en/planning-frontline.b932995617789059.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-frontline.e5b333846bb68f2e.webp",
+      "en": "/api/v1/assets/guide/en/planning-frontline.e99b930a8c22fa76.webp"
      },
      "size": {
       "ru": {
@@ -956,8 +956,8 @@
       "en": "Buildings in a selected hex"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-selected.c4767c3568157098.webp",
-      "en": "/api/v1/assets/guide/en/planning-selected.ec308cd5663f1b6b.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-selected.afe4353d20d0b316.webp",
+      "en": "/api/v1/assets/guide/en/planning-selected.48ab636b80299fea.webp"
      },
      "size": {
       "ru": {
@@ -987,8 +987,8 @@
       "en": "Grouped planning tools"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/planning-tools.68441e016d17c1ac.webp",
-      "en": "/api/v1/assets/guide/en/planning-tools.a070bb8129fd214d.webp"
+      "ru": "/api/v1/assets/guide/ru/planning-tools.9f1f854ec01927eb.webp",
+      "en": "/api/v1/assets/guide/en/planning-tools.4af28d44e0704a8b.webp"
      },
      "size": {
       "ru": {
@@ -1004,12 +1004,12 @@
       "ru": [
        "Переключайте группы рисования, размещения объектов и правки.",
        "Свободная линия рисуется мышью или касанием и сохраняется как редактируемый объект.",
-       "Маршрут строится отдельными точками. Длину и ETA можно менять скоростью; точки двигаются по одной."
+       "Линейка показывает расстояние и азимут между двумя точками."
       ],
       "en": [
        "Switch between drawing, placing objects, and editing tools.",
        "Draw a freehand line with mouse or touch; it is saved as an editable object.",
-       "Build a route from individual waypoints. Change its speed to update distance and ETA; drag waypoints to edit it."
+       "The ruler measures distance and azimuth between two points."
       ]
      }
     }
@@ -1041,8 +1041,8 @@
       "cs": "Výcvikové centrum"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/training.82aa80b70fa32813.webp",
-      "en": "/api/v1/assets/guide/en/training.caef2efeedaf7fa4.webp",
+      "ru": "/api/v1/assets/guide/ru/training.07551adb7a4e153e.webp",
+      "en": "/api/v1/assets/guide/en/training.e93d72393d6d2487.webp",
       "cs": "/api/v1/assets/guide/cs/training.webp"
      },
      "size": {
@@ -1337,8 +1337,8 @@
       "cs": "Profil člena"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/profile.4a6a8fc6d8e0576c.webp",
-      "en": "/api/v1/assets/guide/en/profile.86d828fd3b1c5e95.webp",
+      "ru": "/api/v1/assets/guide/ru/profile.72793c3d92a780d6.webp",
+      "en": "/api/v1/assets/guide/en/profile.2328b642aada36cd.webp",
       "cs": "/api/v1/assets/guide/cs/profile.webp"
      },
      "size": {
@@ -1558,8 +1558,8 @@
       "en": "Facility production plan"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/facility.17113db805a8e18c.webp",
-      "en": "/api/v1/assets/guide/en/facility.46164e6658feecb1.webp"
+      "ru": "/api/v1/assets/guide/ru/facility.c20f21ae06558fbc.webp",
+      "en": "/api/v1/assets/guide/en/facility.35801f6f03065398.webp"
      },
      "size": {
       "ru": {
@@ -1618,8 +1618,8 @@
       "en": "Factory queue"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/factory.713b9086f2a15f7a.webp",
-      "en": "/api/v1/assets/guide/en/factory.4e752ee0a5f1a716.webp"
+      "ru": "/api/v1/assets/guide/ru/factory.3abc7b16fcff3d08.webp",
+      "en": "/api/v1/assets/guide/en/factory.dd2b0b00dc6f3f1e.webp"
      },
      "size": {
       "ru": {
@@ -1649,8 +1649,8 @@
       "en": "Resource refining"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/refinery.5464f94fcdcd0358.webp",
-      "en": "/api/v1/assets/guide/en/refinery.bb864b3e584e0294.webp"
+      "ru": "/api/v1/assets/guide/ru/refinery.74c6019682c27e65.webp",
+      "en": "/api/v1/assets/guide/en/refinery.2c44c216c0025dc2.webp"
      },
      "size": {
       "ru": {
@@ -1698,8 +1698,8 @@
       "en": "Activity and goals overview"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/statistics.777a27f2d56dd448.webp",
-      "en": "/api/v1/assets/guide/en/statistics.50f93bc279d6837e.webp"
+      "ru": "/api/v1/assets/guide/ru/statistics.11c830d994ee0cca.webp",
+      "en": "/api/v1/assets/guide/en/statistics.6e65f598c1f8dfd2.webp"
      },
      "size": {
       "ru": {
@@ -1747,8 +1747,8 @@
       "en": "Operation plans and participants"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/operations.ce974e359fed3dc7.webp",
-      "en": "/api/v1/assets/guide/en/operations.a7acc09120a1d7d6.webp"
+      "ru": "/api/v1/assets/guide/ru/operations.d9b951e5ceb1c0b0.webp",
+      "en": "/api/v1/assets/guide/en/operations.213955a9a2877800.webp"
      },
      "size": {
       "ru": {
@@ -1794,8 +1794,8 @@
       "en": "Feedback form and history"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/feedback.0d55caeceb93d532.webp",
-      "en": "/api/v1/assets/guide/en/feedback.ef60ce1ea35f5b42.webp"
+      "ru": "/api/v1/assets/guide/ru/feedback.d4a0b5352ee6415c.webp",
+      "en": "/api/v1/assets/guide/en/feedback.fb921e6f1af5bc30.webp"
      },
      "size": {
       "ru": {
@@ -1841,8 +1841,8 @@
       "en": "Inbox"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/mail.2212e703c8dfb8f9.webp",
-      "en": "/api/v1/assets/guide/en/mail.0774d4e85c241b32.webp"
+      "ru": "/api/v1/assets/guide/ru/mail.38136d6430e9d1e1.webp",
+      "en": "/api/v1/assets/guide/en/mail.b97370ff98d582cd.webp"
      },
      "size": {
       "ru": {
@@ -1888,8 +1888,8 @@
       "en": "Support Sandalis"
      },
      "images": {
-      "ru": "/api/v1/assets/guide/ru/support.4637e763bc7e02b2.webp",
-      "en": "/api/v1/assets/guide/en/support.fd575eda5251bd27.webp"
+      "ru": "/api/v1/assets/guide/ru/support.345b68c2c964deb6.webp",
+      "en": "/api/v1/assets/guide/en/support.7d62d2c6bf1c6a2c.webp"
      },
      "size": {
       "ru": {

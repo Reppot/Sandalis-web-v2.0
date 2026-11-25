@@ -208,7 +208,7 @@ const PREPARE = {
     await page.waitForSelector('[data-guide="planning-tool-tabs"]', { timeout: 30000 });
     const draw = await page.$('[data-guide="planning-tool-tabs"] [role="tab"]');
     await draw.click();
-    await page.click('[data-guide="planning-tool-route"]');
+    await page.click('[data-guide="planning-tool-freehand"]');
   },
   async expandMember(page) {
     await page.waitForSelector('[data-guide="mgmt-members"] li button', { timeout: 30000 });

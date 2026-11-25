@@ -54,7 +54,6 @@ export const PlanningWorkspace: React.FC = () => {
   const [personalPlan, setPersonalPlan] = React.useState<{ scope: string; shapes: Shape[] }>({ scope: "", shapes: [] });
   const shapes = personalPlan.scope === storageScope ? personalPlan.shapes : [];
   const [selected, setSelected] = React.useState<string | null>(null);
-  const [routeDraft, setRouteDraft] = React.useState<{ x: number; y: number }[]>([]);
   const [defaults, setDefaults] = React.useState<Defaults>(DEFAULTS);
   const [catalog, setCatalog] = React.useState<StructureCatalog | null>(null);
   const [snapshotState, setSnapshotState] = React.useState<{ scope: string; items: Snapshot[] }>({ scope: "", items: [] });
@@ -175,26 +174,9 @@ export const PlanningWorkspace: React.FC = () => {
     setTool("select");
   };
   const pickTool = (next: Tool) => {
-    if (next !== "route" || tool !== "route") setRouteDraft([]);
     setTool(next);
     if (next !== "select") setSelected(null);
   };
-  const finishRoute = React.useCallback(() => {
-    if (routeDraft.length < 2) return;
-    const route = {
-      id: newId(), kind: "route" as const, x: routeDraft[0].x, y: routeDraft[0].y, angle: 0,
-      points: routeDraft, width: defaults.width, color: defaults.color, speedKmh: defaults.speedKmh,
-    };
-    commit((prev) => [...prev, route]);
-    setSelected(route.id);
-    setRouteDraft([]);
-    setTool("select");
-  }, [routeDraft, defaults.width, defaults.color, defaults.speedKmh, commit]);
-  const cancelRoute = React.useCallback(() => {
-    setRouteDraft([]);
-    setTool("select");
-    setSelected(null);
-  }, []);
   const exportPlan = () => {
     const content = JSON.stringify({ format: "sandalis-plan", version: 1, exportedAt: new Date().toISOString(), shapes: plan }, null, 2);
     const url = URL.createObjectURL(new Blob([content], { type: "application/json" }));
@@ -272,16 +254,14 @@ export const PlanningWorkspace: React.FC = () => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement)?.closest("button, input, textarea, select, a")) return;
       if ((e.key === "Delete" || e.key === "Backspace") && selected) editor.onDelete(selected);
-      if (e.key === "Enter" && tool === "route" && routeDraft.length >= 2) finishRoute();
       if (e.key === "Escape") {
-        if (tool === "route") setRouteDraft([]);
         setSelected(null);
         setTool("select");
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [selected, editor, tool, routeDraft, finishRoute]);
+  }, [selected, editor]);
 
   const toggle = (kind: MapKind) =>
     setHidden((prev) => {
@@ -380,7 +360,7 @@ export const PlanningWorkspace: React.FC = () => {
           ) : !data ? (
             <Loading label={t("planning.loading")} />
           ) : (
-            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} focusRegion={focusRegion} routeDraftPoints={routeDraft} onRoutePoint={(point) => setRouteDraft((current) => [...current, point])} frontlinePoints={showFrontline ? frontlinePoints : null} />
+            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} focusRegion={focusRegion} frontlinePoints={showFrontline ? frontlinePoints : null} />
           )}
 
           {data && !resistance ? (
@@ -468,9 +448,6 @@ export const PlanningWorkspace: React.FC = () => {
               onRenameSnapshot={(id, name) => changeSnapshots((prev) => prev.map((x) => (x.id === id ? { ...x, name } : x)))}
               onDeleteSnapshot={(id) => changeSnapshots((prev) => prev.filter((x) => x.id !== id))}
               onMoveSnapshots={canMove ? () => setMoving(true) : undefined}
-              routePointCount={routeDraft.length}
-              onFinishRoute={finishRoute}
-              onCancelRoute={cancelRoute}
               onExportPlan={exportPlan}
               onImportPlan={importPlan}
             />

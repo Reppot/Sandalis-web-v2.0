@@ -295,8 +295,8 @@ export const CHAPTERS = [
     icon: "map",
     title: RE("Планирование операций", "Operation planning"),
     summary: RE(
-      "Найдите регион поиском, выберите только нужные гексы: постройки загружаются по запросу. На карте можно рисовать, ставить редактируемые точки маршрута и оценивать время по заданной скорости.",
-      "Search for a region and select only the hexes you need; building details load on demand. Draw on the map, place editable route waypoints, and estimate travel time at a chosen speed.",
+      "Найдите регион поиском, выберите только нужные гексы: постройки загружаются по запросу. На карте можно рисовать линии, измерять расстояния и размещать метки плана.",
+      "Search for a region and select only the hexes you need; building details load on demand. Draw lines, measure distances, and place plan markers on the map.",
     ),
     shots: [
       {
@@ -354,7 +354,7 @@ export const CHAPTERS = [
         notes: [
           { sel: g("planning-tool-tabs"), note: RE("Переключайте группы рисования, размещения объектов и правки.", "Switch between drawing, placing objects, and editing tools.") },
           { sel: g("planning-tool-freehand"), note: RE("Свободная линия рисуется мышью или касанием и сохраняется как редактируемый объект.", "Draw a freehand line with mouse or touch; it is saved as an editable object.") },
-          { sel: g("planning-tool-route"), note: RE("Маршрут строится отдельными точками. Длину и ETA можно менять скоростью; точки двигаются по одной.", "Build a route from individual waypoints. Change its speed to update distance and ETA; drag waypoints to edit it.") },
+          { sel: g("planning-tool-ruler"), note: RE("Линейка показывает расстояние и азимут между двумя точками.", "The ruler measures distance and azimuth between two points.") },
         ],
       },
     ],

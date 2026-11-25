@@ -9,7 +9,7 @@ import { HEX_H, HEX_W, type FrontlinePoint, type MapRegion } from "@/features/pl
 export const M_PER_PX_X = 2184 / HEX_W;
 export const M_PER_PX_Y = 1890 / HEX_H;
 
-export const TOOLS = ["select", "line", "freehand", "ruler", "route", "arrow", "radius", "structure", "order", "point", "frame", "eraser"] as const;
+export const TOOLS = ["select", "line", "freehand", "ruler", "arrow", "radius", "structure", "order", "point", "frame", "eraser"] as const;
 export type Tool = (typeof TOOLS)[number];
 export const UNITS = ["infantry", "tanks", "artillery", "ships"] as const;
 export type Unit = (typeof UNITS)[number];

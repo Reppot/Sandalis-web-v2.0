@@ -236,10 +236,18 @@ async function main() {
     }));
     assert(frontline.length === 2 && frontline.every((line) => line.dash === null && line.curve), `Frontline is not drawn as a continuous smooth stroke: ${JSON.stringify(frontline)}`);
     assert(frontline.every((line) => line.maxJump <= 3072), `Frontline contains a long jump between town-hall pairs: ${JSON.stringify(frontline)}`);
+    await page.click('[data-guide="planning-tools-toggle"]');
+    await page.waitForSelector('[data-guide="planning-tools-panel"]', { timeout: 5000 });
+    await page.click('[data-guide="planning-tool-tabs"] [role="tab"]:first-child');
+    const routeTools = await page.$$eval('[data-guide="planning-tool-route"]', (tools) => tools.length);
+    assert(routeTools === 0, `Route planning tool is still available in the drawing tools: ${routeTools}`);
+
+    const clippedHexes = await page.$$eval(".planning-frontline clipPath [data-frontline-clip-hex]", (hexes) => hexes.length);
+    assert(clippedHexes === 2, `Frontline is not clipped to the two selected hexes: found ${clippedHexes} clip polygons`);
     verifyGeneratedAssets();
     assert(pageErrors.length === 0, `Browser runtime errors: ${pageErrors.join("; ")}`);
 
-    console.log(JSON.stringify({ result: "PASS", ruChapters, enChapters, mobileOptions: mobile.options, mobileWidth: `${mobile.width}/${mobile.viewport}`, planningOverview: "empty / overview only", planningSelection: "2 selected / details scoped / map fits", frontline, legacyMarkers: 0 }, null, 2));
+    console.log(JSON.stringify({ result: "PASS", ruChapters, enChapters, mobileOptions: mobile.options, mobileWidth: `${mobile.width}/${mobile.viewport}`, planningOverview: "empty / overview only", planningSelection: "2 selected / details scoped / map fits", routeTool: "removed", frontlineClippedHexes: clippedHexes, frontline, legacyMarkers: 0 }, null, 2));
   } finally {
     await browser.close();
   }

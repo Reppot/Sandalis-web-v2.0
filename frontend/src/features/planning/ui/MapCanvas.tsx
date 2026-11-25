@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { HEX_H, HEX_W, hexLeft, hexTop, iconOf, markerFactor, visibleLabels, type FrontlinePoint, type MapItem, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
-import { M_PER_PX_X, UNIT_COLOR, fmtMeters, measure, moveShape, newId, rectFrom, routeEtaMinutes, type Defaults, type Rect, type RouteShape, type Shape, type StructureDef, type Tool } from "@/features/planning/model/plan";
+import { M_PER_PX_X, UNIT_COLOR, fmtMeters, measure, moveShape, newId, rectFrom, routeEtaMinutes, type Defaults, type Rect, type Shape, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { PlanLayer } from "@/features/planning/ui/PlanLayer";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, useT, type MessageKey } from "@/shared";
@@ -80,11 +80,6 @@ const freehandShape = (points: Point[], d: Defaults, id = "draft"): Shape => ({
   points, width: d.width, color: d.color,
 });
 
-const routeShape = (points: Point[], d: Defaults, id = "draft"): RouteShape => ({
-  id, kind: "route", x: points[0]?.x ?? 0, y: points[0]?.y ?? 0, angle: 0,
-  points, width: d.width, color: d.color, speedKmh: d.speedKmh,
-});
-
 /** Трансформ мира и CSS-переменные размера маркеров (--m) и подписей (--inv). */
 function worldStyle(v: View): React.CSSProperties {
   const screenHexWidth = HEX_W * v.scale;
@@ -114,13 +109,12 @@ export const MapCanvas: React.FC<{
   onToggleRegion: (key: string) => void;
   selectingRegions: boolean;
   focusRegion?: { key: string; request: number } | null;
-  routeDraftPoints: Point[];
-  onRoutePoint: (point: Point) => void;
   frontlinePoints?: FrontlinePoint[] | null;
   /** Просмотр снимка: только этот кусок карты, без правки — панорама, масштаб и подсказки. */
   frame?: Rect | null;
-}> = ({ data, hidden, editor, selectedRegions, onToggleRegion, selectingRegions, focusRegion, routeDraftPoints, onRoutePoint, frontlinePoints, frame }) => {
+}> = ({ data, hidden, editor, selectedRegions, onToggleRegion, selectingRegions, focusRegion, frontlinePoints, frame }) => {
   const t = useT();
+  const frontlineClipId = React.useId().replace(/:/g, "");
   const box = React.useRef<HTMLDivElement>(null);
   const world = React.useRef<HTMLDivElement>(null);
   // view — «зафиксированный» вид для React; viewRef — живой вид во время жеста
@@ -334,9 +328,6 @@ export const MapCanvas: React.FC<{
     } else if (tool === "point") {
       onAdd({ id: newId(), kind: "point", x: p.x, y: p.y, angle: 0, size: 100, point: defaults.point, label: defaults.pointLabel.trim(), note: "" });
       gesture.current = null;
-    } else if (tool === "route") {
-      onRoutePoint(p);
-      gesture.current = null;
     } else if (tool === "freehand") {
       gesture.current = { type: "freehand", points: [p] };
       setDraft(freehandShape([p], defaults));
@@ -481,12 +472,31 @@ export const MapCanvas: React.FC<{
             <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance && selectedRegions.has(r.key)} selected={selectedRegions.has(r.key)} selecting={selectingRegions} onToggleRegion={onToggleRegion} />
           ))}
           {!resistance && frontlinePoints && frontlinePoints.length > 1 ? <svg className="planning-frontline" style={{ left: mapBounds.minX, top: mapBounds.minY, width: mapBounds.w, height: mapBounds.h }} viewBox={`${mapBounds.minX} ${mapBounds.minY} ${mapBounds.w} ${mapBounds.h}`} aria-label={t("planning.frontline")}>
-            <path d={frontlinePath(frontlinePoints)} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
-            <path d={frontlinePath(frontlinePoints)} fill="none" stroke="#f34f55" strokeWidth={5} strokeLinejoin="round" strokeLinecap="round" />
+            <defs>
+              <clipPath id={frontlineClipId} clipPathUnits="userSpaceOnUse">
+                {visibleRegions.map((region) => {
+                  const x = hexLeft(region.col);
+                  const y = hexTop(region.row);
+                  const points = [
+                    [x + HEX_W * 0.25, y],
+                    [x + HEX_W * 0.75, y],
+                    [x + HEX_W, y + HEX_H * 0.5],
+                    [x + HEX_W * 0.75, y + HEX_H],
+                    [x + HEX_W * 0.25, y + HEX_H],
+                    [x, y + HEX_H * 0.5],
+                  ].map(([px, py]) => `${px},${py}`).join(" ");
+                  return <polygon key={region.key} data-frontline-clip-hex={region.key} points={points} />;
+                })}
+              </clipPath>
+            </defs>
+            <g clipPath={`url(#${frontlineClipId})`}>
+              <path d={frontlinePath(frontlinePoints)} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
+              <path d={frontlinePath(frontlinePoints)} fill="none" stroke="#f34f55" strokeWidth={5} strokeLinejoin="round" strokeLinecap="round" />
+            </g>
           </svg> : null}
           <PlanLayer
             shapes={editor.shapes.filter((shape) => isInSelectedRegion(shape))}
-            draft={draft ?? (editor.tool === "route" && routeDraftPoints.length ? routeShape(routeDraftPoints, editor.defaults) : null)}
+            draft={draft}
             selected={editor.selected}
             scale={scale}
             structures={editor.structures}

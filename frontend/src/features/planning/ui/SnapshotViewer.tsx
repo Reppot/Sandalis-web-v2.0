@@ -105,7 +105,7 @@ export const SnapshotViewer: React.FC<{
             </span>
           </div>
           <div className="planning-snapshot-view">
-            <MapCanvas data={data} hidden={NOTHING_HIDDEN} editor={editor} selectedRegions={new Set(data.regions.map((r) => r.key))} onToggleRegion={() => {}} selectingRegions={false} routeDraftPoints={[]} onRoutePoint={() => {}} frontlinePoints={snapshot.frontline ?? null} frame={snapshot.rect} />
+            <MapCanvas data={data} hidden={NOTHING_HIDDEN} editor={editor} selectedRegions={new Set(data.regions.map((r) => r.key))} onToggleRegion={() => {}} selectingRegions={false} frontlinePoints={snapshot.frontline ?? null} frame={snapshot.rect} />
           </div>
           <p className="text-xs text-fg-3">{t("planning.snapshotHint")}</p>
           {/* план в масштабе картинки — источник SVG для PNG */}

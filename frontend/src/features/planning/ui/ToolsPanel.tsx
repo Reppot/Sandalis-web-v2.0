@@ -5,9 +5,9 @@ import { COLORS, FACTIONS, FACTION_COLOR, POINT_COLOR, POINT_ICON, POINT_KINDS, 
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, formatDateTime, useConfirm, useT, type IconName, type MessageKey } from "@/shared";
 
-const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", freehand: "line", ruler: "ruler", route: "map", arrow: "arrow", radius: "radius", structure: "building", order: "paste", point: "flag", frame: "crop", eraser: "eraser" };
+const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", freehand: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", point: "flag", frame: "crop", eraser: "eraser" };
 const TOOL_GROUPS = {
-  draw: ["line", "freehand", "ruler", "route", "arrow", "radius"],
+  draw: ["line", "freehand", "ruler", "arrow", "radius"],
   place: ["structure", "order", "point"],
   edit: ["select", "frame", "eraser"],
 } as const;
@@ -42,12 +42,9 @@ export const ToolsPanel: React.FC<{
   locked?: boolean;
   /** Подпись «где хранится план». */
   savedLabel?: string;
-  routePointCount: number;
-  onFinishRoute: () => void;
-  onCancelRoute: () => void;
   onExportPlan: () => void;
   onImportPlan: (file: File) => void;
-}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots, locked, savedLabel, routePointCount, onFinishRoute, onCancelRoute, onExportPlan, onImportPlan }) => {
+}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots, locked, savedLabel, onExportPlan, onImportPlan }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
   const importInput = React.useRef<HTMLInputElement>(null);
@@ -58,7 +55,7 @@ export const ToolsPanel: React.FC<{
     if (group) setToolGroup(group);
     onTool(next);
   };
-  const drawing = tool === "line" || tool === "freehand" || tool === "arrow" || tool === "radius" || tool === "ruler" || tool === "route";
+  const drawing = tool === "line" || tool === "freehand" || tool === "arrow" || tool === "radius" || tool === "ruler";
 
   if (locked) {
     return (
@@ -94,22 +91,7 @@ export const ToolsPanel: React.FC<{
       ) : drawing ? (
         <section className="planning-props">
           <h3 className="planning-props-title">{t("planning.newObject")}</h3>
-          {tool === "route" ? (
-            <>
-              <ColorPicker value={defaults.color} onChange={(c) => set("color", c)} />
-              <Range label={t("planning.prop.width")} value={defaults.width} min={1} max={12} unit="px" onChange={(v) => set("width", v)} />
-              <Range label={t("planning.prop.speed")} value={defaults.speedKmh} min={1} max={100} unit="km/h" onChange={(v) => set("speedKmh", v)} />
-              <p className="text-xs text-fg-3">{t("planning.routeEstimateNote")}</p>
-              {routePointCount ? (
-                <div className="flex gap-2">
-                  <button type="button" className="btn btn-primary h-9 min-h-0 flex-1 justify-center text-sm" disabled={routePointCount < 2} onClick={onFinishRoute}>
-                    <Icon name="check" size={15} />{t("planning.routeFinish", { n: routePointCount })}
-                  </button>
-                  <button type="button" className="btn h-9 min-h-0 justify-center text-sm" onClick={onCancelRoute} aria-label={t("planning.routeCancel")} title={t("planning.routeCancel")}><Icon name="close" size={15} /></button>
-                </div>
-              ) : <p className="text-xs text-fg-3">{t("planning.routeNeedPoints")}</p>}
-            </>
-          ) : tool === "arrow" ? (
+          {tool === "arrow" ? (
             <>
               <UnitPicker value={defaults.unit} onChange={(u) => set("unit", u)} />
               <Field label={t("planning.prop.name")}>
