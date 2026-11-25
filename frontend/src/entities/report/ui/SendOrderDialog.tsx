@@ -31,6 +31,7 @@ export const SendOrderDialog: React.FC<{
   const [region, setRegion] = React.useState("");
   const [town, setTown] = React.useState("");
   const [busy, setBusy] = React.useState(false);
+  const submitting = React.useRef(false);
   const { list } = useContent();
   const fallbackRegions = React.useMemo(() => list<{ name: string }>("region").map((r) => r.payload.name), [list]);
   const needsPlace = kind === "bunker" || kind === "factory";
@@ -54,7 +55,8 @@ export const SendOrderDialog: React.FC<{
   const total = lines.reduce((n, l) => n + l.quantity, 0);
 
   const submit = async () => {
-    if (!title.trim() || !lines.length || (needsPlace && (!region || !town.trim()))) return;
+    if (submitting.current || !title.trim() || !lines.length || (needsPlace && (!region || !town.trim()))) return;
+    submitting.current = true;
     setBusy(true);
     // для бункера и завода в шапку заказа идут выбранные гекс и город (+ уточнение)
     const where = needsPlace ? [town.trim(), destination.trim()].filter(Boolean).join(" — ").slice(0, 80) : destination.trim();
@@ -69,6 +71,7 @@ export const SendOrderDialog: React.FC<{
     } catch (err) {
       notify({ title: t("reports.report"), message: errorText(err, t("builder.rejected")), tone: "danger" });
     } finally {
+      submitting.current = false;
       setBusy(false);
     }
   };

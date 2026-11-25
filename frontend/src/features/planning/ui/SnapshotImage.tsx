@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import type { Snapshot, StructureDef } from "@/features/planning/model/plan";
+import { fmtMeters, pathLength, routeEtaMinutes, type Snapshot, type StructureDef } from "@/features/planning/model/plan";
 import { PlanLayer } from "@/features/planning/ui/PlanLayer";
 import { renderPng } from "@/features/planning/ui/SnapshotViewer";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
@@ -30,7 +30,15 @@ export const SnapshotImage: React.FC<{
   const k = Math.min(1.5, width / snapshot.rect.w);
   const s = Math.min(1, k / 2);
   const labels = React.useMemo(
-    () => ({ arrow: (u: string) => t(`planning.unit.${u}` as MessageKey), status: (st: Report["status"] | null) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")) }),
+    () => ({
+      arrow: (u: string) => t(`planning.unit.${u}` as MessageKey),
+      status: (st: Report["status"] | null) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")),
+      route: (meters: number, speedKmh: number) => {
+        const minutes = routeEtaMinutes(meters, speedKmh);
+        const eta = minutes >= 60 ? t("planning.routeHoursMinutes", { h: Math.floor(minutes / 60), m: minutes % 60 }) : t("planning.routeMinutes", { m: minutes });
+        return t("planning.routeSummary", { distance: fmtMeters(meters), eta, speed: speedKmh });
+      },
+    }),
     [t],
   );
 

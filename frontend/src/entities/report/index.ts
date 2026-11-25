@@ -235,8 +235,8 @@ export interface DraftLine {
 }
 
 export const orderDraft = {
-  read: (): DraftLine[] => readStorage<DraftLine[]>(STORAGE_KEYS.orderDraft, []),
-  write: (lines: DraftLine[]) => writeStorage(STORAGE_KEYS.orderDraft, lines),
+  read: (scope = "guest"): DraftLine[] => readStorage<DraftLine[]>(`${STORAGE_KEYS.orderDraft}:${encodeURIComponent(scope)}`, []),
+  write: (lines: DraftLine[], scope = "guest") => writeStorage(`${STORAGE_KEYS.orderDraft}:${encodeURIComponent(scope)}`, lines),
   /** «⤴ В конструктор» со страницы рапортов. */
   fromReport: (report: Report): DraftLine[] =>
     report.lines.map((l) => ({ name: l.name, item_code: l.item_code, quantity: l.quantity, unit: l.unit, icon_url: l.icon_url })),

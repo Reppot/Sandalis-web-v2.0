@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { HEX_H, HEX_W, hexLeft, hexTop, iconOf, markerFactor, visibleLabels, type WorldMap } from "@/features/planning/model/map";
-import { DEFAULTS, FACTION_COLOR, type Snapshot, type StructureDef } from "@/features/planning/model/plan";
+import { DEFAULTS, FACTION_COLOR, fmtMeters, pathLength, routeEtaMinutes, type Snapshot, type StructureDef } from "@/features/planning/model/plan";
 import type { MapKind } from "@/features/planning/model/map";
 import { MapCanvas, type Editor } from "@/features/planning/ui/MapCanvas";
 import { PlanLayer } from "@/features/planning/ui/PlanLayer";
@@ -49,7 +49,15 @@ export const SnapshotViewer: React.FC<{
     [snapshot, structures, orders],
   );
   const labels = React.useMemo(
-    () => ({ arrow: (u: string) => t(`planning.unit.${u}` as MessageKey), status: (st: Report["status"] | null) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")) }),
+    () => ({
+      arrow: (u: string) => t(`planning.unit.${u}` as MessageKey),
+      status: (st: Report["status"] | null) => (st ? t(REPORT_STATUS_LABEL[st]) : t("planning.orderGone")),
+      route: (meters: number, speedKmh: number) => {
+        const minutes = routeEtaMinutes(meters, speedKmh);
+        const eta = minutes >= 60 ? t("planning.routeHoursMinutes", { h: Math.floor(minutes / 60), m: minutes % 60 }) : t("planning.routeMinutes", { m: minutes });
+        return t("planning.routeSummary", { distance: fmtMeters(meters), eta, speed: speedKmh });
+      },
+    }),
     [t],
   );
 
@@ -97,7 +105,7 @@ export const SnapshotViewer: React.FC<{
             </span>
           </div>
           <div className="planning-snapshot-view">
-            <MapCanvas data={data} hidden={NOTHING_HIDDEN} editor={editor} selectedRegions={new Set(data.regions.map((r) => r.key))} onToggleRegion={() => {}} selectingRegions={false} frontlinePoints={snapshot.frontline ?? null} frame={snapshot.rect} />
+            <MapCanvas data={data} hidden={NOTHING_HIDDEN} editor={editor} selectedRegions={new Set(data.regions.map((r) => r.key))} onToggleRegion={() => {}} selectingRegions={false} routeDraftPoints={[]} onRoutePoint={() => {}} frontlinePoints={snapshot.frontline ?? null} frame={snapshot.rect} />
           </div>
           <p className="text-xs text-fg-3">{t("planning.snapshotHint")}</p>
           {/* план в масштабе картинки — источник SVG для PNG */}

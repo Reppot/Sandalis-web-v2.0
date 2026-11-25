@@ -163,6 +163,23 @@ export const OperationPlanDialog: React.FC<{
   const sectionToggle = (key: BriefSection, on: boolean) =>
     edit((d) => ({ ...d, hidden: on ? d.hidden.filter((h) => h !== key) : [...d.hidden, key] }));
 
+  const addSupplyChain = () => edit((d) => {
+    const steps = [
+      [t("opsPlan.supplyChain.check"), t("opsPlan.supplyChain.checkNote")],
+      [t("opsPlan.supplyChain.gather"), t("opsPlan.supplyChain.gatherNote")],
+      [t("opsPlan.supplyChain.refine"), t("opsPlan.supplyChain.refineNote")],
+      [t("opsPlan.supplyChain.produce"), t("opsPlan.supplyChain.produceNote")],
+      [t("opsPlan.supplyChain.load"), t("opsPlan.supplyChain.loadNote")],
+      [t("opsPlan.supplyChain.deliver"), t("opsPlan.supplyChain.deliverNote")],
+    ].slice(0, Math.max(0, 40 - d.stages.length));
+    return {
+      ...d,
+      stages: [...d.stages, ...steps.map(([title, note]) => ({
+        id: planId(), time: "", title, note, owner_id: null, done: false, brief: true,
+      }))],
+    };
+  });
+
   const postBrief = () =>
     run(async () => {
       // снимки карты — картинками, если раздел «Карты» не скрыт
@@ -422,11 +439,18 @@ export const OperationPlanDialog: React.FC<{
               );
             })}
           </ul>
-          <button type="button" className="btn mt-2 h-8 min-h-0 text-sm" disabled={draft.stages.length >= 40}
-            onClick={() => edit((d) => ({ ...d, stages: [...d.stages, { id: planId(), time: "", title: "", note: "", owner_id: null, done: false, brief: true }] }))}>
-            <Icon name="plus" size={14} />
-            {t("opsPlan.addStage")}
-          </button>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button type="button" className="btn h-8 min-h-0 text-sm" disabled={draft.stages.length >= 40}
+              onClick={() => edit((d) => ({ ...d, stages: [...d.stages, { id: planId(), time: "", title: "", note: "", owner_id: null, done: false, brief: true }] }))}>
+              <Icon name="plus" size={14} />
+              {t("opsPlan.addStage")}
+            </button>
+            <button type="button" className="btn h-8 min-h-0 text-sm" disabled={draft.stages.length > 34}
+              title={t("opsPlan.supplyChainHint")} onClick={addSupplyChain}>
+              <Icon name="box" size={14} />
+              {t("opsPlan.addSupplyChain")}
+            </button>
+          </div>
         </section>
 
         <section>

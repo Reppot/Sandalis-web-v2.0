@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { FACTION_COLOR, M_PER_PX_X, M_PER_PX_Y, POINT_COLOR, POINT_ICON, UNIT_COLOR, endPoint, fmtMeters, structureIcon, type Shape, type StructureDef, type Unit } from "@/features/planning/model/plan";
+import { FACTION_COLOR, M_PER_PX_X, M_PER_PX_Y, POINT_COLOR, POINT_ICON, UNIT_COLOR, endPoint, fmtMeters, pathLength, structureIcon, type Shape, type StructureDef, type Unit } from "@/features/planning/model/plan";
 import type { Report, ReportStatus } from "@/entities/report";
 import { assetUrl } from "@/shared";
 
@@ -47,11 +47,11 @@ const Label: React.FC<{ x: number; y: number; px: number; children: React.ReactN
 /** Конец отрезка-объекта и его «ручка» для изменения угла и размера. */
 function tip(s: Shape) {
   if (s.kind === "radius") return endPoint(s.x, s.y, s.angle, s.radius);
-  if (s.kind === "structure" || s.kind === "order" || s.kind === "point" || s.kind === "freehand") return null;
+  if (s.kind === "structure" || s.kind === "order" || s.kind === "point" || s.kind === "freehand" || s.kind === "route") return null;
   return endPoint(s.x, s.y, s.angle, s.length);
 }
 
-type Labels = { arrow: (unit: Unit) => string; status: (status: ReportStatus | null) => string };
+type Labels = { arrow: (unit: Unit) => string; status: (status: ReportStatus | null) => string; route: (meters: number, speedKmh: number) => string };
 /** Цвет метки заказа по статусу; заказа нет (удалён) — серый. */
 const ORDER_COLOR: Record<ReportStatus, string> = { open: "#f5a524", in_progress: "#38bdf8", done: "#a3e635", cancelled: "#71717a" };
 
@@ -66,6 +66,28 @@ const ShapeView: React.FC<{ s: Shape; px: number; selected: boolean; draft?: boo
       <g data-shape={draft ? undefined : s.id} opacity={draft ? 0.72 : 1}>
         <polyline points={points} fill="none" stroke={s.color} strokeWidth={s.width * px} strokeLinecap="round" strokeLinejoin="round" />
         <polyline points={points} stroke="transparent" strokeWidth={16 * px} fill="none" pointerEvents="stroke" />
+        {sel}
+      </g>
+    );
+  }
+
+  if (s.kind === "route") {
+    const points = s.points.map((p) => `${p.x},${p.y}`).join(" ");
+    const last = s.points[s.points.length - 1];
+    const summary = labels.route(pathLength(s.points), s.speedKmh);
+    return (
+      <g data-shape={draft ? undefined : s.id} opacity={draft ? 0.78 : 1}>
+        {s.points.length > 1 ? (
+          <>
+            <polyline points={points} fill="none" stroke={s.color} strokeWidth={s.width * px} strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points={points} fill="none" stroke="transparent" strokeWidth={16 * px} pointerEvents="stroke" />
+          </>
+        ) : null}
+        {s.points.map((point, index) => (
+          <circle key={index} cx={point.x} cy={point.y} r={(selected ? 6 : 4) * px} fill={index === 0 ? "#fff" : s.color} stroke="#111" strokeWidth={1.5 * px} data-route-handle={draft ? undefined : index} style={draft ? undefined : { cursor: "grab" }} />
+        ))}
+        {last && s.points.length > 1 ? <Label x={last.x} y={last.y - 14 * px} px={px} color={s.color}>{summary}</Label> : null}
+        {selected ? s.points.map((point, index) => <circle key={`hit-${index}`} data-route-handle={index} cx={point.x} cy={point.y} r={11 * px} fill="transparent" />) : null}
         {sel}
       </g>
     );
@@ -185,11 +207,13 @@ const ShapeView: React.FC<{ s: Shape; px: number; selected: boolean; draft?: boo
   if (s.kind === "point") {
     // флажок-точка: кружок цвета типа со значком, подпись снизу; экранный размер
     const r = Math.max(9, 14 * (s.size / 100)) * px;
-    const color = POINT_COLOR[s.point];
+    const expired = Boolean(s.expiresAt && Date.parse(s.expiresAt) <= Date.now());
+    const color = expired ? "#71717a" : POINT_COLOR[s.point];
     return (
-      <g data-shape={draft ? undefined : s.id} transform={`translate(${s.x} ${s.y})`}>
+      <g data-shape={draft ? undefined : s.id} transform={`translate(${s.x} ${s.y})`} opacity={expired ? 0.7 : 1}>
+        <title>{[s.label, s.createdBy, s.expiresAt].filter(Boolean).join(" · ")}</title>
         <circle r={r + 3 * px} fill="rgba(0,0,0,0.55)" />
-        <circle r={r} fill="#15181c" stroke={color} strokeWidth={2.5 * px} />
+        <circle r={r} fill="#15181c" stroke={color} strokeWidth={2.5 * px} strokeDasharray={expired ? `${4 * px} ${3 * px}` : undefined} />
         <text x={0} y={0} fontSize={r * 1.15} textAnchor="middle" dominantBaseline="central" pointerEvents="none">{POINT_ICON[s.point]}</text>
         <circle r={r + 4 * px} fill="transparent" pointerEvents="all" />
         {s.label ? <Label x={0} y={r + 11 * px} px={px} size={12} color={color}>{s.label}</Label> : null}

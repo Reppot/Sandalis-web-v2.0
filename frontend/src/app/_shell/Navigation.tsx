@@ -57,6 +57,21 @@ const Chevron: React.FC<{ dir: "left" | "right" }> = ({ dir }) => (
   </svg>
 );
 
+type NavGroupKey = "tools" | "clan" | "site";
+
+const GroupToggle: React.FC<{ label: string; icon: React.ReactNode; collapsed: boolean; expanded: boolean; count: number; onClick: () => void }> = ({ label, icon, collapsed, expanded, count, onClick }) => (
+  <button type="button" className={cn("nav-group-toggle", expanded && "is-open")} onClick={onClick} aria-expanded={expanded} aria-label={label} title={collapsed ? label : undefined}>
+    <span className="nav-group-toggle-icon">{icon}</span>
+    {collapsed ? null : <>
+      <span className="nav-group-toggle-label">{label}</span>
+      <span className="nav-group-count">{count}</span>
+      <svg className="nav-group-chevron" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
+        <path d="m4 6 4 4 4-4" />
+      </svg>
+    </>}
+  </button>
+);
+
 /** Ссылка меню: на ПК — строка с подписью, в свёрнутом виде — только значок с подсказкой. */
 const NavItem: React.FC<{
   on: boolean;
@@ -87,7 +102,17 @@ const NavItem: React.FC<{
 export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect, clan, tools, activeTool, clanSections, activeClanView, user, logo }) => {
   const t = useT();
   const [collapsed, setCollapsed] = React.useState(false);
+  const [openGroups, setOpenGroups] = React.useState<Record<NavGroupKey, boolean>>(() => ({ tools: true, clan: false, site: false, ...readStorage<Partial<Record<NavGroupKey, boolean>>>("sindaris-nav-groups", {}) }));
   React.useEffect(() => setCollapsed(readStorage<unknown>(STORAGE_KEYS.sidebar, null) === "collapsed"), []);
+  React.useEffect(() => {
+    const current: NavGroupKey | null = active === "tools" ? "tools" : active === "clan" ? "clan" : active === "guide" || active === "feedback" || active === "mail" || active === "support" ? "site" : null;
+    if (current) setOpenGroups((prev) => prev[current] ? prev : { ...prev, [current]: true });
+  }, [active]);
+  const toggleGroup = (key: NavGroupKey) => setOpenGroups((prev) => {
+    const next = { ...prev, [key]: !prev[key] };
+    writeStorage("sindaris-nav-groups", next);
+    return next;
+  });
   const toggle = () =>
     setCollapsed((prev) => {
       writeStorage(STORAGE_KEYS.sidebar, prev ? null : "collapsed");
@@ -121,43 +146,30 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect, clan, tool
       <nav data-guide="shell-nav" className="sidebar-scroll">
         {has("tools") ? (
           <div className="nav-group">
-            <NavItem on={active === "tools" && !activeTool} label={label("tools")} title={t(tabKeys("tools").hint)} icon={<TabIcon tab={tab("tools")} size={18} />} collapsed={collapsed} onClick={() => onSelect("tools", null)} />
-            {tools.map((m) => (
-              <NavItem
-                key={m.id}
-                nested
-                on={active === "tools" && activeTool === m.id}
-                label={t(m.label)}
-                icon={<UiGlyph icon={m.icon} size={18} className="nav-glyph" />}
-                badge={m.isNew ? t("tools.badgeNew") : null}
-                collapsed={collapsed}
-                onClick={() => onSelect("tools", m.id)}
-              />
-            ))}
+            <GroupToggle label={label("tools")} icon={<TabIcon tab={tab("tools")} size={18} />} collapsed={collapsed} expanded={openGroups.tools} count={tools.length} onClick={() => toggleGroup("tools")} />
+            {openGroups.tools ? <>
+              <NavItem on={active === "tools" && !activeTool} label={t("nav.toolsHome" as MessageKey)} title={t(tabKeys("tools").hint)} icon={<TabIcon tab={tab("tools")} size={18} />} collapsed={collapsed} onClick={() => onSelect("tools", null)} />
+              {tools.map((m) => (
+                <NavItem key={m.id} nested on={active === "tools" && activeTool === m.id} label={t(m.label)} icon={<UiGlyph icon={m.icon} size={18} className="nav-glyph" />} badge={m.isNew ? t("tools.badgeNew") : null} collapsed={collapsed} onClick={() => onSelect("tools", m.id)} />
+              ))}
+            </> : null}
           </div>
         ) : null}
 
         {has("clan") ? (
           <div className="nav-group">
-            {collapsed ? <div className="nav-sep" /> : <div className="nav-group-title">{clan?.name ?? label("clan")}</div>}
-            {clanSections.map((s) => (
-              <NavItem
-                key={s.id}
-                on={active === "clan" && activeClanView === s.id}
-                label={t(s.label)}
-                icon={<UiGlyph icon={s.icon} size={18} className="nav-glyph" />}
-                collapsed={collapsed}
-                onClick={() => onSelect("clan", s.id)}
-              />
-            ))}
+            <GroupToggle label={clan?.name ?? label("clan")} icon={<TabIcon tab={tab("clan")} size={18} clan={clan} />} collapsed={collapsed} expanded={openGroups.clan} count={clanSections.length} onClick={() => toggleGroup("clan")} />
+            {openGroups.clan ? clanSections.map((s) => (
+              <NavItem key={s.id} nested on={active === "clan" && activeClanView === s.id} label={t(s.label)} icon={<UiGlyph icon={s.icon} size={18} className="nav-glyph" />} collapsed={collapsed} onClick={() => onSelect("clan", s.id)} />
+            )) : null}
           </div>
         ) : null}
 
         <div className="nav-group">
-          {collapsed ? <div className="nav-sep" /> : <div className="nav-group-title">{t("nav.siteGroup")}</div>}
-          {(["guide", "feedback", "mail", "support"] as const).filter(has).map((key) => (
+          <GroupToggle label={t("nav.siteGroup")} icon={<TabIcon tab={tab("guide")} size={18} />} collapsed={collapsed} expanded={openGroups.site} count={(["guide", "feedback", "mail", "support"] as const).filter(has).length} onClick={() => toggleGroup("site")} />
+          {openGroups.site ? (["guide", "feedback", "mail", "support"] as const).filter(has).map((key) => (
             <NavItem key={key} on={active === key} label={label(key)} title={t(tabKeys(key).hint)} icon={<TabIcon tab={tab(key)} size={18} />} collapsed={collapsed} onClick={() => onSelect(key)} />
-          ))}
+          )) : null}
         </div>
       </nav>
 
@@ -238,23 +250,24 @@ const MoreSheet: React.FC<NavProps & { open: boolean; onClose: () => void }> = (
         </div>
         <nav className="sheet-body" aria-label={t("nav.aria")}>
           {has("tools") ? (
-            <section className="sheet-group">
+            <details className="sheet-group" open={active === "tools"}>
+              <summary className="sheet-group-title">{t("nav.tools.label")}</summary>
               {row("tools", active === "tools" && !activeTool, <UiGlyph icon="tools" size={20} />, t("nav.tools.label"), () => go("tools"), t("nav.tools.hint"))}
               {tools.map((m) => row(`tool-${m.id}`, active === "tools" && activeTool === m.id, <UiGlyph icon={m.icon} size={20} />, t(m.label), () => go("tools", m.id)))}
-            </section>
+            </details>
           ) : null}
           {has("clan") ? (
-            <section className="sheet-group">
-              <div className="sheet-group-title">{clan?.name ?? t("nav.clan.label")}</div>
+            <details className="sheet-group" open={active === "clan"}>
+              <summary className="sheet-group-title">{clan?.name ?? t("nav.clan.label")}</summary>
               {clanSections.map((s) => row(`clan-${s.id}`, active === "clan" && activeClanView === s.id, <UiGlyph icon={s.icon} size={20} />, t(s.label), () => go("clan", s.id)))}
-            </section>
+            </details>
           ) : null}
-          <section className="sheet-group">
-            <div className="sheet-group-title">{t("nav.siteGroup")}</div>
+          <details className="sheet-group" open={active !== "tools" && active !== "clan"}>
+            <summary className="sheet-group-title">{t("nav.siteGroup")}</summary>
             {tabs
               .filter((x) => x.key !== "tools" && x.key !== "clan")
               .map((x) => row(x.key, active === x.key, <TabIcon tab={x} size={20} clan={clan} />, t(tabKeys(x.key).label), () => go(x.key), t(tabKeys(x.key).hint)))}
-          </section>
+          </details>
         </nav>
       </div>
     </div>,
@@ -279,7 +292,7 @@ export const MobileNav: React.FC<NavProps> = (props) => {
             <span className="tabbar-label">{t(tabKeys(tab.key).short)}</span>
           </button>
         ))}
-        <button type="button" className={cn("tabbar-item", inMenu && "is-active")} onClick={() => setMenu(true)} aria-haspopup="dialog" aria-expanded={menu}>
+        <button type="button" data-guide="shell-menu-trigger" className={cn("tabbar-item", inMenu && "is-active")} onClick={() => setMenu(true)} aria-haspopup="dialog" aria-expanded={menu}>
           <MoreIcon />
           <span className="tabbar-label">{t("nav.menuShort")}</span>
         </button>

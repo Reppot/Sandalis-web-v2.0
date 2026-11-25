@@ -4,12 +4,13 @@ from __future__ import annotations
 from typing import Annotated
 
 from fastapi import APIRouter, Response, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import delete, select
 
 from app.api.deps import CurrentPrincipal, DbDep
 from app.core.config import settings
 from app.core.errors import NotFoundError
+from app.core.push_endpoint import is_allowed_push_endpoint
 from app.core.tenancy import bypass_clan_filter
 from app.models.push import PushSubscription
 from app.models.rbac import User
@@ -36,8 +37,15 @@ class PushKeys(BaseModel):
 
 
 class PushSubscribe(BaseModel):
-    endpoint: Annotated[str, Field(min_length=10, max_length=600, pattern=r"^https://")]
+    endpoint: Annotated[str, Field(min_length=10, max_length=600)]
     keys: PushKeys
+
+    @field_validator("endpoint")
+    @classmethod
+    def _trusted_push_service(cls, value: str) -> str:
+        if not is_allowed_push_endpoint(value):
+            raise ValueError("unsupported push service endpoint")
+        return value
 
 
 class PushUnsubscribe(BaseModel):

@@ -59,7 +59,7 @@ export const ExportBar: React.FC<ExportBarProps> = ({ onAction, busy, mode, onTo
   const isImport = mode === "import";
   return (
     <div className="export-bar">
-      <div className="export-bar-head">
+      <div className="export-bar-head" data-guide="export-mode">
         {mode && onToggleMode ? (
           <Segmented
             size="sm"

@@ -23,9 +23,11 @@ class OrderCreate(BaseModel):
 class OrderUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
-    title: Annotated[str | None, Field(default=None, min_length=1, max_length=120)]
-    quantity: Annotated[int | None, Field(default=None, gt=0, le=1_000_000)]
-    produced: Annotated[int | None, Field(default=None, ge=0)]
+    # Non-null database fields stay non-null when present in PATCH. Field(default=None)
+    # means "omitted"; Pydantic still rejects an explicit JSON null.
+    title: Annotated[str, Field(default=None, min_length=1, max_length=120)]
+    quantity: Annotated[int, Field(default=None, gt=0, le=1_000_000)]
+    produced: Annotated[int, Field(default=None, ge=0)]
     notes: Annotated[str | None, Field(default=None, max_length=2000)]
     assignee_id: Annotated[str | None, Field(default=None, max_length=64)]
 

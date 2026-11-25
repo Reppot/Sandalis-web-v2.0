@@ -2,9 +2,14 @@
 from __future__ import annotations
 
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import select
 
 from app.core.config import settings
+from app.core.db import AsyncSessionLocal
 from app.main import app
+from app.core.permissions import ClanRole
+from app.core.tenancy import bypass_clan_filter
+from app.models.rbac import ClanMembership
 from tests.conftest import bearer, run, seed_catalog_item, seed_clan
 
 API = "/api/v1"
@@ -98,5 +103,47 @@ def test_locale_preference_roundtrip(db):
 
             bad = await c.put(f"{API}/auth/me/locale", json={"locale": "ja"}, headers=auth)
             assert bad.status_code == 422
+
+    run(main())
+
+
+def test_live_membership_revokes_removed_access(db, monkeypatch):
+    async def main() -> None:
+        monkeypatch.setattr(settings, "AUTH_MEMBERSHIP_CHECK", True)
+        async with client() as c:
+            issued = await c.post(f"{API}/auth/dev-token", json={
+                "user_id": "u-live-access", "clan_id": "CLAN_LIVE", "role": "admin",
+            })
+            assert issued.status_code == 200, issued.text
+            auth = {"Authorization": f"Bearer {issued.json()['access_token']}"}
+            assert (await c.get(f"{API}/auth/me", headers=auth)).json()["role"] == "admin"
+
+            async with AsyncSessionLocal() as s:
+                with bypass_clan_filter():
+                    membership = (await s.execute(select(ClanMembership).where(
+                        ClanMembership.clan_id == "CLAN_LIVE",
+                        ClanMembership.user_id == "u-live-access",
+                    ))).scalar_one()
+                    membership.role = ClanRole.GUEST
+                    membership.extra_scopes = []
+                    membership.revoked_scopes = []
+                    await s.commit()
+
+            current = await c.get(f"{API}/auth/me", headers=auth)
+            assert current.status_code == 200, current.text
+            assert current.json()["role"] == "guest"
+            assert "reports:create" not in current.json()["scopes"]
+
+            async with AsyncSessionLocal() as s:
+                with bypass_clan_filter():
+                    membership = (await s.execute(select(ClanMembership).where(
+                        ClanMembership.clan_id == "CLAN_LIVE",
+                        ClanMembership.user_id == "u-live-access",
+                    ))).scalar_one()
+                    membership.is_active = False
+                    await s.commit()
+
+            revoked = await c.get(f"{API}/auth/me", headers=auth)
+            assert revoked.status_code == 401, revoked.text
 
     run(main())

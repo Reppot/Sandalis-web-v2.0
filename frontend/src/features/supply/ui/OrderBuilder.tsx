@@ -4,6 +4,7 @@ import * as React from "react";
 import { useContent } from "@/entities/content";
 import { catalogApi, itemName, itemSearchHay, type FoxholeItem, type ItemUnit } from "@/entities/item";
 import { orderDraft, type DraftLine } from "@/entities/report";
+import { useSession } from "@/features/cabinet";
 import { SendOrderDialog } from "@/entities/report/ui/SendOrderDialog";
 import type { Stockpile } from "@/entities/stockpile";
 import {
@@ -38,13 +39,23 @@ interface OrderBuilderProps {
 
 /** «Конструктор заказа»: матрица каталога → строки ЯЩ/ШТ → рапорт в штаб (POST /reports). */
 export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidth, pinned, onSubmitted }) => {
+  const { session } = useSession();
+  const draftScope = session?.subjectType === "user" ? `${session.userId}:${session.clanId}` : "guest";
   const notify = useNotify();
   const { t, locale } = useI18n();
   const { media, label, list } = useContent();
   const [catalog, setCatalog] = React.useState<FoxholeItem[]>([]);
   const [catalogLoading, setCatalogLoading] = React.useState(true);
-  const [order, setOrder] = React.useState<DraftLine[]>([]);
-  const [hydrated, setHydrated] = React.useState(false);
+  const [draftState, setDraftState] = React.useState<{ scope: string; lines: DraftLine[] }>({ scope: "", lines: [] });
+  const order = draftState.scope === draftScope ? draftState.lines : [];
+  const setOrder = React.useCallback<React.Dispatch<React.SetStateAction<DraftLine[]>>>((update) => {
+    setDraftState((current) => {
+      if (current.scope !== draftScope) return current;
+      const next = typeof update === "function" ? update(current.lines) : update;
+      orderDraft.write(next, draftScope);
+      return { scope: draftScope, lines: next };
+    });
+  }, [draftScope]);
   const [selected, setSelected] = React.useState<FoxholeItem | null>(null);
   const [count, setCount] = React.useState("");
   const [unit, setUnit] = React.useState<ItemUnit>("crate");
@@ -62,18 +73,16 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
   const { run: exportDoc, previewModal } = useDocExport(media("bg_report_texture"));
 
   React.useEffect(() => {
-    setOrder(orderDraft.read());
-    setHydrated(true);
+    setDraftState({ scope: draftScope, lines: orderDraft.read(draftScope) });
+  }, [draftScope]);
+
+  React.useEffect(() => {
     catalogApi
       .all()
       .then(setCatalog)
       .catch((err) => notify({ title: t("builder.catalog"), message: errorText(err, t("builder.catalogFailed")), tone: "danger" }))
       .finally(() => setCatalogLoading(false));
   }, [notify, t]);
-
-  React.useEffect(() => {
-    if (hydrated) orderDraft.write(order);
-  }, [order, hydrated]);
 
   // карточки категорий: иконка первого предмета категории и число предметов
   const categories = React.useMemo(() => {

@@ -297,6 +297,21 @@ class AuthService:
         )
         with bypass_clan_filter():
             # Discord подтвердил владение сервером — роль всегда owner
+            former_owners = (await self.session.execute(
+                select(ClanMembership)
+                .where(
+                    ClanMembership.clan_id == clan.id,
+                    ClanMembership.user_id != user_id,
+                    ClanMembership.role == ClanRole.OWNER,
+                )
+                .with_for_update(of=ClanMembership)
+            )).scalars().all()
+            for former_owner in former_owners:
+                # Discord ownership is singular. Remove owner-only grants on transfer;
+                # a future OAuth login will restore whatever their Discord roles allow.
+                former_owner.role = ClanRole.MEMBER
+                former_owner.extra_scopes = []
+                former_owner.revoked_scopes = []
             membership.role = ClanRole.OWNER
             membership.is_active = True
             await self.session.flush()

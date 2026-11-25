@@ -70,11 +70,27 @@ PRESETS: Final[dict[str, list[dict[str, Any]]]] = {
         {"title": "", "items": [("WaterBucket", 2), ("GasMask", 2), ("GasMaskFilter", 3)]},
     ],
     "frontline": [
-        {"title": "", "items": [("SoldierSupplies", 15), ("Cloth", 20)]},
+        # Starter profile, not a universal stock target. `Cloth` is the catalog code
+        # for Basic Materials; commanders can tune each crate target to their base.
+        {"title": "", "items": [("SoldierSupplies", 15), ("Cloth", 20), ("Shovel", 2)]},
         {"title": "", "items": [("Bandages", 4), ("FirstAidKit", 3), ("TraumaKit", 3), ("BloodPlasma", 3)]},
-        {"title": "", "items": [("RifleAmmo", 6), ("MGAmmo", 4), ("GrenadeW", 4), ("GrenadeC", 4), ("HEGrenade", 3)]},
-        {"title": "", "items": [("SandbagMaterials", 3), ("BarbedWireMaterials", 3), ("Shovel", 2)]},
-        {"title": "", "items": [("RpgAmmo", 3), ("StickyBomb", 3), ("SmokeGrenade", 2)]},
+        {"title": "", "items": [
+            ("RifleW", 4), ("RifleC", 4), ("RifleAmmo", 6),
+            ("AssaultRifleW", 2), ("AssaultRifleC", 2), ("AssaultRifleAmmo", 3),
+            ("MGW", 2), ("MGC", 2), ("MGAmmo", 4),
+            ("GrenadeW", 4), ("GrenadeC", 4), ("HEGrenade", 3), ("GreenAsh", 2),
+            ("SmokeGrenade", 2), ("Radio", 2), ("Binoculars", 2),
+        ]},
+        {"title": "", "items": [
+            ("RpgW", 2), ("ATRPGLightC", 2), ("RpgAmmo", 4), ("StickyBomb", 3),
+            ("ATRifleW", 1), ("ATRifleLightC", 1), ("ATRifleAmmo", 3),
+            ("LightTankAmmo", 3), ("MiniTankAmmo", 2), ("ATAmmo", 3),
+        ]},
+        {"title": "", "items": [
+            ("SandbagMaterials", 3), ("BarbedWireMaterials", 3), ("MaintenanceSupplies", 2),
+            ("WaterBucket", 1), ("ListeningKit", 1), ("WorkWrench", 2),
+            ("Mortar", 1), ("MortarAmmo", 4), ("MortarAmmoFL", 2), ("MortarAmmoSH", 2), ("Tripod", 2),
+        ]},
     ],
 }
 

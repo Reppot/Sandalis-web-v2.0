@@ -89,6 +89,29 @@ def _set_session_cookie(response: Response, token: str) -> None:
 
 
 SETUP_COOKIE = "sindaris_discord_setup"
+OAUTH_STATE_COOKIE = "sindaris_discord_oauth_state"
+
+
+def _set_oauth_state_cookie(response: Response, nonce: str) -> None:
+    response.set_cookie(
+        key=OAUTH_STATE_COOKIE,
+        value=nonce,
+        max_age=settings.DISCORD_OAUTH_STATE_TTL_SEC,
+        path=f"{settings.API_V1_PREFIX}/auth/discord/callback",
+        httponly=True,
+        secure=settings.COOKIE_SECURE,
+        samesite="lax",
+    )
+
+
+def _clear_oauth_state_cookie(response: Response) -> None:
+    response.delete_cookie(
+        key=OAUTH_STATE_COOKIE,
+        path=f"{settings.API_V1_PREFIX}/auth/discord/callback",
+        secure=settings.COOKIE_SECURE,
+        httponly=True,
+        samesite="lax",
+    )
 
 
 def _set_setup_cookie(response: Response, value: str) -> None:
@@ -260,7 +283,9 @@ async def discord_login(
             params={},
         )
     state = make_state(clan_id=clan_id, return_to=return_to)
-    return RedirectResponse(build_authorize_url(state), status_code=status.HTTP_302_FOUND)
+    redirect = RedirectResponse(build_authorize_url(state), status_code=status.HTTP_302_FOUND)
+    _set_oauth_state_cookie(redirect, verify_state(state).nonce)
+    return redirect
 
 
 @router.get(
@@ -280,6 +305,7 @@ async def discord_callback(
     translator: AuthTranslator,
     code: Annotated[str | None, Query(max_length=512)] = None,
     state: Annotated[str | None, Query(max_length=4096)] = None,
+    oauth_state_cookie: Annotated[str | None, Cookie(alias=OAUTH_STATE_COOKIE)] = None,
     response_mode: Annotated[str | None, Query(alias="response", max_length=16)] = None,
     discord_error: Annotated[str | None, Query(alias="error", max_length=128)] = None,
 ) -> Response:
@@ -298,6 +324,10 @@ async def discord_callback(
             )
 
         oauth_state = verify_state(state)
+        if not oauth_state_cookie or not secrets.compare_digest(oauth_state.nonce, oauth_state_cookie):
+            raise UnauthorizedError(
+                message_key="discord.state_invalid", domain="auth", code="state_invalid"
+            )
         token = await exchange_code(code)
         profile = await fetch_profile(token.access_token)
         await service.upsert_discord_user(
@@ -356,17 +386,21 @@ async def discord_callback(
     except AppError as exc:
         if json_mode:
             raise                      # стандартный JSON-envelope проекта
-        return RedirectResponse(error_redirect_url(exc.code), status_code=status.HTTP_302_FOUND)
+        redirect = RedirectResponse(error_redirect_url(exc.code), status_code=status.HTTP_302_FOUND)
+        _clear_oauth_state_cookie(redirect)
+        return redirect
 
     if json_mode:
         body = JSONResponse(token_response.model_dump(mode="json"), status_code=status.HTTP_200_OK)
         _set_session_cookie(body, token_response.access_token)
+        _clear_oauth_state_cookie(body)
         return body
 
     redirect = RedirectResponse(
         safe_return_to(oauth_state.return_to), status_code=status.HTTP_302_FOUND
     )
     _set_session_cookie(redirect, token_response.access_token)
+    _clear_oauth_state_cookie(redirect)
     return redirect
 
 

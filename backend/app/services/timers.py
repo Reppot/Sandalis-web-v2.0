@@ -134,12 +134,13 @@ class TimerService(ClanScopedService):
         if kind is not None:
             timer.kind = kind.value
 
-        stockpile_id = fields.pop("stockpile_id", None)
-        if stockpile_id is not None:
-            await self._get_scoped(
-                Stockpile, stockpile_id,
-                not_found_key="timer.stockpile_missing", domain=DOMAIN,
-            )
+        if "stockpile_id" in fields:
+            stockpile_id = fields.pop("stockpile_id")
+            if stockpile_id is not None:
+                await self._get_scoped(
+                    Stockpile, stockpile_id,
+                    not_found_key="timer.stockpile_missing", domain=DOMAIN,
+                )
             timer.stockpile_id = stockpile_id
 
         completed = fields.pop("completed", None)

@@ -62,6 +62,7 @@ const VIEW_LABEL: Record<View, MessageKey> = {
 
 interface ReportsWorkspaceProps {
   can: Can;
+  draftScope: string;
   /** Текущий пользователь: свои записи журнала выполнения он может удалить. */
   userId: string;
   /** Строки рапорта загружены в черновик — открыть вкладку «Заказы». */
@@ -93,7 +94,7 @@ const unitLabel = (unit: string, t: Translate) => t(unit === "crate" ? "unit.cra
  * «Заказы клана» — штаб: сводка, ближайшие операции с готовностью, представления и совмещаемые
  * фильтры, список задач (приоритет, исполнители, срок, прогресс) и карточка заказа справа.
  */
-export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId, onOpenConstructor, onOpenOperations }) => {
+export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, draftScope, userId, onOpenConstructor, onOpenOperations }) => {
   const notify = useNotify();
   const { t, locale } = useI18n();
   const { media } = useContent();
@@ -463,7 +464,7 @@ export const ReportsWorkspace: React.FC<ReportsWorkspaceProps> = ({ can, userId,
           actions={
             <>
               <button className="btn" disabled={busy} data-guide="report-builder" title={t("reports.toBuilderHint")} onClick={() => {
-                orderDraft.write(orderDraft.fromReport(current));
+                orderDraft.write(orderDraft.fromReport(current), draftScope);
                 notify({ title: t("builder.short"), message: t("reports.loadedToBuilder", { title: current.title }), tone: "info" });
                 onOpenConstructor();
               }}>

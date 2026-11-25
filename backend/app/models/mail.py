@@ -26,5 +26,8 @@ class ClanMail(Base, UUIDPkMixin, TimestampMixin):
     kind: Mapped[str] = mapped_column(String(32), nullable=False)
     payload: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict)
     read_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # Каналы, которые уже подтвердили доставку; временный сбой одного канала
+    # не должен терять уведомление и повторно отправлять его в успешные каналы.
+    dispatch_state: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False, default=dict, server_default="{}")
     # разослано вне сайта (ЛС Discord / push в браузер) — или решено не рассылать
     delivered_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

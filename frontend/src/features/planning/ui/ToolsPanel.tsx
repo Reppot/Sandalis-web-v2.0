@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { COLORS, FACTIONS, FACTION_COLOR, POINT_COLOR, POINT_ICON, POINT_KINDS, UNITS, UNIT_COLOR, normAngle, structureIcon, type Defaults, type Faction, type PointKind, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
+import { COLORS, FACTIONS, FACTION_COLOR, POINT_COLOR, POINT_ICON, POINT_KINDS, RADIUS_PRESETS, UNITS, UNIT_COLOR, fmtMeters, normAngle, pathLength, routeEtaMinutes, structureIcon, type Defaults, type Faction, type PointKind, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool, type Unit } from "@/features/planning/model/plan";
 import { REPORT_STATUS_LABEL, type Report } from "@/entities/report";
 import { Icon, assetUrl, cn, formatDateTime, useConfirm, useT, type IconName, type MessageKey } from "@/shared";
 
-const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", freehand: "line", ruler: "ruler", arrow: "arrow", radius: "radius", structure: "building", order: "paste", point: "flag", frame: "crop", eraser: "eraser" };
+const TOOL_ICON: Record<Tool, IconName> = { select: "cursor", line: "line", freehand: "line", ruler: "ruler", route: "map", arrow: "arrow", radius: "radius", structure: "building", order: "paste", point: "flag", frame: "crop", eraser: "eraser" };
 const TOOL_GROUPS = {
-  draw: ["line", "freehand", "ruler", "arrow", "radius"],
+  draw: ["line", "freehand", "ruler", "route", "arrow", "radius"],
   place: ["structure", "order", "point"],
   edit: ["select", "frame", "eraser"],
 } as const;
@@ -42,9 +42,15 @@ export const ToolsPanel: React.FC<{
   locked?: boolean;
   /** Подпись «где хранится план». */
   savedLabel?: string;
-}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots, locked, savedLabel }) => {
+  routePointCount: number;
+  onFinishRoute: () => void;
+  onCancelRoute: () => void;
+  onExportPlan: () => void;
+  onImportPlan: (file: File) => void;
+}> = ({ tool, onTool, defaults, onDefaults, selected, onUpdate, onDelete, onClear, count, catalog, structures, orders, member, snapshots, onOpenSnapshot, onRenameSnapshot, onDeleteSnapshot, onMoveSnapshots, locked, savedLabel, routePointCount, onFinishRoute, onCancelRoute, onExportPlan, onImportPlan }) => {
   const t = useT();
   const [armed, confirm] = useConfirm();
+  const importInput = React.useRef<HTMLInputElement>(null);
   const [toolGroup, setToolGroup] = React.useState<ToolGroup>("edit");
   const set = <K extends keyof Defaults>(key: K, value: Defaults[K]) => onDefaults({ ...defaults, [key]: value });
   const pickTool = (next: Tool) => {
@@ -52,7 +58,7 @@ export const ToolsPanel: React.FC<{
     if (group) setToolGroup(group);
     onTool(next);
   };
-  const drawing = tool === "line" || tool === "freehand" || tool === "arrow" || tool === "radius" || tool === "ruler";
+  const drawing = tool === "line" || tool === "freehand" || tool === "arrow" || tool === "radius" || tool === "ruler" || tool === "route";
 
   if (locked) {
     return (
@@ -83,12 +89,27 @@ export const ToolsPanel: React.FC<{
       </div>
       <p className="text-xs text-fg-3">{t(`planning.tool.${tool}Hint` as MessageKey)}</p>
 
-      {selected ? (
+      {selected && tool === "select" ? (
         <Properties shape={selected} onUpdate={onUpdate} onDelete={onDelete} structures={structures} orders={orders ?? []} />
       ) : drawing ? (
         <section className="planning-props">
           <h3 className="planning-props-title">{t("planning.newObject")}</h3>
-          {tool === "arrow" ? (
+          {tool === "route" ? (
+            <>
+              <ColorPicker value={defaults.color} onChange={(c) => set("color", c)} />
+              <Range label={t("planning.prop.width")} value={defaults.width} min={1} max={12} unit="px" onChange={(v) => set("width", v)} />
+              <Range label={t("planning.prop.speed")} value={defaults.speedKmh} min={1} max={100} unit="km/h" onChange={(v) => set("speedKmh", v)} />
+              <p className="text-xs text-fg-3">{t("planning.routeEstimateNote")}</p>
+              {routePointCount ? (
+                <div className="flex gap-2">
+                  <button type="button" className="btn btn-primary h-9 min-h-0 flex-1 justify-center text-sm" disabled={routePointCount < 2} onClick={onFinishRoute}>
+                    <Icon name="check" size={15} />{t("planning.routeFinish", { n: routePointCount })}
+                  </button>
+                  <button type="button" className="btn h-9 min-h-0 justify-center text-sm" onClick={onCancelRoute} aria-label={t("planning.routeCancel")} title={t("planning.routeCancel")}><Icon name="close" size={15} /></button>
+                </div>
+              ) : <p className="text-xs text-fg-3">{t("planning.routeNeedPoints")}</p>}
+            </>
+          ) : tool === "arrow" ? (
             <>
               <UnitPicker value={defaults.unit} onChange={(u) => set("unit", u)} />
               <Field label={t("planning.prop.name")}>
@@ -100,6 +121,7 @@ export const ToolsPanel: React.FC<{
           )}
           {tool === "line" || tool === "freehand" || tool === "arrow" ? <Range label={t("planning.prop.width")} value={defaults.width} min={1} max={12} unit="px" onChange={(v) => set("width", v)} /> : null}
           {tool === "radius" ? <Range label={t("planning.prop.sweep")} value={defaults.sweep} min={10} max={360} unit="°" onChange={(v) => set("sweep", v)} /> : null}
+          {tool === "radius" ? <RadiusPresetPicker value={defaults.radiusMeters} onChange={(v) => set("radiusMeters", v)} /> : null}
         </section>
       ) : null}
 
@@ -116,6 +138,7 @@ export const ToolsPanel: React.FC<{
           <Field label={t("planning.prop.pointLabel")}>
             <input className="field h-9" value={defaults.pointLabel} maxLength={80} placeholder={t("planning.prop.pointLabelPh")} onChange={(e) => set("pointLabel", e.target.value)} />
           </Field>
+          <ExpiryPicker value={defaults.pointExpiryHours} onChange={(hours) => set("pointExpiryHours", hours)} />
         </section>
       ) : null}
       {tool === "frame" || snapshots.length ? <SnapshotList list={snapshots} onOpen={onOpenSnapshot} onRename={onRenameSnapshot} onDelete={onDeleteSnapshot} onMove={onMoveSnapshots} /> : null}
@@ -128,6 +151,20 @@ export const ToolsPanel: React.FC<{
           {armed === "clear" ? t("common.confirmQ") : t("planning.clear")}
         </button>
       </div>
+      <div className="planning-plan-portability">
+        <button type="button" className="btn h-9 min-h-0 justify-center text-xs" onClick={onExportPlan}>
+          <Icon name="download" size={14} />{t("planning.exportPlan")}
+        </button>
+        <button type="button" className="btn h-9 min-h-0 justify-center text-xs" onClick={() => importInput.current?.click()}>
+          <Icon name="upload" size={14} />{t("planning.importPlan")}
+        </button>
+        <input ref={importInput} className="sr-only" type="file" accept="application/json,.json" aria-label={t("planning.importPlan")} onChange={(e) => {
+          const file = e.currentTarget.files?.[0];
+          if (file) onImportPlan(file);
+          e.currentTarget.value = "";
+        }} />
+      </div>
+      <p className="text-xs text-fg-3">{t("planning.planPortabilityHint")}</p>
     </div>
   );
 };
@@ -168,6 +205,10 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
           <Field label={t("planning.prop.pointNote")}>
             <input className="field h-9" value={s.note} maxLength={300} placeholder={t("planning.prop.pointNotePh")} onChange={(e) => onUpdate({ ...s, note: e.target.value })} />
           </Field>
+          <div className="space-y-1 text-xs text-fg-3">
+            {s.createdBy ? <p>{t("planning.pointAuthor", { name: s.createdBy })}</p> : null}
+            {s.expiresAt ? <p>{Date.parse(s.expiresAt) <= Date.now() ? t("planning.pointExpired") : t("planning.pointExpires", { at: formatDateTime(s.expiresAt) })}</p> : <p>{t("planning.pointNoExpiry")}</p>}
+          </div>
           <p className="text-xs text-fg-3">{t("planning.pointToOps")}</p>
         </>
       ) : s.kind === "order" ? (
@@ -178,7 +219,7 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
             {t("planning.openOrders")}
           </a>
         </>
-      ) : s.kind === "freehand" ? null : (
+      ) : s.kind === "freehand" || s.kind === "route" ? null : (
         <Range label={s.kind === "structure" ? t("planning.prop.rotation") : t("planning.prop.angle")} value={s.angle} min={0} max={359} unit="°" onChange={(v) => onUpdate({ ...s, angle: normAngle(v) })} />
       )}
 
@@ -188,13 +229,21 @@ const Properties: React.FC<{ shape: Shape; onUpdate: (s: Shape) => void; onDelet
       {s.kind === "radius" ? (
         <>
           <Range label={t("planning.prop.radius")} value={s.radius} min={5} max={3000} step={5} unit="m" onChange={(v) => onUpdate({ ...s, radius: v })} />
+          <RadiusPresetPicker value={s.radius} onChange={(radius) => onUpdate({ ...s, radius })} />
           <Range label={t("planning.prop.sweep")} value={s.sweep} min={10} max={360} unit="°" onChange={(v) => onUpdate({ ...s, sweep: v })} />
         </>
       ) : null}
-      {s.kind === "line" || s.kind === "freehand" || s.kind === "arrow" ? <Range label={t("planning.prop.width")} value={s.width} min={1} max={12} unit="px" onChange={(v) => onUpdate({ ...s, width: v })} /> : null}
+      {s.kind === "route" ? (
+        <>
+          <p className="text-sm font-medium text-fg">{t("planning.routeSummary", { distance: fmtMeters(pathLength(s.points)), eta: routeEtaMinutes(pathLength(s.points), s.speedKmh) >= 60 ? t("planning.routeHoursMinutes", { h: Math.floor(routeEtaMinutes(pathLength(s.points), s.speedKmh) / 60), m: routeEtaMinutes(pathLength(s.points), s.speedKmh) % 60 }) : t("planning.routeMinutes", { m: routeEtaMinutes(pathLength(s.points), s.speedKmh) }), speed: s.speedKmh })}</p>
+          <p className="text-xs text-fg-3">{t("planning.routeEstimateNote")}</p>
+          <Range label={t("planning.prop.speed")} value={s.speedKmh} min={1} max={100} unit="km/h" onChange={(speedKmh) => onUpdate({ ...s, speedKmh })} />
+        </>
+      ) : null}
+      {s.kind === "line" || s.kind === "freehand" || s.kind === "arrow" || s.kind === "route" ? <Range label={t("planning.prop.width")} value={s.width} min={1} max={12} unit="px" onChange={(v) => onUpdate({ ...s, width: v })} /> : null}
       {s.kind === "structure" ? <FactionPicker value={s.team ?? null} onChange={(team) => onUpdate({ ...s, team })} /> : null}
       {s.kind === "structure" || s.kind === "order" || s.kind === "point" ? <Range label={t("planning.prop.size")} value={s.size} min={50} max={300} step={10} unit="%" onChange={(v) => onUpdate({ ...s, size: v })} /> : null}
-      {s.kind === "line" || s.kind === "freehand" || s.kind === "ruler" || s.kind === "radius" ? <ColorPicker value={s.color} onChange={(color) => onUpdate({ ...s, color })} /> : null}
+      {s.kind === "line" || s.kind === "freehand" || s.kind === "ruler" || s.kind === "radius" || s.kind === "route" ? <ColorPicker value={s.color} onChange={(color) => onUpdate({ ...s, color })} /> : null}
     </section>
   );
 };
@@ -389,6 +438,36 @@ const PointPicker: React.FC<{ value: PointKind; onChange: (p: PointKind) => void
           <button key={p} type="button" className={cn("planning-unit", value === p && "is-active")} onClick={() => onChange(p)} aria-pressed={value === p}>
             <span aria-hidden style={{ color: POINT_COLOR[p] }}>{POINT_ICON[p]}</span>
             {t(`opsPlan.point.${p}` as MessageKey)}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const ExpiryPicker: React.FC<{ value: number; onChange: (hours: number) => void }> = ({ value, onChange }) => {
+  const t = useT();
+  return (
+    <Field label={t("planning.prop.pointExpiry")}>
+      <select className="field h-9" value={value} onChange={(e) => onChange(Number(e.target.value))}>
+        <option value={0}>{t("planning.pointExpiryNever")}</option>
+        <option value={1}>{t("planning.pointExpiryHour", { n: 1 })}</option>
+        <option value={6}>{t("planning.pointExpiryHour", { n: 6 })}</option>
+        <option value={24}>{t("planning.pointExpiryDay")}</option>
+      </select>
+    </Field>
+  );
+};
+
+const RadiusPresetPicker: React.FC<{ value: number; onChange: (meters: number) => void }> = ({ value, onChange }) => {
+  const t = useT();
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="field-label">{t("planning.radiusPresets")}</span>
+      <div className="flex flex-wrap gap-1">
+        {RADIUS_PRESETS.map((meters) => (
+          <button key={meters} type="button" className={cn("planning-unit !min-h-8 !px-2 text-xs", value === meters && "is-active")} onClick={() => onChange(meters)} aria-pressed={value === meters}>
+            {fmtMeters(meters)}
           </button>
         ))}
       </div>

@@ -17,15 +17,26 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
   const { t, locale } = useI18n();
   const notify = useNotify();
   const [raw, setProgress] = React.useState<ReportProgress | null>(null);
+  const [loadFailed, setLoadFailed] = React.useState(false);
   const progress = React.useMemo(() => (raw ? localizeProgress(raw, locale) : null), [raw, locale]);
   const [open, setOpen] = React.useState(false);
   const [armed, confirm] = useConfirm();
 
   const load = React.useCallback(() => {
-    reportApi.progress(report.id).then(setProgress).catch(() => setProgress(null));
+    setLoadFailed(false);
+    reportApi.progress(report.id).then((next) => {
+      setProgress(next);
+      setLoadFailed(false);
+    }).catch(() => setLoadFailed(true));
   }, [report.id]);
   React.useEffect(load, [load, report.updated_at]);
 
+  if (!progress && loadFailed) return (
+    <div className="report-progress flex min-h-[60px] flex-wrap items-center justify-between gap-2" role="alert">
+      <span className="text-sm text-danger">{t("progress.loadFailed")}</span>
+      <button type="button" className="btn h-8 min-h-0 text-xs" onClick={load}>{t("progress.retry")}</button>
+    </div>
+  );
   if (!progress) return <div className="report-progress"><Loading className="min-h-[60px]" skeleton={false} /></div>;
 
   const total = pct(progress.delivered_total, progress.ordered_total);
@@ -46,6 +57,7 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
   const remove = async (id: string) => {
     try {
       setProgress(await reportApi.removeContribution(report.id, id));
+      onStatusMaybeChanged();
     } catch (err) {
       notify({ title: t("progress.title"), message: errorText(err, t("progress.failed")), tone: "danger" });
     }
@@ -53,6 +65,12 @@ export const ReportProgressPanel: React.FC<{ report: Report; can: Can; userId: s
 
   return (
     <div data-guide="report-progress" className="report-progress">
+      {loadFailed ? (
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-md border border-warn/30 bg-warn/5 px-3 py-2 text-xs text-warn" role="status">
+          <span>{t("progress.loadFailed")}</span>
+          <button type="button" className="btn h-7 min-h-0 px-2 text-xs" onClick={load}>{t("progress.retry")}</button>
+        </div>
+      ) : null}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="text-sm font-semibold">{t("progress.title")}</div>

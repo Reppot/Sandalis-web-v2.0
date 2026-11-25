@@ -1,14 +1,15 @@
 "use client";
 
 import * as React from "react";
-import { FILTER_ICON, MAP_KINDS, planningApi, regionsIn, type MapKind, type WorldMap } from "@/features/planning/model/map";
-import { DEFAULTS, STRUCTURES_URL, loadDefaults, loadPlan, loadSnapshots, newId, saveDefaults, savePlan, saveSnapshots, type Defaults, type Rect, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool } from "@/features/planning/model/plan";
+import { FILTER_ICON, MAP_KINDS, planningApi, regionsIn, type MapKind, type MapRegion, type WorldMap } from "@/features/planning/model/map";
+import { DEFAULTS, STRUCTURES_URL, loadDefaults, loadPlan, loadSnapshots, newId, parsePlanFile, saveDefaults, savePlan, saveSnapshots, type Defaults, type Rect, type Shape, type Snapshot, type StructureCatalog, type StructureDef, type Tool } from "@/features/planning/model/plan";
 import { SnapshotViewer } from "@/features/planning/ui/SnapshotViewer";
 import { useClanPlan } from "@/features/planning/model/clanPlan";
 import { OperationDialog } from "@/features/operations/ui/OperationDialog";
 import { toOperationSnapshot } from "@/features/operations/model/operations";
 import { Scopes } from "@/entities/session";
 import { MapCanvas } from "@/features/planning/ui/MapCanvas";
+import { RegionSearch } from "@/features/planning/ui/RegionSearch";
 import { ToolsPanel } from "@/features/planning/ui/ToolsPanel";
 import { useSession } from "@/features/cabinet";
 import { reportApi, type Report } from "@/entities/report";
@@ -17,6 +18,12 @@ import { EmptyState, Icon, Loading, assetUrl, cn, errorText, formatDateTime, rea
 const FILTERS_KEY = "sindaris-planning-hidden";
 const SIDE_KEY = "sindaris-planning-side";
 const MODE_KEY = "sindaris-planning-mode";
+const FILTER_PRESETS: Record<string, MapKind[]> = {
+  all: [...MAP_KINDS],
+  bases: ["town_hall", "relic"],
+  logistics: ["storage", "seaport", "runway"],
+  defense: ["town_hall", "coastal_gun", "relic"],
+};
 type PlanMode = "mine" | "clan";
 
 /**
@@ -30,10 +37,13 @@ type PlanMode = "mine" | "clan";
 export const PlanningWorkspace: React.FC = () => {
   const t = useT();
   const notify = useNotify();
+  const { session, can } = useSession();
+  const storageScope = session?.subjectType === "user" ? `user:${session.userId}:${session.clanId}` : "guest";
   const [data, setData] = React.useState<WorldMap | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [hidden, setHidden] = React.useState<Set<MapKind>>(new Set());
   const [regionSelection, setRegionSelection] = React.useState<Set<string>>(() => new Set());
+  const [focusRegion, setFocusRegion] = React.useState<{ key: string; request: number } | null>(null);
   const [detailsLoading, setDetailsLoading] = React.useState(false);
   const [showFrontline, setShowFrontline] = React.useState(false);
   const [frontlinePoints, setFrontlinePoints] = React.useState<Awaited<ReturnType<typeof planningApi.frontline>>["points"] | null>(null);
@@ -41,25 +51,28 @@ export const PlanningWorkspace: React.FC = () => {
   const [selectingRegions, setSelectingRegions] = React.useState(false);
   const [side, setSide] = React.useState(false);
   const [tool, setTool] = React.useState<Tool>("select");
-  const [shapes, setShapes] = React.useState<Shape[]>([]);
+  const [personalPlan, setPersonalPlan] = React.useState<{ scope: string; shapes: Shape[] }>({ scope: "", shapes: [] });
+  const shapes = personalPlan.scope === storageScope ? personalPlan.shapes : [];
   const [selected, setSelected] = React.useState<string | null>(null);
+  const [routeDraft, setRouteDraft] = React.useState<{ x: number; y: number }[]>([]);
   const [defaults, setDefaults] = React.useState<Defaults>(DEFAULTS);
   const [catalog, setCatalog] = React.useState<StructureCatalog | null>(null);
-  const [snapshots, setSnapshots] = React.useState<Snapshot[]>([]);
+  const [snapshotState, setSnapshotState] = React.useState<{ scope: string; items: Snapshot[] }>({ scope: "", items: [] });
+  const snapshots = snapshotState.scope === storageScope ? snapshotState.items : [];
   const [viewing, setViewing] = React.useState<Snapshot | null>(null);
   // «Перенести в операции»: снимок уходит в календарь операций клана
   // переносятся все снимки сессии планирования — в одну операцию
   const [moving, setMoving] = React.useState(false);
-  React.useEffect(() => setSnapshots(loadSnapshots()), []);
+  React.useEffect(() => setSnapshotState({ scope: storageScope, items: loadSnapshots(storageScope) }), [storageScope]);
   const changeSnapshots = React.useCallback((fn: (prev: Snapshot[]) => Snapshot[]) => {
-    setSnapshots((prev) => {
+    setSnapshotState((current) => {
+      const prev = current.scope === storageScope ? current.items : [];
       const next = fn(prev);
-      saveSnapshots(next);
-      return next;
+      saveSnapshots(next, storageScope);
+      return { scope: storageScope, items: next };
     });
-  }, []);
+  }, [storageScope]);
   // активные заказы клана — для меток на карте; у гостя заказов нет
-  const { session, can } = useSession();
   const member = Boolean(session) && session?.subjectType !== "guest";
   const canMove = member && can(Scopes.OPERATIONS_CREATE);
   const canClan = member && can(Scopes.OPERATIONS_READ);
@@ -76,9 +89,9 @@ export const PlanningWorkspace: React.FC = () => {
   React.useEffect(() => {
     setHidden(new Set(readStorage<MapKind[]>(FILTERS_KEY, []).filter((k) => MAP_KINDS.includes(k))));
     setSide(readStorage<boolean>(SIDE_KEY, false));
-    setShapes(loadPlan());
     setDefaults(loadDefaults());
   }, []);
+  React.useEffect(() => setPersonalPlan({ scope: storageScope, shapes: loadPlan(storageScope) }), [storageScope]);
   React.useEffect(() => {
     planningApi.overview().then(setData).catch((err) => setError(errorText(err, t("planning.loadFailed"))));
   }, [t]);
@@ -87,6 +100,7 @@ export const PlanningWorkspace: React.FC = () => {
     next.has(key) ? next.delete(key) : next.add(key);
     return next;
   });
+  const navigateToRegion = (region: MapRegion) => setFocusRegion((prev) => ({ key: region.key, request: (prev?.request ?? 0) + 1 }));
   const toggleFrontline = async () => {
     if (showFrontline) {
       setShowFrontline(false);
@@ -139,14 +153,16 @@ export const PlanningWorkspace: React.FC = () => {
   const structures = React.useMemo(() => new Map<string, StructureDef>((catalog?.items ?? []).map((i) => [i.id, i])), [catalog]);
 
   const commitMine = React.useCallback((fn: (prev: Shape[]) => Shape[]) => {
-    setShapes((prev) => {
+    setPersonalPlan((current) => {
+      if (current.scope !== storageScope) return current;
+      const prev = current.shapes;
       const next = fn(prev);
-      savePlan(next);
-      return next;
+      savePlan(next, storageScope);
+      return { scope: storageScope, shapes: next };
     });
-  }, []);
+  }, [storageScope]);
   // план клана без права правки — только смотреть
-  const locked = clanMode && !clan.canEdit;
+  const locked = (clanMode && !clan.canEdit) || (!clanMode && personalPlan.scope !== storageScope);
   const plan = clanMode ? clan.shapes : shapes;
   const commit = React.useMemo(() => (clanMode ? (locked ? () => undefined : clan.commit) : commitMine), [clanMode, locked, clan.commit, commitMine]);
   const switchMode = (next: PlanMode) => {
@@ -154,6 +170,53 @@ export const PlanningWorkspace: React.FC = () => {
     writeStorage(MODE_KEY, next);
     setSelected(null);
     setTool("select");
+  };
+  const pickTool = (next: Tool) => {
+    if (next !== "route" || tool !== "route") setRouteDraft([]);
+    setTool(next);
+    if (next !== "select") setSelected(null);
+  };
+  const finishRoute = React.useCallback(() => {
+    if (routeDraft.length < 2) return;
+    const route = {
+      id: newId(), kind: "route" as const, x: routeDraft[0].x, y: routeDraft[0].y, angle: 0,
+      points: routeDraft, width: defaults.width, color: defaults.color, speedKmh: defaults.speedKmh,
+    };
+    commit((prev) => [...prev, route]);
+    setSelected(route.id);
+    setRouteDraft([]);
+    setTool("select");
+  }, [routeDraft, defaults.width, defaults.color, defaults.speedKmh, commit]);
+  const cancelRoute = React.useCallback(() => {
+    setRouteDraft([]);
+    setTool("select");
+    setSelected(null);
+  }, []);
+  const exportPlan = () => {
+    const content = JSON.stringify({ format: "sandalis-plan", version: 1, exportedAt: new Date().toISOString(), shapes: plan }, null, 2);
+    const url = URL.createObjectURL(new Blob([content], { type: "application/json" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `sandalis-plan-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    notify({ title: t("planning.tools"), message: t("planning.planExported"), tone: "success" });
+  };
+  const importPlan = (file: File) => {
+    if (locked) return;
+    if (file.size > 2_000_000) {
+      notify({ title: t("planning.tools"), message: t("planning.planImportFailed"), tone: "danger" });
+      return;
+    }
+    void file.text().then((content) => {
+      const imported = parsePlanFile(content);
+      if (plan.length + imported.length > 2000) {
+        notify({ title: t("planning.tools"), message: t("planning.planImportLimit"), tone: "warning" });
+        return;
+      }
+      commit((current) => [...current, ...imported]);
+      notify({ title: t("planning.tools"), message: t("planning.planImported", { n: imported.length }), tone: "success" });
+    }).catch(() => notify({ title: t("planning.tools"), message: t("planning.planImportFailed"), tone: "danger" }));
   };
   const editor = React.useMemo(
     () => ({
@@ -165,9 +228,14 @@ export const PlanningWorkspace: React.FC = () => {
       orders: orders ?? [],
       onSelect: setSelected,
       onAdd: (s: Shape) => {
-        commit((prev) => [...prev, s]);
+        const shape = s.kind === "point" ? {
+          ...s,
+          createdBy: session?.subjectType === "guest" ? t("role.guest") : session?.displayName ?? session?.userId ?? t("role.guest"),
+          expiresAt: defaults.pointExpiryHours > 0 ? new Date(Date.now() + defaults.pointExpiryHours * 60 * 60 * 1000).toISOString() : null,
+        } : s;
+        commit((prev) => [...prev, shape]);
         // стрелки и линии после рисования сразу выбраны — угол и размер правятся в панели
-        if (s.kind !== "structure") setSelected(s.id);
+        if (shape.kind !== "structure") setSelected(shape.id);
       },
       onUpdate: (s: Shape) => commit((prev) => prev.map((x) => (x.id === s.id ? s : x))),
       onDelete: (id: string) => {
@@ -193,22 +261,24 @@ export const PlanningWorkspace: React.FC = () => {
         setViewing(snap);
       },
     }),
-    [tool, locked, plan, selected, defaults, structures, orders, commit, data, snapshots.length, changeSnapshots, t],
+    [tool, locked, plan, selected, defaults, structures, orders, commit, data, snapshots.length, changeSnapshots, session, t],
   );
 
   // Delete — удалить выбранное, Esc — снять выбор и вернуться к курсору
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement)?.closest("input, textarea, select")) return;
+      if ((e.target as HTMLElement)?.closest("button, input, textarea, select, a")) return;
       if ((e.key === "Delete" || e.key === "Backspace") && selected) editor.onDelete(selected);
+      if (e.key === "Enter" && tool === "route" && routeDraft.length >= 2) finishRoute();
       if (e.key === "Escape") {
+        if (tool === "route") setRouteDraft([]);
         setSelected(null);
         setTool("select");
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [selected, editor]);
+  }, [selected, editor, tool, routeDraft, finishRoute]);
 
   const toggle = (kind: MapKind) =>
     setHidden((prev) => {
@@ -223,6 +293,12 @@ export const PlanningWorkspace: React.FC = () => {
     writeStorage(FILTERS_KEY, [...next]);
     setHidden(next);
   };
+  const applyFilterPreset = (preset: keyof typeof FILTER_PRESETS) => {
+    const visible = new Set(FILTER_PRESETS[preset]);
+    const next = new Set<MapKind>(MAP_KINDS.filter((kind) => !visible.has(kind)));
+    writeStorage(FILTERS_KEY, [...next]);
+    setHidden(next);
+  };
   const toggleSide = () =>
     setSide((open) => {
       writeStorage(SIDE_KEY, !open);
@@ -230,10 +306,6 @@ export const PlanningWorkspace: React.FC = () => {
       if (open) setTool("select");
       return !open;
     });
-  const pickTool = (next: Tool) => {
-    setTool(next);
-    if (next !== "select") setSelected(null);
-  };
   const changeDefaults = (d: Defaults) => {
     setDefaults(d);
     saveDefaults(d);
@@ -281,32 +353,36 @@ export const PlanningWorkspace: React.FC = () => {
         </div>
       ) : null}
 
+      {data && !resistance ? (
+        <div data-guide="planning-region-actions" className={cn("planning-region-toolbar", selectingRegions && "is-selecting")} aria-label={t("planning.regions", { n: regionSelection.size })}>
+          <RegionSearch regions={data.regions} onNavigate={navigateToRegion} />
+          <button data-guide="planning-regions" type="button" className={cn("btn planning-side-btn", selectingRegions && "is-active")} onClick={() => setSelectingRegions((v) => !v)} aria-pressed={selectingRegions}>
+            <Icon name="map" size={15} /> {t("planning.regions", { n: regionSelection.size })}
+          </button>
+          {selectingRegions ? (
+            <>
+              <span>{t("planning.regionsHint")}</span>
+              <button type="button" onClick={() => setRegionSelection(new Set(data.regions.map((r) => r.key)))}>{t("planning.regionsAll")}</button>
+              <button type="button" onClick={() => setRegionSelection(new Set())}>{t("planning.regionsNone")}</button>
+              <button type="button" onClick={() => setSelectingRegions(false)}>{t("planning.regionsDone")}</button>
+            </>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className={cn("planning", side && "has-side")}>
-        <div data-guide="planning-map" className="planning-map panel">
+        <div data-guide="planning-map" className={cn("planning-map panel", selectingRegions && "is-selecting-regions")}>
           {error ? (
             <EmptyState icon="map" title={t("planning.loadFailed")} hint={error} />
           ) : !data ? (
             <Loading label={t("planning.loading")} />
           ) : (
-            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} frontlinePoints={showFrontline ? frontlinePoints : null} />
+            <MapCanvas data={data} hidden={hidden} editor={editor} selectedRegions={regionSelection} onToggleRegion={toggleRegion} selectingRegions={selectingRegions} focusRegion={focusRegion} routeDraftPoints={routeDraft} onRoutePoint={(point) => setRouteDraft((current) => [...current, point])} frontlinePoints={showFrontline ? frontlinePoints : null} />
           )}
 
           {data && !resistance ? (
             <div className="planning-overlay is-left">
-              <FilterPanel counts={counts} hidden={hidden} onToggle={toggle} onAll={setAll} />
-            </div>
-          ) : null}
-          {data && !resistance ? (
-            <div className="planning-overlay is-regions">
-              <button data-guide="planning-regions" type="button" className={cn("btn planning-side-btn", selectingRegions && "is-active")} onClick={() => setSelectingRegions((v) => !v)} aria-pressed={selectingRegions}>
-                <Icon name="map" size={15} /> {t("planning.regions", { n: regionSelection.size })}
-              </button>
-              {selectingRegions ? <div data-guide="planning-region-actions" className="planning-region-actions">
-                <span>{t("planning.regionsHint")}</span>
-                <button type="button" onClick={() => setRegionSelection(new Set(data.regions.map((r) => r.key)))}>{t("planning.regionsAll")}</button>
-                <button type="button" onClick={() => setRegionSelection(new Set())}>{t("planning.regionsNone")}</button>
-                <button type="button" onClick={() => setSelectingRegions(false)}>{t("planning.regionsDone")}</button>
-              </div> : null}
+              <FilterPanel counts={counts} hidden={hidden} onToggle={toggle} onAll={setAll} onPreset={applyFilterPreset} />
             </div>
           ) : null}
           <div className="planning-overlay is-right">
@@ -389,6 +465,11 @@ export const PlanningWorkspace: React.FC = () => {
               onRenameSnapshot={(id, name) => changeSnapshots((prev) => prev.map((x) => (x.id === id ? { ...x, name } : x)))}
               onDeleteSnapshot={(id) => changeSnapshots((prev) => prev.filter((x) => x.id !== id))}
               onMoveSnapshots={canMove ? () => setMoving(true) : undefined}
+              routePointCount={routeDraft.length}
+              onFinishRoute={finishRoute}
+              onCancelRoute={cancelRoute}
+              onExportPlan={exportPlan}
+              onImportPlan={importPlan}
             />
           </aside>
         ) : null}
@@ -413,7 +494,8 @@ const FilterPanel: React.FC<{
   hidden: Set<MapKind>;
   onToggle: (kind: MapKind) => void;
   onAll: (hide: boolean) => void;
-}> = ({ counts, hidden, onToggle, onAll }) => {
+  onPreset: (preset: keyof typeof FILTER_PRESETS) => void;
+}> = ({ counts, hidden, onToggle, onAll, onPreset }) => {
   const t = useT();
   const [open, setOpen] = React.useState(true);
   // на телефоне список свёрнут, чтобы не закрывать карту
@@ -427,6 +509,13 @@ const FilterPanel: React.FC<{
       </button>
       {open ? (
         <>
+          <div className="planning-filter-presets" aria-label={t("planning.filterPresets")}>
+            {(Object.keys(FILTER_PRESETS) as (keyof typeof FILTER_PRESETS)[]).map((preset) => {
+              const visible = new Set(FILTER_PRESETS[preset]);
+              const active = MAP_KINDS.every((kind) => hidden.has(kind) === !visible.has(kind));
+              return <button key={preset} type="button" className={cn("planning-filter-preset", active && "is-active")} onClick={() => onPreset(preset)} aria-pressed={active}>{t(`planning.filterPreset.${preset}` as MessageKey)}</button>;
+            })}
+          </div>
           <div className="planning-filters-list">
             {MAP_KINDS.map((kind) => {
               const on = !hidden.has(kind);

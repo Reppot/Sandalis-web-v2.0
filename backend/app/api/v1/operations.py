@@ -81,8 +81,11 @@ def _summary(row: ClanOperation, principal: Principal) -> OperationSummary:
     )
 
 
-async def _get(session: DbDep, operation_id: uuid.UUID) -> ClanOperation:
-    row = (await session.execute(select(ClanOperation).where(ClanOperation.id == operation_id))).scalar_one_or_none()
+async def _get(session: DbDep, operation_id: uuid.UUID, *, for_update: bool = False) -> ClanOperation:
+    stmt = select(ClanOperation).where(ClanOperation.id == operation_id)
+    if for_update:
+        stmt = stmt.with_for_update()
+    row = (await session.execute(stmt)).scalar_one_or_none()
     if row is None:
         raise NotFoundError()
     return row
@@ -150,7 +153,7 @@ async def create_operation(payload: OperationCreate, principal: CurrentPrincipal
 @router.put("/{operation_id}", response_model=OperationSummary, summary="Переименовать / перенести операцию")
 async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, principal: CurrentPrincipal, session: DbDep,
                            background: BackgroundTasks) -> OperationSummary:
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     if not _can_edit(principal, row):
         raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
     roles = await clan_roles(session)
@@ -171,7 +174,7 @@ async def update_operation(operation_id: uuid.UUID, payload: OperationWrite, pri
 
 @router.post("/{operation_id}/snapshots", response_model=OperationSummary, summary="Добавить снимки карты в операцию")
 async def add_snapshots(operation_id: uuid.UUID, payload: SnapshotsAdd, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     if not _can_edit(principal, row):
         raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
     snapshots = [*(row.snapshots or []), *payload.snapshots]
@@ -189,7 +192,7 @@ async def add_snapshots(operation_id: uuid.UUID, payload: SnapshotsAdd, principa
 @router.delete("/{operation_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Удалить операцию")
 async def delete_operation(operation_id: uuid.UUID, principal: CurrentPrincipal, session: DbDep,
                            background: BackgroundTasks) -> Response:
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     if not _can_edit(principal, row):
         raise AppError(message_key="errors.operation_not_yours", code="forbidden", status_code=403, params={})
     posted = discord_ops.ids_of(row)
@@ -205,7 +208,7 @@ async def attend_operation(operation_id: uuid.UUID, payload: Attend, principal: 
                            background: BackgroundTasks) -> OperationSummary:
     if not _member(principal):
         raise NotFoundError()
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     # новый список участников — JSONB помечается изменённым
     operation_plan.answer(row, principal.user_id, principal.display_name or principal.user_id, payload.resolved(), payload.role)
     await session.commit()
@@ -222,7 +225,7 @@ def _editor(principal: Principal, row: ClanOperation) -> None:
 @router.put("/{operation_id}/plan", response_model=OperationSummary, summary="План операции: роли, отряды, этапы, точки")
 async def save_plan(operation_id: uuid.UUID, payload: PlanWrite, principal: CurrentPrincipal, session: DbDep,
                     background: BackgroundTasks) -> OperationSummary:
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     _editor(principal, row)
     plan = operation_plan.plan_of(row)
     row.plan = {**payload.model_dump(mode="json", exclude={"points"}), "points": (row.plan or {}).get("points") or [],
@@ -238,7 +241,7 @@ async def save_plan(operation_id: uuid.UUID, payload: PlanWrite, principal: Curr
 
 @router.put("/{operation_id}/debrief", response_model=OperationSummary, summary="Итоги операции")
 async def save_debrief(operation_id: uuid.UUID, payload: Debrief, principal: CurrentPrincipal, session: DbDep) -> OperationSummary:
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     _editor(principal, row)
     row.plan = {**(row.plan or {}), "debrief": payload.model_dump(mode="json")}
     await session.commit()
@@ -249,7 +252,7 @@ async def save_debrief(operation_id: uuid.UUID, payload: Debrief, principal: Cur
 @router.post("/{operation_id}/assign", response_model=OperationSummary, summary="Роль, отряд и явка участника")
 async def assign_member(operation_id: uuid.UUID, payload: Assign, principal: CurrentPrincipal, session: DbDep,
                         background: BackgroundTasks) -> OperationSummary:
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     _editor(principal, row)
     fields = payload.model_dump(include=payload.model_fields_set - {"user_id"})
     if not operation_plan.assign(row, payload.user_id, fields):
@@ -263,7 +266,7 @@ async def assign_member(operation_id: uuid.UUID, payload: Assign, principal: Cur
 @router.post("/{operation_id}/stages/{stage_id}", response_model=OperationSummary, summary="Отметить этап выполненным")
 async def stage_done(operation_id: uuid.UUID, stage_id: str, payload: StageDone, principal: CurrentPrincipal,
                      session: DbDep) -> OperationSummary:
-    row = await _get(session, operation_id)
+    row = await _get(session, operation_id, for_update=True)
     plan = operation_plan.plan_of(row)
     stage = next((st for st in plan.stages if st.id == stage_id), None)
     if stage is None:

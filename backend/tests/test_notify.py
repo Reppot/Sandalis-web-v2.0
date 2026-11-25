@@ -52,9 +52,12 @@ def test_dm_and_push_dispatch(db, monkeypatch):
             assert st == {"dm": False, "dm_available": True, "push_key": "pub", "push_devices": 0}
             assert (await c.put(f"{API}/notify", headers=auth("111"), json={"dm": True})).json()["dm"] is True
             keys = {"p256dh": "k" * 20, "auth": "a" * 8}
-            await c.post(f"{API}/notify/push", headers=auth("222"), json={"endpoint": "https://push.example/ok", "keys": keys})
-            r = await c.post(f"{API}/notify/push", headers=auth("222"), json={"endpoint": "https://push.example/dead", "keys": keys})
+            await c.post(f"{API}/notify/push", headers=auth("222"), json={"endpoint": "https://fcm.googleapis.com/ok", "keys": keys})
+            r = await c.post(f"{API}/notify/push", headers=auth("222"), json={"endpoint": "https://fcm.googleapis.com/dead", "keys": keys})
             assert r.json()["push_devices"] == 2
+            bad_endpoint = await c.post(f"{API}/notify/push", headers=auth("222"),
+                                        json={"endpoint": "https://127.0.0.1/private", "keys": keys})
+            assert bad_endpoint.status_code == 422
 
         now = datetime.now(UTC)
         async with AsyncSessionLocal() as s:
@@ -71,9 +74,48 @@ def test_dm_and_push_dispatch(db, monkeypatch):
             assert await notify_dispatch.dispatch() == 2          # ЛС Бобу + один живой push Анне
             assert "Boss назначил(а) вам заказ «Фронт»" in json.loads(dm.calls.last.request.content)["content"]
             assert await notify_dispatch.dispatch() == 0          # второй проход — ничего
-        assert {(e, p["body"]) for e, p in pushed} == {("https://push.example/ok", "Reserve “Sind-1” has expired!"),
-                                                       ("https://push.example/dead", "Reserve “Sind-1” has expired!")}
+        assert {(e, p["body"]) for e, p in pushed} == {("https://fcm.googleapis.com/ok", "Reserve “Sind-1” has expired!"),
+                                                       ("https://fcm.googleapis.com/dead", "Reserve “Sind-1” has expired!")}
         async with AsyncSessionLocal() as s:
             assert (await s.execute(select(func.count()).select_from(PushSubscription))).scalar_one() == 1
+
+    run(main())
+
+
+def test_dispatch_retries_only_failed_channels(db, monkeypatch):
+    monkeypatch.setattr(settings, "VAPID_PUBLIC_KEY", "pub")
+    monkeypatch.setattr(settings, "VAPID_PRIVATE_KEY", "priv")
+    monkeypatch.setattr(notify_dispatch.discord_bot, "enabled", lambda: True)
+    dm_attempts = 0
+    push_attempts = 0
+
+    async def fake_dm(*_args):  # noqa: ANN002
+        nonlocal dm_attempts
+        dm_attempts += 1
+        return dm_attempts > 1
+
+    def fake_push(*_args):  # noqa: ANN002
+        nonlocal push_attempts
+        push_attempts += 1
+        return 201
+
+    monkeypatch.setattr(notify_dispatch, "_dm", fake_dm)
+    monkeypatch.setattr(notify_dispatch, "_push_one", fake_push)
+
+    async def main() -> None:
+        await seed_clan("CLAN_A")
+        async with AsyncSessionLocal() as s:
+            s.add(User(id="recipient", display_name="Recipient", notify_dm=True))
+            s.add(PushSubscription(user_id="recipient", endpoint="https://fcm.googleapis.com/subscription",
+                                  p256dh="k" * 20, auth="a" * 8))
+            s.add(ClanMail(clan_id="CLAN_A", recipient_id="recipient", sender_id="sender",
+                           sender_name="Commander", kind="task_assigned", payload={"title": "Front"}))
+            await s.commit()
+
+        assert await notify_dispatch.dispatch() == 1  # push delivered, DM transiently failed
+        assert (dm_attempts, push_attempts) == (1, 1)
+        assert await notify_dispatch.dispatch() == 1  # only failed DM retried
+        assert (dm_attempts, push_attempts) == (2, 1)
+        assert await notify_dispatch.dispatch() == 0
 
     run(main())

@@ -98,3 +98,9 @@ def test_preset_items_exist_in_catalog():
     catalog = {x["code"] for x in json.loads((Path(__file__).resolve().parents[1] / "app/seed/data/catalog.json").read_text(encoding="utf-8"))}
     missing = {key: [c for t in tiers for c, _ in t["items"] if c not in catalog] for key, tiers in PRESETS.items()}
     assert not any(missing.values()), missing
+    frontline = PRESETS["frontline"]
+    frontline_codes = {code for tier in frontline for code, _ in tier["items"]}
+    assert len(frontline) == 5  # preserve the existing pyramid levels
+    assert {"SoldierSupplies", "Cloth", "Bandages", "RifleW", "RifleC", "RifleAmmo", "RpgW", "RpgAmmo",
+            "ATRifleW", "ATRifleAmmo", "SandbagMaterials", "BarbedWireMaterials", "Radio", "Mortar", "MortarAmmo"} <= frontline_codes
+    assert all(len(tier["items"]) <= 40 for tier in frontline)

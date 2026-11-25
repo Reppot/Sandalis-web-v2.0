@@ -8,7 +8,6 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
@@ -17,6 +16,7 @@ from sqlalchemy import delete, select
 from app.core.config import settings
 from app.core.db import AsyncSessionLocal
 from app.core.i18n import Translator, normalize_locale
+from app.core.push_endpoint import is_allowed_push_endpoint
 from app.core.tenancy import bypass_clan_filter
 from app.models.mail import ClanMail
 from app.models.push import PushSubscription
@@ -61,9 +61,12 @@ async def _dm(user_id: str, text: str, url: str) -> bool:
 def _push_one(sub: PushSubscription, payload: str) -> int | None:
     from pywebpush import WebPushException, webpush
 
+    if not is_allowed_push_endpoint(sub.endpoint):
+        return 410
     try:
         webpush(subscription_info={"endpoint": sub.endpoint, "keys": {"p256dh": sub.p256dh, "auth": sub.auth}},
-                data=payload, vapid_private_key=settings.VAPID_PRIVATE_KEY, vapid_claims={"sub": settings.VAPID_SUBJECT}, ttl=3600)
+                data=payload, vapid_private_key=settings.VAPID_PRIVATE_KEY,
+                vapid_claims={"sub": settings.VAPID_SUBJECT}, ttl=3600, timeout=5)
         return 201
     except WebPushException as exc:
         return exc.response.status_code if exc.response is not None else None
@@ -75,35 +78,56 @@ async def dispatch(now: datetime | None = None) -> int:
     sent = 0
     async with AsyncSessionLocal() as session:
         with bypass_clan_filter():
-            mails = (await session.execute(
-                select(ClanMail).where(ClanMail.delivered_at.is_(None)).order_by(ClanMail.created_at).limit(200)
+            ids = (await session.execute(
+                select(ClanMail.id).where(ClanMail.delivered_at.is_(None))
+                .order_by(ClanMail.created_at).limit(200)
             )).scalars().all()
-            if not mails:
-                return 0
-            ids = {m.recipient_id for m in mails}
-            users = {u.id: u for u in (await session.execute(select(User).where(User.id.in_(ids)))).scalars().all()}
-            subs: dict[str, list[PushSubscription]] = defaultdict(list)
-            if push_enabled():
-                for sub in (await session.execute(select(PushSubscription).where(PushSubscription.user_id.in_(ids)))).scalars().all():
-                    subs[sub.user_id].append(sub)
-            gone: list[str] = []
-            for mail in mails:
-                mail.delivered_at = now
-                created = mail.created_at if mail.created_at.tzinfo else mail.created_at.replace(tzinfo=UTC)
-                user = users.get(mail.recipient_id)
-                if user is None or now - created > MAX_AGE:
+            for mail_id in ids:
+                mail = (await session.execute(
+                    select(ClanMail).where(ClanMail.id == mail_id, ClanMail.delivered_at.is_(None))
+                    .with_for_update(skip_locked=True)
+                )).scalar_one_or_none()
+                if mail is None:
                     continue
+                created = mail.created_at if mail.created_at.tzinfo else mail.created_at.replace(tzinfo=UTC)
+                user = await session.get(User, mail.recipient_id)
+                if user is None or now - created > MAX_AGE:
+                    mail.delivered_at = now
+                    await session.commit()
+                    continue
+
                 t = Translator(locale=normalize_locale(user.preferred_locale) or settings.DEFAULT_LOCALE, default_domain="reports")
                 text, url = render(mail, t)
-                if user.notify_dm and discord_bot.enabled() and await _dm(user.id, text, url):
+                state = dict(mail.dispatch_state or {})
+                dm_done = not (user.notify_dm and discord_bot.enabled()) or bool(state.get("dm"))
+                if not dm_done and await _dm(user.id, text, url):
+                    dm_done = True
                     sent += 1
-                for sub in subs.get(user.id, []):
-                    status = await asyncio.to_thread(_push_one, sub, json.dumps({"title": "SINDARIS", "body": text, "url": url}))
+
+                subscriptions: list[PushSubscription] = []
+                if push_enabled():
+                    subscriptions = list((await session.execute(
+                        select(PushSubscription).where(PushSubscription.user_id == user.id)
+                        .order_by(PushSubscription.created_at).limit(20)
+                    )).scalars().all())
+                push_done = {str(value) for value in state.get("push", []) if isinstance(value, str)}
+                for sub in subscriptions:
+                    subscription_id = str(sub.id)
+                    if subscription_id in push_done:
+                        continue
+                    status = await asyncio.to_thread(
+                        _push_one, sub, json.dumps({"title": "SINDARIS", "body": text, "url": url})
+                    )
                     if status in (404, 410):
-                        gone.append(sub.endpoint)      # подписка браузера больше не действует
-                    elif status and status < 400:
+                        push_done.add(subscription_id)
+                        await session.execute(delete(PushSubscription).where(PushSubscription.id == sub.id))
+                    elif status is not None and status < 400:
+                        push_done.add(subscription_id)
                         sent += 1
-            if gone:
-                await session.execute(delete(PushSubscription).where(PushSubscription.endpoint.in_(gone)))
-            await session.commit()
+
+                mail.dispatch_state = {"dm": dm_done, "push": sorted(push_done)}
+                push_done_all = not push_enabled() or all(str(sub.id) in push_done for sub in subscriptions)
+                if dm_done and push_done_all:
+                    mail.delivered_at = now
+                await session.commit()
     return sent

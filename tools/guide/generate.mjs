@@ -46,10 +46,13 @@ const PREPARE = {
     await page.waitForSelector(".matrix-item", { timeout: 30000 });
     await page.click(".matrix-item");
     await page.type('[data-guide="builder-qty"]', "5");
+    await page.click('[data-guide="builder-add"]');
+    await page.waitForSelector('[data-guide="builder-order"]', { timeout: 30000 });
   },
   async expandReport(page) {
     await page.waitForSelector('[data-guide="report-card"] button', { timeout: 30000 });
     await page.click('[data-guide="report-card"] button');
+    await page.waitForSelector(".hq-drawer", { timeout: 30000 });
   },
   async openTimer(page) {
     await page.waitForSelector('[data-guide="timer-manage"]', { timeout: 30000 });
@@ -59,12 +62,19 @@ const PREPARE = {
   },
   async openMpf(page) {
     await page.waitForSelector('[data-guide="tools-tabs"] [role=tab]', { timeout: 30000 });
-    const tabs = await page.$$('[data-guide="tools-tabs"] [role=tab]');
-    await tabs[1].click();
+    await page.$eval('[data-guide="tools-tabs"] [role=tab][aria-selected="true"]', (el) => el.scrollIntoView({ block: "nearest", inline: "center" }));
     await page.waitForSelector(".factory-item-card");
   },
   async openPlanning(page) {
     await page.waitForSelector('[data-guide="planning-regions"]', { timeout: 30000 });
+    const toggle = await page.$('[data-guide="planning-regions"]');
+    if (await toggle.evaluate((el) => el.getAttribute("aria-pressed") !== "true")) await toggle.click();
+  },
+  async openTraining(page) {
+    await page.waitForSelector(".training-switch-btn", { timeout: 30000 });
+    const active = await page.$eval(".training-switch-btn", (el) => el.getAttribute("aria-selected"));
+    if (active !== "true") await page.click(".training-switch-btn");
+    await page.waitForSelector(".training-grid .training-card", { timeout: 30000 });
   },
   async selectPlanningHex(page) {
     await page.waitForSelector('[data-guide="planning-regions"]', { timeout: 30000 });
@@ -80,38 +90,40 @@ const PREPARE = {
     await page.waitForSelector('[data-guide="planning-tool-tabs"]', { timeout: 30000 });
     const draw = await page.$('[data-guide="planning-tool-tabs"] [role="tab"]');
     await draw.click();
+    await page.click('[data-guide="planning-tool-route"]');
   },
   async expandMember(page) {
     await page.waitForSelector('[data-guide="mgmt-members"] li button', { timeout: 30000 });
     await page.click('[data-guide="mgmt-members"] li button');
   },
   async openRolesTab(page) {
-    await page.waitForSelector("[role=tab]", { timeout: 30000 });
-    const tabs = await page.$$("main [role=tab]");
+    await page.waitForSelector('main [role="radiogroup"] [role="radio"]', { timeout: 30000 });
+    const tabs = await page.$$('main [role="radiogroup"] [role="radio"]');
     await tabs[1].click();
-    await page.waitForSelector('[data-guide="mgmt-level"]', { timeout: 30000 });
+    await page.waitForSelector('[data-guide="mgmt-roles"]', { timeout: 30000 });
   },
   async openIntegrationsTab(page) {
-    await page.waitForSelector("[role=tab]", { timeout: 30000 });
-    const tabs = await page.$$("main [role=tab]");
-    await tabs[2].click();
+    await page.waitForSelector('main [role="radiogroup"] [role="radio"]', { timeout: 30000 });
+    const tabs = await page.$$('main [role="radiogroup"] [role="radio"]');
+    await tabs[3].click();
     await page.waitForSelector('[data-guide="cab-token"]', { timeout: 30000 });
   },
   async openSettingsLanguage(page) {
-    await page.waitForSelector('[data-guide="settings-sections"] .filter-card', { timeout: 30000 });
-    const cards = await page.$$('[data-guide="settings-sections"] .filter-card');
-    await cards[1].click();
+    await page.waitForSelector('[data-guide="settings-sections"] [role="radio"]', { timeout: 30000 });
+    const sections = await page.$$('[data-guide="settings-sections"] [role="radio"]');
+    await sections[1].click();
     await page.waitForSelector('[data-guide="cab-lang"]', { timeout: 30000 });
   },
   async openSettingsAppearance(page) {
-    await page.waitForSelector('[data-guide="settings-sections"] .filter-card', { timeout: 30000 });
-    const cards = await page.$$('[data-guide="settings-sections"] .filter-card');
-    await cards[2].click();
+    await page.waitForSelector('[data-guide="settings-sections"] [role="radio"]', { timeout: 30000 });
+    const sections = await page.$$('[data-guide="settings-sections"] [role="radio"]');
+    await sections[2].click();
     await page.waitForSelector('[data-guide="settings-appearance"]', { timeout: 30000 });
   },
-  async openBurger(page) {
-    await page.waitForSelector('[data-guide="shell-burger"]', { timeout: 30000 });
-    await page.click('[data-guide="shell-burger"]');
+  async openMobileMenu(page) {
+    await page.setViewport({ width: 390, height: 844 });
+    await page.waitForSelector('[data-guide="shell-menu-trigger"]', { timeout: 30000 });
+    await page.click('[data-guide="shell-menu-trigger"]');
     await page.waitForSelector('[data-guide="shell-menu"]', { timeout: 30000 });
   },
   async openRoleModal(page) {
@@ -122,15 +134,15 @@ const PREPARE = {
   },
   async fillMpf(page) {
     await PREPARE.openMpf(page);
-    const cards = await page.$$(".factory-item-card");
+    let cards = await page.$$(".factory-item-card");
     await cards[0].click();
-    await cards[3].click();
+    const categories = await page.$$('[data-guide="tool-cats"] button');
+    if (categories.length > 2) await categories[2].click();
+    await page.waitForSelector(".factory-item-card");
+    cards = await page.$$(".factory-item-card");
+    await cards[0].click();
     await page.waitForSelector(".factory-plan-row");
-    await page.evaluate(() => {
-      const top = document.querySelector(".factory-topbar").getBoundingClientRect().top + window.scrollY;
-      const chrome = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--chrome-h")) || 72;
-      window.scrollTo(0, Math.max(0, top - chrome - 12));
-    });
+    await page.evaluate(() => window.scrollTo(0, 0));
   },
 };
 
@@ -151,6 +163,7 @@ function markerPoint(r, at) {
 }
 
 async function shoot(page, locale, shot) {
+  await page.setViewport(shot.viewport ?? VIEWPORT);
   await page.goto(`${FRONTEND}${shot.path}`, { waitUntil: "networkidle0" });
   await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}" });
   const ready = shot.mode === "viewport" || shot.prepare ? shot.markers[0].sel : shot.mode.clip;
@@ -159,10 +172,18 @@ async function shoot(page, locale, shot) {
   if (shot.prepare) await PREPARE[shot.prepare](page);
   await sleep(700);
 
+  const missingMarkers = await page.evaluate((markers) => markers.flatMap(({ sel }) => {
+    const [base, nth] = sel.split(" >>");
+    const elements = nth === undefined ? document.querySelectorAll(base) : [document.querySelectorAll(base)[Number(nth)]].filter(Boolean);
+    return elements.length ? [] : [sel];
+  }), shot.markers);
+  if (missingMarkers.length) throw new Error(`[${locale}] ${shot.id}: missing markers: ${missingMarkers.join(", ")}`);
+
   let clip;
   if (shot.mode === "viewport") {
     const scrollY = await page.evaluate(() => window.scrollY);
-    clip = { x: 0, y: scrollY, width: VIEWPORT.width, height: VIEWPORT.height };
+    const viewport = shot.viewport ?? VIEWPORT;
+    clip = { x: 0, y: scrollY, width: viewport.width, height: viewport.height };
   } else {
     const r = await rectOf(page, shot.mode.clip);
     if (!r) throw new Error(`[${locale}] ${shot.id}: clip ${shot.mode.clip} not found`);
@@ -206,7 +227,10 @@ async function main() {
     await page.setViewport(VIEWPORT);
     await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
     await page.goto(FRONTEND, { waitUntil: "networkidle0" });
-    await page.evaluate((loc) => localStorage.setItem("sindaris-locale", loc), locale);
+    await page.evaluate((loc) => {
+      localStorage.setItem("sindaris-locale", loc);
+      localStorage.setItem("sindaris-theme", "dark");
+    }, locale);
 
     let loggedIn = false;
     for (const chapter of CHAPTERS) {

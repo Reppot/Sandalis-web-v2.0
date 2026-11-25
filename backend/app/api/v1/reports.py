@@ -38,7 +38,7 @@ from app.schemas.report import (
 )
 from app.services.clan_settings import ClanSettingsService, to_read
 from app.services.report_progress import ReportProgressService
-from app.services import audit, discord_bot, report_tasks
+from app.services import audit, discord_bot, gamification, report_tasks
 from app.services.reports import CatalogNames, ReportService, line_icon, line_names
 
 router = APIRouter(prefix="/reports", tags=["reports"])
@@ -264,9 +264,10 @@ async def create_report(payload: ReportCreate, service: ServiceDep, principal: C
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_EDIT]))],
 )
 async def update_report(
-    report_id: uuid.UUID, payload: ReportUpdate, service: ServiceDep, background: BackgroundTasks
+    report_id: uuid.UUID, payload: ReportUpdate, service: ServiceDep, background: BackgroundTasks, principal: CurrentPrincipal
 ) -> ReportSaved:
     report, message = await service.update_report(report_id, payload)
+    gamification.forget(principal.clan_id)
     background.add_task(discord_bot.refresh_post, report_id)
     return ReportSaved(report=await _one(service, report), message=message)
 
@@ -299,6 +300,7 @@ async def delete_report(report_id: uuid.UUID, service: ServiceDep, background: B
                         principal: CurrentPrincipal) -> Response:
     title = (await service.get_report(report_id)).title
     channel, message = await service.delete_report(report_id)
+    gamification.forget(principal.clan_id)
     await audit.record(principal.clan_id, principal, "orders.delete", title=title)
     if channel and message:
         background.add_task(discord_bot.delete_post, channel, message)
@@ -365,6 +367,7 @@ async def report_progress(report_id: uuid.UUID, service: ProgressDep) -> ReportP
 async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, service: ProgressDep, principal: CurrentPrincipal,
                        background: BackgroundTasks) -> ReportProgressRead:
     result = await service.contribute(report_id, payload)
+    gamification.forget(principal.clan_id)
     await report_tasks.after_contribution(service.session, report_id, payload, result, principal.clan_id, *_who(principal))
     background.add_task(discord_bot.refresh_post, report_id)
     return result
@@ -377,8 +380,9 @@ async def add_progress(report_id: uuid.UUID, payload: ContributionCreate, servic
     dependencies=[Depends(PermissionChecker([Scopes.REPORTS_READ]))],
 )
 async def remove_progress(report_id: uuid.UUID, contribution_id: uuid.UUID, service: ProgressDep,
-                          background: BackgroundTasks) -> ReportProgressRead:
+                          background: BackgroundTasks, principal: CurrentPrincipal) -> ReportProgressRead:
     result = await service.remove_contribution(report_id, contribution_id)
+    gamification.forget(principal.clan_id)
     background.add_task(discord_bot.refresh_post, report_id)
     return result
 

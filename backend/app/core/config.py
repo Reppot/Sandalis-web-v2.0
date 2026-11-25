@@ -68,6 +68,7 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "http://localhost:3000"
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
     SESSION_TTL_MINUTES: int = 60            # Max-Age куки = TTL * 60
+    AUTH_MEMBERSHIP_CHECK: bool = True        # актуальные роли/членство проверяются для JWT-запросов
     COOKIE_SECURE: bool = False              # в prod -> true
     COOKIE_SAMESITE: Literal["lax", "strict", "none"] = "lax"
 

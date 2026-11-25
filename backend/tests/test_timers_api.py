@@ -45,6 +45,16 @@ def test_timers_flow(db):
             assert timer["remaining_display"].startswith("09:")
             assert "clan_id" not in timer
 
+            null_title = await c.patch(f"{API}/timers/{tid}", json={"title": None}, headers=officer)
+            assert null_title.status_code == 422
+            stockpile = await c.post(f"{API}/stockpiles", json={"name": "Test", "region": "Deadlands", "kind": "depot"}, headers=officer)
+            assert stockpile.status_code == 201, stockpile.text
+            stockpile_id = stockpile.json()["stockpile"]["id"]
+            attached = await c.patch(f"{API}/timers/{tid}", json={"stockpile_id": str(stockpile_id)}, headers=officer)
+            assert attached.status_code == 200 and attached.json()["timer"]["stockpile_id"] == str(stockpile_id)
+            detached = await c.patch(f"{API}/timers/{tid}", json={"stockpile_id": None}, headers=officer)
+            assert detached.status_code == 200 and detached.json()["timer"]["stockpile_id"] is None
+
             # --- legacy-ввод: target_timestamp (мс) + duration_seconds --------
             target_ms = int((now + timedelta(hours=2)).timestamp() * 1000)
             t2 = await c.post(

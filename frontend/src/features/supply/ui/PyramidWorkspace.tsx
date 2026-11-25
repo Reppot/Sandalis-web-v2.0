@@ -3,6 +3,7 @@
 import * as React from "react";
 import { catalogApi, itemName, type FoxholeItem } from "@/entities/item";
 import { orderDraft, type DraftLine } from "@/entities/report";
+import { useSession } from "@/features/cabinet";
 import { Scopes, type Can } from "@/entities/session";
 import { stockpileApi, type Stockpile } from "@/entities/stockpile";
 import {
@@ -73,6 +74,8 @@ const presetLabel = (key: string) => `pyramid.preset.${key}` as MessageKey;
  * бункерная база; конфигурация — пирамида клана или готовая (normal, tank, artillery...).
  */
 export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => void }> = ({ can, onOpenConstructor }) => {
+  const { session } = useSession();
+  const draftScope = session?.subjectType === "user" ? `${session.userId}:${session.clanId}` : "guest";
   const { t, locale } = useI18n();
   const notify = useNotify();
   const canCreate = can(Scopes.PYRAMID_CREATE);
@@ -169,7 +172,7 @@ export const PyramidWorkspace: React.FC<{ can: Can; onOpenConstructor: () => voi
     if (!indices.length) return notify({ title: t("pyramid.title"), message: t("pyramid.selectedNone"), tone: "warning" });
     if (!lines.length) return notify({ title: t("pyramid.title"), message: t("pyramid.nothingToBring"), tone: "success" });
     // прошлый состав конструктора (например, самолёты) не смешивается с заказом пирамиды
-    orderDraft.write(lines);
+    orderDraft.write(lines, draftScope);
     notify({ title: t("pyramid.title"), message: t("pyramid.sentToBuilder", { n: lines.length }), tone: "success" });
     onOpenConstructor();
   };

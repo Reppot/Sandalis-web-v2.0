@@ -56,6 +56,24 @@ def test_shared_plan_ops(db):
     run(main())
 
 
+def test_shared_plan_accepts_route_and_freehand(db):
+    async def main() -> None:
+        await seed_clan("CLAN_A")
+        route = {"id": "route-1", "kind": "route", "x": 10, "y": 20, "angle": 0,
+                 "points": [{"x": 10, "y": 20}, {"x": 30, "y": 40}],
+                 "width": 4, "color": "#f5a524", "speedKmh": 30}
+        freehand = {"id": "freehand-1", "kind": "freehand", "x": 15, "y": 25, "angle": 0,
+                    "points": [{"x": 15, "y": 25}, {"x": 35, "y": 45}],
+                    "width": 3, "color": "#38bdf8"}
+        async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as c:
+            response = await c.post(f"{API}/ops", headers=auth("boss", ClanRole.OWNER),
+                                    json={"upsert": [route, freehand]})
+            assert response.status_code == 200, response.text
+            assert [item["kind"] for item in response.json()["shapes"]] == ["route", "freehand"]
+
+    run(main())
+
+
 def test_rsvp_reminder_once(db):
     async def main() -> None:
         await seed_clan("CLAN_A")

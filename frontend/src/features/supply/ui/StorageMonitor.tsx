@@ -190,6 +190,8 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
   const items = pinned?.items ?? [];
   const itemLabel = (i: { name: string | null; nameEn: string | null; itemCode: string }) => (locale === "ru" ? i.name : i.nameEn ?? i.name) ?? i.itemCode;
   const total = items.reduce((acc, i) => acc + i.quantity, 0);
+  const syncAgeMs = pinned?.lastSyncAt ? Date.now() - new Date(pinned.lastSyncAt).getTime() : null;
+  const syncNeedsReview = syncAgeMs !== null && Number.isFinite(syncAgeMs) && syncAgeMs > 24 * 60 * 60 * 1000;
   const visible = React.useMemo(() => {
     const q = query.trim().toLowerCase();
     return q ? items.filter((i) => matchesWords(`${i.name ?? ""} ${i.nameEn ?? ""} ${i.itemCode} ${codeSynonyms(i.itemCode).join(" ")}`, q)) : items;
@@ -307,8 +309,9 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
       <div data-guide="stock-sync" className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-fg-3">
         <span>
           {t("stock.sync")}:{" "}
-          <span className="text-fg-2">
+          <span className={syncNeedsReview ? "text-warn" : "text-fg-2"}>
             {pinned?.lastSyncAt ? `${formatDateTime(pinned.lastSyncAt)} · ${SOURCE_LABEL[pinned.lastSyncSource ?? ""] ?? t(pinned.lastSyncSource === "clipboard" ? "stock.srcClipboard" : "stock.srcManual")} · ${t("common.pos", { n: items.length })}` : t("common.noData")}
+            {syncNeedsReview ? ` · ${t("stock.syncNeedsReview")}` : ""}
           </span>
         </span>
         {busy && <span className="pulse text-warn">{t("common.processing")}</span>}

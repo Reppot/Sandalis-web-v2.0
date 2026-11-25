@@ -9,8 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY backend/pyproject.toml ./
-RUN pip install --no-cache-dir --prefix=/install .
+COPY backend/requirements-runtime.txt ./requirements-runtime.txt
+RUN pip install --no-cache-dir --prefix=/install -r requirements-runtime.txt
 
 # === STAGE 2: Runtime ===
 FROM python:3.12-slim AS runner
@@ -26,7 +26,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder /install /usr/local
 COPY backend/app /app/app
-COPY backend/alembic /app/alembic
+COPY backend/static /app/static
+COPY backend/migrations /app/migrations
 COPY backend/alembic.ini /app/alembic.ini
 
 EXPOSE 8000
@@ -36,6 +37,6 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Healthcheck для балансировщиков
 HEALTHCHECK --interval=10s --timeout=3s --retries=3 \
-  CMD curl -f http://localhost:8000/health || exit 1
+  CMD curl -f http://localhost:8000/api/v1/health/live || exit 1
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

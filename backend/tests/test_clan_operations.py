@@ -1,6 +1,8 @@
 """Операции клана: календарь, снимок карты, опрос участников; чужой клан и гость не видят."""
 from __future__ import annotations
 
+import asyncio
+
 from httpx import ASGITransport, AsyncClient
 
 from app.core.permissions import ClanRole
@@ -88,5 +90,25 @@ def test_operations_calendar_snapshot_and_poll(db):
 
             assert (await c.delete(f"{API}/{plain['id']}", headers=boss)).status_code == 204
             assert [o["title"] for o in (await c.get(API, headers=boss)).json()["operations"]] == ["Прорыв 2"]
+
+    run(main())
+
+
+def test_concurrent_attendance_keeps_both_members(db):
+    async def main() -> None:
+        await seed_clan("CLAN_A")
+        members = [auth(uid, "CLAN_A", ClanRole.MEMBER, uid.title()) for uid in ("alpha", "bravo")]
+        async with client() as c:
+            created = await c.post(API, headers=auth("boss", "CLAN_A", ClanRole.OWNER),
+                                   json={"title": "Concurrent RSVP", "date": "2026-11-25"})
+            assert created.status_code == 201, created.text
+            operation_id = created.json()["id"]
+            responses = await asyncio.gather(*(
+                c.post(f"{API}/{operation_id}/attend", headers=headers, json={"going": True})
+                for headers in members
+            ))
+            assert [response.status_code for response in responses] == [200, 200]
+            final = await c.get(f"{API}/{operation_id}", headers=members[0])
+            assert {p["user_id"] for p in final.json()["participants"]} == {"alpha", "bravo"}
 
     run(main())

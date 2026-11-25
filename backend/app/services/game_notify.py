@@ -66,6 +66,9 @@ async def season_start() -> datetime | None:
 TIER_COLOR = {"iron": 0x5F5E5A, "bronze": 0xB4693E, "silver": 0xA8ABB0, "gold": 0xE0A526, "platinum": 0x1D9E75,
               "emerald": 0x3FA34D, "diamond": 0x378ADD, "master": 0x7F77DD}
 ROLE_CHANGES_PER_PASS = 25
+# PostgreSQL's clock may differ slightly from the API host's clock. Keep recent
+# DB-generated contributions in the closing season when that skew is small.
+MAX_DB_CLOCK_SKEW = timedelta(minutes=5)
 
 
 def _parse(ts: Any) -> datetime | None:
@@ -128,6 +131,12 @@ async def check_clan(clan_id: str, now: datetime | None = None) -> int:
                 prev_since = _parse(state.get("season_since"))
                 # граница сезонов — начало новой войны (если War API отдал его позже прошлого), иначе сейчас
                 until = since if since and (prev_since is None or since > prev_since) else now
+                if until == now:
+                    latest_recent = max(
+                        (credit.at for credit in items if credit.at <= now + MAX_DB_CLOCK_SKEW),
+                        default=now,
+                    )
+                    until = max(now, latest_recent)
                 top = game.season_top(items, prev_since, until, names)
                 cs.game_hall = ([{"war": prev, "since": state.get("season_since"), "until": until.isoformat(), "top": top}]
                                 + list(cs.game_hall or []))[:20]

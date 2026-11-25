@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from contextlib import contextmanager
 from urllib.parse import parse_qs
+from urllib.parse import urlsplit
 from types import SimpleNamespace
 from typing import Any, Iterator
 
@@ -24,6 +25,8 @@ from app.core.security import issue_access_token
 from app.core.tenancy import bypass_clan_filter
 from app.core.db import AsyncSessionLocal
 from app.main import app
+from app.api.v1.auth import OAUTH_STATE_COOKIE
+from app.services.auth import AuthService
 from app.models.rbac import Clan, ClanMembership, User
 from app.services.discord_oauth import make_state, verify_state
 from tests.conftest import run, seed_catalog_item, seed_clan, seed_stockpile_with_stock
@@ -49,11 +52,22 @@ PROFILE: dict[str, Any] = {
 }
 
 
-def client() -> AsyncClient:
+def client(*, bind_oauth_state: bool = True) -> AsyncClient:
+    async def bind_browser_state(request: httpx.Request) -> None:
+        if not bind_oauth_state or not request.url.path.endswith("/auth/discord/callback"):
+            return
+        state = parse_qs(urlsplit(str(request.url)).query).get("state", [None])[0]
+        try:
+            nonce = verify_state(state).nonce
+        except Exception:
+            return  # invalid states should still reach the endpoint's validation
+        request.headers["Cookie"] = f"{OAUTH_STATE_COOKIE}={nonce}"
+
     return AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://testserver",
         follow_redirects=False,
+        event_hooks={"request": [bind_browser_state]},
     )
 
 
@@ -164,10 +178,32 @@ def test_login_redirects_to_discord_with_signed_state(db, monkeypatch):
             assert state.clan_id == "CLAN_A"
             assert state.return_to == "/cabinet"
             assert state.nonce
+            assert r.cookies.get(OAUTH_STATE_COOKIE) == state.nonce
+            assert OAUTH_STATE_COOKIE in r.headers["set-cookie"]
+            assert "HttpOnly" in r.headers["set-cookie"]
+            assert "samesite=lax" in r.headers["set-cookie"].lower()
 
             # два логина -> два разных state (nonce не переиспользуется)
             again = await c.get(f"{API}/auth/discord/login", params={"clan_id": "CLAN_A"})
             assert again.headers["location"] != location
+
+    run(main())
+
+
+def test_callback_rejects_state_from_another_browser(db, monkeypatch):
+    async def main() -> None:
+        enable_discord(monkeypatch)
+        state = make_state()
+        with discord_mock() as mock:
+            async with client(bind_oauth_state=False) as c:
+                r = await c.get(
+                    f"{API}/auth/discord/callback",
+                    params={"code": "abc", "state": state, "response": "json"},
+                    cookies={OAUTH_STATE_COOKIE: "a-different-browser-nonce"},
+                )
+        assert r.status_code == 401, r.text
+        assert r.json()["error"]["code"] == "state_invalid"
+        assert not mock.token.called
 
     run(main())
 
@@ -599,6 +635,34 @@ def test_owner_picks_guild_and_becomes_clan_owner(db, monkeypatch):
                 assert ok.status_code == 200
                 denied = await c.post(f"{API}/auth/discord/setup", json={"clan_id": "CLAN_X"})
                 assert denied.status_code == 401        # кука уже потрачена
+
+    run(main())
+
+
+def test_discord_owner_transfer_demotes_previous_owner_and_refreshes_jwt(db, monkeypatch):
+    async def main() -> None:
+        clan_id = GUILDS[0]["id"]
+        await seed_clan(clan_id, "SINDARIS HQ")
+        await seed_membership(clan_id, user_id="previous-owner", role=ClanRole.OWNER)
+        monkeypatch.setattr(settings, "AUTH_MEMBERSHIP_CHECK", True)
+
+        async with AsyncSessionLocal() as s:
+            service = AuthService(s, Translator(locale="en", default_domain="auth"))
+            current, _ = await service.claim_guild(
+                user_id="new-owner", display_name="New owner",
+                guild={"id": clan_id, "name": "SINDARIS HQ", "icon_url": None},
+            )
+            await s.commit()
+            assert current.role == ClanRole.OWNER
+
+        old_token = issue_access_token(
+            user_id="previous-owner", clan_id=clan_id, role=ClanRole.OWNER,
+        )
+        async with client() as c:
+            old_me = await c.get(f"{API}/auth/me", headers={"Authorization": f"Bearer {old_token}"})
+        assert old_me.status_code == 200, old_me.text
+        assert old_me.json()["role"] == "member"
+        assert "*" not in old_me.json()["scopes"]
 
     run(main())
 

@@ -23,7 +23,7 @@ from app.models.clan_plan import ClanPlan
 router = APIRouter(prefix="/clan/plan", tags=["clan"])
 CanRead = [Depends(PermissionChecker([Scopes.OPERATIONS_READ]))]
 
-KINDS = frozenset({"line", "ruler", "arrow", "radius", "structure", "order", "point"})
+KINDS = frozenset({"line", "freehand", "ruler", "route", "arrow", "radius", "structure", "order", "point"})
 MAX_SHAPES = 2000
 MAX_BYTES = 1_500_000
 

@@ -48,23 +48,30 @@ export default function TerminalPage() {
   }, []);
 
   React.useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const requested = params.get("tab");
-    const legacy = legacyClanView(requested);
-    if (isToolModule(requested)) {
-      // старые ссылки ?tab=orders / pyramid / codes — теперь модули инструментов
-      setTab("tools");
-      setTool(requested);
-    } else if (legacy) {
-      // старые ссылки ?tab=reports / timers / training / management — подразделы «Вашего клана»
-      setTab("clan");
-      setClanView(legacy);
-    } else if (isTabKey(requested)) {
-      setTab(requested);
-      if (requested === "tools") setTool(params.get("tool"));
-      const view = params.get("view");
-      if (requested === "clan" && isClanView(view)) setClanView(view);
-    }
+    const syncFromLocation = () => {
+      const params = new URLSearchParams(window.location.search);
+      const requested = params.get("tab");
+      const legacy = legacyClanView(requested);
+      if (isToolModule(requested)) {
+        setTab("tools");
+        setTool(requested);
+      } else if (legacy) {
+        setTab("clan");
+        setClanView(legacy);
+      } else if (isTabKey(requested)) {
+        setTab(requested);
+        setTool(requested === "tools" ? params.get("tool") : null);
+        const view = params.get("view");
+        if (requested === "clan" && isClanView(view)) setClanView(view);
+      } else {
+        setTab("tools");
+        setTool(null);
+      }
+      window.scrollTo({ top: 0 });
+    };
+    syncFromLocation();
+    window.addEventListener("popstate", syncFromLocation);
+    return () => window.removeEventListener("popstate", syncFromLocation);
   }, []);
 
   /** sub — модуль инструментов или подраздел клана; живёт в адресе страницы. */
@@ -76,7 +83,7 @@ export default function TerminalPage() {
     const url = new URL(window.location.href);
     url.search =
       key === "tools" ? (sub ? `?tab=tools&tool=${sub}` : "") : key === "clan" && sub ? `?tab=clan&view=${sub}` : `?tab=${key}`;
-    window.history.replaceState(null, "", url);
+    if (url.search !== window.location.search) window.history.pushState(null, "", url);
     window.scrollTo({ top: 0 });
   }, []);
   const openTool = React.useCallback((id: string | null) => select("tools", id), [select]);
@@ -111,7 +118,7 @@ export default function TerminalPage() {
   const clanSections = React.useMemo<ClanSection[]>(
     () => [
       ...(can(Scopes.REPORTS_READ)
-        ? [{ view: "reports" as const, icon: "reports" as const, label: "nav.reports.label" as const, hint: "nav.reports.hint" as const, render: () => <ReportsWorkspace can={can} userId={session?.userId ?? ""} onOpenConstructor={() => openTool("orders")} onOpenOperations={() => openClan("operations")} /> }]
+        ? [{ view: "reports" as const, icon: "reports" as const, label: "nav.reports.label" as const, hint: "nav.reports.hint" as const, render: () => <ReportsWorkspace can={can} draftScope={session?.subjectType === "user" ? `${session.userId}:${session.clanId}` : "guest"} userId={session?.userId ?? ""} onOpenConstructor={() => openTool("orders")} onOpenOperations={() => openClan("operations")} /> }]
         : []),
       ...(can(Scopes.STOCKPILES_READ) || can(Scopes.TIMERS_READ)
         ? [{

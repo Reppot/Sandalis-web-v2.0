@@ -92,8 +92,13 @@ def test_audit_log_records_sensitive_actions(db):
             await c.delete(f"{API}/reports/{r.json()['report']['id']}", headers=boss)
             assert (await c.get(f"{API}/clan/audit", headers=auth("333", ClanRole.MEMBER))).status_code in (401, 403)
             log = (await c.get(f"{API}/clan/audit", headers=boss)).json()
-            assert [e["action"] for e in log] == ["orders.delete", "settings.update", "blacklist.save"]
-            assert log[0]["details"] == {"title": "Лишний"} and log[1]["details"] == {"timer_minutes": 60}
-            assert log[2]["details"]["users"] == ["Tank"] and log[2]["actor_id"] == "111"
+            # PostgreSQL's now() is stable per transaction; requests can share the same
+            # timestamp, so only assert content/order-independent facts for ties.
+            by_action = {entry["action"]: entry for entry in log}
+            assert set(by_action) == {"orders.delete", "settings.update", "blacklist.save"}
+            assert by_action["orders.delete"]["details"] == {"title": "Лишний"}
+            assert by_action["settings.update"]["details"] == {"timer_minutes": 60}
+            assert by_action["blacklist.save"]["details"]["users"] == ["Tank"]
+            assert by_action["blacklist.save"]["actor_id"] == "111"
 
     run(main())

@@ -3,14 +3,60 @@ from __future__ import annotations
 import asyncio
 import os
 import uuid
+from pathlib import Path
+from urllib.parse import unquote, urlsplit
 
 # --- env ДО любых импортов app.* -------------------------------------------- #
-os.environ.setdefault(
-    "DATABASE_URL",
-    "postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/sandalis_test",
-)
+test_database_url = os.environ.get("TEST_DATABASE_URL", "").strip()
+if not test_database_url:
+    raise RuntimeError(
+        "Set TEST_DATABASE_URL to a dedicated local PostgreSQL database before running tests. "
+        "Tests refuse to fall back to DATABASE_URL because their fixture drops all tables."
+    )
+
+def _database_target(url: str) -> tuple[str | None, int | None, str]:
+    parsed = urlsplit(url)
+    if parsed.scheme not in {"postgres", "postgresql", "postgresql+asyncpg"}:
+        raise RuntimeError("TEST_DATABASE_URL must use PostgreSQL with asyncpg.")
+    return parsed.hostname, parsed.port, unquote(parsed.path.lstrip("/"))
+
+
+test_host, _, test_name = _database_target(test_database_url)
+if test_host not in {"localhost", "127.0.0.1", "::1", "db", "postgres"}:
+    raise RuntimeError("TEST_DATABASE_URL must point to localhost or a local CI PostgreSQL service.")
+if not (test_name.lower().endswith("_test") or test_name.lower().startswith("test_")):
+    raise RuntimeError("TEST_DATABASE_URL database name must end in '_test' or start with 'test_'.")
+
+runtime_database_url = os.environ.get("DATABASE_URL", "").strip()
+runtime_env = Path(__file__).resolve().parents[1] / ".env"
+already_configured_test_target = os.environ.get("SANDALIS_TEST_DATABASE_TARGET") == test_database_url
+if not runtime_database_url and not already_configured_test_target and runtime_env.is_file():
+    for line in runtime_env.read_text(encoding="utf-8").splitlines():
+        if line.strip().startswith("DATABASE_URL="):
+            runtime_database_url = line.split("=", 1)[1].strip().strip("\"'")
+            break
+if not already_configured_test_target and runtime_database_url and _database_target(runtime_database_url) == _database_target(test_database_url):
+    raise RuntimeError("TEST_DATABASE_URL matches the application's DATABASE_URL; refusing destructive tests.")
+
+os.environ["DATABASE_URL"] = test_database_url
+os.environ["SANDALIS_TEST_DATABASE_TARGET"] = test_database_url
 os.environ["JWT_SECRET"] = "test-secret-only-for-ci-do-not-use-in-prod"
 os.environ["ENV"] = "local"
+# The project .env is loaded by Pydantic even when tests run, so pin its
+# runtime-facing values here. In particular, a developer's Discord OAuth
+# credentials must not silently turn the "disabled by default" tests on.
+os.environ["DISCORD_CLIENT_ID"] = ""
+os.environ["DISCORD_CLIENT_SECRET"] = ""
+os.environ["DISCORD_REDIRECT_URI"] = ""
+os.environ["FRONTEND_URL"] = "http://localhost:3000"
+os.environ["COOKIE_SECURE"] = "false"
+os.environ["COOKIE_SAMESITE"] = "lax"
+os.environ["SESSION_COOKIE_NAME"] = "sandalis_session"
+os.environ["SESSION_TTL_MINUTES"] = "60"
+# Most API tests intentionally use isolated signed principals instead of creating
+# a membership row for each fixture. Dedicated auth tests enable live membership
+# checks to verify production behavior.
+os.environ["AUTH_MEMBERSHIP_CHECK"] = "false"
 # NullPool: коннекты открываются/закрываются внутри одного event loop —
 # тесты опираются на asyncio.run() с чистым loop на каждый кейс.
 os.environ["DB_USE_PGBOUNCER"] = "true"

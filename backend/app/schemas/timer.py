@@ -54,16 +54,16 @@ class TimerCreate(BaseModel):
 class TimerUpdate(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
 
-    title: Annotated[str | None, Field(default=None, min_length=1, max_length=120)]
-    kind: TimerKind | None = None
-    ends_at: datetime | None = None
+    title: Annotated[str, Field(default=None, min_length=1, max_length=120)]
+    kind: TimerKind = None
+    ends_at: datetime = None
     note: Annotated[str | None, Field(default=None, max_length=2000)]
     stockpile_id: uuid.UUID | None = None
-    completed: bool | None = None         # True -> завершить, False -> переоткрыть
+    completed: bool = None                # True -> завершить, False -> переоткрыть
     # True -> окно заново от «сейчас»: длительность duration_seconds или прежняя
     # («Сбросить на 48 ч», «Задать таймер» Д/Ч/М старого сайта)
-    restart: bool | None = None
-    duration_seconds: Annotated[int | None, Field(default=None, gt=0, le=365 * 24 * 3600)] = None
+    restart: bool = None
+    duration_seconds: Annotated[int, Field(default=None, gt=0, le=365 * 24 * 3600)]
 
     @field_validator("ends_at")
     @classmethod

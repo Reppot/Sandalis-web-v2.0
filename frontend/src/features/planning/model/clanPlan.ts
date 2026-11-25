@@ -92,8 +92,13 @@ export function useClanPlan(active: boolean, onError: (err: unknown) => void): C
     } catch (err) {
       // не ушло — вернуть в очередь под более свежие правки
       const p = pending.current;
-      for (const [id, s] of sent.upsert) if (!p.upsert.has(id) && !p.del.has(id)) p.upsert.set(id, s);
-      for (const id of sent.del) if (!p.upsert.has(id)) p.del.add(id);
+      // Если после отправки пользователь очистил план, нельзя восстановить элементы
+      // из устаревшего запроса поверх этого более нового clear.
+      const newerClear = p.clear && !sent.clear;
+      if (!newerClear) {
+        for (const [id, s] of sent.upsert) if (!p.upsert.has(id) && !p.del.has(id)) p.upsert.set(id, s);
+        for (const id of sent.del) if (!p.upsert.has(id)) p.del.add(id);
+      }
       p.clear = p.clear || sent.clear;
       errorRef.current(err);
     } finally {

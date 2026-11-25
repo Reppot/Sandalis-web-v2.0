@@ -68,18 +68,19 @@ export const CHAPTERS = [
           { sel: g("shell-status"), note: L("Состояние связи с сервером, общий статус складов и время последней синхронизации.", "Server link status, overall stockpile status and the time of the last sync.", "Stav spojení se serverem, celkový stav skladů a čas poslední synchronizace.") },
           { sel: g("shell-nav"), note: L("Быстрый доступ: Инструменты, Обучение и Навигация.", "Quick access: Tools, Training and Navigation.", "Rychlý přístup: Nástroje, Výcvik a Navigace.") },
           { sel: g("shell-collapse"), note: L("Свернуть или развернуть меню — останутся только иконки.", "Collapse or expand the menu — only icons stay visible.", "Sbalit nebo rozbalit menu — zůstanou jen ikony.") },
-          { sel: g("shell-burger"), note: L("Меню: все разделы сайта и настройки.", "Menu: every site section and settings.", "Menu: všechny sekce webu a nastavení.") },
+          { sel: g("shell-brand"), note: L("Нажмите на герб, чтобы вернуться в инструменты.", "Select the crest to return to Tools.", "Kliknutím na erb se vraťte do Nástrojů.") },
         ],
       },
       {
         id: "menu",
         path: "/?tab=orders",
         mode: "viewport",
-        prepare: "openBurger",
+        prepare: "openMobileMenu",
+        viewport: { width: 390, height: 844 },
         caption: L("Меню разделов", "Section menu", "Menu sekcí"),
         markers: [
-          { sel: `${g("shell-menu")} .burger-item`, at: "start", note: L("Все разделы: заказы, рапорты, таймеры, коды, инструменты, обучение, навигация, управление (командир) и настройки. Набор зависит от вашей роли.", "All sections: orders, reports, timers, codes, tools, training, navigation, management (commander) and settings. Which you see depends on your role.", "Všechny sekce: objednávky, hlášení, časovače, kódy, nástroje, výcvik, navigace, správa (velitel) a nastavení. Výběr závisí na vaší roli.") },
-          { sel: `${g("shell-menu")} .burger-item.is-active`, note: L("Раздел, открытый сейчас.", "The section open now.", "Právě otevřená sekce.") },
+          { sel: `${g("shell-menu")} .sheet-row`, at: "start", note: L("Разделы объединены по группам, у каждого есть короткое пояснение. Доступные пункты зависят от роли.", "Sections are grouped by task, with a short hint for each. Available entries depend on your role.", "Sekce jsou seskupené podle úkolů a každá má krátký popis. Dostupné položky závisí na roli.") },
+          { sel: `${g("shell-menu")} .sheet-row.is-active`, note: L("Активный раздел отмечен в списке.", "The active section is marked in the list.", "Aktivní sekce je v seznamu označená.") },
         ],
       },
     ],
@@ -121,7 +122,7 @@ export const CHAPTERS = [
         markers: [
           { sel: g("builder-pick"), note: L("Выбранный предмет — нажмите на него в матрице ниже.", "The selected item — click it in the matrix below.", "Vybraný předmět — klikněte na něj v matici níže.") },
           { sel: g("builder-qty"), note: L("Количество. Enter сразу добавляет строку.", "Quantity. Enter adds the line right away.", "Množství. Enter řádek rovnou přidá.") },
-          { sel: g("builder-unit"), note: L("Единица: ящики или штуки.", "Unit: crates or pieces.", "Jednotka: bedny nebo kusy.") },
+          { sel: `${g("builder-panel")} .builder-unit`, note: L("Единица: ящики или штуки.", "Unit: crates or pieces.", "Jednotka: bedny nebo kusy.") },
           { sel: g("builder-add"), note: L("Добавить строку в заказ.", "Add the line to the order.", "Přidat řádek do objednávky.") },
           { sel: g("builder-filter"), note: L("Поиск по русскому и английскому названию или коду; под ним — категории.", "Search by Russian or English name or code; categories are below.", "Hledání podle ruského či anglického názvu nebo kódu; pod ním kategorie.") },
           { sel: g("builder-matrix"), note: L("Матрица предметов каталога.", "Catalog item matrix.", "Matice předmětů katalogu.") },
@@ -147,17 +148,25 @@ export const CHAPTERS = [
         id: "reports",
         path: "/?tab=reports",
         mode: { clip: "main" },
-        prepare: "expandReport",
-        caption: L("Рапорты штаба", "HQ reports", "Hlášení štábu"),
+        caption: L("Очередь штаба", "HQ task queue", "Fronta úkolů štábu"),
         markers: [
           { sel: g("reports-filters"), note: L("Фильтр: текущие, выполненные, отменённые или все.", "Filter: current, completed, cancelled or all.", "Filtr: aktuální, splněné, zrušené nebo vše.") },
           { sel: g("reports-search"), note: L("Поиск по названию рапорта или предмету.", "Search by report title or item.", "Hledání podle názvu hlášení nebo předmětu.") },
-          { sel: g("report-card"), at: "start", note: L("Рапорт: нажмите на заголовок, чтобы раскрыть все строки.", "A report: click the title to expand all lines.", "Hlášení: kliknutím na nadpis rozbalíte všechny řádky.") },
-          { sel: g("report-status"), note: L("Статус: открыт, в работе, выполнен, отменён.", "Status: open, in progress, done, cancelled.", "Stav: otevřené, v řešení, splněno, zrušeno.") },
-          { sel: `${g("report-actions")} button`, note: L("Смена статуса — взять в работу, выполнить, отменить.", "Change the status — take on, complete, cancel.", "Změna stavu — převzít, splnit, zrušit.") },
-          { sel: g("report-builder"), note: L("Загрузить строки рапорта в конструктор для правки или повтора.", "Load the report lines into the builder to edit or repeat it.", "Načíst řádky hlášení do konstruktoru k úpravě nebo opakování.") },
-          { sel: g("report-discord"), note: L("Отправить рапорт картинкой в канал Discord (вебхук задаётся в кабинете).", "Post the report as an image to the Discord channel (the webhook is set in the profile).", "Poslat hlášení jako obrázek do kanálu Discord (webhook se nastavuje v profilu).") },
-          { sel: `${g("report-card")} ${g("export-formats")}`, note: L("Выгрузка рапорта в TXT, XLSX, PNG или буфер.", "Export the report as TXT, XLSX, PNG or to the clipboard.", "Export hlášení do TXT, XLSX, PNG nebo schránky.") },
+          { sel: `${g("report-card")} .hq-row`, at: "start", note: L("Каждая строка показывает заказ, нужные предметы, исполнителей, срок и ход выполнения. Нажмите, чтобы открыть карточку.", "Each row shows the task, requested items, assignees, deadline and progress. Open it to see the full task.", "Každý řádek ukazuje úkol, požadované předměty, řešitele, termín a průběh. Otevřete ho pro podrobnosti.") },
+        ],
+      },
+      {
+        id: "report-detail",
+        path: "/?tab=reports",
+        mode: { clip: ".hq-drawer" },
+        prepare: "expandReport",
+        viewport: { width: 1440, height: 1440 },
+        caption: RE("Карточка заказа", "Task details"),
+        markers: [
+          { sel: ".hq-steps", note: RE("Путь выполнения: открыт, в работе, выполнен. Доступные действия зависят от роли.", "Move a task through open, in progress and done. Available actions depend on your role.") },
+          { sel: g("report-progress"), note: RE("Здесь участники отмечают фактически доставленное количество по каждой позиции.", "Members record how much of each requested item has actually arrived here.") },
+          { sel: ".hq-drawer-actions", note: RE("Загрузить заказ в конструктор или отправить его в Discord.", "Load the order into the builder or post it to Discord.") },
+          { sel: ".hq-doc summary", note: RE("В документе можно посмотреть и выгрузить состав заказа.", "The document section contains the order contents and export options.") },
         ],
       },
     ],
@@ -180,7 +189,7 @@ export const CHAPTERS = [
         markers: [
           { sel: g("timers-stats"), note: L("Сколько складов в зоне риска: меньше часа, меньше суток и в безопасности.", "How many stockpiles are at risk: under an hour, under a day and safe.", "Kolik skladů je v ohrožení: méně než hodina, méně než den a v bezpečí.") },
           { sel: g("timers-search"), note: L("Поиск по сектору или складу.", "Search by sector or stockpile.", "Hledání podle sektoru nebo skladu.") },
-          { sel: g("timers-register"), note: L("Поставить новый склад на мониторинг: гекс, локация и стартовое время (офицеры).", "Start monitoring a new stockpile: hex, location and starting time (officers).", "Zahájit sledování nového skladu: hex, lokace a počáteční čas (důstojníci).") },
+          { sel: g("stockpile-new"), note: L("Добавить склад на мониторинг: сектор, название и время последнего обновления.", "Add a stockpile to monitoring: region, name and time of its last refresh.", "Přidat sklad ke sledování: sektor, název a čas posledního obnovení.") },
           { sel: ".timer-card", at: "start", note: L("Карточка склада: полоса показывает остаток от 48 часов, цвет — уровень риска.", "Stockpile card: the bar shows what is left of 48 hours, the colour shows the risk.", "Karta skladu: pruh ukazuje zbytek ze 48 hodin, barva míru rizika.") },
           { sel: g("timer-left"), note: L("Оставшееся время до исчезновения склада.", "Time left until the stockpile disappears.", "Zbývající čas do zmizení skladu.") },
           { sel: g("timer-manage"), note: L("Открыть канал связи склада: обновить таймер, журнал, снять с мониторинга.", "Open the stockpile channel: refresh the timer, log, stop monitoring.", "Otevřít kanál skladu: obnovit časovač, deník, ukončit sledování.") },
@@ -223,7 +232,6 @@ export const CHAPTERS = [
           { sel: g("codes-stats"), note: L("Всего записей, сколько с иконкой и сколько требуют проверки.", "Total records, how many have an icon and how many need review.", "Celkem záznamů, kolik má ikonu a kolik je třeba ověřit.") },
           { sel: g("codes-search"), note: L("Поиск по коду, английскому или русскому названию.", "Search by code, English or Russian name.", "Hledání podle kódu, anglického nebo ruského názvu.") },
           { sel: g("codes-filters"), note: L("Фильтры по категории и фракции.", "Category and faction filters.", "Filtry podle kategorie a frakce.") },
-          { sel: g("codes-review"), note: L("Показать только спорные записи.", "Show disputed records only.", "Zobrazit jen sporné záznamy.") },
           { sel: g("codes-copy"), note: L("Скопировать отфильтрованные строки (JSON) или скачать CSV.", "Copy the filtered lines (JSON) or download a CSV.", "Zkopírovat filtrované řádky (JSON) nebo stáhnout CSV.") },
           { sel: g("codes-compare"), note: L("Сравнить сырую выгрузку склада из игры с реестром: что распознано, что нет.", "Compare a raw in-game stockpile export with the registry: what is recognised and what is not.", "Porovnat surový výpis skladu ze hry s registrem: co je rozpoznáno a co ne.") },
           { sel: g("codes-table"), at: "start", note: L("Таблица реестра.", "The registry table.", "Tabulka registru.") },
@@ -243,21 +251,22 @@ export const CHAPTERS = [
     shots: [
       {
         id: "tools-tabs",
-        path: "/?tab=tools",
+        path: "/?tab=tools&tool=mpf",
         mode: { clip: g("tools-tabs") },
         prepare: "openMpf",
-        caption: L("Выбор калькулятора", "Choosing a calculator", "Výběr kalkulačky"),
+        viewport: { width: 390, height: 844 },
+        caption: RE("Навигация по инструментам", "Tool navigation"),
         markers: [
-          { sel: `${g("tools-tabs")} [role=tab] >>0`, note: L("Калькулятор фабрики: очередь до 4 ящиков (техника — 5), цена без скидки.", "Factory calculator: queue up to 4 crates (vehicles — 5), full price.", "Kalkulačka továrny: fronta až 4 bedny (vozidla — 5), plná cena.") },
-          { sel: `${g("tools-tabs")} [role=tab] >>1`, note: L("MPF: заказ 3–9 ящиков (техника и сооружения 3–5), скидка 10–50% на каждый следующий ящик.", "MPF: an order of 3–9 crates (vehicles and structures 3–5), 10–50% off every next crate.", "MPF: objednávka 3–9 beden (vozidla a stavby 3–5), sleva 10–50 % na každou další bednu.") },
-          { sel: `${g("tools-tabs")} [role=tab] >>2`, note: L("Молоток (Refinery): сколько сырья и времени нужно на материалы.", "Refinery: how much raw material and time the materials need.", "Rafinerie: kolik suroviny a času je potřeba na materiály.") },
+          { sel: `${g("tools-tabs")} .tools-back`, note: RE("Вернуться к каталогу, где инструменты собраны по задачам.", "Return to the catalog, where tools are grouped by task.") },
+          { sel: `${g("tools-tabs")} [role=tab][aria-selected="true"]`, note: RE("Текущий раздел отмечен как выбранный.", "The current section is marked as selected.") },
         ],
       },
       {
         id: "mpf",
-        path: "/?tab=tools",
+        path: "/?tab=tools&tool=mpf",
         mode: "viewport",
         prepare: "fillMpf",
+        viewport: { width: 1440, height: 1200 },
         caption: L("Калькулятор MPF", "MPF calculator", "Kalkulačka MPF"),
         markers: [
           { sel: g("tool-mode"), note: L("PRODUCTION — игровые лимиты заказа; PLANNING — любое количество, разбивается на заказы.", "PRODUCTION — in-game order limits; PLANNING — any amount, split into orders.", "PRODUCTION — herní limity objednávky; PLANNING — libovolné množství rozdělené na objednávky.") },
@@ -277,17 +286,18 @@ export const CHAPTERS = [
     icon: "map",
     title: RE("Планирование операций", "Operation planning"),
     summary: RE(
-      "Выберите нужные гексы: карта остаётся обзором, а постройки загружаются только для выбранных регионов. Инструменты сгруппированы по задаче; свободную линию можно перемещать и настраивать.",
-      "Select the hexes you need. The map stays an overview, and buildings load only for selected regions. Tools are grouped by task; freehand lines can be moved and styled.",
+      "Найдите регион поиском, выберите только нужные гексы: постройки загружаются по запросу. На карте можно рисовать, ставить редактируемые точки маршрута и оценивать время по заданной скорости.",
+      "Search for a region and select only the hexes you need; building details load on demand. Draw on the map, place editable route waypoints, and estimate travel time at a chosen speed.",
     ),
     shots: [
       {
         id: "planning-regions",
         path: "/?tab=tools&tool=planning",
-        mode: { clip: g("planning-map") },
+        mode: { clip: ".planning-page" },
         prepare: "openPlanning",
         caption: RE("Выбор гексов", "Selecting hexes"),
         markers: [
+          { sel: g("planning-region-search"), note: RE("Найдите гекс или город и перейдите к нему. Поиск не выбирает регион и не загружает постройки.", "Find a hex or town and jump to it. Search does not select the region or load its buildings.") },
           { sel: g("planning-regions"), note: RE("Нажмите, чтобы включить выбор. Отметьте несколько гексов и завершите выбор.", "Turn on selection, choose multiple hexes, then finish." ) },
           { sel: g("planning-map"), at: "start", note: RE("До выбора здесь нет маркеров построек. Подробности карты запрашиваются только для выбранных гексов.", "No building markers appear before selection. Map details are requested only for selected hexes.") },
           { sel: g("planning-frontline-toggle"), note: RE("Линия рассчитывается отдельно по расположению ратуш; она не включает маркеры построек карты.", "The frontline is calculated separately from town hall positions; it does not load map building markers.") },
@@ -296,7 +306,7 @@ export const CHAPTERS = [
       {
         id: "planning-selected",
         path: "/?tab=tools&tool=planning",
-        mode: { clip: g("planning-map") },
+        mode: { clip: ".planning-page" },
         prepare: "selectPlanningHex",
         caption: RE("Постройки выбранного гекса", "Buildings in a selected hex"),
         markers: [
@@ -313,6 +323,7 @@ export const CHAPTERS = [
         markers: [
           { sel: g("planning-tool-tabs"), note: RE("Переключайте группы рисования, размещения объектов и правки.", "Switch between drawing, placing objects, and editing tools.") },
           { sel: g("planning-tool-freehand"), note: RE("Свободная линия рисуется мышью или касанием и сохраняется как редактируемый объект.", "Draw a freehand line with mouse or touch; it is saved as an editable object.") },
+          { sel: g("planning-tool-route"), note: RE("Маршрут строится отдельными точками. Длину и ETA можно менять скоростью; точки двигаются по одной.", "Build a route from individual waypoints. Change its speed to update distance and ETA; drag waypoints to edit it.") },
         ],
       },
     ],
@@ -321,19 +332,20 @@ export const CHAPTERS = [
     key: "training",
     icon: "training",
     title: L("Обучение", "Training", "Výcvik"),
-    summary: L(
-      "Учебный центр штаба готовится — раздел скоро откроется.",
-      "The HQ training centre is being prepared — the section opens soon.",
-      "Výcvikové centrum štábu se připravuje — sekce se brzy otevře.",
+    summary: RE(
+      "Курсы терминала и материалы вашего клана собраны в одном месте.",
+      "Terminal courses and your clan's learning materials live in one place.",
     ),
     shots: [
       {
         id: "training",
-        path: "/?tab=training",
+        path: "/?tab=clan&view=training",
         mode: "viewport",
-        caption: L("Учебный центр", "Training center", "Výcvikové centrum"),
+        prepare: "openTraining",
+        caption: RE("Курсы и материалы", "Courses and learning materials"),
         markers: [
-          { sel: ".coming-soon-title", note: L("Coming soon: курсы по логистике, производству и терминалу.", "Coming soon: courses on logistics, production and the terminal.", "Coming soon: kurzy logistiky, výroby a terminálu.") },
+          { sel: ".training-switch", at: "start", note: RE("Переключитесь между курсами терминала и материалами клана.", "Switch between terminal courses and clan materials.") },
+          { sel: ".training-card", at: "start", note: RE("Карточка показывает тему, краткое содержание и размер курса. Нажмите, чтобы открыть уроки.", "Each course card shows its topic, summary and size. Open it to browse the lessons.") },
         ],
       },
     ],
@@ -354,9 +366,8 @@ export const CHAPTERS = [
         mode: { clip: g("mgmt-bot") },
         caption: L("Бот клана на Discord-сервере", "Clan bot on the Discord server", "Bot klanu na Discord serveru"),
         markers: [
+          { sel: `${g("mgmt-bot")} .panel-title`, note: RE("Подключение Discord-бота для синхронизации серверных ролей и доступа участников.", "Connect the Discord bot to sync server roles and member access.") },
           { sel: `${g("mgmt-bot")} ol`, at: "start", note: L("Три шага: сервер привязан к клану, бот добавлен, роли подтянуты. Выполненные отмечены ✔.", "Three steps: server linked, bot added, roles pulled. Done steps are marked ✔.", "Tři kroky: server propojen, bot přidán, role načteny. Hotové kroky mají ✔.") },
-          { sel: g("mgmt-add-bot"), note: L("Добавить бота клана на сервер — Discord откроет выбор сервера. Бот добавляется без прав.", "Add the clan bot to the server — Discord opens the server picker. The bot needs no permissions.", "Přidat bota klanu na server — Discord otevře výběr serveru. Bot nepotřebuje žádná oprávnění.") },
-          { sel: `${g("mgmt-bot")} .cabinet-pill`, note: L("Состояние: виден ли бот на сервере и сколько ролей подтянуто. «Подтянуть роли» появляется, когда бот на сервере.", "Status: whether the bot sees the server and how many roles are pulled. “Pull roles” appears once the bot is on the server.", "Stav: zda bot vidí server a kolik rolí je načteno. „Načíst role“ se objeví, když je bot na serveru.") },
         ],
       },
       {
@@ -378,21 +389,8 @@ export const CHAPTERS = [
         prepare: "openRolesTab",
         caption: L("Роли и уровни доступа", "Roles and access levels", "Role a úrovně přístupu"),
         markers: [
-          { sel: g("mgmt-level"), note: L("Пресет доступа роли: базовый (рядовой), средний, высокий или кастомный.", "Role access preset: basic (private), medium, high or custom.", "Předvolba přístupu role: základní (řadový), střední, vysoký nebo vlastní.") },
-          { sel: g("mgmt-gear"), note: L("У кастомной роли — ⚙ и число выбранных действий: открывает окно настройки прав.", "A custom role shows ⚙ and the number of selected actions: opens its rights window.", "Vlastní role má ⚙ a počet vybraných akcí: otevře okno nastavení práv.") },
-          { sel: g("mgmt-save"), note: L("Сохранить. Участники получат новые права при следующем входе.", "Save. Members get the new rights at their next sign-in.", "Uložit. Členové dostanou nová práva při dalším přihlášení.") },
-        ],
-      },
-      {
-        id: "mgmt-role",
-        path: "/?tab=management",
-        mode: { clip: ".modal-panel" },
-        prepare: "openRoleModal",
-        caption: L("Права кастомной роли", "Custom role rights", "Práva vlastní role"),
-        markers: [
-          { sel: ".modal-panel .btn", note: L("Заполнить из пресета, выбрать всё или снять все отметки.", "Fill from a preset, select all or clear everything.", "Vyplnit z předvolby, vybrat vše nebo vše zrušit.") },
-          { sel: g("mgmt-perm-group"), at: "start", note: L("Действия сайта по разделам: склады, рапорты, таймеры, каталог, клан. Отмеченные — разрешены этой роли.", "Site actions by section: stockpiles, reports, timers, catalog, clan. Checked ones are allowed for this role.", "Akce webu podle sekcí: sklady, hlášení, časovače, katalog, klan. Zaškrtnuté jsou této roli povoleny.") },
-          { sel: g("mgmt-apply"), note: L("Применить и закрыть окно; затем сохраните роли.", "Apply and close; then save the roles.", "Použít a zavřít; potom role uložte.") },
+          { sel: g("mgmt-roles"), at: "start", note: RE("После синхронизации выберите для каждой Discord-роли пресет доступа или задайте отдельные права.", "After syncing, assign each Discord role an access preset or configure permissions individually.") },
+          { sel: `${g("mgmt-roles")} > p`, note: RE("Эта подсказка объясняет, почему настройки ролей могут быть недоступны до синхронизации.", "This hint explains why role settings may remain unavailable until roles are synced.") },
         ],
       },
       {
@@ -425,10 +423,9 @@ export const CHAPTERS = [
     key: "cabinet",
     icon: "cabinet",
     title: L("Настройки", "Settings", "Nastavení"),
-    summary: L(
-      "Открываются из меню. Три раздела: профиль (уровень доступа и права), язык интерфейса и внешний вид (тема сайта).",
-      "Opened from the menu. Three sections: profile (access level and rights), interface language and appearance (site theme).",
-      "Otevírá se z menu. Tři sekce: profil (úroveň přístupu a práva), jazyk rozhraní a vzhled (motiv webu).",
+    summary: RE(
+      "Профиль, язык, тема, уведомления и служебные настройки. Доступные разделы зависят от роли.",
+      "Profile, language, theme, notifications and developer settings. Available sections depend on your role.",
     ),
     shots: [
       {
@@ -437,7 +434,7 @@ export const CHAPTERS = [
         mode: "viewport",
         caption: L("Профиль участника", "Member profile", "Profil člena"),
         markers: [
-          { sel: `${g("settings-sections")} .filter-card`, at: "start", note: L("Разделы настроек: профиль, язык интерфейса, внешний вид.", "Settings sections: profile, interface language, appearance.", "Sekce nastavení: profil, jazyk rozhraní, vzhled.") },
+          { sel: `${g("settings-sections")} [role=radio] >>0`, at: "start", note: RE("Переключатель настроек: профиль, язык, тема, уведомления и служебные параметры (если доступны вашей роли).", "Settings switcher: profile, language, theme, notifications and developer options (if your role allows them).") },
           { sel: ".cabinet-hero .cabinet-pill >>1", note: L("Ваш уровень в клане: командир, высокий, средний доступ или рядовой.", "Your clan level: commander, high, medium access or private.", "Vaše úroveň v klanu: velitel, vysoký, střední přístup nebo řadový.") },
           { sel: ".cabinet-logout", note: L("Выйти из терминала на этом устройстве.", "Sign out of the terminal on this device.", "Odhlásit se z terminálu na tomto zařízení.") },
           { sel: ".cabinet-grid .cabinet-card", at: "start", note: L("Данные участника: ID, позывной, клан и способ входа.", "Member details: ID, callsign, clan and sign-in method.", "Údaje člena: ID, volací znak, klan a způsob přihlášení.") },
@@ -461,7 +458,7 @@ export const CHAPTERS = [
         prepare: "openSettingsAppearance",
         caption: L("Внешний вид", "Appearance", "Vzhled"),
         markers: [
-          { sel: ".theme-choice", at: "start", note: L("Ночной режим или упрощённая светлая тема. Раньше переключатель был внизу бокового меню.", "Night mode or the simplified light theme. The switch used to be at the bottom of the side menu.", "Noční režim nebo zjednodušený světlý motiv. Přepínač býval dole v bočním menu.") },
+          { sel: ".theme-choice", at: "start", note: RE("Выберите одну из доступных тем. Выбор применяется сразу и сохраняется в этом браузере.", "Choose a theme. It applies immediately and is saved in this browser.") },
         ],
       },
     ],

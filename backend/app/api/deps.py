@@ -16,7 +16,7 @@ from app.core.i18n import Translator, normalize_locale, parse_accept_language
 from app.core.permissions import ClanRole, scopes_for
 from app.core.security import Principal, decode_access_token, hash_clan_token
 from app.core.tenancy import bind_session_to_clan, bypass_clan_filter, set_current_clan_id
-from app.models.rbac import ClanApiToken
+from app.models.rbac import ClanApiToken, ClanMembership
 
 bearer_scheme = HTTPBearer(auto_error=False, scheme_name="ClanJWT")
 
@@ -106,6 +106,23 @@ async def get_principal(
         principal = await _principal_from_clan_token(session, clan_token)
     else:
         raise UnauthorizedError()
+
+    # JWTs carry a compact permission snapshot, but membership is authoritative.
+    # Refresh it on every user request so removal/demotion takes effect immediately.
+    if settings.AUTH_MEMBERSHIP_CHECK and principal.subject_type == "user" and not principal.developer:
+        with bypass_clan_filter():
+            membership = (await session.execute(
+                select(ClanMembership).where(
+                    ClanMembership.clan_id == principal.clan_id,
+                    ClanMembership.user_id == principal.user_id,
+                ).limit(1)
+            )).scalar_one_or_none()
+        if membership is None or not membership.is_active:
+            raise UnauthorizedError(code="invalid_token")
+        principal = principal.model_copy(update={
+            "role": membership.role,
+            "scopes": scopes_for(membership.role, membership.extra_scopes, membership.revoked_scopes),
+        })
 
     # чёрный список клана: уже выданная сессия перестаёт действовать (командир и разработчик — нет)
     if principal.subject_type == "user" and not principal.developer and principal.role != ClanRole.OWNER:

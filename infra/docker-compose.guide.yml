@@ -1,0 +1,67 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sandalis-guide-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sandalis
+      POSTGRES_PASSWORD: sandalis-guide-local
+      POSTGRES_DB: sandalis_guide
+    ports:
+      - "127.0.0.1:55433:5432"
+    volumes:
+      - sandalis-guide-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sandalis -d sandalis_guide"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.api
+    container_name: sandalis-guide-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["sh", "-c", "alembic upgrade head && python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    env_file:
+      - .env.guide
+    environment:
+      DATABASE_URL: postgresql+asyncpg://sandalis:sandalis-guide-local@db:5432/sandalis_guide
+      ENV: local
+      FRONTEND_URL: http://127.0.0.1:3300
+    ports:
+      - "127.0.0.1:8020:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/api/v1/health/live"]
+      interval: 10s
+      timeout: 3s
+      retries: 12
+      start_period: 25s
+
+  web:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile.web
+      args:
+        BACKEND_URL: http://api:8000
+    container_name: sandalis-guide-web
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:3300:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 4s
+      retries: 8
+      start_period: 15s
+
+volumes:
+  sandalis-guide-pg:
+    name: sandalis-guide-pg

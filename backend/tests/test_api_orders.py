@@ -74,6 +74,12 @@ def test_orders_flow_tenancy_rbac_i18n(db):
             assert "clan_id" not in created["order"]   # дискриминатор не утёк наружу
             assert r.headers["content-language"] == "ru"
 
+            # PATCH distinguishes omitted fields from explicit null on NOT NULL columns.
+            null_title = await c.patch(f"{API}/orders/{oid}", json={"title": None}, headers=admin_a)
+            assert null_title.status_code == 422
+            note_update = await c.patch(f"{API}/orders/{oid}", json={"notes": "проверка"}, headers=admin_a)
+            assert note_update.status_code == 200 and note_update.json()["notes"] == "проверка"
+
             # --- изоляция: A видит заказ, B — нет ----------------------------
             la = await c.get(f"{API}/orders", headers=admin_a)
             assert la.json()["total"] == 1
