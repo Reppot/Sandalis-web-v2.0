@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { STORAGE_KEYS } from '@/shared/lib/storage';
 import './desktop.css';
 
 type DesktopTab = 'companion' | 'links' | 'report' | 'tools' | 'clan' | 'guide' | 'feedback' | 'mail' | 'support' | 'cabinet';
@@ -84,6 +85,13 @@ function PlusIcon() {
 function HistoryIcon({ direction }: { direction: 'back' | 'forward' }) {
   return <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     {direction === 'back' ? <path d="M8 5 3 10l5 5M3.5 10H17" /> : <path d="m12 5 5 5-5 5M16.5 10H3" />}
+  </svg>;
+}
+
+function SettingsIcon() {
+  return <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="10" cy="10" r="2.6" />
+    <path d="m8.2 2.8.4-1h2.8l.4 1a7.8 7.8 0 0 1 1.5.6l1-.4 2 2-.4 1a7.8 7.8 0 0 1 .6 1.5l1 .4v2.8l-1 .4a7.8 7.8 0 0 1-.6 1.5l.4 1-2 2-1-.4a7.8 7.8 0 0 1-1.5.6l-.4 1h-2.8l-.4-1a7.8 7.8 0 0 1-1.5-.6l-1 .4-2-2 .4-1a7.8 7.8 0 0 1-.6-1.5l-1-.4V8.9l1-.4a7.8 7.8 0 0 1 .6-1.5l-.4-1 2-2 1 .4a7.8 7.8 0 0 1 1.5-.6Z" />
   </svg>;
 }
 
@@ -182,11 +190,25 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
     const cellHeight = 15;
     const glyphs = ' .,:;+=/\\|(){}[]<>01#@*';
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shell = document.querySelector<HTMLElement>('.desktop-shell');
+    let accentRgb = '244 63 82';
+    let accentForeground = '#ff8994';
+    const syncPalette = () => {
+      const palette = getComputedStyle(shell ?? document.documentElement);
+      accentRgb = palette.getPropertyValue('--accent-rgb').trim() || accentRgb;
+      accentForeground = palette.getPropertyValue('--accent-fg').trim() || accentForeground;
+    };
+    syncPalette();
+    const paletteObserver = new MutationObserver(syncPalette);
+    paletteObserver.observe(shell ?? document.documentElement, { attributes: true, attributeFilter: ['data-skin'] });
     const ripples: Array<{ x: number; y: number; startedAt: number }> = [];
-    const drops: Array<{ startedAt: number; impacted: boolean }> = [];
-    let nextDropAt = performance.now() + 3000;
+    const drops: Array<{ x: number; startY: number; targetY: number; startedAt: number; impacted: boolean }> = [];
+    const dripSources: Array<{ x: number; y: number; nextDropAt: number }> = [];
+    let nextSourceSync = 0;
+    let canvasRect = canvas.getBoundingClientRect();
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
+      canvasRect = rect;
       const scale = Math.min(window.devicePixelRatio || 1, 1.5);
       width = rect.width;
       height = rect.height;
@@ -207,9 +229,23 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
       const swing = reduceMotion ? 0 : Math.sin(now * (active ? 0.00014 : 0.0001));
       const flowPhase = reduceMotion ? 0 : now * (active ? 0.00052 : 0.00038);
       const advection = Math.sin(flowPhase) * width * 0.22;
-      if (scene === 'links' && !reduceMotion && now >= nextDropAt) {
-        drops.push({ startedAt: now, impacted: false });
-        nextDropAt = now + 3000;
+      if (scene === 'links' && !reduceMotion && now >= nextSourceSync) {
+        canvasRect = canvas.getBoundingClientRect();
+        const currentSources = [...document.querySelectorAll<HTMLElement>('.link-board-item')].map((item) => {
+          const rect = item.getBoundingClientRect();
+          return { x: rect.left + rect.width / 2 - canvasRect.left, y: rect.bottom - canvasRect.top };
+        }).filter((source) => source.x >= 0 && source.x <= width && source.y >= 0 && source.y < height);
+        const previous = [...dripSources];
+        dripSources.splice(0, dripSources.length, ...currentSources.map((source, index) => ({
+          ...source,
+          nextDropAt: previous[index]?.nextDropAt ?? now + 650 + index * 530 + Math.random() * 2200,
+        })));
+        nextSourceSync = now + 400;
+        for (const source of dripSources) {
+          if (now < source.nextDropAt) continue;
+          drops.push({ x: source.x, startY: source.y, targetY: height * 0.88, startedAt: now, impacted: false });
+          source.nextDropAt = now + 4700 + Math.random() * 5400;
+        }
       }
       for (let index = ripples.length - 1; index >= 0; index -= 1) {
         if (now - ripples[index].startedAt > (reduceMotion ? 650 : 2600)) ripples.splice(index, 1);
@@ -217,26 +253,28 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
       for (let index = drops.length - 1; index >= 0; index -= 1) {
         const drop = drops[index];
         const age = now - drop.startedAt;
-        const fallDuration = 900;
+        const fallDuration = 1150;
         if (age >= fallDuration && !drop.impacted) {
-          ripples.push({ x: width * 0.5, y: height * 0.86, startedAt: now });
+          ripples.push({ x: drop.x, y: drop.targetY, startedAt: now });
           drop.impacted = true;
         }
         if (age > fallDuration + 2600) { drops.splice(index, 1); continue; }
         if (age < fallDuration) {
           const progress = age / fallDuration;
-          const y = height * (0.2 + 0.66 * progress);
-          const alpha = 0.3 + Math.sin(progress * Math.PI) * 0.42;
-          context.fillStyle = `rgba(255, 93, 111, ${alpha})`;
-          context.fillText(' . ', width * 0.5 - cellWidth, y - cellHeight * 1.3);
-          context.fillText(' {@} ', width * 0.5 - cellWidth * 1.5, y);
-          context.fillText('  #  ', width * 0.5 - cellWidth * 1.5, y + cellHeight);
+          const y = drop.startY + (drop.targetY - drop.startY) * progress;
+          const alpha = 0.35 + Math.sin(progress * Math.PI) * 0.45;
+          context.fillStyle = `rgb(${accentRgb} / ${alpha})`;
+          context.fillText(' . ', drop.x - cellWidth, y - cellHeight * 1.3);
+          context.fillText(' {@} ', drop.x - cellWidth * 1.5, y);
+          context.fillText('  #  ', drop.x - cellWidth * 1.5, y + cellHeight);
         }
       }
       const columns = Math.ceil(width / cellWidth);
       const rows = Math.ceil(height / cellHeight);
       const companionSourceX = width * 0.19;
       const companionSourceY = height * 0.56;
+      const clockX = width * 0.19;
+      const clockY = height * 0.22;
       const puddleY = height * 0.86;
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
@@ -246,7 +284,7 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
           for (const origin of ripples) {
             const age = (now - origin.startedAt) / 1000;
             if (scene === 'links') {
-              const distance = Math.hypot((x - origin.x) / (width * 0.54), (y - origin.y) / (height * 0.105));
+              const distance = Math.hypot((x - origin.x) / (width * 0.54), (y - origin.y) / (height * 0.12));
               const radius = reduceMotion ? 0.48 : age / 2.4;
               const fade = reduceMotion ? 0.85 : Math.max(0, 1 - age / 2.6);
               ripple += Math.exp(-Math.abs(distance - radius) / 0.075) * fade;
@@ -258,22 +296,30 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
           let offset = 0;
           if (scene === 'companion') {
             const along = Math.max(0, (x - companionSourceX) / Math.max(width - companionSourceX, 1));
-            const centerY = companionSourceY + height * (0.11 * Math.sin(along * Math.PI * 2.2 + flowPhase * 1.4)
-              + 0.045 * Math.sin(along * Math.PI * 4.2 - flowPhase * 0.8));
-            const thickness = height * (0.19 + 0.025 * Math.sin(along * 6 + swing));
+            const clockPulse = 0.5 + 0.5 * Math.sin(now * Math.PI * 2 / 3400);
+            const centerY = companionSourceY + height * (0.105 * Math.sin(along * Math.PI * 2.2 + flowPhase * 1.4 + clockPulse * 0.8)
+              + 0.052 * Math.sin(along * Math.PI * 4.2 - flowPhase * 0.8));
+            const thickness = height * (0.205 + 0.035 * clockPulse + 0.015 * Math.sin(along * 6 + swing));
             offset = y - centerY;
             const envelope = x >= companionSourceX ? Math.min(1, (x - companionSourceX) / (width * 0.08) + 0.25) : 0;
             const stream = Math.exp(-Math.pow(offset / thickness, 2) * 0.72) * envelope;
-            const wave = (0.5 + 0.5 * Math.sin(offset / Math.max(height * 0.025, 1) - along * 15 + flowPhase * 2)) * stream;
+            const wave = (0.5 + 0.5 * Math.sin(offset / Math.max(height * 0.025, 1) - along * 15 + flowPhase * 2 + clockPulse * 2.4)) * stream;
             const wake = Math.exp(-Math.pow((x - companionSourceX) / (width * 0.12), 2) - Math.pow((y - companionSourceY) / (height * 0.12), 2));
+            const clockDistance = Math.hypot((x - clockX) / (width * 0.15), (y - clockY) / (height * 0.16));
+            const clockWake = Math.exp(-Math.pow((clockDistance - (0.12 + clockPulse * 0.12)) / 0.045, 2)) * clockPulse;
             turbulence = 0.5 + 0.5 * Math.sin(x * 0.008 + y * 0.006 + flowPhase * 2 + Math.sin(y * 0.008 - swing));
-            density = Math.min(1, (stream * 0.42 + wave * 0.48 + wake * 0.52) * (0.84 + turbulence * 0.16));
+            density = Math.min(1, (stream * 0.4 + wave * 0.47 + wake * 0.54 + clockWake * 0.42) * (0.84 + turbulence * 0.16));
           } else if (scene === 'links') {
-            if (y < height * 0.68) continue;
-            const poolDepth = (y - puddleY) / (height * 0.14);
-            const pool = Math.exp(-Math.pow(poolDepth / 1.5, 2));
-            turbulence = 0.5 + 0.5 * Math.sin(x * 0.009 + flowPhase + Math.sin(y * 0.012));
-            density = pool * (0.075 + 0.08 * turbulence);
+            const dx = (x - width * 0.5) / Math.max(width * 0.62, 1);
+            const dy = (y - puddleY) / Math.max(height * 0.42, 1);
+            const radius = Math.hypot(dx * 0.82, dy);
+            const angle = Math.atan2(dy, dx);
+            const currentRadius = 0.34 + 0.055 * Math.sin(flowPhase * 1.3 - angle * 2.2 + radius * 5);
+            const current = Math.exp(-Math.pow((radius - currentRadius) / 0.16, 2));
+            const outerSurge = Math.exp(-Math.pow((radius - (0.68 + swing * 0.06)) / 0.12, 2));
+            const pool = Math.exp(-Math.pow((y - puddleY) / (height * 0.17), 2));
+            turbulence = 0.5 + 0.5 * Math.sin(x * 0.009 + flowPhase * 1.4 + Math.sin(y * 0.012 - angle));
+            density = Math.min(1, current * (0.38 + turbulence * 0.26) + outerSurge * 0.24 + pool * (0.12 + turbulence * 0.1));
           } else {
             const along = (x + advection) / Math.max(width, 1);
             const centerY = height * (0.5 + 0.22 * Math.sin(along * Math.PI * 2.1 + swing * 1.65 + flowPhase * 0.45)
@@ -296,14 +342,16 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
             ? Math.min(0.48, 0.11 + density * 0.42 + ripple * 0.44)
             : Math.min(scene === 'companion' ? 0.24 : 0.31, 0.022 + density * (scene === 'companion' ? 0.2 : 0.255) + ripple * 0.12);
           context.fillStyle = ripple > 0.2 && ((column + row) % 4 === 0)
-            ? `rgba(255, 190, 196, ${Math.min(0.62, alpha + 0.12)})`
-            : `rgba(${scene === 'links' ? (turbulence > 0.84 ? '255, 82, 96' : '213, 30, 48') : (turbulence > 0.84 ? '255, 104, 116' : '226, 59, 78')}, ${alpha})`;
+            ? accentForeground
+            : `rgb(${accentRgb} / ${alpha})`;
+          if (ripple > 0.2 && ((column + row) % 4 === 0)) context.globalAlpha = Math.min(0.68, alpha + 0.18);
           context.fillText(glyphs[index], x, y);
+          context.globalAlpha = 1;
         }
       }
     };
     frame = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); paletteObserver.disconnect(); };
   }, [active, scene]);
   return <canvas ref={canvasRef} className="ascii-flow" aria-hidden="true" />;
 }
@@ -410,14 +458,22 @@ export default function DesktopShell() {
     const isSkin = (candidate: string): candidate is DesktopSkin => ['red', 'lime', 'light', 'amber', 'contrast', 'noir', 'soft', 'ascii'].includes(candidate);
     const syncTheme = (value?: string | null) => {
       let stored = value;
-      if (stored === null || stored === undefined) {
-        try { stored = window.localStorage.getItem('sindaris-theme'); } catch { stored = null; }
+      try {
+        if (window.localStorage.getItem(STORAGE_KEYS.themeDefaultMigration) !== 'red-v1') {
+          window.localStorage.setItem(STORAGE_KEYS.theme, 'red');
+          window.localStorage.setItem(STORAGE_KEYS.themeDefaultMigration, 'red-v1');
+          stored = 'red';
+        } else if (stored === null || stored === undefined) {
+          stored = window.localStorage.getItem(STORAGE_KEYS.theme);
+        }
+      } catch {
+        stored = null;
       }
       const theme: DesktopSkin = stored === 'dark' ? 'red' : stored && isSkin(stored) ? stored : 'red';
       document.querySelector('.desktop-shell')?.setAttribute('data-skin', theme);
     };
     const onStorage = (event: StorageEvent) => {
-      if (event.key === 'sindaris-theme' || event.key === null) syncTheme(event.newValue);
+      if (event.key === STORAGE_KEYS.theme || event.key === null) syncTheme(event.newValue);
     };
     syncTheme();
     window.addEventListener('storage', onStorage);
@@ -534,14 +590,16 @@ export default function DesktopShell() {
   };
   const chooseFile = async () => { const api = getApi(); if (api) { const next = await api.chooseSaveFile(); if (next?.state) setStatus(next); } };
   const login = async () => { await getApi()?.openDiscordLogin(); };
+  const openSettings = () => openSection('cabinet');
   const totalStockpiles = (status.stockpiles?.length ?? 0) + (status.incompleteCount ?? 0);
 
   return <main className="desktop-shell">
     <AsciiFlow active={status.state === 'processing'} scene={active === 'companion' ? 'companion' : active === 'links' ? 'links' : 'other'} />
     <header className="desktop-topbar">
-      <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-icon.png" width={34} height={34} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
+      <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-icon.png" width={44} height={44} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
       <div className="desktop-topbar-actions">
         <div className="desktop-live"><b className={status.state === 'error' ? 'is-error' : status.state === 'processing' ? 'is-working' : ''} />{status.state === 'processing' ? 'Локальное сканирование' : 'Компаньон активен'}</div>
+        <button type="button" className="desktop-global-settings" onClick={openSettings} aria-label="Настройки" title="Настройки"><SettingsIcon /></button>
         <div className="desktop-window-controls" aria-label="Управление окном">
           <button type="button" onClick={() => void getApi()?.minimizeWindow()} aria-label="Свернуть окно" title="Свернуть"><WindowActionIcon kind="minimize" /></button>
           <button type="button" onClick={() => void getApi()?.toggleMaximizeWindow().then(setWindowMaximized)} aria-label={windowMaximized ? 'Восстановить окно' : 'Развернуть окно'} title={windowMaximized ? 'Восстановить' : 'Развернуть'}><WindowActionIcon kind={windowMaximized ? 'restore' : 'maximize'} /></button>
@@ -577,7 +635,7 @@ export default function DesktopShell() {
         return <div key={tab} className="companion-page" style={{ display: active === tab ? 'block' : 'none' }}>
         <div className={`companion-desktop${status.state === 'processing' ? ' is-scanning' : ''}`}>
           <aside className="guardian-rail" aria-label="Маскот локального сканера">
-            <img className="guardian-portrait" src="/ascii-guardian.png" width={1070} height={1536} alt="ASCII-страж в полный рост, сотканный из символов и красных водяных рябей" />
+            <img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt="Хрономант в полный рост" />
           </aside>
           <div className="companion-workspace">
             <div className="companion-page-inner">

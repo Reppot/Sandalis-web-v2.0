@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "@/app/globals.css";
 import { AppProviders } from "@/app/providers";
 import { THEME_INIT_SCRIPT } from "@/shared";
+import { AsciiBackdrop } from "@/shared/ui/AsciiBackdrop";
 
 // Шрифты лежат в npm-пакетах и попадают в сборку: без запросов к Google Fonts при сборке на Render.
 // Inter — текст интерфейса, Inter Tight — заголовки, JetBrains Mono — коды и числа, Russo One — логотип.
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
       </head>
       <body className="antialiased">
+        <AsciiBackdrop />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
         {/* терминал рисуется на клиенте — краткое описание в HTML для поисковиков и экранных читалок */}
         <header className="sr-only">

@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="16" fill="#0b090a"/>
-  <path d="M12 29 18 12l14-7 14 7 6 17-7-4-4-9-9-5-9 5-4 9z" fill="#171213" stroke="#ff596a" stroke-width="2.5" stroke-linejoin="round"/>
-  <path d="M17 29c2-7 7-11 15-11s13 4 15 11v17c-4 5-9 8-15 8s-11-3-15-8z" fill="#080708" stroke="#f6e9e9" stroke-width="2"/>
-  <path d="M19 36h26M32 22v3m0 18v3m-9-10h-2m22 0h-2" fill="none" stroke="#9c7c7f" stroke-width="1.5"/>
-  <path d="m32 35 9-8" fill="none" stroke="#f43f52" stroke-width="2.5" stroke-linecap="round"/>
-  <circle cx="32" cy="36" r="2.5" fill="#f43f52"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Chronomancer">
+  <rect width="128" height="128" rx="28" fill="#100c0d"/>
+  <path d="M64 7C48 16 34 26 25 43L13 69C8 82 18 91 33 91 30 103 23 114 14 122c17-7 33-15 50-15s33 8 50 15c-9-8-16-19-19-31 15 0 25-9 20-22l-12-26C94 26 80 16 64 7Z" fill="#c51f36" stroke="#ff4054" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M64 19C47 29 36 41 31 59l3 17c8-5 17-9 30-9s22 4 30 9l3-17C92 41 81 29 64 19Z" fill="#100c0d"/>
+  <path d="M39 86c-2 11-8 22-15 30 10-5 18-9 26-11m39-19c2 11 8 22 15 30-10-5-18-9-26-11M64 82v24" fill="none" stroke="#ff6573" stroke-width="4" stroke-linecap="round" opacity=".86"/>
+  <circle cx="64" cy="57" r="25" fill="#100c0d" stroke="#fff3e6" stroke-width="5"/>
+  <path d="M64 36v4M85 57h-4M64 78v-4M43 57h4" fill="none" stroke="#fff3e6" stroke-width="4" stroke-linecap="round"/>
+  <path d="m64 57 15-12" fill="none" stroke="#ff4054" stroke-width="6" stroke-linecap="round"/>
+  <path d="M64 57V44" fill="none" stroke="#fff3e6" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="64" cy="57" r="4" fill="#fff3e6"/>
 </svg>

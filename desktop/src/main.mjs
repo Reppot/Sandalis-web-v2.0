@@ -13,6 +13,7 @@ protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: {
   standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true,
 } }]);
 app.setName('Chronomancer');
+if (process.platform === 'win32') app.setAppUserModelId('com.sindaris.terminal');
 // Keep the existing local profile so auth state, preferences, and scan reports survive the rebrand.
 app.setPath('userData', path.join(app.getPath('appData'), 'Sindaris'));
 const locked = app.requestSingleInstanceLock();
@@ -282,10 +283,13 @@ function openExternal(value) {
 }
 
 function brandIcon() {
-  const iconPath = app.isPackaged
+  const root = app.getAppPath();
+  const iconPath = path.join(root, 'resources', 'chronomancer.ico');
+  const icon = nativeImage.createFromPath(iconPath);
+  if (!icon.isEmpty()) return icon;
+  return nativeImage.createFromPath(app.isPackaged
     ? path.join(process.resourcesPath, 'chronomancer-icon.png')
-    : path.join(app.getAppPath(), 'resources', 'chronomancer-icon.png');
-  return nativeImage.createFromPath(iconPath);
+    : path.join(root, 'resources', 'chronomancer-icon.png'));
 }
 
 function openLogin(ses) {

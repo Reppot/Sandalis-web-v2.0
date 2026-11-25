@@ -84,7 +84,7 @@ export function useTheme(): ThemeContextValue {
 }
 
 /** Инлайн-скрипт: тема до первой отрисовки, без мерцания. */
-export const THEME_INIT_SCRIPT = `(function(){var d=document.documentElement;try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");if(t==="dark")t="red";var b={red:"dark",lime:"dark",light:"light",amber:"dark",contrast:"dark",noir:"light",soft:"light",ascii:"dark"};if(!b[t])t="red";d.setAttribute("data-theme",b[t]);if(t==="light")d.removeAttribute("data-skin");else d.setAttribute("data-skin",t)}catch(e){d.setAttribute("data-theme","dark");d.setAttribute("data-skin","red")}})();`;
+export const THEME_INIT_SCRIPT = `(function(){var d=document.documentElement;d.setAttribute("data-desktop-host",location.protocol==="app:"?"true":"false");try{var t=localStorage.getItem("${STORAGE_KEYS.theme}");if(localStorage.getItem("${STORAGE_KEYS.themeDefaultMigration}")!=="red-v1"){t="red";localStorage.setItem("${STORAGE_KEYS.theme}",t);localStorage.setItem("${STORAGE_KEYS.themeDefaultMigration}","red-v1")}if(t==="dark")t="red";var b={red:"dark",lime:"dark",light:"light",amber:"dark",contrast:"dark",noir:"light",soft:"light",ascii:"dark"};if(!b[t])t="red";d.setAttribute("data-theme",b[t]);if(t==="light")d.removeAttribute("data-skin");else d.setAttribute("data-skin",t)}catch(e){d.setAttribute("data-theme","dark");d.setAttribute("data-skin","red")}})();`;
 
 export const ThemeIcon: React.FC<{ theme: Theme; size?: number }> = ({ theme, size = 30 }) => {
   const common = { width: size, height: size, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };

@@ -57,7 +57,7 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="mail-workspace flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <span className="text-sm text-fg-3">{unread ? t("mail.unreadCount", { n: unread }) : t("mail.allRead")}</span>
         <button type="button" className="btn h-9 min-h-0" disabled={!unread} onClick={() => void readAll()}>
@@ -68,9 +68,9 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
       {items.length === 0 ? (
         <div className="panel"><EmptyState icon="mail" title={t("mail.empty")} hint={t("mail.emptyHint")} /></div>
       ) : (
-        <ul className="flex flex-col gap-2">
+        <ul className="mail-list flex flex-col gap-2">
           {items.map((m) => (
-            <li key={m.id} className={cn("panel mail-item", !m.read && "is-unread")} onClick={() => void markRead(m)}>
+            <li key={m.id} className={cn("panel mail-item", !m.read && "is-unread")}>
               <span className="mail-icon"><Icon name="mail" size={16} /></span>
               {ORDER_KINDS.has(m.kind) ? (
                 <div className="min-w-0 flex-1">
@@ -122,12 +122,12 @@ export const MailWorkspace: React.FC<{ onOpenOperations: () => void; onOpenFeedb
                   {m.payload.note ? <MentionText text={m.payload.note} className="mt-2 text-sm text-fg-2" /> : null}
                 </div>
               )}
-              <span className="flex shrink-0 flex-col items-end gap-1.5">
-                <button type="button" className="btn h-8 min-h-0 px-2.5 text-xs" onClick={(e) => { e.stopPropagation(); void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : ORDER_KINDS.has(m.kind) ? onOpenOrders : TIMER_KINDS.has(m.kind) ? onOpenStockpiles : m.kind === "game_award" ? onOpenStats : onOpenOperations)(); }}>
+              <span className="mail-actions flex shrink-0 flex-col items-end gap-1.5">
+                <button type="button" className="mail-open-action btn h-8 min-h-0 px-2.5 text-xs" onClick={() => { void markRead(m); (m.kind === "feedback_reply" ? onOpenFeedback : ORDER_KINDS.has(m.kind) ? onOpenOrders : TIMER_KINDS.has(m.kind) ? onOpenStockpiles : m.kind === "game_award" ? onOpenStats : onOpenOperations)(); }}>
                   <Icon name="external" size={14} />
                   {m.kind === "feedback_reply" ? t("mail.openFeedback") : ORDER_KINDS.has(m.kind) ? t("mail.openOrders") : TIMER_KINDS.has(m.kind) ? t("mail.openStockpiles") : m.kind === "game_award" ? t("mail.openStats") : t("mail.openOperation")}
                 </button>
-                <button type="button" className="icon-btn" onClick={(e) => { e.stopPropagation(); void remove(m); }} aria-label={t("common.delete")} title={t("common.delete")}><Icon name="trash" size={15} /></button>
+                <button type="button" className="icon-btn mail-delete-action" onClick={() => void remove(m)} aria-label={t("common.delete")} title={t("common.delete")}><Icon name="trash" size={15} /></button>
               </span>
             </li>
           ))}

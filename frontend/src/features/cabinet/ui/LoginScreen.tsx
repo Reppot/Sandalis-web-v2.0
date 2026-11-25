@@ -104,7 +104,7 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
       <section className="auth-panel">
         <div className="auth-header">
           {/* eslint-disable-next-line @next/next/no-img-element -- local Chronomancer mascot */}
-          <img src="/chronomancer-icon.png" alt="" width={88} height={88} className="auth-logo chronomancer-mark" />
+          <img src="/chronomancer-mascot-medium.png" alt="" width={88} height={88} className="auth-logo chronomancer-mark" />
           <h1 className="auth-title">Chronomancer</h1>
           <p className="auth-subtitle">{t("login.tagline")}</p>
         </div>

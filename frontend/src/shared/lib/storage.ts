@@ -4,6 +4,7 @@
  */
 export const STORAGE_KEYS = {
   theme: "sindaris-theme",
+  themeDefaultMigration: "chronomancer-theme-default-v1",
   locale: "sindaris-locale",
   sidebar: "sindaris-sidebar",
   orderDraft: "sindaris-order-draft",
