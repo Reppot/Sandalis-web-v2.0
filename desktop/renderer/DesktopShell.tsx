@@ -137,7 +137,7 @@ function ScanReportPage({ report }: { report: ScanReport | null }) {
     return text.includes(query.trim().toLocaleLowerCase());
   });
   return <section className="scan-report-page" aria-labelledby="report-page-title">
-    <header className="report-page-heading"><div><h1 id="report-page-title">Последнее сканирование</h1><p>{report ? `${report.fileName} · ${new Date(report.processedAt).toLocaleString()}` : 'Отчёт появится после первого сканирования MapData.sav.'}</p></div><b>Данные остаются на этом компьютере</b></header>
+    <header className="report-page-heading"><div><h1 id="report-page-title">Последнее сканирование</h1><p>{report ? `${report.fileName} · ${new Date(report.processedAt).toLocaleString()}` : 'Отчёт появится после первого сканирования MapData.sav.'}</p></div></header>
     {report ? <>
       <div className="report-overview" aria-label="Сводка сканирования">
         <div><strong>{report.total}</strong><span>закреплённых объектов</span></div>
@@ -433,6 +433,7 @@ export default function DesktopShell() {
       const sourceFrame = frames.find((item) => event.source === item.contentWindow);
       if (!sourceFrame) return;
       const frame = frames.find((item) => item.style.display !== 'none');
+      if (event.origin !== window.location.origin) return;
       const data = event.data as { type?: string; canBack?: boolean; canForward?: boolean; direction?: string; theme?: string };
       if (data?.type === 'chronomancer:theme-change') {
         const candidate = data.theme === 'dark' ? 'red' : data.theme;
@@ -443,6 +444,9 @@ export default function DesktopShell() {
         setFrameHistory({ canBack: Boolean(data.canBack), canForward: Boolean(data.canForward) });
       } else if (sourceFrame === frame && data?.type === 'chronomancer:history-fallback') {
         moveTabHistory(data.direction === 'forward' ? 1 : -1);
+      } else if (data?.type === 'chronomancer:open-local-report') {
+        setOpenTabs((tabs) => tabs.includes('report') ? tabs : [...tabs, 'report']);
+        navigateTab('report');
       }
     };
     document.addEventListener('auxclick', onAuxClick);
@@ -451,7 +455,7 @@ export default function DesktopShell() {
       document.removeEventListener('auxclick', onAuxClick);
       window.removeEventListener('message', onFrameMessage);
     };
-  }, [moveTabHistory, navigateHistory]);
+  }, [moveTabHistory, navigateHistory, navigateTab]);
 
   React.useEffect(() => {
     type DesktopSkin = 'red' | 'lime' | 'light' | 'amber' | 'contrast' | 'noir' | 'soft' | 'ascii';
@@ -598,7 +602,7 @@ export default function DesktopShell() {
     <header className="desktop-topbar">
       <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-icon.png" width={44} height={44} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
       <div className="desktop-topbar-actions">
-        <div className="desktop-live"><b className={status.state === 'error' ? 'is-error' : status.state === 'processing' ? 'is-working' : ''} />{status.state === 'processing' ? 'Локальное сканирование' : 'Компаньон активен'}</div>
+        {status.state !== 'waiting' && <div className="desktop-live" role="status" aria-label={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]} title={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]}><b className={status.state === 'error' ? 'is-error' : status.state === 'processing' ? 'is-working' : ''} /></div>}
         <button type="button" className="desktop-global-settings" onClick={openSettings} aria-label="Настройки" title="Настройки"><SettingsIcon /></button>
         <div className="desktop-window-controls" aria-label="Управление окном">
           <button type="button" onClick={() => void getApi()?.minimizeWindow()} aria-label="Свернуть окно" title="Свернуть"><WindowActionIcon kind="minimize" /></button>
@@ -635,7 +639,7 @@ export default function DesktopShell() {
         return <div key={tab} className="companion-page" style={{ display: active === tab ? 'block' : 'none' }}>
         <div className={`companion-desktop${status.state === 'processing' ? ' is-scanning' : ''}`}>
           <aside className="guardian-rail" aria-label="Маскот локального сканера">
-            <img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt="Хрономант в полный рост" />
+            <picture className="guardian-picture"><source media="(max-width: 1080px), (max-height: 720px)" srcSet="/chronomancer-mascot-medium.png" /><img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt="Хрономант в полный рост" /></picture>
           </aside>
           <div className="companion-workspace">
             <div className="companion-page-inner">
@@ -699,13 +703,13 @@ export default function DesktopShell() {
                 <div className="account-copy"><h2 id="account-title">Профиль Chronomancer</h2><p>{profile.clanId ? `Активный сервер: ${profile.clanName || profile.clanId}. Отправка данных скана выключена.` : 'Вход выполнен. Отправка данных скана выключена.'}</p></div>
                 <div className="companion-profile">
                   {profile.avatarUrl ? <img className="companion-avatar" src={profile.avatarUrl} alt={`Аватар ${profile.displayName}`} width={43} height={43} /> : <span className="companion-avatar companion-avatar-fallback">{profile.displayName.slice(0, 1).toUpperCase()}</span>}
-                  <div className="companion-profile-copy"><strong>{profile.displayName}</strong><span>Discord · Chronomancer</span></div>
+                  <div className="companion-profile-copy"><strong>{profile.displayName}</strong></div>
                   <span className={`level-badge level-${profile.level}`} title="Уровень доступа на сайте">
                     <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m10 2 6 3.5v7L10 18l-6-5.5v-7z"/><path d="m7 10 2 2 4-4"/></svg>
                     {({ owner: 'Командир', high: 'Высокий', medium: 'Средний', basic: 'Базовый', custom: 'Особый', guest: 'Гость' } as const)[profile.level]}
                   </span>
                 </div>
-                {profile.clanId && <div className="server-context"><span className="server-context-icon">{profile.clanAvatarUrl ? <img src={profile.clanAvatarUrl} alt="" width={29} height={29} /> : profile.clanName.slice(0, 1).toUpperCase()}</span><div><strong>{profile.clanName || profile.clanId}</strong><small>Контекст сайта · {profile.clanId}</small></div></div>}
+                {profile.clanId && <div className="server-context"><span className="server-context-icon">{profile.clanAvatarUrl ? <img src={profile.clanAvatarUrl} alt="" width={29} height={29} /> : profile.clanName.slice(0, 1).toUpperCase()}</span><div><strong>{profile.clanName || profile.clanId}</strong></div></div>}
                 <button className="profile-server-change" onClick={login}>Выбрать сервер Discord</button>
               </> : profileLoading ? <div className="account-copy"><h2 id="account-title">Проверяю аккаунт</h2><p>Сверяю текущий вход Chronomancer.</p></div>
                 : profileUnavailable ? <div className="account-copy"><h2 id="account-title">Нет связи с сайтом</h2><p>Статус входа пока не удалось проверить.</p><button className="profile-retry" onClick={refreshProfile}>Проверить снова</button></div>

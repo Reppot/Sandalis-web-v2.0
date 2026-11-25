@@ -1069,6 +1069,7 @@ export const uk: Partial<Record<MessageKey, string>> = {
   "stock.paste": "Вставити з буфера обміну",
   "stock.scanHint": "Завантажити MapData.sav і розпізнати предмети",
   "stock.scan": "Сканувати файл",
+  "stock.localScanReport": "Відкрити локальний звіт SAV",
   "stock.filter": "Пошук на складі…",
   "stock.clear": "Очистити вміст складу",
   "stock.clearFailed": "Не вдалося очистити склад",

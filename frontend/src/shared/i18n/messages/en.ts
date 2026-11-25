@@ -1101,6 +1101,7 @@ export const en: Record<MessageKey, string> = {
   "stock.paste": "Paste from clipboard",
   "stock.scanHint": "Upload MapData.sav and recognize items",
   "stock.scan": "Scan file",
+  "stock.localScanReport": "Open companion SAV report",
   "stock.filter": "Search this stockpile…",
   "stock.clear": "Clear stockpile contents",
   "stock.clearFailed": "Could not clear the stockpile",

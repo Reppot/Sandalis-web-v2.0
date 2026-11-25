@@ -1069,6 +1069,7 @@ export const de: Partial<Record<MessageKey, string>> = {
   "stock.paste": "Aus der Zwischenablage einfügen",
   "stock.scanHint": "MapData.sav hochladen und Gegenstände erkennen",
   "stock.scan": "Datei scannen",
+  "stock.localScanReport": "Lokalen SAV-Bericht öffnen",
   "stock.filter": "In diesem Lager suchen…",
   "stock.clear": "Lagerinhalt leeren",
   "stock.clearFailed": "Lager konnte nicht geleert werden",

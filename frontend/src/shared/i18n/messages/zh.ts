@@ -1069,6 +1069,7 @@ export const zh: Partial<Record<MessageKey, string>> = {
   "stock.paste": "从剪贴板粘贴",
   "stock.scanHint": "上传 MapData.sav 并识别物品",
   "stock.scan": "扫描文件",
+  "stock.localScanReport": "打开本地 SAV 扫描报告",
   "stock.filter": "在此仓库中搜索…",
   "stock.clear": "清空仓库内容",
   "stock.clearFailed": "无法清空仓库",

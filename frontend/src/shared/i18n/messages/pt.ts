@@ -1069,6 +1069,7 @@ export const pt: Partial<Record<MessageKey, string>> = {
   "stock.paste": "Colar da área de transferência",
   "stock.scanHint": "Enviar MapData.sav e reconhecer os itens",
   "stock.scan": "Escanear arquivo",
+  "stock.localScanReport": "Abrir relatório SAV local",
   "stock.filter": "Buscar neste estoque…",
   "stock.clear": "Limpar o conteúdo do estoque",
   "stock.clearFailed": "Não foi possível limpar o estoque",

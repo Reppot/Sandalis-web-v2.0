@@ -1069,6 +1069,7 @@ export const fr: Partial<Record<MessageKey, string>> = {
   "stock.paste": "Coller depuis le presse-papiers",
   "stock.scanHint": "Importer MapData.sav et reconnaître les objets",
   "stock.scan": "Scanner un fichier",
+  "stock.localScanReport": "Ouvrir le rapport SAV local",
   "stock.filter": "Rechercher dans cette réserve…",
   "stock.clear": "Vider le contenu de la réserve",
   "stock.clearFailed": "Impossible de vider la réserve",

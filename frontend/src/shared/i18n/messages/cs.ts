@@ -1068,6 +1068,7 @@ export const cs: Partial<Record<MessageKey, string>> = {
   "stock.paste": "Vložit ze schránky",
   "stock.scanHint": "Nahrát MapData.sav a rozpoznat předměty",
   "stock.scan": "Skenovat soubor",
+  "stock.localScanReport": "Otevřít místní zprávu SAV",
   "stock.filter": "Hledat ve skladu…",
   "stock.clear": "Vymazat obsah skladu",
   "stock.clearFailed": "Sklad se nepodařilo vymazat",

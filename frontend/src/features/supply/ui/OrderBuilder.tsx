@@ -195,7 +195,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
       {/* выбор предмета и количества */}
       <div className="builder-composer mt-5">
         <div data-guide="builder-pick" className={`builder-picked ${selected ? "is-set" : ""}`} title={selected ? itemName(selected, locale) : t("builder.pick")}>
-          {selected ? <ItemIcon sources={[assetUrl(selected.iconUrl)]} size={30} label={selected.name} /> : <span className="builder-picked-dot" aria-hidden />}
+          {selected ? <ItemIcon sources={[assetUrl(selected.iconUrl)]} size={42} label={selected.name} /> : <span className="builder-picked-dot" aria-hidden />}
           <span className="truncate">{selected ? itemName(selected, locale) : t("builder.pick")}</span>
         </div>
         <input ref={countRef} className="field field-mono h-11" data-guide="builder-qty" placeholder={t("builder.qty")} inputMode="numeric" value={count} onChange={(e) => setCount(e.target.value.replace(/[^\d]/g, ""))} onKeyDown={(e) => e.key === "Enter" && submitLine()} />
@@ -234,7 +234,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
           matrix.map((item) => (
             <button key={item.code} className={`matrix-item ${isFullWidth ? "min-h-[64px]" : ""} ${selected?.code === item.code ? "is-selected" : ""}`} onClick={() => setSelected(item)} title={`${locale === "ru" ? item.englishName : item.name} • ${item.code}`}>
               <span className="flex min-w-0 items-center gap-3">
-                <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 48 : 30} label={itemName(item, locale)} />
+                <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 48 : 40} label={itemName(item, locale)} />
                 <span className={`truncate ${isFullWidth ? "text-[0.95rem] font-medium" : ""}`}>{itemName(item, locale)}</span>
               </span>
               <span className="matrix-cat shrink-0">{label("catalog_category", item.category)}</span>
@@ -268,7 +268,7 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
           <ul data-guide="builder-order" className={`grid grid-cols-1 gap-1.5 sm:grid-cols-2 ${isFullWidth ? "xl:grid-cols-3" : ""}`}>
             {order.map((line) => (
               <li key={line.name} className="order-line group">
-                <ItemIcon sources={[assetUrl(line.icon_url)]} size={isFullWidth ? 44 : 34} label={line.name} />
+                <ItemIcon sources={[assetUrl(line.icon_url)]} size={isFullWidth ? 48 : 42} label={line.name} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[0.875rem] font-medium" title={line.item_code ? undefined : t("builder.notInCatalog")}>
                     {line.name}

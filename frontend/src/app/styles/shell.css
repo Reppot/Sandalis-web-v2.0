@@ -10,6 +10,7 @@
 html[data-desktop-host="true"] .ascii-backdrop { display: none; }
 html[data-desktop-host="true"],html[data-desktop-host="true"] body { background: transparent; }
 html[data-desktop-host="true"] .topbar-settings { display: none; }
+html[data-desktop-host="true"] .sidebar-head { display: none; }
 .app-main { display: flex; min-width: 0; flex: 1; flex-direction: column; }
 .app-content { width: 100%; max-width: var(--content-max); flex: 1; margin: 0 auto; padding: 1.75rem 2rem 1rem; }
 /* «Планирование»: карта на всю рабочую зону, без ограничения ширины */

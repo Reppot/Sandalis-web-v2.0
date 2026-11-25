@@ -1100,6 +1100,7 @@ export const ru = {
   "stock.paste": "Вставить из буфера обмена",
   "stock.scanHint": "Загрузить MapData.sav и распознать предметы",
   "stock.scan": "Сканировать файл",
+  "stock.localScanReport": "Открыть отчёт SAV компаньона",
   "stock.filter": "Поиск по складу…",
   "stock.clear": "Очистить содержимое склада",
   "stock.clearFailed": "Не удалось очистить склад",

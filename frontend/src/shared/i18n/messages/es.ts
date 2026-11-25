@@ -1069,6 +1069,7 @@ export const es: Partial<Record<MessageKey, string>> = {
   "stock.paste": "Pegar del portapapeles",
   "stock.scanHint": "Subir MapData.sav y reconocer objetos",
   "stock.scan": "Escanear archivo",
+  "stock.localScanReport": "Abrir informe SAV local",
   "stock.filter": "Buscar en este almacén…",
   "stock.clear": "Vaciar el contenido del almacén",
   "stock.clearFailed": "No se pudo vaciar el almacén",

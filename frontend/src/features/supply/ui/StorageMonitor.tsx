@@ -18,7 +18,6 @@ import {
   assetUrl,
   errorText,
   formatDateTime,
-  readStorage,
   useConfirm,
   useDocExport,
   useI18n,
@@ -49,8 +48,8 @@ interface StorageMonitorProps {
 }
 
 /**
- * «Содержимое закреплённого склада»: выгрузка сканера (JSON/TXT, XLSX, буфер, MapData.sav)
- * разбирается сервером и целиком заменяет содержимое склада клана.
+ * «Содержимое закреплённого склада»: серверные данные показываются только после выбора склада.
+ * SAV сканируется локальным компаньоном; экран склада не загружает файл на сервер.
  */
 export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth, onPinned }) => {
   const canItems = can(Scopes.STOCKPILES_ITEMS);
@@ -70,15 +69,13 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
   const [armed, confirm] = useConfirm();
   const textInput = React.useRef<HTMLInputElement>(null);
   const xlsxInput = React.useRef<HTMLInputElement>(null);
-  const savInput = React.useRef<HTMLInputElement>(null);
   const { run: exportDoc, previewModal } = useDocExport(media("bg_report_texture"));
 
   const loadList = React.useCallback(async () => {
     try {
       const list = await stockpileApi.list();
       setStockpiles(list);
-      const saved = readStorage<string | null>(STORAGE_KEYS.pinnedStockpile, null);
-      setPinnedId((current) => current ?? (list.some((s) => s.id === saved) ? saved : list[0]?.id ?? null));
+      setPinnedId((current) => current && list.some((s) => s.id === current) ? current : null);
     } catch (err) {
       notify({ title: t("stock.stockpiles"), message: errorText(err, t("stock.loadFailed")), tone: "danger" });
     } finally {
@@ -169,22 +166,12 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
     ref.current.click();
   };
 
-  const onScan = async (file: File | undefined) => {
-    if (!file) return;
-    setBusy(true);
-    try {
-      const result = await catalogApi.scan(file);
-      if (!result.lines.length) {
-        notify({ title: t("scan.title"), message: t("scan.nothing", { file: result.fileName, kb: (result.fileSize / 1024).toFixed(0) }), tone: "warning" });
-        return;
-      }
-      notify({ title: t("scan.mapdata"), message: t(result.strict ? "scan.found" : "scan.foundSoft", { file: result.fileName, n: result.matched }), tone: "info" });
-      await applyParsed(result, "scan");
-    } catch (err) {
-      notify({ title: t("scan.title"), message: errorText(err, t("scan.failed")), tone: "danger" });
-    } finally {
-      setBusy(false);
+  const openLocalScan = () => {
+    if (window.parent === window) {
+      notify({ title: t("scan.title"), message: "Выберите MapData.sav в локальном компаньоне Chronomancer.", tone: "info" });
+      return;
     }
+    window.parent.postMessage({ type: "chronomancer:open-local-report" }, window.location.origin);
   };
 
   const items = pinned?.items ?? [];
@@ -299,9 +286,9 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
             <Icon name="paste" size={16} />
             <span>{t("stock.pasteShort")}</span>
           </button>
-          <button className="btn" onClick={() => pick(savInput)} data-guide="stock-scan" title={t("stock.scanHint")} disabled={busy || !pinned}>
-            <Icon name="scan" size={16} />
-            <span>{t("stock.scan")}</span>
+          <button className="btn" onClick={openLocalScan} data-guide="stock-scan" title={t("stock.localScanReport")} disabled={busy}>
+            <Icon name="scan" size={20} />
+            <span>{t("stock.localScanReport")}</span>
           </button>
         </div>
       )}
@@ -338,7 +325,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
             {page.items.map((item) => (
               <li key={item.id} className="row-item">
                 <span className="flex min-w-0 items-center gap-2.5">
-                  <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 44 : 30} label={itemLabel(item)} />
+                  <ItemIcon sources={[assetUrl(item.iconUrl)]} size={isFullWidth ? 48 : 40} label={itemLabel(item)} />
                   <span className={`truncate ${isFullWidth ? "text-[0.95rem] font-medium" : "text-[0.85rem]"}`}>{itemLabel(item)}</span>
                 </span>
                 <span className="stock-qty">
@@ -362,7 +349,6 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
         const file = e.target.files?.[0];
         if (file) void xlsxToText(file).then((text) => importText(text, "xlsx")).catch((err) => notify({ title: "XLSX", message: errorText(err, t("import.xlsxFailed")), tone: "danger" }));
       }} />
-      <input ref={savInput} type="file" accept=".sav,application/octet-stream" className="hidden" onChange={(e) => void onScan(e.target.files?.[0])} />
 
       <Modal open={pasteOpen} onClose={() => setPasteOpen(false)} title={t("import.pasteTitle")} icon="clipboard" widthClass="max-w-lg">
         <p className="text-sm text-fg-2">{t("import.pasteHelp")}</p>
