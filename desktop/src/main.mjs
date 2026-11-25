@@ -21,12 +21,13 @@ let catalog;
 let tray;
 let quitting = false;
 let saveFolder = null;
+let saveFile = null;
 let saveWatcher = null;
 let scanTimer = null;
 let lastSaveSignature = null;
 let scanInProgress = false;
 let scanChild = null;
-let companionStatus = { state: 'waiting', folder: null, fileName: null, stockpiles: [], incompleteCount: 0, message: 'Выберите папку сохранений Foxhole.' };
+let companionStatus = { state: 'waiting', folder: null, fileName: null, stockpiles: [], incompleteCount: 0, message: 'Ищу MapData.sav в папке сохранений Foxhole…' };
 let offlineGuest = false;
 const nativeAuth = createNativeAuthSession();
 let preferencesFile;
@@ -37,7 +38,7 @@ const error = (message, status = 503) => json({ error: { message, code: 'desktop
 const persistGuest = async (value) => {
   offlineGuest = value;
   const existing = await readPreferences();
-  await writeFile(preferencesFile, JSON.stringify({ ...existing, offlineGuest: value, saveFolder }), 'utf8');
+  await writeFile(preferencesFile, JSON.stringify({ ...existing, offlineGuest: value, saveFolder, saveFile }), 'utf8');
 };
 async function readPreferences() {
   try { return JSON.parse(await readFile(preferencesFile, 'utf8')); } catch { return {}; }
@@ -112,32 +113,52 @@ async function processSaveFile(file, signature) {
 async function pollSaveFolder() {
   if (!saveFolder || quitting || scanInProgress) return;
   try {
-    const candidate = await findSaveFile(saveFolder);
+    const candidate = saveFile
+      ? { file: saveFile, info: await stat(saveFile) }
+      : await findSaveFile(saveFolder);
     if (!candidate) {
-      publishCompanionStatus({ state: 'waiting', folder: saveFolder, fileName: null, stockpiles: [], incompleteCount: 0, message: 'В выбранной папке нет файлов *_MapData.sav.' });
+      publishCompanionStatus({ state: 'error', folder: saveFolder, fileName: null, stockpiles: [], incompleteCount: 0, processedAt: null, message: 'MapData.sav не найден. Нажмите «Найти файл» и выберите сохранение вручную.' });
       return;
     }
     const signature = `${candidate.file}:${candidate.info.size}:${candidate.info.mtimeMs}`;
     if (signature !== lastSaveSignature) await processSaveFile(candidate.file, signature);
   } catch (error) {
-    publishCompanionStatus({ state: 'error', folder: saveFolder, message: `Не удалось проверить папку: ${error.message}` });
+    const missing = error.code === 'ENOENT';
+    publishCompanionStatus({
+      state: 'error', folder: saveFolder, fileName: null, stockpiles: [], incompleteCount: 0,
+      processedAt: null,
+      message: missing
+        ? saveFile
+          ? 'Выбранный MapData.sav недоступен. Нажмите «Найти файл» и укажите актуальное сохранение.'
+          : 'Автопоиск не нашёл MapData.sav. Нажмите «Найти файл», чтобы указать его вручную.'
+        : `Не удалось прочитать сохранение: ${error.message}. Выберите файл вручную.`,
+    });
   }
 }
 
-async function setSaveFolder(folder) {
-  saveFolder = folder;
+async function watchSaveFolder(folder) {
   lastSaveSignature = null;
   saveWatcher?.close();
   if (scanTimer) clearInterval(scanTimer);
-  const prefs = await readPreferences();
-  await writeFile(preferencesFile, JSON.stringify({ ...prefs, offlineGuest, saveFolder }), 'utf8');
-  companionStatus = { state: 'waiting', folder, fileName: null, stockpiles: [], incompleteCount: 0, message: 'Папка выбрана. Ожидаю локальное сканирование.' };
+  companionStatus = { state: 'waiting', folder, fileName: null, stockpiles: [], incompleteCount: 0, message: 'Ищу последнее сохранение Foxhole…' };
   if (folder) {
     try { saveWatcher = watch(folder, () => { void pollSaveFolder(); }); } catch { saveWatcher = null; }
     scanTimer = setInterval(() => void pollSaveFolder(), 2500);
     await pollSaveFolder();
   }
   return companionStatus;
+}
+
+async function setSaveFile(file) {
+  if (!/_MapData\.sav$/i.test(path.basename(file))) {
+    publishCompanionStatus({ state: 'error', folder: path.dirname(file), fileName: path.basename(file), message: 'Выберите файл Foxhole с именем *_MapData.sav.' });
+    return companionStatus;
+  }
+  saveFile = file;
+  saveFolder = path.dirname(file);
+  const prefs = await readPreferences();
+  await writeFile(preferencesFile, JSON.stringify({ ...prefs, offlineGuest, saveFolder, saveFile }), 'utf8');
+  return watchSaveFolder(saveFolder);
 }
 
 function openExternal(value) {
@@ -212,16 +233,23 @@ if (locked) app.whenReady().then(async () => {
   preferencesFile = path.join(app.getPath('userData'), 'desktop-preferences.json');
   const preferences = await readPreferences();
   offlineGuest = preferences.offlineGuest === true;
-  saveFolder = typeof preferences.saveFolder === 'string' ? preferences.saveFolder : null;
+  saveFile = typeof preferences.saveFile === 'string' ? preferences.saveFile : null;
+  saveFolder = typeof preferences.saveFolder === 'string'
+    ? preferences.saveFolder
+    : path.join(process.env.LOCALAPPDATA || path.join(app.getPath('home'), 'AppData', 'Local'), 'Foxhole', 'Saved', 'SaveGames');
+  if (saveFile) saveFolder = path.dirname(saveFile);
   const root = app.getAppPath();
   const resources = path.join(root, 'resources');
   catalog = createCatalog(path.join(resources, 'snapshot.json'));
   const ses = session.fromPartition('persist:sindaris-desktop');
-  ipcMain.handle('companion:choose-save-folder', async (event) => {
+  ipcMain.handle('companion:choose-save-file', async (event) => {
     if (!trustedIpc(event)) return companionStatus;
-    const result = await dialog.showOpenDialog(mainWindow, { title: 'Папка сохранений Foxhole', properties: ['openDirectory'] });
+    const result = await dialog.showOpenDialog(mainWindow, {
+      title: 'Выберите файл Foxhole MapData.sav', properties: ['openFile'],
+      filters: [{ name: 'Foxhole MapData', extensions: ['sav'] }],
+    });
     if (result.canceled || !result.filePaths[0]) return companionStatus;
-    return setSaveFolder(result.filePaths[0]);
+    return setSaveFile(result.filePaths[0]);
   });
   ipcMain.handle('companion:get-status', (event) => trustedIpc(event) ? companionStatus : null);
   ipcMain.handle('companion:discord-login', (event) => {
@@ -311,7 +339,7 @@ if (locked) app.whenReady().then(async () => {
     }
   });
   await createWindow(ses);
-  if (saveFolder) await setSaveFolder(saveFolder);
+  await watchSaveFolder(saveFolder);
   app.on('activate', () => { if (!mainWindow) void createWindow(ses); });
 }).catch(() => { dialog.showErrorBox('Sindaris', 'Не удалось запустить приложение. Выполните сборку desktop заново.'); app.quit(); });
 app.on('second-instance', () => { if (mainWindow) { if (mainWindow.isMinimized()) mainWindow.restore(); mainWindow.focus(); } });

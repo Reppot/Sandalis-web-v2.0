@@ -1,0 +1,35 @@
+.desktop-sindaris-page {
+  min-height: 100dvh;
+  background: var(--bg);
+}
+
+.desktop-sindaris-page .sidebar,
+.desktop-sindaris-page .tabbar {
+  display: none !important;
+}
+
+.desktop-sindaris-page .app {
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.desktop-sindaris-page .app-main {
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.desktop-sindaris-page .topbar {
+  position: sticky;
+  top: 0;
+  z-index: 55;
+}
+
+.desktop-sindaris-page .app-content {
+  width: 100%;
+  max-width: min(var(--content-max), 1480px);
+  padding: 1.5rem clamp(1rem, 3vw, 2.5rem) 1rem;
+}
+
+.desktop-sindaris-page .app-footer {
+  padding: 0 2.5rem 1.5rem;
+}

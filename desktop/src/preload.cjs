@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('sindarisDesktop', {
-  chooseSaveFolder: () => ipcRenderer.invoke('companion:choose-save-folder'),
+  chooseSaveFile: () => ipcRenderer.invoke('companion:choose-save-file'),
   getCompanionStatus: () => ipcRenderer.invoke('companion:get-status'),
   openDiscordLogin: () => ipcRenderer.invoke('companion:discord-login'),
   onCompanionStatus: (callback) => {

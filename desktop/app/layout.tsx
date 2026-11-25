@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '../../frontend/src/app/globals.css';
 import './sources.css';
+import '../renderer/sindaris-section.css';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/inter-tight';
 import '@fontsource-variable/jetbrains-mono';
