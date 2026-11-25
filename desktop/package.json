@@ -1,0 +1,69 @@
+{
+  "name": "sindaris-desktop",
+  "productName": "Sindaris",
+  "version": "0.1.2",
+  "private": true,
+  "license": "UNLICENSED",
+  "type": "module",
+  "main": "src/main.mjs",
+  "scripts": {
+    "prepare:assets": "node scripts/prepare.mjs",
+    "prepare:fs": "node scripts/prepare-fs.mjs",
+    "build": "npm run prepare:assets && npm run prepare:fs && node scripts/build-renderer.mjs",
+    "start": "electron .",
+    "dev": "npm run build && electron .",
+    "test": "npm run prepare:assets && node --test tests/*.test.mjs",
+    "typecheck": "node ../frontend/node_modules/typescript/bin/tsc -p tsconfig.json --noEmit",
+    "dist:win": "npm run build && electron-builder --win nsis --x64 --publish never"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "devDependencies": {
+    "electron": "44.9.3",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "com.sindaris.terminal",
+    "productName": "Sindaris",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "src/**/*.mjs",
+      "src/**/*.cjs",
+      "dist/**/*",
+      "resources/**/*",
+      "!resources/fs.exe",
+      "!resources/foxhole-stockpiles-LICENSE.txt",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/fs.exe",
+        "to": "fs.exe"
+      },
+      {
+        "from": "resources/foxhole-stockpiles-LICENSE.txt",
+        "to": "foxhole-stockpiles-LICENSE.txt"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "artifactName": "Sindaris-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true,
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "differentialPackage": false,
+      "include": "build/personal-installer.nsh"
+    },
+    "afterPack": "./build/personal-after-pack.mjs"
+  }
+}

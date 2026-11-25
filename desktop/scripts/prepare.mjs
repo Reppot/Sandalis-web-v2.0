@@ -1,0 +1,20 @@
+import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const repo = path.resolve(root, '..');
+const seed = path.join(repo, 'backend/app/seed/data');
+const resources = path.join(root, 'resources');
+const read = async name => JSON.parse(await readFile(path.join(seed,name),'utf8'));
+await mkdir(resources,{recursive:true});
+const catalog = await read('catalog.json');
+const recipes = [...await read('recipes.json'), ...await read('facility_recipes.json')];
+const content = (await read('content.json')).map(r => ({is_active:true,...r}));
+const guide = await read('guide.json');
+content.push(...guide.map(r => ({is_active:true,...r})));
+const translations = await read('content_i18n.json');
+for (const row of content) { const translated = translations[row.kind]?.[row.key]; if (translated) row.payload = {...row.payload,i18n:translated}; }
+await writeFile(path.join(resources,'snapshot.json'),JSON.stringify({catalog,recipes,content}),'utf8');
+await cp(path.join(repo,'backend/static'),path.join(resources,'static'),{recursive:true});
+await cp(path.join(repo,'frontend/public'),path.join(resources,'public'),{recursive:true});
+console.log(`Prepared ${catalog.length} catalog items, ${recipes.length} recipes, ${content.length} content entries`);
