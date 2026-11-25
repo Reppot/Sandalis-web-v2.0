@@ -90,10 +90,13 @@ function WindowActionIcon({ kind }: { kind: 'minimize' | 'maximize' | 'restore' 
 
 function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'companion' | 'links' | 'report'>) => void }) {
   return <section className="internal-link-board" aria-labelledby="link-board-title">
-    <header className="link-board-heading"><div><h1 id="link-board-title">Все разделы</h1><p>Откройте нужную часть сайта в отдельной вкладке приложения.</p></div><b>{sections.length} разделов</b></header>
+    <header className="link-board-heading">
+      <div><span className="link-board-kicker">CHRONOMANCER / FOXHOLE FIELD SYSTEMS</span><h1 id="link-board-title">Оперативные модули</h1><p>Инструменты логистики и сводка вашего клана — каждый модуль откроется в своей вкладке.</p></div>
+      <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>модулей</span></b>
+    </header>
     <div className="link-board-grid">
-      {sections.map((section) => <button className={`link-board-item link-${section}`} key={section} onClick={() => onOpen(section)}>
-        <span><strong>{labels[section]}</strong><small>{sectionDetails[section]}</small></span>
+      {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} onClick={() => onOpen(section)}>
+        <span className="link-board-copy"><small className="link-board-index">МОДУЛЬ {String(index + 1).padStart(2, '0')}</small><strong>{labels[section]}</strong><small className="link-board-description">{sectionDetails[section]}</small></span>
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5" /></svg>
       </button>)}
     </div>
