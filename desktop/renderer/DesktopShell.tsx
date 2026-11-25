@@ -81,6 +81,12 @@ function PlusIcon() {
   return <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true"><path d="M10 3.5v13M3.5 10h13" /></svg>;
 }
 
+function HistoryIcon({ direction }: { direction: 'back' | 'forward' }) {
+  return <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {direction === 'back' ? <path d="M8 5 3 10l5 5M3.5 10H17" /> : <path d="m12 5 5 5-5 5M16.5 10H3" />}
+  </svg>;
+}
+
 function WindowActionIcon({ kind }: { kind: 'minimize' | 'maximize' | 'restore' | 'close' }) {
   if (kind === 'minimize') return <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true"><path d="M3 8h10" /></svg>;
   if (kind === 'close') return <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true"><path d="m4 4 8 8m0-8-8 8" /></svg>;
@@ -91,7 +97,7 @@ function WindowActionIcon({ kind }: { kind: 'minimize' | 'maximize' | 'restore' 
 function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'companion' | 'links' | 'report'>) => void }) {
   return <section className="internal-link-board" aria-labelledby="link-board-title">
     <header className="link-board-heading">
-      <div><span className="link-board-kicker">CHRONOMANCER / FOXHOLE FIELD SYSTEMS</span><h1 id="link-board-title">Оперативные модули</h1><p>Инструменты логистики и сводка вашего клана — каждый модуль откроется в своей вкладке.</p></div>
+      <div><h1 id="link-board-title">Модули</h1></div>
       <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>модулей</span></b>
     </header>
     <div className="link-board-grid">
@@ -162,7 +168,7 @@ function ScanReportPage({ report }: { report: ScanReport | null }) {
   </section>;
 }
 
-function AsciiFlow({ active }: { active: boolean }) {
+function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'links' | 'other' }) {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   React.useEffect(() => {
     const canvas = canvasRef.current;
@@ -176,22 +182,9 @@ function AsciiFlow({ active }: { active: boolean }) {
     const cellHeight = 15;
     const glyphs = ' .,:;+=/\\|(){}[]<>01#@*';
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const ripples: Array<{ x: number; y: number; startedAt: number; source: 'drop' | 'click' }> = [];
-    const drops: Array<{ x: number; y: number; startedAt: number; impacted: boolean }> = [];
-    let nextDropAt = performance.now() + 1000;
-    let randomState = 0x51d42026;
-    const seededRandom = () => {
-      randomState = (Math.imul(randomState, 1664525) + 1013904223) >>> 0;
-      return randomState / 4294967296;
-    };
-    const host = canvas.parentElement;
-    const onClick = (event: MouseEvent) => {
-      if (!(event.target instanceof Element) || !event.target.closest('button')) return;
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width < 1 || rect.height < 1 || event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) return;
-      ripples.push({ x: event.clientX - rect.left, y: event.clientY - rect.top, startedAt: performance.now(), source: 'click' });
-    };
-    host?.addEventListener('click', onClick);
+    const ripples: Array<{ x: number; y: number; startedAt: number }> = [];
+    const drops: Array<{ startedAt: number; impacted: boolean }> = [];
+    let nextDropAt = performance.now() + 3000;
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
       const scale = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -214,35 +207,37 @@ function AsciiFlow({ active }: { active: boolean }) {
       const swing = reduceMotion ? 0 : Math.sin(now * (active ? 0.00014 : 0.0001));
       const flowPhase = reduceMotion ? 0 : now * (active ? 0.00052 : 0.00038);
       const advection = Math.sin(flowPhase) * width * 0.22;
-      if (!reduceMotion && now >= nextDropAt) {
-        drops.push({ x: width * (0.1 + seededRandom() * 0.8), y: height * (0.32 + seededRandom() * 0.43), startedAt: now, impacted: false });
+      if (scene === 'links' && !reduceMotion && now >= nextDropAt) {
+        drops.push({ startedAt: now, impacted: false });
         nextDropAt = now + 3000;
       }
       for (let index = ripples.length - 1; index >= 0; index -= 1) {
-        if (now - ripples[index].startedAt > (reduceMotion ? 650 : 2100)) ripples.splice(index, 1);
+        if (now - ripples[index].startedAt > (reduceMotion ? 650 : 2600)) ripples.splice(index, 1);
       }
       for (let index = drops.length - 1; index >= 0; index -= 1) {
         const drop = drops[index];
         const age = now - drop.startedAt;
-        const fallDuration = 760;
+        const fallDuration = 900;
         if (age >= fallDuration && !drop.impacted) {
-          ripples.push({ x: drop.x, y: drop.y, startedAt: now, source: 'drop' });
+          ripples.push({ x: width * 0.5, y: height * 0.86, startedAt: now });
           drop.impacted = true;
         }
-        if (age > fallDuration + 2100) { drops.splice(index, 1); continue; }
+        if (age > fallDuration + 2600) { drops.splice(index, 1); continue; }
         if (age < fallDuration) {
           const progress = age / fallDuration;
-          const y = drop.y - height * 0.34 * (1 - progress);
-          const alpha = 0.12 + Math.sin(progress * Math.PI) * 0.26;
+          const y = height * (0.2 + 0.66 * progress);
+          const alpha = 0.3 + Math.sin(progress * Math.PI) * 0.42;
           context.fillStyle = `rgba(255, 93, 111, ${alpha})`;
-          context.fillText('|', drop.x, y - 12);
-          context.fillText('@', drop.x, y);
-          context.fillStyle = `rgba(255, 132, 144, ${alpha * 0.7})`;
-          context.fillText(':', drop.x + cellWidth, y - 10);
+          context.fillText(' . ', width * 0.5 - cellWidth, y - cellHeight * 1.3);
+          context.fillText(' {@} ', width * 0.5 - cellWidth * 1.5, y);
+          context.fillText('  #  ', width * 0.5 - cellWidth * 1.5, y + cellHeight);
         }
       }
       const columns = Math.ceil(width / cellWidth);
       const rows = Math.ceil(height / cellHeight);
+      const companionSourceX = width * 0.19;
+      const companionSourceY = height * 0.56;
+      const puddleY = height * 0.86;
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
           const x = column * cellWidth;
@@ -250,48 +245,76 @@ function AsciiFlow({ active }: { active: boolean }) {
           let ripple = 0;
           for (const origin of ripples) {
             const age = (now - origin.startedAt) / 1000;
-            const distance = Math.hypot(x - origin.x, y - origin.y);
-            const radius = reduceMotion ? 76 : age * (origin.source === 'drop' ? 250 : 190);
-            const fade = reduceMotion ? 1 : Math.max(0, 1 - age / 2.1);
-            ripple += Math.exp(-Math.abs(distance - radius) / (reduceMotion ? 15 : origin.source === 'drop' ? 38 : 27)) * fade;
+            if (scene === 'links') {
+              const distance = Math.hypot((x - origin.x) / (width * 0.54), (y - origin.y) / (height * 0.105));
+              const radius = reduceMotion ? 0.48 : age / 2.4;
+              const fade = reduceMotion ? 0.85 : Math.max(0, 1 - age / 2.6);
+              ripple += Math.exp(-Math.abs(distance - radius) / 0.075) * fade;
+            }
           }
           ripple = Math.min(1, ripple);
-          const along = (x + advection) / Math.max(width, 1);
-          const centerY = height * (0.5 + 0.22 * Math.sin(along * Math.PI * 2.1 + swing * 1.65 + flowPhase * 0.45)
-            + 0.08 * Math.sin(along * Math.PI * 4.3 - swing * 0.9 - flowPhase * 0.3));
-          const thickness = height * (0.235 + 0.035 * Math.sin(along * 7 + swing));
-          const offset = y - centerY;
-          const mainStream = Math.exp(-Math.pow(offset / thickness, 2) * 0.8);
-          const upperCurrent = Math.exp(-Math.pow((offset + height * 0.23) / (thickness * 0.48), 2)) * 0.46;
-          const lowerCurrent = Math.exp(-Math.pow((offset - height * 0.22) / (thickness * 0.52), 2)) * 0.38;
-          const vortexX = width * (0.5 + swing * 0.39);
-          const vortexY = height * (0.5 - swing * 0.18);
-          const dx = (x - vortexX) / Math.max(width, 1);
-          const dy = (y - vortexY) / Math.max(height, 1);
-          const radius = Math.hypot(dx, dy * 0.92);
-          const angle = Math.atan2(dy, dx);
-          const curl = (0.5 + 0.5 * Math.sin(radius * 42 - angle * 2.2 + swing * 2.8 + flowPhase * 1.6)) * Math.exp(-radius * 1.55);
-          const turbulence = 0.5 + 0.5 * Math.sin(x * 0.008 + y * 0.006 + flowPhase * 3.2 + Math.sin(y * 0.009 - swing * 2));
-          const density = Math.min(1, (mainStream * 0.78 + upperCurrent * 0.74 + lowerCurrent * 0.68 + curl * 0.42) * (0.82 + turbulence * 0.18));
-          if (density < 0.075 && ripple < 0.025) continue;
+          let density = 0;
+          let turbulence = 0;
+          let offset = 0;
+          if (scene === 'companion') {
+            const along = Math.max(0, (x - companionSourceX) / Math.max(width - companionSourceX, 1));
+            const centerY = companionSourceY + height * (0.11 * Math.sin(along * Math.PI * 2.2 + flowPhase * 1.4)
+              + 0.045 * Math.sin(along * Math.PI * 4.2 - flowPhase * 0.8));
+            const thickness = height * (0.19 + 0.025 * Math.sin(along * 6 + swing));
+            offset = y - centerY;
+            const envelope = x >= companionSourceX ? Math.min(1, (x - companionSourceX) / (width * 0.08) + 0.25) : 0;
+            const stream = Math.exp(-Math.pow(offset / thickness, 2) * 0.72) * envelope;
+            const wave = (0.5 + 0.5 * Math.sin(offset / Math.max(height * 0.025, 1) - along * 15 + flowPhase * 2)) * stream;
+            const wake = Math.exp(-Math.pow((x - companionSourceX) / (width * 0.12), 2) - Math.pow((y - companionSourceY) / (height * 0.12), 2));
+            turbulence = 0.5 + 0.5 * Math.sin(x * 0.008 + y * 0.006 + flowPhase * 2 + Math.sin(y * 0.008 - swing));
+            density = Math.min(1, (stream * 0.42 + wave * 0.48 + wake * 0.52) * (0.84 + turbulence * 0.16));
+          } else if (scene === 'links') {
+            if (y < height * 0.68) continue;
+            const poolDepth = (y - puddleY) / (height * 0.14);
+            const pool = Math.exp(-Math.pow(poolDepth / 1.5, 2));
+            turbulence = 0.5 + 0.5 * Math.sin(x * 0.009 + flowPhase + Math.sin(y * 0.012));
+            density = pool * (0.075 + 0.08 * turbulence);
+          } else {
+            const along = (x + advection) / Math.max(width, 1);
+            const centerY = height * (0.5 + 0.22 * Math.sin(along * Math.PI * 2.1 + swing * 1.65 + flowPhase * 0.45)
+              + 0.08 * Math.sin(along * Math.PI * 4.3 - swing * 0.9 - flowPhase * 0.3));
+            const thickness = height * (0.235 + 0.035 * Math.sin(along * 7 + swing));
+            offset = y - centerY;
+            const vortexX = width * (0.5 + swing * 0.39);
+            const vortexY = height * (0.5 - swing * 0.18);
+            const dx = (x - vortexX) / Math.max(width, 1);
+            const dy = (y - vortexY) / Math.max(height, 1);
+            const radius = Math.hypot(dx, dy * 0.92);
+            const angle = Math.atan2(dy, dx);
+            const curl = (0.5 + 0.5 * Math.sin(radius * 42 - angle * 2.2 + swing * 2.8 + flowPhase * 1.6)) * Math.exp(-radius * 1.55);
+            turbulence = 0.5 + 0.5 * Math.sin(x * 0.008 + y * 0.006 + flowPhase * 3.2 + Math.sin(y * 0.009 - swing * 2));
+            density = Math.min(1, (Math.exp(-Math.pow(offset / thickness, 2) * 0.8) * 0.78 + curl * 0.42) * (0.82 + turbulence * 0.18));
+          }
+          if (density < 0.045 && ripple < 0.025) continue;
           const index = Math.max(1, Math.min(glyphs.length - 1, Math.floor((density * 9 + turbulence * 6 + Math.abs(offset) / cellHeight) % glyphs.length)));
-          const alpha = Math.min(0.31, 0.022 + density * 0.255 + ripple * 0.12);
+          const alpha = scene === 'links'
+            ? Math.min(0.48, 0.11 + density * 0.42 + ripple * 0.44)
+            : Math.min(scene === 'companion' ? 0.24 : 0.31, 0.022 + density * (scene === 'companion' ? 0.2 : 0.255) + ripple * 0.12);
           context.fillStyle = ripple > 0.2 && ((column + row) % 4 === 0)
-            ? `rgba(255, 238, 238, ${Math.min(0.34, alpha + 0.06)})`
-            : `rgba(${turbulence > 0.84 ? '255, 104, 116' : '226, 59, 78'}, ${alpha})`;
+            ? `rgba(255, 190, 196, ${Math.min(0.62, alpha + 0.12)})`
+            : `rgba(${scene === 'links' ? (turbulence > 0.84 ? '255, 82, 96' : '213, 30, 48') : (turbulence > 0.84 ? '255, 104, 116' : '226, 59, 78')}, ${alpha})`;
           context.fillText(glyphs[index], x, y);
         }
       }
     };
     frame = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); host?.removeEventListener('click', onClick); };
-  }, [active]);
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
+  }, [active, scene]);
   return <canvas ref={canvasRef} className="ascii-flow" aria-hidden="true" />;
 }
 
 export default function DesktopShell() {
   const [openTabs, setOpenTabs] = React.useState<DesktopTab[]>(['companion']);
   const [active, setActive] = React.useState<DesktopTab>('companion');
+  const tabHistory = React.useRef<DesktopTab[]>(['companion']);
+  const historyCursor = React.useRef(0);
+  const [historyPosition, setHistoryPosition] = React.useState(0);
+  const [frameHistory, setFrameHistory] = React.useState({ canBack: false, canForward: false });
   const [status, setStatus] = React.useState<ScanStatus>({ state: 'waiting', folder: null, fileName: null, message: 'Ищу MapData.sav в папке сохранений Foxhole.' });
   const [reloadKey, setReloadKey] = React.useState(0);
   const [authQuery, setAuthQuery] = React.useState('');
@@ -305,6 +328,108 @@ export default function DesktopShell() {
   const [serverSetupLoading, setServerSetupLoading] = React.useState(false);
   const [serverSetupBusy, setServerSetupBusy] = React.useState(false);
   const [serverSetupError, setServerSetupError] = React.useState('');
+
+  const refreshFrameHistory = React.useCallback((tab: DesktopTab) => {
+    window.requestAnimationFrame(() => {
+      const frame = [...document.querySelectorAll<HTMLIFrameElement>('.desktop-section-frame')]
+        .find((item) => item.style.display !== 'none' && item.title === labels[tab]);
+      const state = frame?.contentWindow?.history.state as { __chronomancerIndex?: number } | null | undefined;
+      const index = Number(state?.__chronomancerIndex ?? 0);
+      const length = frame?.contentWindow?.history.length ?? 1;
+      setFrameHistory({ canBack: index > 0, canForward: index < length - 1 });
+    });
+  }, []);
+  const navigateTab = React.useCallback((tab: DesktopTab) => {
+    if (tabHistory.current[historyCursor.current] === tab) return;
+    setActive(tab);
+    setFrameHistory({ canBack: false, canForward: false });
+    const next = tabHistory.current.slice(0, historyCursor.current + 1);
+    next.push(tab);
+    tabHistory.current = next;
+    historyCursor.current = next.length - 1;
+    setHistoryPosition(historyCursor.current);
+    refreshFrameHistory(tab);
+  }, [refreshFrameHistory]);
+  const moveTabHistory = React.useCallback((direction: -1 | 1) => {
+    const nextPosition = historyCursor.current + direction;
+    if (nextPosition < 0 || nextPosition >= tabHistory.current.length) return;
+    historyCursor.current = nextPosition;
+    setHistoryPosition(nextPosition);
+    const tab = tabHistory.current[nextPosition];
+    setActive(tab);
+    setFrameHistory({ canBack: false, canForward: false });
+    refreshFrameHistory(tab);
+  }, [refreshFrameHistory]);
+  const navigateHistory = React.useCallback((direction: -1 | 1) => {
+    const frame = [...document.querySelectorAll<HTMLIFrameElement>('.desktop-section-frame')].find((item) => item.style.display !== 'none');
+    try {
+      const frameWindow = frame?.contentWindow;
+      const index = Number((frameWindow?.history.state as { __chronomancerIndex?: number } | null)?.__chronomancerIndex ?? 0);
+      const canMove = direction < 0 ? index > 0 : index < (frameWindow?.history.length ?? 1) - 1;
+      if (frameWindow && canMove) {
+        frameWindow.history[direction < 0 ? 'back' : 'forward']();
+        return;
+      }
+    } catch { /* cross-origin frames fall back to tab history */ }
+    moveTabHistory(direction);
+  }, [moveTabHistory]);
+
+  React.useEffect(() => {
+    const onAuxClick = (event: MouseEvent) => {
+      if (event.button !== 3 && event.button !== 4) return;
+      event.preventDefault();
+      navigateHistory(event.button === 3 ? -1 : 1);
+    };
+    const onFrameMessage = (event: MessageEvent) => {
+      const frames = [...document.querySelectorAll<HTMLIFrameElement>('.desktop-section-frame')];
+      const sourceFrame = frames.find((item) => event.source === item.contentWindow);
+      if (!sourceFrame) return;
+      const frame = frames.find((item) => item.style.display !== 'none');
+      const data = event.data as { type?: string; canBack?: boolean; canForward?: boolean; direction?: string; theme?: string };
+      if (data?.type === 'chronomancer:theme-change') {
+        const candidate = data.theme === 'dark' ? 'red' : data.theme;
+        if (typeof candidate === 'string' && ['red', 'lime', 'light', 'amber', 'contrast', 'noir', 'soft', 'ascii'].includes(candidate)) {
+          document.querySelector('.desktop-shell')?.setAttribute('data-skin', candidate);
+        }
+      } else if (sourceFrame === frame && data?.type === 'chronomancer:history-state') {
+        setFrameHistory({ canBack: Boolean(data.canBack), canForward: Boolean(data.canForward) });
+      } else if (sourceFrame === frame && data?.type === 'chronomancer:history-fallback') {
+        moveTabHistory(data.direction === 'forward' ? 1 : -1);
+      }
+    };
+    document.addEventListener('auxclick', onAuxClick);
+    window.addEventListener('message', onFrameMessage);
+    return () => {
+      document.removeEventListener('auxclick', onAuxClick);
+      window.removeEventListener('message', onFrameMessage);
+    };
+  }, [moveTabHistory, navigateHistory]);
+
+  React.useEffect(() => {
+    type DesktopSkin = 'red' | 'lime' | 'light' | 'amber' | 'contrast' | 'noir' | 'soft' | 'ascii';
+    const isSkin = (candidate: string): candidate is DesktopSkin => ['red', 'lime', 'light', 'amber', 'contrast', 'noir', 'soft', 'ascii'].includes(candidate);
+    const syncTheme = (value?: string | null) => {
+      let stored = value;
+      if (stored === null || stored === undefined) {
+        try { stored = window.localStorage.getItem('sindaris-theme'); } catch { stored = null; }
+      }
+      const theme: DesktopSkin = stored === 'dark' ? 'red' : stored && isSkin(stored) ? stored : 'red';
+      document.querySelector('.desktop-shell')?.setAttribute('data-skin', theme);
+    };
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === 'sindaris-theme' || event.key === null) syncTheme(event.newValue);
+    };
+    syncTheme();
+    window.addEventListener('storage', onStorage);
+    const channel = typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel('chronomancer-theme');
+    if (channel) channel.onmessage = (event: MessageEvent<string>) => syncTheme(event.data);
+    const onThemeMessage = (event: MessageEvent) => {
+      const data = event.data as { type?: string; theme?: string };
+      if (data?.type === 'chronomancer:theme-change') syncTheme(data.theme);
+    };
+    window.addEventListener('message', onThemeMessage);
+    return () => { window.removeEventListener('storage', onStorage); window.removeEventListener('message', onThemeMessage); channel?.close(); };
+  }, []);
 
   const refreshProfile = React.useCallback(() => {
     const api = getApi();
@@ -373,7 +498,7 @@ export default function DesktopShell() {
       const choosingServer = state.setup === 'guild';
       const next: DesktopTab = choosingServer ? 'companion' : openTabs.includes('tools') ? 'tools' : 'companion';
       setOpenTabs((tabs) => tabs.includes(next) ? tabs : [...tabs, next]);
-      setActive(next);
+      navigateTab(next);
       const query = new URLSearchParams();
       if (state.error) query.set('error', state.error);
       setAuthQuery(query.toString());
@@ -381,28 +506,38 @@ export default function DesktopShell() {
       if (choosingServer) void loadServerSetup();
       else refreshProfile();
     });
-  }, [openTabs, refreshProfile, loadServerSetup]);
+  }, [openTabs, refreshProfile, loadServerSetup, navigateTab]);
 
   const openSection = (tab: Exclude<DesktopTab, 'companion' | 'report'>) => {
     setOpenTabs((tabs) => tabs.includes(tab) ? tabs : [...tabs, tab]);
-    setActive(tab);
+    navigateTab(tab);
   };
   const openReport = () => {
     setOpenTabs((tabs) => tabs.includes('report') ? tabs : [...tabs, 'report']);
-    setActive('report');
+    navigateTab('report');
   };
   const closeTab = (tab: DesktopTab) => {
     if (tab === 'companion') return;
     const next = openTabs.filter((item) => item !== tab);
     setOpenTabs(next);
-    if (active === tab) setActive(next[Math.max(0, openTabs.indexOf(tab) - 1)] ?? 'companion');
+    const pruned = tabHistory.current.filter((item) => item === 'companion' || next.includes(item)).filter((item, index, list) => item !== list[index - 1]);
+    tabHistory.current = pruned.length ? pruned : ['companion'];
+    const currentPosition = tabHistory.current.lastIndexOf(active === tab ? (tabHistory.current.at(-1) ?? 'companion') : active);
+    historyCursor.current = currentPosition >= 0 ? currentPosition : tabHistory.current.length - 1;
+    setHistoryPosition(historyCursor.current);
+    if (active === tab) {
+      const target = tabHistory.current[historyCursor.current] ?? next[Math.max(0, openTabs.indexOf(tab) - 1)] ?? 'companion';
+      setActive(target);
+      setFrameHistory({ canBack: false, canForward: false });
+      refreshFrameHistory(target);
+    }
   };
   const chooseFile = async () => { const api = getApi(); if (api) { const next = await api.chooseSaveFile(); if (next?.state) setStatus(next); } };
   const login = async () => { await getApi()?.openDiscordLogin(); };
   const totalStockpiles = (status.stockpiles?.length ?? 0) + (status.incompleteCount ?? 0);
 
   return <main className="desktop-shell">
-    <AsciiFlow active={status.state === 'processing'} />
+    <AsciiFlow active={status.state === 'processing'} scene={active === 'companion' ? 'companion' : active === 'links' ? 'links' : 'other'} />
     <header className="desktop-topbar">
       <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-icon.png" width={34} height={34} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
       <div className="desktop-topbar-actions">
@@ -416,14 +551,18 @@ export default function DesktopShell() {
     </header>
 
     <nav className="desktop-tabs" aria-label="Вкладки Chronomancer">
+      <div className="desktop-history-controls" aria-label="История переходов">
+        <button type="button" onClick={() => navigateHistory(-1)} disabled={!frameHistory.canBack && historyPosition === 0} aria-label="Назад" title="Назад"><HistoryIcon direction="back" /></button>
+        <button type="button" onClick={() => navigateHistory(1)} disabled={!frameHistory.canForward && historyPosition >= tabHistory.current.length - 1} aria-label="Вперёд" title="Вперёд"><HistoryIcon direction="forward" /></button>
+      </div>
       <div className="desktop-tab-item">
-        <button type="button" className={`desktop-tab ${active === 'companion' ? 'is-active' : ''}`} onClick={() => setActive('companion')} aria-current={active === 'companion' ? 'page' : undefined}>
+        <button type="button" className={`desktop-tab ${active === 'companion' ? 'is-active' : ''}`} onClick={() => navigateTab('companion')} aria-current={active === 'companion' ? 'page' : undefined}>
           <span>{labels.companion}</span>
         </button>
         <button type="button" className="desktop-add-tab" onClick={() => openSection('links')} aria-label="Добавить вкладку: открыть разделы Chronomancer" title="Открыть все разделы"><PlusIcon /></button>
       </div>
       {openTabs.filter((tab) => tab !== 'companion').map((tab) => <div key={tab} className="desktop-tab-item">
-        <button type="button" className={`desktop-tab ${active === tab ? 'is-active' : ''}`} onClick={() => setActive(tab)} aria-current={active === tab ? 'page' : undefined}>
+        <button type="button" className={`desktop-tab ${active === tab ? 'is-active' : ''}`} onClick={() => navigateTab(tab)} aria-current={active === tab ? 'page' : undefined}>
           <span>{labels[tab]}</span>
         </button>
         <button type="button" className="desktop-tab-close" onClick={() => closeTab(tab)} aria-label={`Закрыть: ${labels[tab]}`} title={`Закрыть ${labels[tab]}`}>×</button>
@@ -432,7 +571,7 @@ export default function DesktopShell() {
 
     <section className="desktop-content">
       {openTabs.map((tab) => {
-        if (tab === 'links') return <div key={tab} className="native-page" style={{ display: active === tab ? 'block' : 'none' }}><InternalLinkBoard onOpen={openSection} /></div>;
+        if (tab === 'links') return <div key={tab} className="native-page link-board-page" style={{ display: active === tab ? 'block' : 'none' }}><InternalLinkBoard onOpen={openSection} /></div>;
         if (tab === 'report') return <div key={tab} className="native-page" style={{ display: active === tab ? 'block' : 'none' }}><ScanReportPage report={lastReport} /></div>;
         if (tab !== 'companion') return <iframe key={`${tab}-${reloadKey}`} className="desktop-section-frame" title={labels[tab]} src={`app://sindaris/section.html?tab=${tab}${tab === 'tools' && authQuery ? `&${authQuery}` : ''}`} style={{ display: active === tab ? 'block' : 'none' }} />;
         return <div key={tab} className="companion-page" style={{ display: active === tab ? 'block' : 'none' }}>
@@ -445,7 +584,7 @@ export default function DesktopShell() {
           <header className="companion-hero">
             <div>
               <h1>Склады под контролем.</h1>
-              <p>Сканер читает сохранение прямо на этом компьютере. Файл остаётся у вас.</p>
+              <p>Сканер читает сохранение прямо на этом компьютере.</p>
             </div>
           </header>
 

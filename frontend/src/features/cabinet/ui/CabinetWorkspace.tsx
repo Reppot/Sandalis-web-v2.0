@@ -125,13 +125,23 @@ export const CabinetWorkspace: React.FC = () => {
   );
 };
 
-const THEME_CHOICES: { key: Theme; label: MessageKey; hint: MessageKey }[] = [
-  { key: "dark", label: "nav.themeNight", hint: "settings.themeDarkHint" },
-  { key: "light", label: "nav.themeSimple", hint: "settings.themeLightHint" },
-  { key: "amber", label: "settings.themeAmber", hint: "settings.themeAmberHint" },
-  { key: "contrast", label: "settings.themeContrast", hint: "settings.themeContrastHint" },
-  { key: "noir", label: "settings.themeNoir", hint: "settings.themeNoirHint" },
-  { key: "soft", label: "settings.themeSoft", hint: "settings.themeSoftHint" },
+const THEME_GROUPS: { label: MessageKey; choices: { key: Theme; label: MessageKey; hint: MessageKey }[] }[] = [
+  {
+    label: "settings.themeGroupBasic",
+    choices: [
+      { key: "red", label: "settings.themeRed", hint: "settings.themeRedHint" },
+      { key: "lime", label: "settings.themeLime", hint: "settings.themeLimeHint" },
+      { key: "light", label: "nav.themeSimple", hint: "settings.themeLightHint" },
+      { key: "amber", label: "settings.themeAmber", hint: "settings.themeAmberHint" },
+      { key: "contrast", label: "settings.themeContrast", hint: "settings.themeContrastHint" },
+      { key: "noir", label: "settings.themeNoir", hint: "settings.themeNoirHint" },
+      { key: "soft", label: "settings.themeSoft", hint: "settings.themeSoftHint" },
+    ],
+  },
+  {
+    label: "settings.themeGroupAscii",
+    choices: [{ key: "ascii", label: "settings.themeAscii", hint: "settings.themeAsciiHint" }],
+  },
 ];
 
 /** Внешний вид: тема сайта — карточки с мини-превью. */
@@ -142,28 +152,35 @@ const AppearancePanel: React.FC = () => {
     <section data-guide="settings-appearance" className="panel p-5">
       <div className="panel-title">{t("settings.appearance")}</div>
       <p className="mt-1 text-sm text-fg-3">{t("settings.appearanceHint")}</p>
-      <div className="theme-choices mt-5">
-        {THEME_CHOICES.map((item) => {
-          const on = theme === item.key;
-          return (
-            <button key={item.key} type="button" className={`theme-choice ${on ? "is-active" : ""}`} aria-pressed={on} onClick={() => !on && setTheme(item.key)}>
-              <span className={`theme-preview theme-preview-${item.key}`} aria-hidden>
-                <ThemeIcon theme={item.key} size={26} />
-              </span>
-              <span className="flex items-start justify-between gap-2">
-                <span className="min-w-0">
-                  <span className="theme-choice-label">{t(item.label)}</span>
-                  <span className="theme-choice-hint">{t(item.hint)}</span>
-                </span>
-                {on ? (
-                  <span className="theme-choice-check" aria-label={t("settings.active")}>
-                    <Icon name="check" size={12} strokeWidth={3} />
-                  </span>
-                ) : null}
-              </span>
-            </button>
-          );
-        })}
+      <div className="theme-groups mt-5">
+        {THEME_GROUPS.map((group) => (
+          <section className="theme-group" key={group.label} aria-labelledby={`theme-group-${group.label}`}>
+            <h3 className="theme-group-title" id={`theme-group-${group.label}`}>{t(group.label)}</h3>
+            <div className="theme-choices">
+              {group.choices.map((item) => {
+                const on = theme === item.key;
+                return (
+                  <button key={item.key} type="button" className={`theme-choice ${on ? "is-active" : ""}`} aria-pressed={on} onClick={() => !on && setTheme(item.key)}>
+                    <span className={`theme-preview theme-preview-${item.key}`} aria-hidden>
+                      <ThemeIcon theme={item.key} size={26} />
+                    </span>
+                    <span className="flex items-start justify-between gap-2">
+                      <span className="min-w-0">
+                        <span className="theme-choice-label">{t(item.label)}</span>
+                        <span className="theme-choice-hint">{t(item.hint)}</span>
+                      </span>
+                      {on ? (
+                        <span className="theme-choice-check" aria-label={t("settings.active")}>
+                          <Icon name="check" size={12} strokeWidth={3} />
+                        </span>
+                      ) : null}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        ))}
       </div>
     </section>
   );

@@ -73,7 +73,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ru" data-theme="dark" suppressHydrationWarning>
+    <html lang="ru" data-theme="dark" data-skin="red" suppressHydrationWarning>
       <head>
         {/* тема до первой отрисовки — без мерцания */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />

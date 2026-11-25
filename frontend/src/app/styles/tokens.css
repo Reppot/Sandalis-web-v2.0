@@ -113,6 +113,69 @@
   --hero-glow: radial-gradient(80% 120% at 0% 0%, rgb(var(--accent-rgb) / 0.12), transparent 60%);
 }
 
+/* Фирменная красная тема; отдельный skin сохраняет совместимость старых сохранений. */
+html[data-skin="red"] {
+  --accent: #f43f52;
+  --accent-rgb: 244 63 82;
+  --accent-hover: #ff596a;
+  --accent-ink: #24080c;
+  --accent-fg: #ff8994;
+  --accent-soft: rgb(244 63 82 / 0.15);
+  --accent-line: rgb(255 91 108 / 0.48);
+  --nav-active-icon: var(--accent-fg);
+}
+
+/* ASCII переносит бордовые поверхности и сигнальный красный desktop Chronomancer. */
+html[data-skin="ascii"] {
+  --bg: #0b090a;
+  --bg-elev: #171213;
+  --surface: #211a1b;
+  --surface-2: #2c2324;
+  --surface-3: #403336;
+  --surface-hover: rgba(255, 255, 255, 0.045);
+  --surface-press: rgba(255, 255, 255, 0.08);
+  --border: rgba(255, 238, 240, 0.17);
+  --border-strong: rgba(255, 238, 240, 0.28);
+  --fg: #fff7f7;
+  --fg-2: #e0d5d6;
+  --fg-3: #beb1b4;
+  --accent: #f43f52;
+  --accent-rgb: 244 63 82;
+  --accent-hover: #ff596a;
+  --accent-ink: #24080c;
+  --accent-fg: #ff8994;
+  --accent-soft: rgb(244 63 82 / 0.15);
+  --accent-line: rgb(255 91 108 / 0.48);
+  --success: #d4cbcc;
+  --success-rgb: 212 203 204;
+  --warning: #ffb3ba;
+  --warning-rgb: 255 179 186;
+  --danger: #ff4458;
+  --danger-rgb: 255 68 88;
+  --nav-bg: #171213;
+  --nav-border: rgba(255, 238, 240, 0.17);
+  --nav-fg: #e0d5d6;
+  --nav-fg-2: #beb1b4;
+  --nav-active-bg: rgba(255, 238, 240, 0.09);
+  --nav-active-fg: #fff;
+  --nav-active-icon: #ff8994;
+  --focus-ring: 0 0 0 3px rgb(244 63 82 / 0.32);
+}
+
+/* Лаймовая тема переключает только фирменный акцент, оставляя графитовую основу. */
+html[data-skin="lime"] {
+  --accent: #a3e635;
+  --accent-rgb: 163 230 53;
+  --accent-hover: #b4ef55;
+  --accent-ink: #0b1006;
+  --accent-fg: #b9ef62;
+  --accent-soft: rgb(163 230 53 / 0.14);
+  --accent-line: rgb(163 230 53 / 0.42);
+  --nav-active-bg: rgb(163 230 53 / 0.1);
+  --nav-active-icon: var(--accent-fg);
+  --focus-ring: 0 0 0 3px rgb(163 230 53 / 0.32);
+}
+
 /* ─────────────────────────────────── СВЕТЛАЯ ─────────────────────────────────── */
 [data-theme="light"] {
   color-scheme: light;

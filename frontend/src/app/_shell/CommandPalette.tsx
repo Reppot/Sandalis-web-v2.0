@@ -16,12 +16,15 @@ interface Command {
 }
 
 const THEME_LABEL: Record<Theme, MessageKey> = {
-  dark: "nav.themeNight",
+  red: "settings.themeRed",
+  lime: "settings.themeLime",
+  dark: "settings.themeRed",
   light: "nav.themeSimple",
   amber: "settings.themeAmber",
   contrast: "settings.themeContrast",
   noir: "settings.themeNoir",
   soft: "settings.themeSoft",
+  ascii: "settings.themeAscii",
 };
 
 /** Ctrl+K / ⌘K: быстрый переход к любому разделу, модулю и смена темы. */

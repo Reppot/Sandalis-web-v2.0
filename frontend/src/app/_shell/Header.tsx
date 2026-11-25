@@ -16,9 +16,10 @@ export const Header: React.FC<{
   onAlerts?: () => void;
   /** Почта на сайте: непрочитанные и переход в раздел. */
   mail?: { unread: number; onOpen: () => void };
+  onSettings?: () => void;
   /** Режим разработчика: вошли в чужой клан с правами командира. */
   developer?: boolean;
-}> = ({ section, page, onHome, onSearch, onAlerts, mail, developer }) => {
+}> = ({ section, page, onHome, onSearch, onAlerts, mail, onSettings, developer }) => {
   const t = useT();
   const { connection, lastSync } = useTerminal();
   const risk = useRiskSummary();
@@ -79,6 +80,11 @@ export const Header: React.FC<{
           <button type="button" className="topbar-mail" onClick={mail.onOpen} aria-label={t("mail.title")} title={mail.unread ? t("mail.unreadCount", { n: mail.unread }) : t("mail.title")}>
             <Icon name="mail" size={16} />
             {mail.unread ? <span className="topbar-mail-badge">{mail.unread > 99 ? "99+" : mail.unread}</span> : null}
+          </button>
+        ) : null}
+        {onSettings ? (
+          <button type="button" className="topbar-settings" onClick={onSettings} aria-label={t("nav.cabinet.label")} title={t("nav.cabinet.label")}>
+            <Icon name="settings" size={16} />
           </button>
         ) : null}
 

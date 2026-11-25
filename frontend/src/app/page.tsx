@@ -36,6 +36,7 @@ export default function TerminalPage() {
   const [clanView, setClanView] = React.useState<ClanView>("reports");
   const [clan, setClan] = React.useState<ClanProfile | null>(null);
   const [palette, setPalette] = React.useState(false);
+  const historyIndex = React.useRef(0);
   const openPalette = React.useCallback(() => setPalette(true), []);
   const closePalette = React.useCallback(() => setPalette(false), []);
   usePaletteHotkey(openPalette);
@@ -46,6 +47,33 @@ export default function TerminalPage() {
   }, []);
 
   React.useEffect(() => {
+    const onAuxClick = (event: MouseEvent) => {
+      if (event.button !== 3 && event.button !== 4) return;
+      event.preventDefault();
+      const index = Number((window.history.state as { __chronomancerIndex?: number } | null)?.__chronomancerIndex ?? 0);
+      const canMove = event.button === 3 ? index > 0 : index < window.history.length - 1;
+      if (canMove) window.history[event.button === 3 ? "back" : "forward"]();
+      else window.parent.postMessage({ type: "chronomancer:history-fallback", direction: event.button === 3 ? "back" : "forward" }, "*");
+    };
+    document.addEventListener("auxclick", onAuxClick);
+    return () => document.removeEventListener("auxclick", onAuxClick);
+  }, []);
+
+  React.useEffect(() => {
+    const initial = (window.history.state ?? {}) as Record<string, unknown>;
+    historyIndex.current = typeof initial.__chronomancerIndex === "number" ? initial.__chronomancerIndex : 0;
+    if (typeof initial.__chronomancerIndex !== "number") {
+      window.history.replaceState({ ...initial, __chronomancerIndex: 0 }, "", window.location.href);
+    }
+    const publishHistory = () => {
+      const index = Number((window.history.state as { __chronomancerIndex?: number } | null)?.__chronomancerIndex ?? 0);
+      historyIndex.current = index;
+      window.parent.postMessage({
+        type: "chronomancer:history-state",
+        canBack: index > 0,
+        canForward: index < window.history.length - 1,
+      }, "*");
+    };
     const syncFromLocation = () => {
       const params = new URLSearchParams(window.location.search);
       const requested = params.get("tab");
@@ -66,6 +94,7 @@ export default function TerminalPage() {
         setTool(null);
       }
       window.scrollTo({ top: 0 });
+      publishHistory();
     };
     syncFromLocation();
     window.addEventListener("popstate", syncFromLocation);
@@ -81,7 +110,12 @@ export default function TerminalPage() {
     const url = new URL(window.location.href);
     url.search =
       key === "tools" ? (sub ? `?tab=tools&tool=${sub}` : "") : key === "clan" && sub ? `?tab=clan&view=${sub}` : `?tab=${key}`;
-    if (url.search !== window.location.search) window.history.pushState(null, "", url);
+    if (url.search !== window.location.search) {
+      const nextIndex = historyIndex.current + 1;
+      window.history.pushState({ __chronomancerIndex: nextIndex }, "", url);
+      historyIndex.current = nextIndex;
+      window.parent.postMessage({ type: "chronomancer:history-state", canBack: true, canForward: false }, "*");
+    }
     window.scrollTo({ top: 0 });
   }, []);
   const openTool = React.useCallback((id: string | null) => select("tools", id), [select]);
@@ -216,7 +250,7 @@ export default function TerminalPage() {
       <div className="app">
         <Sidebar {...nav} />
         <div className="app-main">
-          <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} onAlerts={clanSections.some((s) => s.view === "stockpiles") ? () => openClan("stockpiles") : undefined} mail={isGuest ? undefined : { unread: unreadMail, onOpen: () => select("mail") }} developer={Boolean(session?.developer)} />
+          <Header section={section} page={page} onHome={() => select("tools")} onSearch={openPalette} onAlerts={clanSections.some((s) => s.view === "stockpiles") ? () => openClan("stockpiles") : undefined} mail={isGuest ? undefined : { unread: unreadMail, onOpen: () => select("mail") }} onSettings={() => select("cabinet")} developer={Boolean(session?.developer)} />
           <main key={`${current}:${currentTool?.id ?? currentClan?.view ?? ""}`} className={currentTool?.id === "planning" ? "app-content is-full" : "app-content"}>
             {workspace}
           </main>
