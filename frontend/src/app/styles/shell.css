@@ -46,6 +46,10 @@
 .sidebar-brand { display: flex; min-width: 0; align-items: center; gap: 0.7rem; border-radius: 10px; padding: 0.3rem 0.35rem; text-align: left; transition: background var(--dur-fast) var(--ease); }
 .sidebar-brand:hover { background: var(--nav-hover); }
 .sidebar-logo { width: 34px; height: 34px; flex-shrink: 0; border-radius: 9px; object-fit: cover; box-shadow: 0 0 0 1px var(--nav-border); }
+.sidebar-logo.chronomancer-mark { width: 38px; height: 38px; border: 1px solid var(--accent-line); border-radius: 11px; background: #100c0d; object-position: center 13%; }
+.brand-wordmark { display: flex; flex-direction: column; gap: 5px; }
+.brand-wordmark .sidebar-brand-name { color: var(--fg); font: 500 15px/1 var(--font-heading); letter-spacing: -.035em; text-transform: none; }
+.brand-wordmark .sidebar-brand-sub { color: var(--accent-fg); font: 600 9px/1 var(--font-mono); letter-spacing: .13em; text-transform: uppercase; }
 .sidebar-mark { display: grid; width: 34px; height: 34px; flex-shrink: 0; place-items: center; border-radius: 9px; background: var(--accent); color: var(--accent-ink); }
 .sidebar-brand-name { display: block; font-family: var(--font-brand); font-size: 0.95rem; letter-spacing: 0.14em; color: var(--nav-strong); }
 .sidebar-brand-sub { display: block; margin-top: 0.3rem; color: var(--nav-fg-2); font-size: var(--text-xs); }
@@ -121,6 +125,7 @@
 @media (max-width: 767px) { .topbar-inner { gap: 0.6rem; padding: 0 0.875rem; } }
 .topbar-logo { display: grid; width: 32px; height: 32px; flex-shrink: 0; place-items: center; overflow: hidden; border-radius: 8px; }
 .topbar-logo img { width: 100%; height: 100%; object-fit: cover; }
+.topbar-logo img.chronomancer-mark { object-position: center 13%; }
 .topbar-crumbs { display: flex; min-width: 0; flex-shrink: 1; align-items: center; gap: 0.5rem; font-size: 0.95rem; font-weight: 600; white-space: nowrap; }
 .topbar-crumb { overflow: hidden; color: var(--fg); text-overflow: ellipsis; letter-spacing: -0.01em; }
 .topbar-crumb.is-parent { color: var(--fg-3); font-weight: 500; }

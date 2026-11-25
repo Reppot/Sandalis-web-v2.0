@@ -4,5 +4,9 @@ out/
 .next/
 dist/
 resources/
+!resources/
+resources/*
+!resources/chronomancer.ico
+!resources/chronomancer-icon.png
 release/
 vendor/foxhole-stockpiles/

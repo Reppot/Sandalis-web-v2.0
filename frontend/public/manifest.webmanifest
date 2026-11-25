@@ -1,12 +1,13 @@
 {
-  "name": "SINDARIS Терминал",
-  "short_name": "SINDARIS",
-  "description": "Склады, заказы и логистика клана Foxhole",
+  "name": "Chronomancer — Foxhole Logi",
+  "short_name": "Chronomancer",
+  "description": "Foxhole logistics tools and a local MapData.sav stockpile scanner",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f1216",
-  "theme_color": "#0f1216",
+  "background_color": "#0b090a",
+  "theme_color": "#0b090a",
   "icons": [
-    { "src": "/api/v1/assets/brand/clan-logo.png", "sizes": "any", "type": "image/png", "purpose": "any" }
+    { "src": "/chronomancer-mark.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "/chronomancer-icon.png", "sizes": "256x256", "type": "image/png", "purpose": "any maskable" }
   ]
 }

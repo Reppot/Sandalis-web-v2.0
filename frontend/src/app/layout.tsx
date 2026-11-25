@@ -13,48 +13,49 @@ import "@fontsource/russo-one/latin-400.css";
 
 // адрес сайта для canonical / sitemap / Open Graph (переопределяется SITE_URL при сборке)
 const SITE_URL = (process.env.SITE_URL || "https://sandalis-web-v2-0.onrender.com").replace(/\/$/, "");
-const TITLE = "SINDARIS Терминал — логистика клана в Foxhole";
+const TITLE = "Chronomancer — Foxhole Logi";
 const DESCRIPTION =
-  "Логистический терминал клана SINDARIS для Foxhole: заказы и пирамида снабжения, склады и таймеры деспавна, база кодов, калькуляторы MPF, фабрик и производства.";
+  "Инструменты логистики Foxhole: склады, заказы, база кодов и калькуляторы производства. Десктоп-компаньон Chronomancer локально сканирует MapData.sav на компьютере игрока.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: TITLE, template: "%s — SINDARIS" },
+  title: { default: TITLE, template: "%s — Chronomancer" },
   description: DESCRIPTION,
-  applicationName: "SINDARIS Терминал",
-  keywords: ["Foxhole", "SINDARIS", "Сандалис", "логистика Foxhole", "калькулятор Foxhole", "MPF", "склады Foxhole", "таймер деспавна", "Foxhole logistics", "Foxhole calculator", "клан Foxhole"],
+  applicationName: "Chronomancer — Foxhole Logi",
+  keywords: ["Foxhole logistics", "Foxhole logi", "Foxhole stockpiles", "Foxhole stockpile scanner", "MapData.sav", "логистика Foxhole", "склады Foxhole", "калькулятор Foxhole", "MPF"],
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "SINDARIS Терминал",
+    siteName: "Chronomancer — Foxhole Logi",
     title: TITLE,
     description: DESCRIPTION,
     locale: "ru_RU",
-    images: [{ url: "/api/v1/assets/brand/clan-logo.png", alt: "SINDARIS" }],
+    images: [{ url: "/chronomancer-icon.png", alt: "Chronomancer — Foxhole Logi" }],
   },
-  twitter: { card: "summary", title: TITLE, description: DESCRIPTION, images: ["/api/v1/assets/brand/clan-logo.png"] },
+  twitter: { card: "summary", title: TITLE, description: DESCRIPTION, images: ["/chronomancer-icon.png"] },
   // коды подтверждения из Google Search Console и Яндекс.Вебмастера (переменные окружения при сборке)
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
     yandex: process.env.YANDEX_VERIFICATION || undefined,
   },
-  icons: { icon: "/api/v1/assets/brand/clan-logo.png" },
+  icons: { icon: "/chronomancer-mark.svg" },
   manifest: "/manifest.webmanifest",
-  authors: [{ name: "Reppot / SINDARIS" }],
-  creator: "Reppot / SINDARIS",
-  other: { copyright: "© 2026 Reppot / SINDARIS. All rights reserved." },
+  authors: [{ name: "Reppot" }],
+  creator: "Reppot",
+  other: { copyright: "© 2026 Reppot. All rights reserved." },
 };
 
 // структурированные данные для поисковиков (schema.org WebApplication)
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "SINDARIS Терминал",
+  name: "Chronomancer — Foxhole Logi",
   url: SITE_URL,
   description: DESCRIPTION,
-  applicationCategory: "GameApplication",
+  applicationCategory: "UtilitiesApplication",
+  featureList: ["Foxhole stockpile and clan logistics tools", "Local MapData.sav stockpile scanner for Windows"],
   operatingSystem: "Any",
   inLanguage: ["ru", "en", "uk", "de", "pl", "fr", "es", "pt-BR", "cs", "zh-CN"],
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -63,8 +64,8 @@ const JSON_LD = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0a0c0b" },
-    { media: "(prefers-color-scheme: light)", color: "#f3f4f1" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b090a" },
+    { media: "(prefers-color-scheme: light)", color: "#f5f0f1" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -81,7 +82,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
         {/* терминал рисуется на клиенте — краткое описание в HTML для поисковиков и экранных читалок */}
         <header className="sr-only">
-          <h1>SINDARIS Терминал — логистический терминал клана для Foxhole</h1>
+          <h1>Chronomancer — Foxhole Logi: инструменты логистики и локальный сканер складов</h1>
           <p>{DESCRIPTION}</p>
         </header>
         <AppProviders>{children}</AppProviders>

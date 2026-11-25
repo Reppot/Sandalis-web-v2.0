@@ -208,10 +208,10 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
     }
     void exportDoc(
       {
-        title: `SINDARIS • ${t("stock.docTitle")}`,
+        title: `Chronomancer • ${t("stock.docTitle")}`,
         header: [`${t("doc.hex")}: ${pinned?.region ?? "—"}`, `${t("doc.stockpile")}: ${pinned?.name ?? "—"}`, `${t("doc.lines")}: ${items.length} • Σ ${total}`],
         sections: [{ rows: items.map((i) => ({ name: itemLabel(i), quantity: i.quantity, unit: t("unit.unit"), icon: assetUrl(i.iconUrl) })) }],
-        fileBase: "SINDARIS_stockpile",
+        fileBase: "Chronomancer_stockpile",
         sheetName: t("stock.sheet"),
       },
       fmt,

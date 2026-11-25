@@ -12,7 +12,9 @@ import { guestProfile } from './local-api.mjs';
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: {
   standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true,
 } }]);
-app.setName('Sindaris');
+app.setName('Chronomancer');
+// Keep the existing local profile so auth state, preferences, and scan reports survive the rebrand.
+app.setPath('userData', path.join(app.getPath('appData'), 'Sindaris'));
 const locked = app.requestSingleInstanceLock();
 if (!locked) app.quit();
 let mainWindow;
@@ -154,7 +156,7 @@ async function completeDiscordSetup(ses, selection) {
     nativeAuth.capture('/api/v1/auth/discord/setup', 'POST', response.status, payload);
     await persistGuest(false);
     return { ok: true };
-  } catch { return { ok: false, error: 'Не удалось связаться с Sindaris. Проверьте подключение и повторите выбор.' }; }
+  } catch { return { ok: false, error: 'Не удалось связаться с сервером. Проверьте подключение и повторите выбор.' }; }
 }
 
 async function findSaveFile(folder) {
@@ -198,16 +200,18 @@ async function processSaveFile(file, signature) {
     } catch (error) {
       if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error;
     }
+    const incomplete = [...new Map([...logs.matchAll(/fs-sav:\s+([A-Za-z0-9_-]{1,100})\s+at\s+([A-Za-z0-9_-]{1,100})\s+skipped: the game had no details for it/gi)]
+      .map((match) => [`${match[1]}:${match[2]}`, { type: match[1], hex: match[2] }])).values()];
     const incompleteCount = [...logs.matchAll(/skipped: the game had no details for it/gi)].length;
     lastSaveSignature = signature;
     lastScanReport = {
       processedAt: new Date().toISOString(), fileName: path.basename(file),
-      stockpiles, incompleteCount, total: stockpiles.length + incompleteCount,
+      stockpiles, incomplete, incompleteCount, total: stockpiles.length + incompleteCount,
     };
     await writeFile(reportFile, JSON.stringify(lastScanReport), 'utf8');
     publishCompanionStatus({
       state: incompleteCount ? 'partial' : 'ready', folder: saveFolder, fileName: path.basename(file),
-      stockpiles, incompleteCount,
+      stockpiles, incomplete, incompleteCount,
       message: incompleteCount
         ? `Распознано складов: ${stockpiles.length}. Ещё ${incompleteCount} закреплённых объектов без доступных деталей — они не считаются пустыми.`
         : `Обработка завершена. Найдено складов: ${stockpiles.length}.`,
@@ -277,11 +281,19 @@ function openExternal(value) {
   if (safe) void shell.openExternal(safe).catch(() => {});
 }
 
+function brandIcon() {
+  const iconPath = app.isPackaged
+    ? path.join(process.resourcesPath, 'chronomancer-icon.png')
+    : path.join(app.getAppPath(), 'resources', 'chronomancer-icon.png');
+  return nativeImage.createFromPath(iconPath);
+}
+
 function openLogin(ses) {
   nativeAuth.clear();
   if (authWindow && !authWindow.isDestroyed()) { authWindow.focus(); return; }
   authWindow = new BrowserWindow({
-    title: 'Sindaris — вход через Discord', width: 760, height: 840, autoHideMenuBar: true,
+    title: 'Chronomancer — вход через Discord', width: 760, height: 840, autoHideMenuBar: true,
+    icon: brandIcon(),
     parent: mainWindow,
     webPreferences: { session: ses, sandbox: true, contextIsolation: true, nodeIntegration: false },
   });
@@ -298,13 +310,13 @@ function openLogin(ses) {
     if (u.searchParams.get('setup') === 'guild') query.set('setup', 'guild');
     if (u.searchParams.has('error')) query.set('error', u.searchParams.get('error').slice(0, 100));
     void persistGuest(false).then(() => mainWindow?.webContents.send('auth:complete', Object.fromEntries(query)))
-      .catch(() => dialog.showErrorBox('Sindaris', 'Не удалось сохранить состояние входа.'));
+      .catch(() => dialog.showErrorBox('Chronomancer', 'Не удалось сохранить состояние входа.'));
     auth.close();
   };
   auth.webContents.on('did-navigate', returned);
   auth.on('closed', () => { if (authWindow === auth) authWindow = null; });
   void auth.loadURL(SERVER_URL + '/api/v1/auth/discord/login?return_to=%2F').catch(() => {
-    dialog.showErrorBox('Sindaris', 'Не удалось открыть Discord. Проверьте подключение к интернету.');
+    dialog.showErrorBox('Chronomancer', 'Не удалось открыть Discord. Проверьте подключение к интернету.');
   });
 }
 
@@ -317,12 +329,15 @@ async function fileResponse(ses, root, pathname) {
 
 async function createWindow(ses) {
   mainWindow = new BrowserWindow({
-    title: 'Sindaris', width: 1440, height: 960, minWidth: 900, minHeight: 640,
-    backgroundColor: '#0a0c0b', autoHideMenuBar: true, show: false,
+    title: 'Chronomancer — Foxhole Logi', width: 1440, height: 960, minWidth: 900, minHeight: 640,
+    icon: brandIcon(), frame: false, backgroundColor: '#0b090a', autoHideMenuBar: true, show: false,
     webPreferences: { session: ses, preload: path.join(app.getAppPath(), 'src', 'preload.cjs'), sandbox: true, contextIsolation: true, nodeIntegration: false, webSecurity: true },
   });
   const win = mainWindow;
   win.once('ready-to-show', () => win.show());
+  const publishWindowState = () => win.webContents.send('window:maximized', win.isMaximized());
+  win.on('maximize', publishWindowState);
+  win.on('unmaximize', publishWindowState);
   win.on('close', (event) => {
     if (!quitting) { event.preventDefault(); win.hide(); }
   });
@@ -358,7 +373,8 @@ if (locked) app.whenReady().then(async () => {
     const report = JSON.parse(await readFile(reportFile, 'utf8'));
     lastScanReport = typeof report?.processedAt === 'string' && typeof report?.fileName === 'string'
       && Array.isArray(report?.stockpiles) && Number.isInteger(report?.incompleteCount) && Number.isInteger(report?.total)
-      ? report : null;
+      ? { ...report, incomplete: Array.isArray(report.incomplete) ? report.incomplete.filter((item) => typeof item?.type === 'string' && typeof item?.hex === 'string').slice(0, 500) : [] }
+      : null;
   } catch { lastScanReport = null; }
   ipcMain.handle('companion:choose-save-file', async (event) => {
     if (!trustedIpc(event)) return companionStatus;
@@ -379,13 +395,28 @@ if (locked) app.whenReady().then(async () => {
     openLogin(ses);
     return true;
   });
+  ipcMain.handle('window:minimize', (event) => {
+    if (!trustedIpc(event) || !mainWindow) return false;
+    mainWindow.minimize();
+    return true;
+  });
+  ipcMain.handle('window:toggle-maximize', (event) => {
+    if (!trustedIpc(event) || !mainWindow) return false;
+    if (mainWindow.isMaximized()) mainWindow.unmaximize(); else mainWindow.maximize();
+    return mainWindow.isMaximized();
+  });
+  ipcMain.handle('window:close', (event) => {
+    if (!trustedIpc(event) || !mainWindow) return false;
+    mainWindow.close();
+    return true;
+  });
+  ipcMain.handle('window:is-maximized', (event) => trustedIpc(event) ? Boolean(mainWindow?.isMaximized()) : false);
   // Closing the window keeps the local companion process alive. Quit is explicit in the tray.
-  const traySvg = '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><rect x="1" y="1" width="30" height="30" rx="8" fill="#100c0d"/><path d="m9 8-3-3m17 3 3-3M12 5h8" fill="none" stroke="#ff6878" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="18" r="10" fill="#f43f52"/><circle cx="16" cy="18" r="7.6" fill="#f2eded"/><path d="M16 13v5l3.5 2" fill="none" stroke="#c52e40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="18" r="1.2" fill="#c52e40"/></svg>';
-  const trayImage = nativeImage.createFromDataURL(`data:image/svg+xml;charset=utf-8,${encodeURIComponent(traySvg)}`);
+  const trayImage = brandIcon();
   tray = new Tray(trayImage);
-  tray.setToolTip('Sindaris — компаньон работает');
+  tray.setToolTip('Chronomancer — Foxhole Logi работает');
   const trayMenu = Menu.buildFromTemplate([
-    { label: 'Открыть Sindaris', click: () => { if (mainWindow?.isMinimized()) mainWindow.restore(); mainWindow?.show(); mainWindow?.focus(); } },
+    { label: 'Открыть Chronomancer', click: () => { if (mainWindow?.isMinimized()) mainWindow.restore(); mainWindow?.show(); mainWindow?.focus(); } },
     { type: 'separator' },
     { label: 'Выход', click: () => { quitting = true; app.quit(); } },
   ]);
@@ -463,7 +494,7 @@ if (locked) app.whenReady().then(async () => {
   await createWindow(ses);
   await watchSaveFolder(saveFolder);
   app.on('activate', () => { if (!mainWindow) void createWindow(ses); });
-}).catch(() => { dialog.showErrorBox('Sindaris', 'Не удалось запустить приложение. Выполните сборку desktop заново.'); app.quit(); });
+}).catch(() => { dialog.showErrorBox('Chronomancer', 'Не удалось запустить приложение. Выполните сборку desktop заново.'); app.quit(); });
 app.on('second-instance', () => { if (mainWindow) { if (mainWindow.isMinimized()) mainWindow.restore(); mainWindow.focus(); } });
 app.on('window-all-closed', () => { /* tray keeps the companion and local collection alive */ });
 app.on('before-quit', () => {

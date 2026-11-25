@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useContent } from "@/entities/content";
 import { Ticker, useClock, useRiskSummary, useTerminal } from "@/features/timers";
 import { Icon, cn, formatClock, useT } from "@/shared";
 
@@ -22,10 +21,8 @@ export const Header: React.FC<{
 }> = ({ section, page, onHome, onSearch, onAlerts, mail, developer }) => {
   const t = useT();
   const { connection, lastSync } = useTerminal();
-  const { media } = useContent();
   const risk = useRiskSummary();
   const now = useClock();
-  const logo = media("clan_logo");
 
   const system =
     risk.critical > 0
@@ -44,9 +41,9 @@ export const Header: React.FC<{
   return (
     <header className="topbar">
       <div className="topbar-inner">
-        <button type="button" className="topbar-logo md:hidden" onClick={onHome} aria-label="SINDARIS">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {logo ? <img src={logo} alt="" width={30} height={30} /> : <span className="title-brand text-sm">S</span>}
+        <button type="button" className="topbar-logo md:hidden" onClick={onHome} aria-label="Chronomancer — Foxhole Logi">
+          {/* eslint-disable-next-line @next/next/no-img-element -- local Chronomancer brand mark */}
+          <img className="chronomancer-mark" src="/chronomancer-icon.png" alt="" width={30} height={30} />
         </button>
 
         <nav className="topbar-crumbs" aria-label={t("header.breadcrumbs")}>

@@ -47,7 +47,6 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   const [videoFailed, setVideoFailed] = React.useState(false);
   const [reducedMotion, setReducedMotion] = React.useState(false);
   const video = mediaEntry("login_video");
-  const logo = media("clan_logo");
 
   React.useEffect(() => {
     setReducedMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -93,7 +92,7 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
   const poster = video?.poster ? (video.poster.startsWith("/") ? `${env.apiUrl}${video.poster}` : video.poster) : media("bg_home");
 
   return (
-    <main className="auth-screen">
+    <main className="auth-screen" data-theme="dark">
       <div className="auth-video-bg" aria-hidden>
         <div className="auth-video-fallback" style={poster ? { backgroundImage: `url(${poster})` } : undefined} />
         {video?.url && !videoFailed && !reducedMotion && (
@@ -104,9 +103,9 @@ export const LoginScreen: React.FC<{ onLoggedIn: (s: UserSession) => void }> = (
 
       <section className="auth-panel">
         <div className="auth-header">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          {logo && <img src={logo} alt={t("common.crest")} width={88} height={88} className="auth-logo" />}
-          <h1 className="auth-title">SINDARIS</h1>
+          {/* eslint-disable-next-line @next/next/no-img-element -- local Chronomancer mascot */}
+          <img src="/chronomancer-icon.png" alt="" width={88} height={88} className="auth-logo chronomancer-mark" />
+          <h1 className="auth-title">Chronomancer</h1>
           <p className="auth-subtitle">{t("login.tagline")}</p>
         </div>
 

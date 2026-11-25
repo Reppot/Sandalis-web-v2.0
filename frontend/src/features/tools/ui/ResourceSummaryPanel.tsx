@@ -26,7 +26,7 @@ export interface ToolReport {
 export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
   const strip = ({ name, quantity, unit, note, icon }: SummaryLine) => ({ name, quantity, unit, note, icon });
   return {
-    title: `SINDARIS • ${report.toolName}`,
+    title: `Chronomancer • ${report.toolName}`,
     header: [`${t("tools.doc.tool")}: ${report.toolName}`, `${t("tools.doc.mode")}: ${report.subtitle}`, `${t("doc.lines")}: ${report.items.length} • ${t("tools.doc.resources")}: ${report.resources.length}`],
     sections: [
       { label: `${t("tools.doc.selected")} • ${report.items.length}`, rows: report.items.map(strip) },
@@ -36,7 +36,7 @@ export function toolDoc(report: ToolReport, t: Translate): ExportDoc {
     ],
     fileBase: report.fileBase,
     sheetName: t("tools.doc.sheet"),
-    footer: `SINDARIS • ${t("tools.doc.footer")}`,
+    footer: `Chronomancer • ${t("tools.doc.footer")}`,
   };
 }
 

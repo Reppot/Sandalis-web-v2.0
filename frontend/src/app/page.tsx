@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { clanApi, type ClanProfile } from "@/entities/clan";
-import { useContent } from "@/entities/content";
 import { Scopes } from "@/entities/session";
 import { CabinetWorkspace, LoginScreen, useSession } from "@/features/cabinet";
 import { CodeBaseWorkspace } from "@/features/codes";
@@ -30,7 +29,6 @@ import { CopyrightNotice, assetUrl, useT, type MessageKey } from "@/shared";
 export default function TerminalPage() {
   const t = useT();
   const { session, loading, setSession, can, logout } = useSession();
-  const { media } = useContent();
   const [tab, setTab] = React.useState<TabKey>("tools");
   // открытый модуль «Инструментов» (?tab=tools&tool=...): заказы, пирамида, коды, калькуляторы
   const [tool, setTool] = React.useState<string | null>(null);
@@ -145,7 +143,7 @@ export default function TerminalPage() {
   if (loading) {
     return (
       <div className="app-splash">
-        <span className="title-brand text-lg">SINDARIS</span>
+        <span className="title-brand text-lg">Chronomancer</span>
         <span className="app-splash-bar" aria-hidden />
         <span className="sr-only">{t("app.connecting")}</span>
       </div>
@@ -209,7 +207,6 @@ export default function TerminalPage() {
     clanSections: clanSections.map((s) => ({ id: s.view, icon: s.icon, label: `clannav.${s.view}` as MessageKey })),
     activeClanView: currentClan?.view ?? clanView,
     user: { name: session.displayName ?? t("role.guest"), avatar: assetUrl(session.avatarUrl) },
-    logo: media("clan_logo"),
   };
   const section = current === "clan" ? clan?.name ?? t("nav.clan.label") : t(tabKeys(current).label);
   const page = currentTool ? t(currentTool.label) : currentClan ? t(currentClan.label) : null;

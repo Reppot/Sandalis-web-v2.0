@@ -1,7 +1,7 @@
 {
-  "name": "sindaris-desktop",
-  "productName": "Sindaris",
-  "version": "0.1.9",
+  "name": "chronomancer-desktop",
+  "productName": "Chronomancer",
+  "version": "0.1.12",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
@@ -25,7 +25,7 @@
   },
   "build": {
     "appId": "com.sindaris.terminal",
-    "productName": "Sindaris",
+    "productName": "Chronomancer",
     "asar": true,
     "directories": {
       "output": "release"
@@ -47,11 +47,16 @@
       {
         "from": "resources/foxhole-stockpiles-LICENSE.txt",
         "to": "foxhole-stockpiles-LICENSE.txt"
+      },
+      {
+        "from": "resources/chronomancer-icon.png",
+        "to": "chronomancer-icon.png"
       }
     ],
     "win": {
+      "icon": "resources/chronomancer.ico",
       "target": "nsis",
-      "artifactName": "Sindaris-Setup-${version}.${ext}"
+      "artifactName": "Chronomancer-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": true,

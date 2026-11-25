@@ -134,11 +134,11 @@ export const CodeBaseWorkspace: React.FC = () => {
             <Icon name="copy" size={15} />
             {t("codes.copy")}
           </button>
-          <button className="btn" onClick={() => downloadBlob(new Blob([toCsv(filtered, t)], { type: "text/csv;charset=utf-8" }), "sindaris-code-base.csv")}>
+          <button className="btn" onClick={() => downloadBlob(new Blob([toCsv(filtered, t)], { type: "text/csv;charset=utf-8" }), "chronomancer-code-base.csv")}>
             <Icon name="download" size={15} />
             CSV
           </button>
-          <button className="btn" onClick={() => downloadBlob(new Blob([toJson(filtered)], { type: "application/json;charset=utf-8" }), "sindaris-code-base.json")}>
+          <button className="btn" onClick={() => downloadBlob(new Blob([toJson(filtered)], { type: "application/json;charset=utf-8" }), "chronomancer-code-base.json")}>
             <Icon name="download" size={15} />
             JSON
           </button>

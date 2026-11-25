@@ -51,5 +51,9 @@ tools/guide/debug-*.png
 desktop/node_modules/
 desktop/dist/
 desktop/resources/
+!desktop/resources/
+desktop/resources/*
+!desktop/resources/chronomancer.ico
+!desktop/resources/chronomancer-icon.png
 desktop/release/
 desktop/npm-audit.json
