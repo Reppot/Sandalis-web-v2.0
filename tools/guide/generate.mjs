@@ -1,5 +1,5 @@
-// Генератор руководства «Навигация»: демо-клан -> скриншоты интерфейса на ru/en/cs ->
-// координаты меток из DOM -> backend/static/guide/<locale>/*.webp + seed/data/guide.json.
+// Генератор руководства «Навигация»: демо-клан -> чистые скриншоты на ru/en ->
+// пояснения к разделам -> backend/static/guide/<locale>/*.webp + seed/data/guide.json.
 // Запуск и подготовка окружения — README.md рядом.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -65,10 +65,63 @@ const PREPARE = {
     await page.$eval('[data-guide="tools-tabs"] [role=tab][aria-selected="true"]', (el) => el.scrollIntoView({ block: "nearest", inline: "center" }));
     await page.waitForSelector(".factory-item-card");
   },
+  async filterFacility(page) {
+    const search = '[data-guide="facility-search"]';
+    await page.waitForSelector(search, { timeout: 30000 });
+    await page.click(search);
+    await page.type(search, "materials");
+    await page.waitForSelector(".factory-item-card", { timeout: 30000 });
+  },
+  async addFactoryItem(page) {
+    await page.waitForSelector(".factory-item-card", { timeout: 30000 });
+    await page.click(".factory-item-card");
+    await page.waitForSelector(".factory-plan-row", { timeout: 30000 });
+  },
+  async selectFacilityChain(page) {
+    await PREPARE.filterFacility(page);
+    await page.click(".factory-item-card");
+    await page.waitForSelector('[data-guide="facility-buildings"]', { timeout: 30000 });
+    await page.$eval('[data-guide="facility-buildings"]', (el) => el.scrollIntoView({ block: "center" }));
+  },
   async openPlanning(page) {
     await page.waitForSelector('[data-guide="planning-regions"]', { timeout: 30000 });
     const toggle = await page.$('[data-guide="planning-regions"]');
     if (await toggle.evaluate((el) => el.getAttribute("aria-pressed") !== "true")) await toggle.click();
+    await page.waitForSelector(".planning-hex-select-label", { timeout: 30000 });
+    const label = await page.$eval(".planning-hex-select-label", (el) => ({ width: el.getBoundingClientRect().width, hexWidth: el.parentElement.getBoundingClientRect().width }));
+    if (label.width > label.hexWidth + 2) throw new Error(`Selection label overflows its hex: ${JSON.stringify(label)}`);
+  },
+  async checkPlanningOverview(page) {
+    await page.waitForSelector(".planning-region", { timeout: 30000 });
+    const state = await page.evaluate(() => ({
+      regions: document.querySelectorAll("[data-region]").length,
+      selected: document.querySelectorAll(".planning-hex.is-region-selected").length,
+      markers: document.querySelectorAll(".planning-marker").length,
+      labelWidth: document.querySelector(".planning-region")?.getBoundingClientRect().width ?? 0,
+      hexWidth: document.querySelector("[data-region]")?.getBoundingClientRect().width ?? 0,
+      mapRequests: performance.getEntriesByType("resource").map((entry) => new URL(entry.name).pathname).filter((path) => path.includes("/api/v1/world/map/")),
+    }));
+    if (state.regions < 40 || state.selected !== 0 || state.markers !== 0 || state.labelWidth > 260) throw new Error(`Invalid empty planning overview: ${JSON.stringify(state)}`);
+    if (state.labelWidth > state.hexWidth + 2) throw new Error(`Overview region labels overlap neighboring hexes: ${JSON.stringify(state)}`);
+    if (state.mapRequests.some((path) => !path.endsWith("/overview"))) throw new Error(`Empty planning overview requested details: ${state.mapRequests.join(", ")}`);
+  },
+  async showPlanningFrontline(page) {
+    const toggle = '[data-guide="planning-frontline-toggle"]';
+    await page.waitForSelector(toggle, { timeout: 30000 });
+    await page.click(toggle);
+    await page.waitForSelector(".planning-frontline polyline", { timeout: 30000 });
+    const state = await page.evaluate(() => ({
+      pressed: document.querySelector('[data-guide="planning-frontline-toggle"]').getAttribute("aria-pressed"),
+      svg: (() => { const { width, height } = document.querySelector(".planning-frontline")?.getBoundingClientRect() ?? {}; return { width, height }; })(),
+      line: (() => { const { left, top, right, bottom } = document.querySelector(".planning-frontline polyline")?.getBoundingClientRect() ?? {}; return { left, top, right, bottom }; })(),
+      canvas: (() => { const { left, top, right, bottom } = document.querySelector(".planning-canvas").getBoundingClientRect(); return { left, top, right, bottom }; })(),
+      points: document.querySelector(".planning-frontline polyline")?.getAttribute("points")?.trim().split(/\s+/).length ?? 0,
+      markers: document.querySelectorAll(".planning-marker").length,
+      selected: document.querySelectorAll(".planning-hex.is-region-selected").length,
+      detailRequests: performance.getEntriesByType("resource").map((entry) => new URL(entry.name).pathname).filter((path) => path.includes("/api/v1/world/map/regions")),
+    }));
+    if (state.pressed !== "true" || state.points < 2 || state.markers !== 0 || state.selected !== 0 || state.detailRequests.length) throw new Error(`Frontline is not isolated from selected map details: ${JSON.stringify(state)}`);
+    if (state.svg.width < 1 || state.svg.height < 1 || state.line.right <= state.canvas.left || state.line.left >= state.canvas.right || state.line.bottom <= state.canvas.top || state.line.top >= state.canvas.bottom) throw new Error(`Frontline geometry is outside the visible map: ${JSON.stringify(state)}`);
   },
   async openTraining(page) {
     await page.waitForSelector(".training-switch-btn", { timeout: 30000 });
@@ -81,8 +134,72 @@ const PREPARE = {
     await page.click('[data-guide="planning-regions"]');
     await page.waitForSelector('[data-region="DeadLandsHex"]', { timeout: 30000 });
     await page.click('[data-region="DeadLandsHex"]');
+    const secondKey = await page.$$eval("[data-region]", (regions) => {
+      const target = regions.find((region) => region.dataset.region === "DeadLandsHex");
+      const x = Number.parseFloat(target?.style.left ?? "0");
+      const y = Number.parseFloat(target?.style.top ?? "0");
+      return regions.filter((region) => region !== target).sort((a, b) => {
+        const distance = (region) => Math.hypot(Number.parseFloat(region.style.left) - x, Number.parseFloat(region.style.top) - y);
+        return distance(a) - distance(b);
+      })[0]?.dataset.region;
+    });
+    if (!secondKey) throw new Error("The map overview has no second region to select");
+    await page.click(`[data-region="${secondKey}"]`);
     await page.waitForSelector(".planning-marker", { timeout: 30000 });
     await page.click('[data-guide="planning-regions"]');
+    await page.waitForFunction(() => document.querySelectorAll("[data-region]").length === 2, { timeout: 30000 });
+    await page.waitForFunction(() => document.querySelector(".planning-filters-head")?.getAttribute("aria-expanded") === "false", { timeout: 3000 });
+    const bounds = await page.evaluate(() => {
+      const canvas = document.querySelector(".planning-canvas").getBoundingClientRect();
+      const filters = document.querySelector(".planning-filters").getBoundingClientRect();
+      const filtersExpanded = document.querySelector(".planning-filters-head").getAttribute("aria-expanded");
+      const hexes = [...document.querySelectorAll("[data-region]")].map((region) => region.getBoundingClientRect());
+      const hex = { left: Math.min(...hexes.map((r) => r.left)), top: Math.min(...hexes.map((r) => r.top)), right: Math.max(...hexes.map((r) => r.right)), bottom: Math.max(...hexes.map((r) => r.bottom)) };
+      const marker = document.querySelector(".planning-marker");
+      const tooltip = getComputedStyle(marker, "::after");
+      const transform = new DOMMatrixReadOnly(tooltip.transform);
+      const requests = performance.getEntriesByType("resource").map((entry) => new URL(entry.name)).filter((url) => url.pathname.includes("/api/v1/world/map/regions"));
+      const detailKeys = requests.map((url) => [...url.searchParams.entries()].filter(([key]) => key.startsWith("regions")).flatMap(([, value]) => value.split(",")).sort().join(","));
+      return { canvas: [canvas.left, canvas.top, canvas.right, canvas.bottom], filters: [filters.left, filters.top, filters.right, filters.bottom], filtersExpanded, hex: [hex.left, hex.top, hex.right, hex.bottom], regions: document.querySelectorAll("[data-region]").length, selected: document.querySelectorAll(".planning-hex.is-region-selected").length, markers: document.querySelectorAll(".planning-marker").length, markerRegions: [...document.querySelectorAll(".planning-marker")].map((el) => el.closest("[data-region]")?.dataset.region), tooltipScale: [transform.a, transform.d], tooltipWidth: parseFloat(tooltip.width), detailKeys };
+    });
+    if (bounds.regions !== 2 || bounds.selected !== 2) throw new Error(`Non-selected hexes remained on the plan: ${JSON.stringify(bounds)}`);
+    if (!bounds.markers || bounds.markerRegions.some((key) => !["DeadLandsHex", secondKey].includes(key))) throw new Error(`Building markers escaped the selected hexes: ${JSON.stringify(bounds)}`);
+    const expectedKeys = ["DeadLandsHex", secondKey].sort().join(",");
+    if (!bounds.detailKeys.some((keys) => keys?.split(",").sort().join(",") === expectedKeys)) throw new Error(`Region details were not requested only for the selected hexes: ${JSON.stringify(bounds)}`);
+    if (bounds.hex[0] < bounds.canvas[0] - 2 || bounds.hex[1] < bounds.canvas[1] - 2 || bounds.hex[2] > bounds.canvas[2] + 2 || bounds.hex[3] > bounds.canvas[3] + 2) throw new Error(`Selected hex is not fitted to the map viewport: ${JSON.stringify(bounds)}`);
+    if (bounds.filtersExpanded !== "false" || bounds.hex[0] < bounds.filters[2] - 2) throw new Error(`The building filter panel obscures the selected map: ${JSON.stringify(bounds)}`);
+    if (Math.abs(bounds.tooltipScale[0] - 1) > 0.02 || Math.abs(bounds.tooltipScale[1] - 1) > 0.02 || bounds.tooltipWidth > 320) throw new Error(`Building tooltip is scaled incorrectly: ${JSON.stringify(bounds)}`);
+    const hoverPoint = await page.evaluate(() => {
+      for (const marker of document.querySelectorAll(".planning-marker")) {
+        const rect = marker.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+        const hit = document.elementFromPoint(x, y);
+        if (hit === marker || marker.contains(hit)) return { x, y };
+      }
+      return null;
+    });
+    if (!hoverPoint) throw new Error("Selected hexes have no visible building marker to hover");
+    await page.mouse.move(hoverPoint.x, hoverPoint.y);
+    await page.waitForFunction(() => [...document.querySelectorAll(".planning-marker")].some((marker) => getComputedStyle(marker, "::after").opacity === "1"), { timeout: 3000 });
+
+    const frontlineToggle = '[data-guide="planning-frontline-toggle"]';
+    await page.click(frontlineToggle);
+    await page.waitForSelector(".planning-frontline polyline", { timeout: 30000 });
+    const selectedFrontline = await page.evaluate(() => {
+      const svg = document.querySelector(".planning-frontline").getBoundingClientRect();
+      const line = document.querySelector(".planning-frontline polyline").getBoundingClientRect();
+      const canvas = document.querySelector(".planning-canvas").getBoundingClientRect();
+      return {
+        regions: document.querySelectorAll("[data-region]").length,
+        selected: document.querySelectorAll(".planning-hex.is-region-selected").length,
+        svg: { width: svg.width, height: svg.height },
+        visible: line.right > canvas.left && line.left < canvas.right && line.bottom > canvas.top && line.top < canvas.bottom,
+      };
+    });
+    if (selectedFrontline.regions !== 2 || selectedFrontline.selected !== 2 || selectedFrontline.svg.width < 1 || selectedFrontline.svg.height < 1 || !selectedFrontline.visible) throw new Error(`Frontline is misaligned after selecting hexes: ${JSON.stringify(selectedFrontline)}`);
+    await page.click(frontlineToggle);
+    await page.waitForFunction(() => !document.querySelector(".planning-frontline"), { timeout: 3000 });
   },
   async openPlanningTools(page) {
     const toggle = await page.$('[data-guide="planning-tools-toggle"]');
@@ -157,27 +274,23 @@ async function rectOf(page, sel) {
   }, sel);
 }
 
-function markerPoint(r, at) {
-  if (at === "start" || r.w > 260 || r.h > 70) return { x: r.x + 18, y: r.y + 18 };
-  return { x: r.x + r.w - 4, y: r.y + 4 };
-}
-
 async function shoot(page, locale, shot) {
   await page.setViewport(shot.viewport ?? VIEWPORT);
   await page.goto(`${FRONTEND}${shot.path}`, { waitUntil: "networkidle0" });
   await page.addStyleTag({ content: "*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}" });
-  const ready = shot.mode === "viewport" || shot.prepare ? shot.markers[0].sel : shot.mode.clip;
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const ready = shot.mode === "viewport" || shot.prepare ? shot.notes[0]?.sel ?? "main" : shot.mode.clip;
   if (shot.prepare) await page.waitForSelector("main, .auth-panel", { timeout: 30000 });
   else await page.waitForSelector(ready.split(" >>")[0], { timeout: 30000 });
   if (shot.prepare) await PREPARE[shot.prepare](page);
   await sleep(700);
 
-  const missingMarkers = await page.evaluate((markers) => markers.flatMap(({ sel }) => {
+  const missingTargets = await page.evaluate((notes) => notes.flatMap(({ sel }) => {
     const [base, nth] = sel.split(" >>");
     const elements = nth === undefined ? document.querySelectorAll(base) : [document.querySelectorAll(base)[Number(nth)]].filter(Boolean);
     return elements.length ? [] : [sel];
-  }), shot.markers);
-  if (missingMarkers.length) throw new Error(`[${locale}] ${shot.id}: missing markers: ${missingMarkers.join(", ")}`);
+  }), shot.notes);
+  if (missingTargets.length) throw new Error(`[${locale}] ${shot.id}: missing screen targets: ${missingTargets.join(", ")}`);
 
   let clip;
   if (shot.mode === "viewport") {
@@ -190,35 +303,23 @@ async function shoot(page, locale, shot) {
     clip = { x: Math.max(0, r.x), y: Math.max(0, r.y), width: Math.ceil(r.w), height: Math.ceil(r.h) };
   }
 
-  const markers = [];
-  for (const m of shot.markers) {
-    const r = await rectOf(page, m.sel);
-    if (!r) throw new Error(`[${locale}] ${shot.id}: marker ${m.sel} not found`);
-    const p = markerPoint(r, m.at);
-    const x = ((p.x - clip.x) / clip.width) * 100;
-    const y = ((p.y - clip.y) / clip.height) * 100;
-    if (x < -1 || x > 101 || y < -1 || y > 101) throw new Error(`[${locale}] ${shot.id}: marker ${m.sel} outside the shot`);
-    const bx = Math.max(0, ((r.x - clip.x) / clip.width) * 100);
-    const by = Math.max(0, ((r.y - clip.y) / clip.height) * 100);
-    const bw = Math.max(0, Math.min(100 - bx, (r.w / clip.width) * 100));
-    const bh = Math.max(0, Math.min(100 - by, (r.h / clip.height) * 100));
-    markers.push({
-      x: +Math.min(98.5, Math.max(1.5, x)).toFixed(2),
-      y: +Math.min(98, Math.max(2, y)).toFixed(2),
-      box: { x: +bx.toFixed(2), y: +by.toFixed(2), w: +bw.toFixed(2), h: +bh.toFixed(2) },
-    });
+  for (const note of shot.notes) {
+    const r = await rectOf(page, note.sel);
+    if (!r) throw new Error(`[${locale}] ${shot.id}: screen target ${note.sel} not found`);
+    const intersects = r.x < clip.x + clip.width && r.x + r.w > clip.x && r.y < clip.y + clip.height && r.y + r.h > clip.y;
+    if (!intersects) throw new Error(`[${locale}] ${shot.id}: screen target ${note.sel} is outside the screenshot`);
   }
 
   mkdirSync(new URL(`${locale}/`, STATIC), { recursive: true });
   await page.screenshot({ path: fileURLToPath(new URL(`${locale}/${shot.id}.webp`, STATIC)), type: "webp", quality: 82, clip, captureBeyondViewport: true });
-  return { size: { w: clip.width, h: clip.height }, markers };
+  return { size: { w: clip.width, h: clip.height } };
 }
 
 async function main() {
   console.log("demo clan…");
   const demo = await seedDemo(BACKEND);
   const browser = await puppeteer.launch({ executablePath: BROWSER, headless: true, args: ["--hide-scrollbars", "--force-device-scale-factor=1"] });
-  const results = {}; // shotId -> locale -> {size, markers}
+  const results = {}; // shotId -> locale -> {size}
 
   for (const locale of LOCALES) {
     console.log(`locale ${locale}`);
@@ -259,7 +360,7 @@ async function main() {
           console.error("page text:", (await page.evaluate(() => document.body.innerText)).slice(0, 600));
           throw err;
         }
-        console.log(`  ${shot.id}: ${shot.markers.length} markers`);
+        console.log(`  ${shot.id}: ${shot.notes.length} screen notes`);
       }
     }
     await context.close();
@@ -287,8 +388,7 @@ async function main() {
         caption: mergeLocales(old.caption, shot.caption),
         images: { ...(old.images ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, `/api/v1/assets/guide/${l}/${shot.id}.webp`])) },
         size: { ...(old.size ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].size])) },
-        markers: { ...(old.markers ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, results[shot.id][l].markers])) },
-        notes: { ...(old.notes ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, shot.markers.map((m) => m.note[l])])) },
+        notes: { ...(old.notes ?? {}), ...Object.fromEntries(LOCALES.map((l) => [l, shot.notes.map((note) => note.note[l])])) },
       }; }),
     },
   }; });

@@ -68,10 +68,14 @@ const routeShape = (points: Point[], d: Defaults, id = "draft"): RouteShape => (
 
 /** Трансформ мира и CSS-переменные размера маркеров (--m) и подписей (--inv). */
 function worldStyle(v: View): React.CSSProperties {
+  const screenHexWidth = HEX_W * v.scale;
   return {
     transform: `translate(${v.x}px, ${v.y}px) scale(${v.scale})`,
     ["--m" as string]: String((1 / v.scale) * markerFactor(v.scale)),
     ["--inv" as string]: String(1 / v.scale),
+    // Counter-scaled region labels stay inside their hex, even at whole-map zoom.
+    ["--region-label-width" as string]: `${Math.max(36, screenHexWidth - 8)}px`,
+    ["--region-label-size" as string]: `${Math.max(9, Math.min(13, screenHexWidth / 6))}px`,
   };
 }
 
@@ -134,13 +138,29 @@ export const MapCanvas: React.FC<{
   const ed = React.useRef(editor);
   ed.current = editor;
 
-  const bounds = React.useMemo(() => {
+  // В режиме выбора карта остаётся обзором. После подтверждения показываем только выбранные
+  // регионы и считаем границы по ним, чтобы кадр не оставался масштабированным под всю войну.
+  const visibleRegions = React.useMemo(() => {
+    if (selectingRegions || selectedRegions.size === 0) return data.regions;
+    const selected = data.regions.filter((region) => selectedRegions.has(region.key));
+    return selected.length > 0 ? selected : data.regions;
+  }, [data.regions, selectingRegions, selectedRegions]);
+
+  const mapBounds = React.useMemo(() => {
     const cols = data.regions.map((r) => r.col);
     const rows = data.regions.map((r) => r.row);
     const minX = hexLeft(Math.min(...cols));
     const minY = hexTop(Math.min(...rows));
     return { minX, minY, w: hexLeft(Math.max(...cols)) + HEX_W - minX, h: hexTop(Math.max(...rows)) + HEX_H - minY };
-  }, [data]);
+  }, [data.regions]);
+
+  const bounds = React.useMemo(() => {
+    const cols = visibleRegions.map((r) => r.col);
+    const rows = visibleRegions.map((r) => r.row);
+    const minX = hexLeft(Math.min(...cols));
+    const minY = hexTop(Math.min(...rows));
+    return { minX, minY, w: hexLeft(Math.max(...cols)) + HEX_W - minX, h: hexTop(Math.max(...rows)) + HEX_H - minY };
+  }, [visibleRegions]);
 
   // во что вписываем: весь театр войны или кадр снимка
   const target = React.useMemo(() => (frame ? { minX: frame.x, minY: frame.y, w: frame.w, h: frame.h } : bounds), [frame, bounds]);
@@ -148,9 +168,16 @@ export const MapCanvas: React.FC<{
     const el = box.current;
     if (!el) return;
     const { width, height } = el.getBoundingClientRect();
-    const scale = Math.min(width / target.w, height / target.h) * (frame ? 0.98 : 0.94);
-    setView({ scale, x: (width - target.w * scale) / 2 - target.minX * scale, y: (height - target.h * scale) / 2 - target.minY * scale });
-  }, [target, frame, setView]);
+    const canvasLeft = el.getBoundingClientRect().left;
+    const filters = el.closest(".planning-map")?.querySelector(".planning-filters");
+    const filtersRight = filters?.getBoundingClientRect().right ?? canvasLeft;
+    const insetLeft = !frame && !selectingRegions && selectedRegions.size > 0
+      ? Math.min(width * 0.55, Math.max(0, filtersRight - canvasLeft))
+      : 0;
+    const availableWidth = Math.max(1, width - insetLeft);
+    const scale = Math.min(availableWidth / target.w, height / target.h) * (frame ? 0.98 : 0.94);
+    setView({ scale, x: insetLeft + (availableWidth - target.w * scale) / 2 - target.minX * scale, y: (height - target.h * scale) / 2 - target.minY * scale });
+  }, [target, frame, selectingRegions, selectedRegions, setView]);
 
   // вписать карту при открытии; при смене размера окна (боковая панель, поворот телефона)
   // масштаб сохраняется, а центр карты остаётся в центре
@@ -430,11 +457,11 @@ export const MapCanvas: React.FC<{
       }}
     >
       {view ? (
-        <div ref={world} className="planning-world" style={live ? worldStyle(live) : undefined}>
-          {data.regions.map((r) => (
+        <div ref={world} className="planning-world" style={{ ...(live ? worldStyle(live) : {}), width: Math.max(0, mapBounds.minX + mapBounds.w), height: Math.max(0, mapBounds.minY + mapBounds.h) }}>
+          {visibleRegions.map((r) => (
             <Hex key={r.key} region={r} hidden={hidden} scale={scale} showItems={!resistance && selectedRegions.has(r.key)} selected={selectedRegions.has(r.key)} selecting={selectingRegions} onToggleRegion={onToggleRegion} />
           ))}
-          {!resistance && frontlinePoints && frontlinePoints.length > 1 ? <svg className="planning-frontline" viewBox={`${bounds.minX} ${bounds.minY} ${bounds.w} ${bounds.h}`} aria-label={t("planning.frontline")}>
+          {!resistance && frontlinePoints && frontlinePoints.length > 1 ? <svg className="planning-frontline" style={{ left: mapBounds.minX, top: mapBounds.minY, width: mapBounds.w, height: mapBounds.h }} viewBox={`${mapBounds.minX} ${mapBounds.minY} ${mapBounds.w} ${mapBounds.h}`} aria-label={t("planning.frontline")}>
             <polyline points={frontlinePoints.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#111" strokeWidth={12} strokeLinejoin="round" strokeLinecap="round" />
             <polyline points={frontlinePoints.map((p) => `${p.x},${p.y}`).join(" ")} fill="none" stroke="#f34f55" strokeWidth={5} strokeDasharray="16 10" strokeLinejoin="round" strokeLinecap="round" />
           </svg> : null}

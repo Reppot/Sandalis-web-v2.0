@@ -6,21 +6,12 @@ import { EmptyState, Loading, Modal, UiGlyph, apiClient, assetUrl, cn, useI18n, 
 
 type L = Partial<Record<Locale, string>>;
 
-interface GuideMarker {
-  /** Центр метки в процентах ширины/высоты скриншота. */
-  x: number;
-  y: number;
-  /** Bounds of the exact UI target, relative to the screenshot. */
-  box?: { x: number; y: number; w: number; h: number };
-}
-
 interface GuideShot {
   id: string;
   caption: L;
   images: Partial<Record<Locale, string>>;
   size: Partial<Record<Locale, { w: number; h: number }>>;
-  markers: Partial<Record<Locale, GuideMarker[]>>;
-  /** notes[locale][i] — пояснение к метке №(i+1). */
+  /** Notes are shown beside the clean screenshot; they are not positioned over controls. */
   notes: Partial<Record<Locale, string[]>>;
 }
 
@@ -38,15 +29,50 @@ interface GuideEntry {
   payload: GuideChapter;
 }
 
-/** Скриншоты сняты на ru/en/cs: для остальных языков — английский кадр с его метками. */
+/** Скриншоты сняты на ru/en; остальные локали используют английский кадр и текст. */
 const shotLocale = (shot: GuideShot, locale: Locale): Locale => (shot.images[locale] ? locale : shot.images.en ? "en" : "ru");
 const pick = (value: L | undefined, locale: Locale) => value?.[locale] ?? (locale === "ru" ? "" : value?.en) ?? value?.ru ?? "";
-const guideSection = (key: string) => (["start", "layout"].includes(key) ? "basics" : ["management", "cabinet"].includes(key) ? "admin" : "work");
+const guideSection = (key: string) => {
+  if (["start", "layout", "menu"].includes(key)) return "basics";
+  if (["orders", "pyramid", "codes", "tools", "calculators", "planning"].includes(key)) return "tools";
+  if (["reports", "timers", "statistics", "operations", "training", "management"].includes(key)) return "clan";
+  if (["feedback", "mail", "support"].includes(key)) return "site";
+  return "account";
+};
 const sectionLabel = (section: string, locale: Locale) => ({
   basics: locale === "ru" ? "Основы" : "Basics",
-  work: locale === "ru" ? "Рабочие разделы" : "Workspace",
-  admin: locale === "ru" ? "Управление" : "Administration",
+  tools: locale === "ru" ? "Инструменты" : "Tools",
+  clan: locale === "ru" ? "Работа клана" : "Clan workspace",
+  site: locale === "ru" ? "Связь и помощь" : "Help and contact",
+  account: locale === "ru" ? "Профиль и настройки" : "Profile and settings",
 }[section] ?? section);
+
+const GUIDE_ORDER = ["start", "layout", "tools", "orders", "pyramid", "planning", "codes", "calculators", "reports", "timers", "statistics", "operations", "training", "management", "feedback", "mail", "support", "cabinet"];
+const guideRank = (key: string) => {
+  const rank = GUIDE_ORDER.indexOf(key);
+  return rank < 0 ? GUIDE_ORDER.length : rank;
+};
+
+const GUIDE_LINKS: Record<string, string> = {
+  layout: "/?tab=tools",
+  menu: "/?tab=tools",
+  orders: "/?tab=tools&tool=orders",
+  pyramid: "/?tab=tools&tool=pyramid",
+  codes: "/?tab=tools&tool=codes",
+  tools: "/?tab=tools",
+  calculators: "/?tab=tools&tool=facility",
+  planning: "/?tab=tools&tool=planning",
+  reports: "/?tab=clan&view=reports",
+  timers: "/?tab=clan&view=stockpiles",
+  statistics: "/?tab=clan&view=stats",
+  operations: "/?tab=clan&view=operations",
+  training: "/?tab=clan&view=training",
+  management: "/?tab=clan&view=management",
+  feedback: "/?tab=feedback",
+  mail: "/?tab=mail",
+  support: "/?tab=support",
+  cabinet: "/?tab=cabinet",
+};
 
 const planningGuide: GuideEntry = {
   key: "planning",
@@ -95,7 +121,7 @@ export const GuideWorkspace: React.FC = () => {
         const currentPlanning = storedPlanning
           ? { ...storedPlanning, payload: { ...storedPlanning.payload, ...planningGuide.payload, shots: storedPlanning.payload.shots } }
           : planningGuide;
-        const sorted = [...rows.filter((row) => row.key !== planningGuide.key), currentPlanning].sort((a, b) => a.sort - b.sort);
+        const sorted = [...rows.filter((row) => row.key !== planningGuide.key), currentPlanning].sort((a, b) => guideRank(a.key) - guideRank(b.key) || a.sort - b.sort);
         setChapters(sorted);
         setActive((prev) => prev ?? sorted[0]?.key ?? null);
       })
@@ -107,6 +133,14 @@ export const GuideWorkspace: React.FC = () => {
 
   const chapter = chapters?.find((c) => c.key === active)?.payload ?? null;
   const index = chapters?.findIndex((c) => c.key === active) ?? -1;
+  const guideGroups = React.useMemo(() => {
+    const groups = new Map<string, GuideEntry[]>();
+    for (const entry of chapters ?? []) {
+      const key = guideSection(entry.key);
+      groups.set(key, [...(groups.get(key) ?? []), entry]);
+    }
+    return [...groups.entries()];
+  }, [chapters]);
 
   const go = (key: string) => {
     setActive(key);
@@ -124,8 +158,17 @@ export const GuideWorkspace: React.FC = () => {
       ) : (
         <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[17rem_minmax(0,1fr)]">
           <nav className="panel guide-toc min-w-0 p-2.5" aria-label={t("guide.toc")}>
-            <div className="px-2 pt-1 pb-2 text-xs font-semibold text-fg-3">{t("guide.toc")}</div>
-            <ol className="flex gap-1.5 overflow-x-auto lg:flex-col lg:overflow-visible">
+            <div className="guide-toc-mobile">
+              <label htmlFor="guide-mobile-jump" className="mb-1 block px-1 text-xs font-semibold text-fg-3">{t("guide.toc")}</label>
+              <select id="guide-mobile-jump" className="field h-10 w-full" value={active ?? ""} onChange={(event) => go(event.currentTarget.value)}>
+                {guideGroups.map(([section, entries]) => (
+                  <optgroup key={section} label={sectionLabel(section, locale)}>
+                    {entries.map((entry) => <option key={entry.key} value={entry.key}>{pick(entry.payload.title, locale)}</option>)}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+            <ol className="guide-toc-list">
               {chapters.map((c, i) => {
                 const section = guideSection(c.key);
                 const previousSection = i > 0 ? guideSection(chapters[i - 1].key) : null;
@@ -145,12 +188,19 @@ export const GuideWorkspace: React.FC = () => {
 
           {chapter && (
             <article className="flex min-w-0 flex-col gap-4">
-              <header className="panel p-5">
-                <div className="page-eyebrow">{t("guide.chapter", { n: index + 1, total: chapters.length })}</div>
-                <h2 className="mt-1.5 flex items-center gap-2.5 text-[1.35rem] font-semibold tracking-[-0.02em]">
-                  <UiGlyph icon={chapter.icon} size={24} /> {pick(chapter.title, locale)}
-                </h2>
-                <p className="mt-2 max-w-3xl text-[0.95rem] leading-relaxed text-fg-2">{pick(chapter.summary, locale)}</p>
+              <header className="panel flex flex-wrap items-start justify-between gap-4 p-5">
+                <div className="min-w-0 flex-1">
+                  <div className="page-eyebrow">{t("guide.chapter", { n: index + 1, total: chapters.length })} · {sectionLabel(guideSection(active ?? ""), locale)}</div>
+                  <h2 className="mt-1.5 flex items-center gap-2.5 text-[1.35rem] font-semibold tracking-[-0.02em]">
+                    <UiGlyph icon={chapter.icon} size={24} /> {pick(chapter.title, locale)}
+                  </h2>
+                  <p className="mt-2 max-w-3xl text-[0.95rem] leading-relaxed text-fg-2">{pick(chapter.summary, locale)}</p>
+                </div>
+                {active && GUIDE_LINKS[active] && !chapter.steps ? (
+                  <Link className="btn btn-primary shrink-0" href={GUIDE_LINKS[active]}>
+                    {locale === "ru" ? "Открыть раздел" : "Open section"}
+                  </Link>
+                ) : null}
               </header>
 
               {chapter.steps?.length ? (
@@ -193,42 +243,19 @@ export const GuideWorkspace: React.FC = () => {
   );
 };
 
-const ShotImage: React.FC<{ shot: GuideShot; locale: Locale; active?: number | null; onMarker?: (i: number) => void }> = ({ shot, locale, active, onMarker }) => {
+const ShotImage: React.FC<{ shot: GuideShot; locale: Locale }> = ({ shot, locale }) => {
   const at = shotLocale(shot, locale);
-  const markers = shot.markers[at] ?? [];
-  const notes = shot.notes[locale] ?? (locale === "ru" ? undefined : shot.notes.en) ?? shot.notes.ru ?? [];
   const src = assetUrl(shot.images[at]) ?? "";
   const size = shot.size[at] ?? { w: 1440, h: 900 };
   return (
-    // высокие снимки (экран входа, модальные окна) целиком помещаются по высоте экрана
-    <div className="guide-shot" style={{ aspectRatio: `${size.w} / ${size.h}`, width: `min(100%, calc(78dvh * ${size.w / size.h}))` }}>
+    <div className="guide-shot" style={{ aspectRatio: `${size.w} / ${size.h}` }}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={pick(shot.caption, locale)} width={size.w} height={size.h} />
-      {markers.map((m, i) => (
-        <React.Fragment key={i}>
-          {m.box && active === i ? <span className="guide-focus-target" style={{ left: `${m.box.x}%`, top: `${m.box.y}%`, width: `${m.box.w}%`, height: `${m.box.h}%` }} aria-hidden="true" /> : null}
-          <button
-            type="button"
-            className={cn("guide-marker", active === i && "is-active")}
-            style={{ left: `${m.x}%`, top: `${m.y}%` }}
-            onClick={(e) => {
-              e.stopPropagation();
-              onMarker?.(i);
-            }}
-            onMouseEnter={() => onMarker?.(i)}
-            onFocus={() => onMarker?.(i)}
-            aria-label={`${i + 1}: ${notes[i] ?? pick(shot.caption, locale)}`}
-          >
-            {i + 1}
-          </button>
-        </React.Fragment>
-      ))}
     </div>
   );
 };
 
 const GuideFigure: React.FC<{ shot: GuideShot; locale: Locale; onZoom: () => void; zoomLabel: string }> = ({ shot, locale, onZoom, zoomLabel }) => {
-  const [active, setActive] = React.useState<number | null>(null);
   const notes = shot.notes[locale] ?? (locale === "ru" ? undefined : shot.notes.en) ?? shot.notes.ru ?? [];
   return (
     <figure className="panel p-4 md:p-5">
@@ -236,15 +263,17 @@ const GuideFigure: React.FC<{ shot: GuideShot; locale: Locale; onZoom: () => voi
         <span className="panel-title">{pick(shot.caption, locale)}</span>
         <button type="button" className="btn h-8 min-h-0 px-3 text-[0.8rem]" onClick={onZoom}><Icon name="eye" size={14} />{zoomLabel}</button>
       </figcaption>
-      <ShotImage shot={shot} locale={locale} active={active} onMarker={setActive} />
-      <ol className="guide-notes mt-3">
-        {notes.map((note, i) => (
-          <li key={i} className={cn(active === i && "is-active")} onMouseEnter={() => setActive(i)} onMouseLeave={() => setActive(null)}>
-            <span className="guide-marker guide-marker-static">{i + 1}</span>
-            <span>{note}</span>
-          </li>
-        ))}
-      </ol>
+      <div className="guide-figure-layout">
+        <ShotImage shot={shot} locale={locale} />
+        {notes.length > 0 ? (
+          <aside className="guide-note-panel" aria-label={locale === "ru" ? "Пояснения к экрану" : "Screen notes"}>
+            <h3 className="guide-note-heading">{locale === "ru" ? "Что здесь можно сделать" : "What you can do here"}</h3>
+            <ul className="guide-notes">
+              {notes.map((note, i) => <li className="guide-note" key={i}>{note}</li>)}
+            </ul>
+          </aside>
+        ) : null}
+      </div>
     </figure>
   );
 };

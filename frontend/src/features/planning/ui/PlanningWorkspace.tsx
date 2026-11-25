@@ -100,7 +100,10 @@ export const PlanningWorkspace: React.FC = () => {
     next.has(key) ? next.delete(key) : next.add(key);
     return next;
   });
-  const navigateToRegion = (region: MapRegion) => setFocusRegion((prev) => ({ key: region.key, request: (prev?.request ?? 0) + 1 }));
+  const navigateToRegion = (region: MapRegion) => {
+    if (regionSelection.size > 0 && !regionSelection.has(region.key)) setSelectingRegions(true);
+    setFocusRegion((prev) => ({ key: region.key, request: (prev?.request ?? 0) + 1 }));
+  };
   const toggleFrontline = async () => {
     if (showFrontline) {
       setShowFrontline(false);
@@ -382,7 +385,7 @@ export const PlanningWorkspace: React.FC = () => {
 
           {data && !resistance ? (
             <div className="planning-overlay is-left">
-              <FilterPanel counts={counts} hidden={hidden} onToggle={toggle} onAll={setAll} onPreset={applyFilterPreset} />
+              <FilterPanel counts={counts} hidden={hidden} onToggle={toggle} onAll={setAll} onPreset={applyFilterPreset} collapseOnConfirm={!selectingRegions && regionSelection.size > 0} />
             </div>
           ) : null}
           <div className="planning-overlay is-right">
@@ -495,11 +498,15 @@ const FilterPanel: React.FC<{
   onToggle: (kind: MapKind) => void;
   onAll: (hide: boolean) => void;
   onPreset: (preset: keyof typeof FILTER_PRESETS) => void;
-}> = ({ counts, hidden, onToggle, onAll, onPreset }) => {
+  collapseOnConfirm: boolean;
+}> = ({ counts, hidden, onToggle, onAll, onPreset, collapseOnConfirm }) => {
   const t = useT();
   const [open, setOpen] = React.useState(true);
   // на телефоне список свёрнут, чтобы не закрывать карту
   React.useEffect(() => setOpen(window.matchMedia("(min-width: 768px)").matches), []);
+  React.useEffect(() => {
+    if (collapseOnConfirm) setOpen(false);
+  }, [collapseOnConfirm]);
   return (
     <div className="planning-filters">
       <button type="button" className="planning-filters-head" onClick={() => setOpen((v) => !v)} aria-expanded={open}>
