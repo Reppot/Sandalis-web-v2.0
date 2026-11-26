@@ -105,12 +105,17 @@ function WindowActionIcon({ kind }: { kind: 'minimize' | 'maximize' | 'restore' 
 
 function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'companion' | 'links' | 'report'>) => void }) {
   return <section className="internal-link-board" aria-labelledby="link-board-title">
+    <svg className="blood-filter-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="chronomancer-goo" x="-180%" y="-180%" width="460%" height="460%"><feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" /><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" /><feBlend in="SourceGraphic" in2="goo" /></filter></defs></svg>
     <header className="link-board-heading">
       <div><h1 id="link-board-title">Модули</h1></div>
       <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>модулей</span></b>
     </header>
     <div className="link-board-grid">
       {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} onClick={() => onOpen(section)}>
+        {(['cabinet', 'mail', 'support'] as DesktopTab[]).includes(section) && <>
+          <span className="blood-source blood-source-left" data-blood-source={`${section}-left`} aria-hidden="true"><i className="blood-pool" /><i className="blood-neck" /><i className="blood-drop" /></span>
+          <span className="blood-source blood-source-right" data-blood-source={`${section}-right`} aria-hidden="true"><i className="blood-pool" /><i className="blood-neck" /><i className="blood-drop" /></span>
+        </>}
         <span className="link-board-copy"><small className="link-board-index">МОДУЛЬ {String(index + 1).padStart(2, '0')}</small><strong>{labels[section]}</strong><small className="link-board-description">{sectionDetails[section]}</small></span>
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5" /></svg>
       </button>)}
@@ -203,8 +208,8 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
     const paletteObserver = new MutationObserver(syncPalette);
     paletteObserver.observe(shell ?? document.documentElement, { attributes: true, attributeFilter: ['data-skin'] });
     const ripples: Array<{ x: number; y: number; startedAt: number }> = [];
-    const drops: Array<{ x: number; startY: number; targetY: number; startedAt: number; impacted: boolean }> = [];
-    const dripSources: Array<{ key: string; x: number; y: number; side: 'left' | 'right'; nextDropAt: number }> = [];
+    const drops: Array<{ x: number; startY: number; targetY: number; startedAt: number; impacted: boolean; element: HTMLElement; side: 'left' | 'right' }> = [];
+    const dripSources: Array<{ key: string; x: number; y: number; side: 'left' | 'right'; nextDropAt: number; element: HTMLElement }> = [];
     let nextSourceSync = 0;
     let canvasRect = canvas.getBoundingClientRect();
     const resize = () => {
@@ -232,46 +237,38 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
       const advection = Math.sin(flowPhase) * width * 0.22;
       if (scene === 'links' && !reduceMotion && now >= nextSourceSync) {
         canvasRect = canvas.getBoundingClientRect();
-        const currentSources = [...document.querySelectorAll<HTMLElement>('.link-board-item.link-cabinet, .link-board-item.link-mail, .link-board-item.link-support')].flatMap((item) => {
-          const rect = item.getBoundingClientRect();
-          return [
-            { key: `${item.classList[1]}-left`, x: rect.left - canvasRect.left + 2, y: rect.bottom - canvasRect.top, side: 'left' as const },
-            { key: `${item.classList[1]}-right`, x: rect.right - canvasRect.left - 2, y: rect.bottom - canvasRect.top, side: 'right' as const },
-          ];
-        }).filter((source) => source.x >= 0 && source.x <= width && source.y >= 0 && source.y < height);
+        const currentSources = [...document.querySelectorAll<HTMLElement>('.blood-source[data-blood-source]')].map((element) => {
+          const rect = element.getBoundingClientRect();
+          const side = element.classList.contains('blood-source-left') ? 'left' as const : 'right' as const;
+          return { key: element.dataset.bloodSource ?? '', element, side, x: (side === 'left' ? rect.left + 2 : rect.right - 2) - canvasRect.left, y: rect.bottom - canvasRect.top };
+        }).filter((source) => source.key && source.x >= 0 && source.x <= width && source.y >= 0 && source.y < height);
         const previous = new Map(dripSources.map((source) => [source.key, source]));
         dripSources.splice(0, dripSources.length, ...currentSources.map((source, index) => ({
           ...source,
-          nextDropAt: previous.get(source.key)?.nextDropAt ?? now + 700 + index * 410 + Math.random() * 700,
+          nextDropAt: previous.get(source.key)?.nextDropAt ?? now + 1800 + index * 1150 + Math.random() * 420,
         })));
         nextSourceSync = now + 400;
         for (const source of dripSources) {
           const untilDrop = source.nextDropAt - now;
           if (untilDrop <= 0) {
-            drops.push({ x: source.x, startY: source.y, targetY: Math.min(height - 18, Math.max(source.y + 115, height * 0.84)), startedAt: now, impacted: false });
-            source.nextDropAt = now + 5400 + Math.random() * 1900;
+            source.element.style.setProperty('--blood-pool-length', '0px');
+            source.element.style.setProperty('--blood-neck-height', '0px');
+            source.element.style.setProperty('--blood-drop-opacity', '1');
+            source.element.style.setProperty('--blood-drop-y', '0px');
+            drops.push({ x: source.x, startY: source.y, targetY: source.y + 46, startedAt: now, impacted: false, element: source.element, side: source.side });
+            source.nextDropAt = now + 14000 + Math.random() * 2000;
           } else if (untilDrop < 1850) {
             const gather = 1 - untilDrop / 1850;
-            const direction = source.side === 'left' ? 1 : -1;
-            context.beginPath();
-            context.moveTo(source.x, source.y);
-            context.lineTo(source.x + direction * (5 + gather * 37), source.y);
-            context.lineCap = 'round';
-            context.strokeStyle = `rgb(${accentRgb} / ${0.32 + gather * 0.56})`;
-            context.lineWidth = 1.5 + gather * 2;
-            context.shadowColor = `rgb(${accentRgb} / .54)`;
-            context.shadowBlur = 7 + gather * 6;
-            context.stroke();
-            context.shadowBlur = 0;
-            if (gather > 0.58) {
-              const length = (gather - 0.58) * 25;
-              context.beginPath();
-              context.moveTo(source.x, source.y);
-              context.quadraticCurveTo(source.x + direction * 1.5, source.y + length * 0.62, source.x + direction, source.y + length);
-              context.strokeStyle = `rgb(${accentRgb} / ${0.55 + gather * 0.35})`;
-              context.lineWidth = 2.2 + gather * 1.5;
-              context.stroke();
-            }
+            source.element.style.setProperty('--blood-pool-length', `${5 + gather * 38}px`);
+            source.element.style.setProperty('--blood-pool-opacity', `${0.3 + gather * 0.62}`);
+            source.element.style.setProperty('--blood-neck-height', `${Math.max(0, gather - 0.34) * 27}px`);
+            source.element.style.setProperty('--blood-drop-opacity', `${Math.max(0, (gather - 0.38) / 0.62)}`);
+            source.element.style.setProperty('--blood-drop-y', `${Math.max(0, gather - 0.42) * 5}px`);
+          } else {
+            source.element.style.setProperty('--blood-pool-length', '0px');
+            source.element.style.setProperty('--blood-pool-opacity', '0');
+            source.element.style.setProperty('--blood-neck-height', '0px');
+            source.element.style.setProperty('--blood-drop-opacity', '0');
           }
         }
       }
@@ -282,27 +279,22 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
         const drop = drops[index];
         const age = now - drop.startedAt;
         const fallDuration = 1150;
+        const dropBounds = drop.element.getBoundingClientRect();
+        drop.x = (drop.side === 'left' ? dropBounds.left + 2 : dropBounds.right - 2) - canvasRect.left;
+        drop.startY = dropBounds.bottom - canvasRect.top;
+        drop.targetY = drop.startY + 46;
         if (age >= fallDuration && !drop.impacted) {
           ripples.push({ x: drop.x, y: drop.targetY, startedAt: now });
+          drop.element.style.setProperty('--blood-drop-y', '46px');
+          drop.element.style.setProperty('--blood-drop-opacity', '0');
           drop.impacted = true;
         }
-        if (age > fallDuration + 2600) { drops.splice(index, 1); continue; }
+        if (age > fallDuration + 300) { drops.splice(index, 1); continue; }
         if (age < fallDuration) {
           const progress = age / fallDuration;
-          const y = drop.startY + (drop.targetY - drop.startY) * (progress * progress);
-          const widthAtSpeed = 3.8 + Math.sin(progress * Math.PI) * 1.5;
-          const alpha = 0.72 + Math.sin(progress * Math.PI) * 0.2;
-          context.beginPath();
-          context.moveTo(drop.x, y - 8);
-          context.bezierCurveTo(drop.x - widthAtSpeed * 0.22, y - 3, drop.x - widthAtSpeed, y + 1, drop.x - widthAtSpeed, y + 5);
-          context.bezierCurveTo(drop.x - widthAtSpeed, y + 11, drop.x + widthAtSpeed, y + 11, drop.x + widthAtSpeed, y + 5);
-          context.bezierCurveTo(drop.x + widthAtSpeed, y + 1, drop.x + widthAtSpeed * 0.22, y - 3, drop.x, y - 8);
-          context.closePath();
-          context.fillStyle = `rgb(${accentRgb} / ${alpha})`;
-          context.shadowColor = `rgb(${accentRgb} / .62)`;
-          context.shadowBlur = 8;
-          context.fill();
-          context.shadowBlur = 0;
+          drop.element.style.setProperty('--blood-neck-height', '0px');
+          drop.element.style.setProperty('--blood-drop-y', `${46 * progress * progress}px`);
+          drop.element.style.setProperty('--blood-drop-opacity', `${0.96 - progress * 0.2}`);
         }
       }
       const columns = Math.ceil(width / cellWidth);
