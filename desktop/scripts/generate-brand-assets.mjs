@@ -20,8 +20,15 @@ try {
   await copyFile(source, backup);
 }
 
-const iconSource = await readFile(iconSourcePath);
-const icon = await sharp(iconSource).resize(256, 256, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
+const mascotSource = sharp(source);
+const mascotMetadata = await mascotSource.metadata();
+const iconEdge = Math.min(mascotMetadata.width ?? 390, mascotMetadata.height ?? 390, 390);
+const maskCrop = await mascotSource.extract({ left: 340, top: 20, width: iconEdge, height: iconEdge })
+  .resize(218, 218, { fit: 'contain' })
+  .png()
+  .toBuffer();
+const iconTile = Buffer.from('<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="250" height="250" rx="48" fill="#100b0d"/><rect x="3.5" y="3.5" width="249" height="249" rx="47.5" fill="none" stroke="#f43f52" stroke-width="5"/></svg>');
+const icon = await sharp(iconTile).composite([{ input: maskCrop, left: 19, top: 19 }]).png().toBuffer();
 await writeFile(iconPath, icon);
 const mediumSource = sharp(mediumSourcePath);
 const mediumMetadata = await mediumSource.metadata();
@@ -32,7 +39,7 @@ await mediumSource.extract({ left: 42, top: 22, width: mediumCrop, height: mediu
   .toFile(mediumPath);
 await mkdir(path.join(root, 'desktop', 'resources'), { recursive: true });
 const iconSizes = [16, 24, 32, 48, 64, 128, 256];
-const iconFrames = await Promise.all(iconSizes.map((size) => sharp(iconSource).resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer()));
+const iconFrames = await Promise.all(iconSizes.map((size) => sharp(icon).resize(size, size, { fit: 'contain' }).png().toBuffer()));
 const iconHeader = Buffer.alloc(6);
 iconHeader.writeUInt16LE(0, 0);
 iconHeader.writeUInt16LE(1, 2);

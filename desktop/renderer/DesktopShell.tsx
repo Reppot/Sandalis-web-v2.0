@@ -252,8 +252,8 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
             if (y < 0 || y > height) continue;
             const fade = 1 - tail / (streak.length + 0.5);
             context.fillStyle = tail === 0
-              ? `rgb(${accentRgb} / ${0.34 * fade})`
-              : `rgb(${accentRgb} / ${0.14 * fade})`;
+              ? `rgb(${accentRgb} / ${0.58 * fade})`
+              : `rgb(${accentRgb} / ${0.27 * fade})`;
             context.fillText(glyphs[1 + Math.floor((streak.seed + tail + glyphPhase) % (glyphs.length - 1))], streak.x + sway, y);
           }
           if (!reduceMotion && streak.y - streak.length * cellHeight > height) {
@@ -307,9 +307,9 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
             turbulence = 0.5 + 0.5 * Math.sin(x * 0.008 + y * 0.006 + flowPhase * 3.2 + Math.sin(y * 0.009 - swing * 2));
             density = Math.min(1, (Math.exp(-Math.pow(offset / thickness, 2) * 0.8) * 0.78 + curl * 0.42) * (0.82 + turbulence * 0.18));
           }
-          if (density < 0.045) continue;
-          const index = Math.max(1, Math.min(glyphs.length - 1, Math.floor((density * 9 + turbulence * 6 + Math.abs(offset) / cellHeight) % glyphs.length)));
-          const alpha = Math.min(scene === 'companion' ? 0.24 : 0.31, 0.022 + density * (scene === 'companion' ? 0.2 : 0.255));
+          if (density < 0.025) continue;
+          const index = Math.max(1, Math.min(glyphs.length - 1, Math.floor((density * 10 + turbulence * 7 + Math.abs(offset) / cellHeight) % glyphs.length)));
+          const alpha = Math.min(scene === 'companion' ? 0.43 : 0.49, 0.028 + density * (scene === 'companion' ? 0.39 : 0.44));
           context.fillStyle = `rgb(${accentRgb} / ${alpha})`;
           context.fillText(glyphs[index], x, y);
           context.globalAlpha = 1;
@@ -586,7 +586,7 @@ export default function DesktopShell() {
   return <main className="desktop-shell">
     <AsciiFlow active={status.state === 'processing'} scene={active === 'companion' ? 'companion' : active === 'links' ? 'links' : 'other'} />
     <header className="desktop-topbar">
-      <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-mascot-medium.png" width={44} height={44} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
+      <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-icon.png" width={44} height={44} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
       <div className="desktop-topbar-actions">
         {status.state !== 'waiting' && <div className="desktop-live" role="status" aria-label={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]} title={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]}><b className={status.state === 'error' ? 'is-error' : status.state === 'processing' ? 'is-working' : ''} /></div>}
         <button type="button" className="desktop-global-settings" onClick={openSettings} aria-label="Настройки" title="Настройки"><SettingsIcon /></button>
