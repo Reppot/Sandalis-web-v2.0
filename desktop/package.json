@@ -1,7 +1,7 @@
 {
   "name": "chronomancer-desktop",
   "productName": "Chronum",
-  "version": "0.1.35",
+  "version": "0.1.36",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
@@ -64,10 +64,23 @@
       "artifactName": "Chronum-Setup-${version}.${ext}"
     },
     "nsis": {
-      "oneClick": true,
+      "oneClick": false,
       "perMachine": false,
-      "allowElevation": false,
-      "allowToChangeInstallationDirectory": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "displayLanguageSelector": true,
+      "installerLanguages": [
+        "cs_CZ",
+        "de_DE",
+        "en_US",
+        "es_ES",
+        "fr_FR",
+        "pl_PL",
+        "pt_BR",
+        "ru_RU",
+        "uk_UA",
+        "zh_CN"
+      ],
       "createDesktopShortcut": true,
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": false,

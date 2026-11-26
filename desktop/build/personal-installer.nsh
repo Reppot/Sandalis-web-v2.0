@@ -1,48 +1,14 @@
-; Personal Windows x64 installer: one fixed destination, no bundled payload in C:\Temp.
+; Personal Windows x64 installer with the standard assisted NSIS wizard.
 !include "FileFunc.nsh"
 !include "WordFunc.nsh"
 
 !macro customHeader
   !ifndef BUILD_UNINSTALLER
-    InstallDir "D:\Games\Sindaris"
+    ; initMultiUser restores the previous InstallLocation during upgrades.
+    InstallDir "$LOCALAPPDATA\Programs\Chronum"
     !include "${PROJECT_DIR}\release\personal-payload.nsh"
   !endif
   ; electron-builder selects non-solid zlib before the template adds resources.
-!macroend
-
-!macro customInit
-  StrCpy $INSTDIR "D:\Games\Sindaris"
-  IfFileExists "D:\*.*" +4 0
-    MessageBox MB_OK|MB_ICONSTOP "This installer requires drive D:. Chronum was not changed."
-    SetErrorLevel 2
-    Quit
-  System::Call 'kernel32::GetDiskFreeSpaceExW(w "D:\", *l .r0, p 0, p 0) i.r1'
-  ${If} $1 == 0
-    MessageBox MB_OK|MB_ICONSTOP "Cannot check free space on D:. Chronum was not changed."
-    SetErrorLevel 2
-    Quit
-  ${EndIf}
-  System::Int64Op $0 / 1048576
-  Pop $0
-  ${If} $0 < 2048
-    MessageBox MB_OK|MB_ICONSTOP "At least 2 GB free on D: is required before replacing Chronum."
-    SetErrorLevel 2
-    Quit
-  ${EndIf}
-  ; Child uninstallers may stage the previous version. Keep that work on D: too.
-  CreateDirectory "D:\Games\Sindaris-Install-Temp"
-  System::Call 'kernel32::SetEnvironmentVariableW(w "TEMP", w "D:\Games\Sindaris-Install-Temp") i.r0'
-  System::Call 'kernel32::SetEnvironmentVariableW(w "TMP", w "D:\Games\Sindaris-Install-Temp") i.r0'
-  CreateDirectory "$INSTDIR"
-  ClearErrors
-  FileOpen $0 "$INSTDIR\.sindaris-write-check" w
-  ${If} ${Errors}
-    MessageBox MB_OK|MB_ICONSTOP "Cannot write to D:\Games\Sindaris. The previous version was not removed."
-    SetErrorLevel 2
-    Quit
-  ${EndIf}
-  FileClose $0
-  Delete "$INSTDIR\.sindaris-write-check"
 !macroend
 
 !macro ChronomancerCheckSize FILE EXPECTED
@@ -96,7 +62,6 @@
   Delete "$LOCALAPPDATA\sindaris-desktop-updater\pending\Sindaris-Setup-*.exe"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater\pending"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater"
-  RMDir "D:\Games\Sindaris-Install-Temp"
   ; Remove older sibling installers only after the new installed files pass validation.
   FindFirst $R6 $R7 "$EXEDIR\Chronomancer-Setup-*.exe"
   ${DoWhile} $R7 != ""
