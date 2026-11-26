@@ -30,6 +30,7 @@ let scanTimer = null;
 let lastSaveSignature = null;
 let scanInProgress = false;
 let scanChild = null;
+let continuousScanning = true;
 let companionStatus = { state: 'waiting', folder: null, fileName: null, stockpiles: [], incompleteCount: 0, message: 'Ищу MapData.sav в папке сохранений Foxhole…' };
 let lastScanReport = null;
 let reportFile = null;
@@ -170,7 +171,7 @@ async function findSaveFile(folder) {
 }
 
 async function processSaveFile(file, signature) {
-  if (scanInProgress || !file || quitting) return;
+  if (scanInProgress || !file || quitting || !continuousScanning) return;
   scanInProgress = true;
   publishCompanionStatus({ state: 'processing', folder: saveFolder, fileName: path.basename(file), message: 'Читаю MapData.sav локально…' });
   const helper = app.isPackaged
@@ -194,6 +195,7 @@ async function processSaveFile(file, signature) {
         code === 0 ? resolve() : reject(new Error(`fs-sav завершился с кодом ${code}`));
       });
     });
+    if (!continuousScanning || quitting) return;
     let stockpiles = [];
     try {
       const payload = JSON.parse(await readFile(output, 'utf8'));
@@ -219,6 +221,7 @@ async function processSaveFile(file, signature) {
       processedAt: lastScanReport.processedAt,
     });
   } catch (error) {
+    if (!continuousScanning) return;
     publishCompanionStatus({ state: 'error', folder: saveFolder, fileName: path.basename(file), message: error.code === 'ENOENT' ? 'Локальный обработчик fs.exe не найден. Пересоберите приложение.' : `Не удалось прочитать сохранение: ${error.message}` });
   } finally {
     await rm(output, { force: true }).catch(() => {});
@@ -227,7 +230,7 @@ async function processSaveFile(file, signature) {
 }
 
 async function pollSaveFolder() {
-  if (!saveFolder || quitting || scanInProgress) return;
+  if (!continuousScanning || !saveFolder || quitting || scanInProgress) return;
   try {
     const candidate = saveFile
       ? { file: saveFile, info: await stat(saveFile) }
@@ -257,12 +260,29 @@ async function watchSaveFolder(folder) {
   saveWatcher?.close();
   if (scanTimer) clearInterval(scanTimer);
   companionStatus = { state: 'waiting', folder, fileName: null, stockpiles: [], incompleteCount: 0, message: 'Ищу последнее сохранение Foxhole…' };
-  if (folder) {
+  if (!continuousScanning) {
+    publishCompanionStatus({ state: 'paused', message: 'Постоянное сканирование выключено. Включите его, чтобы следить за обновлениями MapData.sav.' });
+  } else if (folder) {
     try { saveWatcher = watch(folder, () => { void pollSaveFolder(); }); } catch { saveWatcher = null; }
     scanTimer = setInterval(() => void pollSaveFolder(), 2500);
     await pollSaveFolder();
   }
   return companionStatus;
+}
+
+async function setContinuousScanning(enabled) {
+  continuousScanning = enabled;
+  const prefs = await readPreferences();
+  await writeFile(preferencesFile, JSON.stringify({ ...prefs, offlineGuest, saveFolder, saveFile, continuousScanning }), 'utf8');
+  if (!enabled) {
+    saveWatcher?.close(); saveWatcher = null;
+    if (scanTimer) clearInterval(scanTimer);
+    scanTimer = null;
+    scanChild?.kill();
+    publishCompanionStatus({ state: 'paused', message: 'Постоянное сканирование выключено. Сохранение и предыдущий отчёт не изменены.' });
+    return companionStatus;
+  }
+  return watchSaveFolder(saveFolder);
 }
 
 async function setSaveFile(file) {
@@ -363,6 +383,7 @@ if (locked) app.whenReady().then(async () => {
   preferencesFile = path.join(app.getPath('userData'), 'desktop-preferences.json');
   const preferences = await readPreferences();
   offlineGuest = preferences.offlineGuest === true;
+  continuousScanning = preferences.continuousScanning !== false;
   saveFile = typeof preferences.saveFile === 'string' ? preferences.saveFile : null;
   saveFolder = typeof preferences.saveFolder === 'string'
     ? preferences.saveFolder
@@ -390,6 +411,7 @@ if (locked) app.whenReady().then(async () => {
     return setSaveFile(result.filePaths[0]);
   });
   ipcMain.handle('companion:get-status', (event) => trustedIpc(event) ? companionStatus : null);
+  ipcMain.handle('companion:set-continuous-scanning', (event, enabled) => trustedIpc(event) && typeof enabled === 'boolean' ? setContinuousScanning(enabled) : companionStatus);
   ipcMain.handle('companion:get-profile', (event) => trustedIpc(event) ? companionProfile(ses) : null);
   ipcMain.handle('companion:get-last-report', (event) => trustedIpc(event) ? lastScanReport : null);
   ipcMain.handle('companion:get-discord-setup', (event) => trustedIpc(event) ? getDiscordSetup(ses) : null);

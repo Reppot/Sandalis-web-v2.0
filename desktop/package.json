@@ -1,7 +1,7 @@
 {
   "name": "chronomancer-desktop",
   "productName": "Chronomancer",
-  "version": "0.1.24",
+  "version": "0.1.25",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",

@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('chronomancerDesktop', {
   chooseSaveFile: () => ipcRenderer.invoke('companion:choose-save-file'),
   getCompanionStatus: () => ipcRenderer.invoke('companion:get-status'),
+  setContinuousScanning: (enabled) => ipcRenderer.invoke('companion:set-continuous-scanning', enabled),
   getCompanionProfile: () => ipcRenderer.invoke('companion:get-profile'),
   getLastScanReport: () => ipcRenderer.invoke('companion:get-last-report'),
   getDiscordSetup: () => ipcRenderer.invoke('companion:get-discord-setup'),

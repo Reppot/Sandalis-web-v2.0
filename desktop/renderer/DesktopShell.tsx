@@ -4,7 +4,7 @@ import './desktop.css';
 
 type DesktopTab = 'companion' | 'links' | 'report' | 'tools' | 'clan' | 'guide' | 'feedback' | 'mail' | 'support' | 'cabinet';
 type ScanStatus = {
-  state: 'waiting' | 'processing' | 'ready' | 'partial' | 'error';
+  state: 'waiting' | 'processing' | 'ready' | 'partial' | 'error' | 'paused';
   folder: string | null;
   fileName: string | null;
   message: string;
@@ -25,6 +25,7 @@ type DiscordChoice = { guildId?: string; clanId?: string; joinClanId?: string };
 type DesktopApi = {
   chooseSaveFile: () => Promise<ScanStatus>;
   getCompanionStatus: () => Promise<ScanStatus>;
+  setContinuousScanning: (enabled: boolean) => Promise<ScanStatus>;
   getCompanionProfile: () => Promise<CompanionProfile | null | undefined>;
   getLastScanReport: () => Promise<ScanReport | null>;
   getDiscordSetup: () => Promise<DiscordSetup | null>;
@@ -51,7 +52,7 @@ const sectionDetails: Record<Exclude<DesktopTab, 'companion' | 'links' | 'report
   mail: 'Уведомления и сообщения аккаунта.', support: 'Помощь и контакты поддержки.', cabinet: 'Профиль и параметры аккаунта.',
 };
 const statusNames: Record<ScanStatus['state'], string> = {
-  waiting: 'Поиск файла', processing: 'Сканирование', ready: 'Готово', partial: 'Есть недоступные детали', error: 'Нужно выбрать файл',
+  waiting: 'Поиск файла', processing: 'Сканирование', ready: 'Готово', partial: 'Есть недоступные детали', error: 'Нужно выбрать файл', paused: 'Сканирование выключено',
 };
 const fmt = (value: unknown) => typeof value === 'string' || typeof value === 'number' ? String(value) : '—';
 const stockpileNames: Record<string, string> = {
@@ -109,8 +110,9 @@ function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'comp
       <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>модулей</span></b>
     </header>
     <div className="link-board-grid">
-      {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} onClick={() => onOpen(section)}>
+      {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} style={{ '--drip-delay': `${(index * 1.37) % 8}s` } as React.CSSProperties} onClick={() => onOpen(section)}>
         <span className="link-board-copy"><small className="link-board-index">МОДУЛЬ {String(index + 1).padStart(2, '0')}</small><strong>{labels[section]}</strong><small className="link-board-description">{sectionDetails[section]}</small></span>
+        <span className="blood-seep" aria-hidden="true" />
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5" /></svg>
       </button>)}
     </div>
@@ -364,6 +366,8 @@ export default function DesktopShell() {
   const [historyPosition, setHistoryPosition] = React.useState(0);
   const [frameHistory, setFrameHistory] = React.useState({ canBack: false, canForward: false });
   const [status, setStatus] = React.useState<ScanStatus>({ state: 'waiting', folder: null, fileName: null, message: 'Ищу MapData.sav в папке сохранений Foxhole.' });
+  const [continuousScanning, setContinuousScanning] = React.useState(true);
+  const [scanToggleBusy, setScanToggleBusy] = React.useState(false);
   const [reloadKey, setReloadKey] = React.useState(0);
   const [authQuery, setAuthQuery] = React.useState('');
   const [windowMaximized, setWindowMaximized] = React.useState(false);
@@ -542,12 +546,12 @@ export default function DesktopShell() {
   React.useEffect(() => {
     const api = getApi();
     if (!api) { refreshProfile(); return; }
-    api.getCompanionStatus().then((next) => { if (next?.state) setStatus(next); }).catch(() => {});
+    api.getCompanionStatus().then((next) => { if (next?.state) { setStatus(next); setContinuousScanning(next.state !== 'paused'); } }).catch(() => {});
     api.getLastScanReport().then(setLastReport).catch(() => {});
     refreshProfile();
     const profileTimer = window.setInterval(refreshProfile, 20000);
     const unlisten = api.onCompanionStatus((next) => {
-      if (next?.state) setStatus(next);
+      if (next?.state) { setStatus(next); setContinuousScanning(next.state !== 'paused'); }
       if (next?.processedAt) void api.getLastScanReport().then(setLastReport).catch(() => {});
     });
     return () => { window.clearInterval(profileTimer); unlisten(); };
@@ -604,6 +608,15 @@ export default function DesktopShell() {
   const chooseFile = async () => { const api = getApi(); if (api) { const next = await api.chooseSaveFile(); if (next?.state) setStatus(next); } };
   const login = async () => { await getApi()?.openDiscordLogin(); };
   const openSettings = () => openSection('cabinet');
+  const toggleContinuousScanning = async () => {
+    const api = getApi();
+    if (!api || scanToggleBusy) return;
+    setScanToggleBusy(true);
+    try {
+      const next = await api.setContinuousScanning(!continuousScanning);
+      if (next?.state) { setStatus(next); setContinuousScanning(next.state !== 'paused'); }
+    } finally { setScanToggleBusy(false); }
+  };
   const totalStockpiles = (status.stockpiles?.length ?? 0) + (status.incompleteCount ?? 0);
 
   return <main className="desktop-shell">
@@ -648,6 +661,7 @@ export default function DesktopShell() {
         return <div key={tab} className="companion-page" style={{ display: active === tab ? 'block' : 'none' }}>
         <div className={`companion-desktop${status.state === 'processing' ? ' is-scanning' : ''}`}>
           <aside className="guardian-rail" aria-label="Маскот локального сканера">
+            <button type="button" className={`continuous-scan-toggle${continuousScanning ? ' is-on' : ''}`} role="switch" aria-checked={continuousScanning} aria-busy={scanToggleBusy} disabled={scanToggleBusy} onClick={() => void toggleContinuousScanning()}><span>Постоянное сканирование</span><i aria-hidden="true" /></button>
             <picture className="guardian-picture"><source media="(max-width: 1080px), (max-height: 720px)" srcSet="/chronomancer-mascot-medium.png" /><img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt="Хрономант в полный рост" /></picture>
           </aside>
           <div className="companion-workspace">

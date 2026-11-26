@@ -9,6 +9,7 @@ const sharp = require('sharp');
 const source = path.join(root, 'frontend', 'public', 'chronomancer-mascot.png');
 const backup = path.join(root, 'desktop', 'assets', 'mascot-backups', 'chronomancer-mascot-original.png');
 const iconSourcePath = path.join(root, 'desktop', 'assets', 'brand', 'chronomancer-approved-icon.png');
+const mediumSourcePath = path.join(root, 'desktop', 'assets', 'brand', 'chronomancer-approved-medium.png');
 const iconPath = path.join(root, 'frontend', 'public', 'chronomancer-icon.png');
 const mediumPath = path.join(root, 'frontend', 'public', 'chronomancer-mascot-medium.png');
 
@@ -22,11 +23,10 @@ try {
 const iconSource = await readFile(iconSourcePath);
 const icon = await sharp(iconSource).resize(256, 256, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
 await writeFile(iconPath, icon);
-const mascot = sharp(source);
-const mascotMetadata = await mascot.metadata();
-const cropSize = Math.min(520, mascotMetadata.width ?? 520, mascotMetadata.height ?? 520);
-const cropLeft = Math.max(0, Math.round(((mascotMetadata.width ?? cropSize) - cropSize) / 2));
-await mascot.extract({ left: cropLeft, top: 0, width: cropSize, height: cropSize })
+const mediumSource = sharp(mediumSourcePath);
+const mediumMetadata = await mediumSource.metadata();
+const mediumCrop = Math.min(415, mediumMetadata.width ?? 415, mediumMetadata.height ?? 415);
+await mediumSource.extract({ left: 42, top: 22, width: mediumCrop, height: mediumCrop })
   .resize(640, 640, { fit: 'contain' })
   .png()
   .toFile(mediumPath);
@@ -54,4 +54,4 @@ const iconEntries = iconFrames.map((frame, index) => {
 });
 await writeFile(path.join(root, 'desktop', 'resources', 'chronomancer.ico'), Buffer.concat([iconHeader, ...iconEntries, ...iconFrames]));
 
-console.log('Saved original mascot backup and rendered approved Chronomancer icon sizes.');
+console.log('Saved original mascot backup and rendered approved medium and small Chronomancer marks.');
