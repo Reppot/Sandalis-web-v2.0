@@ -292,7 +292,7 @@ const StockpileCard: React.FC<{
             {s ? (
               <button type="button" className={`stockpile-items-toggle ${expanded ? "is-open" : ""}`} aria-expanded={expanded} disabled={!s.itemsCount} onClick={onToggleItems}>
                 <Icon name="box" size={14} />
-                {t("clan.stockpileLines", { n: s.itemsCount })}{s.lastSyncAt ? ` · ${formatDateTime(new Date(s.lastSyncAt))}` : ""}
+                {t("clan.stockpileLines", { n: s.itemsCount })}{s.lastSyncSource === "scan" ? " · MapData.sav" : ""}{s.lastSyncAt ? ` · ${formatDateTime(new Date(s.lastSyncAt))}` : ""}
                 {s.itemsCount ? <Icon name="chevronDown" size={14} className={expanded ? "rotate-180" : ""} /> : null}
               </button>
             ) : null}

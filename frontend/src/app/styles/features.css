@@ -348,12 +348,13 @@
 .risk-stat.is-warning .risk-stat-dot { background: var(--warning); box-shadow: 0 0 0 3px rgb(var(--warning-rgb, 251 191 36) / 0.18); }
 .risk-stat.is-success .risk-stat-dot { background: var(--success); box-shadow: 0 0 0 3px rgb(var(--success-rgb, 61 220 151) / 0.18); }
 .risk-stat.is-danger .risk-stat-value { color: var(--danger); }
+.stockpile-card { container-type: inline-size; }
 .stockpile-card-art { position: absolute; inset: 0 0 0 auto; width: 40%; background-position: center; background-size: cover; opacity: 0.12; pointer-events: none; -webkit-mask-image: linear-gradient(90deg, transparent, #000); mask-image: linear-gradient(90deg, transparent, #000); }
 .stockpile-card-grid { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) minmax(11rem, 15rem) auto; align-items: center; gap: 1rem; padding: 1rem 1.25rem; }
 .stockpile-card-info { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem 1rem; margin-top: 0.4rem; color: var(--fg-2); }
 .stockpile-card-timer { text-align: right; }
 .stockpile-card-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 0.4rem; }
-@media (max-width: 860px) {
+@container (max-width: 760px) {
   .stockpile-card-grid { grid-template-columns: auto minmax(0, 1fr); }
   .stockpile-card-timer, .stockpile-card-actions { grid-column: 1 / -1; }
   .stockpile-card-timer { text-align: left; }

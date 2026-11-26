@@ -5,7 +5,12 @@
     "updated": "Stockpile \"{name}\" has been updated.",
     "deleted": "Stockpile \"{name}\" has been deleted.",
     "name_taken": "A stockpile named \"{name}\" already exists.",
+    "scan_duplicate": "The scan contains a duplicate stockpile record.",
+    "scan_name_conflict": "That in-game stockpile name is already used by another clan stockpile. Rename the conflicting record and retry.",
     "synced": "Stockpile \"{name}\" synced: {count} items."
+  },
+  "scan": {
+    "synced": "Scan synchronized: {created} stockpiles created, {updated} updated."
   },
   "item": {
     "not_found": "No \"{item}\" in this stockpile.",

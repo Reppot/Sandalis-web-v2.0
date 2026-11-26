@@ -462,6 +462,7 @@ DELETE /api/v1/stockpiles/{stockpile_id}
 POST   /api/v1/stockpiles/{stockpile_id}/items
 PATCH  /api/v1/stockpiles/{stockpile_id}/items/{item_code}
 DELETE /api/v1/stockpiles/{stockpile_id}/items/{item_code}
+POST   /api/v1/stockpiles/import-scan
 ```
 
 Защита:
@@ -472,6 +473,13 @@ stockpiles:write
 ```
 
 Stockpile и StockpileItem являются clan-scoped.
+
+`POST /api/v1/stockpiles/import-scan` принимает один атомарный пакет только с полностью
+разобранными складами Foxhole, для которых из `MapData.sav` прочитано пользовательское
+имя (`StockpileName`). Пустые имена, исходный `.sav` и объекты без доступных игровых
+деталей не отправляются. Записи сопоставляются по типу, гексу и координатам; имя хранится
+как отображаемое поле и может меняться без создания дубликата. Требуется право
+`stockpiles:items`; клан берётся из аутентифицированной сессии.
 
 ---
 

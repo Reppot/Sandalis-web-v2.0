@@ -39,6 +39,7 @@ const SOURCE_LABEL: Record<string, string> = {
   scan: "MapData.sav",
   xlsx: "XLSX",
 };
+const STOCKPILE_REFRESH_MS = 20_000;
 
 interface StorageMonitorProps {
   can: Can;
@@ -74,6 +75,9 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
   const [pasteText, setPasteText] = React.useState("");
   const [editing, setEditing] = React.useState<"create" | "rename" | null>(null);
   const [scanSyncPreview, setScanSyncPreview] = React.useState<ScanSyncPreview | null>(null);
+  const listRequestInFlight = React.useRef(false);
+  const lastListSyncAt = React.useRef(0);
+  const listFailureNotified = React.useRef(false);
   const scanRequestId = React.useRef<string | null>(null);
   const scanRequestTimeout = React.useRef<number | null>(null);
   const [armed, confirm] = useConfirm();
@@ -81,20 +85,41 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
   const xlsxInput = React.useRef<HTMLInputElement>(null);
   const { run: exportDoc, previewModal } = useDocExport(media("bg_report_texture"));
 
-  const loadList = React.useCallback(async () => {
+  const loadList = React.useCallback(async (silent = false) => {
+    if (listRequestInFlight.current) return;
+    listRequestInFlight.current = true;
     try {
       const list = await stockpileApi.list();
       setStockpiles(list);
       setPinnedId((current) => current && list.some((s) => s.id === current) ? current : null);
+      lastListSyncAt.current = Date.now();
+      listFailureNotified.current = false;
     } catch (err) {
-      notify({ title: t("stock.stockpiles"), message: errorText(err, t("stock.loadFailed")), tone: "danger" });
+      if (!silent || !listFailureNotified.current) {
+        notify({ title: t("stock.stockpiles"), message: errorText(err, t("stock.loadFailed")), tone: "danger" });
+      }
+      listFailureNotified.current = true;
     } finally {
+      listRequestInFlight.current = false;
       setLoading(false);
     }
   }, [notify, t]);
 
   React.useEffect(() => {
     void loadList();
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible" && Date.now() - lastListSyncAt.current > 5_000) void loadList(true);
+    };
+    const poll = window.setInterval(() => {
+      if (document.visibilityState === "visible") void loadList(true);
+    }, STOCKPILE_REFRESH_MS);
+    window.addEventListener("focus", refreshWhenVisible);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      window.clearInterval(poll);
+      window.removeEventListener("focus", refreshWhenVisible);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
   }, [loadList]);
 
   React.useEffect(() => {
@@ -150,6 +175,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
     };
   }, [notify, pinned, t]);
 
+  const pinnedListSyncAt = stockpiles.find((stockpile) => stockpile.id === pinnedId)?.lastSyncAt ?? null;
   React.useEffect(() => {
     writeStorage(STORAGE_KEYS.pinnedStockpile, pinnedId);
     if (!pinnedId) {
@@ -169,7 +195,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
     return () => {
       cancelled = true;
     };
-  }, [pinnedId, onPinned]);
+  }, [pinnedId, pinnedListSyncAt, onPinned]);
 
   const applyParsed = async (result: ParseResult, source: SyncSource) => {
     if (!pinned) return notify({ title: t("stock.stockpile"), message: t("stock.pickFirst"), tone: "warning" });
@@ -231,7 +257,7 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
 
   const openLocalScan = () => {
     if (window.parent === window) {
-      notify({ title: t("scan.title"), message: "Выберите MapData.sav в локальном компаньоне Chronomancer.", tone: "info" });
+      notify({ title: t("scan.title"), message: "Выберите MapData.sav в локальном компаньоне Chronum.", tone: "info" });
       return;
     }
     if (!pinned) return notify({ title: t("stock.stockpile"), message: t("stock.pickFirst"), tone: "warning" });
@@ -286,10 +312,10 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
     }
     void exportDoc(
       {
-        title: `Chronomancer • ${t("stock.docTitle")}`,
+        title: `Chronum • ${t("stock.docTitle")}`,
         header: [`${t("doc.hex")}: ${pinned?.region ?? "—"}`, `${t("doc.stockpile")}: ${pinned?.name ?? "—"}`, `${t("doc.lines")}: ${items.length} • Σ ${total}`],
         sections: [{ rows: items.map((i) => ({ name: itemLabel(i), quantity: i.quantity, unit: t("unit.unit"), icon: assetUrl(i.iconUrl) })) }],
-        fileBase: "Chronomancer_stockpile",
+        fileBase: "Chronum_stockpile",
         sheetName: t("stock.sheet"),
       },
       fmt,

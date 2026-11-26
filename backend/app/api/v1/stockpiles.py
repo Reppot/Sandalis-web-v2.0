@@ -28,6 +28,8 @@ from app.schemas.stockpile import (
     StockpileItemUpsert,
     StockpileRead,
     StockpileUpdate,
+    GameScanImport,
+    GameScanImportResult,
 )
 from app.services.stockpiles import StockpileService
 
@@ -45,6 +47,20 @@ async def get_stockpile_service(
 
 
 ServiceDep = Annotated[StockpileService, Depends(get_stockpile_service)]
+
+
+@router.post(
+    "/import-scan",
+    response_model=GameScanImportResult,
+    summary="Пакетный импорт обработанных именованных складов Foxhole",
+    dependencies=[Depends(PermissionChecker([Scopes.STOCKPILES_ITEMS]))],
+)
+async def import_game_scan(payload: GameScanImport, service: ServiceDep) -> GameScanImportResult:
+    created, updated, item_rows = await service.import_game_scan(payload)
+    return GameScanImportResult(
+        created=created, updated=updated, item_rows=item_rows,
+        message=service.t.t("scan.synced", domain="stockpiles", created=created, updated=updated),
+    )
 
 
 def _read(

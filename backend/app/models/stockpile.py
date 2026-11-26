@@ -13,6 +13,7 @@ class Stockpile(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     __tablename__ = "stockpiles"
     __table_args__ = (
         UniqueConstraint("clan_id", "name", name="uq_stockpiles_clan_id_name"),
+        UniqueConstraint("clan_id", "game_key", name="uq_stockpiles_clan_game_key"),
     )
 
     name: Mapped[str] = mapped_column(String(80), nullable=False)
@@ -21,6 +22,14 @@ class Stockpile(Base, UUIDPkMixin, ClanScopedMixin, TimestampMixin):
     town: Mapped[str | None] = mapped_column(String(80), nullable=True)
     kind: Mapped[str | None] = mapped_column(String(16), nullable=True)
     access_code: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    # Game identity is independent from the display name so renaming a reserve
+    # stockpile updates the same clan record instead of creating a duplicate.
+    game_key: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    game_type: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    faction: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    game_x: Mapped[float | None] = mapped_column(nullable=True)
+    game_y: Mapped[float | None] = mapped_column(nullable=True)
+    game_scanned_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     # 0005: источник и время последней полной выгрузки содержимого (монитор склада)
     last_sync_source: Mapped[str | None] = mapped_column(String(16), nullable=True)
     last_sync_at: Mapped[datetime | None] = mapped_column(

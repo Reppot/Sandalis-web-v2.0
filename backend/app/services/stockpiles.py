@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+import hashlib
 from datetime import UTC, datetime
 from typing import Iterable, Sequence
 
@@ -12,6 +13,7 @@ from app.models.catalog import CatalogItem
 from app.models.stockpile import Stockpile, StockpileItem
 from app.schemas.stockpile import (
     StockpileContentsReplace,
+    GameScanImport,
     StockpileCreate,
     StockpileItemPatch,
     StockpileItemUpsert,
@@ -251,6 +253,102 @@ class StockpileService(ClanScopedService):
         return stockpile, items, self.t.t(
             "stockpile.synced", domain=DOMAIN, name=stockpile.name, count=len(items)
         )
+
+    @staticmethod
+    def game_key(stockpile) -> str:
+        """Stable identity excludes the user-editable in-game display name."""
+        coords = stockpile.coords
+        canonical = "|".join((
+            stockpile.kind.strip().casefold(),
+            stockpile.hex.strip().casefold(),
+            f"{coords.x:.4f}",
+            f"{coords.y:.4f}",
+        ))
+        return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+    async def import_game_scan(self, payload: GameScanImport) -> tuple[int, int, int]:
+        """Atomically upsert named game stockpiles and replace only their contents."""
+        entries: dict[str, object] = {}
+        merged_by_key: dict[str, dict[str, list[int]]] = {}
+        for entry in payload.stockpiles:
+            key = self.game_key(entry)
+            if key in entries:
+                raise ConflictError(message_key="stockpile.scan_duplicate", domain=DOMAIN)
+            entries[key] = entry
+            merged: dict[str, list[int]] = {}
+            for item in entry.items:
+                slot = merged.setdefault(item.item_code, [0, 0])
+                slot[0 if item.crated else 1] = min(slot[0 if item.crated else 1] + item.quantity, 1_000_000)
+            merged_by_key[key] = merged
+
+        all_codes = {code for items in merged_by_key.values() for code in items}
+        if all_codes:
+            known = set((await self.session.execute(
+                select(CatalogItem.code).where(
+                    CatalogItem.code.in_(all_codes), CatalogItem.is_active.is_(True)
+                )
+            )).scalars())
+            unknown = sorted(all_codes - known)
+            if unknown:
+                raise NotFoundError(
+                    message_key="item.unknown_code", domain="catalog",
+                    params={"code": ", ".join(unknown[:5])},
+                )
+
+        existing = {}
+        if entries:
+            rows = (await self.session.execute(
+                self._scoped(select(Stockpile), Stockpile)
+                .where(Stockpile.game_key.in_(entries.keys()))
+                .with_for_update()
+            )).scalars().all()
+            existing = {row.game_key: row for row in rows}
+
+        created = updated = 0
+        touched_ids = []
+        for key, entry in entries.items():
+            row = existing.get(key)
+            if row is None:
+                row = Stockpile(clan_id=self.clan_id, name=entry.name, region=entry.hex)
+                self.session.add(row)
+                created += 1
+            else:
+                row.name = entry.name
+                row.region = entry.hex
+                updated += 1
+            row.town = entry.town
+            row.kind = "seaport" if entry.kind.casefold() == "seaport" else "depot" if "depot" in entry.kind.casefold() else "other"
+            row.game_key = key
+            row.game_type = entry.kind
+            row.faction = entry.faction
+            row.game_x = entry.coords.x
+            row.game_y = entry.coords.y
+            row.game_scanned_at = payload.scanned_at
+            row.last_sync_source = "scan"
+            row.last_sync_at = datetime.now(UTC)
+            touched_ids.append((row, key))
+
+        item_rows = 0
+        try:
+            await self.session.flush()
+            stockpile_ids = [row.id for row, _ in touched_ids]
+            if stockpile_ids:
+                await self.session.execute(delete(StockpileItem).where(
+                    StockpileItem.clan_id == self.clan_id,
+                    StockpileItem.stockpile_id.in_(stockpile_ids),
+                ))
+            for row, key in touched_ids:
+                for code, (crates, loose) in merged_by_key[key].items():
+                    self.session.add(StockpileItem(
+                        stockpile_id=row.id, item_code=code,
+                        quantity=crates, loose_quantity=loose,
+                    ))
+                    item_rows += 1
+            await self.session.commit()
+        except IntegrityError as exc:
+            await self.session.rollback()
+            raise ConflictError(message_key="stockpile.scan_name_conflict", domain=DOMAIN) from exc
+        return created, updated, item_rows
 
     async def catalog_brief(self, codes: Iterable[str]) -> dict[str, tuple[str, str, str | None]]:
         """code -> (русское название, английское название, иконка) для витрины позиций."""
