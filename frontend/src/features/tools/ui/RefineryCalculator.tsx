@@ -58,7 +58,7 @@ export const RefineryCalculator: React.FC<{ recipes: Recipe[] }> = ({ recipes })
     return {
       toolName: t("tools.refinery"),
       subtitle: t("tools.refinerySubtitle"),
-      fileBase: "Chronomancer_refinery",
+      fileBase: "Chronum_refinery",
       items: rows.map(({ recipe, entry, units }) => ({
         name: `${rname(recipe)} (${recipe.item_class})`,
         quantity: entry.quantity,

@@ -42,7 +42,7 @@ export const Header: React.FC<{
   return (
     <header className="topbar">
       <div className="topbar-inner">
-        <button type="button" className="topbar-logo md:hidden" onClick={onHome} aria-label="Chronomancer — Foxhole Logi">
+        <button type="button" className="topbar-logo md:hidden" onClick={onHome} aria-label="Chronum — Foxhole Logi">
           {/* eslint-disable-next-line @next/next/no-img-element -- local Chronomancer brand mark */}
           <img className="chronomancer-mark" src="/chronomancer-icon.png" alt="" width={30} height={30} />
         </button>

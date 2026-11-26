@@ -13,19 +13,19 @@
 !macro customInit
   StrCpy $INSTDIR "D:\Games\Sindaris"
   IfFileExists "D:\*.*" +4 0
-    MessageBox MB_OK|MB_ICONSTOP "This installer requires drive D:. Chronomancer was not changed."
+    MessageBox MB_OK|MB_ICONSTOP "This installer requires drive D:. Chronum was not changed."
     SetErrorLevel 2
     Quit
   System::Call 'kernel32::GetDiskFreeSpaceExW(w "D:\", *l .r0, p 0, p 0) i.r1'
   ${If} $1 == 0
-    MessageBox MB_OK|MB_ICONSTOP "Cannot check free space on D:. Chronomancer was not changed."
+    MessageBox MB_OK|MB_ICONSTOP "Cannot check free space on D:. Chronum was not changed."
     SetErrorLevel 2
     Quit
   ${EndIf}
   System::Int64Op $0 / 1048576
   Pop $0
   ${If} $0 < 2048
-    MessageBox MB_OK|MB_ICONSTOP "At least 2 GB free on D: is required before replacing Chronomancer."
+    MessageBox MB_OK|MB_ICONSTOP "At least 2 GB free on D: is required before replacing Chronum."
     SetErrorLevel 2
     Quit
   ${EndIf}
@@ -49,14 +49,14 @@
   ClearErrors
   FileOpen $0 "${FILE}" r
   ${If} ${Errors}
-    MessageBox MB_OK|MB_ICONSTOP "Chronomancer installation is incomplete. Run the installer again."
+    MessageBox MB_OK|MB_ICONSTOP "Chronum installation is incomplete. Run the installer again."
     SetErrorLevel 2
     Quit
   ${EndIf}
   FileSeek $0 0 END $1
   FileClose $0
   ${If} $1 != ${EXPECTED}
-    MessageBox MB_OK|MB_ICONSTOP "Chronomancer installation is incomplete. Run the installer again."
+    MessageBox MB_OK|MB_ICONSTOP "Chronum installation is incomplete. Run the installer again."
     SetErrorLevel 2
     Quit
   ${EndIf}
@@ -66,7 +66,7 @@
   ClearErrors
   FileOpen $0 "${FILE}" r
   ${If} ${Errors}
-    MessageBox MB_OK|MB_ICONSTOP "Chronomancer installation is incomplete. Run the installer again."
+    MessageBox MB_OK|MB_ICONSTOP "Chronum installation is incomplete. Run the installer again."
     SetErrorLevel 2
     Quit
   ${EndIf}
@@ -75,22 +75,24 @@
   ; electron-builder modifies the executable after afterPack, so its exact
   ; byte count is not stable. A full packaged Electron binary is well above 100 MB.
   ${If} $1 < 104857600
-    MessageBox MB_OK|MB_ICONSTOP "Chronomancer installation is incomplete. Run the installer again."
+    MessageBox MB_OK|MB_ICONSTOP "Chronum installation is incomplete. Run the installer again."
     SetErrorLevel 2
     Quit
   ${EndIf}
 !macroend
 
 !macro customInstall
-  !insertmacro ChronomancerCheckExecutable "$INSTDIR\Chronomancer.exe"
+  !insertmacro ChronomancerCheckExecutable "$INSTDIR\Chronum.exe"
   !insertmacro ChronomancerCheckSize "$INSTDIR\resources\app.asar" ${CHRONOMANCER_ASAR_BYTES}
   ; Remove the previous executable after the replacement has passed validation.
   Delete "$INSTDIR\Sindaris.exe"
+  Delete "$INSTDIR\Chronomancer.exe"
   ; Bypass the broken old Start Menu launch link. Shortcuts still get refreshed.
-  StrCpy $launchLink "$INSTDIR\Chronomancer.exe"
+  StrCpy $launchLink "$INSTDIR\Chronum.exe"
   ; Clean only the legacy updater's known installer copy, not user data.
   Delete "$LOCALAPPDATA\sindaris-desktop-updater\installer.exe"
   Delete "$LOCALAPPDATA\sindaris-desktop-updater\pending\Chronomancer-Setup-*.exe"
+  Delete "$LOCALAPPDATA\sindaris-desktop-updater\pending\Chronum-Setup-*.exe"
   Delete "$LOCALAPPDATA\sindaris-desktop-updater\pending\Sindaris-Setup-*.exe"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater\pending"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater"

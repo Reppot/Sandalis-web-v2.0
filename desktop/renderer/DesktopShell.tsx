@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { STORAGE_KEYS } from '@/shared/lib/storage';
+import { useDesktopLocale, type DesktopLocale } from './desktop-i18n';
 import './desktop.css';
 
 type DesktopTab = 'companion' | 'links' | 'report' | 'tools' | 'clan' | 'guide' | 'feedback' | 'mail' | 'support' | 'cabinet';
@@ -12,9 +13,11 @@ type ScanStatus = {
   incomplete?: Array<{ type: string; hex: string }>;
   incompleteCount?: number;
   processedAt?: string | null;
+  sync?: { state: string; message: string; clanId?: string; created?: number; updated?: number };
 };
 type CompanionProfile = { displayName: string; avatarUrl: string | null; clanId: string; clanName: string; clanAvatarUrl: string | null; level: 'owner' | 'high' | 'medium' | 'basic' | 'custom' | 'guest' };
-type ScanReport = { processedAt: string; fileName: string; stockpiles: Array<Record<string, unknown>>; incomplete?: Array<{ type: string; hex: string }>; incompleteCount: number; total: number };
+type ScanReport = { processedAt: string; fileName: string; stockpiles: Array<Record<string, unknown>>; incomplete?: Array<{ type: string; hex: string }>; incompleteCount: number; total: number; sync?: ScanStatus['sync'] };
+type UpdateState = { status: 'idle' | 'checking' | 'current' | 'available' | 'downloading' | 'downloaded' | 'error'; currentVersion?: string; availableVersion?: string | null; percent?: number };
 type DiscordSetup = {
   displayName: string;
   guilds: Array<{ id: string; name: string; iconUrl: string | null; clanId: string; clanName: string }>;
@@ -28,6 +31,11 @@ type DesktopApi = {
   setContinuousScanning: (enabled: boolean) => Promise<ScanStatus>;
   getCompanionProfile: () => Promise<CompanionProfile | null | undefined>;
   getLastScanReport: () => Promise<ScanReport | null>;
+  exportDiagnostics: () => Promise<{ ok?: boolean; canceled?: boolean }>;
+  getUpdateState: () => Promise<UpdateState | null>;
+  checkForUpdates: () => Promise<UpdateState | null>;
+  downloadUpdate: () => Promise<boolean>;
+  installUpdate: () => Promise<boolean>;
   getDiscordSetup: () => Promise<DiscordSetup | null>;
   completeDiscordSetup: (selection: DiscordChoice) => Promise<{ ok: boolean; error?: string }>;
   openDiscordLogin: () => Promise<boolean>;
@@ -36,22 +44,25 @@ type DesktopApi = {
   closeWindow: () => Promise<void>;
   isWindowMaximized: () => Promise<boolean>;
   onWindowMaximized: (callback: (maximized: boolean) => void) => () => void;
+  getDefaultLocale: () => Promise<string>;
   onCompanionStatus: (callback: (status: ScanStatus) => void) => () => void;
+  onUpdateState: (callback: (state: UpdateState) => void) => () => void;
   onAuthComplete: (callback: (state: Record<string, string>) => void) => () => void;
 };
 
 const getApi = () => typeof window === 'undefined' ? undefined : (window as Window & { chronomancerDesktop?: DesktopApi }).chronomancerDesktop;
-const labels: Record<DesktopTab, string> = {
-  companion: 'Компаньон', links: 'Разделы Chronomancer', report: 'Последний отчёт', tools: 'Инструменты', clan: 'Клан', guide: 'Руководство',
+const dateLocale: Record<DesktopLocale, string> = { cs: 'cs-CZ', de: 'de-DE', en: 'en-GB', es: 'es-ES', fr: 'fr-FR', pl: 'pl-PL', pt: 'pt-BR', ru: 'ru-RU', uk: 'uk-UA', zh: 'zh-CN' };
+const labelSource: Record<DesktopTab, string> = {
+  companion: 'Компаньон', links: 'Разделы Chronum', report: 'Последний отчёт', tools: 'Инструменты', clan: 'Клан', guide: 'Руководство',
   feedback: 'Обратная связь', mail: 'Почта', support: 'Поддержка', cabinet: 'Настройки',
 };
-const sections = Object.keys(labels).filter((key) => !['companion', 'links', 'report'].includes(key)) as Exclude<DesktopTab, 'companion' | 'links' | 'report'>[];
-const sectionDetails: Record<Exclude<DesktopTab, 'companion' | 'links' | 'report'>, string> = {
+const sections = Object.keys(labelSource).filter((key) => !['companion', 'links', 'report'].includes(key)) as Exclude<DesktopTab, 'companion' | 'links' | 'report'>[];
+const sectionDetailSource: Record<Exclude<DesktopTab, 'companion' | 'links' | 'report'>, string> = {
   tools: 'Производственные калькуляторы и рабочие инструменты.', clan: 'Склады, заказы и состояние клана.',
-  guide: 'Обучение и справочные материалы Chronomancer.', feedback: 'Обратная связь команде проекта.',
+  guide: 'Обучение и справочные материалы Chronum.', feedback: 'Обратная связь команде проекта.',
   mail: 'Уведомления и сообщения аккаунта.', support: 'Помощь и контакты поддержки.', cabinet: 'Профиль и параметры аккаунта.',
 };
-const statusNames: Record<ScanStatus['state'], string> = {
+const statusNameSource: Record<ScanStatus['state'], string> = {
   waiting: 'Поиск файла', processing: 'Сканирование', ready: 'Готово', partial: 'Есть недоступные детали', error: 'Нужно выбрать файл', paused: 'Сканирование выключено',
 };
 const fmt = (value: unknown) => typeof value === 'string' || typeof value === 'number' ? String(value) : '—';
@@ -66,9 +77,33 @@ const hexNames: Record<string, string> = {
   WestgateHex: 'Westgate', StonecradleHex: 'Stonecradle',
 };
 const readableCode = (value: string) => value.replace(/Hex$/, '').replace(/([a-z])([A-Z])/g, '$1 $2');
+const localizedScanMessage = (status: ScanStatus, t: (text: string, params?: Record<string, string | number>) => string) => {
+  if (status.state === 'processing') return t('Читаю MapData.sav локально…');
+  if (status.state === 'partial') return t('Распознано складов: {n}. Ещё {count} закреплённых объектов без доступных деталей — они не считаются пустыми.', { n: status.stockpiles?.length ?? 0, count: status.incompleteCount ?? 0 });
+  if (status.state === 'ready') return t('Обработка завершена. Найдено складов: {n}.', { n: status.stockpiles?.length ?? 0 });
+  if (status.state === 'paused') return t('Постоянное сканирование выключено. Включите его, чтобы следить за обновлениями MapData.sav.');
+  if (status.state === 'error') return t(status.fileName ? 'Не удалось прочитать сохранение. Проверьте файл и повторите сканирование.' : 'MapData.sav не найден. Нажмите «Найти файл» и выберите сохранение вручную.');
+  if (status.state === 'waiting') return t('Поиск файла MapData.sav в сохранениях Foxhole.');
+  return t(status.message);
+};
+const localizedSyncMessage = (sync: ScanStatus['sync'], t: (text: string) => string) => {
+  if (!sync) return '';
+  const stateDefaults: Record<string, string> = {
+    uploading: 'Отправляю обработанные склады в API…', synced: 'Скан синхронизирован с базой клана.',
+    'no-clan': 'Войдите через Discord и выберите сервер для синхронизации.',
+    'no-named-stocks': 'Нет складов с именем из игры для синхронизации.',
+    retrying: 'API временно недоступен. Повторю отправку позже.',
+    rejected: 'Сервер отклонил данные скана.',
+  };
+  return t(sync.message) !== sync.message ? t(sync.message) : t(stateDefaults[sync.state] ?? 'Статус синхронизации обновлён.');
+};
 
 function QuestionIcon() {
   return <svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.5" /><path d="M7.9 7.5a2.2 2.2 0 1 1 3.7 1.6c-.9.7-1.6 1.1-1.6 2.4M10 14.4v.1" /></svg>;
+}
+
+function ProblemIcon() {
+  return <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3.5 5.5A2.5 2.5 0 0 1 6 3h8a2.5 2.5 0 0 1 2.5 2.5v5A2.5 2.5 0 0 1 14 13H9l-4.5 3v-3.5a2.5 2.5 0 0 1-1-2z" /><path d="M10 6.4v3.2M10 11.8v.1" /></svg>;
 }
 
 function FolderIcon() {
@@ -104,14 +139,17 @@ function WindowActionIcon({ kind }: { kind: 'minimize' | 'maximize' | 'restore' 
 }
 
 function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'companion' | 'links' | 'report'>) => void }) {
+  const { t } = useDesktopLocale();
+  const labels = Object.fromEntries(Object.entries(labelSource).map(([key, value]) => [key, t(value)])) as Record<DesktopTab, string>;
+  const sectionDetails = Object.fromEntries(Object.entries(sectionDetailSource).map(([key, value]) => [key, t(value)])) as typeof sectionDetailSource;
   return <section className="internal-link-board" aria-labelledby="link-board-title">
     <header className="link-board-heading">
-      <div><h1 id="link-board-title">Модули</h1></div>
-      <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>модулей</span></b>
+      <div><h1 id="link-board-title">{t('Модули')}</h1></div>
+      <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>{t('модулей')}</span></b>
     </header>
     <div className="link-board-grid">
       {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} onClick={() => onOpen(section)}>
-        <span className="link-board-copy"><small className="link-board-index">МОДУЛЬ {String(index + 1).padStart(2, '0')}</small><strong>{labels[section]}</strong><small className="link-board-description">{sectionDetails[section]}</small></span>
+        <span className="link-board-copy"><small className="link-board-index">{t('МОДУЛЬ')} {String(index + 1).padStart(2, '0')}</small><strong>{labels[section]}</strong><small className="link-board-description">{sectionDetails[section]}</small></span>
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5" /></svg>
       </button>)}
     </div>
@@ -119,6 +157,7 @@ function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'comp
 }
 
 function ScanReportPage({ report }: { report: ScanReport | null }) {
+  const { locale, t } = useDesktopLocale();
   const [query, setQuery] = React.useState('');
   const stockpiles = report?.stockpiles ?? [];
   const unavailableGroups = React.useMemo(() => {
@@ -138,21 +177,21 @@ function ScanReportPage({ report }: { report: ScanReport | null }) {
     return text.includes(query.trim().toLocaleLowerCase());
   });
   return <section className="scan-report-page" aria-labelledby="report-page-title">
-    <header className="report-page-heading"><div><h1 id="report-page-title">Последнее сканирование</h1><p>{report ? `${report.fileName} · ${new Date(report.processedAt).toLocaleString()}` : 'Отчёт появится после первого сканирования MapData.sav.'}</p></div></header>
+    <header className="report-page-heading"><div><h1 id="report-page-title">{t('Последнее сканирование')}</h1><p>{report ? `${report.fileName} · ${new Date(report.processedAt).toLocaleString(dateLocale[locale])}` : t('Отчёт появится после первого сканирования MapData.sav.')}</p></div></header>
     {report ? <>
-      <div className="report-overview" aria-label="Сводка сканирования">
-        <div><strong>{report.total}</strong><span>закреплённых объектов</span></div>
-        <div><strong>{report.stockpiles.length}</strong><span>с доступными деталями</span></div>
-        <div><strong>{report.incompleteCount}</strong><span>без игровых деталей</span></div>
-        <div><strong>{itemCount}</strong><span>строк предметов</span></div>
+      <div className="report-overview" aria-label={t('Сводка сканирования')}>
+        <div><strong>{report.total}</strong><span>{t('закреплённых объектов')}</span></div>
+        <div><strong>{report.stockpiles.length}</strong><span>{t('с доступными деталями')}</span></div>
+        <div><strong>{report.incompleteCount}</strong><span>{t('без игровых деталей')}</span></div>
+        <div><strong>{itemCount}</strong><span>{t('строк предметов')}</span></div>
       </div>
       {!!report.incompleteCount && <section className="report-incomplete" aria-labelledby="report-incomplete-title">
-        <h2 id="report-incomplete-title">Объекты без последних деталей</h2>
-        <p>{report.incompleteCount} закреплённых объектов. Файл содержит их тип и сектор, но не содержимое. Причину — скрытый склад или запись из прошлой войны — определить по этим данным нельзя.</p>
-        {!!unavailableGroups.length ? <ul>{unavailableGroups.map((group) => <li key={group.type}><span className="report-incomplete-type"><strong>{stockpileNames[group.type] ?? readableCode(group.type)}</strong><small>{group.type}</small></span><span>{[...group.hexes].map((hex) => hexNames[hex] ?? readableCode(hex)).join(', ')}{group.count > group.hexes.size ? ` · ${group.count} объектов` : ''}</span></li>)}</ul>
-          : <small>В старом отчёте сохранено только их число. После следующего локального сканирования здесь появятся типы объектов и секторы.</small>}
+        <h2 id="report-incomplete-title">{t('Объекты без последних деталей')}</h2>
+        <p>{report.incompleteCount} {t('закреплённых объектов')}. {t('Файл содержит их тип и сектор, но не содержимое. Причину — скрытый склад или запись из прошлой войны — определить по этим данным нельзя.')}</p>
+        {!!unavailableGroups.length ? <ul>{unavailableGroups.map((group) => <li key={group.type}><span className="report-incomplete-type"><strong>{t(stockpileNames[group.type] ?? readableCode(group.type))}</strong><small>{group.type}</small></span><span>{[...group.hexes].map((hex) => hexNames[hex] ?? readableCode(hex)).join(', ')}{group.count > group.hexes.size ? ` · ${group.count} ${t('объектов')}` : ''}</span></li>)}</ul>
+          : <small>{t('В старом отчёте сохранено только их число. После следующего локального сканирования здесь появятся типы объектов и секторы.')}</small>}
       </section>}
-      <div className="report-stockpiles-heading"><h2>Содержимое складов</h2><label><span>Фильтр</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Склад, город, предмет…" /></label></div>
+      <div className="report-stockpiles-heading"><h2>{t('Содержимое складов')}</h2><label><span>{t('Фильтр')}</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('Склад, город, предмет…')} /></label></div>
       <div className="report-stockpiles">
         {filtered.map(({ stockpile, index }) => {
           const items = Array.isArray(stockpile.items) ? stockpile.items as Array<Record<string, unknown>> : [];
@@ -166,14 +205,14 @@ function ScanReportPage({ report }: { report: ScanReport | null }) {
             ? new Date(stockpile.timestamp).toLocaleString()
             : fmt(stockpile.timestamp);
           return <details className="report-stockpile" key={`${fmt(stockpile.hex)}-${index}`} open={index === 0 && !query}>
-            <summary><span className="report-stockpile-name"><strong>{stockpileNames[type] ?? readableCode(type)}</strong><small>{[stockpile.town, hexNames[fmt(stockpile.hex)] ?? readableCode(fmt(stockpile.hex))].filter(Boolean).join(' · ')}</small></span><span className="report-stockpile-faction">{factionNames[fmt(stockpile.faction)] ?? fmt(stockpile.faction)}</span><span className="report-stockpile-items">{items.length} позиций</span><span className="report-stockpile-caret" aria-hidden="true">⌄</span></summary>
-            <div className="report-stockpile-meta"><span>Тип <b>{stockpileNames[type] ?? readableCode(type)}</b></span><span>Город <b>{fmt(stockpile.town)}</b></span><span>Сектор <b>{hexNames[fmt(stockpile.hex)] ?? readableCode(fmt(stockpile.hex))}</b></span><span>Резерв <b>{stockpile.is_reserve ? 'Да' : 'Нет'}</b></span><span title={coordinateTitle}>Координаты <b>{coordinateValue}</b></span><span>Обновлён <b>{timestamp}</b></span></div>
-            {items.length ? <table className="report-items-table"><thead><tr><th>Предмет</th><th>Количество</th><th>Упаковка</th></tr></thead><tbody>{items.map((item, itemIndex) => <tr key={`${fmt(item.code)}-${itemIndex}`}><td>{fmt(item.code)}</td><td>{fmt(item.quantity)}</td><td>{item.crated ? 'В ящике' : 'Штучно'}</td></tr>)}</tbody></table> : <p className="report-no-items">В доступных деталях нет предметов.</p>}
+            <summary><span className="report-stockpile-name"><strong>{t(stockpileNames[type] ?? readableCode(type))}</strong><small>{[stockpile.town, hexNames[fmt(stockpile.hex)] ?? readableCode(fmt(stockpile.hex))].filter(Boolean).join(' · ')}</small></span><span className="report-stockpile-faction">{t(factionNames[fmt(stockpile.faction)] ?? fmt(stockpile.faction))}</span><span className="report-stockpile-items">{items.length} {t('позиций')}</span><span className="report-stockpile-caret" aria-hidden="true">⌄</span></summary>
+            <div className="report-stockpile-meta"><span>{t('Тип')} <b>{t(stockpileNames[type] ?? readableCode(type))}</b></span><span>{t('Город')} <b>{fmt(stockpile.town)}</b></span><span>{t('Сектор')} <b>{hexNames[fmt(stockpile.hex)] ?? readableCode(fmt(stockpile.hex))}</b></span><span>{t('Резерв')} <b>{t(stockpile.is_reserve ? 'Да' : 'Нет')}</b></span><span title={coordinateTitle}>{t('Координаты')} <b>{coordinateValue}</b></span><span>{t('Обновлён')} <b>{timestamp}</b></span></div>
+            {items.length ? <table className="report-items-table"><thead><tr><th>{t('Предмет')}</th><th>{t('Количество')}</th><th>{t('Упаковка')}</th></tr></thead><tbody>{items.map((item, itemIndex) => <tr key={`${fmt(item.code)}-${itemIndex}`}><td>{fmt(item.code)}</td><td>{fmt(item.quantity)}</td><td>{t(item.crated ? 'В ящике' : 'Штучно')}</td></tr>)}</tbody></table> : <p className="report-no-items">{t('В доступных деталях нет предметов.')}</p>}
           </details>;
         })}
-        {!filtered.length && <p className="report-no-items">По этому запросу ничего не найдено.</p>}
+        {!filtered.length && <p className="report-no-items">{t('По этому запросу ничего не найдено.')}</p>}
       </div>
-    </> : <p className="report-no-items">Завершите первое сканирование, чтобы получить сводку и содержимое складов.</p>}
+    </> : <p className="report-no-items">{t('Завершите первое сканирование, чтобы получить сводку и содержимое складов.')}</p>}
   </section>;
 }
 
@@ -190,7 +229,8 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
     const cellWidth = 11;
     const cellHeight = 15;
     const glyphs = ' .,:;+=/\\|(){}[]<>01#@*';
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reduceMotion = motionQuery.matches;
     const shell = document.querySelector<HTMLElement>('.desktop-shell');
     let accentRgb = '244 63 82';
     const syncPalette = () => {
@@ -214,12 +254,12 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
       context.setTransform(scale, 0, 0, scale, 0, 0);
       rainSeed = Math.max(1, Math.floor(width * 1009 + height * 917 + 401));
       rain.length = 0;
-      const count = Math.max(28, Math.min(190, Math.round(width / 19)));
+      const count = Math.max(48, Math.min(240, Math.round(width / 12)));
       for (let index = 0; index < count; index += 1) rain.push({
         x: randomRain() * width,
         y: randomRain() * height,
         speed: 32 + randomRain() * 58,
-        length: 2 + Math.floor(randomRain() * 5),
+        length: 4 + Math.floor(randomRain() * 5),
         drift: -5 + randomRain() * 10,
         seed: randomRain() * 22,
       });
@@ -228,8 +268,12 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
     observer.observe(canvas);
     resize();
     const draw = (now: number) => {
-      frame = requestAnimationFrame(draw);
-      if (now - lastDraw < 33) return;
+      frame = 0;
+      if (document.hidden) return;
+      if (lastDraw && now - lastDraw < 33) {
+        if (!reduceMotion) frame = requestAnimationFrame(draw);
+        return;
+      }
       lastDraw = now;
       context.clearRect(0, 0, width, height);
       context.font = '12px "Cascadia Mono", "JetBrains Mono", monospace';
@@ -252,8 +296,8 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
             if (y < 0 || y > height) continue;
             const fade = 1 - tail / (streak.length + 0.5);
             context.fillStyle = tail === 0
-              ? `rgb(${accentRgb} / ${0.58 * fade})`
-              : `rgb(${accentRgb} / ${0.27 * fade})`;
+              ? `rgb(${accentRgb} / ${0.66 * fade})`
+              : `rgb(${accentRgb} / ${0.34 * fade})`;
             context.fillText(glyphs[1 + Math.floor((streak.seed + tail + glyphPhase) % (glyphs.length - 1))], streak.x + sway, y);
           }
           if (!reduceMotion && streak.y - streak.length * cellHeight > height) {
@@ -261,6 +305,7 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
             streak.x = randomRain() * width;
           }
         }
+        if (!reduceMotion) frame = requestAnimationFrame(draw);
         return;
       }
       const columns = Math.ceil(width / cellWidth);
@@ -315,14 +360,41 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
           context.globalAlpha = 1;
         }
       }
+      if (!reduceMotion) frame = requestAnimationFrame(draw);
     };
-    frame = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(frame); observer.disconnect(); paletteObserver.disconnect(); };
+    const syncMotion = () => {
+      reduceMotion = motionQuery.matches;
+      cancelAnimationFrame(frame);
+      frame = 0;
+      if (reduceMotion) draw(performance.now());
+      else if (!document.hidden) frame = requestAnimationFrame(draw);
+    };
+    const syncVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (reduceMotion) draw(performance.now());
+      else if (!frame) frame = requestAnimationFrame(draw);
+    };
+    motionQuery.addEventListener('change', syncMotion);
+    document.addEventListener('visibilitychange', syncVisibility);
+    if (reduceMotion) draw(performance.now());
+    else frame = requestAnimationFrame(draw);
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      paletteObserver.disconnect();
+      motionQuery.removeEventListener('change', syncMotion);
+      document.removeEventListener('visibilitychange', syncVisibility);
+    };
   }, [active, scene]);
   return <canvas ref={canvasRef} className="ascii-flow" aria-hidden="true" />;
 }
 
 export default function DesktopShell() {
+  const { locale, t } = useDesktopLocale();
+  const labels = Object.fromEntries(Object.entries(labelSource).map(([key, value]) => [key, t(value)])) as Record<DesktopTab, string>;
+  const statusNames = Object.fromEntries(Object.entries(statusNameSource).map(([key, value]) => [key, t(value)])) as Record<ScanStatus['state'], string>;
   const [openTabs, setOpenTabs] = React.useState<DesktopTab[]>(['companion']);
   const [active, setActive] = React.useState<DesktopTab>('companion');
   const tabHistory = React.useRef<DesktopTab[]>(['companion']);
@@ -344,6 +416,10 @@ export default function DesktopShell() {
   const [serverSetupLoading, setServerSetupLoading] = React.useState(false);
   const [serverSetupBusy, setServerSetupBusy] = React.useState(false);
   const [serverSetupError, setServerSetupError] = React.useState('');
+  const [problemPanelOpen, setProblemPanelOpen] = React.useState(false);
+  const [diagnosticsExportStatus, setDiagnosticsExportStatus] = React.useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [updateState, setUpdateState] = React.useState<UpdateState>({ status: 'idle' });
+  const [updateDismissedVersion, setUpdateDismissedVersion] = React.useState<string | null>(null);
 
   const refreshFrameHistory = React.useCallback((tab: DesktopTab) => {
     window.requestAnimationFrame(() => {
@@ -389,6 +465,13 @@ export default function DesktopShell() {
     } catch { /* cross-origin frames fall back to tab history */ }
     moveTabHistory(direction);
   }, [moveTabHistory]);
+
+  React.useEffect(() => {
+    const api = getApi();
+    if (!api) return;
+    void api.getUpdateState().then((state) => { if (state) setUpdateState(state); }).catch(() => {});
+    return api.onUpdateState(setUpdateState);
+  }, []);
 
   React.useEffect(() => {
     const onAuxClick = (event: MouseEvent) => {
@@ -572,6 +655,17 @@ export default function DesktopShell() {
   const chooseFile = async () => { const api = getApi(); if (api) { const next = await api.chooseSaveFile(); if (next?.state) setStatus(next); } };
   const login = async () => { await getApi()?.openDiscordLogin(); };
   const openSettings = () => openSection('cabinet');
+  const exportDiagnostics = async () => {
+    const api = getApi();
+    if (!api || diagnosticsExportStatus === 'saving') return;
+    setDiagnosticsExportStatus('saving');
+    try {
+      const result = await api.exportDiagnostics();
+      setDiagnosticsExportStatus(result?.ok ? 'saved' : result?.canceled ? 'idle' : 'error');
+    } catch { setDiagnosticsExportStatus('error'); }
+  };
+  const downloadUpdate = async () => { await getApi()?.downloadUpdate(); };
+  const installUpdate = async () => { await getApi()?.installUpdate(); };
   const toggleContinuousScanning = async () => {
     const api = getApi();
     if (!api || scanToggleBusy) return;
@@ -586,34 +680,61 @@ export default function DesktopShell() {
   return <main className="desktop-shell">
     <AsciiFlow active={status.state === 'processing'} scene={active === 'companion' ? 'companion' : active === 'links' ? 'links' : 'other'} />
     <header className="desktop-topbar">
-      <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-icon.png" width={44} height={44} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
+      <div className="desktop-brand"><span className="desktop-mark" title="Chronum"><img src="/chronomancer-icon.png" width={44} height={44} alt="" /></span><span>Chronum</span><i>FOXHOLE LOGI</i><small className="desktop-version">v{process.env.NEXT_PUBLIC_CHRONUM_VERSION}</small></div>
       <div className="desktop-topbar-actions">
         {status.state !== 'waiting' && <div className="desktop-live" role="status" aria-label={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]} title={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]}><b className={status.state === 'error' ? 'is-error' : status.state === 'processing' ? 'is-working' : ''} /></div>}
-        <button type="button" className="desktop-global-settings" onClick={openSettings} aria-label="Настройки" title="Настройки"><SettingsIcon /></button>
-        <div className="desktop-window-controls" aria-label="Управление окном">
-          <button type="button" onClick={() => void getApi()?.minimizeWindow()} aria-label="Свернуть окно" title="Свернуть"><WindowActionIcon kind="minimize" /></button>
-          <button type="button" onClick={() => void getApi()?.toggleMaximizeWindow().then(setWindowMaximized)} aria-label={windowMaximized ? 'Восстановить окно' : 'Развернуть окно'} title={windowMaximized ? 'Восстановить' : 'Развернуть'}><WindowActionIcon kind={windowMaximized ? 'restore' : 'maximize'} /></button>
-          <button type="button" className="window-close" onClick={() => void getApi()?.closeWindow()} aria-label="Скрыть Chronomancer в трей" title="Скрыть в трей"><WindowActionIcon kind="close" /></button>
+        <div className="desktop-problem-menu">
+          <button type="button" className="desktop-problem-trigger" onClick={() => { setProblemPanelOpen((open) => !open); setDiagnosticsExportStatus('idle'); }} aria-label={t('Сообщить о проблеме')} aria-expanded={problemPanelOpen} aria-controls="desktop-problem-panel"><ProblemIcon /><span>{t('Сообщить о проблеме')}</span></button>
+          {problemPanelOpen && <section className="desktop-problem-panel" id="desktop-problem-panel" aria-labelledby="desktop-problem-title">
+            <div className="desktop-problem-heading"><h2 id="desktop-problem-title">{t('Сообщить о проблеме')}</h2><button type="button" onClick={() => setProblemPanelOpen(false)} aria-label={t('Закрыть')}>×</button></div>
+            <p>{t('Архив поможет разобраться с ошибкой. Скачайте его и отправьте разработчику.')}</p>
+            <p className="desktop-problem-privacy">{t('Архив не содержит сохранение Foxhole и данные входа.')}</p>
+            <button type="button" className="desktop-problem-download" onClick={() => void exportDiagnostics()} disabled={diagnosticsExportStatus === 'saving'}>
+              {diagnosticsExportStatus === 'saving' ? t('Подготовка архива…') : t('Скачать файл диагностики')}
+            </button>
+            {diagnosticsExportStatus === 'saved' && <p className="desktop-problem-result is-success" role="status">{t('Диагностический файл сохранён.')}</p>}
+            {diagnosticsExportStatus === 'error' && <p className="desktop-problem-result is-error" role="alert">{t('Не удалось сохранить архив.')}</p>}
+          </section>}
+        </div>
+        <button type="button" className="desktop-global-settings" onClick={openSettings} aria-label={t('Настройки')} title={t('Настройки')}><SettingsIcon /></button>
+        <div className="desktop-window-controls" aria-label={t('Управление окном')}>
+          <button type="button" onClick={() => void getApi()?.minimizeWindow()} aria-label={t('Свернуть окно')} title={t('Свернуть')}><WindowActionIcon kind="minimize" /></button>
+          <button type="button" onClick={() => void getApi()?.toggleMaximizeWindow().then(setWindowMaximized)} aria-label={t(windowMaximized ? 'Восстановить окно' : 'Развернуть окно')} title={t(windowMaximized ? 'Восстановить' : 'Развернуть')}><WindowActionIcon kind={windowMaximized ? 'restore' : 'maximize'} /></button>
+          <button type="button" className="window-close" onClick={() => void getApi()?.closeWindow()} aria-label={t('Скрыть Chronum в трей')} title={t('Скрыть в трей')}><WindowActionIcon kind="close" /></button>
         </div>
       </div>
     </header>
 
-    <nav className="desktop-tabs" aria-label="Вкладки Chronomancer">
-      <div className="desktop-history-controls" aria-label="История переходов">
-        <button type="button" onClick={() => navigateHistory(-1)} disabled={!frameHistory.canBack && historyPosition === 0} aria-label="Назад" title="Назад"><HistoryIcon direction="back" /></button>
-        <button type="button" onClick={() => navigateHistory(1)} disabled={!frameHistory.canForward && historyPosition >= tabHistory.current.length - 1} aria-label="Вперёд" title="Вперёд"><HistoryIcon direction="forward" /></button>
+    {updateState.availableVersion && ['available', 'downloading', 'downloaded'].includes(updateState.status) && updateDismissedVersion !== updateState.availableVersion && <div className="desktop-update-scrim">
+      <section className="desktop-update-dialog" role="dialog" aria-modal="true" aria-labelledby="desktop-update-title">
+        <h2 id="desktop-update-title">{t('Доступна версия {version}', { version: updateState.availableVersion })}</h2>
+        <p>{t('При запуске приложение проверяет обновления, но не скачивает их без вашего согласия.')}</p>
+        {updateState.status === 'downloading' && <div className="desktop-update-progress"><progress max={100} value={updateState.percent ?? 0} /><span>{t('Скачивание: {percent}%', { percent: updateState.percent ?? 0 })}</span></div>}
+        {updateState.status === 'downloaded' && <p>{t('Обновление готово к установке.')}</p>}
+        <div className="desktop-update-actions">
+          {updateState.status === 'available' && <button type="button" className="desktop-update-primary" onClick={() => void downloadUpdate()}>{t('Скачать обновление')}</button>}
+          {updateState.status === 'downloaded' && <button type="button" className="desktop-update-primary" onClick={() => void installUpdate()}>{t('Обновить и перезапустить')}</button>}
+          {updateState.status !== 'downloading' && <button type="button" className="desktop-update-secondary" onClick={() => setUpdateDismissedVersion(updateState.availableVersion ?? null)}>{t('Позже')}</button>}
+        </div>
+      </section>
+    </div>}
+
+    <nav className="desktop-tabs" aria-label={t('Вкладки Chronum')}>
+      <div className="desktop-history-controls" aria-label={t('История переходов')}>
+        <button type="button" onClick={() => navigateHistory(-1)} disabled={!frameHistory.canBack && historyPosition === 0} aria-label={t('Назад')} title={t('Назад')}><HistoryIcon direction="back" /></button>
+        <button type="button" onClick={() => navigateHistory(1)} disabled={!frameHistory.canForward && historyPosition >= tabHistory.current.length - 1} aria-label={t('Вперёд')} title={t('Вперёд')}><HistoryIcon direction="forward" /></button>
       </div>
       <div className="desktop-tab-item">
         <button type="button" className={`desktop-tab ${active === 'companion' ? 'is-active' : ''}`} onClick={() => navigateTab('companion')} aria-current={active === 'companion' ? 'page' : undefined}>
           <span>{labels.companion}</span>
         </button>
-        <button type="button" className="desktop-add-tab" onClick={() => openSection('links')} aria-label="Добавить вкладку: открыть разделы Chronomancer" title="Открыть все разделы"><PlusIcon /></button>
+        <button type="button" className="desktop-add-tab" onClick={() => openSection('links')} aria-label={t('Добавить вкладку: открыть разделы Chronum')} title={t('Открыть все разделы')}><PlusIcon /></button>
       </div>
       {openTabs.filter((tab) => tab !== 'companion').map((tab) => <div key={tab} className="desktop-tab-item">
         <button type="button" className={`desktop-tab ${active === tab ? 'is-active' : ''}`} onClick={() => navigateTab(tab)} aria-current={active === tab ? 'page' : undefined}>
           <span>{labels[tab]}</span>
         </button>
-        <button type="button" className="desktop-tab-close" onClick={() => closeTab(tab)} aria-label={`Закрыть: ${labels[tab]}`} title={`Закрыть ${labels[tab]}`}>×</button>
+        <button type="button" className="desktop-tab-close" onClick={() => closeTab(tab)} aria-label={`${t('Закрыть')}: ${labels[tab]}`} title={`${t('Закрыть')} ${labels[tab]}`}>×</button>
       </div>)}
     </nav>
 
@@ -624,26 +745,26 @@ export default function DesktopShell() {
         if (tab !== 'companion') return <iframe key={`${tab}-${reloadKey}`} className="desktop-section-frame" title={labels[tab]} src={`app://sindaris/section.html?tab=${tab}${tab === 'tools' && authQuery ? `&${authQuery}` : ''}`} style={{ display: active === tab ? 'block' : 'none' }} />;
         return <div key={tab} className="companion-page" style={{ display: active === tab ? 'block' : 'none' }}>
         <div className={`companion-desktop${status.state === 'processing' ? ' is-scanning' : ''}`}>
-          <aside className="guardian-rail" aria-label="Маскот локального сканера">
-            <button type="button" className={`continuous-scan-toggle${continuousScanning ? ' is-on' : ''}`} role="switch" aria-checked={continuousScanning} aria-busy={scanToggleBusy} disabled={scanToggleBusy} onClick={() => void toggleContinuousScanning()}><span>Постоянное сканирование</span><i aria-hidden="true" /></button>
-            <picture className="guardian-picture"><source media="(max-width: 1080px), (max-height: 720px)" srcSet="/chronomancer-mascot-medium.png" /><img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt="Маскот Chronomancer" /></picture>
+          <aside className="guardian-rail" aria-label={t('Маскот локального сканера')}>
+            <button type="button" className={`continuous-scan-toggle${continuousScanning ? ' is-on' : ''}`} role="switch" aria-checked={continuousScanning} aria-busy={scanToggleBusy} disabled={scanToggleBusy} onClick={() => void toggleContinuousScanning()}><span>{t('Постоянное сканирование')}</span><i aria-hidden="true" /></button>
+            <picture className="guardian-picture"><source media="(max-width: 1080px), (max-height: 720px)" srcSet="/chronomancer-mascot-medium.png" /><img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt={t('Маскот Chronum')} /></picture>
           </aside>
           <div className="companion-workspace">
             <div className="companion-page-inner">
           <header className="companion-hero">
             <div>
-              <h1>Склады под контролем.</h1>
-              <p>Сканер читает сохранение прямо на этом компьютере.</p>
+              <h1>{t('Склады под контролем.')}</h1>
+              <p>{t('Сканер читает сохранение прямо на этом компьютере.')}</p>
             </div>
           </header>
 
           <div className="companion-layout">
             <section className={`scan-panel scan-${status.state}`} aria-labelledby="save-file-title">
               <div className="scan-panel-heading">
-                <div className="scan-panel-title"><span className="scan-panel-icon"><FolderIcon /></span><h2 id="save-file-title">Файл сохранения</h2>
+                <div className="scan-panel-title"><span className="scan-panel-icon"><FolderIcon /></span><h2 id="save-file-title">{t('Файл сохранения')}</h2>
                   <details className="save-help">
-                    <summary aria-label="Где найти MapData.sav" title="Где найти файл"><QuestionIcon /></summary>
-                    <div className="save-help-popover"><strong>Где найти MapData.sav</strong><p>Обычно Foxhole сохраняет файл здесь:</p><code>%LOCALAPPDATA%\Foxhole\Saved\SaveGames</code><p>Найдите файл с именем, оканчивающимся на <code>_MapData.sav</code>, и выберите его. Компаньон будет перечитывать его при обновлении.</p></div>
+                    <summary aria-label={t('Где найти MapData.sav')} title={t('Где найти файл')}><QuestionIcon /></summary>
+                    <div className="save-help-popover"><strong>{t('Где найти MapData.sav')}</strong><p>{t('Обычно Foxhole сохраняет файл здесь:')}</p><code>%LOCALAPPDATA%\Foxhole\Saved\SaveGames</code><p>{t('Найдите файл с именем, оканчивающимся на _MapData.sav, и выберите его. Компаньон будет перечитывать его при обновлении.')}</p></div>
                   </details>
                 </div>
                 <span className="scan-state"><i />{statusNames[status.state]}</span>
@@ -651,71 +772,72 @@ export default function DesktopShell() {
 
               <div className="scan-file-row">
                 <span className="scan-file-mark"><FolderIcon /></span>
-                <div className="scan-file-copy"><strong>{status.fileName ?? (status.state === 'error' ? 'Файл не найден' : 'Идёт поиск MapData.sav…')}</strong><span>{status.folder ?? '%LOCALAPPDATA%/Foxhole/Saved/SaveGames'}</span></div>
-                <button className="button-primary" onClick={chooseFile}>{status.fileName ? 'Сменить файл' : 'Найти файл'}</button>
+                <div className="scan-file-copy"><strong>{status.fileName ?? (status.state === 'error' ? t('Файл не найден') : t('Идёт поиск MapData.sav…'))}</strong><span>{status.folder ?? '%LOCALAPPDATA%/Foxhole/Saved/SaveGames'}</span></div>
+                <button className="button-primary" onClick={chooseFile}>{status.fileName ? t('Сменить файл') : t('Найти файл')}</button>
               </div>
 
               <div className="scan-feedback" role="status" aria-live="polite">
                 <span className="scan-feedback-light" />
-                <div><strong>{statusNames[status.state]}</strong><p>{status.message}</p></div>
+                <div><strong>{statusNames[status.state]}</strong><p>{localizedScanMessage(status, t)}</p></div>
               </div>
+              {status.sync && <p className={`scan-sync-status is-${status.sync.state}`} role="status">{status.sync.message}</p>}
             </section>
 
             <section className="account-panel" aria-labelledby="account-title">
               {serverSetupOpen ? <>
-                <div className="account-copy"><h2 id="account-title">Выберите сервер Discord</h2><p>Укажите клан для сайта. Данные сканирования пока остаются только на этом компьютере.</p></div>
-                {serverSetupLoading ? <p className="server-setup-status" role="status">Получаю список доступных серверов…</p> : serverSetup ? <div className="server-picker-list">
-                  {!!serverSetup.joins.length && <div className="server-picker-group"><strong>Кланы, в которые можно вступить</strong>
+                <div className="account-copy"><h2 id="account-title">{t('Выберите сервер Discord')}</h2><p>{t('Укажите клан для сайта и синхронизации именованных складов из игрового сохранения.')}</p></div>
+                {serverSetupLoading ? <p className="server-setup-status" role="status">{t('Получаю список доступных серверов…')}</p> : serverSetup ? <div className="server-picker-list">
+                  {!!serverSetup.joins.length && <div className="server-picker-group"><strong>{t('Кланы, в которые можно вступить')}</strong>
                     {serverSetup.joins.map((join) => <button className="server-choice" key={`join-${join.clanId}`} disabled={serverSetupBusy} onClick={() => void chooseDiscordContext({ joinClanId: join.clanId })}>
                       {join.iconUrl ? <img src={join.iconUrl} alt="" width={36} height={36} loading="lazy" /> : <span className="server-choice-mark">{join.name.slice(0, 1).toUpperCase()}</span>}
-                      <span className="server-choice-copy"><b>{join.name}</b><small>Вступить · {({ basic: 'базовый', medium: 'средний', high: 'высокий' } as Record<string, string>)[join.level] ?? 'базовый'} уровень{join.roles.length ? ` · ${join.roles.slice(0, 2).join(', ')}` : ''}</small></span><span className="server-choice-arrow">›</span>
+                      <span className="server-choice-copy"><b>{join.name}</b><small>{t('Вступить')} · {t(({ basic: 'базовый', medium: 'средний', high: 'высокий' } as Record<string, string>)[join.level] ?? 'базовый')} {t('уровень')}{join.roles.length ? ` · ${join.roles.slice(0, 2).join(', ')}` : ''}</small></span><span className="server-choice-arrow">›</span>
                     </button>)}
                   </div>}
-                  {!!serverSetup.guilds.length && <div className="server-picker-group"><strong>Ваши Discord-серверы</strong>
+                  {!!serverSetup.guilds.length && <div className="server-picker-group"><strong>{t('Ваши Discord-серверы')}</strong>
                     {serverSetup.guilds.map((guild) => <button className="server-choice" key={`guild-${guild.id}`} disabled={serverSetupBusy} onClick={() => void chooseDiscordContext({ guildId: guild.id })}>
                       {guild.iconUrl ? <img src={guild.iconUrl} alt="" width={36} height={36} loading="lazy" /> : <span className="server-choice-mark">{guild.name.slice(0, 1).toUpperCase()}</span>}
-                      <span className="server-choice-copy"><b>{guild.name}</b><small>{guild.clanId ? `Клан · ${guild.clanName || guild.clanId}` : 'Создать клан на этом сервере'}</small></span><span className="server-choice-arrow">›</span>
+                      <span className="server-choice-copy"><b>{guild.name}</b><small>{guild.clanId ? t('Клан · {name}', { name: guild.clanName || guild.clanId }) : t('Создать клан на этом сервере')}</small></span><span className="server-choice-arrow">›</span>
                     </button>)}
                   </div>}
-                  {!!serverSetup.memberships.length && <div className="server-picker-group"><strong>Мои кланы</strong>
+                  {!!serverSetup.memberships.length && <div className="server-picker-group"><strong>{t('Мои кланы')}</strong>
                     {serverSetup.memberships.map((membership) => <button className="server-choice" key={`membership-${membership.clanId}`} disabled={serverSetupBusy} onClick={() => void chooseDiscordContext({ clanId: membership.clanId })}>
-                      <span className="server-choice-mark">{membership.clanName.slice(0, 1).toUpperCase()}</span><span className="server-choice-copy"><b>{membership.clanName}</b><small>Войти · {membership.role}</small></span><span className="server-choice-arrow">›</span>
+                      <span className="server-choice-mark">{membership.clanName.slice(0, 1).toUpperCase()}</span><span className="server-choice-copy"><b>{membership.clanName}</b><small>{t('Войти')} · {t(membership.role)}</small></span><span className="server-choice-arrow">›</span>
                     </button>)}
                   </div>}
-                  {!serverSetup.joins.length && !serverSetup.guilds.length && !serverSetup.memberships.length && <p className="server-setup-status">Для аккаунта пока не найдено доступных кланов.</p>}
+                  {!serverSetup.joins.length && !serverSetup.guilds.length && !serverSetup.memberships.length && <p className="server-setup-status">{t('Для аккаунта пока не найдено доступных кланов.')}</p>}
                 </div> : null}
-                {serverSetupError && <p className="server-setup-error" role="alert">{serverSetupError}</p>}
-                <button className="server-setup-cancel" onClick={() => { setServerSetupOpen(false); setServerSetupError(''); }}>Назад к компаньону</button>
+                {serverSetupError && <p className="server-setup-error" role="alert">{t(serverSetupError) !== serverSetupError ? t(serverSetupError) : t('Не удалось выполнить действие. Попробуйте снова.')}</p>}
+                <button className="server-setup-cancel" onClick={() => { setServerSetupOpen(false); setServerSetupError(''); }}>{t('Назад к компаньону')}</button>
               </> : profile ? <>
-                <div className="account-copy"><h2 id="account-title">Профиль Chronomancer</h2><p>{profile.clanId ? `Активный сервер: ${profile.clanName || profile.clanId}. Отправка данных скана выключена.` : 'Вход выполнен. Отправка данных скана выключена.'}</p></div>
+                <div className="account-copy"><h2 id="account-title">{t('Профиль Chronum')}</h2><p>{profile.clanId ? t('Активный сервер: {name}.', { name: profile.clanName || profile.clanId }) : t('Вход выполнен.')} {status.sync ? localizedSyncMessage(status.sync, t) : t('Скан будет синхронизирован после обработки и проверки прав доступа.')}</p></div>
                 <div className="companion-profile">
                   {profile.avatarUrl ? <img className="companion-avatar" src={profile.avatarUrl} alt={`Аватар ${profile.displayName}`} width={43} height={43} /> : <span className="companion-avatar companion-avatar-fallback">{profile.displayName.slice(0, 1).toUpperCase()}</span>}
                   <div className="companion-profile-copy"><strong>{profile.displayName}</strong></div>
-                  <span className={`level-badge level-${profile.level}`} title="Уровень доступа на сайте">
+                  <span className={`level-badge level-${profile.level}`} title={t('Уровень доступа на сайте')}>
                     <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m10 2 6 3.5v7L10 18l-6-5.5v-7z"/><path d="m7 10 2 2 4-4"/></svg>
-                    {({ owner: 'Командир', high: 'Высокий', medium: 'Средний', basic: 'Базовый', custom: 'Особый', guest: 'Гость' } as const)[profile.level]}
+                    {t(({ owner: 'Командир', high: 'Высокий', medium: 'Средний', basic: 'Базовый', custom: 'Особый', guest: 'Гость' } as const)[profile.level])}
                   </span>
                 </div>
                 {profile.clanId && <div className="server-context"><span className="server-context-icon">{profile.clanAvatarUrl ? <img src={profile.clanAvatarUrl} alt="" width={29} height={29} /> : profile.clanName.slice(0, 1).toUpperCase()}</span><div><strong>{profile.clanName || profile.clanId}</strong></div></div>}
-                <button className="profile-server-change" onClick={login}>Выбрать сервер Discord</button>
-              </> : profileLoading ? <div className="account-copy"><h2 id="account-title">Проверяю аккаунт</h2><p>Сверяю текущий вход Chronomancer.</p></div>
-                : profileUnavailable ? <div className="account-copy"><h2 id="account-title">Нет связи с сайтом</h2><p>Статус входа пока не удалось проверить.</p><button className="profile-retry" onClick={refreshProfile}>Проверить снова</button></div>
+                <button className="profile-server-change" onClick={login}>{t('Выбрать сервер Discord')}</button>
+              </> : profileLoading ? <div className="account-copy"><h2 id="account-title">{t('Проверяю аккаунт')}</h2><p>{t('Сверяю текущий вход Chronum.')}</p></div>
+                : profileUnavailable ? <div className="account-copy"><h2 id="account-title">{t('Нет связи с сайтом')}</h2><p>{t('Статус входа пока не удалось проверить.')}</p><button className="profile-retry" onClick={refreshProfile}>{t('Проверить снова')}</button></div>
                 : <>
-                <div className="account-copy"><h2 id="account-title">Ваш клан — в соседней вкладке</h2><p>Подключите аккаунт, чтобы открыть инструменты Chronomancer и данные клана.</p></div>
-                <button className="button-discord" onClick={login}><DiscordIcon />Войти через Discord</button>
+                <div className="account-copy"><h2 id="account-title">{t('Ваш клан — в соседней вкладке')}</h2><p>{t('Подключите аккаунт, чтобы открыть инструменты Chronum и данные клана.')}</p></div>
+                <button className="button-discord" onClick={login}><DiscordIcon />{t('Войти через Discord')}</button>
               </>}
             </section>
 
             <section className="scan-results" aria-labelledby="scan-results-title">
-              <div className="scan-results-heading"><h2 id="scan-results-title">Последнее сканирование</h2><span>{status.processedAt ? new Date(status.processedAt).toLocaleTimeString() : 'Ожидание данных'}</span>
-                <button className="report-button" onClick={openReport}>Посмотреть последний отчёт</button>
+              <div className="scan-results-heading"><h2 id="scan-results-title">{t('Последнее сканирование')}</h2><span>{status.processedAt ? new Date(status.processedAt).toLocaleTimeString(dateLocale[locale]) : t('Ожидание данных')}</span>
+                <button className="report-button" onClick={openReport}>{t('Посмотреть последний отчёт')}</button>
               </div>
-              {status.processedAt ? <div className="scan-results-count"><strong>{totalStockpiles}</strong><span>закреплённых объектов</span><i />
-                <div><b>{status.stockpiles?.length ?? 0}</b><span>с доступными деталями</span></div>
-                {!!status.incompleteCount && <div className="scan-incomplete"><b>{status.incompleteCount}</b><span>без игровых деталей</span></div>}
-              </div> : <p className="scan-empty">{status.state === 'processing' ? 'Жду окончания локального сканирования.' : 'Результаты появятся после первого сканирования MapData.sav.'}</p>}
-              {(status.stockpiles?.length ?? 0) > 0 && <div className="stockpile-list">{status.stockpiles!.map((stockpile, index) => <div className="stockpile-row" key={`${fmt(stockpile.name)}-${index}`}><b>{fmt(stockpile.name ?? stockpile.type)}</b><span>{fmt(stockpile.hex)}</span><span>{Array.isArray(stockpile.items) ? `${stockpile.items.length} поз.` : 'Детали доступны'}</span></div>)}</div>}
-              {!!status.incompleteCount && <p className="scan-incomplete-note">Эти объекты не считаются пустыми: игра не предоставила их последние детали.</p>}
+              {status.processedAt ? <div className="scan-results-count"><strong>{totalStockpiles}</strong><span>{t('закреплённых объектов')}</span><i />
+                <div><b>{status.stockpiles?.length ?? 0}</b><span>{t('с доступными деталями')}</span></div>
+                {!!status.incompleteCount && <div className="scan-incomplete"><b>{status.incompleteCount}</b><span>{t('без игровых деталей')}</span></div>}
+              </div> : <p className="scan-empty">{status.state === 'processing' ? t('Жду окончания локального сканирования.') : t('Результаты появятся после первого сканирования MapData.sav.')}</p>}
+              {(status.stockpiles?.length ?? 0) > 0 && <div className="stockpile-list">{status.stockpiles!.map((stockpile, index) => <div className="stockpile-row" key={`${fmt(stockpile.name)}-${index}`}><b>{fmt(stockpile.name ?? stockpile.type)}</b><span>{fmt(stockpile.hex)}</span><span>{Array.isArray(stockpile.items) ? `${stockpile.items.length} ${t('поз.')}` : t('Детали доступны')}</span></div>)}</div>}
+              {!!status.incompleteCount && <p className="scan-incomplete-note">{t('Эти объекты не считаются пустыми: игра не предоставила их последние детали.')}</p>}
             </section>
           </div>
         </div>

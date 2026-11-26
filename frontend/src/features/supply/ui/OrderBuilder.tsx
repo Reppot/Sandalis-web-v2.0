@@ -169,10 +169,10 @@ export const OrderBuilder: React.FC<OrderBuilderProps> = ({ canWrite, isFullWidt
     }
     void exportDoc(
       {
-        title: `Chronomancer • ${t("builder.docTitle")}`,
+        title: `Chronum • ${t("builder.docTitle")}`,
         header: [`${t("doc.hex")}: ${pinned?.region ?? "—"}`, `${t("doc.stockpile")}: ${pinned?.name ?? "—"}`, `${t("doc.lines")}: ${order.length} • Σ ${totalUnits}`],
         sections: [{ rows: order.map((l) => ({ name: l.name, quantity: l.quantity, unit: t(l.unit === "crate" ? "unit.crate" : "unit.unit"), icon: assetUrl(l.icon_url) })) }],
-        fileBase: "Chronomancer_order",
+        fileBase: "Chronum_order",
         sheetName: t("builder.sheet"),
       },
       fmt,

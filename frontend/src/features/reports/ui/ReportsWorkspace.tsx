@@ -80,10 +80,10 @@ function toDoc(report: Report, t: Translate, locale: string): ExportDoc {
     report.meta.stockpile && `${t(report.meta.type === "bunker" || report.meta.type === "factory" ? "doc.town" : "doc.stockpile")}: ${report.meta.stockpile}`,
   ].filter(Boolean) as string[];
   return {
-    title: `Chronomancer • ${report.title}`,
+    title: `Chronum • ${report.title}`,
     header: [...meta, `${t("doc.author")}: ${report.created_by_name ?? report.created_by} • ${formatDateTime(report.created_at)}`, `${t("doc.status")}: ${t(REPORT_STATUS_LABEL[report.status])}`],
     sections: [{ rows: report.lines.map((l) => ({ name: lineName(l, locale), quantity: l.quantity, unit: unitLabel(l.unit, t), icon: assetUrl(l.icon_url) })) }],
-    fileBase: `Chronomancer_report_${report.title}`.slice(0, 60),
+    fileBase: `Chronum_report_${report.title}`.slice(0, 60),
     sheetName: t("reports.report"),
   };
 }

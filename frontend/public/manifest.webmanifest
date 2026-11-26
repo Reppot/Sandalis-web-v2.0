@@ -1,6 +1,6 @@
 {
-  "name": "Chronomancer — Foxhole Logi",
-  "short_name": "Chronomancer",
+  "name": "Chronum — Foxhole Logi",
+  "short_name": "Chronum",
   "description": "Foxhole logistics tools and a local MapData.sav stockpile scanner",
   "start_url": "/",
   "display": "standalone",

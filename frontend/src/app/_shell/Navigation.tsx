@@ -125,12 +125,12 @@ export const Sidebar: React.FC<NavProps> = ({ tabs, active, onSelect, clan, tool
   return (
     <aside className={cn("sidebar", collapsed && "is-collapsed")} aria-label={t("nav.aria")}>
       <div className="sidebar-head">
-        <button type="button" data-guide="shell-brand" className="sidebar-brand" onClick={() => onSelect("tools", null)} title="Chronomancer — Foxhole Logi">
+        <button type="button" data-guide="shell-brand" className="sidebar-brand" onClick={() => onSelect("tools", null)} title="Chronum — Foxhole Logi">
           {/* eslint-disable-next-line @next/next/no-img-element -- local Chronomancer mascot */}
           <img src="/chronomancer-icon.png" alt="" width={36} height={36} className="sidebar-logo chronomancer-mark" />
           {collapsed ? null : (
             <span className="brand-wordmark min-w-0 leading-none">
-              <span className="sidebar-brand-name">Chronomancer</span>
+              <span className="sidebar-brand-name">Chronum</span>
               <span className="sidebar-brand-sub">Foxhole Logi</span>
             </span>
           )}

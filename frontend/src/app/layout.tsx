@@ -14,26 +14,26 @@ import "@fontsource/russo-one/latin-400.css";
 
 // адрес сайта для canonical / sitemap / Open Graph (переопределяется SITE_URL при сборке)
 const SITE_URL = (process.env.SITE_URL || "https://sandalis-web-v2-0.onrender.com").replace(/\/$/, "");
-const TITLE = "Chronomancer — Foxhole Logi";
+const TITLE = "Chronum — Foxhole Logi";
 const DESCRIPTION =
-  "Инструменты логистики Foxhole: склады, заказы, база кодов и калькуляторы производства. Десктоп-компаньон Chronomancer локально сканирует MapData.sav на компьютере игрока.";
+  "Инструменты логистики Foxhole: склады, заказы, база кодов и калькуляторы производства. Десктоп-компаньон Chronum локально сканирует MapData.sav на компьютере игрока.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: TITLE, template: "%s — Chronomancer" },
+  title: { default: TITLE, template: "%s — Chronum" },
   description: DESCRIPTION,
-  applicationName: "Chronomancer — Foxhole Logi",
+  applicationName: "Chronum — Foxhole Logi",
   keywords: ["Foxhole logistics", "Foxhole logi", "Foxhole stockpiles", "Foxhole stockpile scanner", "MapData.sav", "логистика Foxhole", "склады Foxhole", "калькулятор Foxhole", "MPF"],
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "Chronomancer — Foxhole Logi",
+    siteName: "Chronum — Foxhole Logi",
     title: TITLE,
     description: DESCRIPTION,
     locale: "ru_RU",
-    images: [{ url: "/chronomancer-icon.png", alt: "Chronomancer — Foxhole Logi" }],
+    images: [{ url: "/chronomancer-icon.png", alt: "Chronum — Foxhole Logi" }],
   },
   twitter: { card: "summary", title: TITLE, description: DESCRIPTION, images: ["/chronomancer-icon.png"] },
   // коды подтверждения из Google Search Console и Яндекс.Вебмастера (переменные окружения при сборке)
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "Chronomancer — Foxhole Logi",
+  name: "Chronum — Foxhole Logi",
   url: SITE_URL,
   description: DESCRIPTION,
   applicationCategory: "UtilitiesApplication",
@@ -84,7 +84,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
         {/* терминал рисуется на клиенте — краткое описание в HTML для поисковиков и экранных читалок */}
         <header className="sr-only">
-          <h1>Chronomancer — Foxhole Logi: инструменты логистики и локальный сканер складов</h1>
+          <h1>Chronum — Foxhole Logi: инструменты логистики и локальный сканер складов</h1>
           <p>{DESCRIPTION}</p>
         </header>
         <AppProviders>{children}</AppProviders>

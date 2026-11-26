@@ -115,7 +115,7 @@ export const FactoryCalculator: React.FC<{ facility: Facility; recipes: Recipe[]
     return {
       toolName: isFactory ? t("tools.factory") : "MPF — Mass Production Factory",
       subtitle: `${isFactory ? "Factory" : "Mass Production Factory"} • ${planning ? t("tools.planningMode") : t("tools.productionMode")}`,
-      fileBase: isFactory ? "Chronomancer_factory" : "Chronomancer_MPF",
+      fileBase: isFactory ? "Chronum_factory" : "Chronum_MPF",
       items: rows.map(({ recipe, crates: q }) => ({ name: rname(recipe), quantity: q, unit: t("unit.crate"), icon: assetUrl(recipe.icon_url), note: t("tools.cratesUnits", { units: q * perCrate(recipe, facility) }) })),
       resources: Object.entries(materials).map(([key, value]) => ({ name: label("material", key), quantity: Math.round(value), unit: t("unit.unit"), icon: labelIcon("material", key) })),
       stats: [

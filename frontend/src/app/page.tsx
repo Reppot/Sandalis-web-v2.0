@@ -177,7 +177,7 @@ export default function TerminalPage() {
   if (loading) {
     return (
       <div className="app-splash">
-        <span className="title-brand text-lg">Chronomancer</span>
+        <span className="title-brand text-lg">Chronum</span>
         <span className="app-splash-bar" aria-hidden />
         <span className="sr-only">{t("app.connecting")}</span>
       </div>

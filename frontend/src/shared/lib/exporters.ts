@@ -41,16 +41,16 @@ const RU_LABELS: ExportLabels = {
   name: "Название",
   quantity: "Количество",
   unit: "Ед. изм.",
-  footer: "Chronomancer • Foxhole Logi",
+  footer: "Chronum • Foxhole Logi",
 };
 
 export interface ExportDoc {
-  /** Заголовок страницы: «Chronomancer • Заказ снабжения». */
+  /** Заголовок страницы: «Chronum • Заказ снабжения». */
   title: string;
   /** Строки шапки: «Гекс: …», «Режим: …». */
   header: string[];
   sections: ExportSection[];
-  /** Основа имени файла без даты: «Chronomancer_заказ». */
+  /** Основа имени файла без даты: «Chronum_заказ». */
   fileBase: string;
   footer?: string;
   /** Имя листа XLSX для первой секции (лист совместим с импортом конструктора). */

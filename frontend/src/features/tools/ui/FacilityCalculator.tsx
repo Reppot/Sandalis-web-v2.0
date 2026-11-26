@@ -155,7 +155,7 @@ export const FacilityCalculator: React.FC<{ recipes: Recipe[]; canSend?: boolean
     return {
       toolName: t("tools.facility"),
       subtitle: "Facilities • foxhole.wiki.gg",
-      fileBase: "Chronomancer_facility",
+      fileBase: "Chronum_facility",
       items: roots.map((n) => ({ name: dn(n.name), quantity: withUnit(n.amount, n.unit), unit: n.unit ? "" : unitOf(null), icon: assetUrl(n.icon_url), note: n.recipe ? facilityData(n.recipe)?.source : undefined })),
       resources: [...totals.raw].map(([name, v]) => ({ name: dn(name), quantity: withUnit(Math.ceil(v.amount * 10) / 10, v.unit), unit: v.unit ? "" : unitOf(null), icon: assetUrl(v.icon_url) })),
       stats: [

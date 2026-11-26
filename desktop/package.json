@@ -1,7 +1,7 @@
 {
   "name": "chronomancer-desktop",
-  "productName": "Chronomancer",
-  "version": "0.1.29",
+  "productName": "Chronum",
+  "version": "0.1.34",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
@@ -24,8 +24,13 @@
     "electron-builder": "26.18.0"
   },
   "build": {
+    "publish": {
+      "provider": "github",
+      "owner": "Reppot",
+      "repo": "Sandalis-web-v2.0"
+    },
     "appId": "com.sindaris.terminal",
-    "productName": "Chronomancer",
+    "productName": "Chronum",
     "asar": true,
     "directories": {
       "output": "release"
@@ -56,7 +61,7 @@
     "win": {
       "icon": "resources/chronomancer.ico",
       "target": "nsis",
-      "artifactName": "Chronomancer-Setup-${version}.${ext}"
+      "artifactName": "Chronum-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": true,
@@ -66,9 +71,12 @@
       "createDesktopShortcut": true,
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": false,
-      "differentialPackage": false,
+      "differentialPackage": "store-asar",
       "include": "build/personal-installer.nsh"
     },
     "afterPack": "./build/personal-after-pack.mjs"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }

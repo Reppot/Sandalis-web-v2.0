@@ -61,4 +61,4 @@ const iconEntries = iconFrames.map((frame, index) => {
 });
 await writeFile(path.join(root, 'desktop', 'resources', 'chronomancer.ico'), Buffer.concat([iconHeader, ...iconEntries, ...iconFrames]));
 
-console.log('Saved original mascot backup and rendered approved medium and small Chronomancer marks.');
+console.log('Saved original mascot backup and rendered approved medium and small Chronum marks.');

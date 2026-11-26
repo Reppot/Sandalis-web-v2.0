@@ -37,4 +37,4 @@ await rm(dist, { recursive: true, force: true });
 await cp(exported, dist, { recursive: true });
 await copyFile(path.join(exported, 'desktop-section', 'index.html'), path.join(dist, 'section.html'));
 await mkdir(dist, { recursive: true });
-console.log('Prepared static Next.js renderer: Chronomancer shell and section page');
+console.log('Prepared static Next.js renderer: Chronum shell and section page');
