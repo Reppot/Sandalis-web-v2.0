@@ -52,7 +52,7 @@ body { color: var(--fg, #f0f2ee); background: var(--bg, #0d0f0e); font-family: v
 .link-board-heading > b strong { color: var(--fg); font-size: 17px; }
 .link-board-heading > b span { color: var(--fg-3); }
 .link-board-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.link-board-item { position: relative; display: flex; min-width: 0; min-height: 154px; align-items: flex-start; justify-content: space-between; gap: 16px; overflow: visible; border: 1px solid var(--border); border-radius: 13px; background: linear-gradient(145deg, color-mix(in srgb, var(--surface-2) 98%, transparent), color-mix(in srgb, var(--surface) 98%, transparent)); padding: 19px 19px 17px; color: var(--fg); text-align: left; cursor: pointer; box-shadow: 0 10px 24px rgb(0 0 0 / .12); transition: border-color 160ms ease, background 160ms ease, transform 160ms ease, box-shadow 160ms ease; }
+.link-board-item { position: relative; display: flex; min-width: 0; min-height: 154px; align-items: flex-start; justify-content: space-between; gap: 16px; overflow: hidden; border: 1px solid var(--border); border-radius: 13px; background: linear-gradient(145deg, color-mix(in srgb, var(--surface-2) 98%, transparent), color-mix(in srgb, var(--surface) 98%, transparent)); padding: 19px 19px 17px; color: var(--fg); text-align: left; cursor: pointer; box-shadow: 0 10px 24px rgb(0 0 0 / .12); transition: border-color 160ms ease, background 160ms ease, transform 160ms ease, box-shadow 160ms ease; }
 .link-board-item::before { position: absolute; top: 0; left: 19px; width: 34px; height: 2px; background: var(--accent); content: ""; opacity: .72; }
 .link-board-copy { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 9px; }
 .link-board-index { color: var(--accent-fg); font: 600 9px var(--font-mono, "JetBrains Mono", monospace); letter-spacing: .12em; }
@@ -62,9 +62,6 @@ body { color: var(--fg, #f0f2ee); background: var(--bg, #0d0f0e); font-family: v
 .link-board-item:hover,.link-board-item:focus-visible { transform: translateY(-2px); border-color: var(--accent-line); background: linear-gradient(145deg, color-mix(in srgb, var(--surface-2) 91%, var(--accent)), color-mix(in srgb, var(--surface) 97%, var(--accent))); outline: 0; box-shadow: 0 14px 30px rgb(0 0 0 / .24); }
 .link-board-item:hover > svg,.link-board-item:focus-visible > svg { transform: translateX(3px); opacity: 1; }
 .link-board-item:focus-visible { box-shadow: 0 0 0 2px var(--accent), 0 14px 30px rgb(0 0 0 / .24); }
-.blood-seep { position: absolute; z-index: 3; right: 15%; bottom: -1px; left: 15%; height: 2px; pointer-events: none; }
-.blood-seep::before { position: absolute; right: 0; bottom: 0; left: 0; height: 3px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px rgb(var(--accent-rgb) / .78), 0 2px 13px rgb(var(--accent-rgb) / .45); content: ""; opacity: 0; transform: scaleX(.05); transform-origin: center; animation: blood-pool 8.4s ease-in-out var(--drip-delay, 0s) infinite; }
-.blood-seep::after { position: absolute; top: -1px; left: 50%; width: 8px; height: 9px; border-radius: 50% 50% 58% 42%; background: var(--accent); box-shadow: 0 1px 9px rgb(var(--accent-rgb) / .7); content: ""; opacity: 0; transform: translate(-50%, 0) scale(.2); transform-origin: 50% 0; animation: blood-drop 8.4s cubic-bezier(.45,0,.72,.28) var(--drip-delay, 0s) infinite; }
 .report-page-heading { margin-bottom: 22px; }
 .report-overview { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 18px 0; }
 .report-overview > div { display: flex; flex-direction: column; gap: 5px; border-right: 1px solid var(--border); padding: 0 20px; }
@@ -233,8 +230,6 @@ button,svg,img,canvas,video,[role="button"] { -webkit-user-select: none; user-se
 
 @keyframes companion-pulse { from { opacity: .55; } to { opacity: 1; } }
 @keyframes atmosphere-drift { from { transform: translate3d(-2%, -1%, 0) scale(.97); } to { transform: translate3d(2%, 1%, 0) scale(1.03); } }
-@keyframes blood-pool { 0%,10% { opacity: 0; transform: scaleX(.04); } 22% { opacity: .85; transform: scaleX(.42); } 36% { opacity: 1; transform: scaleX(1); } 47% { opacity: .68; transform: scaleX(.72); } 53%,100% { opacity: 0; transform: scaleX(.08); } }
-@keyframes blood-drop { 0%,35% { opacity: 0; transform: translate(-50%, 0) scale(.2,.25); } 43% { opacity: 1; transform: translate(-50%, 0) scale(.82,.55); } 51% { opacity: 1; transform: translate(-50%, 0) scale(1,1.8); } 64% { opacity: .85; transform: translate(-50%, 38px) scale(.8,1.25); } 72%,100% { opacity: 0; transform: translate(-50%, 42px) scale(.45,.7); } }
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
 @media (max-width: 1080px) {
   .desktop-topbar { padding-left: 11px; }

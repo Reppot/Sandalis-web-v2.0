@@ -110,9 +110,8 @@ function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'comp
       <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>модулей</span></b>
     </header>
     <div className="link-board-grid">
-      {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} style={{ '--drip-delay': `${(index * 1.37) % 8}s` } as React.CSSProperties} onClick={() => onOpen(section)}>
+      {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} onClick={() => onOpen(section)}>
         <span className="link-board-copy"><small className="link-board-index">МОДУЛЬ {String(index + 1).padStart(2, '0')}</small><strong>{labels[section]}</strong><small className="link-board-description">{sectionDetails[section]}</small></span>
-        <span className="blood-seep" aria-hidden="true" />
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5" /></svg>
       </button>)}
     </div>
@@ -205,7 +204,7 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
     paletteObserver.observe(shell ?? document.documentElement, { attributes: true, attributeFilter: ['data-skin'] });
     const ripples: Array<{ x: number; y: number; startedAt: number }> = [];
     const drops: Array<{ x: number; startY: number; targetY: number; startedAt: number; impacted: boolean }> = [];
-    const dripSources: Array<{ x: number; y: number; nextDropAt: number }> = [];
+    const dripSources: Array<{ key: string; x: number; y: number; side: 'left' | 'right'; nextDropAt: number }> = [];
     let nextSourceSync = 0;
     let canvasRect = canvas.getBoundingClientRect();
     const resize = () => {
@@ -233,20 +232,47 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
       const advection = Math.sin(flowPhase) * width * 0.22;
       if (scene === 'links' && !reduceMotion && now >= nextSourceSync) {
         canvasRect = canvas.getBoundingClientRect();
-        const currentSources = [...document.querySelectorAll<HTMLElement>('.link-board-item')].map((item) => {
+        const currentSources = [...document.querySelectorAll<HTMLElement>('.link-board-item.link-cabinet, .link-board-item.link-mail, .link-board-item.link-support')].flatMap((item) => {
           const rect = item.getBoundingClientRect();
-          return { x: rect.left + rect.width / 2 - canvasRect.left, y: rect.bottom - canvasRect.top };
+          return [
+            { key: `${item.classList[1]}-left`, x: rect.left - canvasRect.left + 2, y: rect.bottom - canvasRect.top, side: 'left' as const },
+            { key: `${item.classList[1]}-right`, x: rect.right - canvasRect.left - 2, y: rect.bottom - canvasRect.top, side: 'right' as const },
+          ];
         }).filter((source) => source.x >= 0 && source.x <= width && source.y >= 0 && source.y < height);
-        const previous = [...dripSources];
+        const previous = new Map(dripSources.map((source) => [source.key, source]));
         dripSources.splice(0, dripSources.length, ...currentSources.map((source, index) => ({
           ...source,
-          nextDropAt: previous[index]?.nextDropAt ?? now + 650 + index * 530 + Math.random() * 2200,
+          nextDropAt: previous.get(source.key)?.nextDropAt ?? now + 700 + index * 410 + Math.random() * 700,
         })));
         nextSourceSync = now + 400;
         for (const source of dripSources) {
-          if (now < source.nextDropAt) continue;
-          drops.push({ x: source.x, startY: source.y, targetY: height * 0.88, startedAt: now, impacted: false });
-          source.nextDropAt = now + 4700 + Math.random() * 5400;
+          const untilDrop = source.nextDropAt - now;
+          if (untilDrop <= 0) {
+            drops.push({ x: source.x, startY: source.y, targetY: Math.min(height - 18, Math.max(source.y + 115, height * 0.84)), startedAt: now, impacted: false });
+            source.nextDropAt = now + 5400 + Math.random() * 1900;
+          } else if (untilDrop < 1850) {
+            const gather = 1 - untilDrop / 1850;
+            const direction = source.side === 'left' ? 1 : -1;
+            context.beginPath();
+            context.moveTo(source.x, source.y);
+            context.lineTo(source.x + direction * (5 + gather * 37), source.y);
+            context.lineCap = 'round';
+            context.strokeStyle = `rgb(${accentRgb} / ${0.32 + gather * 0.56})`;
+            context.lineWidth = 1.5 + gather * 2;
+            context.shadowColor = `rgb(${accentRgb} / .54)`;
+            context.shadowBlur = 7 + gather * 6;
+            context.stroke();
+            context.shadowBlur = 0;
+            if (gather > 0.58) {
+              const length = (gather - 0.58) * 25;
+              context.beginPath();
+              context.moveTo(source.x, source.y);
+              context.quadraticCurveTo(source.x + direction * 1.5, source.y + length * 0.62, source.x + direction, source.y + length);
+              context.strokeStyle = `rgb(${accentRgb} / ${0.55 + gather * 0.35})`;
+              context.lineWidth = 2.2 + gather * 1.5;
+              context.stroke();
+            }
+          }
         }
       }
       for (let index = ripples.length - 1; index >= 0; index -= 1) {
@@ -263,12 +289,20 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
         if (age > fallDuration + 2600) { drops.splice(index, 1); continue; }
         if (age < fallDuration) {
           const progress = age / fallDuration;
-          const y = drop.startY + (drop.targetY - drop.startY) * progress;
-          const alpha = 0.35 + Math.sin(progress * Math.PI) * 0.45;
+          const y = drop.startY + (drop.targetY - drop.startY) * (progress * progress);
+          const widthAtSpeed = 3.8 + Math.sin(progress * Math.PI) * 1.5;
+          const alpha = 0.72 + Math.sin(progress * Math.PI) * 0.2;
+          context.beginPath();
+          context.moveTo(drop.x, y - 8);
+          context.bezierCurveTo(drop.x - widthAtSpeed * 0.22, y - 3, drop.x - widthAtSpeed, y + 1, drop.x - widthAtSpeed, y + 5);
+          context.bezierCurveTo(drop.x - widthAtSpeed, y + 11, drop.x + widthAtSpeed, y + 11, drop.x + widthAtSpeed, y + 5);
+          context.bezierCurveTo(drop.x + widthAtSpeed, y + 1, drop.x + widthAtSpeed * 0.22, y - 3, drop.x, y - 8);
+          context.closePath();
           context.fillStyle = `rgb(${accentRgb} / ${alpha})`;
-          context.fillText(' . ', drop.x - cellWidth, y - cellHeight * 1.3);
-          context.fillText(' {@} ', drop.x - cellWidth * 1.5, y);
-          context.fillText('  #  ', drop.x - cellWidth * 1.5, y + cellHeight);
+          context.shadowColor = `rgb(${accentRgb} / .62)`;
+          context.shadowBlur = 8;
+          context.fill();
+          context.shadowBlur = 0;
         }
       }
       const columns = Math.ceil(width / cellWidth);
