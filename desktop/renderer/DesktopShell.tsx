@@ -105,17 +105,12 @@ function WindowActionIcon({ kind }: { kind: 'minimize' | 'maximize' | 'restore' 
 
 function InternalLinkBoard({ onOpen }: { onOpen: (tab: Exclude<DesktopTab, 'companion' | 'links' | 'report'>) => void }) {
   return <section className="internal-link-board" aria-labelledby="link-board-title">
-    <svg className="blood-filter-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><filter id="chronomancer-goo" x="-180%" y="-180%" width="460%" height="460%"><feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" /><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9" result="goo" /><feBlend in="SourceGraphic" in2="goo" /></filter></defs></svg>
     <header className="link-board-heading">
       <div><h1 id="link-board-title">Модули</h1></div>
       <b><strong>{String(sections.length).padStart(2, '0')}</strong><span>модулей</span></b>
     </header>
     <div className="link-board-grid">
       {sections.map((section, index) => <button className={`link-board-item link-${section}`} key={section} onClick={() => onOpen(section)}>
-        {(['cabinet', 'mail', 'support'] as DesktopTab[]).includes(section) && <>
-          <span className="blood-source blood-source-left" data-blood-source={`${section}-left`} aria-hidden="true"><i className="blood-pool" /><i className="blood-neck" /><i className="blood-drop" /></span>
-          <span className="blood-source blood-source-right" data-blood-source={`${section}-right`} aria-hidden="true"><i className="blood-pool" /><i className="blood-neck" /><i className="blood-drop" /></span>
-        </>}
         <span className="link-board-copy"><small className="link-board-index">МОДУЛЬ {String(index + 1).padStart(2, '0')}</small><strong>{labels[section]}</strong><small className="link-board-description">{sectionDetails[section]}</small></span>
         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M4 10h11M10 5l5 5-5 5" /></svg>
       </button>)}
@@ -198,29 +193,36 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const shell = document.querySelector<HTMLElement>('.desktop-shell');
     let accentRgb = '244 63 82';
-    let accentForeground = '#ff8994';
     const syncPalette = () => {
       const palette = getComputedStyle(shell ?? document.documentElement);
       accentRgb = palette.getPropertyValue('--accent-rgb').trim() || accentRgb;
-      accentForeground = palette.getPropertyValue('--accent-fg').trim() || accentForeground;
     };
     syncPalette();
     const paletteObserver = new MutationObserver(syncPalette);
     paletteObserver.observe(shell ?? document.documentElement, { attributes: true, attributeFilter: ['data-skin'] });
-    const ripples: Array<{ x: number; y: number; startedAt: number }> = [];
-    const drops: Array<{ x: number; startY: number; targetY: number; startedAt: number; impacted: boolean; element: HTMLElement; side: 'left' | 'right' }> = [];
-    const dripSources: Array<{ key: string; x: number; y: number; side: 'left' | 'right'; nextDropAt: number; element: HTMLElement }> = [];
-    let nextSourceSync = 0;
-    let canvasRect = canvas.getBoundingClientRect();
+    const rain: Array<{ x: number; y: number; speed: number; length: number; drift: number; seed: number }> = [];
+    let rainClock = 0;
+    let rainSeed = 1;
+    const randomRain = () => { rainSeed = (rainSeed * 1664525 + 1013904223) >>> 0; return rainSeed / 4294967296; };
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      canvasRect = rect;
       const scale = Math.min(window.devicePixelRatio || 1, 1.5);
       width = rect.width;
       height = rect.height;
       canvas.width = Math.round(width * scale);
       canvas.height = Math.round(height * scale);
       context.setTransform(scale, 0, 0, scale, 0, 0);
+      rainSeed = Math.max(1, Math.floor(width * 1009 + height * 917 + 401));
+      rain.length = 0;
+      const count = Math.max(28, Math.min(190, Math.round(width / 19)));
+      for (let index = 0; index < count; index += 1) rain.push({
+        x: randomRain() * width,
+        y: randomRain() * height,
+        speed: 32 + randomRain() * 58,
+        length: 2 + Math.floor(randomRain() * 5),
+        drift: -5 + randomRain() * 10,
+        seed: randomRain() * 22,
+      });
     };
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
@@ -235,67 +237,31 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
       const swing = reduceMotion ? 0 : Math.sin(now * (active ? 0.00014 : 0.0001));
       const flowPhase = reduceMotion ? 0 : now * (active ? 0.00052 : 0.00038);
       const advection = Math.sin(flowPhase) * width * 0.22;
-      if (scene === 'links' && !reduceMotion && now >= nextSourceSync) {
-        canvasRect = canvas.getBoundingClientRect();
-        const currentSources = [...document.querySelectorAll<HTMLElement>('.blood-source[data-blood-source]')].map((element) => {
-          const rect = element.getBoundingClientRect();
-          const side = element.classList.contains('blood-source-left') ? 'left' as const : 'right' as const;
-          return { key: element.dataset.bloodSource ?? '', element, side, x: (side === 'left' ? rect.left + 2 : rect.right - 2) - canvasRect.left, y: rect.bottom - canvasRect.top };
-        }).filter((source) => source.key && source.x >= 0 && source.x <= width && source.y >= 0 && source.y < height);
-        const previous = new Map(dripSources.map((source) => [source.key, source]));
-        dripSources.splice(0, dripSources.length, ...currentSources.map((source, index) => ({
-          ...source,
-          nextDropAt: previous.get(source.key)?.nextDropAt ?? now + 1800 + index * 1150 + Math.random() * 420,
-        })));
-        nextSourceSync = now + 400;
-        for (const source of dripSources) {
-          const untilDrop = source.nextDropAt - now;
-          if (untilDrop <= 0) {
-            source.element.style.setProperty('--blood-pool-length', '0px');
-            source.element.style.setProperty('--blood-neck-height', '0px');
-            source.element.style.setProperty('--blood-drop-opacity', '1');
-            source.element.style.setProperty('--blood-drop-y', '0px');
-            drops.push({ x: source.x, startY: source.y, targetY: source.y + 46, startedAt: now, impacted: false, element: source.element, side: source.side });
-            source.nextDropAt = now + 14000 + Math.random() * 2000;
-          } else if (untilDrop < 1850) {
-            const gather = 1 - untilDrop / 1850;
-            source.element.style.setProperty('--blood-pool-length', `${5 + gather * 38}px`);
-            source.element.style.setProperty('--blood-pool-opacity', `${0.3 + gather * 0.62}`);
-            source.element.style.setProperty('--blood-neck-height', `${Math.max(0, gather - 0.34) * 27}px`);
-            source.element.style.setProperty('--blood-drop-opacity', `${Math.max(0, (gather - 0.38) / 0.62)}`);
-            source.element.style.setProperty('--blood-drop-y', `${Math.max(0, gather - 0.42) * 5}px`);
-          } else {
-            source.element.style.setProperty('--blood-pool-length', '0px');
-            source.element.style.setProperty('--blood-pool-opacity', '0');
-            source.element.style.setProperty('--blood-neck-height', '0px');
-            source.element.style.setProperty('--blood-drop-opacity', '0');
+      if (scene === 'links') {
+        const elapsed = Math.min(0.06, Math.max(0, (now - rainClock) / 1000));
+        rainClock = now;
+        for (const streak of rain) {
+          if (!reduceMotion) {
+            streak.y += streak.speed * elapsed;
+            streak.x += streak.drift * elapsed;
+          }
+          const sway = reduceMotion ? 0 : Math.sin(now * 0.0014 + streak.seed) * 2;
+          const glyphPhase = reduceMotion ? 0 : Math.floor(now / 140);
+          for (let tail = 0; tail < streak.length; tail += 1) {
+            const y = streak.y - tail * cellHeight;
+            if (y < 0 || y > height) continue;
+            const fade = 1 - tail / (streak.length + 0.5);
+            context.fillStyle = tail === 0
+              ? `rgb(${accentRgb} / ${0.34 * fade})`
+              : `rgb(${accentRgb} / ${0.14 * fade})`;
+            context.fillText(glyphs[1 + Math.floor((streak.seed + tail + glyphPhase) % (glyphs.length - 1))], streak.x + sway, y);
+          }
+          if (!reduceMotion && streak.y - streak.length * cellHeight > height) {
+            streak.y = -randomRain() * height * 0.65;
+            streak.x = randomRain() * width;
           }
         }
-      }
-      for (let index = ripples.length - 1; index >= 0; index -= 1) {
-        if (now - ripples[index].startedAt > (reduceMotion ? 650 : 2600)) ripples.splice(index, 1);
-      }
-      for (let index = drops.length - 1; index >= 0; index -= 1) {
-        const drop = drops[index];
-        const age = now - drop.startedAt;
-        const fallDuration = 1150;
-        const dropBounds = drop.element.getBoundingClientRect();
-        drop.x = (drop.side === 'left' ? dropBounds.left + 2 : dropBounds.right - 2) - canvasRect.left;
-        drop.startY = dropBounds.bottom - canvasRect.top;
-        drop.targetY = drop.startY + 46;
-        if (age >= fallDuration && !drop.impacted) {
-          ripples.push({ x: drop.x, y: drop.targetY, startedAt: now });
-          drop.element.style.setProperty('--blood-drop-y', '46px');
-          drop.element.style.setProperty('--blood-drop-opacity', '0');
-          drop.impacted = true;
-        }
-        if (age > fallDuration + 300) { drops.splice(index, 1); continue; }
-        if (age < fallDuration) {
-          const progress = age / fallDuration;
-          drop.element.style.setProperty('--blood-neck-height', '0px');
-          drop.element.style.setProperty('--blood-drop-y', `${46 * progress * progress}px`);
-          drop.element.style.setProperty('--blood-drop-opacity', `${0.96 - progress * 0.2}`);
-        }
+        return;
       }
       const columns = Math.ceil(width / cellWidth);
       const rows = Math.ceil(height / cellHeight);
@@ -303,22 +269,10 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
       const companionSourceY = height * 0.56;
       const clockX = width * 0.19;
       const clockY = height * 0.22;
-      const puddleY = height * 0.86;
       for (let row = 0; row < rows; row += 1) {
         for (let column = 0; column < columns; column += 1) {
           const x = column * cellWidth;
           const y = row * cellHeight;
-          let ripple = 0;
-          for (const origin of ripples) {
-            const age = (now - origin.startedAt) / 1000;
-            if (scene === 'links') {
-              const distance = Math.hypot((x - origin.x) / (width * 0.54), (y - origin.y) / (height * 0.12));
-              const radius = reduceMotion ? 0.48 : age / 2.4;
-              const fade = reduceMotion ? 0.85 : Math.max(0, 1 - age / 2.6);
-              ripple += Math.exp(-Math.abs(distance - radius) / 0.075) * fade;
-            }
-          }
-          ripple = Math.min(1, ripple);
           let density = 0;
           let turbulence = 0;
           let offset = 0;
@@ -337,17 +291,6 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
             const clockWake = Math.exp(-Math.pow((clockDistance - (0.12 + clockPulse * 0.12)) / 0.045, 2)) * clockPulse;
             turbulence = 0.5 + 0.5 * Math.sin(x * 0.008 + y * 0.006 + flowPhase * 2 + Math.sin(y * 0.008 - swing));
             density = Math.min(1, (stream * 0.4 + wave * 0.47 + wake * 0.54 + clockWake * 0.42) * (0.84 + turbulence * 0.16));
-          } else if (scene === 'links') {
-            const dx = (x - width * 0.5) / Math.max(width * 0.62, 1);
-            const dy = (y - puddleY) / Math.max(height * 0.42, 1);
-            const radius = Math.hypot(dx * 0.82, dy);
-            const angle = Math.atan2(dy, dx);
-            const currentRadius = 0.34 + 0.055 * Math.sin(flowPhase * 1.3 - angle * 2.2 + radius * 5);
-            const current = Math.exp(-Math.pow((radius - currentRadius) / 0.16, 2));
-            const outerSurge = Math.exp(-Math.pow((radius - (0.68 + swing * 0.06)) / 0.12, 2));
-            const pool = Math.exp(-Math.pow((y - puddleY) / (height * 0.17), 2));
-            turbulence = 0.5 + 0.5 * Math.sin(x * 0.009 + flowPhase * 1.4 + Math.sin(y * 0.012 - angle));
-            density = Math.min(1, current * (0.38 + turbulence * 0.26) + outerSurge * 0.24 + pool * (0.12 + turbulence * 0.1));
           } else {
             const along = (x + advection) / Math.max(width, 1);
             const centerY = height * (0.5 + 0.22 * Math.sin(along * Math.PI * 2.1 + swing * 1.65 + flowPhase * 0.45)
@@ -364,15 +307,10 @@ function AsciiFlow({ active, scene }: { active: boolean; scene: 'companion' | 'l
             turbulence = 0.5 + 0.5 * Math.sin(x * 0.008 + y * 0.006 + flowPhase * 3.2 + Math.sin(y * 0.009 - swing * 2));
             density = Math.min(1, (Math.exp(-Math.pow(offset / thickness, 2) * 0.8) * 0.78 + curl * 0.42) * (0.82 + turbulence * 0.18));
           }
-          if (density < 0.045 && ripple < 0.025) continue;
+          if (density < 0.045) continue;
           const index = Math.max(1, Math.min(glyphs.length - 1, Math.floor((density * 9 + turbulence * 6 + Math.abs(offset) / cellHeight) % glyphs.length)));
-          const alpha = scene === 'links'
-            ? Math.min(0.48, 0.11 + density * 0.42 + ripple * 0.44)
-            : Math.min(scene === 'companion' ? 0.24 : 0.31, 0.022 + density * (scene === 'companion' ? 0.2 : 0.255) + ripple * 0.12);
-          context.fillStyle = ripple > 0.2 && ((column + row) % 4 === 0)
-            ? accentForeground
-            : `rgb(${accentRgb} / ${alpha})`;
-          if (ripple > 0.2 && ((column + row) % 4 === 0)) context.globalAlpha = Math.min(0.68, alpha + 0.18);
+          const alpha = Math.min(scene === 'companion' ? 0.24 : 0.31, 0.022 + density * (scene === 'companion' ? 0.2 : 0.255));
+          context.fillStyle = `rgb(${accentRgb} / ${alpha})`;
           context.fillText(glyphs[index], x, y);
           context.globalAlpha = 1;
         }
@@ -688,7 +626,7 @@ export default function DesktopShell() {
         <div className={`companion-desktop${status.state === 'processing' ? ' is-scanning' : ''}`}>
           <aside className="guardian-rail" aria-label="Маскот локального сканера">
             <button type="button" className={`continuous-scan-toggle${continuousScanning ? ' is-on' : ''}`} role="switch" aria-checked={continuousScanning} aria-busy={scanToggleBusy} disabled={scanToggleBusy} onClick={() => void toggleContinuousScanning()}><span>Постоянное сканирование</span><i aria-hidden="true" /></button>
-            <picture className="guardian-picture"><source media="(max-width: 1080px), (max-height: 720px)" srcSet="/chronomancer-mascot-medium.png" /><img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt="Хрономант в полный рост" /></picture>
+            <picture className="guardian-picture"><source media="(max-width: 1080px), (max-height: 720px)" srcSet="/chronomancer-mascot-medium.png" /><img className="guardian-portrait" src="/chronomancer-mascot.png" width={1070} height={1536} alt="Маскот Chronomancer" /></picture>
           </aside>
           <div className="companion-workspace">
             <div className="companion-page-inner">
