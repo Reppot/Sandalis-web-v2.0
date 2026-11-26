@@ -609,7 +609,7 @@ export default function DesktopShell() {
   return <main className="desktop-shell">
     <AsciiFlow active={status.state === 'processing'} scene={active === 'companion' ? 'companion' : active === 'links' ? 'links' : 'other'} />
     <header className="desktop-topbar">
-      <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-icon.png" width={44} height={44} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
+      <div className="desktop-brand"><span className="desktop-mark" title="Chronomancer"><img src="/chronomancer-mascot-medium.png" width={44} height={44} alt="" /></span><span>Chronomancer</span><i>FOXHOLE LOGI</i></div>
       <div className="desktop-topbar-actions">
         {status.state !== 'waiting' && <div className="desktop-live" role="status" aria-label={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]} title={status.state === 'processing' ? 'Локальное сканирование' : statusNames[status.state]}><b className={status.state === 'error' ? 'is-error' : status.state === 'processing' ? 'is-working' : ''} /></div>}
         <button type="button" className="desktop-global-settings" onClick={openSettings} aria-label="Настройки" title="Настройки"><SettingsIcon /></button>

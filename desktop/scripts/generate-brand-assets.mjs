@@ -20,7 +20,7 @@ try {
 }
 
 const iconSource = await readFile(iconSourcePath);
-const icon = await sharp(iconSource).resize(256, 256, { fit: 'fill' }).png().toBuffer();
+const icon = await sharp(iconSource).resize(256, 256, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
 await writeFile(iconPath, icon);
 const mascot = sharp(source);
 const mascotMetadata = await mascot.metadata();
@@ -32,7 +32,7 @@ await mascot.extract({ left: cropLeft, top: 0, width: cropSize, height: cropSize
   .toFile(mediumPath);
 await mkdir(path.join(root, 'desktop', 'resources'), { recursive: true });
 const iconSizes = [16, 24, 32, 48, 64, 128, 256];
-const iconFrames = await Promise.all(iconSizes.map((size) => sharp(iconSource).resize(size, size, { fit: 'fill' }).png().toBuffer()));
+const iconFrames = await Promise.all(iconSizes.map((size) => sharp(iconSource).resize(size, size, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer()));
 const iconHeader = Buffer.alloc(6);
 iconHeader.writeUInt16LE(0, 0);
 iconHeader.writeUInt16LE(1, 2);

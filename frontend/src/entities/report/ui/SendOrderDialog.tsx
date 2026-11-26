@@ -55,14 +55,14 @@ export const SendOrderDialog: React.FC<{
   const total = lines.reduce((n, l) => n + l.quantity, 0);
 
   const submit = async () => {
-    if (submitting.current || !title.trim() || !lines.length || (needsPlace && (!region || !town.trim()))) return;
+    if (submitting.current || !lines.length || (needsPlace && (!region || !town.trim()))) return;
     submitting.current = true;
     setBusy(true);
     // для бункера и завода в шапку заказа идут выбранные гекс и город (+ уточнение)
     const where = needsPlace ? [town.trim(), destination.trim()].filter(Boolean).join(" — ").slice(0, 80) : destination.trim();
     try {
       const r = await reportApi.create({
-        title: title.trim(),
+        title: title.trim() || undefined,
         meta: { region: (needsPlace ? region : meta?.region) || null, type: kind, stockpile: where || null },
         lines: lines.map(({ name, item_code, quantity, unit }) => ({ name, item_code, quantity, unit })),
       });
@@ -128,7 +128,7 @@ export const SendOrderDialog: React.FC<{
 
         <div className="flex justify-end gap-2">
           <button type="button" className="btn" onClick={onClose}>{t("common.cancel")}</button>
-          <button type="button" className="btn btn-primary" data-guide="order-send" disabled={busy || !title.trim() || !lines.length || (needsPlace && (!region || !town.trim()))} onClick={() => void submit()}>
+          <button type="button" className="btn btn-primary" data-guide="order-send" disabled={busy || !lines.length || (needsPlace && (!region || !town.trim()))} onClick={() => void submit()}>
             {busy ? t("common.sending") : t("orderSend.submit")}
           </button>
         </div>
