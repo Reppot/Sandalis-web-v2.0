@@ -434,7 +434,7 @@ export default function DesktopShell() {
       if (!sourceFrame) return;
       const frame = frames.find((item) => item.style.display !== 'none');
       if (event.origin !== window.location.origin) return;
-      const data = event.data as { type?: string; canBack?: boolean; canForward?: boolean; direction?: string; theme?: string };
+      const data = event.data as { type?: string; canBack?: boolean; canForward?: boolean; direction?: string; theme?: string; requestId?: string };
       if (data?.type === 'chronomancer:theme-change') {
         const candidate = data.theme === 'dark' ? 'red' : data.theme;
         if (typeof candidate === 'string' && ['red', 'lime', 'light', 'amber', 'contrast', 'noir', 'soft', 'ascii'].includes(candidate)) {
@@ -447,6 +447,15 @@ export default function DesktopShell() {
       } else if (data?.type === 'chronomancer:open-local-report') {
         setOpenTabs((tabs) => tabs.includes('report') ? tabs : [...tabs, 'report']);
         navigateTab('report');
+      } else if (sourceFrame === frame && data?.type === 'chronomancer:get-local-scan' && typeof data.requestId === 'string' && data.requestId.length <= 64) {
+        sourceFrame.contentWindow?.postMessage({
+          type: 'chronomancer:local-scan-result',
+          requestId: data.requestId,
+          report: ['ready', 'partial'].includes(status.state) && status.processedAt && status.stockpiles?.length
+            ? { processedAt: status.processedAt, fileName: status.fileName, stockpiles: status.stockpiles }
+            : null,
+          state: status.state,
+        }, event.origin);
       }
     };
     document.addEventListener('auxclick', onAuxClick);
@@ -455,7 +464,7 @@ export default function DesktopShell() {
       document.removeEventListener('auxclick', onAuxClick);
       window.removeEventListener('message', onFrameMessage);
     };
-  }, [moveTabHistory, navigateHistory, navigateTab]);
+  }, [moveTabHistory, navigateHistory, navigateTab, status]);
 
   React.useEffect(() => {
     type DesktopSkin = 'red' | 'lime' | 'light' | 'amber' | 'contrast' | 'noir' | 'soft' | 'ascii';

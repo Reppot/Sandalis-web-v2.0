@@ -8,7 +8,7 @@ const require = createRequire(path.join(root, 'frontend', 'package.json'));
 const sharp = require('sharp');
 const source = path.join(root, 'frontend', 'public', 'chronomancer-mascot.png');
 const backup = path.join(root, 'desktop', 'assets', 'mascot-backups', 'chronomancer-mascot-original.png');
-const markPath = path.join(root, 'frontend', 'public', 'chronomancer-mark.svg');
+const iconSourcePath = path.join(root, 'desktop', 'assets', 'brand', 'chronomancer-approved-icon.png');
 const iconPath = path.join(root, 'frontend', 'public', 'chronomancer-icon.png');
 const mediumPath = path.join(root, 'frontend', 'public', 'chronomancer-mascot-medium.png');
 
@@ -19,8 +19,8 @@ try {
   await copyFile(source, backup);
 }
 
-const mark = await readFile(markPath);
-const icon = await sharp(mark).resize(256, 256, { fit: 'fill' }).png().toBuffer();
+const iconSource = await readFile(iconSourcePath);
+const icon = await sharp(iconSource).resize(256, 256, { fit: 'fill' }).png().toBuffer();
 await writeFile(iconPath, icon);
 const mascot = sharp(source);
 const mascotMetadata = await mascot.metadata();
@@ -32,7 +32,7 @@ await mascot.extract({ left: cropLeft, top: 0, width: cropSize, height: cropSize
   .toFile(mediumPath);
 await mkdir(path.join(root, 'desktop', 'resources'), { recursive: true });
 const iconSizes = [16, 24, 32, 48, 64, 128, 256];
-const iconFrames = await Promise.all(iconSizes.map((size) => sharp(mark).resize(size, size, { fit: 'fill' }).png().toBuffer()));
+const iconFrames = await Promise.all(iconSizes.map((size) => sharp(iconSource).resize(size, size, { fit: 'fill' }).png().toBuffer()));
 const iconHeader = Buffer.alloc(6);
 iconHeader.writeUInt16LE(0, 0);
 iconHeader.writeUInt16LE(1, 2);
@@ -54,4 +54,4 @@ const iconEntries = iconFrames.map((frame, index) => {
 });
 await writeFile(path.join(root, 'desktop', 'resources', 'chronomancer.ico'), Buffer.concat([iconHeader, ...iconEntries, ...iconFrames]));
 
-console.log('Saved original mascot backup and rendered multi-resolution Chronomancer app icons.');
+console.log('Saved original mascot backup and rendered approved Chronomancer icon sizes.');

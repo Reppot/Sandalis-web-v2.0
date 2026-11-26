@@ -47,6 +47,13 @@ interface StorageMonitorProps {
   onPinned: (stockpile: Stockpile | null) => void;
 }
 
+type LocalScanStockpile = { name: string; type: string; town: string; hex: string; items: Array<{ code: string; quantity: number; crated: boolean }> };
+type LocalScanReport = { processedAt: string; fileName: string | null; stockpiles: LocalScanStockpile[] };
+type ScanSyncPreview = { source: LocalScanStockpile; targetId: string; targetName: string; fileName: string | null; processedAt: string; items: Array<{ item_code: string; quantity: number; unit: "crate" | "unit" }> };
+
+const matchKey = (value: string | null | undefined) => (value ?? "").replace(/Hex$/i, "").toLocaleLowerCase().replace(/[^a-z0-9]/g, "");
+const localKind = (type: string): Stockpile["kind"] => type === "Seaport" ? "seaport" : /depot/i.test(type) ? "depot" : "other";
+
 /**
  * «Содержимое закреплённого склада»: серверные данные показываются только после выбора склада.
  * SAV сканируется локальным компаньоном; экран склада не загружает файл на сервер.
@@ -66,6 +73,9 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
   const [pasteOpen, setPasteOpen] = React.useState(false);
   const [pasteText, setPasteText] = React.useState("");
   const [editing, setEditing] = React.useState<"create" | "rename" | null>(null);
+  const [scanSyncPreview, setScanSyncPreview] = React.useState<ScanSyncPreview | null>(null);
+  const scanRequestId = React.useRef<string | null>(null);
+  const scanRequestTimeout = React.useRef<number | null>(null);
   const [armed, confirm] = useConfirm();
   const textInput = React.useRef<HTMLInputElement>(null);
   const xlsxInput = React.useRef<HTMLInputElement>(null);
@@ -86,6 +96,59 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
   React.useEffect(() => {
     void loadList();
   }, [loadList]);
+
+  React.useEffect(() => {
+    const onLocalScan = (event: MessageEvent) => {
+      if (event.source !== window.parent || event.origin !== window.location.origin) return;
+      const data = event.data as { type?: string; requestId?: string; state?: string; report?: LocalScanReport | null };
+      if (data?.type !== "chronomancer:local-scan-result" || data.requestId !== scanRequestId.current) return;
+      scanRequestId.current = null;
+      if (scanRequestTimeout.current !== null) window.clearTimeout(scanRequestTimeout.current);
+      scanRequestTimeout.current = null;
+      setBusy(false);
+      const report = data.report;
+      if (!report || typeof report.processedAt !== "string" || !Array.isArray(report.stockpiles) || report.stockpiles.length > 200) {
+        notify({ title: t("scan.title"), message: data.state === "processing" ? t("common.processing") : t("stock.scanSyncNoMatch"), tone: "warning" });
+        return;
+      }
+      if (!pinned) {
+        notify({ title: t("stock.stockpile"), message: t("stock.pickFirst"), tone: "warning" });
+        return;
+      }
+      const matches = report.stockpiles.filter((source) =>
+        source && typeof source.hex === "string" && typeof source.town === "string" &&
+        typeof source.type === "string" && typeof source.name === "string" &&
+        matchKey(source.hex) === matchKey(pinned.region) &&
+        matchKey(source.town) === matchKey(pinned.town) &&
+        (!pinned.kind || localKind(source.type) === pinned.kind) &&
+        Array.isArray(source.items) && source.items.length > 0,
+      );
+      if (matches.length !== 1) {
+        notify({ title: t("scan.title"), message: t("stock.scanSyncNoMatch"), tone: "warning", ttl: 8000 });
+        return;
+      }
+      const source = matches[0];
+      const grouped = new Map<string, { item_code: string; quantity: number; unit: "crate" | "unit" }>();
+      for (const item of source.items) {
+        if (!item || typeof item.code !== "string" || !Number.isSafeInteger(item.quantity) || item.quantity <= 0) continue;
+        const unit = item.crated ? "crate" : "unit";
+        const key = `${item.code}:${unit}`;
+        const current = grouped.get(key);
+        grouped.set(key, { item_code: item.code, quantity: Math.min(1_000_000, (current?.quantity ?? 0) + item.quantity), unit });
+      }
+      const items = [...grouped.values()];
+      if (!items.length) {
+        notify({ title: t("scan.title"), message: t("stock.scanSyncNoMatch"), tone: "warning" });
+        return;
+      }
+      setScanSyncPreview({ source, targetId: pinned.id, targetName: `${pinned.region} · ${pinned.name}`, fileName: report.fileName, processedAt: report.processedAt, items });
+    };
+    window.addEventListener("message", onLocalScan);
+    return () => {
+      window.removeEventListener("message", onLocalScan);
+      if (scanRequestTimeout.current !== null) window.clearTimeout(scanRequestTimeout.current);
+    };
+  }, [notify, pinned, t]);
 
   React.useEffect(() => {
     writeStorage(STORAGE_KEYS.pinnedStockpile, pinnedId);
@@ -171,7 +234,35 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
       notify({ title: t("scan.title"), message: "Выберите MapData.sav в локальном компаньоне Chronomancer.", tone: "info" });
       return;
     }
-    window.parent.postMessage({ type: "chronomancer:open-local-report" }, window.location.origin);
+    if (!pinned) return notify({ title: t("stock.stockpile"), message: t("stock.pickFirst"), tone: "warning" });
+    const requestId = window.crypto.randomUUID();
+    scanRequestId.current = requestId;
+    setBusy(true);
+    window.parent.postMessage({ type: "chronomancer:get-local-scan", requestId }, window.location.origin);
+    scanRequestTimeout.current = window.setTimeout(() => {
+      if (scanRequestId.current !== requestId) return;
+      scanRequestId.current = null;
+      scanRequestTimeout.current = null;
+      setBusy(false);
+      notify({ title: t("scan.title"), message: t("stock.scanSyncNoMatch"), tone: "warning" });
+    }, 6000);
+  };
+
+  const syncLocalScan = async () => {
+    if (!scanSyncPreview || scanSyncPreview.targetId !== pinned?.id) return;
+    setBusy(true);
+    try {
+      const saved = await stockpileApi.replaceContents(scanSyncPreview.targetId, scanSyncPreview.items, "scan");
+      setPinned(saved.stockpile);
+      onPinned(saved.stockpile);
+      setStockpiles((prev) => prev.map((stockpile) => stockpile.id === saved.stockpile.id ? saved.stockpile : stockpile));
+      setScanSyncPreview(null);
+      notify({ title: t("stock.synced"), message: saved.message, tone: "success" });
+    } catch (err) {
+      notify({ title: t("common.database"), message: errorText(err, t("stock.notSaved")), tone: "danger" });
+    } finally {
+      setBusy(false);
+    }
   };
 
   const items = pinned?.items ?? [];
@@ -286,9 +377,9 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
             <Icon name="paste" size={16} />
             <span>{t("stock.pasteShort")}</span>
           </button>
-          <button className="btn" onClick={openLocalScan} data-guide="stock-scan" title={t("stock.localScanReport")} disabled={busy}>
+          <button className="btn" onClick={openLocalScan} data-guide="stock-scan" title={t("stock.scanSyncAction")} disabled={busy || !pinned}>
             <Icon name="scan" size={20} />
-            <span>{t("stock.localScanReport")}</span>
+            <span>{t("stock.scanSyncAction")}</span>
           </button>
         </div>
       )}
@@ -362,6 +453,22 @@ export const StorageMonitor: React.FC<StorageMonitorProps> = ({ can, isFullWidth
             {t("import.recognize")}
           </button>
         </div>
+      </Modal>
+
+      <Modal open={!!scanSyncPreview} onClose={() => setScanSyncPreview(null)} title={t("stock.scanSyncTitle")} icon="stockpile" widthClass="max-w-lg">
+        {scanSyncPreview && <div className="grid gap-3">
+          <p className="text-sm text-fg-2">{t("stock.scanSyncHelp")}</p>
+          <div className="panel-inner grid gap-2 p-3 text-sm">
+            <div><strong>{scanSyncPreview.source.name}</strong> · {scanSyncPreview.source.town} · {scanSyncPreview.source.hex.replace(/Hex$/i, "")}</div>
+            <div>{t("stock.stockpile")}: <strong>{scanSyncPreview.targetName}</strong></div>
+            <div>{t("common.pos", { n: scanSyncPreview.items.length })} · Σ {scanSyncPreview.items.reduce((sum, item) => sum + item.quantity, 0)}</div>
+            <div className="text-xs text-fg-3">{scanSyncPreview.fileName ?? "MapData.sav"} · {formatDateTime(scanSyncPreview.processedAt)}</div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <button className="btn" onClick={() => setScanSyncPreview(null)}>{t("common.cancel")}</button>
+            <button className="btn btn-primary" onClick={() => void syncLocalScan()} disabled={busy}>{t("stock.scanSyncConfirm")}</button>
+          </div>
+        </div>}
       </Modal>
 
       <StockpileFormModal

@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
     yandex: process.env.YANDEX_VERIFICATION || undefined,
   },
-  icons: { icon: "/chronomancer-mark.svg" },
+  icons: { icon: "/chronomancer-icon.png" },
   manifest: "/manifest.webmanifest",
   authors: [{ name: "Reppot" }],
   creator: "Reppot",
