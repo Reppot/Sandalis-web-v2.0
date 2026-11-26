@@ -6,11 +6,13 @@ import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import os from 'node:os';
-import { autoUpdater } from 'electron-updater';
+import updaterModule from 'electron-updater';
 import { APP_URL, SERVER_URL, isAppUrl, safeFile, isAuthNavigation, externalUrl, trustedRequest, sessionRequestPolicy, rendererAuthResponse, createNativeAuthSession } from './policy.mjs';
 import { createCatalog } from './catalog-client.mjs';
 import { guestProfile } from './local-api.mjs';
 import { createDiagnosticsLogger, createZip, readDiagnosticLogs } from './diagnostics.mjs';
+
+const { autoUpdater } = updaterModule;
 
 protocol.registerSchemesAsPrivileged([{ scheme: 'app', privileges: {
   standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true,
