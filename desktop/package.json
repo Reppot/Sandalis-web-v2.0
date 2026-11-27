@@ -1,7 +1,7 @@
 {
   "name": "chronomancer-desktop",
   "productName": "Chronum",
-  "version": "0.1.37",
+  "version": "0.1.38",
   "private": true,
   "license": "UNLICENSED",
   "type": "module",
