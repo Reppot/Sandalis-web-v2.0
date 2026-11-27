@@ -33,7 +33,8 @@ function safeValue(value, depth = 0) {
   if (typeof value === 'object') {
     const result = {};
     for (const [key, item] of Object.entries(value).slice(0, 40)) {
-      if (/token|secret|authorization|cookie|password|credential|savefile|filename|filepath|stockpile|inventory|item|clan|guild|discord|username|avatar|body|contents/i.test(key)) {
+      const isSafePresenceFlag = typeof item === 'boolean' && /(?:attached|present|configured|available|enabled|online)$/i.test(key);
+      if (!isSafePresenceFlag && /token|secret|authorization|cookie|password|credential|savefile|filename|filepath|stockpile|inventory|item|clan|guild|discord|username|avatar|body|contents/i.test(key)) {
         result[key] = '[redacted]';
       } else result[key] = safeValue(item, depth + 1);
     }

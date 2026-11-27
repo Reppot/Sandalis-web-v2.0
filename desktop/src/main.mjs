@@ -1,7 +1,8 @@
-import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, protocol, session, shell, Tray } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, Menu, nativeImage, net, protocol, session, shell, Tray } from 'electron';
 import { spawn, spawnSync } from 'node:child_process';
 import { watch } from 'node:fs';
 import { mkdir, readFile, readdir, rm, stat, writeFile } from 'node:fs/promises';
+import { lookup } from 'node:dns/promises';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
@@ -42,6 +43,8 @@ let updateCheckInProgress = false;
 let lastUpdateCheckAt = 0;
 let desktopSession = null;
 let lastSaveSignature = null;
+let lastConnectivityProbeAt = 0;
+let connectivityProbePromise = null;
 
 const WINDOWS_LANGUAGE_IDS = new Map([
   [0x09, 'en'], [0x22, 'uk'], [0x19, 'ru'], [0x07, 'de'], [0x15, 'pl'],
@@ -186,6 +189,7 @@ async function exportDiagnostics(event) {
     filters: [{ name: 'ZIP archive', extensions: ['zip'] }],
   });
   if (selected.canceled || !selected.filePath) return { canceled: true };
+  await connectivityProbePromise?.catch(() => {});
   await diagnostics.info('diagnostics.export.requested');
   await diagnostics.flush();
   const helper = app.isPackaged ? path.join(process.resourcesPath, 'fs.exe') : path.join(app.getAppPath(), 'resources', 'fs.exe');
@@ -215,6 +219,64 @@ async function exportDiagnostics(event) {
   await writeFile(selected.filePath, archive);
   await diagnostics.info('diagnostics.export.completed', { bytes: archive.length });
   return { ok: true };
+}
+
+function proxyKinds(config) {
+  const modes = String(config ?? '').match(/(?:^|[;\s])(DIRECT|PROXY|HTTPS|SOCKS4|SOCKS5|QUIC)(?=$|[;\s])/gi) ?? [];
+  return [...new Set(modes.map((mode) => mode.trim().toUpperCase()))];
+}
+
+function diagnoseApiConnectivity(ses, failedRequestId) {
+  const now = Date.now();
+  if (connectivityProbePromise) return connectivityProbePromise;
+  if (now - lastConnectivityProbeAt < 60_000) {
+    diagnostics?.info('network.diagnostic.skipped', { failedRequestId, reason: 'cooldown' });
+    return Promise.resolve();
+  }
+  lastConnectivityProbeAt = now;
+  connectivityProbePromise = (async () => {
+    const host = new URL(SERVER_URL).hostname;
+    const result = { failedRequestId, internetOnline: net.isOnline(), proxyModes: [], dns: null, apiHealth: null };
+    const proxyStartedAt = Date.now();
+    try {
+      result.proxyModes = proxyKinds(await ses.resolveProxy(SERVER_URL));
+      result.proxyResolutionMs = Date.now() - proxyStartedAt;
+    } catch (failure) {
+      result.proxyResolution = diagnosticErrorDetails(failure);
+    }
+    const dnsStartedAt = Date.now();
+    try {
+      const addresses = await lookup(host, { all: true, verbatim: true });
+      result.dns = { ok: true, addressCount: addresses.length, families: [...new Set(addresses.map(({ family }) => family))], durationMs: Date.now() - dnsStartedAt };
+    } catch (failure) {
+      result.dns = { ok: false, durationMs: Date.now() - dnsStartedAt, ...diagnosticErrorDetails(failure) };
+    }
+    const healthStartedAt = Date.now();
+    try {
+      const response = await ses.fetch(`${SERVER_URL}/api/v1/health/live`, {
+        method: 'GET', headers: { Accept: 'application/json' }, credentials: 'omit', redirect: 'manual', signal: AbortSignal.timeout(12000),
+      });
+      result.apiHealth = { ok: response.status >= 200 && response.status < 300, statusCode: response.status, durationMs: Date.now() - healthStartedAt };
+      await response.body?.cancel().catch(() => {});
+    } catch (failure) {
+      result.apiHealth = { ok: false, durationMs: Date.now() - healthStartedAt, ...diagnosticErrorDetails(failure) };
+    }
+    result.classification = result.apiHealth?.ok === true
+      ? 'api-host-reachable-check-failed-route'
+      : result.apiHealth?.statusCode >= 500
+        ? 'api-service-error'
+        : result.dns?.ok === false && result.apiHealth?.ok !== true
+        ? 'dns-or-proxy-resolution-failure'
+        : !result.internetOnline
+          ? 'windows-reports-offline'
+          : result.apiHealth?.statusCode
+            ? 'api-returned-unexpected-status'
+            : 'api-transport-unreachable';
+    await diagnostics?.warn('network.diagnostic.completed', result);
+  })().catch((failure) => diagnostics?.warn('network.diagnostic.failed', diagnosticErrorDetails(failure)))
+    .finally(() => { connectivityProbePromise = null; });
+  void diagnostics?.info('network.diagnostic.started', { failedRequestId, apiHealthRoute: '/api/v1/health/live' });
+  return connectivityProbePromise;
 }
 
 async function persistScanSync(report, sync) {
@@ -955,6 +1017,7 @@ if (locked) app.whenReady().then(async () => {
         durationMs: apiRequestStartedAt === null ? null : Date.now() - apiRequestStartedAt,
         ...diagnosticErrorDetails(e),
       });
+      if (u.pathname.startsWith('/api/')) void diagnoseApiConnectivity(ses, apiRequestId);
       if ([400, 404].includes(e.status)) return error(e.message, e.status);
       if (e instanceof URIError || e.message === 'Invalid asset path') return error('Недопустимый путь', 400);
       if (e.code === 'ENOENT') return new Response('Not found', { status: 404 });
