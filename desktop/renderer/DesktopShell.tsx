@@ -819,7 +819,10 @@ export default function DesktopShell() {
                   </span>
                 </div>
                 {profile.clanId && <div className="server-context"><span className="server-context-icon">{profile.clanAvatarUrl ? <img src={profile.clanAvatarUrl} alt="" width={29} height={29} /> : profile.clanName.slice(0, 1).toUpperCase()}</span><div><strong>{profile.clanName || profile.clanId}</strong></div></div>}
-                <button className="profile-server-change" onClick={login}>{t('Выбрать сервер Discord')}</button>
+                <div className="profile-server-actions">
+                  <button className="profile-server-change" onClick={login}>{t('Сменить сервер')}</button>
+                  <span>{t('Переподключите Discord, чтобы выбрать другой сервер.')}</span>
+                </div>
               </> : profileLoading ? <div className="account-copy"><h2 id="account-title">{t('Проверяю аккаунт')}</h2><p>{t('Сверяю текущий вход Chronum.')}</p></div>
                 : profileUnavailable ? <div className="account-copy"><h2 id="account-title">{t('Нет связи с сайтом')}</h2><p>{t('Статус входа пока не удалось проверить.')}</p><button className="profile-retry" onClick={refreshProfile}>{t('Проверить снова')}</button></div>
                 : <>

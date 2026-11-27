@@ -10,7 +10,7 @@ import updaterModule from 'electron-updater';
 import { APP_URL, SERVER_URL, isAppUrl, safeFile, isAuthNavigation, externalUrl, trustedRequest, sessionRequestPolicy, rendererAuthResponse, createNativeAuthSession } from './policy.mjs';
 import { createCatalog } from './catalog-client.mjs';
 import { guestProfile } from './local-api.mjs';
-import { createDiagnosticsLogger, createZip, readDiagnosticLogs } from './diagnostics.mjs';
+import { createDiagnosticsLogger, createZip, diagnosticErrorDetails, readDiagnosticLogs } from './diagnostics.mjs';
 
 const { autoUpdater } = updaterModule;
 
@@ -101,6 +101,12 @@ const json = (value, status = 200) => new Response(JSON.stringify(value), {
 });
 const error = (message, status = 503) => json({ error: { message, code: 'desktop' } }, status);
 const diagnosticRoute = (pathname) => pathname.replace(/\/[0-9a-f-]{12,}(?=\/|$)/gi, '/:id');
+function diagnosticUrl(value, base = undefined) {
+  try {
+    const url = new URL(value, base);
+    return { origin: url.origin, route: diagnosticRoute(url.pathname) };
+  } catch { return { origin: null, route: null }; }
+}
 const persistGuest = async (value) => {
   offlineGuest = value;
   const existing = await readPreferences();
@@ -150,7 +156,7 @@ function configureUpdater() {
     publishUpdateState({ status: 'downloaded', availableVersion: info.version, percent: 100 });
   });
   autoUpdater.on('error', (failure) => {
-    diagnostics?.error('update.failed', { error: failure?.message ?? 'unknown' });
+    diagnostics?.error('update.failed', diagnosticErrorDetails(failure));
     publishUpdateState({ status: 'error' });
   });
 }
@@ -162,7 +168,7 @@ async function checkForUpdates() {
   try {
     await autoUpdater.checkForUpdates();
   } catch (failure) {
-    diagnostics?.warn('update.check.failed', { error: failure?.message ?? 'unknown' });
+    diagnostics?.warn('update.check.failed', diagnosticErrorDetails(failure));
     publishUpdateState({ status: 'error' });
   } finally {
     updateCheckInProgress = false;
@@ -645,6 +651,8 @@ function brandIcon() {
 function openLogin(ses) {
   nativeAuth.clear();
   if (authWindow && !authWindow.isDestroyed()) { authWindow.focus(); return; }
+  const loginUrl = SERVER_URL + '/api/v1/auth/discord/login?return_to=%2F';
+  diagnostics?.info('auth.login.window.opened', { target: diagnosticUrl(loginUrl) });
   authWindow = new BrowserWindow({
     title: nativeText('login-title'), width: 760, height: 840, autoHideMenuBar: true,
     icon: brandIcon(),
@@ -653,12 +661,27 @@ function openLogin(ses) {
   });
   const auth = authWindow;
   auth.webContents.setWindowOpenHandler(({ url }) => { openExternal(url); return { action: 'deny' }; });
+  auth.webContents.on('did-start-navigation', (_event, url, _isInPlace, isMainFrame) => {
+    diagnostics?.info('auth.login.navigation.started', { target: diagnosticUrl(url), isMainFrame });
+  });
+  auth.webContents.on('did-redirect-navigation', (_event, url, _isInPlace, isMainFrame) => {
+    diagnostics?.info('auth.login.navigation.redirected', { target: diagnosticUrl(url), isMainFrame });
+  });
+  auth.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL, isMainFrame) => {
+    diagnostics?.warn('auth.login.navigation.failed', {
+      errorCode, errorDescription, target: diagnosticUrl(validatedURL), isMainFrame,
+    });
+  });
   const guard = (event, url) => { if (!isAuthNavigation(url)) event.preventDefault(); };
   auth.webContents.on('will-navigate', guard);
   auth.webContents.on('will-redirect', guard);
   const returned = (_event, value) => {
     const u = new URL(value);
     if (u.origin !== SERVER_URL || u.pathname !== '/') return;
+    diagnostics?.info('auth.login.callback', {
+      hasSetupSelection: u.searchParams.get('setup') === 'guild',
+      errorCode: u.searchParams.get('error')?.slice(0, 80) ?? null,
+    });
     // Cookies stay in the persistent session; only the non-secret UI state returns.
     const query = new URLSearchParams();
     if (u.searchParams.get('setup') === 'guild') query.set('setup', 'guild');
@@ -669,7 +692,8 @@ function openLogin(ses) {
   };
   auth.webContents.on('did-navigate', returned);
   auth.on('closed', () => { if (authWindow === auth) authWindow = null; });
-  void auth.loadURL(SERVER_URL + '/api/v1/auth/discord/login?return_to=%2F').catch(() => {
+  void auth.loadURL(loginUrl).catch((failure) => {
+    diagnostics?.error('auth.login.navigation.start.failed', diagnosticErrorDetails(failure));
     dialog.showErrorBox('Chronum', nativeText('login-open-error'));
   });
 }
@@ -832,6 +856,9 @@ if (locked) app.whenReady().then(async () => {
   ses.protocol.handle('app', async (request) => {
     if (!trustedRequest(request)) return error('Недопустимый источник запроса', 403);
     const u = new URL(request.url);
+    const apiRequestId = randomUUID();
+    let apiRequestStartedAt = null;
+    let apiRequestTimeoutMs = null;
     try {
       if (u.pathname.startsWith('/api/v1/assets/')) {
         if (!['GET', 'HEAD'].includes(request.method)) return error('Метод не поддерживается', 405);
@@ -874,17 +901,39 @@ if (locked) app.whenReady().then(async () => {
       const authorization = nativeAuth.authorization(SERVER_URL + u.pathname + u.search);
       if (authorization) headers.set('Authorization', authorization);
       const requestStartedAt = Date.now();
+      apiRequestStartedAt = requestStartedAt;
+      apiRequestTimeoutMs = policy.timeout;
+      diagnostics?.info('api.request.started', {
+        requestId: apiRequestId,
+        method: request.method,
+        route: diagnosticRoute(u.pathname),
+        timeoutMs: policy.timeout,
+        requestBytes: body?.byteLength ?? 0,
+        nativeAuthorizationAttached: Boolean(authorization),
+      });
       const upstream = await ses.fetch(SERVER_URL + u.pathname + u.search, {
         method: request.method, headers, body, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(policy.timeout),
       });
       diagnostics?.info('api.response', {
+        requestId: apiRequestId,
         method: request.method,
         route: diagnosticRoute(u.pathname),
         statusCode: upstream.status,
         durationMs: Date.now() - requestStartedAt,
         requestBytes: body?.byteLength ?? 0,
+        responseType: upstream.type,
+        redirected: upstream.redirected,
       });
-      if (upstream.status >= 300 && upstream.status < 400) return error('Неожиданное перенаправление сервера', 502);
+      if (upstream.status >= 300 && upstream.status < 400) {
+        diagnostics?.warn('api.redirect.blocked', {
+          requestId: apiRequestId,
+          method: request.method,
+          route: diagnosticRoute(u.pathname),
+          statusCode: upstream.status,
+          target: diagnosticUrl(upstream.headers.get('location') ?? '', SERVER_URL),
+        });
+        return error('Неожиданное перенаправление сервера', 502);
+      }
       const responseHeaders = new Headers();
       for (const name of ['content-type', 'content-language', 'content-disposition']) {
         const value = upstream.headers.get(name); if (value) responseHeaders.set(name, value);
@@ -899,10 +948,12 @@ if (locked) app.whenReady().then(async () => {
       return new Response(upstream.body, { status: upstream.status, headers: responseHeaders });
     } catch (e) {
       if (u.pathname.startsWith('/api/')) diagnostics?.warn('api.request.failed', {
+        requestId: apiRequestId,
         method: request.method,
         route: diagnosticRoute(u.pathname),
-        errorCode: e.code ?? null,
-        errorName: e.name ?? 'Error',
+        timeoutMs: apiRequestTimeoutMs,
+        durationMs: apiRequestStartedAt === null ? null : Date.now() - apiRequestStartedAt,
+        ...diagnosticErrorDetails(e),
       });
       if ([400, 404].includes(e.status)) return error(e.message, e.status);
       if (e instanceof URIError || e.message === 'Invalid asset path') return error('Недопустимый путь', 400);

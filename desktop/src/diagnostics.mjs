@@ -8,17 +8,27 @@ function escapeRegExp(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+function safeText(value) {
+  let text = String(value).slice(0, 1200)
+    .replace(/\bBearer\s+[^\s"']+/gi, 'Bearer [redacted]')
+    .replace(/\beyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\b/g, '[redacted-token]')
+    .replace(/([?&](?:access_token|refresh_token|id_token|token|code|state|client_secret|password|session|ticket)=)[^&#\s]*/gi, '$1[redacted]')
+    .replace(/(set-cookie\s*:\s*)[^\r\n]+/gi, '$1[redacted]')
+    .replace(/https?:\/\/[^\s"'<>]+/gi, (raw) => {
+      try {
+        const url = new URL(raw.replace(/[),.;]+$/, ''));
+        return `${url.origin}${url.pathname}`;
+      } catch { return '[redacted-url]'; }
+    });
+  const home = process.env.USERPROFILE;
+  if (home) text = text.replace(new RegExp(escapeRegExp(home), 'gi'), '%USERPROFILE%');
+  return text;
+}
+
 function safeValue(value, depth = 0) {
   if (depth > 3 || value == null) return value ?? null;
   if (typeof value === 'boolean' || typeof value === 'number') return value;
-  if (typeof value === 'string') {
-    let text = value.slice(0, 700)
-      .replace(/\bBearer\s+[^\s"']+/gi, 'Bearer [redacted]')
-      .replace(/\beyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}\b/g, '[redacted-token]');
-    const home = process.env.USERPROFILE;
-    if (home) text = text.replace(new RegExp(escapeRegExp(home), 'gi'), '%USERPROFILE%');
-    return text;
-  }
+  if (typeof value === 'string') return safeText(value);
   if (Array.isArray(value)) return value.slice(0, 20).map((item) => safeValue(item, depth + 1));
   if (typeof value === 'object') {
     const result = {};
@@ -131,4 +141,19 @@ export async function readDiagnosticLogs(filePath) {
 
 export function sanitizeDiagnostic(value) {
   return safeValue(value);
+}
+
+export function diagnosticErrorDetails(error) {
+  const failure = error && typeof error === 'object' ? error : { message: String(error ?? 'Unknown error') };
+  const cause = failure.cause && typeof failure.cause === 'object' ? failure.cause : null;
+  const details = {
+    errorName: typeof failure.name === 'string' ? failure.name : 'Error',
+    errorCode: failure.code ?? failure.errno ?? null,
+    errorMessage: typeof failure.message === 'string' ? failure.message : String(failure),
+    causeName: typeof cause?.name === 'string' ? cause.name : null,
+    causeCode: cause?.code ?? cause?.errno ?? null,
+    causeMessage: typeof cause?.message === 'string' ? cause.message : null,
+  };
+  if (typeof failure.stack === 'string') details.stack = failure.stack.split('\n').slice(0, 8).join('\n');
+  return safeValue(details);
 }

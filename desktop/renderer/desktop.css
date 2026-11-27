@@ -200,6 +200,8 @@ body { color: var(--fg, #f0f2ee); background: var(--bg, #0d0f0e); font-family: v
 .button-discord:hover { transform: translateY(-1px); border-color: var(--accent-fg); background: var(--accent-hover); }
 .profile-retry { margin-top: 11px; border: 0; background: transparent; padding: 0; color: var(--accent-fg); font: 550 var(--text-2xs) var(--font-sans, Inter, sans-serif); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .profile-retry:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.profile-server-actions { display: grid; justify-items: start; gap: 5px; }
+.profile-server-actions > span { color: var(--fg-3); font-size: var(--text-2xs); line-height: 1.4; }
 .profile-server-change,.server-setup-cancel { align-self: flex-start; border: 1px solid var(--border-strong); border-radius: 9px; background: var(--bg-elev); padding: 8px 11px; color: var(--fg-2); font: 550 var(--text-2xs) var(--font-sans, Inter, sans-serif); cursor: pointer; }
 .profile-server-change:hover,.server-setup-cancel:hover { border-color: var(--accent-line); color: var(--accent-fg); }
 .server-picker-list { display: grid; max-height: 270px; gap: 16px; overflow-y: auto; padding-right: 4px; scrollbar-color: var(--surface-3) transparent; scrollbar-width: thin; }
