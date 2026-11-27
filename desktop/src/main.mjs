@@ -41,6 +41,8 @@ let diagnostics;
 let updateState = { status: 'idle', currentVersion: app.getVersion() };
 let updateCheckInProgress = false;
 let lastUpdateCheckAt = 0;
+const UPDATE_CHECK_COOLDOWN_MS = 15 * 60 * 1000;
+const UPDATE_RETRY_AFTER_ERROR_MS = 60 * 1000;
 let desktopSession = null;
 let lastSaveSignature = null;
 let lastConnectivityProbeAt = 0;
@@ -160,18 +162,20 @@ function configureUpdater() {
   });
   autoUpdater.on('error', (failure) => {
     diagnostics?.error('update.failed', diagnosticErrorDetails(failure));
+    lastUpdateCheckAt = Math.max(0, Date.now() - UPDATE_CHECK_COOLDOWN_MS + UPDATE_RETRY_AFTER_ERROR_MS);
     publishUpdateState({ status: 'error' });
   });
 }
 
-async function checkForUpdates() {
-  if (!app.isPackaged || updateCheckInProgress || quitting || Date.now() - lastUpdateCheckAt < 4 * 60 * 60 * 1000) return updateState;
+async function checkForUpdates(force = false) {
+  if (!app.isPackaged || updateCheckInProgress || quitting || (!force && Date.now() - lastUpdateCheckAt < UPDATE_CHECK_COOLDOWN_MS)) return updateState;
   updateCheckInProgress = true;
   lastUpdateCheckAt = Date.now();
   try {
     await autoUpdater.checkForUpdates();
   } catch (failure) {
     diagnostics?.warn('update.check.failed', diagnosticErrorDetails(failure));
+    lastUpdateCheckAt = Math.max(0, Date.now() - UPDATE_CHECK_COOLDOWN_MS + UPDATE_RETRY_AFTER_ERROR_MS);
     publishUpdateState({ status: 'error' });
   } finally {
     updateCheckInProgress = false;
@@ -840,7 +844,7 @@ if (locked) app.whenReady().then(async () => {
   ipcMain.handle('updates:get-state', (event) => trustedIpc(event) ? updateState : null);
   ipcMain.handle('updates:check', async (event) => {
     if (!trustedIpc(event)) return null;
-    await checkForUpdates();
+    await checkForUpdates(true);
     return updateState;
   });
   ipcMain.handle('updates:download', async (event) => {
@@ -1034,7 +1038,7 @@ if (locked) app.whenReady().then(async () => {
 }).catch(() => { dialog.showErrorBox('Chronum', 'Не удалось запустить приложение. Выполните сборку desktop заново.'); app.quit(); });
 app.on('second-instance', () => {
   if (mainWindow) { if (mainWindow.isMinimized()) mainWindow.restore(); mainWindow.show(); mainWindow.focus(); }
-  void checkForUpdates();
+  void checkForUpdates(true);
 });
 app.on('window-all-closed', () => { /* tray keeps the companion and local collection alive */ });
 app.on('before-quit', () => {
