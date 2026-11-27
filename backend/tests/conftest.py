@@ -82,6 +82,11 @@ def run(coro):
 @pytest.fixture()
 def db():
     """Полностью чистая схема на каждый тест (локальный PostgreSQL)."""
+    # Очистка таблиц должна сбрасывать и process-local кеши, иначе данные
+    # предыдущего теста могут пережить БД и повлиять на следующий.
+    from app.services.blacklist import clear_cache
+
+    clear_cache()
 
     async def _reset() -> None:
         async with engine.begin() as conn:

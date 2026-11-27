@@ -64,6 +64,11 @@ def forget(clan_id: str) -> None:
     _cache.pop(clan_id, None)
 
 
+def clear_cache() -> None:
+    """Сбросить процессный кеш при полной очистке состояния (например, в тестах)."""
+    _cache.clear()
+
+
 async def apply(session: AsyncSession, clan_id: str, cs: ClanSettings) -> int:
     """Снять членство у всех, кого закрывает список (командира — никогда). Возвращает число снятых."""
     users, roles = user_ids(cs), role_ids(cs)
