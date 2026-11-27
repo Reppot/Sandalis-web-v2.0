@@ -410,6 +410,12 @@ export default function DesktopShell() {
   const [profile, setProfile] = React.useState<CompanionProfile | null>(null);
   const [profileLoading, setProfileLoading] = React.useState(true);
   const [profileUnavailable, setProfileUnavailable] = React.useState(false);
+  const [profileSlow, setProfileSlow] = React.useState(false);
+  const profileDataRef = React.useRef<CompanionProfile | null>(null);
+  const profileRequestInFlight = React.useRef(false);
+  const profileRetryQueued = React.useRef(false);
+  const profileRetryForceQueued = React.useRef(false);
+  const refreshProfileRef = React.useRef<(force?: boolean) => void>(() => {});
   const [lastReport, setLastReport] = React.useState<ScanReport | null>(null);
   const [serverSetup, setServerSetup] = React.useState<DiscordSetup | null>(null);
   const [serverSetupOpen, setServerSetupOpen] = React.useState(false);
@@ -551,16 +557,47 @@ export default function DesktopShell() {
     return () => { window.removeEventListener('storage', onStorage); window.removeEventListener('message', onThemeMessage); channel?.close(); };
   }, []);
 
-  const refreshProfile = React.useCallback(() => {
+  const refreshProfile = React.useCallback((force = false) => {
     const api = getApi();
     if (!api) { setProfileLoading(false); return; }
+    if (profileRequestInFlight.current) {
+      if (force) {
+        profileRetryQueued.current = true;
+        profileRetryForceQueued.current = true;
+        setProfileLoading(true);
+        setProfileUnavailable(false);
+      }
+      return;
+    }
+    profileRequestInFlight.current = true;
+    if (force || !profileDataRef.current) {
+      setProfileLoading(true);
+    }
+    if (force || !profileDataRef.current) {
+      setProfileUnavailable(false);
+    }
+    setProfileSlow(false);
+    const slowTimer = window.setTimeout(() => setProfileSlow(true), 8_000);
     void api.getCompanionProfile().then((next) => {
-      setProfileLoading(false);
       if (next === undefined) { setProfileUnavailable(true); return; }
       setProfileUnavailable(false);
+      profileDataRef.current = next;
       setProfile(next);
-    }).catch(() => { setProfileLoading(false); setProfileUnavailable(true); });
+    }).catch(() => { setProfileUnavailable(true); }).finally(() => {
+      window.clearTimeout(slowTimer);
+      const retryQueued = profileRetryQueued.current;
+      const retryForce = profileRetryForceQueued.current;
+      if (!retryQueued) setProfileLoading(false);
+      setProfileSlow(false);
+      profileRequestInFlight.current = false;
+      if (retryQueued) {
+        profileRetryQueued.current = false;
+        profileRetryForceQueued.current = false;
+        window.setTimeout(() => refreshProfileRef.current(retryForce), 0);
+      }
+    });
   }, []);
+  refreshProfileRef.current = refreshProfile;
 
   const loadServerSetup = React.useCallback(async () => {
     const api = getApi();
@@ -584,10 +621,12 @@ export default function DesktopShell() {
     if (!result.ok) { setServerSetupError(result.error ?? 'Не удалось применить выбор.'); return; }
     setServerSetupOpen(false);
     setServerSetup(null);
+    profileDataRef.current = null;
     setProfile(null);
     setProfileLoading(true);
     setProfileUnavailable(false);
-    refreshProfile();
+    setProfileSlow(false);
+    refreshProfile(true);
   };
 
   React.useEffect(() => {
@@ -624,7 +663,13 @@ export default function DesktopShell() {
       setAuthQuery(query.toString());
       setReloadKey((n) => n + 1);
       if (choosingServer) void loadServerSetup();
-      else refreshProfile();
+      else {
+        profileDataRef.current = null;
+        setProfile(null);
+        setProfileLoading(true);
+        setProfileUnavailable(false);
+        refreshProfile(true);
+      }
     });
   }, [openTabs, refreshProfile, loadServerSetup, navigateTab]);
 
@@ -823,8 +868,8 @@ export default function DesktopShell() {
                   <button className="profile-server-change" onClick={login}>{t('Сменить сервер')}</button>
                   <span>{t('Переподключите Discord, чтобы выбрать другой сервер.')}</span>
                 </div>
-              </> : profileLoading ? <div className="account-copy"><h2 id="account-title">{t('Проверяю аккаунт')}</h2><p>{t('Сверяю текущий вход Chronum.')}</p></div>
-                : profileUnavailable ? <div className="account-copy"><h2 id="account-title">{t('Нет связи с сайтом')}</h2><p>{t('Статус входа пока не удалось проверить.')}</p><button className="profile-retry" onClick={refreshProfile}>{t('Проверить снова')}</button></div>
+              </> : profileLoading ? <div className="account-copy"><h2 id="account-title">{t('Проверяю аккаунт')}</h2><p>{profileSlow ? t('Жду ответа сайта. Это может занять около минуты.') : t('Сверяю текущий вход Chronum.')}</p></div>
+                : profileUnavailable ? <div className="account-copy"><h2 id="account-title">{t('Нет связи с сайтом')}</h2><p>{t('Статус входа пока не удалось проверить.')}</p><button className="profile-retry" onClick={() => refreshProfile(true)}>{t('Проверить снова')}</button></div>
                 : <>
                 <div className="account-copy"><h2 id="account-title">{t('Ваш клан — в соседней вкладке')}</h2><p>{t('Подключите аккаунт, чтобы открыть инструменты Chronum и данные клана.')}</p></div>
                 <button className="button-discord" onClick={login}><DiscordIcon />{t('Войти через Discord')}</button>

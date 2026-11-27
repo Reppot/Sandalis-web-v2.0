@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from functools import lru_cache
 from typing import Literal
 
@@ -98,7 +99,18 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    return Settings()  # type: ignore[call-arg]
+    result = Settings()  # type: ignore[call-arg]
+    hmac_minimum_bytes = {"HS256": 32, "HS384": 48, "HS512": 64}
+    required_bytes = hmac_minimum_bytes.get(result.JWT_ALG.upper())
+    actual_bytes = len(result.JWT_SECRET.encode("utf-8"))
+    if result.ENV == "prod" and required_bytes is not None and actual_bytes < required_bytes:
+        logging.getLogger("app.security").critical(
+            "SECURITY_CONFIG jwt_secret_too_short algorithm=%s configured_bytes=%s minimum_bytes=%s; rotate JWT_SECRET in the production environment",
+            result.JWT_ALG.upper(),
+            actual_bytes,
+            required_bytes,
+        )
+    return result
 
 
 settings = get_settings()

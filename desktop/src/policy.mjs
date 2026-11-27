@@ -2,8 +2,8 @@ import path from 'node:path';
 export const APP_URL = 'app://sindaris/';
 export const SERVER_URL = 'https://sandalis-web-v2-0.onrender.com';
 export function sessionRequestPolicy(pathname) {
-  const me = pathname === '/api/v1/auth/me';
-  return { timeout: me ? 8000 : 120000 };
+  const wakeSensitive = ['/api/v1/auth/me', '/api/v1/auth/discord/setup', '/api/v1/clan/profile'].includes(pathname);
+  return { timeout: wakeSensitive ? 75000 : 120000 };
 }
 export function rendererAuthResponse(pathname, payload) {
   if (!['/api/v1/auth/discord/setup', '/api/v1/auth/developer/enter', '/api/v1/auth/dev-token'].includes(pathname)) return payload;

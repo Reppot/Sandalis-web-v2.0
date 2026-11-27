@@ -152,6 +152,28 @@
   Delete "$LOCALAPPDATA\sindaris-desktop-updater\pending\Sindaris-Setup-*.exe"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater\pending"
   RMDir "$LOCALAPPDATA\sindaris-desktop-updater"
+  ; Seed one base installer for electron-updater's block-level NSIS downloads.
+  ; Replace the previous copy only after the new installer was copied successfully.
+  StrCpy $R5 "$LOCALAPPDATA\chronomancer-desktop-updater"
+  CreateDirectory "$R5"
+  ${GetParameters} $R0
+  ClearErrors
+  ${GetOptions} $R0 "--updated" $R1
+  ${If} ${Errors}
+    ; A manually launched setup may not match a block map left by an older update.
+    Delete "$R5\current.blockmap"
+  ${EndIf}
+  Delete "$R5\installer.next.exe"
+  ClearErrors
+  CopyFiles /SILENT "$EXEPATH" "$R5\installer.next.exe"
+  ${IfNot} ${Errors}
+    Delete "$R5\installer.exe"
+    ClearErrors
+    Rename "$R5\installer.next.exe" "$R5\installer.exe"
+  ${EndIf}
+  ${If} ${Errors}
+    Delete "$R5\installer.next.exe"
+  ${EndIf}
   ; Remove older sibling installers only after the new installed files pass validation.
   FindFirst $R6 $R7 "$EXEDIR\Chronomancer-Setup-*.exe"
   ${DoWhile} $R7 != ""
@@ -182,4 +204,16 @@
     FindNext $R6 $R7
   ${Loop}
   FindClose $R6
+!macroend
+
+!macro customUnInstall
+  ; electron-builder uses KEEP_APP_DATA for in-place upgrades. Preserve the
+  ; single updater base and pending download during that internal uninstall.
+  ${GetParameters} $R0
+  ClearErrors
+  ${GetOptions} $R0 "/KEEP_APP_DATA" $R1
+  ${If} ${Errors}
+    RMDir /r "$LOCALAPPDATA\chronomancer-desktop-updater"
+    RMDir /r "$LOCALAPPDATA\sindaris-desktop-updater"
+  ${EndIf}
 !macroend

@@ -43,6 +43,8 @@ let updateCheckInProgress = false;
 let lastUpdateCheckAt = 0;
 const UPDATE_CHECK_COOLDOWN_MS = 15 * 60 * 1000;
 const UPDATE_RETRY_AFTER_ERROR_MS = 60 * 1000;
+const API_WARMUP_TIMEOUT_MS = 75_000;
+const API_RETRY_DELAYS_MS = [5_000, 15_000];
 let desktopSession = null;
 let lastSaveSignature = null;
 let lastConnectivityProbeAt = 0;
@@ -106,6 +108,101 @@ const json = (value, status = 200) => new Response(JSON.stringify(value), {
 });
 const error = (message, status = 503) => json({ error: { message, code: 'desktop' } }, status);
 const diagnosticRoute = (pathname) => pathname.replace(/\/[0-9a-f-]{12,}(?=\/|$)/gi, '/:id');
+function updaterCacheDirectory() {
+  const localAppData = process.env.LOCALAPPDATA || path.join(os.homedir(), 'AppData', 'Local');
+  return path.join(localAppData, 'chronomancer-desktop-updater');
+}
+
+function isTransientApiFailure(failure) {
+  const details = diagnosticErrorDetails(failure);
+  return /ERR_CONNECTION_RESET|ERR_CONNECTION_CLOSED|ERR_CONNECTION_REFUSED|ERR_NETWORK_CHANGED|ERR_INTERNET_DISCONNECTED|ERR_NAME_NOT_RESOLVED|ERR_ADDRESS_UNREACHABLE/i
+    .test(`${details.errorCode ?? ''} ${details.errorMessage ?? ''}`);
+}
+
+function bodyByteLength(body) {
+  if (typeof body === 'string') return Buffer.byteLength(body);
+  if (body instanceof ArrayBuffer) return body.byteLength;
+  if (ArrayBuffer.isView(body)) return body.byteLength;
+  return 0;
+}
+
+async function fetchServerApi(ses, endpoint, init = {}, {
+  timeoutMs = API_WARMUP_TIMEOUT_MS, retryTransient = false, retries = 0, requestId = null,
+} = {}) {
+  const target = new URL(endpoint);
+  if (target.origin !== SERVER_URL || target.username || target.password) throw new Error('Invalid API origin');
+  const method = String(init.method ?? 'GET').toUpperCase();
+  const route = diagnosticRoute(target.pathname);
+  const requestBytes = bodyByteLength(init.body);
+
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    const currentRequestId = attempt === 0 && requestId ? requestId : randomUUID();
+    const headers = new Headers(init.headers);
+    headers.set('X-Chronum-Request-ID', currentRequestId);
+    const startedAt = Date.now();
+    diagnostics?.info('api.request.started', {
+      requestId: currentRequestId, method, route, timeoutMs, attempt: attempt + 1,
+      requestBytes, nativeAuthorizationAttached: headers.has('Authorization'),
+    });
+
+    try {
+      const response = await ses.fetch(target.href, {
+        ...init,
+        method,
+        headers,
+        credentials: init.credentials ?? 'include',
+        redirect: init.redirect ?? 'manual',
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      diagnostics?.info('api.response', {
+        requestId: currentRequestId, method, route, statusCode: response.status,
+        durationMs: Date.now() - startedAt, requestBytes, responseType: response.type,
+        redirected: response.redirected,
+      });
+
+      if (retryTransient && [502, 503, 504].includes(response.status) && attempt < retries) {
+        const delayMs = API_RETRY_DELAYS_MS[attempt] ?? 15_000;
+        diagnostics?.warn('api.request.retry', {
+          requestId: currentRequestId, method, route, attempt: attempt + 1,
+          nextAttemptInMs: delayMs, statusCode: response.status,
+        });
+        await response.body?.cancel().catch(() => {});
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+        continue;
+      }
+      return response;
+    } catch (failure) {
+      diagnostics?.warn('api.request.failed', {
+        requestId: currentRequestId, method, route, timeoutMs,
+        durationMs: Date.now() - startedAt, attempt: attempt + 1,
+        ...diagnosticErrorDetails(failure),
+      });
+      if (!retryTransient || !isTransientApiFailure(failure) || attempt >= retries) throw failure;
+      const delayMs = API_RETRY_DELAYS_MS[attempt] ?? 15_000;
+      diagnostics?.warn('api.request.retry', {
+        requestId: currentRequestId, method, route, attempt: attempt + 1,
+        nextAttemptInMs: delayMs, reason: 'transient-transport-error',
+      });
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+  throw new Error('API request retries exhausted');
+}
+
+function cleanupCompletedUpdaterDownload() {
+  if (!process.argv.includes('--updated')) return;
+  const pendingDirectory = path.join(updaterCacheDirectory(), 'pending');
+  diagnostics?.info('updater.cache.pending-cleanup.scheduled', { delayMs: 60_000 });
+  const timer = setTimeout(() => {
+    void rm(pendingDirectory, { recursive: true, force: true }).then(() => {
+      diagnostics?.info('updater.cache.pending-cleaned');
+    }).catch((failure) => {
+      diagnostics?.warn('updater.cache.pending-cleanup.failed', diagnosticErrorDetails(failure));
+    });
+  }, 60_000);
+  timer.unref?.();
+}
+
 function diagnosticUrl(value, base = undefined) {
   try {
     const url = new URL(value, base);
@@ -257,9 +354,9 @@ function diagnoseApiConnectivity(ses, failedRequestId) {
     }
     const healthStartedAt = Date.now();
     try {
-      const response = await ses.fetch(`${SERVER_URL}/api/v1/health/live`, {
-        method: 'GET', headers: { Accept: 'application/json' }, credentials: 'omit', redirect: 'manual', signal: AbortSignal.timeout(12000),
-      });
+      const response = await fetchServerApi(ses, `${SERVER_URL}/api/v1/health/live`, {
+        method: 'GET', headers: { Accept: 'application/json' }, credentials: 'omit', redirect: 'manual',
+      }, { timeoutMs: API_WARMUP_TIMEOUT_MS });
       result.apiHealth = { ok: response.status >= 200 && response.status < 300, statusCode: response.status, durationMs: Date.now() - healthStartedAt };
       await response.body?.cancel().catch(() => {});
     } catch (failure) {
@@ -364,10 +461,9 @@ async function runScanUpload(ses) {
     const headers = new Headers({ Accept: 'application/json', 'Content-Type': 'application/json' });
     const authorization = nativeAuth.authorization(endpoint);
     if (authorization) headers.set('Authorization', authorization);
-    const response = await ses.fetch(endpoint, {
-      method: 'POST', headers, body: current.body, credentials: 'include', redirect: 'manual',
-      signal: AbortSignal.timeout(30000),
-    });
+    const response = await fetchServerApi(ses, endpoint, {
+      method: 'POST', headers, body: current.body,
+    }, { timeoutMs: API_WARMUP_TIMEOUT_MS });
     diagnostics?.info('scan.upload.response', { statusCode: response.status, durationMs: Date.now() - (current.startedAt ?? Date.now()) });
     const result = await response.json().catch(() => ({}));
     if (response.ok) {
@@ -421,8 +517,8 @@ async function companionProfile(ses) {
     const headers = new Headers();
     const authorization = nativeAuth.authorization(SERVER_URL + '/api/v1/auth/me');
     if (authorization) headers.set('Authorization', authorization);
-    const response = await ses.fetch(SERVER_URL + '/api/v1/auth/me', {
-      headers, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(8000),
+    const response = await fetchServerApi(ses, SERVER_URL + '/api/v1/auth/me', { headers }, {
+      timeoutMs: API_WARMUP_TIMEOUT_MS, retryTransient: true, retries: API_RETRY_DELAYS_MS.length,
     });
     if (response.status === 401 || response.status === 403) return null;
     if (!response.ok) return undefined;
@@ -438,8 +534,8 @@ async function companionProfile(ses) {
     try {
       const clanHeaders = new Headers();
       if (authorization) clanHeaders.set('Authorization', authorization);
-      const clanResponse = await ses.fetch(SERVER_URL + '/api/v1/clan/profile', {
-        headers: clanHeaders, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(8000),
+      const clanResponse = await fetchServerApi(ses, SERVER_URL + '/api/v1/clan/profile', { headers: clanHeaders }, {
+        timeoutMs: API_WARMUP_TIMEOUT_MS, retryTransient: true, retries: API_RETRY_DELAYS_MS.length,
       });
       if (clanResponse.ok) {
         const clan = await clanResponse.json();
@@ -465,8 +561,8 @@ async function currentClanId(ses) {
     const headers = new Headers();
     const authorization = nativeAuth.authorization(endpoint);
     if (authorization) headers.set('Authorization', authorization);
-    const response = await ses.fetch(endpoint, {
-      headers, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(8000),
+    const response = await fetchServerApi(ses, endpoint, { headers }, {
+      timeoutMs: API_WARMUP_TIMEOUT_MS, retryTransient: true, retries: API_RETRY_DELAYS_MS.length,
     });
     if (!response.ok) return null;
     const me = await response.json();
@@ -477,9 +573,9 @@ async function currentClanId(ses) {
 async function getDiscordSetup(ses) {
   if (offlineGuest) return null;
   try {
-    const response = await ses.fetch(SERVER_URL + '/api/v1/auth/discord/setup', {
-      headers: { Accept: 'application/json' }, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(10000),
-    });
+    const response = await fetchServerApi(ses, SERVER_URL + '/api/v1/auth/discord/setup', {
+      headers: { Accept: 'application/json' },
+    }, { timeoutMs: API_WARMUP_TIMEOUT_MS, retryTransient: true, retries: API_RETRY_DELAYS_MS.length });
     if (!response.ok) return null;
     const setup = await response.json();
     const text = (value, max = 120) => typeof value === 'string' ? value.slice(0, max) : '';
@@ -515,10 +611,9 @@ async function completeDiscordSetup(ses, selection) {
     const headers = new Headers({ 'Content-Type': 'application/json', Accept: 'application/json' });
     const authorization = nativeAuth.authorization(endpoint);
     if (authorization) headers.set('Authorization', authorization);
-    const response = await ses.fetch(endpoint, {
+    const response = await fetchServerApi(ses, endpoint, {
       method: 'POST', headers, body: JSON.stringify({ [fields[key]]: value }),
-      credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(12000),
-    });
+    }, { timeoutMs: API_WARMUP_TIMEOUT_MS });
     const payload = await response.json().catch(() => ({}));
     if (!response.ok) return { ok: false, error: 'Сервер не применил этот выбор. Обновите список и попробуйте ещё раз.' };
     nativeAuth.capture('/api/v1/auth/discord/setup', 'POST', response.status, payload);
@@ -758,10 +853,29 @@ function openLogin(ses) {
   };
   auth.webContents.on('did-navigate', returned);
   auth.on('closed', () => { if (authWindow === auth) authWindow = null; });
-  void auth.loadURL(loginUrl).catch((failure) => {
-    diagnostics?.error('auth.login.navigation.start.failed', diagnosticErrorDetails(failure));
-    dialog.showErrorBox('Chronum', nativeText('login-open-error'));
-  });
+  const loadLogin = async (attempt = 0) => {
+    if (auth.isDestroyed() || auth.webContents.isDestroyed()) return;
+    try {
+      diagnostics?.info('auth.login.navigation.starting', { attempt: attempt + 1, maxAttempts: 4 });
+      await auth.loadURL(loginUrl);
+    } catch (failure) {
+      const aborted = /ERR_ABORTED|ERR_FAILED -3/i.test(`${failure?.code ?? ''} ${failure?.message ?? ''}`);
+      if (aborted || auth.isDestroyed() || auth.webContents.isDestroyed()) return;
+      if (isTransientApiFailure(failure) && attempt < 3) {
+        const delayMs = [5_000, 15_000, 30_000][attempt];
+        diagnostics?.warn('auth.login.navigation.retry', {
+          attempt: attempt + 1, nextAttemptInMs: delayMs, ...diagnosticErrorDetails(failure),
+        });
+        setTimeout(() => { void loadLogin(attempt + 1); }, delayMs);
+        return;
+      }
+      diagnostics?.error('auth.login.navigation.start.failed', {
+        attempt: attempt + 1, ...diagnosticErrorDetails(failure),
+      });
+      if (!auth.isDestroyed()) dialog.showErrorBox('Chronum', nativeText('login-open-error'));
+    }
+  };
+  void loadLogin();
 }
 
 async function fileResponse(ses, root, pathname) {
@@ -807,6 +921,17 @@ if (locked) app.whenReady().then(async () => {
     appVersion: app.getVersion(), electronVersion: process.versions.electron,
     platform: process.platform, architecture: process.arch, locale: defaultLocaleFromSystem(),
   });
+  const updaterCache = updaterCacheDirectory();
+  const cachedInstaller = await stat(path.join(updaterCache, 'installer.exe')).catch(() => null);
+  const cachedBlockMap = await stat(path.join(updaterCache, 'current.blockmap')).catch(() => null);
+  const pendingUpdate = await stat(path.join(updaterCache, 'pending')).catch(() => null);
+  diagnostics?.info('updater.cache.state', {
+    installerPresent: Boolean(cachedInstaller?.isFile()),
+    installerBytes: cachedInstaller?.isFile() ? cachedInstaller.size : 0,
+    blockMapPresent: Boolean(cachedBlockMap?.isFile()),
+    pendingDirectoryPresent: Boolean(pendingUpdate?.isDirectory()),
+  });
+  cleanupCompletedUpdaterDownload();
   configureUpdater();
   const preferences = await readPreferences();
   offlineGuest = preferences.offlineGuest === true;
@@ -923,8 +1048,6 @@ if (locked) app.whenReady().then(async () => {
     if (!trustedRequest(request)) return error('Недопустимый источник запроса', 403);
     const u = new URL(request.url);
     const apiRequestId = randomUUID();
-    let apiRequestStartedAt = null;
-    let apiRequestTimeoutMs = null;
     try {
       if (u.pathname.startsWith('/api/v1/assets/')) {
         if (!['GET', 'HEAD'].includes(request.method)) return error('Метод не поддерживается', 405);
@@ -966,29 +1089,14 @@ if (locked) app.whenReady().then(async () => {
       if (body && body.byteLength > 65 * 1024 * 1024) return error('Слишком большой файл', 413);
       const authorization = nativeAuth.authorization(SERVER_URL + u.pathname + u.search);
       if (authorization) headers.set('Authorization', authorization);
-      const requestStartedAt = Date.now();
-      apiRequestStartedAt = requestStartedAt;
-      apiRequestTimeoutMs = policy.timeout;
-      diagnostics?.info('api.request.started', {
-        requestId: apiRequestId,
-        method: request.method,
-        route: diagnosticRoute(u.pathname),
+      const canRetryRead = ['GET', 'HEAD'].includes(request.method);
+      const upstream = await fetchServerApi(ses, SERVER_URL + u.pathname + u.search, {
+        method: request.method, headers, body, credentials: 'include', redirect: 'manual',
+      }, {
         timeoutMs: policy.timeout,
-        requestBytes: body?.byteLength ?? 0,
-        nativeAuthorizationAttached: Boolean(authorization),
-      });
-      const upstream = await ses.fetch(SERVER_URL + u.pathname + u.search, {
-        method: request.method, headers, body, credentials: 'include', redirect: 'manual', signal: AbortSignal.timeout(policy.timeout),
-      });
-      diagnostics?.info('api.response', {
+        retryTransient: canRetryRead,
+        retries: canRetryRead ? API_RETRY_DELAYS_MS.length : 0,
         requestId: apiRequestId,
-        method: request.method,
-        route: diagnosticRoute(u.pathname),
-        statusCode: upstream.status,
-        durationMs: Date.now() - requestStartedAt,
-        requestBytes: body?.byteLength ?? 0,
-        responseType: upstream.type,
-        redirected: upstream.redirected,
       });
       if (upstream.status >= 300 && upstream.status < 400) {
         diagnostics?.warn('api.redirect.blocked', {
@@ -1001,7 +1109,7 @@ if (locked) app.whenReady().then(async () => {
         return error('Неожиданное перенаправление сервера', 502);
       }
       const responseHeaders = new Headers();
-      for (const name of ['content-type', 'content-language', 'content-disposition']) {
+      for (const name of ['content-type', 'content-language', 'content-disposition', 'x-chronum-request-id']) {
         const value = upstream.headers.get(name); if (value) responseHeaders.set(name, value);
       }
       responseHeaders.set('Cache-Control', 'no-store');
@@ -1013,19 +1121,11 @@ if (locked) app.whenReady().then(async () => {
       }
       return new Response(upstream.body, { status: upstream.status, headers: responseHeaders });
     } catch (e) {
-      if (u.pathname.startsWith('/api/')) diagnostics?.warn('api.request.failed', {
-        requestId: apiRequestId,
-        method: request.method,
-        route: diagnosticRoute(u.pathname),
-        timeoutMs: apiRequestTimeoutMs,
-        durationMs: apiRequestStartedAt === null ? null : Date.now() - apiRequestStartedAt,
-        ...diagnosticErrorDetails(e),
-      });
       if (u.pathname.startsWith('/api/')) void diagnoseApiConnectivity(ses, apiRequestId);
       if ([400, 404].includes(e.status)) return error(e.message, e.status);
       if (e instanceof URIError || e.message === 'Invalid asset path') return error('Недопустимый путь', 400);
       if (e.code === 'ENOENT') return new Response('Not found', { status: 404 });
-      return error('Сервис недоступен. Проверьте интернет. Локальные справочники доступны в гостевом режиме.');
+      return error('Сайт временно не ответил. Повторите запрос через минуту. Локальные справочники доступны в гостевом режиме.');
     }
   });
   await createWindow(ses);

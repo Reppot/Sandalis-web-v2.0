@@ -3,6 +3,9 @@ from __future__ import annotations
 import asyncio
 import logging
 import mimetypes
+import re
+import time
+import uuid
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
@@ -21,6 +24,7 @@ from app.core.i18n import Translator, load_catalogs, normalize_locale, parse_acc
 from app.services import discord_bot, game_notify, timer_alerts
 
 logging.basicConfig(level=logging.INFO)
+request_logger = logging.getLogger("app.http")
 
 
 if settings.SENTRY_DSN:
@@ -60,8 +64,8 @@ app.add_middleware(
     allow_origins=list(settings.CORS_ORIGINS),
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*", "Authorization", "X-Clan-Token", "X-Locale", "Accept-Language"],
-    expose_headers=["Content-Language"],
+    allow_headers=["*", "Authorization", "X-Clan-Token", "X-Locale", "Accept-Language", "X-Chronum-Request-ID"],
+    expose_headers=["Content-Language", "X-Chronum-Request-ID"],
 )
 
 
@@ -76,12 +80,39 @@ async def locale_middleware(request: Request, call_next) -> Response:
     )
     request.state.locale = locale
     request.state.translator = Translator(locale=locale)
-    response: Response = await call_next(request)
-    response.headers.setdefault("Content-Language", locale)
-    # API и /assets отдаются через прокси Next без его заголовков — базовые ставим здесь
-    response.headers.setdefault("X-Content-Type-Options", "nosniff")
-    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
-    return response
+    candidate_request_id = request.headers.get("X-Chronum-Request-ID", "")
+    try:
+        request_id = str(uuid.UUID(candidate_request_id)) if candidate_request_id else str(uuid.uuid4())
+    except (ValueError, AttributeError):
+        request_id = str(uuid.uuid4())
+    request.state.request_id = request_id
+    started_at = time.perf_counter()
+    status_code = 500
+    try:
+        response: Response = await call_next(request)
+        status_code = response.status_code
+        response.headers.setdefault("Content-Language", locale)
+        response.headers.setdefault("X-Chronum-Request-ID", request_id)
+        # API и /assets отдаются через прокси Next без его заголовков — базовые ставим здесь
+        response.headers.setdefault("X-Content-Type-Options", "nosniff")
+        response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+        return response
+    finally:
+        if not request.url.path.startswith(f"{settings.API_V1_PREFIX}/assets/"):
+            route = re.sub(r"/[0-9a-fA-F-]{12,}(?=/|$)", "/:id", request.url.path)
+            duration_ms = round((time.perf_counter() - started_at) * 1000, 1)
+            session_cookie_present = bool(request.cookies.get(settings.SESSION_COOKIE_NAME))
+            bearer_present = request.headers.get("authorization", "").lower().startswith("bearer ")
+            request_logger.info(
+                "http.request.completed request_id=%s method=%s route=%s status_code=%s duration_ms=%s session_cookie_present=%s bearer_present=%s",
+                request_id,
+                request.method,
+                route,
+                status_code,
+                duration_ms,
+                session_cookie_present,
+                bearer_present,
+            )
 
 
 register_exception_handlers(app)
