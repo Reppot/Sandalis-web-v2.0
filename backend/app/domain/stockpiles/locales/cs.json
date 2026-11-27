@@ -5,7 +5,12 @@
     "updated": "Sklad „{name}“ byl aktualizován.",
     "deleted": "Sklad „{name}“ byl smazán.",
     "name_taken": "Sklad s názvem „{name}“ již existuje.",
+    "scan_duplicate": "Sken obsahuje duplicitní záznam skladu.",
+    "scan_name_conflict": "Tento herní název skladu už používá jiný klanový sklad. Přejmenujte záznam nebo vyřešte konflikt.",
     "synced": "Sklad „{name}“ synchronizován: položek {count}."
+  },
+  "scan": {
+    "synced": "Sken synchronizován: vytvořeno skladů {created}, aktualizováno {updated}."
   },
   "item": {
     "not_found": "Ve skladu není „{item}“.",

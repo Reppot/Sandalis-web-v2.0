@@ -5,7 +5,12 @@
     "updated": "仓库“{name}”已更新。",
     "deleted": "仓库“{name}”已删除。",
     "name_taken": "名为“{name}”的仓库已存在。",
+    "scan_duplicate": "扫描结果中包含重复的仓库记录。",
+    "scan_name_conflict": "该游戏内仓库名称已被军团中的另一个仓库使用。请重命名记录或解决冲突。",
     "synced": "仓库“{name}”已同步：{count} 项。"
+  },
+  "scan": {
+    "synced": "扫描已同步：创建 {created} 个仓库，更新 {updated} 个。"
   },
   "item": {
     "not_found": "此仓库中没有“{item}”。",

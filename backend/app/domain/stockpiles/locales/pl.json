@@ -5,7 +5,12 @@
     "updated": "Zaktualizowano magazyn „{name}”.",
     "deleted": "Usunięto magazyn „{name}”.",
     "name_taken": "Magazyn o nazwie „{name}” już istnieje.",
+    "scan_duplicate": "Skan zawiera powielony wpis magazynu.",
+    "scan_name_conflict": "Ta nazwa magazynu z gry jest już używana przez inny magazyn klanu. Zmień nazwę wpisu lub rozwiąż konflikt.",
     "synced": "Zsynchronizowano magazyn „{name}”: pozycji {count}."
+  },
+  "scan": {
+    "synced": "Zsynchronizowano skan: utworzono magazynów {created}, zaktualizowano {updated}."
   },
   "item": {
     "not_found": "W magazynie nie ma „{item}”.",

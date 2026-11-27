@@ -5,7 +5,12 @@
     "updated": "Lager „{name}“ aktualisiert.",
     "deleted": "Lager „{name}“ gelöscht.",
     "name_taken": "Ein Lager namens „{name}“ gibt es bereits.",
+    "scan_duplicate": "Der Scan enthält einen doppelten Lagereintrag.",
+    "scan_name_conflict": "Dieser Spielname wird bereits von einem anderen Clanlager verwendet. Benenne den Eintrag um oder behebe den Konflikt.",
     "synced": "Lager „{name}“ synchronisiert: {count} Positionen."
+  },
+  "scan": {
+    "synced": "Scan synchronisiert: {created} Lager erstellt, {updated} aktualisiert."
   },
   "item": {
     "not_found": "Kein „{item}“ in diesem Lager.",

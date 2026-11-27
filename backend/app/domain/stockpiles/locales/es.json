@@ -5,7 +5,12 @@
     "updated": "Almacén «{name}» actualizado.",
     "deleted": "Almacén «{name}» eliminado.",
     "name_taken": "Ya existe un almacén llamado «{name}».",
+    "scan_duplicate": "El escaneo contiene un registro duplicado de almacén.",
+    "scan_name_conflict": "Otro almacén del clan ya usa ese nombre del juego. Cambia el nombre del registro o resuelve el conflicto.",
     "synced": "Almacén «{name}» sincronizado: {count} líneas."
+  },
+  "scan": {
+    "synced": "Escaneo sincronizado: {created} almacenes creados y {updated} actualizados."
   },
   "item": {
     "not_found": "No hay «{item}» en este almacén.",

@@ -5,7 +5,12 @@
     "updated": "Estoque “{name}” atualizado.",
     "deleted": "Estoque “{name}” excluído.",
     "name_taken": "Já existe um estoque chamado “{name}”.",
+    "scan_duplicate": "A análise contém um registo de armazém duplicado.",
+    "scan_name_conflict": "Outro armazém do clã já usa este nome do jogo. Altere o nome do registo ou resolva o conflito.",
     "synced": "Estoque “{name}” sincronizado: {count} linhas."
+  },
+  "scan": {
+    "synced": "Análise sincronizada: {created} armazéns criados, {updated} atualizados."
   },
   "item": {
     "not_found": "Não há “{item}” neste estoque.",

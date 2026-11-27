@@ -5,7 +5,12 @@
     "updated": "Réserve « {name} » mise à jour.",
     "deleted": "Réserve « {name} » supprimée.",
     "name_taken": "Une réserve nommée « {name} » existe déjà.",
+    "scan_duplicate": "L’analyse contient un doublon de dépôt.",
+    "scan_name_conflict": "Un autre dépôt du clan utilise déjà ce nom en jeu. Renommez l’entrée ou résolvez le conflit.",
     "synced": "Réserve « {name} » synchronisée : {count} lignes."
+  },
+  "scan": {
+    "synced": "Analyse synchronisée : {created} dépôts créés, {updated} mis à jour."
   },
   "item": {
     "not_found": "Pas de « {item} » dans cette réserve.",
