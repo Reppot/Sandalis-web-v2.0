@@ -2,6 +2,21 @@
 !include "FileFunc.nsh"
 !include "WordFunc.nsh"
 
+!macro customWelcomePage
+  ; Keep the standard localized wizard controls and page copy, but brand its
+  ; welcome and header artwork with resources embedded in the single EXE.
+  !define MUI_BGCOLOR "100B0C"
+  !define MUI_TEXTCOLOR "FFF6F2"
+  !define MUI_HEADERIMAGE
+  !define MUI_HEADERIMAGE_RIGHT
+  !define MUI_HEADERIMAGE_BITMAP "${PROJECT_DIR}\build\chronum-installer-header.bmp"
+  !ifdef MUI_WELCOMEFINISHPAGE_BITMAP
+    !undef MUI_WELCOMEFINISHPAGE_BITMAP
+  !endif
+  !define MUI_WELCOMEFINISHPAGE_BITMAP "${PROJECT_DIR}\build\chronum-installer-welcome.bmp"
+  !insertmacro MUI_PAGE_WELCOME
+!macroend
+
 !macro customHeader
   !ifndef BUILD_UNINSTALLER
     ; initMultiUser restores the previous InstallLocation during upgrades.
